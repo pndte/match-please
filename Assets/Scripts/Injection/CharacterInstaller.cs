@@ -1,22 +1,37 @@
-﻿using Entities;
+﻿using System;
+using Entities;
 using Entities.Network;
 using JetBrains.Lifetimes;
+using Setup;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Zenject;
 
 namespace Injection
 {
     public class CharacterInstaller : MonoInstaller
     {
+        [Inject] private IRuntimeSettings _runtimeSettings;
+        
         [SerializeField] private HealthConfig _healthConfig;
-        [FormerlySerializedAs("_healthData")] [SerializeField] private NetworkHealthData _networkHealthData;
+        [SerializeField] private NetworkHealthData _networkHealthData;
         
         public override void InstallBindings()
         {
             Container.Bind<HealthConfig>().FromInstance(_healthConfig).AsSingle();
             Container.Bind<NetworkHealthData>().FromInstance(_networkHealthData).AsSingle();
-            Container.BindInterfacesTo<NetworkHealth>().AsSingle().WithArguments(Lifetime.Eternal, _healthConfig, _networkHealthData);
+            
+            switch (_runtimeSettings.CurrentPeerType)
+            {
+                case PeerType.Server:
+                    Container.BindInterfacesAndSelfTo<NetworkHealth>().AsSingle().WithArguments(Lifetime.Eternal);
+                    Container.Bind<HealthDataConnector>().AsSingle().NonLazy();
+                    break;
+                case PeerType.Client:
+                    Container.Bind<IReadonlyHealth>().To<NetworkHealth>().AsSingle().WithArguments(Lifetime.Eternal);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

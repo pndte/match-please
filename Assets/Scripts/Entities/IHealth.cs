@@ -4,7 +4,7 @@ namespace Entities
 {
     public interface IReadonlyHealth : IReadonlyProperty<float>
     {
-        public float MaxHealth { get; }
+        public float Max { get; }
     }
 
     public interface IHealth : IReadonlyHealth, IViewableProperty<float>

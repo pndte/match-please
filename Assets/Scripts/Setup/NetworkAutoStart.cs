@@ -1,39 +1,51 @@
 ﻿using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using Zenject;
 
 #if UNITY_EDITOR
 
 #endif
 
-namespace DefaultNamespace
+namespace Setup
 {
     /// <summary>
     /// Automatically starts NetworkManager based on Multiplayer Play Mode tags.
     /// Supports "server" and "client" tags for automatic server/client startup.
+    /// Also initializes the RuntimeSettings with the detected peer type.
     /// </summary>
     public class NetworkAutoStart : MonoBehaviour
     {
         [Header("Auto-Start Configuration")]
         [Tooltip("Enable automatic startup based on Multiplayer Play Mode tags")]
-        [SerializeField] private bool enableAutoStart = true;
+        [SerializeField]
+        private bool enableAutoStart = true;
 
-        [Tooltip("Tag name for server instances (default: 'server')")]
-        [SerializeField] private string serverTag = "server";
+        [Tooltip("Tag name for server instances (default: 'server')")] [SerializeField]
+        private string serverTag = "server";
 
-        [Tooltip("Tag name for client instances (default: 'client')")]
-        [SerializeField] private string clientTag = "client";
+        [Tooltip("Tag name for client instances (default: 'client')")] [SerializeField]
+        private string clientTag = "client";
 
         [Header("Connection Settings")]
         [Tooltip("IP address for client to connect to (default: 127.0.0.1)")]
-        [SerializeField] private string serverAddress = "127.0.0.1";
+        [SerializeField]
+        private string serverAddress = "127.0.0.1";
 
-        [Tooltip("Port for network communication (default: 7777)")]
-        [SerializeField] private ushort port = 7777;
+        [Tooltip("Port for network communication (default: 7777)")] [SerializeField]
+        private ushort port = 7777;
 
-        [Header("Debug")]
-        [Tooltip("Enable detailed logging")]
-        [SerializeField] private bool enableLogging = true;
+        [Header("Debug")] [Tooltip("Enable detailed logging")] [SerializeField]
+        private bool enableLogging = true;
+
+        // Injected dependency
+        private IRuntimeSettings _runtimeSettings;
+
+        [Inject]
+        private void Construct(IRuntimeSettings runtimeSettings)
+        {
+            _runtimeSettings = runtimeSettings;
+        }
 
         private void Start()
         {
@@ -45,7 +57,8 @@ namespace DefaultNamespace
 
             if (NetworkManager.Singleton == null)
             {
-                Debug.LogError("[NetworkAutoStart] NetworkManager.Singleton is null! Make sure NetworkManager exists in the scene.");
+                Debug.LogError(
+                    "[NetworkAutoStart] NetworkManager.Singleton is null! Make sure NetworkManager exists in the scene.");
                 return;
             }
 
@@ -78,7 +91,8 @@ namespace DefaultNamespace
             }
             else
             {
-                Log($"Unknown tag '{currentTag}'. Expected '{serverTag}' or '{clientTag}'. No automatic startup performed.");
+                Log(
+                    $"Unknown tag '{currentTag}'. Expected '{serverTag}' or '{clientTag}'. No automatic startup performed.");
             }
 #else
             Log("Multiplayer Play Mode is only available in the Unity Editor. Running in standalone build mode.");
@@ -97,6 +111,12 @@ namespace DefaultNamespace
             if (success)
             {
                 Log($"<color=green>✓ Server started successfully on port {port}</color>");
+
+                // Initialize RuntimeSettings with Server peer type
+                if (_runtimeSettings is RuntimeSettings runtimeSettings)
+                {
+                    runtimeSettings.Initialize(PeerType.Server);
+                }
             }
             else
             {
@@ -116,6 +136,12 @@ namespace DefaultNamespace
             if (success)
             {
                 Log($"<color=cyan>✓ Client started successfully, connecting to {serverAddress}:{port}</color>");
+
+                // Initialize RuntimeSettings with Client peer type
+                if (_runtimeSettings is RuntimeSettings runtimeSettings)
+                {
+                    runtimeSettings.Initialize(PeerType.Client);
+                }
             }
             else
             {
@@ -127,12 +153,12 @@ namespace DefaultNamespace
         {
             // Try to configure UnityTransport if it exists
             var transport = NetworkManager.Singleton.NetworkConfig.NetworkTransport;
-            
+
             if (transport != null)
             {
                 // Use reflection to set connection data on UnityTransport
                 var transportType = transport.GetType();
-                
+
                 // Check if it's UnityTransport
                 if (transportType.Name == "UnityTransport")
                 {
@@ -144,28 +170,29 @@ namespace DefaultNamespace
                         {
                             var connectionData = connectionDataField.GetValue(transport);
                             var connectionDataType = connectionData.GetType();
-                            
+
                             // Set Address
                             var addressField = connectionDataType.GetField("Address");
                             if (addressField != null)
                             {
                                 addressField.SetValue(connectionData, serverAddress);
                             }
-                            
+
                             // Set Port
                             var portField = connectionDataType.GetField("Port");
                             if (portField != null)
                             {
                                 portField.SetValue(connectionData, port);
                             }
-                            
+
                             connectionDataField.SetValue(transport, connectionData);
                             Log($"Transport configured: {serverAddress}:{port}");
                         }
                     }
                     catch (System.Exception ex)
                     {
-                        Debug.LogWarning($"[NetworkAutoStart] Could not configure transport via reflection: {ex.Message}");
+                        Debug.LogWarning(
+                            $"[NetworkAutoStart] Could not configure transport via reflection: {ex.Message}");
                     }
                 }
             }
@@ -181,14 +208,13 @@ namespace DefaultNamespace
 
         #region Debug GUI (Optional)
 
-        [Header("GUI")]
-        [SerializeField] private bool showDebugGUI = true;
+        [Header("GUI")] [SerializeField] private bool showDebugGUI = true;
 
         private void OnGUI()
         {
             if (!showDebugGUI) return;
 
-            GUILayout.BeginArea(new Rect(10, 10, 400, 200));
+            GUILayout.BeginArea(new Rect(10, 10, 400, 250));
             GUILayout.Label("=== Network Auto-Start ===");
 
 #if UNITY_EDITOR
@@ -198,24 +224,30 @@ namespace DefaultNamespace
             GUILayout.Label("Multiplayer Play Mode: Not available (Standalone build)");
 #endif
 
+            // Display RuntimeSettings status
+            if (_runtimeSettings != null)
+            {
+                GUILayout.Label($"Runtime Peer Type: <color=yellow>{_runtimeSettings.CurrentPeerType}</color>");
+            }
+
             if (NetworkManager.Singleton != null)
             {
                 GUILayout.Label($"Network Status: {GetNetworkStatus()}");
-                
+
                 if (!NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsClient)
                 {
                     GUILayout.Label("Manual Controls:");
-                    
+
                     if (GUILayout.Button("Start Server", GUILayout.Height(30)))
                     {
                         StartAsServer();
                     }
-                    
+
                     if (GUILayout.Button("Start Client", GUILayout.Height(30)))
                     {
                         StartAsClient();
                     }
-                    
+
                     if (GUILayout.Button("Start Host", GUILayout.Height(30)))
                     {
                         Log("<color=yellow>Starting as HOST...</color>");
@@ -242,18 +274,17 @@ namespace DefaultNamespace
         private string GetNetworkStatus()
         {
             if (NetworkManager.Singleton == null) return "No NetworkManager";
-            
+
             if (NetworkManager.Singleton.IsHost)
                 return "<color=yellow>Host (Server + Client)</color>";
             if (NetworkManager.Singleton.IsServer)
                 return "<color=green>Server</color>";
             if (NetworkManager.Singleton.IsClient)
                 return "<color=cyan>Client</color>";
-            
+
             return "Not Started";
         }
 
         #endregion
     }
 }
-

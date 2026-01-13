@@ -27,7 +27,7 @@ namespace DefaultNamespace
 
         private void OnMouseDown()
         {
-            if (!_networkHealthData.IsServer && !_networkHealthData.IsOwner)
+            if (!_networkHealthData.IsServer)
             {
                 Debug.LogWarning($"[Client] No authority to modify health. IsServer: {_networkHealthData.IsServer}, IsOwner: {_networkHealthData.IsOwner}");
                 return;

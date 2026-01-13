@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84b3ba5f8e8845409810f2bef4a13d6a, type: 3}
   m_Name: HealthConfig
   m_EditorClassIdentifier: Assembly-CSharp::DefaultNamespace.HealthConfig
-  MaxHealth: 100
+  Max: 100
