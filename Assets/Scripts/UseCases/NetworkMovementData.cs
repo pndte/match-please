@@ -8,7 +8,7 @@ namespace DefaultNamespace
 {
     public class NetworkMovementData : NetworkLifetimedBehaviour
     {
-        public NetworkVariable<float> XVelocity = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        [HideInInspector] public NetworkVariable<float> XVelocity = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         
         private Rigidbody2D _physics;
         private MovementConfig _config;

@@ -10,23 +10,30 @@ namespace Entities.Network
         public float Max => _config.Max;
         private readonly HealthConfig _config;
         private bool _isSynchronizing;
+        private readonly NetworkHealthData _networkData;
 
-        public NetworkHealth(Lifetime lifetime, HealthConfig config, NetworkHealthData networkData)
+        public NetworkHealth(ILifetimed lifetimed, HealthConfig config, NetworkHealthData networkData)
         {
             _config = config;
+            _networkData = networkData;
+            lifetimed.WhenAlive(OnAlive);
+        }
+
+        private void OnAlive(Lifetime lifetime)
+        {
             Advise(lifetime, health => Debug.Log("Health changed: " + health));
 
-            networkData.SpawnedLifetime.WhenAlive(lifetime, aliveLifetime =>
+            _networkData.SpawnedLifetime.WhenAlive(lifetime, aliveLifetime =>
             {
                 Advise(aliveLifetime, newHealth =>
                 {
                     if (!_isSynchronizing && NetworkManager.Singleton.IsServer /* TODO: исправить */) 
-                        networkData.Health.Value = newHealth;
+                        _networkData.Health.Value = newHealth;
                 });
 
                 aliveLifetime.Bracket(
-                    () => networkData.Health.OnValueChanged += SynchronizeHealth,
-                    () => networkData.Health.OnValueChanged -= SynchronizeHealth);
+                    () => _networkData.Health.OnValueChanged += SynchronizeHealth,
+                    () => _networkData.Health.OnValueChanged -= SynchronizeHealth);
             });
             
             return;

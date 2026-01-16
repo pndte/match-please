@@ -241,11 +241,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7edb576fb2249949173afef5b68fe50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Injection.CharacterInstaller
+  _networkLifetimedBehaviour: {fileID: 2845693040811876034}
+  _networkCharacter: {fileID: 6675623069992059912}
   _healthConfig: {fileID: 11400000, guid: 20665ca7550f0604d82f61652021be97, type: 2}
   _networkHealthData: {fileID: 2845693040811876034}
   _physics: {fileID: 7303288911383704076}
   _movementConfig: {fileID: 11400000, guid: 69583fc462e9fe145a5a5101d5d42728, type: 2}
-  _networkMovementData: {fileID: 7318710291484346262}
 --- !u!114 &6882384179166022606
 MonoBehaviour:
   m_ObjectHideFlags: 0

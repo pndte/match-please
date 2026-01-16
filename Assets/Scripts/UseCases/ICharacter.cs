@@ -1,14 +1,11 @@
-﻿using Entities;
+﻿using DefaultNamespace;
+using Entities;
 
-namespace DefaultNamespace
+namespace UseCases.Network
 {
     public interface ICharacter : IReadonlyCharacter
     {
         public IHealth Health { get; }
-    }
-
-    public interface IReadonlyCharacter
-    {
-        public IReadonlyHealth Health { get; }
+        public void Die();
     }
 }

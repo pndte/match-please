@@ -4,6 +4,6 @@ namespace Entities
 {
     public interface IPlayer
     {
-        public ICharacter Character { get; }
+        public NetworkCharacter ICharacter { get; }
     }
 }
