@@ -1,4 +1,5 @@
 ﻿using System;
+using DefaultNamespace;
 using Entities;
 using Entities.Network;
 using JetBrains.Lifetimes;
@@ -15,10 +16,18 @@ namespace Injection
         [SerializeField] private HealthConfig _healthConfig;
         [SerializeField] private NetworkHealthData _networkHealthData;
         
+        [SerializeField] private Rigidbody2D _physics;
+        [SerializeField] private MovementConfig _movementConfig;
+        [SerializeField] private NetworkMovementData _networkMovementData;
+        
         public override void InstallBindings()
         {
             Container.Bind<HealthConfig>().FromInstance(_healthConfig).AsSingle();
             Container.Bind<NetworkHealthData>().FromInstance(_networkHealthData).AsSingle();
+
+            Container.Bind<Rigidbody2D>().To<Rigidbody2D>().FromInstance(_physics).AsSingle();
+            Container.Bind<MovementConfig>().To<MovementConfig>().FromInstance(_movementConfig).AsSingle();
+            Container.Bind<NetworkMovementData>().FromInstance(_networkMovementData).AsSingle().NonLazy();
             
             switch (_runtimeSettings.CurrentPeerType)
             {

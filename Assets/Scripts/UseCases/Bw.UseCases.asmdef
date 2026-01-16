@@ -1,0 +1,22 @@
+{
+    "name": "Bw.UseCases",
+    "rootNamespace": "",
+    "references": [
+        "Bw.Entities.Network",
+        "Bw.Entities",
+        "Unity.Netcode.Runtime",
+        "Zenject"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JetBrains.Lifetimes.dll",
+        "Zenject-usage.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

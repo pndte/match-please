@@ -1,0 +1,23 @@
+{
+    "name": "Bw.Injection",
+    "rootNamespace": "",
+    "references": [
+        "Bw.Entities.Network",
+        "Bw.Entities",
+        "Bw.Setup",
+        "Zenject",
+        "Bw.UseCases"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JetBrains.Lifetimes.dll",
+        "Zenject-usage.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

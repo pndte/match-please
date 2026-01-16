@@ -5,24 +5,18 @@ using Zenject;
 
 namespace DefaultNamespace
 {
-    public class Character : MonoBehaviour
+    public class Character : MonoBehaviour, ICharacter
     {
-        private IHealth _health;
+        public IHealth Health { get; private set; }
+        IReadonlyHealth IReadonlyCharacter.Health => Health;
+
         private NetworkHealthData _networkHealthData;
 
         [Inject]
         private void Construct(IHealth health, NetworkHealthData networkHealthData)
         {
-            _health = health;
+            Health = health;
             _networkHealthData = networkHealthData;
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                OnMouseDown();
-            }
         }
 
         private void OnMouseDown()
@@ -33,9 +27,10 @@ namespace DefaultNamespace
                 return;
             }
 
-            Debug.Log($"[{((_networkHealthData.IsServer) ? "Server" : "Client")}] Before Hit: {_health.Value}");
-            _health.Value -= 10;
-            Debug.Log($"[{((_networkHealthData.IsServer) ? "Server" : "Client")}] After Hit: {_health.Value}");
+            Debug.Log($"[{((_networkHealthData.IsServer) ? "Server" : "Client")}] Before Hit: {Health.Value}");
+            Health.Value -= 10;
+            Debug.Log($"[{((_networkHealthData.IsServer) ? "Server" : "Client")}] After Hit: {Health.Value}");
         }
+
     }
 }
