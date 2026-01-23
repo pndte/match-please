@@ -1,11 +1,13 @@
 {
     "name": "Bw.UseCases",
-    "rootNamespace": "",
+    "rootNamespace": "Bw",
     "references": [
         "Bw.Entities.Network",
         "Bw.Entities",
         "Unity.Netcode.Runtime",
-        "Zenject"
+        "Zenject",
+        "UniTask.DOTween",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -13,7 +15,8 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "JetBrains.Lifetimes.dll",
-        "Zenject-usage.dll"
+        "Zenject-usage.dll",
+        "DOTween.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

@@ -61,6 +61,7 @@ namespace Setup
                     "[NetworkAutoStart] NetworkManager.Singleton is null! Make sure NetworkManager exists in the scene.");
                 return;
             }
+            
 
             // Detect and handle Multiplayer Play Mode tag
             DetectAndStartNetwork();

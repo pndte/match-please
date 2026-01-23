@@ -1,6 +1,6 @@
-﻿using DefaultNamespace;
+﻿using Bw.UseCases.Character.Network;
 
-namespace Entities
+namespace Bw.UseCases
 {
     public interface IPlayer
     {

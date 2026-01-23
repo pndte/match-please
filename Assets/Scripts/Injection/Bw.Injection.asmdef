@@ -1,12 +1,13 @@
 {
     "name": "Bw.Injection",
-    "rootNamespace": "",
+    "rootNamespace": "Bw",
     "references": [
         "Bw.Entities.Network",
         "Bw.Entities",
         "Bw.Setup",
+        "Bw.UseCases",
         "Zenject",
-        "Bw.UseCases"
+        "Unity.Netcode.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

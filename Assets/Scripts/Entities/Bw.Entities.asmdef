@@ -1,6 +1,6 @@
 {
     "name": "Bw.Entities",
-    "rootNamespace": "",
+    "rootNamespace": "Bw",
     "references": [
     ],
     "includePlatforms": [],

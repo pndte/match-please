@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Entities
+namespace Bw.Entities
 {
     [CreateAssetMenu(fileName = "HealthConfig", menuName = "Configs/HealthConfig")]
     public class HealthConfig : ScriptableObject

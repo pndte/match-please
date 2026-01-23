@@ -1,6 +1,6 @@
 ﻿using JetBrains.Collections.Viewable;
 
-namespace Entities
+namespace Bw.Entities
 {
     public interface IReadonlyHealth : IReadonlyProperty<float>
     {

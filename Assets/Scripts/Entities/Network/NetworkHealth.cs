@@ -1,9 +1,10 @@
-﻿using JetBrains.Collections.Viewable;
+﻿using Bw.Entities.Extensions;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Entities.Network
+namespace Bw.Entities.Network
 {
     public sealed class NetworkHealth : ViewableProperty<float>, IHealth
     {

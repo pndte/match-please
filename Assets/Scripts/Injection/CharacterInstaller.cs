@@ -1,14 +1,16 @@
 ﻿using System;
+using Bw.Entities;
+using Bw.Entities.Network;
+using Bw.UseCases;
+using Bw.UseCases.Character;
+using Bw.UseCases.Character.Network;
+using Bw.UseCases.Movement;
 using DefaultNamespace;
-using Entities;
-using Entities.Network;
-using JetBrains.Lifetimes;
 using Setup;
 using UnityEngine;
-using UseCases.Network;
 using Zenject;
 
-namespace Injection
+namespace Bw.Injection
 {
     public class CharacterInstaller : MonoInstaller
     {

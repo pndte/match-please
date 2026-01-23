@@ -1,6 +1,6 @@
 {
     "name": "Bw.Setup",
-    "rootNamespace": "",
+    "rootNamespace": "Bw",
     "references": [
         "Bw.Entities.Network",
         "Bw.Entities",

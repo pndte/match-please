@@ -4,7 +4,7 @@ using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
 
-namespace Entities.Network
+namespace Bw.Entities.Network
 {
     public class NetworkLifetimedBehaviour : NetworkBehaviour, ILifetimed
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Unity.Netcode;
 
-namespace Entities.Network
+namespace Bw.Entities.Network
 {
     public class NetworkHealthData : NetworkLifetimedBehaviour
     {

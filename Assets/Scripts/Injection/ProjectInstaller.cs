@@ -1,16 +1,23 @@
-﻿using DefaultNamespace;
+﻿using Bw.UseCases;
+using Bw.UseCases.Clients.Network;
 using Setup;
 using UnityEngine;
 using Zenject;
 
-namespace Injection
+namespace Bw.Injection
 {
     public class ProjectInstaller : MonoInstaller
     {
+        [Inject] private IRuntimeSettings _runtimeSettings;
+        
         public override void InstallBindings()
         {
-            Container.Bind<IRuntimeSettings>().To<RuntimeSettings>().AsSingle(); // TODO: сделать инициализацию явной, не через NetworkAutoStart
-            Container.BindInterfacesTo<DiContainer>().FromInstance(Container).AsSingle();
+            Container.BindInterfacesAndSelfTo<DiContainer>().FromInstance(Container).AsSingle();
+
+            if (_runtimeSettings.CurrentPeerType == PeerType.Server)
+            {
+                Container.BindInterfacesTo<CharacterRegistry>().AsSingle();
+            }
         }
     }
 }

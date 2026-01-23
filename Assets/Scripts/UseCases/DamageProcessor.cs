@@ -1,7 +1,9 @@
-﻿using Entities;
+﻿using Bw.Entities;
+using Bw.Entities.Extensions;
+using Bw.UseCases.Character;
 using JetBrains.Lifetimes;
 
-namespace UseCases.Network
+namespace Bw.UseCases
 {
     public class DamageProcessor
     {

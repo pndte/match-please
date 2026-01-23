@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Lifetimes;
 
-namespace Entities
+namespace Bw.Entities
 {
     public interface ILifetimed //TODO: переделать
     {

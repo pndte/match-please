@@ -1,4 +1,4 @@
-﻿namespace Entities.Network
+﻿namespace Bw.Entities.Network
 {
     public class HealthDataConnector
     {

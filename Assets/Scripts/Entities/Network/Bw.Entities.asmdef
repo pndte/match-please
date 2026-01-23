@@ -1,6 +1,6 @@
 {
     "name": "Bw.Entities.Network",
-    "rootNamespace": "",
+    "rootNamespace": "Bw",
     "references": [
         "Unity.Netcode.Runtime",
         "Bw.Entities"
