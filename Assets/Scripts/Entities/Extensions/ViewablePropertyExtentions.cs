@@ -27,5 +27,34 @@ namespace Bw.Entities.Extensions
         {
             map.AddLifetimed(lifetime, new KeyValuePair<K, V>(key, value));
         }
+
+        public static void ViewForKey<K, V>(this IViewableMap<K, V> map, Lifetime lifetime, K targetKey,
+            Action<Lifetime, V> handler)
+        {
+            LifetimeDefinition def = null;
+            map.AdviseAddRemove(lifetime, (kind, newKey, value) =>
+            {
+                switch (kind)
+                {
+                    case AddRemove.Add:
+                        if (Equals(newKey, targetKey))
+                        {
+                            def = Lifetime.Define(lifetime);
+                            handler(def.Lifetime, value);
+                        }
+
+                        break;
+                    case AddRemove.Remove:
+                        if (Equals(newKey, targetKey))
+                        {
+                            def?.Terminate();
+                        }
+
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException($"Illegal enum value: {kind}");
+                }
+            });
+        }
     }
 }

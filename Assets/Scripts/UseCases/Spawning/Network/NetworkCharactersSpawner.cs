@@ -28,16 +28,20 @@ namespace Bw.UseCases.Spawning.Network
         private int _nextSpawnPointIndex = 0;
         
         private ICharacterRegistry _characterRegistry;
-        private INetworkPrefabInstanceHandler _prefabHandler;
+        private IGameObjectByCharacterCollection _gameObjectByCharacterCollection;
         private IInstantiator _instantiator;
         [SerializeField] private GameObject _character;
 
         [Inject]
-        private void Construct(Lifetime lifetime, IClientCollection clientCollection, ICharacterRegistry characterRegistry, INetworkPrefabInstanceHandler prefabInstanceHandler,
+        private void Construct(
+            Lifetime lifetime,
+            IClientCollection clientCollection, 
+            ICharacterRegistry characterRegistry,
+            IGameObjectByCharacterCollection gameObjectByCharacterCollection,
             IInstantiator instantiator)
         {
             _characterRegistry = characterRegistry;
-            _prefabHandler = prefabInstanceHandler;
+            _gameObjectByCharacterCollection = gameObjectByCharacterCollection;
             _instantiator = instantiator;
             Debug.Log("Construct executed");
             
@@ -54,10 +58,13 @@ namespace Bw.UseCases.Spawning.Network
             var playerInstance =  _instantiator.InstantiatePrefab(_character, spawnPosition, spawnRotation, null).GetComponent<NetworkObject>();
             
             playerInstance.SpawnAsPlayerObject(client.Id, true);
-            var character = playerInstance.gameObject.GetComponent<NetworkCharacter>();
+            var character = playerInstance.gameObject.GetComponent<NetworkCharacter>(); //TODO: добавлять в отдельном файле
             
-            character.SpawnedLifetime.WhenAliveOnce(lifetime, spawnedLifetime =>
-                _characterRegistry.ClientByCharacter.AddLifetimed(spawnedLifetime, character, client));
+            character.AliveLifetime.WhenAliveOnce(lifetime, aliveLifetime =>
+            {
+                _gameObjectByCharacterCollection.AddLifetimed(aliveLifetime, character, playerInstance.gameObject);
+                _characterRegistry.ClientByCharacter.AddLifetimed(aliveLifetime, character, client);
+            });
 
             Log($"<color=green>✓ Player character spawned for client {client} at {spawnPosition}</color>");
 

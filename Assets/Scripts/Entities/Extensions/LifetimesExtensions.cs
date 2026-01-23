@@ -8,23 +8,21 @@ namespace Bw.Entities.Extensions
     {
         public static void WhenAlive(this IReadonlyProperty<Lifetime> property, Lifetime lifetime, Action<Lifetime> handler)
         {
-            property.View(lifetime, (valueLifetime, value) =>
+            property.Advise(lifetime, value =>
             {
                 if (value.IsAlive)
-                {
-                    handler(valueLifetime);
-                }
+                    handler(value);
             });
         }
         
         public static void WhenAliveOnce(this IReadonlyProperty<Lifetime> property, Lifetime lifetime, Action<Lifetime> handler)
         {
             var def = lifetime.CreateNested();
-            property.View(def.Lifetime, (valueLifetime, value) =>
+            property.Advise(def.Lifetime, value =>
             {
                 if (value.IsAlive)
                 {
-                    handler(valueLifetime);
+                    handler(value);
                     def.Terminate();
                 }
             });

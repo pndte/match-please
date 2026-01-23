@@ -299,7 +299,7 @@ MonoBehaviour:
   m_DisconnectTimeoutMS: 30000
   ConnectionData:
     Address: 127.0.0.1
-    Port: 7777
+    Port: 9000
     ServerListenAddress: 127.0.0.1
     ClientBindPort: 0
   DebugSimulator:
@@ -379,7 +379,7 @@ MonoBehaviour:
   serverTag: server
   clientTag: client
   serverAddress: 127.0.0.1
-  port: 7777
+  port: 9000
   enableLogging: 1
   showDebugGUI: 1
 --- !u!1 &619394800
@@ -951,6 +951,8 @@ GameObject:
   - component: {fileID: 1377258033}
   - component: {fileID: 1377258034}
   - component: {fileID: 1377258035}
+  - component: {fileID: 1377258036}
+  - component: {fileID: 1377258037}
   m_Layer: 0
   m_Name: SceneContext
   m_TagString: Untagged
@@ -987,6 +989,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Zenject::Zenject.SceneContext
   _scriptableObjectInstallers: []
   _monoInstallers:
+  - {fileID: 1377258037}
+  - {fileID: 1377258036}
   - {fileID: 1377258035}
   _installerPrefabs: []
   _findSiblingMonoInstallers: 0
@@ -1021,6 +1025,30 @@ MonoBehaviour:
   _networkCharactersSpawner: {fileID: 1220899334}
   _networkClientCollection: {fileID: 1220899337}
   _character: {fileID: 8102801189555939568, guid: fc8b285af66260547821ffb4b60738cc, type: 3}
+--- !u!114 &1377258036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1377258032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9428002f53f74d528d40abbe82459752, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Bw.Injection::Bw.Injection.GameSessionInstaller
+--- !u!114 &1377258037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1377258032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e4fbf2e01cb4a2d96f7114b06fb790f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Bw.Injection::Bw.Injection.LifetimeInstaller
 --- !u!1 &1547961739
 GameObject:
   m_ObjectHideFlags: 0

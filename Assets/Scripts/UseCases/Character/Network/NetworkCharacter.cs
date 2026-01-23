@@ -10,7 +10,9 @@ namespace Bw.UseCases.Character.Network
     public class NetworkCharacter : NetworkLifetimedBehaviour, ICharacter
     {
         public IHealth Health { get; private set; }
+        public IViewableProperty<CharacterState> State { get; } = new ViewableProperty<CharacterState>(CharacterState.Alive);
         public IReadonlyProperty<Lifetime> Lifetime => SpawnedLifetime;
+        IReadonlyProperty<CharacterState> IReadonlyCharacter.State => State; //TODO: sync by network
         IReadonlyHealth IReadonlyCharacter.Health => Health;
 
         private NetworkHealthData _networkHealthData;
@@ -24,7 +26,8 @@ namespace Bw.UseCases.Character.Network
         
         public void Die()
         {
-            NetworkObject.Despawn(true);
+            State.Value = CharacterState.Dead;
+            NetworkObject.Despawn(false); // TODO: refactor
         }
 
         private void OnMouseDown()
