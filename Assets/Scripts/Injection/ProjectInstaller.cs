@@ -1,7 +1,5 @@
 ﻿using Bw.UseCases;
-using Bw.UseCases.Clients.Network;
 using Setup;
-using UnityEngine;
 using Zenject;
 
 namespace Bw.Injection
