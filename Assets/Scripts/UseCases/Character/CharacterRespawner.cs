@@ -1,6 +1,8 @@
-﻿using Bw.Entities;
+﻿using System;
+using Bw.Entities;
 using Bw.UseCases.Character.Extensions;
 using Bw.UseCases.Spawning;
+using Cysharp.Threading.Tasks;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Character
@@ -22,11 +24,12 @@ namespace Bw.UseCases.Character
 
         private void HandleCharacter(Lifetime lifetime, ICharacter character, IClient client)
         {
-            character.State.WhenDead(lifetime, _ => RespawnCharacter(client));
+            character.State.WhenDead(lifetime, _ => RespawnCharacter(client).Forget());
         }
 
-        private void RespawnCharacter(IClient client)
+        private async UniTaskVoid RespawnCharacter(IClient client)
         {
+            await UniTask.Delay(TimeSpan.FromSeconds(3), cancellationToken:_selfLifetime); //TODO: лайфтайм клиента
             _characterSpawner.SpawnCharacterFor(_selfLifetime, client);
         }
     }
