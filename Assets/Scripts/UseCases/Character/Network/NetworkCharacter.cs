@@ -10,23 +10,21 @@ namespace Bw.UseCases.Character.Network
     public class NetworkCharacter : NetworkLifetimedBehaviour, ICharacter
     {
         public IHealth Health { get; private set; }
-        public IReadonlyProperty<Lifetime> Lifetime => _networkLifetimedBehaviour.SpawnedLifetime;
+        public IReadonlyProperty<Lifetime> Lifetime => SpawnedLifetime;
         IReadonlyHealth IReadonlyCharacter.Health => Health;
 
         private NetworkHealthData _networkHealthData;
-        private NetworkLifetimedBehaviour _networkLifetimedBehaviour;
 
         [Inject]
-        private void Construct(IHealth health, NetworkHealthData networkHealthData, NetworkLifetimedBehaviour networkLifetimedBehaviour)
+        private void Construct(IHealth health, NetworkHealthData networkHealthData)
         {
             Health = health;
             _networkHealthData = networkHealthData;
-            _networkLifetimedBehaviour = networkLifetimedBehaviour;
         }
         
         public void Die()
         {
-            _networkLifetimedBehaviour.NetworkObject.Despawn(true);
+            NetworkObject.Despawn(true);
         }
 
         private void OnMouseDown()

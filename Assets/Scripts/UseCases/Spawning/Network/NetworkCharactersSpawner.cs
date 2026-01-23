@@ -3,6 +3,7 @@ using Bw.Entities.Extensions;
 using Bw.UseCases.Character;
 using Bw.UseCases.Character.Network;
 using Bw.UseCases.Clients;
+using Cysharp.Threading.Tasks;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
 using UnityEngine;
@@ -40,7 +41,11 @@ namespace Bw.UseCases.Spawning.Network
             _instantiator = instantiator;
             Debug.Log("Construct executed");
             
-            clientCollection.ByIds.AdviseAdd(lifetime, (_, client) => SpawnCharacterFor(lifetime, client)); // TODO: спавн на лайфтайм, надо перенести в другой объект
+            clientCollection.ByIds.AdviseAdd(lifetime, async (_, client) =>
+            {
+                await UniTask.Yield();
+                SpawnCharacterFor(lifetime, client);
+            }); // TODO: спавн на лайфтайм, надо перенести в другой объект
         }
 
         public ICharacter SpawnCharacterFor(Lifetime lifetime, IClient client)

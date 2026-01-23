@@ -36,8 +36,8 @@ namespace Bw.Injection
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.BindInterfacesAndSelfTo<NetworkLifetimedBehaviour>().FromInstance(_networkLifetimedBehaviour).AsSingle();
-                    Container.BindInterfacesTo<NetworkCharacter>().FromInstance(_networkCharacter).AsSingle();
+                    Container.Bind<ILifetimed>().To<NetworkLifetimedBehaviour>().FromInstance(_networkLifetimedBehaviour).AsSingle();
+                    Container.Bind<ICharacter>().To<NetworkCharacter>().FromInstance(_networkCharacter).AsSingle();
                     Container.BindInterfacesAndSelfTo<NetworkHealth>().AsSingle();
                     Container.Bind<HealthDataConnector>().AsSingle().NonLazy();
                     Container.Bind<DamageProcessor>().AsSingle().NonLazy();
