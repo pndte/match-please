@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 #if UNITY_EDITOR
@@ -61,10 +62,11 @@ namespace Setup
                     "[NetworkAutoStart] NetworkManager.Singleton is null! Make sure NetworkManager exists in the scene.");
                 return;
             }
-            
+            Log("Auto-start startoing.");
 
             // Detect and handle Multiplayer Play Mode tag
             DetectAndStartNetwork();
+            SceneManager.LoadScene("SampleScene", LoadSceneMode.Single);
         }
 
         private void DetectAndStartNetwork()
@@ -114,10 +116,7 @@ namespace Setup
                 Log($"<color=green>✓ Server started successfully on port {port}</color>");
 
                 // Initialize RuntimeSettings with Server peer type
-                if (_runtimeSettings is RuntimeSettings runtimeSettings)
-                {
-                    runtimeSettings.Initialize(PeerType.Server);
-                }
+                _runtimeSettings.Initialize(PeerType.Server);
             }
             else
             {
@@ -139,10 +138,7 @@ namespace Setup
                 Log($"<color=cyan>✓ Client started successfully, connecting to {serverAddress}:{port}</color>");
 
                 // Initialize RuntimeSettings with Client peer type
-                if (_runtimeSettings is RuntimeSettings runtimeSettings)
-                {
-                    runtimeSettings.Initialize(PeerType.Client);
-                }
+                _runtimeSettings.Initialize(PeerType.Client);
             }
             else
             {

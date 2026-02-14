@@ -2,7 +2,7 @@
 
 namespace Bw.Entities.Loop
 {
-    class Sequence : IUpdatable
+    public class Sequence : IUpdatable
     {
         private readonly IUpdateGroup _group;
 
@@ -11,10 +11,8 @@ namespace Bw.Entities.Loop
             _group = group;
         }
 
-        public Sequence(params IUpdatable[] subscribers)
-        {
-            _group = new StaticGroup(subscribers);
-        }
+        public Sequence(params IUpdatable[] subscribers) : this(new StaticGroup(subscribers))
+        { }
 
         public void Update()
         {

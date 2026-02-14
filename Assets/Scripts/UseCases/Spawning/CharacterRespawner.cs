@@ -1,11 +1,11 @@
 ﻿using System;
 using Bw.Entities;
+using Bw.UseCases.Character;
 using Bw.UseCases.Character.Extensions;
-using Bw.UseCases.Spawning;
 using Cysharp.Threading.Tasks;
 using JetBrains.Lifetimes;
 
-namespace Bw.UseCases.Character
+namespace Bw.UseCases.Spawning
 {
     public class CharacterRespawner
     {

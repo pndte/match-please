@@ -12,6 +12,14 @@ namespace Bw.UseCases.Character.Extensions
             {
                 if (state == CharacterState.Dead) handler(stateLifetime);
             });
+        }       
+        
+        public static void WhenAlive(this IReadonlyProperty<CharacterState> characterState, Lifetime lifetime, Action<Lifetime> handler)
+        {
+            characterState.View(lifetime, (stateLifetime, state) =>
+            {
+                if (state == CharacterState.Alive) handler(stateLifetime);
+            });
         }
     }
 }

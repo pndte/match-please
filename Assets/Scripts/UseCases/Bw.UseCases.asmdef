@@ -5,9 +5,11 @@
         "Bw.Entities.Network",
         "Bw.Entities",
         "Unity.Netcode.Runtime",
+        "Unity.Collections",
         "Zenject",
         "UniTask.DOTween",
-        "UniTask"
+        "UniTask",
+        "Bw.Setup"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

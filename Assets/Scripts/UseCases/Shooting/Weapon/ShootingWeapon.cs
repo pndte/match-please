@@ -52,13 +52,18 @@ namespace Bw.UseCases.Shooting.Weapon
                 _ammo.View(triggerLifetime, (ammoLifetime, _) =>
                     Reload(ammoLifetime).Forget()));
         }
+        
+        public void ForceShot(Vector3 targetPosition)
+        {
+            _shotSignal.Fire(targetPosition);
+        }
 
         public void Update()
         {
             var currentTime = Time.time;
             var deltaTime = currentTime - _lastUpdateTime;
             _lastUpdateTime = currentTime;
-
+            
             if (_readyToShot.Value || _ammo.Empty() || _reloading.Value) return;
             
             _elapsedTime -= deltaTime;
@@ -74,7 +79,8 @@ namespace Bw.UseCases.Shooting.Weapon
             _reloading.Value = true;
             lifetime.OnTermination(() => _reloading.Value = false);
             
-            await UniTask.Delay(TimeSpan.FromSeconds(_config.ReloadTime), cancellationToken: lifetime).SuppressCancellationThrow();
+            var cancelled = await UniTask.Delay(TimeSpan.FromSeconds(_config.ReloadTime), cancellationToken: lifetime).SuppressCancellationThrow();
+            if (cancelled) return;
             
             _reloading.Value = false;
             _reloadComplete.Fire();

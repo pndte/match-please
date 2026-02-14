@@ -1,18 +1,19 @@
 ﻿using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Lifetimes;
+using UnityEngine;
 
 namespace Bw.UseCases.Shooting.Weapon.Network
 {
     public class ShootingWeaponServerHandler //TODO: ренейм и релокейт
     {
-        private readonly IWeapon _shootingWeapon;
+        private readonly IReadonlyWeapon _shootingWeapon;
         private readonly IReloader _reloader;
         private readonly ShootingWeaponConfig _config;
         private readonly IAmmo _ammo;
             
         public ShootingWeaponServerHandler(
             Lifetime lifetime, 
-            IWeapon shootingWeapon, 
+            IReadonlyWeapon shootingWeapon, 
             IReloader reloader,
             ShootingWeaponConfig config, 
             IAmmo ammo)

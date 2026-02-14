@@ -12,9 +12,7 @@ namespace Bw.Injection.Entities.Camera
         [SerializeField] private UnityEngine.Camera _camera;
         public override void InstallBindings()
         {
-            if (_settings.CurrentPeerType != PeerType.Client) return;
-            
-            Container.BindInterfacesAndSelfTo<PlayerCamera>().AsSingle().WithArguments(_camera);
+            Container.BindInterfacesTo<PlayerCamera>().AsSingle().WithArguments(_camera).NonLazy(); // TODO: сделать только для клиента
         }
     }
 }

@@ -6,6 +6,8 @@
         "Bw.Entities",
         "Bw.Setup",
         "Bw.UseCases",
+        "Bw.UseCases.Shooting",
+        "Bw.UseCases.Spawning",
         "Zenject",
         "Unity.Netcode.Runtime"
     ],

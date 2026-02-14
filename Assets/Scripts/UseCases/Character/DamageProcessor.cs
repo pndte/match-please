@@ -1,18 +1,16 @@
-﻿using Bw.Entities;
-using Bw.Entities.Extensions;
-using Bw.UseCases.Character;
+﻿using Bw.Entities.Extensions;
 using JetBrains.Lifetimes;
 
-namespace Bw.UseCases
+namespace Bw.UseCases.Character
 {
     public class DamageProcessor
     {
         private readonly ICharacter _character;
 
-        public DamageProcessor(ILifetimed lifetimed, ICharacter character)
+        public DamageProcessor(Lifetime lifetime, ICharacter character)
         {
             _character = character;
-            lifetimed.WhenAlive(WhenCharacterAlive);
+            character.Lifetime.WhenAlive(lifetime, WhenCharacterAlive);
         }
 
         private void WhenCharacterAlive(Lifetime lifetime)

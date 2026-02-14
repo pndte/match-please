@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Setup
 {
@@ -12,6 +13,8 @@ namespace Setup
 
         /// <inheritdoc />
         public PeerType CurrentPeerType => _currentPeerType;
+        
+        private bool _initialized;
 
         /// <summary>
         /// Initializes the runtime settings with the specified peer type.
@@ -20,18 +23,11 @@ namespace Setup
         /// <param name="peerType">The peer type to set (Server or Client).</param>
         public void Initialize(PeerType peerType)
         {
-            _currentPeerType = peerType;
+            if (_initialized) throw new Exception("already initialized");
             
+            _currentPeerType = peerType;
+            _initialized = true;
             Debug.Log($"<color=cyan>[RuntimeSettings] Initialized with PeerType: {peerType}</color>");
-        }
-
-        /// <summary>
-        /// Resets the runtime settings (useful for testing or when shutting down the network).
-        /// </summary>
-        public void Reset()
-        {
-            _currentPeerType = PeerType.Client;
-            Debug.Log("[RuntimeSettings] Reset to uninitialized state.");
         }
     }
 }

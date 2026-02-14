@@ -6,7 +6,7 @@ namespace Bw.UseCases
 {
     public interface ICharacterRegistry
     {
-        public IViewableMap<ICharacter, IClient> ClientByCharacter { get; }
+        public IViewableMap<ICharacter, IClient> ClientByCharacter { get; } // TODO: refactor, клиент не может напрямую владеть персонажем
     }
 
     public class CharacterRegistry : ICharacterRegistry

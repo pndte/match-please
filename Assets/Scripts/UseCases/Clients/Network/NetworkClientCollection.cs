@@ -1,25 +1,29 @@
-﻿using System.Collections.Generic;
-using Bw.Entities;
-using JetBrains.Collections.Viewable;
+﻿using Bw.Entities;
+using Bw.Entities.Infrastructure;
+using JetBrains.Lifetimes;
+using Setup;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Bw.UseCases.Clients.Network
 {
-    public class NetworkClientCollection : NetworkBehaviour, IClientCollection
+    public class NetworkClientCollection : IClientCollection //TODO: to project Context
     {
-        public IViewableMap<ulong, IClient> ByIds { get; } = new ViewableMap<ulong, IClient>();
-        public ICollection<IClient> All => ByIds.Values;
+        public IViewableBiMap<ulong, IClient> ByIds { get; }
 
-        public override void OnNetworkSpawn()
+        private NetworkClientCollection(Lifetime lifetime, NetworkManager manager, IRuntimeSettings runtimeSettings)
         {
-            if (!IsServer)
+            ByIds = new ViewableBiMap<ulong, IClient>(lifetime);
+            if (runtimeSettings.CurrentPeerType != PeerType.Server)
             {
                 return; // Only server handles spawning
             }
             
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
+            manager.OnClientConnectedCallback += OnClientConnected;
+            manager.OnClientDisconnectCallback += OnClientDisconnected;
+            
+            lifetime.OnTermination(() => manager.OnClientDisconnectCallback -= OnClientDisconnected);
+            lifetime.OnTermination(() => manager.OnClientConnectedCallback -= OnClientConnected);
         }
 
         private void OnClientConnected(ulong id)

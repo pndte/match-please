@@ -13,7 +13,7 @@ namespace Bw.UseCases.Shooting.Weapon
 
         public BulletTrailRenderer(
             Lifetime lifetime, 
-            IWeapon weapon,
+            IReadonlyWeapon weapon,
             IWeaponMuzzle weaponMuzzle,
             IShotVfxPlayer shotVfxPlayer,
             RaycastShootConfig raycastConfig)

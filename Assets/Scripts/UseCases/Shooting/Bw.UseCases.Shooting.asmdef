@@ -1,0 +1,28 @@
+{
+    "name": "Bw.UseCases.Shooting",
+    "rootNamespace": "Bw",
+    "references": [
+        "Bw.Entities.Network",
+        "Bw.Entities",
+        "Bw.Setup",
+        "Bw.UseCases",
+        "Unity.Netcode.Runtime",
+        "Unity.Collections",
+        "Zenject",
+        "UniTask.DOTween",
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JetBrains.Lifetimes.dll",
+        "Zenject-usage.dll",
+        "DOTween.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

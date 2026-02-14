@@ -1,10 +1,12 @@
-﻿using Bw.Entities.Network;
+﻿using System;
+using Bw.Entities.Network;
 using Bw.UseCases.Character;
 using UnityEngine;
 
 namespace Bw.UseCases.Shooting
 {
-    public class Bullet : NetworkLifetimedBehaviour // TODO: это пока не нужно, заменить на рейкасты, использовать для дебаггинга направления полёта пули
+    [Obsolete]
+    public class Bullet : NetworkLifetimedBehaviour
     {
         public float Speed;
         public Rigidbody2D Physics;

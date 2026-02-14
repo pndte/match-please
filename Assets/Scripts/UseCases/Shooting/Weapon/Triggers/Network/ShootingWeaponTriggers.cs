@@ -3,10 +3,11 @@ using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
 using UnityEngine;
+using Zenject;
 
-namespace Bw.UseCases.Shooting.Weapon.Triggers
+namespace Bw.UseCases.Shooting.Weapon.Triggers.Network
 {
-    public class ShootingWeaponTriggers : NetworkLifetimedBehaviour, IMouseShootTrigger, IReloadTrigger // TODO: декомпозировать.
+    public class ShootingWeaponTriggers : NetworkLifetimedBehaviour, IMouseShootTrigger, IReloadTrigger // TODO: декомпозировать, избавиться от RPC и NetworkLifetimedBehaviour.
     {
         ISignal<Vector3> IMouseShootTrigger.Triggered => _shotTriggered;
         ISignal<Lifetime> IReloadTrigger.Triggered => _reloadTriggered;
@@ -15,16 +16,18 @@ namespace Bw.UseCases.Shooting.Weapon.Triggers
         private readonly ISignal<Lifetime> _reloadTriggered = new Signal<Lifetime>();
         private SequentialLifetimes _reloadLifetimes = new(Lifetime.Terminated);
 
-        private void Start()
+        [Inject]
+        private void Construct(Lifetime lifetime, IReadonlyControlledBy enabled)
         {
-            _reloadLifetimes = new SequentialLifetimes(AliveLifetime.Value);
-            if (IsServer || !IsOwner) return;
-            
-            WhenAlive(OnAlive);
+            _reloadLifetimes = new SequentialLifetimes(lifetime);
+            enabled.Me.WhenTrue(lifetime, OnAlive);
         }
 
         private void OnAlive(Lifetime lifetime)
         {
+            if (!IsOwner) return; 
+            
+            Debug.Log("Advised");
             _reloadTriggered.Advise(lifetime, _ => TriggerReloadServerRpc());
             _shotTriggered.Advise(lifetime, mousePosition =>
             {
@@ -35,6 +38,7 @@ namespace Bw.UseCases.Shooting.Weapon.Triggers
         [Rpc(SendTo.Server)]
         private void TriggerShotServerRpc(Vector3 mousePosition, RpcParams rpcParams = default)
         {
+            Debug.Log($"{nameof(TriggerShotServerRpc)} called");
             _shotTriggered.Fire(mousePosition);
             var target = RpcTarget.Not(rpcParams.Receive.SenderClientId, RpcTargetUse.Temp);
             TriggerShotClientRpc(mousePosition, new RpcParams {Send = new RpcSendParams {Target = target}});
@@ -43,7 +47,7 @@ namespace Bw.UseCases.Shooting.Weapon.Triggers
         [Rpc(SendTo.SpecifiedInParams)]
         private void TriggerShotClientRpc(Vector3 mousePosition, RpcParams rpcParams = default)
         {
-            _shotTriggered.Fire(mousePosition);
+            _shotTriggered.Fire(mousePosition); //TODO: это не работает, надо вызывать рпс на weapon.Shot
         }
         
         [Rpc(SendTo.Server)]

@@ -1,11 +1,13 @@
-﻿using Bw.Entities.Network;
+﻿using System;
+using Bw.Entities.Network;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
 
 namespace Bw.UseCases.Shooting
 {
-    public class ClientShootData : NetworkLifetimedBehaviour // TODO: переделать под раннеры
+    [Obsolete]
+    public class ClientShootData : NetworkLifetimedBehaviour
     {
         [SerializeField] private NetworkBehaviour _bulletPrefab;
         [SerializeField] private Transform _weaponMuzzleTransform;

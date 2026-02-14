@@ -3,10 +3,8 @@ using JetBrains.Lifetimes;
 
 namespace Bw.Entities.Network
 {
-    public interface INetworkLifetimed : ILifetimed
+    public interface INetworkLifetimed
     {
         public IReadonlyProperty<Lifetime> SpawnedLifetime { get; }
-        public IReadonlyProperty<Lifetime> AliveLifetime { get; }
-        public IReadonlyProperty<Lifetime> OwnerLifetime { get; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Setup;
+using UnityEngine;
 using Zenject;
 
 namespace Bw.Injection
@@ -7,7 +8,7 @@ namespace Bw.Injection
     {
         public override void InstallBindings()
         {
-            Container.Bind<IRuntimeSettings>().To<RuntimeSettings>().AsSingle(); // TODO: сделать инициализацию явной, не через NetworkAutoStart
+            Container.Bind<IRuntimeSettings>().To<RuntimeSettings>().AsSingle().NonLazy(); // TODO: сделать инициализацию явной, не через NetworkAutoStart
         }
     }
 }

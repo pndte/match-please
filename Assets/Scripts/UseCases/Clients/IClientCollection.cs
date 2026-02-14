@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using Bw.Entities;
-using JetBrains.Collections.Viewable;
+﻿using Bw.Entities;
+using Bw.Entities.Infrastructure;
 
 namespace Bw.UseCases.Clients
 {
     public interface IClientCollection
     {
-        IViewableMap<ulong, IClient> ByIds { get; }
-        ICollection<IClient> All { get; }
+        IViewableBiMap<ulong, IClient> ByIds { get; }
     }
 }

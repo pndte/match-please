@@ -19,6 +19,8 @@
         /// This value is set when the network starts and remains immutable during runtime.
         /// </summary>
         PeerType CurrentPeerType { get; }
+
+        public void Initialize(PeerType peerType);
     }
 }
 

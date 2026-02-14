@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace Bw.UseCases.Shooting.Weapon.Triggers
 {
-    public class KeyboardWeaponTriggersConnector : IUpdatable
+    public class KeyboardWeaponTriggersConnector : IUpdatable // TODO: в целом можно перенести в ShootingWeaponTriggers и устанавливать Updatable только для клиента
     {
-        private readonly IWeapon _weapon;
+        private readonly IReadonlyWeapon _weapon;
         private readonly IReloadTrigger _reloadTrigger;
         private readonly IMouseShootTrigger _mouseShootTrigger;
         private readonly IChangableCamera _playerCamera;
@@ -16,7 +16,7 @@ namespace Bw.UseCases.Shooting.Weapon.Triggers
 
         public KeyboardWeaponTriggersConnector(
             Lifetime lifetime, 
-            IWeapon weapon, 
+            IReadonlyWeapon weapon, 
             IReloadTrigger reloadTrigger, 
             IMouseShootTrigger mouseShootTrigger,
             IChangableCamera playerCamera)
@@ -30,7 +30,7 @@ namespace Bw.UseCases.Shooting.Weapon.Triggers
 
         public void Update() // TODO: это место должно вызываться только owner-ом. Настроить это можно будет в стороннем скрипте
         {
-            if (Input.GetMouseButtonDown(0) && _weapon.ReadyToShot.Value) // TODO: заменить на новую инпут систему
+            if (Input.GetMouseButton(0) && _weapon.ReadyToShot.Value) // TODO: заменить на новую инпут систему
             {
                 var mousePos = Input.mousePosition;
                 var camera = _playerCamera.Current.Value;

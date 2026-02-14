@@ -1,8 +1,13 @@
-﻿using Bw.Entities;
+﻿using System;
+using Bw.Entities;
 using Bw.Entities.Extensions;
+using Bw.Entities.Extensions.Zenject;
 using Bw.UseCases.Character;
+using Bw.UseCases.Character.Extensions;
 using Bw.UseCases.Character.Network;
 using Bw.UseCases.Clients;
+using Bw.UseCases.Players;
+using Bw.UseCases.Shooting.Weapon;
 using Cysharp.Threading.Tasks;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
@@ -16,37 +21,43 @@ namespace Bw.UseCases.Spawning.Network
     /// Handles spawning of player characters when clients connect.
     /// Each client gets their own character with proper NetworkObject ownership.
     /// </summary>
-    public class NetworkCharactersSpawner : NetworkBehaviour, ICharacterSpawner
+    public class NetworkCharactersSpawner : ICharacterSpawner
     {
-        [Tooltip("Spawn points for players. If empty, spawns at origin.")]
-        [SerializeField]
-        private Transform[] _spawnPoints;
+        public struct Data
+        {
+            public Transform[] SpawnPoints;
+            public float SpawnRandomOffset;
 
-        [Tooltip("Random offset range for spawn positions")]
-        [SerializeField]
-        private float _spawnRandomOffset = 2f;
+            public NetworkObject Character;
+            public NetworkObject Weapon;
+        }
+
+        private readonly Data _data;
         private int _nextSpawnPointIndex = 0;
-        
-        private ICharacterRegistry _characterRegistry;
-        private IGameObjectByCharacterCollection _gameObjectByCharacterCollection;
-        private IInstantiator _instantiator;
-        [SerializeField] private GameObject _character;
 
-        [Inject]
-        private void Construct(
+        private readonly ICharacterRegistry _characterRegistry;
+        private readonly IGameObjectByCharacterCollection _gameObjectByCharacterCollection;
+        private readonly IClientPlayerCollection _clientPlayerCollection;
+        private readonly IInstantiator _instantiator;
+        private int _counter = 0;
+
+        private NetworkCharactersSpawner(
             Lifetime lifetime,
-            IClientCollection clientCollection, 
+            IClientCollection clientCollection,
             ICharacterRegistry characterRegistry,
             IGameObjectByCharacterCollection gameObjectByCharacterCollection,
-            IInstantiator instantiator)
+            IClientPlayerCollection clientPlayerCollection,
+            IInstantiator instantiator,
+            Data data)
         {
             _characterRegistry = characterRegistry;
             _gameObjectByCharacterCollection = gameObjectByCharacterCollection;
+            _clientPlayerCollection = clientPlayerCollection;
             _instantiator = instantiator;
-            Debug.Log("Construct executed");
-            
+            _data = data;
+
             clientCollection.ByIds.AdviseAdd(lifetime, (_, client) =>
-                SpawnCharacterFor(lifetime, client)); // TODO: спавн на лайфтайм, надо перенести в другой объект
+                SpawnCharacterFor(lifetime, client));
         }
 
         public ICharacter SpawnCharacterFor(Lifetime lifetime, IClient client)
@@ -55,30 +66,51 @@ namespace Bw.UseCases.Spawning.Network
 
             var spawnPosition = GetSpawnPosition();
             var spawnRotation = Quaternion.identity;
-            var playerInstance =  _instantiator.InstantiatePrefab(_character, spawnPosition, spawnRotation, null).GetComponent<NetworkObject>();
             
+            var playerInstance = _instantiator.InstantiatePrefabForComponent<NetworkObject>(_data.Character, spawnPosition, spawnRotation, null);
             playerInstance.SpawnAsPlayerObject(client.Id, true);
-            var character = playerInstance.gameObject.GetComponent<NetworkCharacter>(); //TODO: добавлять в отдельном файле
+            var characterHolder = playerInstance.gameObject.GetComponent<CharacterHolder>(); //TODO: добавлять в отдельном файле
             
-            character.AliveLifetime.WhenAliveOnce(lifetime, aliveLifetime =>
-            {
-                _gameObjectByCharacterCollection.AddLifetimed(aliveLifetime, character, playerInstance.gameObject);
-                _characterRegistry.ClientByCharacter.AddLifetimed(aliveLifetime, character, client);
-            });
+            var characterObjectLifetime = characterHolder.gameObject.Lifetime();
+            var character = characterHolder.Value;
+            
+            _gameObjectByCharacterCollection.AddLifetimed(characterObjectLifetime, character, playerInstance.gameObject); // TODO: берём лайфтайм из аргументов
+            _characterRegistry.ClientByCharacter.AddLifetimed(characterObjectLifetime, character, client);
+           
+            SetupWeaponForPlayer();
 
             Log($"<color=green>✓ Player character spawned for client {client} at {spawnPosition}</color>");
 
-            return character;
+            return characterHolder.Value;
+
+            void SetupWeaponForPlayer()
+            {
+                var weaponObject = _instantiator.InstantiatePrefabForComponent<NetworkObject>(lifetime, _data.Weapon, spawnPosition, spawnRotation); //TODO: вынести
+                weaponObject.name += ", " + _counter++;
+                weaponObject.SpawnWithOwnership(client.Id, true);
+
+                var weaponHolder = weaponObject.GetComponent<WeaponHolder>();
+                var player = _clientPlayerCollection.ByClient[client];
+
+                characterHolder.Value.State.WhenAlive(characterObjectLifetime, async aliveLifetime =>
+                {
+                    weaponHolder.ControlledBy.Set(aliveLifetime, player);
+                    weaponHolder.Ownership.AddOwner(aliveLifetime, player);
+                    await UniTask.Delay(TimeSpan.FromSeconds(2f));
+                    weaponHolder.PickUpWeapon(aliveLifetime, characterHolder);
+                });
+            }
         }
+
 
         private Vector3 GetSpawnPosition()
         {
             Vector3 basePosition;
 
-            if (_spawnPoints != null && _spawnPoints.Length > 0)
+            if (_data.SpawnPoints is { Length: > 0 })
             {
-                var spawnPoint = _spawnPoints[_nextSpawnPointIndex];
-                _nextSpawnPointIndex = (_nextSpawnPointIndex + 1) % _spawnPoints.Length;
+                var spawnPoint = _data.SpawnPoints[_nextSpawnPointIndex];
+                _nextSpawnPointIndex = (_nextSpawnPointIndex + 1) % _data.SpawnPoints.Length;
                 basePosition = spawnPoint.position;
             }
             else
@@ -87,12 +119,12 @@ namespace Bw.UseCases.Spawning.Network
             }
 
             // Add random offset to avoid players spawning on top of each other
-            if (_spawnRandomOffset > 0f)
+            if (_data.SpawnRandomOffset > 0f)
             {
                 Vector3 randomOffset = new Vector3(
-                    Random.Range(-_spawnRandomOffset, _spawnRandomOffset),
+                    Random.Range(-_data.SpawnRandomOffset, _data.SpawnRandomOffset),
                     0f,
-                    Random.Range(-_spawnRandomOffset, _spawnRandomOffset)
+                    Random.Range(-_data.SpawnRandomOffset, _data.SpawnRandomOffset)
                 );
                 basePosition += randomOffset;
             }
@@ -104,24 +136,5 @@ namespace Bw.UseCases.Spawning.Network
         {
             Debug.Log($"[PlayerSpawner] {message}");
         }
-
-        #region Editor Helpers
-
-        private void OnDrawGizmos()
-        {
-            if (_spawnPoints.Length == 0)
-            {
-                return;
-            }
-
-            Gizmos.color = Color.green;
-            foreach (var spawnPoint in _spawnPoints)
-            {
-                Gizmos.DrawWireSphere(spawnPoint.position, 0.5f);
-                Gizmos.DrawLine(spawnPoint.position, spawnPoint.position + Vector3.up * 2f);
-            }
-        }
-
-        #endregion
     }
 }

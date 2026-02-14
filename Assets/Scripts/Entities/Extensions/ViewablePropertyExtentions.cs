@@ -22,6 +22,12 @@ namespace Bw.Entities.Extensions
                 if (addRemove == AddRemove.Add) handler(key, value);
             });
         }
+
+        public static void View<T>(this IViewableList<T> list, Lifetime lifetime, Action<Lifetime, T> handler)
+        {
+            list.View(lifetime, (itemLifetime, _, item) =>
+                handler(itemLifetime, item));
+        }
         
         public static void AddLifetimed<K, V>(this IViewableMap<K, V> map, Lifetime lifetime, K key, V value)
         {

@@ -1,5 +1,4 @@
 ﻿using Bw.Entities.Network;
-using DefaultNamespace;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -9,8 +8,8 @@ namespace Bw.UseCases.Shooting
     {
         [SerializeField] private WeaponRotationConfig _config;
 
+        private Transform ParentTransform => transform.parent;
         private Camera _camera;
-        private Transform _parentTransform;
 
         private Vector3 _lastMouseWorldPosition;
         private bool _hasMouseWorldPosition;
@@ -21,7 +20,6 @@ namespace Bw.UseCases.Shooting
         private void Awake()
         {
             _camera = Camera.main;
-            _parentTransform = transform.parent;
 
             if (_config != null)
             {
@@ -44,7 +42,7 @@ namespace Bw.UseCases.Shooting
 
         private void UpdateClientInput()
         {
-            if (_camera == null) return;
+            if (_camera == null  || ParentTransform == null) return;
 
             Vector3 mouseScreenPos = Input.mousePosition;
             mouseScreenPos.z = _camera.nearClipPlane;
@@ -62,9 +60,9 @@ namespace Bw.UseCases.Shooting
 
         private void UpdateWeaponPosition()
         {
-            if (_config == null || _parentTransform == null || !_hasMouseWorldPosition) return;
+            if (_config == null || ParentTransform == null || !_hasMouseWorldPosition) return;
 
-            Vector3 delta = _lastMouseWorldPosition - _parentTransform.position;
+            Vector3 delta = _lastMouseWorldPosition - ParentTransform.position;
             Vector2 directionFromParent = new Vector2(delta.x, delta.y);
             if (directionFromParent.sqrMagnitude < 0.0001f) return;
             directionFromParent.Normalize();
@@ -84,7 +82,7 @@ namespace Bw.UseCases.Shooting
             Vector2 directionToWeapon = new Vector2(Mathf.Cos(angleInRadians), Mathf.Sin(angleInRadians));
 
             var hit = Physics2D.Raycast(
-                _parentTransform.position,
+                ParentTransform.position,
                 directionToWeapon,
                 _config.ObstacleDetectionDistance,
                 _config.ObstacleLayerMask
@@ -106,7 +104,7 @@ namespace Bw.UseCases.Shooting
                 transform.rotation = Quaternion.Euler(0f, 0f, _currentAngle);
             }
 
-            Debug.DrawRay(_parentTransform.position, directionToWeapon * _config.ObstacleDetectionDistance,
+            Debug.DrawRay(ParentTransform.position, directionToWeapon * _config.ObstacleDetectionDistance,
                 obstacleDetected ? Color.red : Color.green);
         }
     }

@@ -1,4 +1,5 @@
-﻿using Bw.UseCases.Character;
+﻿using Bw.Entities;
+using Bw.UseCases.Character;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Lifetimes;
@@ -14,7 +15,7 @@ namespace Bw.UseCases.Shooting
 
         public RaycastShooter(
             Lifetime lifetime,
-            IWeapon weapon,
+            IReadonlyWeapon weapon,
             IWeaponMuzzle weaponMuzzle,
             RaycastShootConfig raycastConfig,
             ShootingWeaponConfig weaponConfig
@@ -35,9 +36,9 @@ namespace Bw.UseCases.Shooting
 
             var hit = Physics2D.Raycast(origin, direction, _raycastConfig.MaxDistance, _raycastConfig.HitMask);
 
-            if (hit.collider != null && hit.collider.TryGetComponent<ICharacter>(out var character))
+            if (hit.collider != null && hit.collider.TryGetComponent<IHolder<ICharacter>>(out var characterHolder))
             {
-                character.Health.Value -= _weaponConfig.Damage;
+                characterHolder.Value.Health.Value -= _weaponConfig.Damage;
             }
         }
     }

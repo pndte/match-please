@@ -1,0 +1,28 @@
+{
+    "name": "Bw.UseCases.Spawning",
+    "rootNamespace": "Bw",
+    "references": [
+        "Bw.Entities.Network",
+        "Bw.Entities",
+        "Bw.Entities.Extensions.Zenject",
+        "Bw.UseCases",
+        "Bw.UseCases.Shooting",
+        "Unity.Netcode.Runtime",
+        "Zenject",
+        "UniTask.DOTween",
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JetBrains.Lifetimes.dll",
+        "Zenject-usage.dll",
+        "DOTween.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

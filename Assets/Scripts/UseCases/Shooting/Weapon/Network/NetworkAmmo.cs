@@ -1,4 +1,5 @@
 ﻿using System;
+using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
@@ -30,16 +31,19 @@ namespace Bw.UseCases.Shooting.Weapon.Network
         private AmmoConfig _ammoConfig;
 
         [Inject]
-        private void Construct(AmmoConfig ammoConfig)
+        private void Construct(Lifetime lifetime, AmmoConfig ammoConfig)
         {
             _ammoConfig = ammoConfig;
-            WhenAlive(ConnectNetworkData); // TODO: надо переносить лайфтаймы в конструктор
+            ConnectNetworkData(lifetime);
         }
 
         private void ConnectNetworkData(Lifetime lifetime)
         {
-            _networkInner.Value = _ammoConfig.OnSpawnValue;
-            _networkInner.ConnectTo(lifetime, _inner);
+            SpawnedLifetime.WhenAlive(lifetime, spawnedLifetime =>
+            {
+                _networkInner.ConnectTo(spawnedLifetime, _inner);
+                _inner.Value = _ammoConfig.OnSpawnValue;
+            });
         }
 
         public void Advise(Lifetime lifetime, Action<int> handler)

@@ -13,18 +13,18 @@ namespace Bw.Entities.Network
         private bool _isSynchronizing;
         private readonly NetworkHealthData _networkData;
 
-        public NetworkHealth(ILifetimed lifetimed, HealthConfig config, NetworkHealthData networkData)
+        public NetworkHealth(Lifetime lifetime, HealthConfig config, NetworkHealthData networkData)
         {
             _config = config;
             _networkData = networkData;
-            lifetimed.WhenAlive(OnAlive);
+            OnAlive(lifetime);
         }
 
         private void OnAlive(Lifetime lifetime)
         {
             Advise(lifetime, health => Debug.Log("Health changed: " + health));
 
-            _networkData.SpawnedLifetime.WhenAlive(lifetime, aliveLifetime =>
+            _networkData.SpawnedLifetime.WhenAlive(lifetime, aliveLifetime => //TODO: передавать сюда сразу SpawnedLifetime, объект не должен знать заспавнен он или нет
             {
                 Advise(aliveLifetime, newHealth =>
                 {
