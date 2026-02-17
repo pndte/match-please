@@ -1,6 +1,7 @@
 ﻿using System;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
+using Bw.Entities.Network.Objects;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Core;

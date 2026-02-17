@@ -1,4 +1,5 @@
-﻿using Bw.UseCases;
+﻿using Bw.Entities.Network;
+using Bw.UseCases;
 using Setup;
 using UnityEngine.SceneManagement;
 using Zenject;

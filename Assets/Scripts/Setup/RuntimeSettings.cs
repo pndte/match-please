@@ -1,4 +1,5 @@
 ﻿using System;
+using Bw.Entities.Network;
 using UnityEngine;
 
 namespace Setup

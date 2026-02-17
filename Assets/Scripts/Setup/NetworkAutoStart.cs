@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Bw.Entities.Network;
+using Cysharp.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -48,7 +51,7 @@ namespace Setup
             _runtimeSettings = runtimeSettings;
         }
 
-        private void Start()
+        private async void Start()
         {
             if (!enableAutoStart)
             {
@@ -66,7 +69,7 @@ namespace Setup
 
             // Detect and handle Multiplayer Play Mode tag
             DetectAndStartNetwork();
-            SceneManager.LoadScene("SampleScene", LoadSceneMode.Single);
+            SceneManager.LoadScene("TestScene", LoadSceneMode.Single);
         }
 
         private void DetectAndStartNetwork()

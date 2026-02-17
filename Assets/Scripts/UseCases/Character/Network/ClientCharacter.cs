@@ -1,5 +1,6 @@
 ﻿using Bw.Entities;
 using Bw.Entities.Network;
+using Bw.Entities.Network.Objects;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
@@ -13,11 +14,11 @@ namespace Bw.UseCases.Character.Network
         
         protected ViewableProperty<CharacterState> State { get; } = new(CharacterState.Alive);
         
-        private readonly INetworkLifetimed _networkLifetimed;
+        private readonly INetworkLifetimedObject _networkLifetimed;
 
         public ClientCharacter(
             IReadonlyHealth health,
-            INetworkLifetimed networkLifetimed)
+            INetworkLifetimedObject networkLifetimed)
         {
             Health = health;
             _networkLifetimed = networkLifetimed;

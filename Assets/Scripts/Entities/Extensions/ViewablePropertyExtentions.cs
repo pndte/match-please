@@ -22,6 +22,14 @@ namespace Bw.Entities.Extensions
                 if (addRemove == AddRemove.Add) handler(key, value);
             });
         }
+        
+        public static void AdviseTrue(this IReadonlyProperty<bool> property, Lifetime lifetime, Action handler)
+        {
+            property.Advise(lifetime, value =>
+            {
+                if (value) handler();
+            });
+        }
 
         public static void View<T>(this IViewableList<T> list, Lifetime lifetime, Action<Lifetime, T> handler)
         {

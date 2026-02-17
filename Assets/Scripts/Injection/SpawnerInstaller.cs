@@ -1,4 +1,5 @@
-﻿using Bw.UseCases.Clients.Network;
+﻿using Bw.Entities.Network;
+using Bw.UseCases.Clients.Network;
 using Bw.UseCases.Players;
 using Bw.UseCases.Spawning;
 using Bw.UseCases.Spawning.Network;

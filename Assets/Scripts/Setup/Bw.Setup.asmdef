@@ -5,7 +5,8 @@
         "Bw.Entities.Network",
         "Bw.Entities",
         "Unity.Netcode.Runtime",
-        "Zenject"
+        "Zenject",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

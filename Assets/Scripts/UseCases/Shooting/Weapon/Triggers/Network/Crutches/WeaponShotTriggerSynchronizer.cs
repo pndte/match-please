@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
+using Bw.Entities.Network.Objects;
 using Bw.UseCases.Players;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Lifetimes;

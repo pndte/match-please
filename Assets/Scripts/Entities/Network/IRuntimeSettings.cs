@@ -1,4 +1,4 @@
-﻿namespace Setup
+﻿namespace Bw.Entities.Network
 {
     /// <summary>
     /// Defines the network peer type for the current game instance.

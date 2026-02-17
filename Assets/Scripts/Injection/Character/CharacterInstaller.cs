@@ -2,6 +2,7 @@
 using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
+using Bw.Entities.Network.Objects;
 using Bw.UseCases.Character;
 using Bw.UseCases.Character.Network;
 using Bw.UseCases.Movement;

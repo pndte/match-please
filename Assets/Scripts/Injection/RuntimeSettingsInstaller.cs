@@ -1,5 +1,5 @@
-﻿using Setup;
-using UnityEngine;
+﻿using Bw.Entities.Network;
+using Setup;
 using Zenject;
 
 namespace Bw.Injection

@@ -1,5 +1,6 @@
 ﻿using Bw.Entities;
 using Bw.Entities.Network;
+using Bw.Entities.Network.Objects;
 using JetBrains.Collections.Viewable;
 using Unity.Netcode;
 
@@ -13,7 +14,7 @@ namespace Bw.UseCases.Character.Network
         
         public ServerCharacter(
             IHealth health, 
-            INetworkLifetimed networkLifetimed,
+            INetworkLifetimedObject networkLifetimed,
             NetworkObject networkObject) : base(health, networkLifetimed)
         {
             _networkObject = networkObject;

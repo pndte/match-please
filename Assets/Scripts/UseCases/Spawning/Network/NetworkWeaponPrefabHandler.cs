@@ -19,7 +19,6 @@ namespace Bw.UseCases.Spawning.Network
         public NetworkObject Instantiate(ulong ownerClientId, Vector3 position, Quaternion rotation)
         {
             var go = _container.InstantiatePrefab(_prefab, position, rotation, null);
-            go.name += " " + _counter++;
             return go.GetComponent<NetworkObject>();
         }
 

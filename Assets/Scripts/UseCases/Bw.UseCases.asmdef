@@ -2,14 +2,14 @@
     "name": "Bw.UseCases",
     "rootNamespace": "Bw",
     "references": [
-        "Bw.Entities.Network",
         "Bw.Entities",
+        "Bw.Entities.Network",
+        "Bw.Setup",
         "Unity.Netcode.Runtime",
         "Unity.Collections",
         "Zenject",
         "UniTask.DOTween",
-        "UniTask",
-        "Bw.Setup"
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

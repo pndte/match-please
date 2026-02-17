@@ -11,6 +11,7 @@ using Bw.UseCases.Shooting.Weapon;
 using Cysharp.Threading.Tasks;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
@@ -94,9 +95,9 @@ namespace Bw.UseCases.Spawning.Network
 
                 characterHolder.Value.State.WhenAlive(characterObjectLifetime, async aliveLifetime =>
                 {
+                    await UniTask.Delay(TimeSpan.FromSeconds(2f));
                     weaponHolder.ControlledBy.Set(aliveLifetime, player);
                     weaponHolder.Ownership.AddOwner(aliveLifetime, player);
-                    await UniTask.Delay(TimeSpan.FromSeconds(2f));
                     weaponHolder.PickUpWeapon(aliveLifetime, characterHolder);
                 });
             }

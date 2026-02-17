@@ -1,5 +1,6 @@
 ﻿using Bw.UseCases.Shooting.Weapon.Triggers;
 using Bw.Entities.Loop;
+using Bw.Entities.Network;
 using JetBrains.Lifetimes;
 using Setup;
 using UnityEngine;

@@ -1,4 +1,5 @@
-﻿using Bw.UseCases.Character;
+﻿using Bw.Entities.Network;
+using Bw.UseCases.Character;
 using Setup;
 using Zenject;
 

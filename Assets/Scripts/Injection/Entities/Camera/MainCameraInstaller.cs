@@ -1,4 +1,5 @@
 ﻿using Bw.Entities;
+using Bw.Entities.Network;
 using Setup;
 using UnityEngine;
 using Zenject;
