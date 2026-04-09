@@ -3,7 +3,8 @@
     "rootNamespace": "Bw",
     "references": [
         "Unity.Netcode.Runtime",
-        "Bw.Entities"
+        "Bw.Entities",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

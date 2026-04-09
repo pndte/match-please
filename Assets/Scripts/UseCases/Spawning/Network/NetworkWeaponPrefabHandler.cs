@@ -1,4 +1,4 @@
-﻿using Unity.Netcode;
+using Unity.Netcode;
 using UnityEngine;
 using Zenject;
 
@@ -18,7 +18,8 @@ namespace Bw.UseCases.Spawning.Network
 
         public NetworkObject Instantiate(ulong ownerClientId, Vector3 position, Quaternion rotation)
         {
-            var go = _container.InstantiatePrefab(_prefab, position, rotation, null);
+            var go = UnityEngine.Object.Instantiate(_prefab, position, rotation);
+            _container.InjectGameObject(go);
             return go.GetComponent<NetworkObject>();
         }
 

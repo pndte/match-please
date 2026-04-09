@@ -38,7 +38,7 @@ namespace Bw.UseCases.Shooting
 
             if (hit.collider != null && hit.collider.TryGetComponent<IHolder<ICharacter>>(out var characterHolder))
             {
-                characterHolder.Value.Health.Value -= _weaponConfig.Damage;
+                characterHolder.Value.Health.Current.Value -= _weaponConfig.Damage;
             }
         }
     }

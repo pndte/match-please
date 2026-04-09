@@ -1,17 +1,13 @@
-﻿using System;
 using Bw.Entities;
 using Bw.Entities.Extensions;
-using Bw.Entities.Extensions.Zenject;
 using Bw.UseCases.Character;
 using Bw.UseCases.Character.Extensions;
 using Bw.UseCases.Character.Network;
 using Bw.UseCases.Clients;
 using Bw.UseCases.Players;
 using Bw.UseCases.Shooting.Weapon;
-using Cysharp.Threading.Tasks;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
@@ -39,7 +35,7 @@ namespace Bw.UseCases.Spawning.Network
         private readonly ICharacterRegistry _characterRegistry;
         private readonly IGameObjectByCharacterCollection _gameObjectByCharacterCollection;
         private readonly IClientPlayerCollection _clientPlayerCollection;
-        private readonly IInstantiator _instantiator;
+        private readonly DiContainer _container;
         private int _counter = 0;
 
         private NetworkCharactersSpawner(
@@ -48,13 +44,13 @@ namespace Bw.UseCases.Spawning.Network
             ICharacterRegistry characterRegistry,
             IGameObjectByCharacterCollection gameObjectByCharacterCollection,
             IClientPlayerCollection clientPlayerCollection,
-            IInstantiator instantiator,
+            DiContainer container,
             Data data)
         {
             _characterRegistry = characterRegistry;
             _gameObjectByCharacterCollection = gameObjectByCharacterCollection;
             _clientPlayerCollection = clientPlayerCollection;
-            _instantiator = instantiator;
+            _container = container;
             _data = data;
 
             clientCollection.ByIds.AdviseAdd(lifetime, (_, client) =>
@@ -67,8 +63,8 @@ namespace Bw.UseCases.Spawning.Network
 
             var spawnPosition = GetSpawnPosition();
             var spawnRotation = Quaternion.identity;
-            
-            var playerInstance = _instantiator.InstantiatePrefabForComponent<NetworkObject>(_data.Character, spawnPosition, spawnRotation, null);
+
+            var playerInstance = InstantiateAndInjectNetworkObject(_data.Character.gameObject, spawnPosition, spawnRotation);
             playerInstance.SpawnAsPlayerObject(client.Id, true);
             var characterHolder = playerInstance.gameObject.GetComponent<CharacterHolder>(); //TODO: добавлять в отдельном файле
             
@@ -86,16 +82,20 @@ namespace Bw.UseCases.Spawning.Network
 
             void SetupWeaponForPlayer()
             {
-                var weaponObject = _instantiator.InstantiatePrefabForComponent<NetworkObject>(lifetime, _data.Weapon, spawnPosition, spawnRotation); //TODO: вынести
+                var weaponPos = playerInstance.transform.position;
+                var weaponObject = InstantiateAndInjectNetworkObject(_data.Weapon.gameObject, weaponPos, spawnRotation);
                 weaponObject.name += ", " + _counter++;
+                var weaponRb = weaponObject.GetComponent<Rigidbody2D>();
+                if (weaponRb != null)
+                    weaponRb.simulated = false;
+
                 weaponObject.SpawnWithOwnership(client.Id, true);
 
                 var weaponHolder = weaponObject.GetComponent<WeaponHolder>();
                 var player = _clientPlayerCollection.ByClient[client];
 
-                characterHolder.Value.State.WhenAlive(characterObjectLifetime, async aliveLifetime =>
+                characterHolder.Value.State.WhenAlive(characterObjectLifetime, aliveLifetime =>
                 {
-                    await UniTask.Delay(TimeSpan.FromSeconds(2f));
                     weaponHolder.ControlledBy.Set(aliveLifetime, player);
                     weaponHolder.Ownership.AddOwner(aliveLifetime, player);
                     weaponHolder.PickUpWeapon(aliveLifetime, characterHolder);
@@ -103,6 +103,13 @@ namespace Bw.UseCases.Spawning.Network
             }
         }
 
+
+        private NetworkObject InstantiateAndInjectNetworkObject(GameObject prefab, Vector3 position, Quaternion rotation)
+        {
+            var instance = UnityEngine.Object.Instantiate(prefab, position, rotation);
+            _container.InjectGameObject(instance);
+            return instance.GetComponent<NetworkObject>();
+        }
 
         private Vector3 GetSpawnPosition()
         {

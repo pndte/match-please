@@ -1,69 +1,87 @@
-﻿using Bw.Entities.Extensions;
+using Bw.Entities.Extensions;
 using Bw.Entities.Infrastructure;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
-using UnityEngine;
 
 namespace Bw.Entities.Network.Variables
 {
     public interface INetVariablesTable
     {
-        public IViewableBiMap<ushort, INetProperty> PropertiesByIndex { get; }
+        IViewableBiMap<ushort, INetSyncEntry> PropertiesByIndex { get; }
     }
 
-    public class NetVariablesTable : INetVariablesTable, INetPropertyVisitor
+    public class NetVariablesTable : INetVariablesTable, INetSyncVisitor
     {
-        public IViewableBiMap<ushort, INetProperty> PropertiesByIndex { get; }
+        public IViewableBiMap<ushort, INetSyncEntry> PropertiesByIndex { get; }
 
-        private readonly NetworkObject _networkObject; //TODO: придумать что-то, нужно только для id
+        private readonly NetworkObject _networkObject;
         private readonly IMessageSenders _messageSenders;
 
         private ushort _counter = 1;
-        private NetPropertyInfo _currentPropertyInfo;
-        
+        private NetRegistryInfo _currentRegistration;
+
         public NetVariablesTable(
-            Lifetime lifetime, 
+            Lifetime lifetime,
             NetworkObject networkObject,
             IMessageSenders senders,
             INetPropertyFactory factory,
             IRuntimeSettings runtimeSettings)
         {
-            PropertiesByIndex = new ViewableBiMap<ushort, INetProperty>(lifetime);
+            PropertiesByIndex = new ViewableBiMap<ushort, INetSyncEntry>(lifetime);
             _networkObject = networkObject;
             _messageSenders = senders;
-            factory.PropertyRegistered.Advise(lifetime, OnNewPropertyRegistered);
+            factory.EntryRegistered.Advise(lifetime, OnNewEntryRegistered);
             return;
-            
-            void OnNewPropertyRegistered(NetPropertyInfo info)
+
+            void OnNewEntryRegistered(NetRegistryInfo info)
             {
-                var netProperty = info.Property;
-                PropertiesByIndex.Add(_counter++, netProperty);
-                if (runtimeSettings.CurrentPeerType != PeerType.Server) return; //TODO: полноценная система разрешений для переменных
-                
-                netProperty.Dirty.AdviseTrue(lifetime, () =>
+                var entry = info.Entry;
+                PropertiesByIndex.Add(_counter++, entry);
+                if (runtimeSettings.CurrentPeerType != PeerType.Server) return;
+
+                entry.Dirty.AdviseTrue(lifetime, () =>
                 {
-                    _currentPropertyInfo = info;
-                    netProperty.Accept(this);
-                    netProperty.Dirty.Value = false; //TODO: очень важно ждать наступление след сетевого тика. Для этого надо делать свои степраннеры
+                    _currentRegistration = info;
+                    entry.Accept(this);
+                    entry.Dirty.Value = false;
                 });
             }
         }
-        public void Visit<T>(INetProperty<T> property)
+
+        public void VisitProperty<T>(INetProperty<T> property)
         {
-            SendAllClientsVariableUpdate(property);
+            SendAllClientsPropertyUpdate(property);
         }
 
-        private void SendAllClientsVariableUpdate<T>(INetProperty<T> property)
+        public void VisitSignal<T>(INetSignal<T> entry)
+        {
+            SendAllClientsSignalUpdate(entry);
+        }
+
+        private void SendAllClientsPropertyUpdate<T>(INetProperty<T> property)
         {
             var messageSender = (IMessageSender<T>)_messageSenders.ByType[typeof(T)];
             messageSender.SendToAllClients(
-                new NetworkMessageHeader()
+                new NetworkMessageHeader
                 {
                     NetworkObjectId = _networkObject.NetworkObjectId,
                     VarId = PropertiesByIndex.Inverse[property]
                 },
                 property.Value,
-                _currentPropertyInfo.DeliveryType);
+                _currentRegistration.DeliveryType);
+        }
+
+        private void SendAllClientsSignalUpdate<T>(INetSignal<T> entry)
+        {
+            var messageSender = (IMessageSender<T>)_messageSenders.ByType[typeof(T)];
+            messageSender.SendToAllClients(
+                new NetworkMessageHeader
+                {
+                    NetworkObjectId = _networkObject.NetworkObjectId,
+                    VarId = PropertiesByIndex.Inverse[entry]
+                },
+                entry.PendingPayload,
+                _currentRegistration.DeliveryType);
         }
     }
 }

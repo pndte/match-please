@@ -244,6 +244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Weapon.WeaponInstaller
   _gameObjectMetaData: {fileID: 2578125741735959394}
+  _networkObject: {fileID: 8409776997951654046}
   _trailPrefab: {fileID: 4557794692304115249, guid: 834baa140fa4a3643b92af2da947ad35, type: 3}
   _muzzleTransform: {fileID: 8117144414725150372}
   _shootingWeaponTriggers: {fileID: 82381354680183275}
@@ -251,7 +252,7 @@ MonoBehaviour:
   _raycastShootConfig: {fileID: 11400000, guid: 028f3f7f1f83f474697f765f7043df94, type: 2}
   _shootingWeaponConfig: {fileID: 11400000, guid: c7210083ab45bac4eb075b9602232847, type: 2}
   _vfxConfig: {fileID: 11400000, guid: 702bc1ea939f2784495afb093193db74, type: 2}
-  _networkLifetimedBehaviour: {fileID: 82381354680183275}
+  _networkLifetimedBehaviour: {fileID: 2578125741735959394}
   _weaponLoopRunner: {fileID: 2715088513661146607}
 --- !u!114 &2715088513661146607
 MonoBehaviour:

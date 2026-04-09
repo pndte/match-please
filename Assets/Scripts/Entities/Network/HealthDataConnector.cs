@@ -4,7 +4,7 @@
     {
         public HealthDataConnector(IHealth health, HealthConfig healthConfig)
         {
-            health.Value = healthConfig.Max;
+            health.Current.Value = healthConfig.Max;
         }
     }
 }

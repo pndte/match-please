@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2975e51f238471298ddaf22c5af613f, type: 3}
+  m_Name: GlobalNetworkInstaller
+  m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Network.GlobalNetworkInstaller
+  _networkManagerPrefab: {fileID: 2303872855047892107, guid: 06b1c2facaa67e6428aa57dd9beabd9f, type: 3}

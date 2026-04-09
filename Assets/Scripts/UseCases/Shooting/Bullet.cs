@@ -34,7 +34,7 @@ namespace Bw.UseCases.Shooting
             if (!IsServer) return;
             if (other.gameObject.layer != LayerMask.NameToLayer("Character")) NetworkObject.Despawn(true);
             if (!other.gameObject.TryGetComponent<ICharacter>(out var character)) return;
-            character.Health.Value -= 10;
+            character.Health.Current.Value -= 10;
             NetworkObject.Despawn(true);
         }
     }

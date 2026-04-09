@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3889167905082118075}
   - component: {fileID: 8334707615516295052}
   - component: {fileID: 3773905357652456202}
-  - component: {fileID: 2845693040811876034}
   - component: {fileID: 3077970775352720755}
   - component: {fileID: 7636866304431487347}
   - component: {fileID: 7318710291484346262}
@@ -112,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 242630451
+  GlobalObjectIdHash: 3824248496
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -125,19 +124,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &2845693040811876034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7714897418022992417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d579cba81cd44ff88537ba213a70d3db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Bw.Entities.Network::Entities.Network.NetworkHealthData
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &3077970775352720755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,9 +214,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7edb576fb2249949173afef5b68fe50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Injection.CharacterInstaller
-  _networkLifetimedBehaviour: {fileID: 2845693040811876034}
+  _networkObject: {fileID: 3773905357652456202}
+  _networkLifetimedBehaviour: {fileID: 7318710291484346262}
   _healthConfig: {fileID: 11400000, guid: 20665ca7550f0604d82f61652021be97, type: 2}
-  _networkHealthData: {fileID: 2845693040811876034}
   _physics: {fileID: 7303288911383704076}
   _movementConfig: {fileID: 11400000, guid: 69583fc462e9fe145a5a5101d5d42728, type: 2}
   _movementData: {fileID: 7318710291484346262}

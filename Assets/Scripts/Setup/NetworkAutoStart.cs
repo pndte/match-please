@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Bw.Entities.Network;
-using Cysharp.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -44,14 +42,16 @@ namespace Setup
 
         // Injected dependency
         private IRuntimeSettings _runtimeSettings;
+        private INetworkHolder _networkHolder;
 
         [Inject]
-        private void Construct(IRuntimeSettings runtimeSettings)
+        private void Construct(IRuntimeSettings runtimeSettings, INetworkHolder networkHolder)
         {
+            _networkHolder = networkHolder;
             _runtimeSettings = runtimeSettings;
         }
 
-        private async void Start()
+        private void Start()
         {
             if (!enableAutoStart)
             {
@@ -69,7 +69,8 @@ namespace Setup
 
             // Detect and handle Multiplayer Play Mode tag
             DetectAndStartNetwork();
-            SceneManager.LoadScene("TestScene", LoadSceneMode.Single);
+            _networkHolder.NetworkManager.Value = NetworkManager.Singleton;
+            SceneManager.LoadScene("SampleScene", LoadSceneMode.Single);
         }
 
         private void DetectAndStartNetwork()

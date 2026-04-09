@@ -1,6 +1,5 @@
 ﻿using Bw.Entities.Network;
 using Bw.UseCases;
-using Setup;
 using UnityEngine.SceneManagement;
 using Zenject;
 
@@ -12,9 +11,8 @@ namespace Bw.Injection
 
         public override void InstallBindings()
         {
-            if (SceneManager.GetActiveScene().name != "LoadingScene") 
-                SceneManager.LoadScene("LoadingScene", LoadSceneMode.Single);
-            Container.BindInterfacesAndSelfTo<DiContainer>().FromInstance(Container).AsSingle();
+            if (SceneManager.GetActiveScene().name != "GameSetupScene") 
+                SceneManager.LoadScene("GameSetupScene", LoadSceneMode.Single);
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Server)
             {

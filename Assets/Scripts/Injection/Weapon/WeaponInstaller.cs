@@ -1,7 +1,8 @@
-﻿using Bw.Entities;
+using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
+using Bw.Injection.Network.Variables;
 using Bw.UseCases;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.Weapon;
@@ -10,6 +11,7 @@ using Bw.UseCases.Shooting.Weapon.Network;
 using Bw.UseCases.Shooting.Weapon.Triggers;
 using Bw.UseCases.Shooting.Weapon.Triggers.Network;
 using Setup;
+using Unity.Netcode;
 using UnityEngine;
 using Zenject;
 
@@ -33,11 +35,14 @@ namespace Bw.Injection.Weapon
         [SerializeField] private ShootingWeaponConfig _shootingWeaponConfig;
         [SerializeField] private LineRendererVfxConfig _vfxConfig;
 
-        [Header("Network")] [SerializeField] private NetworkLifetimedBehaviour _networkLifetimedBehaviour;
+        [Header("Network")] [SerializeField] private NetworkObject _networkObject;
+        [SerializeField] private NetworkLifetimedBehaviour _networkLifetimedBehaviour;
         [Header("Loop")] [SerializeField] private ShootingWeaponLoopRunner _weaponLoopRunner;
 
         public override void InstallBindings()
         {
+            NetTablesInstaller.Install(Container, _networkObject);
+
             BindOwnership();
             BindConfigs();
             BindLifetime();

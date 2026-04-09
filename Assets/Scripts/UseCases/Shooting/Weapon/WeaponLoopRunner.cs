@@ -1,4 +1,4 @@
-﻿using Bw.UseCases.Shooting.Weapon.Triggers;
+using Bw.UseCases.Shooting.Weapon.Triggers;
 using Bw.Entities.Loop;
 using Bw.Entities.Network;
 using JetBrains.Lifetimes;
@@ -33,7 +33,10 @@ namespace Bw.UseCases.Shooting.Weapon
 
         private void Update()
         {
-            Debug.Log($"{gameObject.name}: controlled by me: {_controlledBy.Me.Value}");
+            if (_controlledBy == null || _settings == null || _enabledUpdateSequence == null ||
+                _enabledAndServerUpdateSequence == null)
+                return;
+
             if (_controlledBy.Me.Value)
                 _enabledUpdateSequence.Update();
             if (_settings.CurrentPeerType == PeerType.Server

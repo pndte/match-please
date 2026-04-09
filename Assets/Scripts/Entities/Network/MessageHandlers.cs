@@ -17,7 +17,7 @@ namespace Bw.Entities.Network
     {
         public IReadOnlyDictionary<Type, IMessageReceiver> ByType { get; }
 
-        public MessageReceivers( IReadOnlyDictionary<Type, IMessageReceiver> receiversByType)
+        public MessageReceivers(IReadOnlyDictionary<Type, IMessageReceiver> receiversByType)
         {
             ByType = receiversByType;
         }

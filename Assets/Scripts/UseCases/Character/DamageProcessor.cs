@@ -15,7 +15,7 @@ namespace Bw.UseCases.Character
 
         private void WhenCharacterAlive(Lifetime lifetime)
         {
-            _character.Health.WhenLessOrEquals(lifetime, 0, OnZeroHealth);
+            _character.Health.Current.WhenLessOrEquals(lifetime, 0, OnZeroHealth);
         }
 
         private void OnZeroHealth()
