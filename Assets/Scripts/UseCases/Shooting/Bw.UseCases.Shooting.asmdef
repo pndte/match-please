@@ -10,7 +10,8 @@
         "Unity.Collections",
         "Zenject",
         "UniTask.DOTween",
-        "UniTask"
+        "UniTask",
+        "R3.Unity"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -19,7 +20,8 @@
     "precompiledReferences": [
         "JetBrains.Lifetimes.dll",
         "Zenject-usage.dll",
-        "DOTween.dll"
+        "DOTween.dll",
+        "R3.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

@@ -1,19 +1,25 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Bw.Entities.Network
 {
-    public interface IMessageSenders
+    public interface IClientSendersCollection
     {
-        public IReadOnlyDictionary<Type, IMessageSender> ByType { get; }
+        IClientMessageSender<T> Get<T>();
+    }
+
+    public interface IServerSendersCollection
+    {
+
+        IServerMessageSender<T> Get<T>();
     }
 
     public interface IMessageReceivers
     {
-        public IReadOnlyDictionary<Type, IMessageReceiver> ByType { get; }
+        IReadOnlyDictionary<Type, IMessageReceiver> ByType { get; }
     }
 
-    public class MessageReceivers : IMessageReceivers
+    public sealed class MessageReceivers : IMessageReceivers
     {
         public IReadOnlyDictionary<Type, IMessageReceiver> ByType { get; }
 
@@ -22,14 +28,20 @@ namespace Bw.Entities.Network
             ByType = receiversByType;
         }
     }
-    
-    public class MessageSenders : IMessageSenders
-    {
-        public IReadOnlyDictionary<Type, IMessageSender> ByType { get; }
 
-        public MessageSenders(IReadOnlyDictionary<Type, IMessageSender> sendersByType)
+    public sealed class SendersCollection : IClientSendersCollection, IServerSendersCollection
+    {
+        private readonly IReadOnlyDictionary<Type, IMessageSender> _byType;
+
+        public SendersCollection(IReadOnlyDictionary<Type, IMessageSender> sendersByType)
         {
-            ByType = sendersByType;
+            _byType = sendersByType;
         }
+
+        IClientMessageSender<T> IClientSendersCollection.Get<T>() =>
+            (IMessageSender<T>)_byType[typeof(T)];
+
+        IServerMessageSender<T> IServerSendersCollection.Get<T>() =>
+            (IMessageSender<T>)_byType[typeof(T)];
     }
 }

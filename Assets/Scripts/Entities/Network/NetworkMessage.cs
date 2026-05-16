@@ -1,4 +1,4 @@
-﻿using Unity.Netcode;
+using Unity.Netcode;
 
 namespace Bw.Entities.Network
 {
@@ -20,15 +20,25 @@ namespace Bw.Entities.Network
         }
     }
     
-    public struct NetworkMessageHeader :  INetworkSerializable
+    public struct NetworkMessageHeader : INetworkSerializable
     {
-        public ulong NetworkObjectId; //TODO: оптимизация для varInt
-        public ushort VarId; //TODO: оптимизация для varInt
-            
+        public ulong NetworkObjectId;
+        public ushort VarId;
+
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            serializer.SerializeValue(ref NetworkObjectId);
-            serializer.SerializeValue(ref VarId);
+            if (serializer.IsWriter)
+            {
+                var writer = serializer.GetFastBufferWriter();
+                BytePacker.WriteValuePacked(writer, NetworkObjectId);
+                BytePacker.WriteValuePacked(writer, VarId);
+            }
+            else
+            {
+                var reader = serializer.GetFastBufferReader();
+                ByteUnpacker.ReadValuePacked(reader, out NetworkObjectId);
+                ByteUnpacker.ReadValuePacked(reader, out VarId);
+            }
         }
     }
 }

@@ -1,8 +1,7 @@
-using Bw.UseCases.Shooting.Weapon.Triggers;
 using Bw.Entities.Loop;
 using Bw.Entities.Network;
+using Bw.UseCases.Shooting.Weapon.Network;
 using JetBrains.Lifetimes;
-using Setup;
 using UnityEngine;
 using Zenject;
 
@@ -11,7 +10,6 @@ namespace Bw.UseCases.Shooting.Weapon
     public class ShootingWeaponLoopRunner : MonoBehaviour
     {
         [Inject] private IRuntimeSettings _settings;
-        [InjectOptional] private KeyboardWeaponTriggersConnector _keyboardWeaponTriggersConnector; //TODO: уродливо
 
         private Sequence _enabledUpdateSequence;
         private Sequence _enabledAndServerUpdateSequence;
@@ -26,9 +24,6 @@ namespace Bw.UseCases.Shooting.Weapon
         {
             _enabledAndServerUpdateSequence = new Sequence(shootingWeapon);
             _controlledBy = controlledBy;
-            _enabledUpdateSequence = _keyboardWeaponTriggersConnector == null
-                ? new Sequence()
-                : new Sequence(_keyboardWeaponTriggersConnector);
         }
 
         private void Update()

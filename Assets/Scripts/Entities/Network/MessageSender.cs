@@ -1,35 +1,39 @@
-﻿using Bw.Entities.Network.Routing;
+using Bw.Entities.Network.Routing;
 using Unity.Netcode;
 
 namespace Bw.Entities.Network
 {
-    public interface IMessageSender
-    { }
-    
-    public interface IMessageSender<in T> : IMessageSender
-    {
-        void SendToAllClients(NetworkMessageHeader metadata, T payload, NetworkDelivery delivery);
-    }
-    
-    public class MessageSender<TValue, TCodec> : IMessageSender<TValue>
+    public sealed class MessageSender<TValue, TCodec> : IMessageSender<TValue>
         where TCodec : struct, ICodec<TValue>
     {
-        private readonly INetworkRouter _router;
+        private readonly IClientNetworkRouter _clientRouter;
+        private readonly IServerNetworkRouter _serverRouter;
 
-        public MessageSender(INetworkRouter router)
+        public MessageSender(IClientNetworkRouter clientRouter, IServerNetworkRouter serverRouter)
         {
-            _router = router;
+            _clientRouter = clientRouter;
+            _serverRouter = serverRouter;
         }
-        
+
         public void SendToAllClients(NetworkMessageHeader metadata, TValue payload, NetworkDelivery delivery)
         {
-            var codec = new TCodec
-            {
-                Value = payload
-            };
-
-            var message = new NetworkMessage<TCodec>(metadata, codec);
-            _router.Broadcast(message, delivery);
+            var message = new NetworkMessage<TCodec>(metadata, Codec(payload));
+            _serverRouter.Broadcast(message, delivery);
         }
+
+        public void SendToClient(NetworkMessageHeader metadata, TValue payload, NetworkDelivery delivery, IClient client)
+        {
+            var message = new NetworkMessage<TCodec>(metadata, Codec(payload));
+            _serverRouter.SendToClient(message, delivery, client);
+        }
+
+        public void SendToServer(NetworkMessageHeader metadata, TValue payload, NetworkDelivery delivery)
+        {
+            var message = new NetworkMessage<TCodec>(metadata, Codec(payload));
+            _clientRouter.SendToServer(message, delivery);
+        }
+
+        private static TCodec Codec(TValue payload) =>
+            new TCodec { Value = payload };
     }
 }

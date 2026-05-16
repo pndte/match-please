@@ -7,16 +7,16 @@ using Zenject;
 
 namespace Bw.UseCases.Shooting.Weapon
 {
-    public class WeaponHolder : MonoBehaviour, IHolder<IReadonlyWeapon>
+    public class WeaponHolder : MonoBehaviour, IHolder<IWeapon>
     {
-        public IReadonlyWeapon Value { get; private set; }
+        public IWeapon Value { get; private set; }
         public IOwnership Ownership { get; private set; }
         public IControlledBy ControlledBy { get; private set; }
 
         [Inject]
         private void Construct(
             Lifetime lifetime, 
-            IReadonlyWeapon weapon, 
+            IWeapon weapon, 
             IOwnership ownership,
             IControlledBy controlledBy)
         {

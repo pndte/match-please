@@ -29,6 +29,23 @@ namespace Bw.Entities.Network.Routing
             });
         }
 
+        private void HandleUnnamedMessage(ulong senderClientId, FastBufferReader reader)
+        {
+            reader.ReadNetworkSerializable(out NetworkMessageHeader header);
+
+            if (!_networkHolder.SpawnManager().SpawnedObjects.TryGetValue(header.NetworkObjectId, out var netObj))
+                throw new Exception($"No network object with id '{header.NetworkObjectId}' was found.");
+
+            if (!netObj.TryGetComponent<INetworkLifetimedObject>(out var targetObject))
+                throw new Exception($"No network object with id '{header.NetworkObjectId}' was found.");
+
+            var targetEntry = targetObject.NetVariablesTable.PropertiesByIndex[header.VarId];
+
+            _currentReader = reader;
+            targetEntry.Accept(this); // переход в метод ниже. Единственный адекватный паттерн, чтобы получить обобщённый тип T
+            // и работать дальше без boxing/unboxing.
+        }
+
         public void VisitProperty<T>(INetProperty<T> property)
         {
             if (!_messageReceivers.ByType.TryGetValue(typeof(T), out var receiver))
@@ -43,22 +60,6 @@ namespace Bw.Entities.Network.Routing
                 return;
 
             ((IMessageReceiver<T>)receiver).ReceiveSignal(ref _currentReader, entry);
-        }
-
-        private void HandleUnnamedMessage(ulong senderClientId, FastBufferReader reader)
-        {
-            reader.ReadNetworkSerializable(out NetworkMessageHeader header);
-
-            if (!_networkHolder.SpawnManager().SpawnedObjects.TryGetValue(header.NetworkObjectId, out var netObj))
-                throw new Exception($"No network object with id '{header.NetworkObjectId}' was found.");
-
-            if (!netObj.TryGetComponent<INetworkLifetimedObject>(out var targetObject))
-                throw new Exception($"No network object with id '{header.NetworkObjectId}' was found.");
-
-            var targetEntry = targetObject.NetVariablesTable.PropertiesByIndex[header.VarId];
-
-            _currentReader = reader;
-            targetEntry.Accept(this);
         }
     }
 }

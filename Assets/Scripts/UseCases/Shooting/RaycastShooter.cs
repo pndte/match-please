@@ -15,7 +15,7 @@ namespace Bw.UseCases.Shooting
 
         public RaycastShooter(
             Lifetime lifetime,
-            IReadonlyWeapon weapon,
+            IWeapon weapon,
             IWeaponMuzzle weaponMuzzle,
             RaycastShootConfig raycastConfig,
             ShootingWeaponConfig weaponConfig
@@ -25,7 +25,7 @@ namespace Bw.UseCases.Shooting
             _raycastConfig = raycastConfig;
             _weaponConfig = weaponConfig;
 
-            weapon.Shot.Advise(lifetime, HandleShot);
+            weapon.OnShot.Advise(lifetime, HandleShot);
         }
 
         private void HandleShot(Vector3 mouseWorldPosition)

@@ -2,14 +2,14 @@ using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
+using Bw.Injection.Network;
 using Bw.Injection.Network.Variables;
 using Bw.UseCases;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network;
-using Bw.UseCases.Shooting.Weapon.Triggers;
-using Bw.UseCases.Shooting.Weapon.Triggers.Network;
+using Bw.UseCases.Shooting.Weapon.Network.Requests;
 using Setup;
 using Unity.Netcode;
 using UnityEngine;
@@ -26,10 +26,6 @@ namespace Bw.Injection.Weapon
         [Header("Graphics")] [SerializeField] private LineRenderer _trailPrefab;
 
         [Header("WeaponMuzzle")] [SerializeField] private Transform _muzzleTransform;
-
-        [Header("Triggers")] [SerializeField] private ShootingWeaponTriggers _shootingWeaponTriggers;
-
-        [Header("Ammo")] [SerializeField] private NetworkAmmo _networkAmmo;
 
         [Header("Configs")] [SerializeField] private RaycastShootConfig _raycastShootConfig;
         [SerializeField] private ShootingWeaponConfig _shootingWeaponConfig;
@@ -86,7 +82,7 @@ namespace Bw.Injection.Weapon
             {
                 case PeerType.Server:
                     Container.Bind<RaycastShooter>().AsSingle().NonLazy();
-                    Container.Bind<ShootingWeaponServerHandler>().AsSingle().NonLazy();
+                    Container.Bind<WeaponAmmoManager>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:
                     Container.Bind<BulletTrailRenderer>().AsSingle().NonLazy();
@@ -96,9 +92,9 @@ namespace Bw.Injection.Weapon
 
         private void BindKeyboardTriggers()
         {
-            if (_runtimeSettings.CurrentPeerType == PeerType.Client)
-                Container.BindInterfacesAndSelfTo<KeyboardWeaponTriggersConnector>().AsSingle()
-                    .NonLazy(); //TODO: должно устанавливаться только на клиенте. Но тогда будет ошибка в лупе, тк объект не найдёт
+            // if (_runtimeSettings.CurrentPeerType == PeerType.Client)
+                // Container.BindInterfacesAndSelfTo<KeyboardWeaponTriggersConnector>().AsSingle()
+                //     .NonLazy(); //TODO: должно устанавливаться только на клиенте. Но тогда будет ошибка в лупе, тк объект не найдёт
         }
 
         private void BindVfxRenderer()
@@ -116,23 +112,23 @@ namespace Bw.Injection.Weapon
 
         private void BindCommonWeaponLogic()
         {
-            Container.Bind(typeof(IReloadTrigger), typeof(IMouseShootTrigger))
-                .To<ShootingWeaponTriggers>().FromInstance(_shootingWeaponTriggers).AsSingle()
-                .NonLazy(); // TODO: owner Lifetime
+            // Container.Bind(typeof(IReloadRequest), typeof(IMouseShootRequest))
+            //     .To<ShootingWeaponTriggers>().FromInstance(_shootingWeaponTriggers).AsSingle()
+            //     .NonLazy(); // TODO: owner Lifetime
             Container.BindInterfacesAndSelfTo<WeaponMuzzle>().AsSingle().WithArguments(_muzzleTransform);
             Container.BindInterfacesAndSelfTo<ShootingWeapon>().AsSingle();
         }
 
         private void BindAmmo()
         {
+            Container.CreatePropertyFor<int, Ammo>(_shootingWeaponConfig.AmmoSettings.Max);
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
-                Container.Bind<IReadonlyAmmo>().To<NetworkAmmo>().FromInstance(_networkAmmo).AsSingle();
+                Container.Bind<IReadonlyAmmo>().To<Ammo>().AsSingle();
             }
             else if (_runtimeSettings.CurrentPeerType == PeerType.Server)
             {
-                Container.Bind(typeof(IAmmo), typeof(IReadonlyAmmo)).To<NetworkAmmo>().FromInstance(_networkAmmo)
-                    .AsSingle();
+                Container.Bind(typeof(IAmmo), typeof(IReadonlyAmmo)).To<Ammo>().AsSingle();
             }
         }
 

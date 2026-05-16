@@ -1,5 +1,4 @@
 ﻿using Bw.UseCases.Shooting.Graphics;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;

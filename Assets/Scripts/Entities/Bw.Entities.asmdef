@@ -2,13 +2,15 @@
     "name": "Bw.Entities",
     "rootNamespace": "Bw",
     "references": [
+        "R3.Unity"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "JetBrains.Lifetimes.dll"
+        "JetBrains.Lifetimes.dll",
+        "R3.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

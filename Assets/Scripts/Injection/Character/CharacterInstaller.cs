@@ -47,7 +47,6 @@ namespace Bw.Injection
                     Container.Bind<NetworkObject>().FromInstance(_networkObject).AsSingle();
                     Container.BindInterfacesTo<ServerCharacter>().AsSingle();
                     Container.BindInterfacesAndSelfTo<Health>().AsSingle();
-                    Container.Bind<HealthDataConnector>().AsSingle().NonLazy();
                     Container.Bind<DamageProcessor>().AsSingle().NonLazy();
                     Container.InstantiateComponent<CharacterHolder>(gameObject);
                     break;
