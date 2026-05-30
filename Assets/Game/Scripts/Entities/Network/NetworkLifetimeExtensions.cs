@@ -29,7 +29,7 @@ namespace Bw.Entities.Network
             var networkBehaviour = variable.GetBehaviour();
             if (networkBehaviour == null)
             {
-                Debug.LogError(
+                UnityEngine.Debug.LogError(
                     $"Variable {variable.Name} не инициализирована");
                 return false;
             }

@@ -3,8 +3,12 @@ using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
-using Bw.Injection.Network;
+using Bw.Entities.Network.Variables;
+using Bw.Injection.ControlledBy;
 using Bw.Injection.Network.Variables;
+using JetBrains.Collections.Viewable;
+using Bw.Injection.Ownership;
+using Bw.UseCases;
 using Bw.UseCases.Character;
 using Bw.UseCases.Character.Network;
 using Bw.UseCases.Movement;
@@ -22,29 +26,37 @@ namespace Bw.Injection
         [SerializeField] private HealthConfig _healthConfig;
 
         [SerializeField] private NetworkObject _networkObject;
-        [SerializeField] private NetworkLifetimedBehaviour _networkLifetimedBehaviour;
         [SerializeField] private Rigidbody2D _physics;
         [SerializeField] private MovementConfig _movementConfig;
         [SerializeField] private NetworkMovementData _movementData;
 
         public override void InstallBindings()
         {
-            NetTablesInstaller.Install(Container, _networkObject);
+            Debug.Log("Character installer executed");
 
+            OwnershipInstaller.Install(Container, _runtimeSettings);
+            ControlledByInstaller.Install(Container, _runtimeSettings);
+            
+            Container.Bind<NetworkObject>().FromInstance(_networkObject).AsSingle();
+            Container.Bind<INetworkLifetimedObject>().FromInstance(_movementData).AsSingle();
+
+            NetTablesInstaller.Install(Container);
+            var netFactory = Container.Resolve<INetPropertyFactory>();
+            var netTable = Container.Resolve<INetVariablesTable>();//TODO: костыль, фиксить
+            
             Container.Bind<HealthConfig>().FromInstance(_healthConfig).AsSingle();
-
-            Container.Bind<Rigidbody2D>().To<Rigidbody2D>().FromInstance(_physics).AsSingle();
-            Container.Bind<MovementConfig>().To<MovementConfig>().FromInstance(_movementConfig).AsSingle();
-
+            Container.Bind<Rigidbody2D>().FromInstance(_physics).AsSingle();
+            Container.Bind<MovementConfig>().FromInstance(_movementConfig).AsSingle();
             var gameObjectLifetime = gameObject.Lifetime();
             Container.BindInstance(gameObjectLifetime).AsSingle();
-            Container.BindInterfacesTo<NetworkLifetimedBehaviour>().FromInstance(_networkLifetimedBehaviour).AsSingle();
-            Container.CreatePropertyFor<float, Health>(_healthConfig.Max);
+
+            OwnershipServicesInstaller.Install(Container, _runtimeSettings, netFactory);
+            ControlledByServicesInstaller.Install(Container, _runtimeSettings, netFactory);
+            BindHealth(netFactory);
 
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.Bind<NetworkObject>().FromInstance(_networkObject).AsSingle();
                     Container.BindInterfacesTo<ServerCharacter>().AsSingle();
                     Container.BindInterfacesAndSelfTo<Health>().AsSingle();
                     Container.Bind<DamageProcessor>().AsSingle().NonLazy();
@@ -58,7 +70,21 @@ namespace Bw.Injection
                     throw new ArgumentOutOfRangeException();
             }
 
-            Container.Bind<NetworkMovementData>().FromInstance(_movementData).AsSingle().NonLazy();
+            Container.Bind<NetworkMovementData>().FromInstance(_movementData).AsSingle().NonLazy(); // triggers movement + lifetimed inject
+        }
+
+        private void BindHealth(INetPropertyFactory netFactory)
+        {
+            // Eager registration so VarId matches on client/server (lazy CreatePropertyFor skipped Health on remote clients).
+            var healthProperty = netFactory.Viewable(
+                _healthConfig.Max,
+                NetworkDelivery.Reliable,
+                NetworkPermissions.Server);
+
+            Container.Bind<IViewableProperty<float>>()
+                .FromInstance(healthProperty)
+                .AsSingle()
+                .WhenInjectedInto<Health>();
         }
     }
 }

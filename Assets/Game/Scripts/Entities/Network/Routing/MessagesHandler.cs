@@ -4,6 +4,7 @@ using Bw.Entities.Network.Variables;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace Bw.Entities.Network.Routing
 {
@@ -34,16 +35,28 @@ namespace Bw.Entities.Network.Routing
             reader.ReadNetworkSerializable(out NetworkMessageHeader header);
 
             if (!_networkHolder.SpawnManager().SpawnedObjects.TryGetValue(header.NetworkObjectId, out var netObj))
-                throw new Exception($"No network object with id '{header.NetworkObjectId}' was found.");
+            {
+                Debug.LogWarning(
+                    $"[MessagesHandler] No spawned network object with id '{header.NetworkObjectId}' " +
+                    $"(varId={header.VarId}, sender={senderClientId}). Message ignored.");
+                return;
+            }
 
             if (!netObj.TryGetComponent<INetworkLifetimedObject>(out var targetObject))
-                throw new Exception($"No network object with id '{header.NetworkObjectId}' was found.");
+            {
+                throw new Exception(
+                    $"[MessagesHandler] Network object '{header.NetworkObjectId}' has no {nameof(INetworkLifetimedObject)}. Message ignored.");
+            }
 
-            var targetEntry = targetObject.NetVariablesTable.PropertiesByIndex[header.VarId];
+            var variablesTable = targetObject.NetVariablesTable;
+            if (!variablesTable.PropertiesByIndex.TryGetValue(header.VarId, out var targetEntry))
+            {
+                throw new Exception(
+                    $"[MessagesHandler] No network property with id '{header.VarId}' on object '{header.NetworkObjectId}'. Message ignored.");
+            }
 
             _currentReader = reader;
-            targetEntry.Accept(this); // переход в метод ниже. Единственный адекватный паттерн, чтобы получить обобщённый тип T
-            // и работать дальше без boxing/unboxing.
+            targetEntry.Accept(this);
         }
 
         public void VisitProperty<T>(INetProperty<T> property)

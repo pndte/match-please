@@ -77,6 +77,9 @@ namespace Bw.Entities.Network.Variables
         {
             entry.Dirty.AdviseTrue(lifetime, () =>
             {
+                if (!NetworkObject.IsSpawned)
+                    return;
+
                 CurrentRegistration = info;
                 entry.Accept(this);
                 entry.Dirty.Value = false;

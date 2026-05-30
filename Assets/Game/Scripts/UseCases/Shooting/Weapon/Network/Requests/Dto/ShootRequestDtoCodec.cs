@@ -15,12 +15,13 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            var clientId = _value.RequestId;
-            var target = _value.TargetPosition;
-            serializer.SerializeValue(ref clientId);
-            serializer.SerializeValue(ref target);
+            var requestId = Value.RequestId;
+            var position = Value.TargetPosition;
             
-            _value = new ShootRequestDto(clientId, target);
+            serializer.SerializeValue(ref requestId);
+            serializer.SerializeValue(ref position);
+            
+            Value = new ShootRequestDto(requestId, position);
         }
     }
 }

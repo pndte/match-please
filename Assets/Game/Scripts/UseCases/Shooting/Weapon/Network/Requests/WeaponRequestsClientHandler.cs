@@ -21,7 +21,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
         
         public WeaponRequestsClientHandler(
             Lifetime lifetime,
-            IControlledBy controlledBy,
+            IReadonlyControlledBy controlledBy,
             IMouseShootRequest shootRequest,
             IReloadRequest reloadRequest,
             IWeapon weapon,

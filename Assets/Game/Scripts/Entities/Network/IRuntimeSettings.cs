@@ -20,7 +20,7 @@
         /// </summary>
         PeerType CurrentPeerType { get; }
 
-        public void Initialize(PeerType peerType);
+        public void Initialize(PeerType peerType); //TODO: internal or smth idk (or another internal interface)
     }
 }
 

@@ -2,15 +2,19 @@ using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
+using Bw.Entities.Network.Repository;
+using Bw.Entities.Network.Variables;
+using Bw.Injection.ControlledBy;
 using Bw.Injection.Network;
 using Bw.Injection.Network.Variables;
-using Bw.UseCases;
+using Bw.Injection.Ownership;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network;
 using Bw.UseCases.Shooting.Weapon.Network.Requests;
-using Setup;
+using JetBrains.Collections.Viewable;
+using JetBrains.Core;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
@@ -21,8 +25,6 @@ namespace Bw.Injection.Weapon
     {
         [Inject] private IRuntimeSettings _runtimeSettings;
 
-        [Header("Ownership")] [SerializeField] private GameObjectMetaData _gameObjectMetaData;
-
         [Header("Graphics")] [SerializeField] private LineRenderer _trailPrefab;
 
         [Header("WeaponMuzzle")] [SerializeField] private Transform _muzzleTransform;
@@ -31,44 +33,49 @@ namespace Bw.Injection.Weapon
         [SerializeField] private ShootingWeaponConfig _shootingWeaponConfig;
         [SerializeField] private LineRendererVfxConfig _vfxConfig;
 
-        [Header("Network")] [SerializeField] private NetworkObject _networkObject;
-        [SerializeField] private NetworkLifetimedBehaviour _networkLifetimedBehaviour;
+        [Header("Network")]
+        [SerializeField] private NetworkObject _networkObject;
+        [SerializeField] private WeaponRotation _weaponRotation;
+
         [Header("Loop")] [SerializeField] private ShootingWeaponLoopRunner _weaponLoopRunner;
 
         public override void InstallBindings()
         {
-            NetTablesInstaller.Install(Container, _networkObject);
+            OwnershipInstaller.Install(Container, _runtimeSettings);
+            ControlledByInstaller.Install(Container, _runtimeSettings);
 
-            BindOwnership();
+            Container.Bind<NetworkObject>().FromInstance(_networkObject).AsSingle();
+            Container.Bind<INetworkLifetimedObject>().FromInstance(_weaponRotation).AsSingle();
+
+            NetTablesInstaller.Install(Container);
+            var netFactory = Container.Resolve<INetPropertyFactory>();
+            var netTable = Container.Resolve<INetVariablesTable>();//TODO: костыль, фиксить
+            
+            OwnershipServicesInstaller.Install(Container, _runtimeSettings, netFactory);
+            ControlledByServicesInstaller.Install(Container, _runtimeSettings, netFactory);
+
             BindConfigs();
             BindLifetime();
-            BindNetwork();
 
-            BindAmmo();
+            BindAmmo(netFactory);
+            BindWeaponRequests();
             BindCommonWeaponLogic();
             BindVfxRenderer();
-            BindKeyboardTriggers();
+            BindRequestHandlers();
 
             BindSpecialWeaponLogic();
 
             BindLoop();
 
             BindWeaponHolder();
+
+            Container.Bind<WeaponRotation>().FromInstance(_weaponRotation).AsSingle().NonLazy();
         }
 
         private void BindWeaponHolder()
         {
             if (_runtimeSettings.CurrentPeerType == PeerType.Server)
                 Container.InstantiateComponent<WeaponHolder>(gameObject);
-        }
-
-        private void BindOwnership()
-        {
-            if (_runtimeSettings.CurrentPeerType == PeerType.Client)
-                Container.Bind(typeof(IReadonlyOwnership), typeof(IReadonlyControlledBy)).FromInstance(_gameObjectMetaData).AsSingle().NonLazy();
-            else
-                Container.BindInterfacesTo<GameObjectMetaData>().FromInstance(_gameObjectMetaData).AsSingle()
-                    .NonLazy();
         }
 
         private void BindLoop()
@@ -90,11 +97,31 @@ namespace Bw.Injection.Weapon
             }
         }
 
-        private void BindKeyboardTriggers()
+        private void BindRequestHandlers()
         {
-            // if (_runtimeSettings.CurrentPeerType == PeerType.Client)
-                // Container.BindInterfacesAndSelfTo<KeyboardWeaponTriggersConnector>().AsSingle()
-                //     .NonLazy(); //TODO: должно устанавливаться только на клиенте. Но тогда будет ошибка в лупе, тк объект не найдёт
+            switch (_runtimeSettings.CurrentPeerType)
+            {
+                case PeerType.Client:
+                    Container.BindInterfacesTo<RequestIdsRepository>().AsSingle();
+                    Container.Bind<WeaponRequestsClientHandler>().AsSingle().NonLazy();
+                    Container.Bind<ShootingWeapon.NetworkHandler>().AsSingle().NonLazy();
+                    break;
+                case PeerType.Server:
+                    Container.Bind<WeaponRequestsServerHandler>().AsSingle().NonLazy();
+                    break;
+            }
+        }
+
+        private void BindWeaponRequests()
+        {
+            Container.BindInterfacesAndSelfTo<WeaponRequests>().FromMethod(ctx =>
+            {
+                var factory = ctx.Container.Resolve<INetPropertyFactory>();
+                return new WeaponRequests(
+                    factory.Signal<ShootRequestDto>(NetworkDelivery.Reliable, NetworkPermissions.Client),
+                    factory.Signal<Unit>(NetworkDelivery.Reliable, NetworkPermissions.Client),
+                    factory.Signal<ShootRequestDto>(NetworkDelivery.Reliable, NetworkPermissions.Server));
+            }).AsSingle();
         }
 
         private void BindVfxRenderer()
@@ -112,16 +139,27 @@ namespace Bw.Injection.Weapon
 
         private void BindCommonWeaponLogic()
         {
-            // Container.Bind(typeof(IReloadRequest), typeof(IMouseShootRequest))
-            //     .To<ShootingWeaponTriggers>().FromInstance(_shootingWeaponTriggers).AsSingle()
-            //     .NonLazy(); // TODO: owner Lifetime
+            Container.Bind<IViewableProperty<ReloadState>>()
+                .FromInstance(new ViewableProperty<ReloadState>(ReloadState.Complete))
+                .WhenInjectedInto<InterruptableReloader>();
+            Container.BindInterfacesAndSelfTo<InterruptableReloader>().AsSingle();
             Container.BindInterfacesAndSelfTo<WeaponMuzzle>().AsSingle().WithArguments(_muzzleTransform);
             Container.BindInterfacesAndSelfTo<ShootingWeapon>().AsSingle();
         }
 
-        private void BindAmmo()
+        private void BindAmmo(INetPropertyFactory netFactory)
         {
-            Container.CreatePropertyFor<int, Ammo>(_shootingWeaponConfig.AmmoSettings.Max);
+            // Eager registration so VarId matches on client/server (lazy CreatePropertyFor registered Ammo after shoot signals on client).
+            var ammoProperty = netFactory.Viewable(
+                _shootingWeaponConfig.AmmoSettings.Max,
+                NetworkDelivery.Reliable,
+                NetworkPermissions.Server);
+
+            Container.Bind<IViewableProperty<int>>()
+                .FromInstance(ammoProperty)
+                .AsSingle()
+                .WhenInjectedInto<Ammo>();
+
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
                 Container.Bind<IReadonlyAmmo>().To<Ammo>().AsSingle();
@@ -130,11 +168,6 @@ namespace Bw.Injection.Weapon
             {
                 Container.Bind(typeof(IAmmo), typeof(IReadonlyAmmo)).To<Ammo>().AsSingle();
             }
-        }
-
-        private void BindNetwork()
-        {
-            Container.BindInterfacesTo<NetworkLifetimedBehaviour>().FromInstance(_networkLifetimedBehaviour).AsSingle();
         }
 
         private void BindLifetime()

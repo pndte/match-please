@@ -17,7 +17,7 @@ namespace Bw.Injection.Network
             Container.BindInstance(gameObject.Lifetime());
             Container.Bind<NetworkObject>().FromInstance(_networkObject).AsSingle();
             
-            NetTablesInstaller.Install(Container, _networkObject);
+            NetTablesInstaller.Install(Container);
 
             Container.CreatePropertyFor<int, TestPropertyScript>(100);
 

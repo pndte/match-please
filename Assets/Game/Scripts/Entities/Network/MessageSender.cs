@@ -33,7 +33,6 @@ namespace Bw.Entities.Network
             _clientRouter.SendToServer(message, delivery);
         }
 
-        private static TCodec Codec(TValue payload) =>
-            new TCodec { Value = payload };
+        private static TCodec Codec(TValue payload) => new() { Value = payload };
     }
 }

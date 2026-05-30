@@ -7,7 +7,7 @@ using Zenject;
 
 namespace Bw.UseCases.Shooting.Weapon
 {
-    public class ShootingWeaponLoopRunner : MonoBehaviour
+    public class ShootingWeaponLoopRunner : MonoBehaviour //TODO: delete
     {
         [Inject] private IRuntimeSettings _settings;
 
@@ -22,7 +22,8 @@ namespace Bw.UseCases.Shooting.Weapon
             ShootingWeapon shootingWeapon,
             IReadonlyControlledBy controlledBy)
         {
-            _enabledAndServerUpdateSequence = new Sequence(shootingWeapon);
+            _enabledUpdateSequence = new Sequence(shootingWeapon);
+            _enabledAndServerUpdateSequence = _enabledUpdateSequence;
             _controlledBy = controlledBy;
         }
 

@@ -23,6 +23,7 @@ namespace Bw.EditorTools.Network
 
         private static readonly string OutputPath = Path.Combine(
             Application.dataPath,
+            "Game",
             "Scripts",
             "Injection",
             "Network",

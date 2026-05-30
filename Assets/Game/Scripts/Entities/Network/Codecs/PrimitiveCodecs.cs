@@ -1,7 +1,17 @@
-﻿using Unity.Netcode;
+using JetBrains.Core;
+using Unity.Netcode;
 
 namespace Bw.Entities.Network.Codecs
 {
+    public struct UnitCodec : ICodec<Unit>
+    {
+        public Unit Value { get; set; }
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+        }
+    }
+
     public struct FloatCodec : ICodec<float>
     {
         public float Value

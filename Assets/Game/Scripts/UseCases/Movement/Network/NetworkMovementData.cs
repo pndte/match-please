@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
@@ -34,7 +34,7 @@ namespace Bw.UseCases.Movement.Network
 
         private void Update()
         {
-            if (!IsOwner) return;
+            if (!IsOwner || !IsSpawned) return;
 
             XInput.Value = Input.GetAxisRaw("Horizontal");
             if (Input.GetKeyDown(KeyCode.Space))
@@ -52,14 +52,14 @@ namespace Bw.UseCases.Movement.Network
 
             var hitCount = Physics2D.OverlapCircle(checkPosition, checkRadius, _groundFilter, _groundResults);
             _isGrounded = hitCount > 0;
-
+            
             _physics.linearVelocity = _physics.linearVelocity.WithX(Mathf.Clamp(XInput.Value, -1, 1) * _config.Speed);
         }
 
         [ServerRpc]
         private void JumpServerRpc()
         {
-            if (!_isGrounded) return;
+            if (_physics == null || _config == null || !_isGrounded) return;
             
             _physics.AddForce(Vector2.up * _config.JumpForce, ForceMode2D.Impulse);
             _isGrounded = false;

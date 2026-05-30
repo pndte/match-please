@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Bw.Entities.Network;
+using Cysharp.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -65,12 +66,29 @@ namespace Setup
                     "[NetworkAutoStart] NetworkManager.Singleton is null! Make sure NetworkManager exists in the scene.");
                 return;
             }
+
             Log("Auto-start startoing.");
 
             // Detect and handle Multiplayer Play Mode tag
             DetectAndStartNetwork();
             _networkHolder.NetworkManager.Value = NetworkManager.Singleton;
-            SceneManager.LoadScene("SampleScene", LoadSceneMode.Single);
+
+            LoadServicesAndGame().Forget();
+        }
+
+        private async UniTaskVoid LoadServicesAndGame()
+        {
+            await SceneManager.LoadSceneAsync("Network", LoadSceneMode.Additive).ToUniTask(); //TODO: consts for scene name or idk
+            await SceneManager.LoadSceneAsync("SampleScene", LoadSceneMode.Additive).ToUniTask();
+            
+            var gameScene = SceneManager.GetSceneByName("SampleScene");
+            SceneManager.SetActiveScene(gameScene);
+            
+            await SceneManager.UnloadSceneAsync("GameSetupScene").ToUniTask();
+
+
+            // var gameSetupScene = SceneManager.GetSceneByName("GameSetupScene");
+            // await SceneManager.UnloadSceneAsync(gameSetupScene);
         }
 
         private void DetectAndStartNetwork()

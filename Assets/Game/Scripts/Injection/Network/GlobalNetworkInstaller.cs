@@ -9,8 +9,8 @@ namespace Bw.Injection.Network
     {
         public override void InstallBindings()
         {
-            Container.BindInterfacesTo<NetworkHolder>().AsSingle();
             MessageHandlersInstaller.Install(Container);
+            Debug.Log($"[{nameof(GlobalNetworkInstaller)}]: Network Services Successfully Installed");
         }
     }
 }

@@ -7,7 +7,8 @@ namespace Bw.Entities.Extensions
 {
     public static class ViewablePropertyExtensions
     {
-        public static void WhenLessOrEquals<T>(this IReadonlyProperty<T> property, Lifetime lifetime, T value, Action handler) where T:  struct, IComparable<T>
+        public static void WhenLessOrEquals<T>(this IReadonlyProperty<T> property, Lifetime lifetime, T value,
+            Action handler) where T : struct, IComparable<T>
         {
             property.Advise(lifetime, comparable =>
             {
@@ -22,7 +23,55 @@ namespace Bw.Entities.Extensions
                 if (addRemove == AddRemove.Add) handler(key, value);
             });
         }
-        
+
+        public static void AdviseAddRemove<T>(this ISource<ListEvent<T>> listEventSource, Lifetime lifetime,
+            Action<AddRemove, T> handler)
+        {
+            listEventSource.Advise(lifetime, listEvent =>
+            {
+                switch (listEvent.Kind)
+                {
+                    case AddUpdateRemove.Add:
+                        handler(AddRemove.Add, listEvent.NewValue);
+                        break;
+                    case AddUpdateRemove.Update:
+                        handler(AddRemove.Remove, listEvent.OldValue);
+                        handler(AddRemove.Add, listEvent.NewValue);
+                        break;
+                    case AddUpdateRemove.Remove:
+                        handler(AddRemove.Remove, listEvent.OldValue);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException("Undefined listevent kind: " + listEvent.Kind);
+                }
+            });
+        }
+
+        public static void View<T>(this ISource<ListEvent<T>> listEventSource, Lifetime lifetime,
+            Action<Lifetime, T> handler)
+        {
+            var lifetimes = new Dictionary<T, LifetimeDefinition>();
+
+            listEventSource.AdviseAddRemove(lifetime, (addRemove, entity) =>
+            {
+                switch (addRemove)
+                {
+                    case AddRemove.Add:
+                        var def = lifetime.CreateNested();
+                        lifetimes.Add(entity, def);
+                        handler(def.Lifetime, entity);
+                        break;
+                    case AddRemove.Remove:
+                        def = lifetimes[entity];
+                        lifetimes.Remove(entity);
+                        def.Terminate();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException("Undefined listevent kind: " + addRemove);
+                }
+            });
+        }
+
         public static void AdviseTrue(this IReadonlyProperty<bool> property, Lifetime lifetime, Action handler)
         {
             property.Advise(lifetime, value =>
@@ -36,7 +85,7 @@ namespace Bw.Entities.Extensions
             list.View(lifetime, (itemLifetime, _, item) =>
                 handler(itemLifetime, item));
         }
-        
+
         public static void AddLifetimed<K, V>(this IViewableMap<K, V> map, Lifetime lifetime, K key, V value)
         {
             map.AddLifetimed(lifetime, new KeyValuePair<K, V>(key, value));

@@ -12,6 +12,9 @@ namespace Bw.Injection.Network
             RegisterCodec<System.Boolean, Bw.Entities.Network.Codecs.BoolCodec>(receivers, senders);
             RegisterCodec<System.Single, Bw.Entities.Network.Codecs.FloatCodec>(receivers, senders);
             RegisterCodec<System.Int32, Bw.Entities.Network.Codecs.IntCodec>(receivers, senders);
+            RegisterCodec<JetBrains.Core.Unit, Bw.Entities.Network.Codecs.UnitCodec>(receivers, senders);
+            RegisterCodec<Bw.UseCases.ControlledByDto, Bw.UseCases.ControlledByDtoCodec>(receivers, senders);
+            RegisterCodec<Bw.UseCases.OwnershipDto, Bw.UseCases.OwnershipDtoCodec>(receivers, senders);
             RegisterCodec<Bw.UseCases.Shooting.Weapon.Network.Requests.ShootRequestDto, Bw.UseCases.Shooting.Weapon.Network.Requests.ShootRequestDtoCodec>(receivers, senders);
         }
     }

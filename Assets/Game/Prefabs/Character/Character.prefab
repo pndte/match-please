@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3824248496
+  GlobalObjectIdHash: 242630451
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -214,9 +214,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7edb576fb2249949173afef5b68fe50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Injection.CharacterInstaller
-  _networkObject: {fileID: 3773905357652456202}
-  _networkLifetimedBehaviour: {fileID: 7318710291484346262}
   _healthConfig: {fileID: 11400000, guid: 20665ca7550f0604d82f61652021be97, type: 2}
+  _networkObject: {fileID: 3773905357652456202}
   _physics: {fileID: 7303288911383704076}
   _movementConfig: {fileID: 11400000, guid: 69583fc462e9fe145a5a5101d5d42728, type: 2}
   _movementData: {fileID: 7318710291484346262}

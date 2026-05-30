@@ -41,12 +41,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2046601173914584316}
   - component: {fileID: 8409776997951654046}
-  - component: {fileID: 2578125741735959394}
-  - component: {fileID: 508414533704846467}
-  - component: {fileID: 82381354680183275}
   - component: {fileID: 2988964128547869906}
   - component: {fileID: 5480233075956149962}
-  - component: {fileID: 305314713262371480}
   - component: {fileID: 6095048442294211056}
   - component: {fileID: 63440579415710661}
   - component: {fileID: 2715088513661146607}
@@ -89,7 +85,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 2412872572
+  GlobalObjectIdHash: 1027306142
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -102,45 +98,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &2578125741735959394
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2477611210009415474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 851977887d714a959b9624db4f051815, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Bw.UseCases::Bw.UseCases.GameObjectMetaData
-  ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &508414533704846467
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2477611210009415474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e2179f2c5054851ae34bcf58afe2085, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Bw.UseCases.Shooting::Bw.UseCases.Shooting.Weapon.Network.NetworkAmmo
-  ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &82381354680183275
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2477611210009415474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c7a4c3faf9742a6b0c6e319beaff3f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Bw.UseCases.Shooting::Bw.UseCases.Shooting.Weapon.Triggers.Network.ShootingWeaponTriggers
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &2988964128547869906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,19 +161,6 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &305314713262371480
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2477611210009415474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40da629c51e44409a88f46147e6bfa9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Bw.UseCases.Shooting::Bw.UseCases.Shooting.Weapon.Triggers.Network.Crutches.WeaponShotTriggerSynchronizer
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &6095048442294211056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,16 +187,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 949c2604aa86458a9edf8f1b29b0bf05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Weapon.WeaponInstaller
-  _gameObjectMetaData: {fileID: 2578125741735959394}
-  _networkObject: {fileID: 8409776997951654046}
   _trailPrefab: {fileID: 4557794692304115249, guid: 834baa140fa4a3643b92af2da947ad35, type: 3}
   _muzzleTransform: {fileID: 8117144414725150372}
-  _shootingWeaponTriggers: {fileID: 82381354680183275}
-  _networkAmmo: {fileID: 508414533704846467}
   _raycastShootConfig: {fileID: 11400000, guid: 028f3f7f1f83f474697f765f7043df94, type: 2}
   _shootingWeaponConfig: {fileID: 11400000, guid: c7210083ab45bac4eb075b9602232847, type: 2}
   _vfxConfig: {fileID: 11400000, guid: 702bc1ea939f2784495afb093193db74, type: 2}
-  _networkLifetimedBehaviour: {fileID: 2578125741735959394}
+  _networkObject: {fileID: 8409776997951654046}
+  _weaponRotation: {fileID: 6095048442294211056}
   _weaponLoopRunner: {fileID: 2715088513661146607}
 --- !u!114 &2715088513661146607
 MonoBehaviour:

@@ -1,3 +1,4 @@
+using System;
 using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.UseCases.Character;
@@ -6,6 +7,7 @@ using Bw.UseCases.Character.Network;
 using Bw.UseCases.Clients;
 using Bw.UseCases.Players;
 using Bw.UseCases.Shooting.Weapon;
+using Cysharp.Threading.Tasks;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
 using UnityEngine;
@@ -14,29 +16,23 @@ using Random = UnityEngine.Random;
 
 namespace Bw.UseCases.Spawning.Network
 {
-    /// <summary>
-    /// Handles spawning of player characters when clients connect.
-    /// Each client gets their own character with proper NetworkObject ownership.
-    /// </summary>
     public class NetworkCharactersSpawner : ICharacterSpawner
     {
         public struct Data
         {
             public Transform[] SpawnPoints;
             public float SpawnRandomOffset;
-
-            public NetworkObject Character;
-            public NetworkObject Weapon;
+            public NetworkObject CharacterPrefab;
+            public NetworkObject WeaponPrefab;
         }
 
         private readonly Data _data;
-        private int _nextSpawnPointIndex = 0;
-
         private readonly ICharacterRegistry _characterRegistry;
         private readonly IGameObjectByCharacterCollection _gameObjectByCharacterCollection;
         private readonly IClientPlayerCollection _clientPlayerCollection;
         private readonly DiContainer _container;
-        private int _counter = 0;
+        private int _nextSpawnPointIndex;
+        private int _weaponNameCounter;
 
         private NetworkCharactersSpawner(
             Lifetime lifetime,
@@ -59,90 +55,82 @@ namespace Bw.UseCases.Spawning.Network
 
         public ICharacter SpawnCharacterFor(Lifetime lifetime, IClient client)
         {
-            Debug.Log("Trying to spawn character");
-
             var spawnPosition = GetSpawnPosition();
             var spawnRotation = Quaternion.identity;
 
-            var playerInstance = InstantiateAndInjectNetworkObject(_data.Character.gameObject, spawnPosition, spawnRotation);
-            playerInstance.SpawnAsPlayerObject(client.Id, true);
-            var characterHolder = playerInstance.gameObject.GetComponent<CharacterHolder>(); //TODO: добавлять в отдельном файле
-            
-            var characterObjectLifetime = characterHolder.gameObject.Lifetime();
+            var characterObject = NetworkPrefabInstantiationHelper.Instantiate(
+                _container, _data.CharacterPrefab, spawnPosition, spawnRotation);
+
+            characterObject.SpawnAsPlayerObject(client.Id, destroyWithScene: true);
+
+            var characterHolder = RequireComponent<CharacterHolder>(characterObject.gameObject);
+            var characterLifetime = characterHolder.gameObject.Lifetime();
             var character = characterHolder.Value;
-            
-            _gameObjectByCharacterCollection.AddLifetimed(characterObjectLifetime, character, playerInstance.gameObject); // TODO: берём лайфтайм из аргументов
-            _characterRegistry.ClientByCharacter.AddLifetimed(characterObjectLifetime, character, client);
-           
-            SetupWeaponForPlayer();
 
-            Log($"<color=green>✓ Player character spawned for client {client} at {spawnPosition}</color>");
+            _gameObjectByCharacterCollection.AddLifetimed(
+                characterLifetime, character, characterObject.gameObject);
+            _characterRegistry.ClientByCharacter.AddLifetimed(characterLifetime, character, client);
 
-            return characterHolder.Value;
+            SpawnAndAttachWeapon(client, characterHolder, characterLifetime, characterObject.transform.position, spawnRotation).Forget();
 
-            void SetupWeaponForPlayer()
-            {
-                var weaponPos = playerInstance.transform.position;
-                var weaponObject = InstantiateAndInjectNetworkObject(_data.Weapon.gameObject, weaponPos, spawnRotation);
-                weaponObject.name += ", " + _counter++;
-                var weaponRb = weaponObject.GetComponent<Rigidbody2D>();
-                if (weaponRb != null)
-                    weaponRb.simulated = false;
-
-                weaponObject.SpawnWithOwnership(client.Id, true);
-
-                var weaponHolder = weaponObject.GetComponent<WeaponHolder>();
-                var player = _clientPlayerCollection.ByClient[client];
-
-                characterHolder.Value.State.WhenAlive(characterObjectLifetime, aliveLifetime =>
-                {
-                    weaponHolder.ControlledBy.Set(aliveLifetime, player);
-                    weaponHolder.Ownership.AddOwner(aliveLifetime, player);
-                    weaponHolder.PickUpWeapon(aliveLifetime, characterHolder);
-                });
-            }
+            Debug.Log($"[PlayerSpawner] Player character spawned for client {client.Id} at {spawnPosition}");
+            return character;
         }
 
-
-        private NetworkObject InstantiateAndInjectNetworkObject(GameObject prefab, Vector3 position, Quaternion rotation)
+        private async UniTaskVoid SpawnAndAttachWeapon(
+            IClient client,
+            CharacterHolder characterHolder,
+            Lifetime characterLifetime,
+            Vector3 position,
+            Quaternion rotation)
         {
-            var instance = UnityEngine.Object.Instantiate(prefab, position, rotation);
-            _container.InjectGameObject(instance);
-            return instance.GetComponent<NetworkObject>();
+            var weaponObject = NetworkPrefabInstantiationHelper.Instantiate(
+                _container, _data.WeaponPrefab, position, rotation);
+            weaponObject.name += $", {_weaponNameCounter++}";
+
+            if (weaponObject.TryGetComponent(out Rigidbody2D weaponRb))
+                weaponRb.simulated = false;
+
+            weaponObject.SpawnWithOwnership(client.Id, destroyWithScene: true);
+
+            var weaponHolder = RequireComponent<WeaponHolder>(weaponObject.gameObject);
+
+            if (!_clientPlayerCollection.ByClient.TryGetValue(client, out var player))
+                throw new InvalidOperationException(
+                    $"No player registered for client {client.Id} before weapon setup.");
+
+            await UniTask.Delay(TimeSpan.FromSeconds(3));//TODO: костыль, фиксить
+            characterHolder.Value.State.WhenAlive(characterLifetime, aliveLifetime =>
+            {
+                weaponHolder.ControlledBy.Set(aliveLifetime, player);
+                weaponHolder.Ownership.AddOwner(aliveLifetime, player);
+                weaponHolder.PickUpWeapon(aliveLifetime, characterHolder);
+            });
         }
 
         private Vector3 GetSpawnPosition()
         {
-            Vector3 basePosition;
+            var basePosition = _data.SpawnPoints is { Length: > 0 }
+                ? _data.SpawnPoints[_nextSpawnPointIndex++ % _data.SpawnPoints.Length].position
+                : Vector3.zero;
 
-            if (_data.SpawnPoints is { Length: > 0 })
-            {
-                var spawnPoint = _data.SpawnPoints[_nextSpawnPointIndex];
-                _nextSpawnPointIndex = (_nextSpawnPointIndex + 1) % _data.SpawnPoints.Length;
-                basePosition = spawnPoint.position;
-            }
-            else
-            {
-                basePosition = Vector3.zero;
-            }
+            if (_data.SpawnRandomOffset <= 0f)
+                return basePosition;
 
-            // Add random offset to avoid players spawning on top of each other
-            if (_data.SpawnRandomOffset > 0f)
-            {
-                Vector3 randomOffset = new Vector3(
-                    Random.Range(-_data.SpawnRandomOffset, _data.SpawnRandomOffset),
-                    0f,
-                    Random.Range(-_data.SpawnRandomOffset, _data.SpawnRandomOffset)
-                );
-                basePosition += randomOffset;
-            }
-
-            return basePosition;
+            return basePosition + new Vector3(
+                Random.Range(-_data.SpawnRandomOffset, _data.SpawnRandomOffset),
+                0f,
+                Random.Range(-_data.SpawnRandomOffset, _data.SpawnRandomOffset));
         }
 
-        private void Log(string message)
+        private static T RequireComponent<T>(GameObject gameObject) where T : Component
         {
-            Debug.Log($"[PlayerSpawner] {message}");
+            if (gameObject.TryGetComponent(out T component))
+                return component;
+
+            throw new InvalidOperationException(
+                $"Component {typeof(T).Name} is missing on '{gameObject.name}' after prefab install.");
         }
+
     }
 }
