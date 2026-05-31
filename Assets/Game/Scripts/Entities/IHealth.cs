@@ -26,6 +26,7 @@ namespace Bw.Entities
 
         public Health(Lifetime lifetime, HealthConfig config, IViewableProperty<float> valueProperty)
         {
+            Debug.Log("health initialized");
             _config = config;
             Current = valueProperty;
             OnAlive(lifetime);
@@ -33,6 +34,8 @@ namespace Bw.Entities
 
         private void OnAlive(Lifetime lifetime)
         {
+            Debug.Log("health changed subscription");
+            
             Current.Advise(lifetime, health => Debug.Log("Health changed: " + health));
         }
     }

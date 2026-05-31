@@ -8,12 +8,14 @@ namespace Bw.Injection.Entities.Camera
 {
     public class MainCameraInstaller : MonoInstaller
     {
-        [Inject] IRuntimeSettings _settings;
-        
+        [Inject] IRuntimeSettings _runtimeSettings;
+
         [SerializeField] private UnityEngine.Camera _camera;
+
         public override void InstallBindings()
         {
-            Container.BindInterfacesTo<PlayerCamera>().AsSingle().WithArguments(_camera).NonLazy(); // TODO: сделать только для клиента
+            if (_runtimeSettings.CurrentPeerType == PeerType.Client)
+                Container.BindInterfacesTo<PlayerCamera>().AsSingle().WithArguments(_camera).NonLazy(); 
         }
     }
 }

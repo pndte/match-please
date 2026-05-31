@@ -5,6 +5,7 @@ using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
 using Bw.Entities.Network.Variables;
 using Bw.Injection.ControlledBy;
+using Bw.Injection.Network;
 using Bw.Injection.Network.Variables;
 using JetBrains.Collections.Viewable;
 using Bw.Injection.Ownership;
@@ -52,18 +53,18 @@ namespace Bw.Injection
 
             OwnershipServicesInstaller.Install(Container, _runtimeSettings, netFactory);
             ControlledByServicesInstaller.Install(Container, _runtimeSettings, netFactory);
-            BindHealth(netFactory);
-
+            
+            Container.CreatePropertyFor<float, Health>(_healthConfig.Max);
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
                     Container.BindInterfacesTo<ServerCharacter>().AsSingle();
-                    Container.BindInterfacesAndSelfTo<Health>().AsSingle();
+                    Container.BindInterfacesAndSelfTo<Health>().AsSingle().NonLazy();
                     Container.Bind<DamageProcessor>().AsSingle().NonLazy();
                     Container.InstantiateComponent<CharacterHolder>(gameObject);
                     break;
                 case PeerType.Client:
-                    Container.Bind<IReadonlyHealth>().To<Health>().AsSingle();
+                    Container.Bind<IReadonlyHealth>().To<Health>().AsSingle().NonLazy();
                     Container.BindInterfacesTo<ClientCharacter>().AsSingle();
                     break;
                 default:
@@ -71,20 +72,6 @@ namespace Bw.Injection
             }
 
             Container.Bind<NetworkMovementData>().FromInstance(_movementData).AsSingle().NonLazy(); // triggers movement + lifetimed inject
-        }
-
-        private void BindHealth(INetPropertyFactory netFactory)
-        {
-            // Eager registration so VarId matches on client/server (lazy CreatePropertyFor skipped Health on remote clients).
-            var healthProperty = netFactory.Viewable(
-                _healthConfig.Max,
-                NetworkDelivery.Reliable,
-                NetworkPermissions.Server);
-
-            Container.Bind<IViewableProperty<float>>()
-                .FromInstance(healthProperty)
-                .AsSingle()
-                .WhenInjectedInto<Health>();
         }
     }
 }

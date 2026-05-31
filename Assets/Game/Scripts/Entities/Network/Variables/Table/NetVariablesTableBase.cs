@@ -20,7 +20,7 @@ namespace Bw.Entities.Network.Variables
             Lifetime lifetime,
             NetworkObject networkObject,
             INetPropertyFactory factory,
-            IReadonlyOwnership ownership)
+            IOwnership ownership)
         {
             PropertiesByIndex = new ViewableBiMap<ushort, INetSyncEntry>(lifetime);
             NetworkObject = networkObject;
@@ -38,7 +38,7 @@ namespace Bw.Entities.Network.Variables
             Lifetime lifetime,
             NetRegistryInfo info,
             INetSyncEntry entry,
-            IReadonlyOwnership ownership)
+            IOwnership ownership)
         {
             switch (info.Permissions)
             {
@@ -58,13 +58,13 @@ namespace Bw.Entities.Network.Variables
             Lifetime lifetime,
             NetRegistryInfo info,
             INetSyncEntry entry,
-            IReadonlyOwnership ownership);
+            IOwnership ownership);
 
         protected void BindDirtyReplicationWhileMine(
             Lifetime lifetime,
             NetRegistryInfo info,
             INetSyncEntry entry,
-            IReadonlyOwnership ownership)
+            IOwnership ownership)
         {
             ownership.Mine.View(lifetime, (mineLifetime, mine) =>
             {

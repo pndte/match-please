@@ -22,9 +22,9 @@ namespace Bw.Injection.Ownership
         {
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
-                Container.Bind<IReadonlyOwnership>().To<UseCases.Ownership>().AsSingle();
+                Container.Bind<IOwnership>().To<UseCases.Ownership>().AsSingle();
                 Container.Bind<UseCases.Ownership>()
-                    .FromMethod(ctx => (UseCases.Ownership)ctx.Container.Resolve<IReadonlyOwnership>())
+                    .FromMethod(ctx => (UseCases.Ownership)ctx.Container.Resolve<IOwnership>())
                     .WhenInjectedInto<UseCases.Ownership.ClientNetworkHandler>();
             }
             else if (_runtimeSettings.CurrentPeerType == PeerType.Server)

@@ -43,7 +43,8 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
         {
             _weapon.CanShoot.WhenTrue(lifetime, canShootLifetime =>
                 Observable.EveryUpdate(UnityFrameProvider.Update, canShootLifetime).Subscribe(UpdateShoot)); //TODO: заменга на свою астракцию
-            
+
+
             Observable.EveryUpdate(UnityFrameProvider.Update, lifetime).Subscribe(UpdateReload);
         }
 

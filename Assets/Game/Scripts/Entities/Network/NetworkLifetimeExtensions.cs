@@ -7,13 +7,7 @@ using UnityEngine;
 namespace Bw.Entities.Network
 {
     public static class NetworkLifetimeExtensions
-    { // TODO: restyle
-        public static void ConnectTo<T>(this NetworkVariable<T> variable, Lifetime lifetime, IViewableProperty<T> property)
-        {
-            property.SynchWithNetworkProperty(lifetime, variable);
-            if (variable.CanWriteVariable())
-                property.Advise(lifetime, x => variable.Value = x);
-        }
+    { 
         
         private static void SynchWithNetworkProperty<T>(this IViewableProperty<T> property, Lifetime lifetime, NetworkVariable<T> variable)
         {

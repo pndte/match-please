@@ -103,7 +103,7 @@ namespace Bw.UseCases.Spawning.Network
             characterHolder.Value.State.WhenAlive(characterLifetime, aliveLifetime =>
             {
                 weaponHolder.ControlledBy.Set(aliveLifetime, player);
-                weaponHolder.Ownership.AddOwner(aliveLifetime, player);
+                weaponHolder.OwnershipController.AddOwner(aliveLifetime, player);
                 weaponHolder.PickUpWeapon(aliveLifetime, characterHolder);
             });
         }

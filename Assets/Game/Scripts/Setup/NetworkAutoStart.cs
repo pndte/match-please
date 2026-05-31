@@ -78,7 +78,7 @@ namespace Setup
 
         private async UniTaskVoid LoadServicesAndGame()
         {
-            await SceneManager.LoadSceneAsync("Network", LoadSceneMode.Additive).ToUniTask(); //TODO: consts for scene name or idk
+            await SceneManager.LoadSceneAsync("Network", LoadSceneMode.Additive).ToUniTask(); //TODO: addresables for scene loading
             await SceneManager.LoadSceneAsync("SampleScene", LoadSceneMode.Additive).ToUniTask();
             
             var gameScene = SceneManager.GetSceneByName("SampleScene");

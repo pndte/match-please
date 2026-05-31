@@ -43,7 +43,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
         public void Shoot(Vector3 mousePos)
         {
             if (!_canShoot.Value)
-                throw new InvalidOperationException("Trying to shoot when not ready (check ReadyToShoot)");
+                throw new InvalidOperationException("Trying to shoot when not ready (check _canShoot)");
 
             _canShoot.Value = false;
             _onShot.Fire(mousePos);
@@ -59,6 +59,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
 
             if (_canShoot.Value || _ammo.Empty() || _reloader.State.Value == ReloadState.Reloading) return;
 
+            Debug.Log("Ammo count: " + _ammo.Value);
             _elapsedTime -= deltaTime;
 
             if (_elapsedTime <= 0)

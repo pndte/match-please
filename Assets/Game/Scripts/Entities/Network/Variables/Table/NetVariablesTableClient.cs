@@ -13,7 +13,7 @@ namespace Bw.Entities.Network.Variables
             NetworkObject networkObject,
             IClientSendersCollection messageSenders,
             INetPropertyFactory factory,
-            IReadonlyOwnership ownership)
+            IOwnership ownership)
             : base(lifetime, networkObject, factory, ownership)
         {
             _messageSenders = messageSenders;
@@ -23,7 +23,7 @@ namespace Bw.Entities.Network.Variables
             Lifetime lifetime,
             NetRegistryInfo info,
             INetSyncEntry entry,
-            IReadonlyOwnership ownership)
+            IOwnership ownership)
         {
             switch (info.Permissions)
             {

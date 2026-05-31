@@ -4,11 +4,10 @@ using Bw.Entities.Network;
 using Bw.UseCases.Players;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
-using UnityEngine;
 
 namespace Bw.UseCases
 {
-    public class Ownership : IOwnership
+    public class Ownership : IOwnershipController, IOwnership
     {
         public IReadonlyProperty<bool> Mine => _mine;
         public IReadonlyViewableList<IPlayer> Owners => _owners;
@@ -50,10 +49,10 @@ namespace Bw.UseCases
             public ServerNetworkHandler(
                 Lifetime lifetime, 
                 IDtoBroadcaster<OwnershipDto> dtoBroadcaster,
-                IOwnership ownership,
+                IOwnershipController ownershipController,
                 IClientPlayerCollection clientPlayers)
             {
-                ownership.Owners.View(lifetime, (ownerLifetime, ownerPlayer) =>
+                ownershipController.Owners.View(lifetime, (ownerLifetime, ownerPlayer) =>
                 {
                     var client = clientPlayers.ByClient.Inverse[ownerPlayer];
                     dtoBroadcaster.Fire(new OwnershipDto(client.Id, true));

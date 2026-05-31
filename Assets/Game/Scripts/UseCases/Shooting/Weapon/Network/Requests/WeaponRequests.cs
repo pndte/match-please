@@ -3,7 +3,7 @@ using JetBrains.Core;
 
 namespace Bw.UseCases.Shooting.Weapon.Network.Requests
 {
-    public class WeaponRequests : IMouseShootRequest, IReloadRequest, IReceivedShot // TODO: norm name
+    public class WeaponSignals : IMouseShootRequest, IReloadRequest, IReceivedShot
     {
         public ISignal<ShootRequestDto> Received { get; }
         ISignal<ShootRequestDto> IMouseShootRequest.Requested => _mouseShootRequest;
@@ -12,7 +12,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
         private readonly ISignal<ShootRequestDto> _mouseShootRequest;
         private readonly ISignal<Unit> _reloadRequest;
 
-        public WeaponRequests(ISignal<ShootRequestDto> mouseShootRequest, ISignal<Unit> reloadRequest,
+        public WeaponSignals(ISignal<ShootRequestDto> mouseShootRequest, ISignal<Unit> reloadRequest,
             ISignal<ShootRequestDto> received)
         {
             _mouseShootRequest = mouseShootRequest;

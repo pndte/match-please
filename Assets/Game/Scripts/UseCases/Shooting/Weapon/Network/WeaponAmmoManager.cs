@@ -4,7 +4,7 @@ using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Shooting.Weapon.Network
 {
-    public class WeaponAmmoManager //TODO: ренейм
+    public class WeaponAmmoManager
     {
         private readonly IWeapon _weapon;
         private readonly IReloader _reloader;

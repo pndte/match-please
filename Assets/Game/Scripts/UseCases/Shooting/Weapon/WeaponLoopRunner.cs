@@ -7,7 +7,7 @@ using Zenject;
 
 namespace Bw.UseCases.Shooting.Weapon
 {
-    public class ShootingWeaponLoopRunner : MonoBehaviour //TODO: delete
+    public class ShootingWeaponLoopRunner : MonoBehaviour //TODO: delete and use R3
     {
         [Inject] private IRuntimeSettings _settings;
 

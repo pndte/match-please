@@ -2,7 +2,7 @@
 
 namespace Bw.Entities
 {
-    public interface IReadonlyOwnership
+    public interface IOwnership
     {
         public IReadonlyProperty<bool> Mine { get; }
     }

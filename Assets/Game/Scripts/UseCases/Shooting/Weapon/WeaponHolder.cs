@@ -10,18 +10,18 @@ namespace Bw.UseCases.Shooting.Weapon
     public class WeaponHolder : MonoBehaviour, IHolder<IWeapon>
     {
         public IWeapon Value { get; private set; }
-        public IOwnership Ownership { get; private set; }
+        public IOwnershipController OwnershipController { get; private set; }
         public IControlledBy ControlledBy { get; private set; }
 
         [Inject]
         private void Construct(
             Lifetime lifetime, 
             IWeapon weapon, 
-            IOwnership ownership,
+            IOwnershipController ownershipController,
             IControlledBy controlledBy)
         {
             Value = weapon;
-            Ownership = ownership;
+            OwnershipController = ownershipController;
             ControlledBy = controlledBy;
         }
 

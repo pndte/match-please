@@ -57,7 +57,7 @@ namespace Bw.Injection.Weapon
             BindConfigs();
             BindLifetime();
 
-            BindAmmo(netFactory);
+            BindAmmo();
             BindWeaponRequests();
             BindCommonWeaponLogic();
             BindVfxRenderer();
@@ -114,10 +114,10 @@ namespace Bw.Injection.Weapon
 
         private void BindWeaponRequests()
         {
-            Container.BindInterfacesAndSelfTo<WeaponRequests>().FromMethod(ctx =>
+            Container.BindInterfacesAndSelfTo<WeaponSignals>().FromMethod(ctx =>
             {
                 var factory = ctx.Container.Resolve<INetPropertyFactory>();
-                return new WeaponRequests(
+                return new WeaponSignals(
                     factory.Signal<ShootRequestDto>(NetworkDelivery.Reliable, NetworkPermissions.Client),
                     factory.Signal<Unit>(NetworkDelivery.Reliable, NetworkPermissions.Client),
                     factory.Signal<ShootRequestDto>(NetworkDelivery.Reliable, NetworkPermissions.Server));
@@ -147,18 +147,9 @@ namespace Bw.Injection.Weapon
             Container.BindInterfacesAndSelfTo<ShootingWeapon>().AsSingle();
         }
 
-        private void BindAmmo(INetPropertyFactory netFactory)
+        private void BindAmmo()
         {
-            // Eager registration so VarId matches on client/server (lazy CreatePropertyFor registered Ammo after shoot signals on client).
-            var ammoProperty = netFactory.Viewable(
-                _shootingWeaponConfig.AmmoSettings.Max,
-                NetworkDelivery.Reliable,
-                NetworkPermissions.Server);
-
-            Container.Bind<IViewableProperty<int>>()
-                .FromInstance(ammoProperty)
-                .AsSingle()
-                .WhenInjectedInto<Ammo>();
+            Container.CreatePropertyFor<int, Ammo>(_shootingWeaponConfig.AmmoSettings.OnSpawnValue);
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {

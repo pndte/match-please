@@ -1,6 +1,5 @@
 ﻿using Bw.Entities.Network;
 using Bw.UseCases.Character;
-using Setup;
 using Zenject;
 
 namespace Bw.Injection
@@ -11,10 +10,10 @@ namespace Bw.Injection
 
         public override void InstallBindings()
         {
-            Container.BindInterfacesTo<GameObjectByCharacterCollection>().AsSingle(); //TODO только на сервере
             if (_runtimeSettings.CurrentPeerType != PeerType.Server)
                 return;
             
+            Container.BindInterfacesTo<GameObjectByCharacterCollection>().AsSingle();
             Container.Bind<DeadCharactersDestroyer>().AsSingle().NonLazy();
         }
     }
