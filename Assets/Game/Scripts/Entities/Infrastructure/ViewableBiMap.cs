@@ -26,7 +26,7 @@ namespace Bw.Entities.Infrastructure
     /// <summary>
     /// Single-threaded (Unity main thread) viewable bimap.
     /// Source of truth: _forward.
-    /// Reverse map is kept in sync via _forward.View(ownerLifetime, ...).
+    /// Reverse map is kept in sync via add/remove events on _forward.
     /// </summary>
     public sealed class ViewableBiMap<TLeft, TRight> : IViewableBiMap<TLeft, TRight>
         where TLeft : notnull
@@ -44,7 +44,7 @@ namespace Bw.Entities.Infrastructure
         public ICollection<TRight> Values => _forward.Values;
         public int Count => _forward.Count;
         public bool IsReadOnly => ((IDictionary<TLeft, TRight>)_forward).IsReadOnly;
-        
+
         private readonly ViewableMap<TLeft, TRight> _forward = new();
         private readonly ViewableMap<TRight, TLeft> _inverseStorage = new();
         private readonly InverseView _inverseView;
@@ -53,16 +53,24 @@ namespace Bw.Entities.Infrastructure
         {
             _inverseView = new InverseView(this);
 
-            _forward.View(ownerLifetime, (itemLifetime, left, right) =>
+            _forward.AdviseAddRemove(ownerLifetime, (kind, left, right) =>
             {
-                _inverseStorage.Add(right, left);
-                itemLifetime.OnTermination(() =>
+                switch (kind)
                 {
-                    _inverseStorage.Remove(right);
-                });
+                    case AddRemove.Add:
+                        if (_inverseStorage.ContainsKey(right))
+                            throw new InvalidOperationException($"Right key already exists: {right}");
+                        _inverseStorage.Add(right, left);
+                        break;
+                    case AddRemove.Remove:
+                        _inverseStorage.Remove(right);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(kind), kind, null);
+                }
             });
         }
-        
+
         public void Advise(Lifetime lifetime, Action<MapEvent<TLeft, TRight>> handler)
             => _forward.Change.Advise(lifetime, handler);
 
@@ -74,7 +82,7 @@ namespace Bw.Entities.Infrastructure
 
         public bool ContainsKey(TLeft key) => _forward.ContainsKey(key);
         public bool TryGetValue(TLeft key, out TRight value) => _forward.TryGetValue(key, out value);
-        
+
         public bool Contains(KeyValuePair<TLeft, TRight> item)
             => ((ICollection<KeyValuePair<TLeft, TRight>>)_forward).Contains(item);
 

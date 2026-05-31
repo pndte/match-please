@@ -1,3 +1,4 @@
+using System;
 using Bw.Entities.Extensions;
 using Bw.Entities.Infrastructure;
 using JetBrains.Collections.Viewable;
@@ -18,12 +19,12 @@ namespace Bw.Entities.Network.Variables
 
         protected NetVariablesTableBase(
             Lifetime lifetime,
-            NetworkObject networkObject,
+            NetworkObject networkObject, //TODO: заменить на свою абстракцию
             INetPropertyFactory factory,
             IOwnership ownership)
         {
             PropertiesByIndex = new ViewableBiMap<ushort, INetSyncEntry>(lifetime);
-            NetworkObject = networkObject;
+            NetworkObject = networkObject; //TODO: отправлять только после спавна
             factory.EntryRegistered.Advise(lifetime, OnNewEntryRegistered);
 
             void OnNewEntryRegistered(NetRegistryInfo info)
@@ -77,9 +78,6 @@ namespace Bw.Entities.Network.Variables
         {
             entry.Dirty.AdviseTrue(lifetime, () =>
             {
-                if (!NetworkObject.IsSpawned)
-                    return;
-
                 CurrentRegistration = info;
                 entry.Accept(this);
                 entry.Dirty.Value = false;
@@ -96,11 +94,16 @@ namespace Bw.Entities.Network.Variables
 
         protected abstract void DispatchSignalUpdate<T>(INetSignal<T> entry);
 
-        protected NetworkMessageHeader HeaderFor(INetSyncEntry entry) =>
-            new()
+        protected NetworkMessageHeader HeaderFor(INetSyncEntry entry)
+        {
+            if (!PropertiesByIndex.TryGetLeft(entry, out var varId))
+                throw new InvalidOperationException("Net sync entry is not registered in this variables table.");
+
+            return new NetworkMessageHeader
             {
                 NetworkObjectId = NetworkObject.NetworkObjectId,
-                VarId = PropertiesByIndex.Inverse[entry]
+                VarId = varId
             };
+        }
     }
 }

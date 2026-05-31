@@ -10,12 +10,12 @@ namespace Bw.UseCases.Shooting.Weapon.Network
         private readonly IReloader _reloader;
         private readonly ShootingWeaponConfig _config;
         private readonly IAmmo _ammo;
-            
+
         public WeaponAmmoManager(
-            Lifetime lifetime, 
-            IWeapon weapon, 
+            Lifetime lifetime,
+            IWeapon weapon,
             IReloader reloader,
-            ShootingWeaponConfig config, 
+            ShootingWeaponConfig config,
             IAmmo ammo)
         {
             _weapon = weapon;
