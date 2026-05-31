@@ -1,5 +1,4 @@
-﻿using Bw.Entities.Network;
-using Bw.Entities.Network.Objects;
+﻿using Bw.Entities.Network.Objects;
 using Unity.Netcode;
 using UnityEngine;
 

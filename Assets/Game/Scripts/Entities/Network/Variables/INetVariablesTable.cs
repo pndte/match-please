@@ -1,5 +1,4 @@
 using Bw.Entities.Infrastructure;
-using JetBrains.Collections.Viewable;
 
 namespace Bw.Entities.Network.Variables
 {

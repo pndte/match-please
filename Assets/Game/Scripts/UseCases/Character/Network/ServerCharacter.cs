@@ -1,5 +1,4 @@
 ﻿using Bw.Entities;
-using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
 using JetBrains.Collections.Viewable;
 using Unity.Netcode;

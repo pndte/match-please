@@ -1,7 +1,6 @@
 ﻿using JetBrains.Lifetimes;
 using Unity.Netcode;
 using UnityEngine;
-using Zenject;
 
 namespace DefaultNamespace
 {

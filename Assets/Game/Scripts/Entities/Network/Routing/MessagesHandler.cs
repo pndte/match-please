@@ -56,7 +56,7 @@ namespace Bw.Entities.Network.Routing
             }
 
             _currentReader = reader;
-            targetEntry.Accept(this);
+            targetEntry.Accept(this); // it goes directly to VisitProperty or VisitSignal down below
         }
 
         public void VisitProperty<T>(INetProperty<T> property)

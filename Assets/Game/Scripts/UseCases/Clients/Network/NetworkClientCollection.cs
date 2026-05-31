@@ -2,7 +2,6 @@
 using Bw.Entities.Infrastructure;
 using Bw.Entities.Network;
 using JetBrains.Lifetimes;
-using Setup;
 using Unity.Netcode;
 using UnityEngine;
 

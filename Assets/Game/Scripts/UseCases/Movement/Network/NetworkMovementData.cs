@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Bw.Entities.Extensions;
-using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
 using Unity.Netcode;
 using UnityEngine;

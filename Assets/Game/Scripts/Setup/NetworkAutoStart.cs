@@ -6,10 +6,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
 
-#if UNITY_EDITOR
-
-#endif
-
 namespace Setup
 {
     /// <summary>

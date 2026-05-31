@@ -1,3 +1,4 @@
+using Bw.Entities;
 using Bw.Entities.Loop;
 using Bw.Entities.Network;
 using Bw.UseCases.Shooting.Weapon.Network;

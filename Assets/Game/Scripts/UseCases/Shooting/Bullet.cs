@@ -1,5 +1,4 @@
 ﻿using System;
-using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
 using Bw.UseCases.Character;
 using UnityEngine;

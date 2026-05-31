@@ -1,15 +1,7 @@
-﻿using System;
-using JetBrains.Lifetimes;
-
-namespace Bw.Entities.Loop
+﻿namespace Bw.Entities.Loop //tODO: delete all of these. Legacy
 {
     public interface IUpdatable
     {
         public void Update();
-    }
-    
-    public interface ISubscrible 
-    {
-        void Subscribe(Lifetime lifetime, Action action);
     }
 }

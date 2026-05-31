@@ -1,3 +1,4 @@
+using Bw.Entities;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
 using Bw.UseCases;
