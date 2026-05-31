@@ -73,10 +73,10 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             public NetworkHandler(
                 Lifetime lifetime,
                 ShootingWeapon shootingWeapon,
-                IReceivedShot receivedShot,
+                IShootRequestResult shootRequestResult,
                 IRequestIdsRepository requestIdsRepository)
             {
-                receivedShot.Received.Advise(lifetime, shootRequestDto =>
+                shootRequestResult.Received.Advise(lifetime, shootRequestDto =>
                 {
                     if (requestIdsRepository.TryRemoveIdFor<ShootRequestDto>(shootRequestDto.RequestId))
                         return;

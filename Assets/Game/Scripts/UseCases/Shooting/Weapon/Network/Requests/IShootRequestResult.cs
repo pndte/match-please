@@ -2,7 +2,7 @@
 
 namespace Bw.UseCases.Shooting.Weapon.Network.Requests
 {
-    public interface IReceivedShot
+    public interface IShootRequestResult
     {
         public ISignal<ShootRequestDto> Received { get; } //TODO: name?
     }

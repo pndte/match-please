@@ -9,7 +9,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
         public WeaponRequestsServerHandler(
             Lifetime lifetime,
             IMouseShootRequest mouseShootRequest,
-            IReceivedShot receivedShot,
+            IShootRequestResult shootRequestResult,
             IReloadRequest reloadRequest,
             IWeapon weapon,
             IReloader reloader)
@@ -18,7 +18,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
             weapon.CanShoot.WhenTrue(lifetime,
                 canShootLifetime => mouseShootRequest.Requested.Advise(canShootLifetime, shootRequestDto =>
                 {
-                    receivedShot.Received.Fire(shootRequestDto);
+                    shootRequestResult.Received.Fire(shootRequestDto);
                     weapon.Shoot(shootRequestDto.TargetPosition);
                 }));
             

@@ -2,7 +2,7 @@
 
 namespace Bw.UseCases.Shooting.Weapon.Network.Requests
 {
-    public struct ShootRequestDto
+    public readonly struct ShootRequestDto
     {
         public readonly ulong RequestId;
         public readonly Vector3 TargetPosition;

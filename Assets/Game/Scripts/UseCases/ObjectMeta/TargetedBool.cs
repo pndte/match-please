@@ -7,7 +7,7 @@ namespace Bw.UseCases
     /// <summary>
     /// Server: <see cref="RecipientClient"/> + flag. Wire: <see cref="Value"/> only (routing via <see cref="TargetedBoolCodecRouting"/>).
     /// </summary>
-    public struct TargetedBool
+    public readonly struct TargetedBool
     {
         public readonly IClient RecipientClient;
         public readonly bool Value;
