@@ -6,8 +6,7 @@ using Zenject;
 
 namespace Bw.Injection.ControlledBy
 {
-    public class ControlledByInstaller
-        : Installer<IRuntimeSettings, ControlledByInstaller>
+    public class ControlledByInstaller : Installer<IRuntimeSettings, ControlledByInstaller>
     {
         private readonly IRuntimeSettings _runtimeSettings;
 
@@ -48,17 +47,25 @@ namespace Bw.Injection.ControlledBy
 
         public override void InstallBindings()
         {
-            var handler =
-                new DtoHandler<ControlledByDto>(_netPropertyFactory.Signal<ControlledByDto>(NetworkDelivery.Reliable, NetworkPermissions.Server));
+            var handler = new DtoHandler<TargetedBool>(
+                _netPropertyFactory.Signal<TargetedBool>(
+                    NetworkDelivery.Reliable,
+                    NetworkPermissions.Server));
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
-                Container.Bind<IDtoSource<ControlledByDto>>().To<DtoHandler<ControlledByDto>>().FromInstance(handler).AsSingle();
+                Container.Bind<IDtoSource<TargetedBool>>()
+                    .To<DtoHandler<TargetedBool>>()
+                    .FromInstance(handler)
+                    .WhenInjectedInto<UseCases.ControlledBy.ClientNetworkHandler>();
                 Container.Bind<UseCases.ControlledBy.ClientNetworkHandler>().ToSelf().AsSingle().NonLazy();
             }
             else if (_runtimeSettings.CurrentPeerType == PeerType.Server)
             {
-                Container.Bind<IDtoBroadcaster<ControlledByDto>>().To<DtoHandler<ControlledByDto>>().FromInstance(handler).AsSingle();
+                Container.Bind<IDtoBroadcaster<TargetedBool>>()
+                    .To<DtoHandler<TargetedBool>>()
+                    .FromInstance(handler)
+                    .WhenInjectedInto<UseCases.ControlledBy.ServerNetworkHandler>();
                 Container.Bind<UseCases.ControlledBy.ServerNetworkHandler>().ToSelf().AsSingle().NonLazy();
             }
         }

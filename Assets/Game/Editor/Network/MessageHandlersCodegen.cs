@@ -19,6 +19,7 @@ namespace Bw.EditorTools.Network
         private const string MenuPath = "Tools/Network/Regenerate message codec registrations";
 
         private const string CodecOpenGenericFullName = "Bw.Entities.Network.ICodec`1";
+        private const string CodecRoutingOpenGenericFullName = "Bw.Entities.Network.CodecTargetRouting`1";
         private const string NetworkSerializableFullName = "Unity.Netcode.INetworkSerializable";
 
         private static readonly string OutputPath = Path.Combine(
@@ -33,6 +34,7 @@ namespace Bw.EditorTools.Network
         public static void Regenerate()
         {
             var pairs = DiscoverCodecPairs();
+            var routingByCodec = DiscoverRoutingByCodec(pairs);
             if (pairs.Count == 0)
             {
                 Debug.LogWarning("MessageHandlersCodegen: no ICodec<> implementations found.");
@@ -53,8 +55,18 @@ namespace Bw.EditorTools.Network
             sb.AppendLine("        {");
 
             foreach (var (valueType, codecType) in pairs)
-                sb.AppendLine(
-                    $"            RegisterCodec<{TypeSpec(valueType)}, {TypeSpec(codecType)}>(receivers, senders);");
+            {
+                if (routingByCodec.TryGetValue(codecType, out var routingType))
+                {
+                    sb.AppendLine(
+                        $"            RegisterCodecRouting<{TypeSpec(valueType)}, {TypeSpec(codecType)}, {TypeSpec(routingType)}>(receivers, senders);");
+                }
+                else
+                {
+                    sb.AppendLine(
+                        $"            RegisterCodec<{TypeSpec(valueType)}, {TypeSpec(codecType)}>(receivers, senders);");
+                }
+            }
 
             sb.AppendLine("        }");
             sb.AppendLine("    }");
@@ -177,6 +189,84 @@ namespace Bw.EditorTools.Network
 
             results.Sort((a, b) => string.Compare(a.codecType.FullName, b.codecType.FullName, StringComparison.Ordinal));
             return results;
+        }
+
+        /// <summary>
+        /// Convention: <c>{ValueType}CodecRouting</c> extends <c>CodecTargetRouting&lt;{ValueType}Codec&gt;</c>.
+        /// </summary>
+        private static Dictionary<Type, Type> DiscoverRoutingByCodec(List<(Type valueType, Type codecType)> pairs)
+        {
+            var routingOpen = ResolveOpenGenericInterface(CodecRoutingOpenGenericFullName);
+            var map = new Dictionary<Type, Type>();
+            if (routingOpen == null)
+                return map;
+
+            var expectedRoutingNameByCodec = pairs.ToDictionary(
+                p => p.codecType,
+                p => p.valueType.Name + "CodecRouting");
+
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                if (assembly.IsDynamic)
+                    continue;
+
+                var name = assembly.GetName().Name ?? "";
+                if (name.StartsWith("Unity.", StringComparison.Ordinal) ||
+                    name.StartsWith("System.", StringComparison.Ordinal) ||
+                    name.StartsWith("mscorlib", StringComparison.Ordinal) ||
+                    name.StartsWith("netstandard", StringComparison.Ordinal) ||
+                    name.StartsWith("Mono.", StringComparison.Ordinal) ||
+                    name == "Zenject" ||
+                    name == "JetBrains.Lifetimes" ||
+                    name == "nunit.framework")
+                    continue;
+
+                Type[] types;
+                try
+                {
+                    types = assembly.GetTypes();
+                }
+                catch (ReflectionTypeLoadException e)
+                {
+                    types = e.Types.Where(t => t != null).Cast<Type>().ToArray();
+                }
+                catch
+                {
+                    continue;
+                }
+
+                foreach (var type in types)
+                {
+                    if (type.IsAbstract || type.IsInterface)
+                        continue;
+
+                    Type? codecType = null;
+                    foreach (var iface in type.GetInterfaces())
+                    {
+                        if (!iface.IsGenericType || iface.GetGenericTypeDefinition() != routingOpen)
+                            continue;
+                        var args = iface.GetGenericArguments();
+                        if (args.Length != 1)
+                            continue;
+                        codecType = args[0];
+                        break;
+                    }
+
+                    if (codecType == null || !expectedRoutingNameByCodec.TryGetValue(codecType, out var expectedName))
+                        continue;
+
+                    if (type.Name != expectedName)
+                        continue;
+
+                    if (map.TryGetValue(codecType, out var existing) && existing != type)
+                        throw new InvalidOperationException(
+                            $"Two routings for codec {codecType.FullName}: {existing.FullName} and {type.FullName}.");
+
+                    map[codecType] = type;
+                }
+            }
+
+            return map;
         }
     }
 }

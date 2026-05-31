@@ -57,12 +57,26 @@ namespace Bw.Injection.Network
             where TCodec : struct, INetworkSerializable, ICodec<TValue>
         {
             var key = typeof(TValue);
-
             if (receivers.ContainsKey(key) || senders.ContainsKey(key))
                 throw new Exception($"Handlers for '{key}' already registered.");
 
             receivers.Add(key, Container.Instantiate<MessageReceiver<TValue, TCodec>>());
             senders.Add(key, Container.Instantiate<MessageSender<TValue, TCodec>>());
+        }
+
+        private void RegisterCodecRouting<TValue, TCodec, TRouting>( //TODO: добавить для него тоже автогенерацию
+            Dictionary<Type, IMessageReceiver> receivers,
+            Dictionary<Type, IMessageSender> senders)
+            where TCodec : struct, INetworkSerializable, ICodec<TValue>
+            where TRouting : CodecTargetRouting<TCodec>
+        {
+            var key = typeof(TValue);
+            if (receivers.ContainsKey(key) || senders.ContainsKey(key))
+                throw new Exception($"Handlers for '{key}' already registered.");
+
+            receivers.Add(key, Container.Instantiate<MessageReceiver<TValue, TCodec>>());
+            senders.Add(key, Container.Instantiate<TargetedMessageSender<TValue, TCodec>>(
+                new object[] { Container.Instantiate<TRouting>() }));
         }
     }
 }

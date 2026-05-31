@@ -4,8 +4,7 @@ namespace Bw.Entities.Network
 {
     public interface IServerMessageSender<T>
     {
-        void SendToAllClients(NetworkMessageHeader metadata, T payload, NetworkDelivery delivery);
-
-        void SendToClient(NetworkMessageHeader metadata, T payload, NetworkDelivery delivery, IClient client);
+        void Dispatch(NetworkMessageHeader metadata, T payload, NetworkDelivery delivery); //TODO: Надо придумать норм имя, сейчас в методе
+                                                                                           //идёт отправка и всем клиентам, и одному определённому
     }
 }

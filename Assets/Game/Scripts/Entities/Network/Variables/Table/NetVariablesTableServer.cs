@@ -43,13 +43,13 @@ namespace Bw.Entities.Network.Variables
         protected override void DispatchPropertyUpdate<T>(INetProperty<T> property)
         {
             var sender = _messageSenders.Get<T>();
-            sender.SendToAllClients(HeaderFor(property), property.Value, CurrentRegistration.DeliveryType);
+            sender.Dispatch(HeaderFor(property), property.Value, CurrentRegistration.DeliveryType);
         }
 
         protected override void DispatchSignalUpdate<T>(INetSignal<T> entry)
         {
             var sender = _messageSenders.Get<T>();
-            sender.SendToAllClients(HeaderFor(entry), entry.PendingPayload, CurrentRegistration.DeliveryType);
+            sender.Dispatch(HeaderFor(entry), entry.PendingPayload, CurrentRegistration.DeliveryType);
         }
     }
 }

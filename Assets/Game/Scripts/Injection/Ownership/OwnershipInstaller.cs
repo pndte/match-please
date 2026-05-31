@@ -3,13 +3,11 @@ using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
 using Bw.UseCases;
 using Unity.Netcode;
-using UnityEngine;
 using Zenject;
 
 namespace Bw.Injection.Ownership
 {
-    public class OwnershipInstaller 
-        : Installer<IRuntimeSettings, OwnershipInstaller>
+    public class OwnershipInstaller : Installer<IRuntimeSettings, OwnershipInstaller>
     {
         private readonly IRuntimeSettings _runtimeSettings;
 
@@ -50,20 +48,27 @@ namespace Bw.Injection.Ownership
 
         public override void InstallBindings()
         {
-            var handler =
-                new DtoHandler<OwnershipDto>(_netPropertyFactory.Signal<OwnershipDto>(NetworkDelivery.Reliable, NetworkPermissions.Server));
-            
+            var handler = new DtoHandler<TargetedBool>(
+                _netPropertyFactory.Signal<TargetedBool>(
+                    NetworkDelivery.Reliable,
+                    NetworkPermissions.Server));
+
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
-                Container.Bind<IDtoSource<OwnershipDto>>().To<DtoHandler<OwnershipDto>>().FromInstance(handler).AsSingle();
+                Container.Bind<IDtoSource<TargetedBool>>()
+                    .To<DtoHandler<TargetedBool>>()
+                    .FromInstance(handler)
+                    .WhenInjectedInto<UseCases.Ownership.ClientNetworkHandler>();
                 Container.Bind<UseCases.Ownership.ClientNetworkHandler>().ToSelf().AsSingle().NonLazy();
             }
             else if (_runtimeSettings.CurrentPeerType == PeerType.Server)
             {
-                Container.Bind<IDtoBroadcaster<OwnershipDto>>().To<DtoHandler<OwnershipDto>>().FromInstance(handler).AsSingle();
+                Container.Bind<IDtoBroadcaster<TargetedBool>>()
+                    .To<DtoHandler<TargetedBool>>()
+                    .FromInstance(handler)
+                    .WhenInjectedInto<UseCases.Ownership.ServerNetworkHandler>();
                 Container.Bind<UseCases.Ownership.ServerNetworkHandler>().ToSelf().AsSingle().NonLazy();
             }
-                
         }
     }
 }

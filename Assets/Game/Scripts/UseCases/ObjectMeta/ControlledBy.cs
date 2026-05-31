@@ -1,6 +1,5 @@
 using Bw.Entities;
 using Bw.Entities.Extensions;
-using Bw.Entities.Network;
 using Bw.UseCases.Players;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
@@ -30,17 +29,10 @@ namespace Bw.UseCases
         {
             public ClientNetworkHandler(
                 Lifetime lifetime,
-                IDtoSource<ControlledByDto> dtoSource,
-                INetworkHolder networkHolder,
+                IDtoSource<TargetedBool> dtoSource,
                 ControlledBy controlledBy)
             {
-                var localClientId = networkHolder.NetworkManager.Value.LocalClientId;
-                dtoSource.Value.Advise(lifetime, dto =>
-                {
-                    if (dto.RecipientClientId != localClientId) return;
-
-                    controlledBy._me.Value = dto.Mine;
-                });
+                dtoSource.Value.Advise(lifetime, dto => controlledBy._me.Value = dto.Value);
             }
         }
 
@@ -48,17 +40,17 @@ namespace Bw.UseCases
         {
             public ServerNetworkHandler(
                 Lifetime lifetime,
-                IDtoBroadcaster<ControlledByDto> dtoBroadcaster,
+                IDtoBroadcaster<TargetedBool> dtoBroadcaster,
                 IControlledBy controlledBy,
                 IClientPlayerCollection clientPlayers)
             {
                 controlledBy.Users.View(lifetime, (userLifetime, userPlayer) =>
                 {
                     var client = clientPlayers.ByClient.Inverse[userPlayer];
-                    dtoBroadcaster.Fire(new ControlledByDto(client.Id, true));
+                    dtoBroadcaster.Fire(new TargetedBool(client, true));
 
                     userLifetime.OnTermination(() =>
-                        dtoBroadcaster.Fire(new ControlledByDto(client.Id, false)));
+                        dtoBroadcaster.Fire(new TargetedBool(client, false)));
                 });
             }
         }

@@ -1,6 +1,5 @@
 ﻿using Bw.Entities;
 using Bw.Entities.Extensions;
-using Bw.Entities.Network;
 using Bw.UseCases.Players;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
@@ -29,36 +28,29 @@ namespace Bw.UseCases
         public class ClientNetworkHandler //TODO: в идеале это всё декомпозировать надо и избавиться от Ownership прямо в конструкторе, костыль по сути
         {
             public ClientNetworkHandler(
-                Lifetime lifetime, 
-                IDtoSource<OwnershipDto> dtoSource, 
-                INetworkHolder networkHolder,
+                Lifetime lifetime,
+                IDtoSource<TargetedBool> dtoSource,
                 Ownership ownership)
             {
-                var localClientId = networkHolder.NetworkManager.Value.LocalClientId;
-                dtoSource.Value.Advise(lifetime, dto =>
-                {
-                    if (dto.RecipientClientId != localClientId) return;
-
-                    ownership._mine.Value = dto.IsOwner;
-                });
+                dtoSource.Value.Advise(lifetime, dto => ownership._mine.Value = dto.Value);
             }
         }
 
         public class ServerNetworkHandler
         {
             public ServerNetworkHandler(
-                Lifetime lifetime, 
-                IDtoBroadcaster<OwnershipDto> dtoBroadcaster,
+                Lifetime lifetime,
+                IDtoBroadcaster<TargetedBool> dtoBroadcaster,
                 IOwnershipController ownershipController,
                 IClientPlayerCollection clientPlayers)
             {
                 ownershipController.Owners.View(lifetime, (ownerLifetime, ownerPlayer) =>
                 {
                     var client = clientPlayers.ByClient.Inverse[ownerPlayer];
-                    dtoBroadcaster.Fire(new OwnershipDto(client.Id, true));
+                    dtoBroadcaster.Fire(new TargetedBool(client, true));
 
                     ownerLifetime.OnTermination(() =>
-                        dtoBroadcaster.Fire(new OwnershipDto(client.Id, false)));
+                        dtoBroadcaster.Fire(new TargetedBool(client, false)));
                 });
             }
         }
