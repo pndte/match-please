@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Bw.UseCases.Shooting::Bw.UseCases.Shooting.Weapon.ShootingWeaponConfig
   AmmoSettings: {fileID: 11400000, guid: ab8392d6e9a0be14a9b05d592a5f2dfe, type: 2}
   ShootCooldown: 0.1
-  ReloadTime: 5
+  ReloadTime: 3
   Damage: 25

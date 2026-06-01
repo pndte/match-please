@@ -4,25 +4,25 @@ using Unity.Netcode;
 
 namespace Bw.UseCases.Shooting.Weapon.Network.Requests
 {
-    public struct ShootRequestDtoCodec : ICodec<ShootRequestDto>
+    public struct ReloadRequestResultDtoCodec : ICodec<ReloadRequestResultDto>
     {
-        public ShootRequestDto Value
+        public ReloadRequestResultDto Value
         {
             get => _value;
             set => _value = value;
         }
 
-        private ShootRequestDto _value;
+        private ReloadRequestResultDto _value;
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
             var requestId = Value.RequestId;
-            var position = Value.TargetPosition;
+            var accepted = Value.Accepted;
 
             serializer.SerializePacked(ref requestId);
-            serializer.SerializeValue(ref position);
+            serializer.SerializePacked(ref accepted);
 
-            Value = new ShootRequestDto(requestId, position);
+            Value = new ReloadRequestResultDto(requestId, accepted);
         }
     }
 }

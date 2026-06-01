@@ -25,6 +25,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
         private float _lastUpdateTime;
 
         public ShootingWeapon(
+            Lifetime lifetime,
             IReadonlyAmmo ammo,
             IReloader reloader,
             ShootingWeaponConfig config)
@@ -38,12 +39,18 @@ namespace Bw.UseCases.Shooting.Weapon.Network
 
             _elapsedTime = config.ShootCooldown;
             _lastUpdateTime = Time.time;
+
+            _reloader.State.Advise(lifetime, state =>
+            {
+                if (state == ReloadState.Reloading)
+                    _canShoot.Value = false;
+            });
         }
 
         public void Shoot(Vector3 mousePos)
         {
-            if (!_canShoot.Value)
-                throw new InvalidOperationException("Trying to shoot when not ready (check _canShoot)");
+            if (!IsReadyToShoot())
+                return;
 
             _canShoot.Value = false;
             _onShot.Fire(mousePos);
@@ -67,6 +74,11 @@ namespace Bw.UseCases.Shooting.Weapon.Network
                 _canShoot.Value = true;
             }
         }
+        
+        private bool IsReadyToShoot() =>
+            _canShoot.Value
+            && _reloader.State.Value != ReloadState.Reloading
+            && !_ammo.Empty();
 
         public class NetworkHandler
         {
@@ -76,13 +88,26 @@ namespace Bw.UseCases.Shooting.Weapon.Network
                 IShootRequestResult shootRequestResult,
                 IRequestIdsRepository requestIdsRepository)
             {
-                shootRequestResult.Received.Advise(lifetime, shootRequestDto =>
+                shootRequestResult.Received.Advise(lifetime, result =>
                 {
-                    if (requestIdsRepository.TryRemoveIdFor<ShootRequestDto>(shootRequestDto.RequestId))
+                    var wasPredicted = requestIdsRepository.TryRemoveIdFor<ShootRequestDto>(result.RequestId);
+
+                    if (wasPredicted)
+                    {
+                        if (!result.Accepted)
+                            RollbackPredictedShot(shootingWeapon);
                         return;
-                    
-                    shootingWeapon._onShot.Fire(shootRequestDto.TargetPosition);
+                    }
+
+                    if (result.Accepted)
+                        shootingWeapon._onShot.Fire(result.TargetPosition);
                 });
+            }
+            
+            public void RollbackPredictedShot(ShootingWeapon shootingWeapon)
+            {
+                shootingWeapon._canShoot.Value = true;
+                shootingWeapon._elapsedTime = shootingWeapon._config.ShootCooldown;
             }
         }
     }

@@ -1,5 +1,5 @@
 ﻿using Bw.UseCases.Shooting.Weapon.Abstractions;
-using JetBrains.Collections.Viewable;
+using Bw.UseCases.Shooting.Weapon.Extensions;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Shooting.Weapon.Network.Requests
@@ -11,19 +11,40 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
             IMouseShootRequest mouseShootRequest,
             IShootRequestResult shootRequestResult,
             IReloadRequest reloadRequest,
+            IReloadRequestResult reloadRequestResult,
             IWeapon weapon,
-            IReloader reloader)
+            IReloader reloader,
+            IReadonlyAmmo ammo)
         {
             var reloadSequentialLifetimes = new SequentialLifetimes(lifetime);
-            weapon.CanShoot.WhenTrue(lifetime,
-                canShootLifetime => mouseShootRequest.Requested.Advise(canShootLifetime, shootRequestDto =>
-                {
-                    shootRequestResult.Received.Fire(shootRequestDto);
-                    weapon.Shoot(shootRequestDto.TargetPosition);
-                }));
-            
-            reloader.CanReload.WhenTrue(lifetime, canReloadLifetime => 
-                reloadRequest.Requested.Advise(canReloadLifetime, _ => reloader.Reload(reloadSequentialLifetimes.Next())));
+
+            mouseShootRequest.Requested.Advise(lifetime, shootRequestDto =>
+            {
+                var accepted = weapon.CanShoot.Value
+                               && !ammo.Empty()
+                               && reloader.State.Value != ReloadState.Reloading;
+
+                shootRequestResult.Received.Fire(
+                    new ShootRequestResultDto(shootRequestDto.RequestId, shootRequestDto.TargetPosition, accepted));
+
+                if (!accepted)
+                    return;
+
+                weapon.Shoot(shootRequestDto.TargetPosition);
+            });
+
+            reloadRequest.Requested.Advise(lifetime, reloadRequestDto =>
+            {
+                var accepted = reloader.CanReload.Value;
+
+                reloadRequestResult.Received.Fire(
+                    new ReloadRequestResultDto(reloadRequestDto.RequestId, accepted));
+
+                if (!accepted)
+                    return;
+
+                reloader.Reload(reloadSequentialLifetimes.Next()).Forget();
+            });
         }
     }
 }

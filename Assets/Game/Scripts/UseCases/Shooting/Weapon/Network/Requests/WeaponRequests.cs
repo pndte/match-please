@@ -1,23 +1,28 @@
 ﻿using JetBrains.Collections.Viewable;
-using JetBrains.Core;
 
 namespace Bw.UseCases.Shooting.Weapon.Network.Requests
 {
-    public class WeaponSignals : IMouseShootRequest, IReloadRequest, IShootRequestResult
+    public class WeaponSignals : IMouseShootRequest, IReloadRequest, IShootRequestResult, IReloadRequestResult
     {
-        public ISignal<ShootRequestDto> Received { get; }
+        public ISignal<ShootRequestResultDto> Received { get; }
+        public ISignal<ReloadRequestResultDto> ReloadReceived { get; }
         ISignal<ShootRequestDto> IMouseShootRequest.Requested => _mouseShootRequest;
-        ISignal<Unit> IReloadRequest.Requested => _reloadRequest;
+        ISignal<ReloadRequestDto> IReloadRequest.Requested => _reloadRequest;
+        ISignal<ReloadRequestResultDto> IReloadRequestResult.Received => ReloadReceived;
 
         private readonly ISignal<ShootRequestDto> _mouseShootRequest;
-        private readonly ISignal<Unit> _reloadRequest;
+        private readonly ISignal<ReloadRequestDto> _reloadRequest;
 
-        public WeaponSignals(ISignal<ShootRequestDto> mouseShootRequest, ISignal<Unit> reloadRequest,
-            ISignal<ShootRequestDto> received)
+        public WeaponSignals(
+            ISignal<ShootRequestDto> mouseShootRequest,
+            ISignal<ReloadRequestDto> reloadRequest,
+            ISignal<ShootRequestResultDto> shootReceived,
+            ISignal<ReloadRequestResultDto> reloadReceived)
         {
             _mouseShootRequest = mouseShootRequest;
             _reloadRequest = reloadRequest;
-            Received = received;
+            Received = shootReceived;
+            ReloadReceived = reloadReceived;
         }
     }
 }

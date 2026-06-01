@@ -4,6 +4,6 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
 {
     public interface IShootRequestResult
     {
-        public ISignal<ShootRequestDto> Received { get; } //TODO: name?
+        public ISignal<ShootRequestResultDto> Received { get; } //TODO: name?
     }
 }

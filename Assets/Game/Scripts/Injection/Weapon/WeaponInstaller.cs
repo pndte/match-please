@@ -103,8 +103,10 @@ namespace Bw.Injection.Weapon
             {
                 case PeerType.Client:
                     Container.BindInterfacesTo<RequestIdsRepository>().AsSingle();
+                    Container.Bind<PendingReloadLifetimes>().AsSingle();
                     Container.Bind<WeaponRequestsClientHandler>().AsSingle().NonLazy();
                     Container.Bind<ShootingWeapon.NetworkHandler>().AsSingle().NonLazy();
+                    Container.Bind<InterruptableReloader.NetworkHandler>().AsSingle().NonLazy();
                     break;
                 case PeerType.Server:
                     Container.Bind<WeaponRequestsServerHandler>().AsSingle().NonLazy();
@@ -119,8 +121,9 @@ namespace Bw.Injection.Weapon
                 var factory = ctx.Container.Resolve<INetPropertyFactory>();
                 return new WeaponSignals(
                     factory.Signal<ShootRequestDto>(NetworkDelivery.Reliable, NetworkPermissions.Client),
-                    factory.Signal<Unit>(NetworkDelivery.Reliable, NetworkPermissions.Client),
-                    factory.Signal<ShootRequestDto>(NetworkDelivery.Reliable, NetworkPermissions.Server));
+                    factory.Signal<ReloadRequestDto>(NetworkDelivery.Reliable, NetworkPermissions.Client),
+                    factory.Signal<ShootRequestResultDto>(NetworkDelivery.Reliable, NetworkPermissions.Server),
+                    factory.Signal<ReloadRequestResultDto>(NetworkDelivery.Reliable, NetworkPermissions.Server));
             }).AsSingle();
         }
 
