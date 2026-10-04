@@ -26,14 +26,17 @@ namespace Bw.Entities.Network.Variables
 
         protected override void DispatchSignalUpdate<T>(INetSignal<T> entry)
         {
-            var sender = _messageSenders.Get<T>();
-            var header = HeaderFor(entry);
-            var payload = entry.PendingPayload;
-            var delivery = CurrentRegistration.DeliveryType;
+            var outgoing = (
+                Sender: _messageSenders.Get<T>(),
+                Header: HeaderFor(entry),
+                Payload: entry.PendingPayload,
+                Delivery: CurrentRegistration.DeliveryType);
             
             entry.PendingTarget.Switch(
-                untargeted: () => sender.Broadcast(header, payload, delivery),
-                targeted: recipient => sender.SendToClient(header, payload, delivery, recipient));
+                outgoing,
+                untargeted: static message => message.Sender.Broadcast(message.Header, message.Payload, message.Delivery),
+                targeted: static (message, recipient) =>
+                    message.Sender.SendToClient(message.Header, message.Payload, message.Delivery, recipient));
         }
     }
 }

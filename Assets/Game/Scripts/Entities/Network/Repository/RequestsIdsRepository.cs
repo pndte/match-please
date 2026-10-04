@@ -17,7 +17,7 @@ namespace Bw.Entities.Network.Repository
         
         public bool ContainsIdFor<TDto>(ulong id)
         {
-            return _byType[typeof(TDto)].UniqueIds.Contains(id);
+            return _byType.TryGetValue(typeof(TDto), out var pair) && pair.UniqueIds.Contains(id);
         }
 
         public ulong NextIdFor<TDto>()
@@ -38,7 +38,9 @@ namespace Bw.Entities.Network.Repository
 
         public void RemoveIdFor<TDto>(ulong id)
         {
-            _byType[typeof(TDto)].UniqueIds.Remove(id);
+            if (!_byType.TryGetValue(typeof(TDto), out var pair) || !pair.UniqueIds.Remove(id))
+                throw new InvalidOperationException(
+                    $"Request id {id.ToString()} for {typeof(TDto).Name} is not pending: it was never issued or is already removed.");
         }
 
         private class Pair

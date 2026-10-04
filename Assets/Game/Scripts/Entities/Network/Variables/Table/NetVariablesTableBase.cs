@@ -53,7 +53,7 @@ namespace Bw.Entities.Network.Variables
             _entriesByDeclaration.TryGetValue(declaration, out var entry)
                 ? entry
                 : throw new InvalidOperationException(
-                    $"The declaration is not in the schema of object {NetworkObject.NetworkObjectId}, it was declared for another net object.");
+                    $"The declaration is not in the schema of object {NetworkObject.NetworkObjectId.ToString()}, it was declared for another net object.");
 
         private void BindDirtyReplication(Lifetime lifetime, NetRegistryInfo info, INetSyncEntry entry)
         {

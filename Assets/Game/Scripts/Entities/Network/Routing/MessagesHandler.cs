@@ -37,29 +37,29 @@ namespace Bw.Entities.Network.Routing
             if (!_networkHolder.SpawnManager().SpawnedObjects.TryGetValue(header.NetworkObjectId, out var netObj))
             {
                 Debug.LogWarning(
-                    $"[MessagesHandler] No spawned network object with id '{header.NetworkObjectId}' " +
-                    $"(varId={header.VarId}, sender={senderClientId}). Message ignored.");
+                    $"[MessagesHandler] No spawned network object with id '{header.NetworkObjectId.ToString()}' " +
+                    $"(varId={header.VarId.ToString()}, sender={senderClientId.ToString()}). Message ignored.");
                 return;
             }
 
             if (!netObj.TryGetComponent<INetworkLifetimedObject>(out var targetObject))
             {
                 throw new Exception(
-                    $"[MessagesHandler] Network object '{header.NetworkObjectId}:{netObj.name}' has no {nameof(INetworkLifetimedObject)}. Message ignored.");
+                    $"[MessagesHandler] Network object '{header.NetworkObjectId.ToString()}:{netObj.name}' has no {nameof(INetworkLifetimedObject)}. Message ignored.");
             }
 
             var netEntries = targetObject.NetEntries;
 
             if (netEntries == null)
             {
-                Debug.LogWarning($"Net variables table is null for '{header.NetworkObjectId}:{netObj.name}'");
+                Debug.LogWarning($"Net variables table is null for '{header.NetworkObjectId.ToString()}:{netObj.name}'");
                 return;
             }
             
             if (!netEntries.TryGetEntry(header.VarId, out var targetEntry))
             {
                 throw new Exception(
-                    $"[MessagesHandler] No network property with id '{header.VarId}' on object '{header.NetworkObjectId}:{netObj.name}'. Message ignored.");
+                    $"[MessagesHandler] No network property with id '{header.VarId.ToString()}' on object '{header.NetworkObjectId.ToString()}:{netObj.name}'. Message ignored.");
             }
 
             _currentReader = reader;

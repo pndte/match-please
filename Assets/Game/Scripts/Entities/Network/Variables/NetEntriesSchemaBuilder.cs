@@ -15,11 +15,19 @@ namespace Bw.Entities.Network.Variables
         private readonly List<NetEntryDeclaration> _declarations = new();
         private bool _built;
 
-        public NetSignalDeclaration<T> DeclareSignal<T>(NetworkDelivery deliveryType, NetworkPermissions permissions) =>
-            Declare(new NetSignalDeclaration<T>(deliveryType, permissions));
+        public NetSignalDeclaration<T> DeclareSignal<T>(NetworkDelivery deliveryType, NetworkPermissions permissions)
+        {
+            var declaration = new NetSignalDeclaration<T>(deliveryType, permissions);
+            Add(declaration);
+            return declaration;
+        }
 
-        public NetPropertyDeclaration<T> DeclareProperty<T>(T initial, NetworkDelivery deliveryType, NetworkPermissions permissions) =>
-            Declare(new NetPropertyDeclaration<T>(initial, deliveryType, permissions));
+        public NetPropertyDeclaration<T> DeclareProperty<T>(T initial, NetworkDelivery deliveryType, NetworkPermissions permissions)
+        {
+            var declaration = new NetPropertyDeclaration<T>(initial, deliveryType, permissions);
+            Add(declaration);
+            return declaration;
+        }
 
         public NetEntriesSchema Build()
         {
@@ -28,11 +36,10 @@ namespace Bw.Entities.Network.Variables
             return new NetEntriesSchema(_declarations.ToArray());
         }
 
-        private TDeclaration Declare<TDeclaration>(TDeclaration declaration) where TDeclaration : NetEntryDeclaration
+        private void Add(NetEntryDeclaration declaration)
         {
             ThrowIfBuilt();
             _declarations.Add(declaration);
-            return declaration;
         }
 
         private void ThrowIfBuilt()

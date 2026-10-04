@@ -48,7 +48,7 @@ namespace Bw.Entities.Network.Variables
             _inner.Check(target);
             if (!_ownership.Mine.Value)
                 throw new InvalidOperationException(
-                    $"Only the owner sends this entry, object {_networkObject.NetworkObjectId} is not mine now.");
+                    $"Only the owner sends this entry, object {_networkObject.NetworkObjectId.ToString()} is not mine now.");
         }
 
         public void WhenOpen(Lifetime lifetime, Action<Lifetime> handler) =>

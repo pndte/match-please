@@ -26,7 +26,7 @@ namespace Bw.Entities.Network.Variables
                 NetworkPermissions.Owner => WhileMine(),
                 NetworkPermissions.Client => WhileMine(),
                 NetworkPermissions.Everyone => new AllowedSendGuard(canTargetClients: false),
-                _ => throw new ArgumentOutOfRangeException(nameof(permissions), permissions, "Unknown NetworkPermissions value.")
+                _ => throw new ArgumentOutOfRangeException(nameof(permissions), $"Unknown NetworkPermissions value {((byte)permissions).ToString()}.")
             };
 
         private INetSendGuard WhileMine() =>
@@ -51,7 +51,7 @@ namespace Bw.Entities.Network.Variables
                 NetworkPermissions.Owner => new WhileMineSendGuard(new AllowedSendGuard(canTargetClients: true), _ownership, _networkObject),
                 NetworkPermissions.Client => new ForbiddenSendGuard("Entry with Client permissions is sent only by its owning client, the server can't send it."),
                 NetworkPermissions.Everyone => new AllowedSendGuard(canTargetClients: true),
-                _ => throw new ArgumentOutOfRangeException(nameof(permissions), permissions, "Unknown NetworkPermissions value.")
+                _ => throw new ArgumentOutOfRangeException(nameof(permissions), $"Unknown NetworkPermissions value {((byte)permissions).ToString()}.")
             };
     }
 }
