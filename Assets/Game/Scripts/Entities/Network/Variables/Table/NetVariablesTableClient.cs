@@ -1,4 +1,3 @@
-using System;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
 
@@ -11,33 +10,12 @@ namespace Bw.Entities.Network.Variables
         public NetVariablesTableClient(
             Lifetime lifetime,
             NetworkObject networkObject,
+            NetEntriesSchema schema,
             IClientSendersCollection messageSenders,
-            INetPropertyFactory factory,
             IOwnership ownership)
-            : base(lifetime, networkObject, factory, ownership)
+            : base(lifetime, networkObject, schema, new NetSendGuardFactoryClient(ownership, networkObject))
         {
             _messageSenders = messageSenders;
-        }
-
-        protected override void SubscribeDirtyForPeerSpecificPermissions(
-            Lifetime lifetime,
-            NetRegistryInfo info,
-            INetSyncEntry entry,
-            IOwnership ownership)
-        {
-            switch (info.Permissions)
-            {
-                case NetworkPermissions.Client:
-                    BindDirtyReplicationWhileMine(lifetime, info, entry, ownership);
-                    break;
-                case NetworkPermissions.Server:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(
-                        nameof(info.Permissions),
-                        info.Permissions,
-                        "Unknown NetworkPermissions value.");
-            }
         }
 
         protected override void DispatchPropertyUpdate<T>(INetProperty<T> property)

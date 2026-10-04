@@ -7,6 +7,7 @@ namespace Bw.UseCases.Movement
     {
         public float Speed;
         public float JumpForce;
+        public float GravityScale = 3f;
         public LayerMask GroundLayer;
     }
 }

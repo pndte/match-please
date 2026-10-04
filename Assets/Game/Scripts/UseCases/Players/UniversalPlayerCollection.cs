@@ -1,8 +1,9 @@
 ﻿using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Infrastructure;
+using Bw.Entities.Network;
 using Bw.UseCases.Clients;
-using JetBrains.Collections.Viewable;
+using Bw.UseCases.Clients.Extensions;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Players
@@ -18,10 +19,10 @@ namespace Bw.UseCases.Players
         {
             ById = new ViewableBiMap<int, IPlayer>(lifetime);
             ByClient = new ViewableBiMap<IClient, IPlayer>(lifetime);
-            collection.ByIds.View(lifetime, HandleNewClient);
+            collection.WhenNewConnected(lifetime, HandleNewConnectedClient);
         }
 
-        private void HandleNewClient(Lifetime lifetime, ulong _, IClient client)
+        private void HandleNewConnectedClient(Lifetime lifetime, IClient client)
         {
             var newPlayer = new Player();
             ById.AddLifetimed(lifetime, _indexCounter++, newPlayer);

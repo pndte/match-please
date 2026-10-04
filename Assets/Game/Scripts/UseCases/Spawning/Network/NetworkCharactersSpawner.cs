@@ -1,10 +1,12 @@
 using System;
 using Bw.Entities;
 using Bw.Entities.Extensions;
+using Bw.Entities.Network;
 using Bw.UseCases.Character;
 using Bw.UseCases.Character.Extensions;
 using Bw.UseCases.Character.Network;
 using Bw.UseCases.Clients;
+using Bw.UseCases.Clients.Extensions;
 using Bw.UseCases.Players;
 using Bw.UseCases.Shooting.Weapon;
 using Cysharp.Threading.Tasks;
@@ -12,6 +14,7 @@ using JetBrains.Lifetimes;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
+using Bw.UseCases;
 using Random = UnityEngine.Random;
 
 namespace Bw.UseCases.Spawning.Network
@@ -49,8 +52,8 @@ namespace Bw.UseCases.Spawning.Network
             _container = container;
             _data = data;
 
-            clientCollection.ByIds.AdviseAdd(lifetime, (_, client) =>
-                SpawnCharacterFor(lifetime, client));
+            clientCollection.WhenNewConnected(lifetime, (connectedLifetime, client) =>
+                SpawnCharacterFor(connectedLifetime, client));
         }
 
         public ICharacter SpawnCharacterFor(Lifetime lifetime, IClient client)
@@ -70,6 +73,16 @@ namespace Bw.UseCases.Spawning.Network
             _gameObjectByCharacterCollection.AddLifetimed(
                 characterLifetime, character, characterObject.gameObject);
             _characterRegistry.ClientByCharacter.AddLifetimed(characterLifetime, character, client);
+
+            if (!_clientPlayerCollection.ByClient.TryGetValue(client, out var player))
+                throw new InvalidOperationException(
+                    $"No player registered for client {client.Id} before character setup.");
+
+            var characterContext = RequireComponent<GameObjectContext>(characterObject.gameObject);
+            var characterControlledBy = characterContext.Container.Resolve<IControlledBy>();
+            var characterOwnership = characterContext.Container.Resolve<IOwnershipController>();
+            characterOwnership.AddOwner(characterLifetime, player);
+            characterControlledBy.Set(characterLifetime, player);
 
             SpawnAndAttachWeapon(client, characterHolder, characterLifetime, characterObject.transform.position, spawnRotation).Forget();
 
@@ -102,8 +115,8 @@ namespace Bw.UseCases.Spawning.Network
             await UniTask.Delay(TimeSpan.FromSeconds(3));//TODO: костыль, фиксить
             characterHolder.Value.State.WhenAlive(characterLifetime, aliveLifetime =>
             {
-                weaponHolder.ControlledBy.Set(aliveLifetime, player);
                 weaponHolder.OwnershipController.AddOwner(aliveLifetime, player);
+                weaponHolder.ControlledBy.Set(aliveLifetime, player);
                 weaponHolder.PickUpWeapon(aliveLifetime, characterHolder);
             });
         }

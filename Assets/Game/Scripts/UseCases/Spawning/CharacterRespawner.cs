@@ -1,5 +1,6 @@
 ﻿using System;
 using Bw.Entities;
+using Bw.Entities.Network;
 using Bw.UseCases.Character;
 using Bw.UseCases.Character.Extensions;
 using Cysharp.Threading.Tasks;

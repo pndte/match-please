@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;

@@ -20,7 +20,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
             var accepted = Value.Accepted;
 
             serializer.SerializePacked(ref requestId);
-            serializer.SerializePacked(ref accepted);
+            serializer.SerializeValue(ref accepted);
 
             Value = new ReloadRequestResultDto(requestId, accepted);
         }

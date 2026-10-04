@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Bw.Entities::Entities.Movement2DConfig
   Speed: 18
   JumpForce: 20
+  GravityScale: 3
   GroundLayer:
     serializedVersion: 2
     m_Bits: 16384

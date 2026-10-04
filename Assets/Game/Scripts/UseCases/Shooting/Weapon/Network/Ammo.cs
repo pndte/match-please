@@ -1,4 +1,5 @@
 ﻿using System;
+using Bw.Entities.Network.Variables;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Core;
@@ -21,10 +22,10 @@ namespace Bw.UseCases.Shooting.Weapon.Network
         }
         int IReadonlyProperty<int>.Value => _inner.Value;
 
-        private readonly IViewableProperty<int> _inner;
+        private readonly INetProperty<int> _inner;
         private readonly AmmoConfig _ammoConfig;
 
-        public Ammo(AmmoConfig ammoConfig, IViewableProperty<int> inner)
+        public Ammo(AmmoConfig ammoConfig, INetProperty<int> inner)
         {
             _ammoConfig = ammoConfig;
             _inner = inner;

@@ -1,5 +1,7 @@
-﻿using Bw.Entities.Network;
+﻿using Bw.Entities.Infrastructure;
+using Bw.Entities.Network;
 using Bw.UseCases;
+using JetBrains.Diagnostics;
 using UnityEngine.SceneManagement;
 using Zenject;
 
@@ -11,6 +13,8 @@ namespace Bw.Injection
 
         public override void InstallBindings()
         {
+            Log.DefaultFactory = new UnityLogFactory();
+
             if (SceneManager.GetActiveScene().name != "GameSetupScene") 
                 SceneManager.LoadScene("GameSetupScene", LoadSceneMode.Single);
 

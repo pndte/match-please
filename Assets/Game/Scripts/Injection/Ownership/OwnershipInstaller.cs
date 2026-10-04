@@ -1,6 +1,7 @@
 ﻿using Bw.Entities;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
+using Bw.Injection.Network;
 using Bw.UseCases;
 using Unity.Netcode;
 using Zenject;
@@ -33,40 +34,33 @@ namespace Bw.Injection.Ownership
     }
 
     public class OwnershipServicesInstaller
-        : Installer<IRuntimeSettings, INetPropertyFactory, OwnershipServicesInstaller>
+        : Installer<IRuntimeSettings, INetEntriesSchemaBuilder, OwnershipServicesInstaller>
     {
         private readonly IRuntimeSettings _runtimeSettings;
-        private readonly INetPropertyFactory _netPropertyFactory;
+        private readonly INetEntriesSchemaBuilder _netSchema;
 
         public OwnershipServicesInstaller(
             IRuntimeSettings runtimeSettings,
-            INetPropertyFactory netPropertyFactory)
+            INetEntriesSchemaBuilder netSchema)
         {
             _runtimeSettings = runtimeSettings;
-            _netPropertyFactory = netPropertyFactory;
+            _netSchema = netSchema;
         }
 
         public override void InstallBindings()
         {
-            var handler = new DtoHandler<TargetedBool>(
-                _netPropertyFactory.Signal<TargetedBool>(
-                    NetworkDelivery.Reliable,
-                    NetworkPermissions.Server));
+            var mineDeclaration = _netSchema.DeclareSignal<bool>(
+                NetworkDelivery.Reliable,
+                NetworkPermissions.Server);
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
-                Container.Bind<IDtoSource<TargetedBool>>()
-                    .To<DtoHandler<TargetedBool>>()
-                    .FromInstance(handler)
-                    .WhenInjectedInto<UseCases.Ownership.ClientNetworkHandler>();
+                Container.BindNetSignalFor<bool, UseCases.Ownership.ClientNetworkHandler>(mineDeclaration);
                 Container.Bind<UseCases.Ownership.ClientNetworkHandler>().ToSelf().AsSingle().NonLazy();
             }
             else if (_runtimeSettings.CurrentPeerType == PeerType.Server)
             {
-                Container.Bind<IDtoBroadcaster<TargetedBool>>()
-                    .To<DtoHandler<TargetedBool>>()
-                    .FromInstance(handler)
-                    .WhenInjectedInto<UseCases.Ownership.ServerNetworkHandler>();
+                Container.BindNetSignalFor<bool, UseCases.Ownership.ServerNetworkHandler>(mineDeclaration);
                 Container.Bind<UseCases.Ownership.ServerNetworkHandler>().ToSelf().AsSingle().NonLazy();
             }
         }

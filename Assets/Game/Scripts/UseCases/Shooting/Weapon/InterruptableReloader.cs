@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Bw.Entities.Network.Repository;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Extensions;

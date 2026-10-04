@@ -1,5 +1,6 @@
 using Bw.Entities;
 using Bw.Entities.Extensions;
+using Bw.Entities.Network.Variables;
 using Bw.UseCases.Players;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
@@ -29,10 +30,13 @@ namespace Bw.UseCases
         {
             public ClientNetworkHandler(
                 Lifetime lifetime,
-                IDtoSource<TargetedBool> dtoSource,
+                INetSignal<bool> meSignal,
                 ControlledBy controlledBy)
             {
-                dtoSource.Value.Advise(lifetime, dto => controlledBy._me.Value = dto.Value);
+                meSignal.Advise(lifetime, me =>
+                {
+                    controlledBy._me.Value = me;
+                });
             }
         }
 
@@ -40,17 +44,17 @@ namespace Bw.UseCases
         {
             public ServerNetworkHandler(
                 Lifetime lifetime,
-                IDtoBroadcaster<TargetedBool> dtoBroadcaster,
+                INetSignal<bool> meSignal,
                 IControlledBy controlledBy,
                 IClientPlayerCollection clientPlayers)
             {
                 controlledBy.Users.View(lifetime, (userLifetime, userPlayer) =>
                 {
                     var client = clientPlayers.ByClient.Inverse[userPlayer];
-                    dtoBroadcaster.Fire(new TargetedBool(client, true));
+                    meSignal.FireTo(client, true);
 
                     userLifetime.OnTermination(() =>
-                        dtoBroadcaster.Fire(new TargetedBool(client, false)));
+                        meSignal.FireTo(client, false));
                 });
             }
         }

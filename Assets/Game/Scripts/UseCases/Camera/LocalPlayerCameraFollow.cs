@@ -157,14 +157,8 @@ namespace DefaultNamespace
                 desiredPosition = ClampToBoundaries(desiredPosition);
             }
             
-            // Smoothly interpolate to the desired position
-            Vector3 smoothedPosition = Vector3.Lerp(
-                _camera.transform.position,
-                desiredPosition,
-                _config.SmoothSpeed
-            );
-            
-            _camera.transform.position = smoothedPosition;
+            var blend = 1f - Mathf.Exp(-_config.FollowSharpness * Time.deltaTime);
+            _camera.transform.position = Vector3.Lerp(_camera.transform.position, desiredPosition, blend);
         }
         
         /// <summary>

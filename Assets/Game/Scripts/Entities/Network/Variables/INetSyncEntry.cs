@@ -4,7 +4,7 @@ namespace Bw.Entities.Network.Variables
 {
     public interface INetSyncEntry
     {
-        IViewableProperty<bool> Dirty { get; }
-        void Accept(INetSyncVisitor visitor);
+        internal IViewableProperty<bool> Dirty { get; }
+        internal void Accept(INetSyncVisitor visitor);
     }
 }

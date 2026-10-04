@@ -46,19 +46,18 @@ namespace Bw.Injection.Weapon
 
             Container.Bind<NetworkObject>().FromInstance(_networkObject).AsSingle();
             Container.Bind<INetworkLifetimedObject>().FromInstance(_weaponRotation).AsSingle();
-
-            NetTablesInstaller.Install(Container);
-            var netFactory = Container.Resolve<INetPropertyFactory>();
-            var netTable = Container.Resolve<INetVariablesTable>();//TODO: костыль, фиксить
-            
-            OwnershipServicesInstaller.Install(Container, _runtimeSettings, netFactory);
-            ControlledByServicesInstaller.Install(Container, _runtimeSettings, netFactory);
-
-            BindConfigs();
             BindLifetime();
 
-            BindAmmo();
-            BindWeaponRequests();
+            var netSchema = new NetEntriesSchemaBuilder();
+            OwnershipServicesInstaller.Install(Container, _runtimeSettings, netSchema);
+            ControlledByServicesInstaller.Install(Container, _runtimeSettings, netSchema);
+
+            BindConfigs();
+
+            BindAmmo(netSchema);
+            BindWeaponRequests(netSchema);
+            NetTablesInstaller.Install(Container, netSchema.Build());
+
             BindCommonWeaponLogic();
             BindVfxRenderer();
             BindRequestHandlers();
@@ -114,16 +113,21 @@ namespace Bw.Injection.Weapon
             }
         }
 
-        private void BindWeaponRequests()
+        private void BindWeaponRequests(INetEntriesSchemaBuilder netSchema)
         {
+            var mouseShootRequestDeclaration = netSchema.DeclareSignal<ShootRequestDto>(NetworkDelivery.Reliable, NetworkPermissions.Client);
+            var reloadRequestDeclaration = netSchema.DeclareSignal<ReloadRequestDto>(NetworkDelivery.Reliable, NetworkPermissions.Client);
+            var shootReceivedDeclaration = netSchema.DeclareSignal<ShootRequestResultDto>(NetworkDelivery.Reliable, NetworkPermissions.Server);
+            var reloadReceivedDeclaration = netSchema.DeclareSignal<ReloadRequestResultDto>(NetworkDelivery.Reliable, NetworkPermissions.Server);
+
             Container.BindInterfacesAndSelfTo<WeaponSignals>().FromMethod(ctx =>
             {
-                var factory = ctx.Container.Resolve<INetPropertyFactory>();
+                var entries = ctx.Container.Resolve<INetEntries>();
                 return new WeaponSignals(
-                    factory.Signal<ShootRequestDto>(NetworkDelivery.Reliable, NetworkPermissions.Client),
-                    factory.Signal<ReloadRequestDto>(NetworkDelivery.Reliable, NetworkPermissions.Client),
-                    factory.Signal<ShootRequestResultDto>(NetworkDelivery.Reliable, NetworkPermissions.Server),
-                    factory.Signal<ReloadRequestResultDto>(NetworkDelivery.Reliable, NetworkPermissions.Server));
+                    entries.Get(mouseShootRequestDeclaration),
+                    entries.Get(reloadRequestDeclaration),
+                    entries.Get(shootReceivedDeclaration),
+                    entries.Get(reloadReceivedDeclaration));
             }).AsSingle();
         }
 
@@ -150,9 +154,13 @@ namespace Bw.Injection.Weapon
             Container.BindInterfacesAndSelfTo<ShootingWeapon>().AsSingle();
         }
 
-        private void BindAmmo()
+        private void BindAmmo(INetEntriesSchemaBuilder netSchema)
         {
-            Container.CreatePropertyFor<int, Ammo>(_shootingWeaponConfig.AmmoSettings.OnSpawnValue);
+            var ammoDeclaration = netSchema.DeclareProperty(
+                _shootingWeaponConfig.AmmoSettings.OnSpawnValue,
+                NetworkDelivery.Reliable,
+                NetworkPermissions.Server);
+            Container.BindNetPropertyFor<int, Ammo>(ammoDeclaration);
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {

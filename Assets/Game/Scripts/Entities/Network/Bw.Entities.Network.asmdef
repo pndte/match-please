@@ -4,7 +4,8 @@
     "references": [
         "Unity.Netcode.Runtime",
         "Bw.Entities",
-        "UniTask"
+        "UniTask",
+        "R3.Unity"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

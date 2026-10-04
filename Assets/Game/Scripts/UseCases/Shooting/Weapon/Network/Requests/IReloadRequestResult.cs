@@ -1,9 +1,9 @@
-using JetBrains.Collections.Viewable;
+using Bw.Entities.Network.Variables;
 
 namespace Bw.UseCases.Shooting.Weapon.Network.Requests
 {
     public interface IReloadRequestResult
     {
-        public ISignal<ReloadRequestResultDto> Received { get; }
+        public INetSignal<ReloadRequestResultDto> Received { get; }
     }
 }

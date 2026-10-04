@@ -1,4 +1,4 @@
-﻿using Bw.UseCases.Shooting.Weapon.Abstractions;
+using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Extensions;
 using JetBrains.Lifetimes;
 

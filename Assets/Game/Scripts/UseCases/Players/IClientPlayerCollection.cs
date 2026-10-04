@@ -1,5 +1,5 @@
-﻿using Bw.Entities;
-using Bw.Entities.Infrastructure;
+﻿using Bw.Entities.Infrastructure;
+using Bw.Entities.Network;
 
 namespace Bw.UseCases.Players
 {

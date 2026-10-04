@@ -1,4 +1,4 @@
-﻿using Bw.Entities;
+﻿using Bw.Entities.Network;
 using Bw.UseCases.Character;
 using JetBrains.Lifetimes;
 

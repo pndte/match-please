@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fc6e032607e43c18e6cc235ea00c08d, type: 3}
+  m_Name: NetworkTicksConfig
+  m_EditorClassIdentifier: Bw.Entities.Network::Bw.Entities.Network.Ticks.NetworkTicksConfig
+  InitialLeadTicks: 2
+  MinLeadTicks: 0
+  MaxLeadTicks: 15
+  TargetMarginTicks: 1
+  LeadRaiseRate: 0.5
+  LeadLowerRate: 0.25
+  MarginReportIntervalTicks: 15
+  InterpolationDelayTicks: 1
+  MaxTicksPerFrame: 5
+  HardResetSeconds: 0.25
+  MaxTimeScaleCorrection: 0.05

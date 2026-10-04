@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 3889167905082118075}
   - component: {fileID: 8334707615516295052}
   - component: {fileID: 3773905357652456202}
-  - component: {fileID: 3077970775352720755}
-  - component: {fileID: 7636866304431487347}
   - component: {fileID: 7318710291484346262}
   - component: {fileID: 1705369709605621449}
   - component: {fileID: 666931174670692420}
@@ -124,69 +122,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &3077970775352720755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7714897418022992417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d7c879794dfda4687da0e400131852, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkRigidbody2D
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkRigidbodyBaseExpanded: 0
-  UseRigidBodyForMotion: 0
-  AutoUpdateKinematicState: 1
-  AutoSetKinematicOnDespawn: 1
---- !u!114 &7636866304431487347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7714897418022992417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkTransform
-  ShowTopMostFoldoutHeaderGroup: 1
-  NetworkTransformExpanded: 0
-  AutoOwnerAuthorityTickOffset: 1
-  PositionInterpolationType: 0
-  RotationInterpolationType: 0
-  ScaleInterpolationType: 0
-  PositionLerpSmoothing: 1
-  PositionMaxInterpolationTime: 0.1
-  RotationLerpSmoothing: 1
-  RotationMaxInterpolationTime: 0.1
-  ScaleLerpSmoothing: 1
-  ScaleMaxInterpolationTime: 0.1
-  AuthorityMode: 0
-  TickSyncChildren: 0
-  UseUnreliableDeltas: 0
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 0
-  SyncRotAngleX: 0
-  SyncRotAngleY: 0
-  SyncRotAngleZ: 0
-  SyncScaleX: 0
-  SyncScaleY: 0
-  SyncScaleZ: 0
-  PositionThreshold: 0.001
-  RotAngleThreshold: 0.01
-  ScaleThreshold: 0.01
-  UseQuaternionSynchronization: 0
-  UseQuaternionCompression: 0
-  UseHalfFloatPrecision: 0
-  InLocalSpace: 0
-  SwitchTransformSpaceWhenParented: 0
-  Interpolate: 1
-  SlerpPosition: 0
 --- !u!114 &7318710291484346262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,12 +131,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7714897418022992417}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca94d312b5c142f998826f6c79abd965, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Bw.Injection::Injection.Character2DInstaller
+  m_Script: {fileID: 11500000, guid: 6a20ce58a5f7418692e01ac43a0ca41c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Bw.Entities.Network::Bw.Entities.Network.Objects.NetworkLifetimedBehaviour
   ShowTopMostFoldoutHeaderGroup: 1
-  XInput:
-    m_InternalValue: 0
 --- !u!114 &1705369709605621449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,9 +149,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Injection.CharacterInstaller
   _healthConfig: {fileID: 11400000, guid: 20665ca7550f0604d82f61652021be97, type: 2}
   _networkObject: {fileID: 3773905357652456202}
+  _networkLifetimedBehaviour: {fileID: 7318710291484346262}
   _physics: {fileID: 7303288911383704076}
+  _collider: {fileID: 8557818833694399266}
   _movementConfig: {fileID: 11400000, guid: 69583fc462e9fe145a5a5101d5d42728, type: 2}
-  _movementData: {fileID: 7318710291484346262}
 --- !u!114 &666931174670692420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,7 +180,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7714897418022992417}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0

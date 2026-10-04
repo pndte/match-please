@@ -12,8 +12,7 @@ using Assembly = System.Reflection.Assembly;
 namespace Bw.EditorTools.Network
 {
     /// <summary>
-    /// Scans player assemblies for <c>struct</c> types implementing <c>ICodec&lt;T&gt;</c> and
-    /// <c>class</c> types deriving from <c>CodecTargetRouting&lt;TCodec&gt;</c>, then regenerates
+    /// Scans player assemblies for <c>struct</c> types implementing <c>ICodec&lt;T&gt;</c>, then regenerates
     /// <c>MessageHandlersInstaller.Generated.cs</c>.
     /// </summary>
     public static class MessageHandlersCodegen
@@ -21,7 +20,6 @@ namespace Bw.EditorTools.Network
         private const string MenuPath = "Tools/Network/Regenerate message codec registrations";
 
         private const string CodecOpenGenericName = "ICodec`1";
-        private const string CodecRoutingOpenGenericName = "CodecTargetRouting`1";
         private const string NetworkSerializableFullName = "Unity.Netcode.INetworkSerializable";
 
         private static readonly string OutputPath = Path.Combine(
@@ -48,10 +46,6 @@ namespace Bw.EditorTools.Network
                 return;
             }
 
-            var routingBase = ResolveOpenGenericDefinition(CodecRoutingOpenGenericName);
-            if (routingBase == null)
-                Debug.LogWarning("MessageHandlersCodegen: could not resolve CodecTargetRouting`1; routings will be skipped.");
-
             var pairs = DiscoverCodecPairs(codecInterface);
             if (pairs.Count == 0)
             {
@@ -59,13 +53,8 @@ namespace Bw.EditorTools.Network
                 return;
             }
 
-            var routingByCodec = routingBase != null
-                ? DiscoverRoutingByCodec(pairs, routingBase)
-                : new Dictionary<Type, Type>();
-
             var ordered = pairs
-                .OrderByDescending(p => routingByCodec.ContainsKey(p.codecType))
-                .ThenBy(p => p.codecType.FullName, StringComparer.Ordinal)
+                .OrderBy(p => p.codecType.FullName, StringComparer.Ordinal)
                 .ToList();
 
             var sb = new StringBuilder(1024);
@@ -83,16 +72,8 @@ namespace Bw.EditorTools.Network
 
             foreach (var (valueType, codecType) in ordered)
             {
-                if (routingByCodec.TryGetValue(codecType, out var routingType))
-                {
-                    sb.AppendLine(
-                        $"            RegisterCodecRouting<{TypeSpec(valueType)}, {TypeSpec(codecType)}, {TypeSpec(routingType)}>(receivers, senders);");
-                }
-                else
-                {
-                    sb.AppendLine(
-                        $"            RegisterCodec<{TypeSpec(valueType)}, {TypeSpec(codecType)}>(receivers, senders);");
-                }
+                sb.AppendLine(
+                    $"            RegisterCodec<{TypeSpec(valueType)}, {TypeSpec(codecType)}>(receivers, senders);");
             }
 
             sb.AppendLine("        }");
@@ -102,17 +83,23 @@ namespace Bw.EditorTools.Network
             File.WriteAllText(OutputPath, sb.ToString(), new UTF8Encoding(false));
             AssetDatabase.Refresh();
 
-            var routingCount = ordered.Count(p => routingByCodec.ContainsKey(p.codecType));
-            Debug.Log(
-                $"MessageHandlersCodegen: wrote {ordered.Count} codec(s) ({routingCount} with routing) to {OutputPath}");
+            Debug.Log($"MessageHandlersCodegen: wrote {ordered.Count} codec(s) to {OutputPath}");
         }
 
-        private static string TypeSpec(Type t) =>
-            t.IsNested
+        private static string TypeSpec(Type t)
+        {
+            var name = t.IsNested
                 ? $"{TypeSpec(t.DeclaringType!)}.{t.Name}"
                 : string.IsNullOrEmpty(t.Namespace)
                     ? t.Name
                     : $"{t.Namespace}.{t.Name}";
+
+            if (!t.IsGenericType)
+                return name;
+
+            var arguments = string.Join(", ", t.GetGenericArguments().Select(TypeSpec));
+            return $"{name.Substring(0, name.IndexOf('`'))}<{arguments}>";
+        }
 
         private static IEnumerable<Assembly> GetCandidateAssemblies()
         {
@@ -181,22 +168,6 @@ namespace Bw.EditorTools.Network
             return false;
         }
 
-        private static Type? GetRoutingCodecType(Type routingType, Type routingBaseDefinition)
-        {
-            for (var current = routingType; current != null; current = current.BaseType)
-            {
-                if (!current.IsGenericType)
-                    continue;
-                var def = current.GetGenericTypeDefinition();
-                if (def != routingBaseDefinition)
-                    continue;
-                var args = current.GetGenericArguments();
-                return args.Length == 1 ? args[0] : null;
-            }
-
-            return null;
-        }
-
         private static List<(Type valueType, Type codecType)> DiscoverCodecPairs(Type codecInterface)
         {
             var results = new List<(Type valueType, Type codecType)>();
@@ -206,7 +177,7 @@ namespace Bw.EditorTools.Network
             {
                 foreach (var type in SafeGetTypes(assembly))
                 {
-                    if (!type.IsValueType || type.IsEnum || type.IsAbstract)
+                    if (!type.IsValueType || type.IsEnum || type.IsAbstract || type.ContainsGenericParameters)
                         continue;
 
                     if (!ImplementsInterfaceByFullName(type, NetworkSerializableFullName))
@@ -239,37 +210,6 @@ namespace Bw.EditorTools.Network
             }
 
             return results;
-        }
-
-        private static Dictionary<Type, Type> DiscoverRoutingByCodec(
-            List<(Type valueType, Type codecType)> pairs,
-            Type routingBaseDefinition)
-        {
-            var knownCodecs = new HashSet<Type>(pairs.Select(p => p.codecType));
-            var map = new Dictionary<Type, Type>();
-
-            foreach (var assembly in GetCandidateAssemblies())
-            {
-                foreach (var type in SafeGetTypes(assembly))
-                {
-                    if (type.IsAbstract || type.IsInterface || type.IsValueType)
-                        continue;
-
-                    var codecType = GetRoutingCodecType(type, routingBaseDefinition);
-                    if (codecType == null || !knownCodecs.Contains(codecType))
-                        continue;
-
-                    if (map.TryGetValue(codecType, out var existing) && existing != type)
-                    {
-                        throw new InvalidOperationException(
-                            $"Two routings for codec {codecType.FullName}: {existing.FullName} and {type.FullName}.");
-                    }
-
-                    map[codecType] = type;
-                }
-            }
-
-            return map;
         }
 
         private static IEnumerable<Type> SafeGetTypes(Assembly assembly)

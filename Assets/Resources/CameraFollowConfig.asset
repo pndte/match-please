@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fa897ca01674b4ca01229cf71a8c3ed, type: 3}
   m_Name: CameraFollowConfig
   m_EditorClassIdentifier: Bw.UseCases::DefaultNamespace.CameraFollowConfig
-  SmoothSpeed: 0.125
+  FollowSharpness: 20
   Offset: {x: 0, y: 0, z: -10}
   UseBoundaries: 0
   MinBounds: {x: -100, y: -100, z: -100}

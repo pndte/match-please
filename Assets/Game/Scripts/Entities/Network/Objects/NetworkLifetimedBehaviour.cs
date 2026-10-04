@@ -9,15 +9,15 @@ namespace Bw.Entities.Network.Objects
     public class NetworkLifetimedBehaviour : NetworkBehaviour, INetworkLifetimedObject
     {
         public ulong Id => NetworkObject.NetworkObjectId;
-        public INetVariablesTable NetVariablesTable { get; private set; }
+        public INetEntries NetEntries { get; private set; }
         public IReadonlyProperty<Lifetime> SpawnedLifetime => _spawnedLifetime;
         private readonly ViewableProperty<Lifetime> _spawnedLifetime = new(Lifetime.Terminated);
         private LifetimeDefinition _spawnedLifetimeDefinition;
 
         [Inject]
-        private void Construct(INetVariablesTable netVariablesTable)
+        private void Construct(INetEntries netEntries)
         {
-            NetVariablesTable = netVariablesTable;
+            NetEntries = netEntries;
         }
 
         public override void OnNetworkSpawn()

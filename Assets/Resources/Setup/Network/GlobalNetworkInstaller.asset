@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: GlobalNetworkInstaller
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Network.GlobalNetworkInstaller
   _networkManagerPrefab: {fileID: 2303872855047892107, guid: 06b1c2facaa67e6428aa57dd9beabd9f, type: 3}
+  _ticksConfig: {fileID: 11400000, guid: a4fb98d142f8429e832a27b7c42fda12, type: 2}

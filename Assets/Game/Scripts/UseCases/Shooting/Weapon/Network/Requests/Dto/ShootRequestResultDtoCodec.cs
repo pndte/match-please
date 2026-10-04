@@ -22,7 +22,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
 
             serializer.SerializePacked(ref requestId);
             serializer.SerializeValue(ref position);
-            serializer.SerializePacked(ref accepted);
+            serializer.SerializeValue(ref accepted);
 
             Value = new ShootRequestResultDto(requestId, position, accepted);
         }

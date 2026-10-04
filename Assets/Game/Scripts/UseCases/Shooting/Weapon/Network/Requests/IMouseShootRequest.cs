@@ -1,9 +1,9 @@
-﻿using JetBrains.Collections.Viewable;
+﻿using Bw.Entities.Network.Variables;
 
 namespace Bw.UseCases.Shooting.Weapon.Network.Requests
 {
     public interface IMouseShootRequest
     {
-        public ISignal<ShootRequestDto> Requested { get; }
+        public INetSignal<ShootRequestDto> Requested { get; }
     }
 }

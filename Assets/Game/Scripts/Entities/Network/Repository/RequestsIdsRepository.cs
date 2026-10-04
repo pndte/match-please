@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace Bw.Entities.Network.Repository
 {
+    //TODO: перевести стрельбу (выстрел, перезарядку, патроны, кулдаун) на сетевые тики и общую предикцию из Bw.Entities.Network.Prediction,
+    //после этого предсказание по request id и этот репозиторий станут не нужны
     public interface IRequestIdsRepository //TODO: rename
     {
         public bool ContainsIdFor<TDto>(ulong id);

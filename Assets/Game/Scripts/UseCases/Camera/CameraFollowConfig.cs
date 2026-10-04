@@ -9,9 +9,9 @@ namespace DefaultNamespace
     public class CameraFollowConfig : ScriptableObject
     {
         [Header("Follow Settings")]
-        [Tooltip("How smoothly the camera follows the target (lower = smoother, higher = more responsive)")]
-        [Range(0.01f, 1f)]
-        public float SmoothSpeed = 0.125f;
+        [Tooltip("How fast the camera catches up with the target, per second (higher = tighter). Independent of frame rate.")]
+        [Min(0f)]
+        public float FollowSharpness = 20f;
         
         [Header("Offset Settings")]
         [Tooltip("Offset from the target position")]

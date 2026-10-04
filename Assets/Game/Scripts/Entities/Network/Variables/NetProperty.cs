@@ -7,34 +7,46 @@ namespace Bw.Entities.Network.Variables
 {
     public interface INetProperty<T> : IViewableProperty<T>, INetSyncEntry
     {
+        internal void ApplyFromNetwork(T value);
     }
 
     public class NetProperty<T> : INetProperty<T>
     {
         public ISource<T> Change => _inner.Change;
         public Maybe<T> Maybe => _inner.Maybe;
-        public IViewableProperty<bool> Dirty { get; } = new ViewableProperty<bool>(false);
 
         public T Value
         {
             get => _inner.Value;
             set
             {
+                _sendGuard.Check(NetSendTarget.Untargeted);
+
                 _inner.Value = value;
-                Dirty.Value = true;
+                _dirty.Value = true;
             }
         }
 
-        private readonly ViewableProperty<T> _inner;
+        IViewableProperty<bool> INetSyncEntry.Dirty => _dirty;
 
-        internal NetProperty(T initial)
+        private readonly ViewableProperty<T> _inner;
+        private readonly ViewableProperty<bool> _dirty = new(false);
+        private readonly INetSendGuard _sendGuard;
+
+        internal NetProperty(T initial, INetSendGuard sendGuard)
         {
             _inner = new ViewableProperty<T>(initial);
+            _sendGuard = sendGuard;
         }
 
         public void Advise(Lifetime lifetime, Action<T> handler)
         {
             _inner.Advise(lifetime, handler);
+        }
+
+        void INetProperty<T>.ApplyFromNetwork(T value)
+        {
+            _inner.Value = value;
         }
 
         void INetSyncEntry.Accept(INetSyncVisitor visitor)

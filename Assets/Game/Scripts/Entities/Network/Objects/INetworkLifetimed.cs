@@ -7,7 +7,7 @@ namespace Bw.Entities.Network.Objects
     public interface INetworkLifetimedObject
     {
         public ulong Id { get; }
-        public INetVariablesTable NetVariablesTable { get; }
+        public INetEntries NetEntries { get; }
         public IReadonlyProperty<Lifetime> SpawnedLifetime { get; }
     }
 }

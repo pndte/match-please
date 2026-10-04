@@ -19,7 +19,7 @@ namespace Bw.Entities.Network
         public void ReceiveProperty(ref FastBufferReader reader, INetProperty<TValue> property)
         {
             reader.ReadNetworkSerializable(out TCodec codec);
-            property.Value = codec.Value;
+            property.ApplyFromNetwork(codec.Value);
         }
 
         public void ReceiveSignal(ref FastBufferReader reader, INetSignal<TValue> signal)

@@ -45,21 +45,28 @@ namespace Bw.Entities.Network.Routing
             if (!netObj.TryGetComponent<INetworkLifetimedObject>(out var targetObject))
             {
                 throw new Exception(
-                    $"[MessagesHandler] Network object '{header.NetworkObjectId}' has no {nameof(INetworkLifetimedObject)}. Message ignored.");
+                    $"[MessagesHandler] Network object '{header.NetworkObjectId}:{netObj.name}' has no {nameof(INetworkLifetimedObject)}. Message ignored.");
             }
 
-            var variablesTable = targetObject.NetVariablesTable;
-            if (!variablesTable.PropertiesByIndex.TryGetValue(header.VarId, out var targetEntry))
+            var netEntries = targetObject.NetEntries;
+
+            if (netEntries == null)
+            {
+                Debug.LogWarning($"Net variables table is null for '{header.NetworkObjectId}:{netObj.name}'");
+                return;
+            }
+            
+            if (!netEntries.TryGetEntry(header.VarId, out var targetEntry))
             {
                 throw new Exception(
-                    $"[MessagesHandler] No network property with id '{header.VarId}' on object '{header.NetworkObjectId}'. Message ignored.");
+                    $"[MessagesHandler] No network property with id '{header.VarId}' on object '{header.NetworkObjectId}:{netObj.name}'. Message ignored.");
             }
 
             _currentReader = reader;
             targetEntry.Accept(this); // it goes directly to VisitProperty or VisitSignal down below
         }
 
-        public void VisitProperty<T>(INetProperty<T> property)
+        void INetSyncVisitor.VisitProperty<T>(INetProperty<T> property)
         {
             if (!_messageReceivers.ByType.TryGetValue(typeof(T), out var receiver))
                 return;
@@ -67,7 +74,7 @@ namespace Bw.Entities.Network.Routing
             ((IMessageReceiver<T>)receiver).ReceiveProperty(ref _currentReader, property);
         }
 
-        public void VisitSignal<T>(INetSignal<T> entry)
+        void INetSyncVisitor.VisitSignal<T>(INetSignal<T> entry)
         {
             if (!_messageReceivers.ByType.TryGetValue(typeof(T), out var receiver))
                 return;

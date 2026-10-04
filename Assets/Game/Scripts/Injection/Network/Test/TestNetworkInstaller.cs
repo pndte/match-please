@@ -1,4 +1,5 @@
 ﻿using Bw.Entities.Extensions;
+using Bw.Entities.Network.Variables;
 using Bw.Injection.Network.Variables;
 using Unity.Netcode;
 using UnityEngine;
@@ -17,9 +18,10 @@ namespace Bw.Injection.Network
             Container.BindInstance(gameObject.Lifetime());
             Container.Bind<NetworkObject>().FromInstance(_networkObject).AsSingle();
 
-            NetTablesInstaller.Install(Container);
-
-            Container.CreatePropertyFor<int, TestPropertyScript>(100);
+            var netSchema = new NetEntriesSchemaBuilder();
+            var testPropertyDeclaration = netSchema.DeclareProperty(100, NetworkDelivery.Reliable, NetworkPermissions.Server);
+            Container.BindNetPropertyFor<int, TestPropertyScript>(testPropertyDeclaration);
+            NetTablesInstaller.Install(Container, netSchema.Build());
 
             Container.Bind<TestPropertyScript>().AsSingle();
         }
