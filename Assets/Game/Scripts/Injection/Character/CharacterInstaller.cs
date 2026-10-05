@@ -30,6 +30,8 @@ namespace Bw.Injection
         [SerializeField] private Rigidbody2D _physics;
         [SerializeField] private BoxCollider2D _collider;
         [SerializeField] private MovementConfig _movementConfig;
+        [SerializeField] private Animator _animator;
+        [SerializeField] private SpriteRenderer _sprite;
 
         public override void InstallBindings()
         {
@@ -47,6 +49,8 @@ namespace Bw.Injection
             Container.Bind<Rigidbody2D>().FromInstance(_physics).AsSingle();
             Container.Bind<BoxCollider2D>().FromInstance(_collider).AsSingle();
             Container.Bind<MovementConfig>().FromInstance(_movementConfig).AsSingle();
+            Container.Bind<Animator>().FromInstance(_animator).AsSingle();
+            Container.Bind<SpriteRenderer>().FromInstance(_sprite).AsSingle();
 
             var netSchema = new NetEntriesSchemaBuilder();
             OwnershipServicesInstaller.Install(Container, _runtimeSettings, netSchema);

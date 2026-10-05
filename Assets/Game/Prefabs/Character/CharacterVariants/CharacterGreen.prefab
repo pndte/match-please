@@ -56,18 +56,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharacterGreen
       objectReference: {fileID: 0}
-    - target: {fileID: 8334707615516295052, guid: 28c1d05763d5c724987f5766ef8d8a60, type: 3}
-      propertyPath: m_Color.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8334707615516295052, guid: 28c1d05763d5c724987f5766ef8d8a60, type: 3}
-      propertyPath: m_Color.g
-      value: 0.7735849
-      objectReference: {fileID: 0}
-    - target: {fileID: 8334707615516295052, guid: 28c1d05763d5c724987f5766ef8d8a60, type: 3}
-      propertyPath: m_Color.r
-      value: 0.43380415
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

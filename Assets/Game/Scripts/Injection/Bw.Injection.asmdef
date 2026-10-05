@@ -8,7 +8,9 @@
         "Bw.UseCases",
         "Bw.UseCases.Movement",
         "Bw.UseCases.Movement.Network",
+        "Bw.UseCases.Movement.View",
         "Bw.UseCases.Shooting",
+        "Bw.UseCases.Shooting.View",
         "Bw.UseCases.Spawning",
         "Zenject",
         "Unity.Netcode.Runtime"

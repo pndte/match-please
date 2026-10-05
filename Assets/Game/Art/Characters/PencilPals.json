@@ -1,0 +1,1163 @@
+{
+  "image": "atlas.png",
+  "width": 8192,
+  "height": 4096,
+  "cell": 512,
+  "cols": 16,
+  "rows": 8,
+  "pivot": {
+    "x": 0.5,
+    "y": 0.0625
+  },
+  "fps": {
+    "idle": 10,
+    "walk": 10,
+    "run": 10,
+    "jump": 10,
+    "fall": 10,
+    "land": 10,
+    "hurt": 12
+  },
+  "loop": {
+    "walk": true,
+    "run": true,
+    "fall": true,
+    "jump": false,
+    "land": false,
+    "hurt": false
+  },
+  "speedUnitsPerFrame": {
+    "walk": 10,
+    "run": 19
+  },
+  "cellUnits": 256,
+  "layout": "rows 0-3: col 0 idle, cols 1-8 walk, cols 9-12 jump (crouch, launch, rise, apex), cols 13-14 fall loop, col 15 land; rows 4-7: cols 1-8 run, cols 9-12 hurt; same character order in both halves; facing right, in place (the game moves the root)",
+  "characters": [
+    "sanya",
+    "seva",
+    "matvey",
+    "GOSHA"
+  ],
+  "sprites": [
+    {
+      "name": "sanya_idle_0",
+      "character": "sanya",
+      "animation": "idle",
+      "frame": 0,
+      "x": 0,
+      "y": 0,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_walk_0",
+      "character": "sanya",
+      "animation": "walk",
+      "frame": 0,
+      "x": 512,
+      "y": 0,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_walk_1",
+      "character": "sanya",
+      "animation": "walk",
+      "frame": 1,
+      "x": 1024,
+      "y": 0,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_walk_2",
+      "character": "sanya",
+      "animation": "walk",
+      "frame": 2,
+      "x": 1536,
+      "y": 0,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_walk_3",
+      "character": "sanya",
+      "animation": "walk",
+      "frame": 3,
+      "x": 2048,
+      "y": 0,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_walk_4",
+      "character": "sanya",
+      "animation": "walk",
+      "frame": 4,
+      "x": 2560,
+      "y": 0,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_walk_5",
+      "character": "sanya",
+      "animation": "walk",
+      "frame": 5,
+      "x": 3072,
+      "y": 0,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_walk_6",
+      "character": "sanya",
+      "animation": "walk",
+      "frame": 6,
+      "x": 3584,
+      "y": 0,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_walk_7",
+      "character": "sanya",
+      "animation": "walk",
+      "frame": 7,
+      "x": 4096,
+      "y": 0,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_jump_0",
+      "character": "sanya",
+      "animation": "jump",
+      "frame": 0,
+      "x": 4608,
+      "y": 0,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_jump_1",
+      "character": "sanya",
+      "animation": "jump",
+      "frame": 1,
+      "x": 5120,
+      "y": 0,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_jump_2",
+      "character": "sanya",
+      "animation": "jump",
+      "frame": 2,
+      "x": 5632,
+      "y": 0,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_jump_3",
+      "character": "sanya",
+      "animation": "jump",
+      "frame": 3,
+      "x": 6144,
+      "y": 0,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_fall_0",
+      "character": "sanya",
+      "animation": "fall",
+      "frame": 0,
+      "x": 6656,
+      "y": 0,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_fall_1",
+      "character": "sanya",
+      "animation": "fall",
+      "frame": 1,
+      "x": 7168,
+      "y": 0,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_land_0",
+      "character": "sanya",
+      "animation": "land",
+      "frame": 0,
+      "x": 7680,
+      "y": 0,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_idle_0",
+      "character": "seva",
+      "animation": "idle",
+      "frame": 0,
+      "x": 0,
+      "y": 512,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_walk_0",
+      "character": "seva",
+      "animation": "walk",
+      "frame": 0,
+      "x": 512,
+      "y": 512,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_walk_1",
+      "character": "seva",
+      "animation": "walk",
+      "frame": 1,
+      "x": 1024,
+      "y": 512,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_walk_2",
+      "character": "seva",
+      "animation": "walk",
+      "frame": 2,
+      "x": 1536,
+      "y": 512,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_walk_3",
+      "character": "seva",
+      "animation": "walk",
+      "frame": 3,
+      "x": 2048,
+      "y": 512,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_walk_4",
+      "character": "seva",
+      "animation": "walk",
+      "frame": 4,
+      "x": 2560,
+      "y": 512,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_walk_5",
+      "character": "seva",
+      "animation": "walk",
+      "frame": 5,
+      "x": 3072,
+      "y": 512,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_walk_6",
+      "character": "seva",
+      "animation": "walk",
+      "frame": 6,
+      "x": 3584,
+      "y": 512,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_walk_7",
+      "character": "seva",
+      "animation": "walk",
+      "frame": 7,
+      "x": 4096,
+      "y": 512,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_jump_0",
+      "character": "seva",
+      "animation": "jump",
+      "frame": 0,
+      "x": 4608,
+      "y": 512,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_jump_1",
+      "character": "seva",
+      "animation": "jump",
+      "frame": 1,
+      "x": 5120,
+      "y": 512,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_jump_2",
+      "character": "seva",
+      "animation": "jump",
+      "frame": 2,
+      "x": 5632,
+      "y": 512,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_jump_3",
+      "character": "seva",
+      "animation": "jump",
+      "frame": 3,
+      "x": 6144,
+      "y": 512,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_fall_0",
+      "character": "seva",
+      "animation": "fall",
+      "frame": 0,
+      "x": 6656,
+      "y": 512,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_fall_1",
+      "character": "seva",
+      "animation": "fall",
+      "frame": 1,
+      "x": 7168,
+      "y": 512,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_land_0",
+      "character": "seva",
+      "animation": "land",
+      "frame": 0,
+      "x": 7680,
+      "y": 512,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_idle_0",
+      "character": "matvey",
+      "animation": "idle",
+      "frame": 0,
+      "x": 0,
+      "y": 1024,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_walk_0",
+      "character": "matvey",
+      "animation": "walk",
+      "frame": 0,
+      "x": 512,
+      "y": 1024,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_walk_1",
+      "character": "matvey",
+      "animation": "walk",
+      "frame": 1,
+      "x": 1024,
+      "y": 1024,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_walk_2",
+      "character": "matvey",
+      "animation": "walk",
+      "frame": 2,
+      "x": 1536,
+      "y": 1024,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_walk_3",
+      "character": "matvey",
+      "animation": "walk",
+      "frame": 3,
+      "x": 2048,
+      "y": 1024,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_walk_4",
+      "character": "matvey",
+      "animation": "walk",
+      "frame": 4,
+      "x": 2560,
+      "y": 1024,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_walk_5",
+      "character": "matvey",
+      "animation": "walk",
+      "frame": 5,
+      "x": 3072,
+      "y": 1024,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_walk_6",
+      "character": "matvey",
+      "animation": "walk",
+      "frame": 6,
+      "x": 3584,
+      "y": 1024,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_walk_7",
+      "character": "matvey",
+      "animation": "walk",
+      "frame": 7,
+      "x": 4096,
+      "y": 1024,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_jump_0",
+      "character": "matvey",
+      "animation": "jump",
+      "frame": 0,
+      "x": 4608,
+      "y": 1024,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_jump_1",
+      "character": "matvey",
+      "animation": "jump",
+      "frame": 1,
+      "x": 5120,
+      "y": 1024,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_jump_2",
+      "character": "matvey",
+      "animation": "jump",
+      "frame": 2,
+      "x": 5632,
+      "y": 1024,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_jump_3",
+      "character": "matvey",
+      "animation": "jump",
+      "frame": 3,
+      "x": 6144,
+      "y": 1024,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_fall_0",
+      "character": "matvey",
+      "animation": "fall",
+      "frame": 0,
+      "x": 6656,
+      "y": 1024,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_fall_1",
+      "character": "matvey",
+      "animation": "fall",
+      "frame": 1,
+      "x": 7168,
+      "y": 1024,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_land_0",
+      "character": "matvey",
+      "animation": "land",
+      "frame": 0,
+      "x": 7680,
+      "y": 1024,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_idle_0",
+      "character": "GOSHA",
+      "animation": "idle",
+      "frame": 0,
+      "x": 0,
+      "y": 1536,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_walk_0",
+      "character": "GOSHA",
+      "animation": "walk",
+      "frame": 0,
+      "x": 512,
+      "y": 1536,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_walk_1",
+      "character": "GOSHA",
+      "animation": "walk",
+      "frame": 1,
+      "x": 1024,
+      "y": 1536,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_walk_2",
+      "character": "GOSHA",
+      "animation": "walk",
+      "frame": 2,
+      "x": 1536,
+      "y": 1536,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_walk_3",
+      "character": "GOSHA",
+      "animation": "walk",
+      "frame": 3,
+      "x": 2048,
+      "y": 1536,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_walk_4",
+      "character": "GOSHA",
+      "animation": "walk",
+      "frame": 4,
+      "x": 2560,
+      "y": 1536,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_walk_5",
+      "character": "GOSHA",
+      "animation": "walk",
+      "frame": 5,
+      "x": 3072,
+      "y": 1536,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_walk_6",
+      "character": "GOSHA",
+      "animation": "walk",
+      "frame": 6,
+      "x": 3584,
+      "y": 1536,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_walk_7",
+      "character": "GOSHA",
+      "animation": "walk",
+      "frame": 7,
+      "x": 4096,
+      "y": 1536,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_jump_0",
+      "character": "GOSHA",
+      "animation": "jump",
+      "frame": 0,
+      "x": 4608,
+      "y": 1536,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_jump_1",
+      "character": "GOSHA",
+      "animation": "jump",
+      "frame": 1,
+      "x": 5120,
+      "y": 1536,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_jump_2",
+      "character": "GOSHA",
+      "animation": "jump",
+      "frame": 2,
+      "x": 5632,
+      "y": 1536,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_jump_3",
+      "character": "GOSHA",
+      "animation": "jump",
+      "frame": 3,
+      "x": 6144,
+      "y": 1536,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_fall_0",
+      "character": "GOSHA",
+      "animation": "fall",
+      "frame": 0,
+      "x": 6656,
+      "y": 1536,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_fall_1",
+      "character": "GOSHA",
+      "animation": "fall",
+      "frame": 1,
+      "x": 7168,
+      "y": 1536,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_land_0",
+      "character": "GOSHA",
+      "animation": "land",
+      "frame": 0,
+      "x": 7680,
+      "y": 1536,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_run_0",
+      "character": "sanya",
+      "animation": "run",
+      "frame": 0,
+      "x": 512,
+      "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_run_1",
+      "character": "sanya",
+      "animation": "run",
+      "frame": 1,
+      "x": 1024,
+      "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_run_2",
+      "character": "sanya",
+      "animation": "run",
+      "frame": 2,
+      "x": 1536,
+      "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_run_3",
+      "character": "sanya",
+      "animation": "run",
+      "frame": 3,
+      "x": 2048,
+      "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_run_4",
+      "character": "sanya",
+      "animation": "run",
+      "frame": 4,
+      "x": 2560,
+      "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_run_5",
+      "character": "sanya",
+      "animation": "run",
+      "frame": 5,
+      "x": 3072,
+      "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_run_6",
+      "character": "sanya",
+      "animation": "run",
+      "frame": 6,
+      "x": 3584,
+      "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_run_7",
+      "character": "sanya",
+      "animation": "run",
+      "frame": 7,
+      "x": 4096,
+      "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_hurt_0",
+      "character": "sanya",
+      "animation": "hurt",
+      "frame": 0,
+      "x": 4608,
+      "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_hurt_1",
+      "character": "sanya",
+      "animation": "hurt",
+      "frame": 1,
+      "x": 5120,
+      "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_hurt_2",
+      "character": "sanya",
+      "animation": "hurt",
+      "frame": 2,
+      "x": 5632,
+      "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_hurt_3",
+      "character": "sanya",
+      "animation": "hurt",
+      "frame": 3,
+      "x": 6144,
+      "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_run_0",
+      "character": "seva",
+      "animation": "run",
+      "frame": 0,
+      "x": 512,
+      "y": 2560,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_run_1",
+      "character": "seva",
+      "animation": "run",
+      "frame": 1,
+      "x": 1024,
+      "y": 2560,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_run_2",
+      "character": "seva",
+      "animation": "run",
+      "frame": 2,
+      "x": 1536,
+      "y": 2560,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_run_3",
+      "character": "seva",
+      "animation": "run",
+      "frame": 3,
+      "x": 2048,
+      "y": 2560,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_run_4",
+      "character": "seva",
+      "animation": "run",
+      "frame": 4,
+      "x": 2560,
+      "y": 2560,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_run_5",
+      "character": "seva",
+      "animation": "run",
+      "frame": 5,
+      "x": 3072,
+      "y": 2560,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_run_6",
+      "character": "seva",
+      "animation": "run",
+      "frame": 6,
+      "x": 3584,
+      "y": 2560,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_run_7",
+      "character": "seva",
+      "animation": "run",
+      "frame": 7,
+      "x": 4096,
+      "y": 2560,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_hurt_0",
+      "character": "seva",
+      "animation": "hurt",
+      "frame": 0,
+      "x": 4608,
+      "y": 2560,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_hurt_1",
+      "character": "seva",
+      "animation": "hurt",
+      "frame": 1,
+      "x": 5120,
+      "y": 2560,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_hurt_2",
+      "character": "seva",
+      "animation": "hurt",
+      "frame": 2,
+      "x": 5632,
+      "y": 2560,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_hurt_3",
+      "character": "seva",
+      "animation": "hurt",
+      "frame": 3,
+      "x": 6144,
+      "y": 2560,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_run_0",
+      "character": "matvey",
+      "animation": "run",
+      "frame": 0,
+      "x": 512,
+      "y": 3072,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_run_1",
+      "character": "matvey",
+      "animation": "run",
+      "frame": 1,
+      "x": 1024,
+      "y": 3072,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_run_2",
+      "character": "matvey",
+      "animation": "run",
+      "frame": 2,
+      "x": 1536,
+      "y": 3072,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_run_3",
+      "character": "matvey",
+      "animation": "run",
+      "frame": 3,
+      "x": 2048,
+      "y": 3072,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_run_4",
+      "character": "matvey",
+      "animation": "run",
+      "frame": 4,
+      "x": 2560,
+      "y": 3072,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_run_5",
+      "character": "matvey",
+      "animation": "run",
+      "frame": 5,
+      "x": 3072,
+      "y": 3072,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_run_6",
+      "character": "matvey",
+      "animation": "run",
+      "frame": 6,
+      "x": 3584,
+      "y": 3072,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_run_7",
+      "character": "matvey",
+      "animation": "run",
+      "frame": 7,
+      "x": 4096,
+      "y": 3072,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_hurt_0",
+      "character": "matvey",
+      "animation": "hurt",
+      "frame": 0,
+      "x": 4608,
+      "y": 3072,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_hurt_1",
+      "character": "matvey",
+      "animation": "hurt",
+      "frame": 1,
+      "x": 5120,
+      "y": 3072,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_hurt_2",
+      "character": "matvey",
+      "animation": "hurt",
+      "frame": 2,
+      "x": 5632,
+      "y": 3072,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_hurt_3",
+      "character": "matvey",
+      "animation": "hurt",
+      "frame": 3,
+      "x": 6144,
+      "y": 3072,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_run_0",
+      "character": "GOSHA",
+      "animation": "run",
+      "frame": 0,
+      "x": 512,
+      "y": 3584,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_run_1",
+      "character": "GOSHA",
+      "animation": "run",
+      "frame": 1,
+      "x": 1024,
+      "y": 3584,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_run_2",
+      "character": "GOSHA",
+      "animation": "run",
+      "frame": 2,
+      "x": 1536,
+      "y": 3584,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_run_3",
+      "character": "GOSHA",
+      "animation": "run",
+      "frame": 3,
+      "x": 2048,
+      "y": 3584,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_run_4",
+      "character": "GOSHA",
+      "animation": "run",
+      "frame": 4,
+      "x": 2560,
+      "y": 3584,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_run_5",
+      "character": "GOSHA",
+      "animation": "run",
+      "frame": 5,
+      "x": 3072,
+      "y": 3584,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_run_6",
+      "character": "GOSHA",
+      "animation": "run",
+      "frame": 6,
+      "x": 3584,
+      "y": 3584,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_run_7",
+      "character": "GOSHA",
+      "animation": "run",
+      "frame": 7,
+      "x": 4096,
+      "y": 3584,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_hurt_0",
+      "character": "GOSHA",
+      "animation": "hurt",
+      "frame": 0,
+      "x": 4608,
+      "y": 3584,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_hurt_1",
+      "character": "GOSHA",
+      "animation": "hurt",
+      "frame": 1,
+      "x": 5120,
+      "y": 3584,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_hurt_2",
+      "character": "GOSHA",
+      "animation": "hurt",
+      "frame": 2,
+      "x": 5632,
+      "y": 3584,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHA_hurt_3",
+      "character": "GOSHA",
+      "animation": "hurt",
+      "frame": 3,
+      "x": 6144,
+      "y": 3584,
+      "w": 512,
+      "h": 512
+    }
+  ]
+}

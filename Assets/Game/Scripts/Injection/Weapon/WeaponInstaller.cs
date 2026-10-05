@@ -9,6 +9,7 @@ using Bw.Injection.Network;
 using Bw.Injection.Network.Variables;
 using Bw.Injection.Ownership;
 using Bw.UseCases.Shooting;
+using Bw.UseCases.Shooting.View;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network;
@@ -26,6 +27,7 @@ namespace Bw.Injection.Weapon
         [Inject] private IRuntimeSettings _runtimeSettings;
 
         [Header("Graphics")] [SerializeField] private LineRenderer _trailPrefab;
+        [SerializeField] private SpriteRenderer _sprite;
 
         [Header("WeaponMuzzle")] [SerializeField] private Transform _muzzleTransform;
 
@@ -60,6 +62,7 @@ namespace Bw.Injection.Weapon
 
             BindCommonWeaponLogic();
             BindVfxRenderer();
+            BindSprite();
             BindRequestHandlers();
 
             BindSpecialWeaponLogic();
@@ -134,6 +137,11 @@ namespace Bw.Injection.Weapon
         private void BindVfxRenderer()
         {
             Container.BindInterfacesTo<LineRendererVfxPlayer>().AsSingle().WithArguments(_trailPrefab);
+        }
+
+        private void BindSprite()
+        {
+            Container.Bind<WeaponSpriteFlip>().AsSingle().WithArguments(transform, _sprite).NonLazy();
         }
 
         private void BindConfigs()

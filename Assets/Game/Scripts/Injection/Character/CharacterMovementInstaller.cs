@@ -1,7 +1,9 @@
 using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
+using Bw.Entities.Simulation;
 using Bw.Injection.Network;
 using Bw.UseCases.Movement;
+using Bw.UseCases.Movement.View.Animation;
 using Bw.UseCases.Movement.Network;
 using Bw.UseCases.Movement.Physics;
 using Zenject;
@@ -27,7 +29,12 @@ namespace Bw.Injection
             Container.BindInterfacesTo<CharacterBody>().AsSingle();
             Container.BindInterfacesTo<PlatformerMotor>().AsSingle();
             Container.BindInterfacesTo<CharacterMovement>().AsSingle().NonLazy();
-            Container.BindInterfacesTo<MovementStateView>().AsSingle();
+            Container.BindInterfacesTo<SpriteMovementAnimator>().AsSingle();
+            Container.Bind<IStateView<MovementState>>()
+                .FromMethod(context => new CompositeStateView<MovementState>(
+                    context.Container.Instantiate<MovementStateView>(),
+                    context.Container.Instantiate<MovementAnimationView>()))
+                .AsSingle();
             Container.BindInterfacesTo<MovementInputSampler>().AsSingle();
             Container.BindInterfacesTo<MovementInputPolicy>().AsSingle();
 
