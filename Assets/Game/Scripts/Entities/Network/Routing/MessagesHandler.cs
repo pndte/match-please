@@ -52,6 +52,13 @@ namespace Bw.Entities.Network.Routing
                 ?? throw new InvalidOperationException(
                     $"[MessagesHandler] Network object '{header.NetworkObjectId.ToString()}:{netObj.name}' has no net entries, it was instantiated without its DI context.");
 
+            if (header.VarId == NetVariablesTableBase.SchemaHashVarId)
+            {
+                reader.ReadNetworkSerializable(out NetSchemaHash schemaHash);
+                netEntries.CheckSchemaOf(senderClientId, schemaHash.Value);
+                return;
+            }
+
             var targetEntry = netEntries.EntryWritableBy(senderClientId, header.VarId);
 
             _currentReader = reader;

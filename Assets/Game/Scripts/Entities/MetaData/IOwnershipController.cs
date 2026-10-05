@@ -6,6 +6,6 @@ namespace Bw.Entities
     public interface IOwnershipController
     {
         public void AddOwner(Lifetime lifetime, IPlayer player);
-        public IReadonlyViewableList<IPlayer> Owners { get; }
+        public IReadonlyViewableList<IPlayer> Owners { get; } //TODO: ViewableHashset
     }
 }

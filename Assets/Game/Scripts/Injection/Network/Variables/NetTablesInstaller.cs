@@ -1,33 +1,35 @@
+using System;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
 using Zenject;
 
 namespace Bw.Injection.Network.Variables
 {
-    public class NetTablesInstaller : Installer<NetEntriesSchema, NetTablesInstaller>
+    public class NetTablesInstaller : Installer<IRuntimeSettings, NetEntriesSchema, NetTablesInstaller>
     {
+        private readonly IRuntimeSettings _runtimeSettings;
         private readonly NetEntriesSchema _schema;
 
-        public NetTablesInstaller(NetEntriesSchema schema)
+        public NetTablesInstaller(IRuntimeSettings runtimeSettings, NetEntriesSchema schema)
         {
+            _runtimeSettings = runtimeSettings;
             _schema = schema;
         }
 
         public override void InstallBindings()
         {
-            Container.Bind<INetEntries>()
-                .FromMethod(CreateNetVariablesTable)
-                .AsSingle()
-                .NonLazy();
-        }
-
-        private NetVariablesTableBase CreateNetVariablesTable(InjectContext context)
-        {
-            var runtimeSettings = context.Container.Resolve<IRuntimeSettings>();
-            var arguments = new object[] { _schema };
-            return runtimeSettings.CurrentPeerType == PeerType.Server
-                ? context.Container.Instantiate<NetVariablesTableServer>(arguments)
-                : context.Container.Instantiate<NetVariablesTableClient>(arguments);
+            switch (_runtimeSettings.CurrentPeerType)
+            {
+                case PeerType.Server:
+                    Container.Bind<INetEntries>().To<NetVariablesTableServer>().AsSingle().WithArguments(_schema).NonLazy();
+                    break;
+                case PeerType.Client:
+                    Container.Bind<INetEntries>().To<NetVariablesTableClient>().AsSingle().WithArguments(_schema).NonLazy();
+                    Container.Bind<NetSchemaHashSender>().AsSingle().WithArguments(_schema).NonLazy();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

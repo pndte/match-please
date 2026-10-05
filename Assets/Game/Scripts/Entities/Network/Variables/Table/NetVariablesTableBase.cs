@@ -9,13 +9,15 @@ namespace Bw.Entities.Network.Variables
 {
     public abstract class NetVariablesTableBase : INetEntries, INetSyncVisitor //TODO: too hard to understand
     {
+        internal const ushort SchemaHashVarId = 0;
+
         protected readonly NetworkObject NetworkObject;
 
         private readonly ViewableBiMap<ushort, INetSyncEntry> _entriesByVarId;
         private readonly Dictionary<NetEntryDeclaration, INetSyncEntry> _entriesByDeclaration = new();
-        private readonly Dictionary<ushort, INetReceiveGuard> _receiveGuardsByVarId = new();
         private readonly List<INetSyncEntry> _entries = new();
         private readonly HashSet<INetSyncEntry> _replicating = new();
+        private readonly uint _schemaHash;
 
         protected NetRegistryInfo CurrentRegistration { get; private set; }
 
@@ -23,20 +25,15 @@ namespace Bw.Entities.Network.Variables
             Lifetime lifetime,
             NetworkObject networkObject, //TODO: заменить на свою абстракцию
             NetEntriesSchema schema,
-            INetSendGuardFactory sendGuards,
-            INetReceiveGuardFactory receiveGuards)
+            INetSendGuardFactory sendGuards)
         {
             NetworkObject = networkObject;
+            _schemaHash = schema.Hash;
             _entriesByVarId = new ViewableBiMap<ushort, INetSyncEntry>(lifetime);
 
-            ushort varId = 1;
+            ushort varId = SchemaHashVarId + 1;
             foreach (var declaration in schema.Declarations)
-                AddEntry(
-                    lifetime,
-                    varId++,
-                    declaration,
-                    sendGuards.Create(declaration.Permissions),
-                    receiveGuards.Create(declaration.Permissions));
+                AddEntry(lifetime, varId++, declaration, sendGuards.Create(declaration.Permissions));
         }
 
         public INetSignal<T> Get<T>(NetSignalDeclaration<T> declaration) =>
@@ -51,9 +48,19 @@ namespace Bw.Entities.Network.Variables
                 throw new InvalidOperationException(
                     $"No net entry with id {varId.ToString()} on object {NetworkObject.NetworkObjectId.ToString()}:{NetworkObject.name}, sender: client {senderClientId.ToString()}.");
 
-            _receiveGuardsByVarId[varId].Check(senderClientId);
+            CheckWriter(senderClientId, entry);
             return entry;
         }
+
+        void INetEntries.CheckSchemaOf(ulong senderClientId, uint schemaHash)
+        {
+            if (schemaHash != _schemaHash) //TODO: сервер должен отключать клиента с другой схемой (играть он всё равно не сможет)
+                throw new InvalidOperationException(
+                    $"Net entries schema of object {NetworkObject.NetworkObjectId.ToString()}:{NetworkObject.name} differs between this peer and sender {senderClientId.ToString()}: " +
+                    $"{schemaHash.ToString("X8")} there, {_schemaHash.ToString("X8")} here. The peers declare other entries or in another order.");
+        }
+
+        private protected abstract void CheckWriter(ulong senderClientId, INetSyncEntry entry);
 
         private protected void VisitReplicating(INetSyncVisitor visitor)
         {
@@ -65,19 +72,13 @@ namespace Bw.Entities.Network.Variables
             }
         }
 
-        private void AddEntry(
-            Lifetime lifetime,
-            ushort varId,
-            NetEntryDeclaration declaration,
-            INetSendGuard sendGuard,
-            INetReceiveGuard receiveGuard)
+        private void AddEntry(Lifetime lifetime, ushort varId, NetEntryDeclaration declaration, INetSendGuard sendGuard)
         {
             var entry = declaration.Create(sendGuard);
             var info = new NetRegistryInfo(entry, declaration.DeliveryType, declaration.Permissions);
 
             _entriesByVarId.Add(varId, entry);
             _entriesByDeclaration.Add(declaration, entry);
-            _receiveGuardsByVarId.Add(varId, receiveGuard);
             _entries.Add(entry);
             sendGuard.WhenOpen(lifetime, openLifetime =>
             {
@@ -87,7 +88,7 @@ namespace Bw.Entities.Network.Variables
             });
         }
 
-        private INetSyncEntry EntryFor(NetEntryDeclaration declaration) =>
+        private protected INetSyncEntry EntryFor(NetEntryDeclaration declaration) =>
             _entriesByDeclaration.TryGetValue(declaration, out var entry)
                 ? entry
                 : throw new InvalidOperationException(

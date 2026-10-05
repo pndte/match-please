@@ -15,7 +15,6 @@ using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network;
 using Bw.UseCases.Shooting.Weapon.Network.Requests;
 using JetBrains.Collections.Viewable;
-using JetBrains.Core;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
@@ -58,7 +57,7 @@ namespace Bw.Injection.Weapon
 
             BindAmmo(netSchema);
             BindWeaponRequests(netSchema);
-            NetTablesInstaller.Install(Container, netSchema.Build());
+            NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
             BindCommonWeaponLogic();
             BindVfxRenderer();

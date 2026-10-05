@@ -58,7 +58,7 @@ namespace Bw.Injection
             CharacterMovementInstaller.Install(Container, _runtimeSettings, netSchema);
             var healthDeclaration = netSchema.DeclareProperty(_healthConfig.Max, NetworkDelivery.Reliable, NetworkPermissions.Server);
             Container.BindNetPropertyFor<float, Health>(healthDeclaration);
-            NetTablesInstaller.Install(Container, netSchema.Build());
+            NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
             switch (_runtimeSettings.CurrentPeerType)
             {

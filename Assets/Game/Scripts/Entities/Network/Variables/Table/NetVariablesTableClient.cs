@@ -13,12 +13,7 @@ namespace Bw.Entities.Network.Variables
             NetEntriesSchema schema,
             IClientSendersCollection messageSenders,
             IOwnership ownership)
-            : base(
-                lifetime,
-                networkObject,
-                schema,
-                new NetSendGuardFactoryClient(ownership, networkObject),
-                new NetReceiveGuardFactoryClient())
+            : base(lifetime, networkObject, schema, new NetSendGuardFactoryClient(ownership, networkObject))
         {
             _messageSenders = messageSenders;
         }
@@ -33,6 +28,10 @@ namespace Bw.Entities.Network.Variables
         {
             var sender = _messageSenders.Get<T>();
             sender.SendToServer(HeaderFor(entry), entry.PendingPayload, CurrentRegistration.DeliveryType);
+        }
+
+        private protected override void CheckWriter(ulong senderClientId, INetSyncEntry entry)
+        { //TODO: нарушенный принцип Лисков
         }
     }
 }
