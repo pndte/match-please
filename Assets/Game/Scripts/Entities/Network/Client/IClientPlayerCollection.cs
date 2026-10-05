@@ -1,7 +1,7 @@
 ﻿using Bw.Entities.Infrastructure;
-using Bw.Entities.Network;
+using Bw.Entities.Players;
 
-namespace Bw.UseCases.Players
+namespace Bw.Entities.Network
 {
     public interface IClientPlayerCollection
     {

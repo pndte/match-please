@@ -4,7 +4,7 @@ namespace Bw.Entities.Network
 {
     public interface IClient
     {
-        public ulong Id { get; }
+        public ulong Id { get; } //TODO: id клиента должна знать IClientCollection (обратный поиск), а не сам клиент: роутеру и спавнеру брать его оттуда
         public IReadonlyProperty<ClientConnectionState> ConnectionState { get; }
         public void ChangeState(ClientConnectionState newState); //TODO: убрать, временно
     }

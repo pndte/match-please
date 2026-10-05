@@ -1,6 +1,7 @@
 using Bw.Entities.Network;
+using Bw.Entities.Players;
 using Bw.UseCases.Clients.Network;
-using Bw.UseCases.Players;
+using Bw.UseCases.Players.Network;
 using Bw.UseCases.Spawning;
 using Bw.UseCases.Spawning.Network;
 using Setup;
@@ -24,7 +25,8 @@ namespace Bw.Injection
         {
             Container.BindInterfacesTo<NetworkClientCollection>().AsSingle()
                 .WithArguments(NetworkManager.Singleton).NonLazy();
-            Container.BindInterfacesTo<UniversalPlayerCollection>().AsSingle();
+            Container.Bind<IPlayerCollection>().To<PlayerCollection>().AsSingle();
+            Container.BindInterfacesTo<NetworkPlayerCollection>().AsSingle();
 
             if (_runtimeSettings.CurrentPeerType != PeerType.Server)
                 return;

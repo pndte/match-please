@@ -15,6 +15,6 @@ namespace Bw.UseCases.Character
     {
         public IReadonlyHealth Health { get; }
         public IReadonlyProperty<CharacterState> State { get; }
-        public IReadonlyProperty<Lifetime> Lifetime { get; }
+        public IReadonlyProperty<Lifetime> Lifetime { get; } //TODO: по сути дублирует State.Alive, ещё и неверно, надо думать как исправлять
     }
 }

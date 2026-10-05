@@ -1,5 +1,4 @@
-﻿using Bw.Entities;
-using Bw.Entities.Network;
+﻿using Bw.Entities.Players;
 using Bw.UseCases.Character;
 using JetBrains.Collections.Viewable;
 
@@ -7,11 +6,11 @@ namespace Bw.UseCases
 {
     public interface ICharacterRegistry
     {
-        public IViewableMap<ICharacter, IClient> ClientByCharacter { get; } // TODO: refactor, клиент не может напрямую владеть персонажем
+        public IViewableMap<ICharacter, IPlayer> PlayerByCharacter { get; }
     }
 
     public class CharacterRegistry : ICharacterRegistry
     {
-        public IViewableMap<ICharacter, IClient> ClientByCharacter { get; } = new ViewableMap<ICharacter, IClient>();
+        public IViewableMap<ICharacter, IPlayer> PlayerByCharacter { get; } = new ViewableMap<ICharacter, IPlayer>();
     }
 }

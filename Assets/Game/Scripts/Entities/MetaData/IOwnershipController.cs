@@ -1,8 +1,7 @@
-﻿using Bw.Entities;
-using Bw.UseCases.Players;
+﻿using Bw.Entities.Players;
 using JetBrains.Lifetimes;
 
-namespace Bw.UseCases
+namespace Bw.Entities
 {
     public interface IOwnershipController
     {

@@ -2,14 +2,13 @@ using System;
 using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
+using Bw.Entities.Players;
 using Bw.UseCases.Character;
 using Bw.UseCases.Character.Extensions;
 using Bw.UseCases.Character.Network;
-using Bw.UseCases.Clients;
-using Bw.UseCases.Clients.Extensions;
-using Bw.UseCases.Players;
 using Bw.UseCases.Shooting.Weapon;
 using Cysharp.Threading.Tasks;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
 using UnityEngine;
@@ -39,7 +38,7 @@ namespace Bw.UseCases.Spawning.Network
 
         private NetworkCharactersSpawner(
             Lifetime lifetime,
-            IClientCollection clientCollection,
+            IPlayerCollection players,
             ICharacterRegistry characterRegistry,
             IGameObjectByCharacterCollection gameObjectByCharacterCollection,
             IClientPlayerCollection clientPlayerCollection,
@@ -52,12 +51,16 @@ namespace Bw.UseCases.Spawning.Network
             _container = container;
             _data = data;
 
-            clientCollection.WhenNewConnected(lifetime, (connectedLifetime, client) =>
-                SpawnCharacterFor(connectedLifetime, client));
+            players.View(lifetime, (playerLifetime, player) =>
+                SpawnCharacterFor(playerLifetime, player));
         }
 
-        public ICharacter SpawnCharacterFor(Lifetime lifetime, IClient client)
+        public ICharacter SpawnCharacterFor(Lifetime lifetime, IPlayer player)
         {
+            if (!_clientPlayerCollection.ByClient.TryGetLeft(player, out var client)) //TODO: боты — спавнить персонажа и без клиента
+                throw new InvalidOperationException(
+                    "The player has no client: the network spawner spawns characters only for network players.");
+
             var spawnPosition = GetSpawnPosition();
             var spawnRotation = Quaternion.identity;
 
@@ -72,11 +75,7 @@ namespace Bw.UseCases.Spawning.Network
 
             _gameObjectByCharacterCollection.AddLifetimed(
                 characterLifetime, character, characterObject.gameObject);
-            _characterRegistry.ClientByCharacter.AddLifetimed(characterLifetime, character, client);
-
-            if (!_clientPlayerCollection.ByClient.TryGetValue(client, out var player))
-                throw new InvalidOperationException(
-                    $"No player registered for client {client.Id} before character setup.");
+            _characterRegistry.PlayerByCharacter.AddLifetimed(characterLifetime, character, player);
 
             var characterContext = RequireComponent<GameObjectContext>(characterObject.gameObject);
             var characterControlledBy = characterContext.Container.Resolve<IControlledBy>();
@@ -84,13 +83,14 @@ namespace Bw.UseCases.Spawning.Network
             characterOwnership.AddOwner(characterLifetime, player);
             characterControlledBy.Set(characterLifetime, player);
 
-            SpawnAndAttachWeapon(client, characterHolder, characterLifetime, characterObject.transform.position, spawnRotation).Forget();
+            SpawnAndAttachWeapon(player, client, characterHolder, characterLifetime, characterObject.transform.position, spawnRotation).Forget();
 
             Debug.Log($"[PlayerSpawner] Player character spawned for client {client.Id} at {spawnPosition}");
             return character;
         }
 
         private async UniTaskVoid SpawnAndAttachWeapon(
+            IPlayer player,
             IClient client,
             CharacterHolder characterHolder,
             Lifetime characterLifetime,
@@ -107,10 +107,6 @@ namespace Bw.UseCases.Spawning.Network
             weaponObject.SpawnWithOwnership(client.Id, destroyWithScene: true);
 
             var weaponHolder = RequireComponent<WeaponHolder>(weaponObject.gameObject);
-
-            if (!_clientPlayerCollection.ByClient.TryGetValue(client, out var player))
-                throw new InvalidOperationException(
-                    $"No player registered for client {client.Id} before weapon setup.");
 
             await UniTask.Delay(TimeSpan.FromSeconds(3));//TODO: костыль, фиксить
             characterHolder.Value.State.WhenAlive(characterLifetime, aliveLifetime =>

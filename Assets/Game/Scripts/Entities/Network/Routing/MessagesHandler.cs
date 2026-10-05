@@ -48,19 +48,11 @@ namespace Bw.Entities.Network.Routing
                     $"[MessagesHandler] Network object '{header.NetworkObjectId.ToString()}:{netObj.name}' has no {nameof(INetworkLifetimedObject)}. Message ignored.");
             }
 
-            var netEntries = targetObject.NetEntries;
+            var netEntries = targetObject.NetEntries
+                ?? throw new InvalidOperationException(
+                    $"[MessagesHandler] Network object '{header.NetworkObjectId.ToString()}:{netObj.name}' has no net entries, it was instantiated without its DI context.");
 
-            if (netEntries == null)
-            {
-                Debug.LogWarning($"Net variables table is null for '{header.NetworkObjectId.ToString()}:{netObj.name}'");
-                return;
-            }
-            
-            if (!netEntries.TryGetEntry(header.VarId, out var targetEntry))
-            {
-                throw new Exception(
-                    $"[MessagesHandler] No network property with id '{header.VarId.ToString()}' on object '{header.NetworkObjectId.ToString()}:{netObj.name}'. Message ignored.");
-            }
+            var targetEntry = netEntries.EntryWritableBy(senderClientId, header.VarId);
 
             _currentReader = reader;
             targetEntry.Accept(this); // it goes directly to VisitProperty or VisitSignal down below
@@ -68,7 +60,7 @@ namespace Bw.Entities.Network.Routing
 
         void INetSyncVisitor.VisitProperty<T>(INetProperty<T> property)
         {
-            if (!_messageReceivers.ByType.TryGetValue(typeof(T), out var receiver))
+            if (!_messageReceivers.ByType.TryGetValue(typeof(T), out var receiver)) //TODO: нет получателя для типа — тихий выход, кандидат на исключение
                 return;
 
             ((IMessageReceiver<T>)receiver).ReceiveProperty(ref _currentReader, property);
@@ -76,7 +68,7 @@ namespace Bw.Entities.Network.Routing
 
         void INetSyncVisitor.VisitSignal<T>(INetSignal<T> entry)
         {
-            if (!_messageReceivers.ByType.TryGetValue(typeof(T), out var receiver))
+            if (!_messageReceivers.ByType.TryGetValue(typeof(T), out var receiver)) //TODO: нет получателя для типа — тихий выход, кандидат на исключение
                 return;
 
             ((IMessageReceiver<T>)receiver).ReceiveSignal(ref _currentReader, entry);

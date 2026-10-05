@@ -48,7 +48,7 @@ namespace Bw.Entities.Network.Variables
             permissions switch
             {
                 NetworkPermissions.Server => new AllowedSendGuard(canTargetClients: true),
-                NetworkPermissions.Owner => new WhileMineSendGuard(new AllowedSendGuard(canTargetClients: true), _ownership, _networkObject),
+                NetworkPermissions.Owner => new WhileMineSendGuard(new AllowedSendGuard(canTargetClients: true), _ownership, _networkObject), //TODO: Mine на сервере не выставляется — Owner-записи сервер отправить не может
                 NetworkPermissions.Client => new ForbiddenSendGuard("Entry with Client permissions is sent only by its owning client, the server can't send it."),
                 NetworkPermissions.Everyone => new AllowedSendGuard(canTargetClients: true),
                 _ => throw new ArgumentOutOfRangeException(nameof(permissions), $"Unknown NetworkPermissions value {((byte)permissions).ToString()}.")

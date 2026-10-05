@@ -1,8 +1,7 @@
-﻿using Bw.Entities;
-using Bw.UseCases.Players;
+﻿using Bw.Entities.Players;
 using JetBrains.Lifetimes;
 
-namespace Bw.UseCases
+namespace Bw.Entities
 {
     public interface IControlledBy : IReadonlyControlledBy //TODO: переименовать по принципу с Ownership и убрать наследование от IControlledBy
                                                            //который должен стать IControlledBy.

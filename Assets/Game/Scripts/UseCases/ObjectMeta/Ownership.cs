@@ -1,7 +1,8 @@
 ﻿using Bw.Entities;
 using Bw.Entities.Extensions;
+using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
-using Bw.UseCases.Players;
+using Bw.Entities.Players;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
@@ -47,7 +48,7 @@ namespace Bw.UseCases
             {
                 ownershipController.Owners.View(lifetime, (ownerLifetime, ownerPlayer) =>
                 {
-                    var client = clientPlayers.ByClient.Inverse[ownerPlayer];
+                    var client = clientPlayers.ByClient.Inverse[ownerPlayer]; //TODO: у бота клиента нет — когда появятся боты, игроков без клиента здесь пропускать
                     mineSignal.FireTo(client, true);
 
                     ownerLifetime.OnTermination(() =>

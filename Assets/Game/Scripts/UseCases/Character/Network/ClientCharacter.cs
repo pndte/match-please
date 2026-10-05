@@ -8,7 +8,7 @@ namespace Bw.UseCases.Character.Network
     public class ClientCharacter : IReadonlyCharacter
     {
         public IReadonlyHealth Health { get; }
-        public IReadonlyProperty<Lifetime> Lifetime => _networkLifetimed.SpawnedLifetime;
+        public IReadonlyProperty<Lifetime> Lifetime => _networkLifetimed.SpawnedLifetime; //TODO: по сути дублирует State.Alive, ещё и неверно, надо думать как исправлять
         IReadonlyProperty<CharacterState> IReadonlyCharacter.State => State;
         
         protected ViewableProperty<CharacterState> State { get; } = new(CharacterState.Alive);

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Bw.Entities.Network;
 using Cysharp.Threading.Tasks;
 using Unity.Netcode;
@@ -65,21 +66,15 @@ namespace Setup
 
             Log("Auto-start startoing.");
 
-            // Detect and handle Multiplayer Play Mode tag
-            DetectAndStartNetwork();
-            _networkHolder.NetworkManager.Value = NetworkManager.Singleton;
-
-            LoadServicesAndGame().Forget();
+            StartGame().Forget();
         }
 
-        private async UniTaskVoid LoadServicesAndGame()
+        private async UniTaskVoid StartGame()
         {
-            await SceneManager.LoadSceneAsync("Network", LoadSceneMode.Additive).ToUniTask(); //TODO: addresables for scene loading
-            await SceneManager.LoadSceneAsync("SampleScene", LoadSceneMode.Additive).ToUniTask();
-            
-            var gameScene = SceneManager.GetSceneByName("SampleScene");
-            SceneManager.SetActiveScene(gameScene);
-            
+            var startNetwork = DetectNetworkStart();
+            await LoadServicesAndGame();
+            startNetwork();
+
             await SceneManager.UnloadSceneAsync("GameSetupScene").ToUniTask();
 
 
@@ -87,7 +82,16 @@ namespace Setup
             // await SceneManager.UnloadSceneAsync(gameSetupScene);
         }
 
-        private void DetectAndStartNetwork()
+        private async UniTask LoadServicesAndGame()
+        {
+            await SceneManager.LoadSceneAsync("Network", LoadSceneMode.Additive).ToUniTask(); //TODO: addresables for scene loading
+            await SceneManager.LoadSceneAsync("SampleScene", LoadSceneMode.Additive).ToUniTask();
+
+            var gameScene = SceneManager.GetSceneByName("SampleScene");
+            SceneManager.SetActiveScene(gameScene);
+        }
+
+        private Action DetectNetworkStart()
         {
 #if UNITY_EDITOR
             // Get the current player's tag from Multiplayer Play Mode
@@ -96,27 +100,31 @@ namespace Setup
             if (string.IsNullOrEmpty(currentTag))
             {
                 Log("No Multiplayer Play Mode tag detected. Running in normal Editor mode or standalone build.");
-                return;
+                return () => { }; //TODO: без тега сцены ставят биндинги с неинициализированным типом пира, а ручные кнопки в OnGUI задают его уже после
             }
 
             Log($"Detected Multiplayer Play Mode tag: '{currentTag}'");
 
-            // Start NetworkManager based on the detected tag
-            if (currentTag.Equals(serverTag, System.StringComparison.OrdinalIgnoreCase))
+            // The game scenes read the peer type while installing, and the network may start only after they are loaded:
+            // NGO builds the already spawned objects right on connection, through the prefab handlers of the game scene
+            if (currentTag.Equals(serverTag, StringComparison.OrdinalIgnoreCase))
             {
-                StartAsServer();
+                _runtimeSettings.Initialize(PeerType.Server);
+                return StartAsServer;
             }
-            else if (currentTag.Equals(clientTag, System.StringComparison.OrdinalIgnoreCase))
+
+            if (currentTag.Equals(clientTag, StringComparison.OrdinalIgnoreCase))
             {
-                StartAsClient();
+                _runtimeSettings.Initialize(PeerType.Client);
+                return StartAsClient;
             }
-            else
-            {
-                Log(
-                    $"Unknown tag '{currentTag}'. Expected '{serverTag}' or '{clientTag}'. No automatic startup performed.");
-            }
+
+            Log(
+                $"Unknown tag '{currentTag}'. Expected '{serverTag}' or '{clientTag}'. No automatic startup performed.");
+            return () => { };
 #else
             Log("Multiplayer Play Mode is only available in the Unity Editor. Running in standalone build mode.");
+            return () => { };
 #endif
         }
 
@@ -132,9 +140,7 @@ namespace Setup
             if (success)
             {
                 Log($"<color=green>✓ Server started successfully on port {port}</color>");
-
-                // Initialize RuntimeSettings with Server peer type
-                _runtimeSettings.Initialize(PeerType.Server);
+                _networkHolder.NetworkManager.Value = NetworkManager.Singleton;
             }
             else
             {
@@ -154,9 +160,7 @@ namespace Setup
             if (success)
             {
                 Log($"<color=cyan>✓ Client started successfully, connecting to {serverAddress}:{port}</color>");
-
-                // Initialize RuntimeSettings with Client peer type
-                _runtimeSettings.Initialize(PeerType.Client);
+                _networkHolder.NetworkManager.Value = NetworkManager.Singleton;
             }
             else
             {
@@ -255,11 +259,13 @@ namespace Setup
 
                     if (GUILayout.Button("Start Server", GUILayout.Height(30)))
                     {
+                        _runtimeSettings.Initialize(PeerType.Server);
                         StartAsServer();
                     }
 
                     if (GUILayout.Button("Start Client", GUILayout.Height(30)))
                     {
+                        _runtimeSettings.Initialize(PeerType.Client);
                         StartAsClient();
                     }
 

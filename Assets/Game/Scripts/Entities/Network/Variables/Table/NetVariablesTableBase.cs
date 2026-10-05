@@ -13,6 +13,9 @@ namespace Bw.Entities.Network.Variables
 
         private readonly ViewableBiMap<ushort, INetSyncEntry> _entriesByVarId;
         private readonly Dictionary<NetEntryDeclaration, INetSyncEntry> _entriesByDeclaration = new();
+        private readonly Dictionary<ushort, INetReceiveGuard> _receiveGuardsByVarId = new();
+        private readonly List<INetSyncEntry> _entries = new();
+        private readonly HashSet<INetSyncEntry> _replicating = new();
 
         protected NetRegistryInfo CurrentRegistration { get; private set; }
 
@@ -20,14 +23,20 @@ namespace Bw.Entities.Network.Variables
             Lifetime lifetime,
             NetworkObject networkObject, //TODO: заменить на свою абстракцию
             NetEntriesSchema schema,
-            INetSendGuardFactory sendGuards)
+            INetSendGuardFactory sendGuards,
+            INetReceiveGuardFactory receiveGuards)
         {
             NetworkObject = networkObject;
             _entriesByVarId = new ViewableBiMap<ushort, INetSyncEntry>(lifetime);
 
             ushort varId = 1;
             foreach (var declaration in schema.Declarations)
-                AddEntry(lifetime, varId++, declaration, sendGuards.Create(declaration.Permissions));
+                AddEntry(
+                    lifetime,
+                    varId++,
+                    declaration,
+                    sendGuards.Create(declaration.Permissions),
+                    receiveGuards.Create(declaration.Permissions));
         }
 
         public INetSignal<T> Get<T>(NetSignalDeclaration<T> declaration) =>
@@ -36,17 +45,46 @@ namespace Bw.Entities.Network.Variables
         public INetProperty<T> Get<T>(NetPropertyDeclaration<T> declaration) =>
             (INetProperty<T>)EntryFor(declaration);
 
-        bool INetEntries.TryGetEntry(ushort varId, out INetSyncEntry entry) =>
-            _entriesByVarId.TryGetValue(varId, out entry);
+        INetSyncEntry INetEntries.EntryWritableBy(ulong senderClientId, ushort varId)
+        {
+            if (!_entriesByVarId.TryGetValue(varId, out var entry))
+                throw new InvalidOperationException(
+                    $"No net entry with id {varId.ToString()} on object {NetworkObject.NetworkObjectId.ToString()}:{NetworkObject.name}, sender: client {senderClientId.ToString()}.");
 
-        private void AddEntry(Lifetime lifetime, ushort varId, NetEntryDeclaration declaration, INetSendGuard sendGuard)
+            _receiveGuardsByVarId[varId].Check(senderClientId);
+            return entry;
+        }
+
+        private protected void VisitReplicating(INetSyncVisitor visitor)
+        {
+            for (var index = 0; index < _entries.Count; index++)
+            {
+                var entry = _entries[index];
+                if (_replicating.Contains(entry))
+                    entry.Accept(visitor);
+            }
+        }
+
+        private void AddEntry(
+            Lifetime lifetime,
+            ushort varId,
+            NetEntryDeclaration declaration,
+            INetSendGuard sendGuard,
+            INetReceiveGuard receiveGuard)
         {
             var entry = declaration.Create(sendGuard);
             var info = new NetRegistryInfo(entry, declaration.DeliveryType, declaration.Permissions);
 
             _entriesByVarId.Add(varId, entry);
             _entriesByDeclaration.Add(declaration, entry);
-            sendGuard.WhenOpen(lifetime, openLifetime => BindDirtyReplication(openLifetime, info, entry));
+            _receiveGuardsByVarId.Add(varId, receiveGuard);
+            _entries.Add(entry);
+            sendGuard.WhenOpen(lifetime, openLifetime =>
+            {
+                _replicating.Add(entry);
+                openLifetime.OnTermination(() => _replicating.Remove(entry));
+                BindDirtyReplication(openLifetime, info, entry);
+            });
         }
 
         private INetSyncEntry EntryFor(NetEntryDeclaration declaration) =>
@@ -60,7 +98,7 @@ namespace Bw.Entities.Network.Variables
             entry.Dirty.AdviseTrue(lifetime, () =>
             {
                 entry.Dirty.Value = false;
-                if (!NetworkObject.IsSpawned)
+                if (!NetworkObject.IsSpawned) //TODO: свойства, записанные до спавна, не дойдут до уже подключённых клиентов (поздним их пришлёт снимок состояния)
                     return;
 
                 CurrentRegistration = info;

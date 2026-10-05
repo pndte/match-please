@@ -1,6 +1,6 @@
 ﻿using System;
 using Bw.Entities;
-using Bw.Entities.Network;
+using Bw.Entities.Players;
 using Bw.UseCases.Character;
 using Bw.UseCases.Character.Extensions;
 using Cysharp.Threading.Tasks;
@@ -20,18 +20,18 @@ namespace Bw.UseCases.Spawning
         {
             _selfLifetime = lifetime;
             _characterSpawner = characterSpawner;
-            characterRegistry.ClientByCharacter.ForEach(lifetime, HandleCharacter);
+            characterRegistry.PlayerByCharacter.ForEach(lifetime, HandleCharacter);
         }
 
-        private void HandleCharacter(Lifetime lifetime, ICharacter character, IClient client)
+        private void HandleCharacter(Lifetime lifetime, ICharacter character, IPlayer player)
         {
-            character.State.WhenDead(lifetime, _ => RespawnCharacter(client).Forget());
+            character.State.WhenDead(lifetime, _ => RespawnCharacter(player).Forget());
         }
 
-        private async UniTaskVoid RespawnCharacter(IClient client)
+        private async UniTaskVoid RespawnCharacter(IPlayer player)
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(3), cancellationToken:_selfLifetime); //TODO: лайфтайм клиента
-            _characterSpawner.SpawnCharacterFor(_selfLifetime, client);
+            await UniTask.Delay(TimeSpan.FromSeconds(3), cancellationToken:_selfLifetime); //TODO: лайфтайм игрока
+            _characterSpawner.SpawnCharacterFor(_selfLifetime, player);
         }
     }
 }

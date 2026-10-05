@@ -1,7 +1,6 @@
 ﻿using Bw.Entities.Infrastructure;
-using Bw.Entities.Network;
 
-namespace Bw.UseCases.Clients
+namespace Bw.Entities.Network
 {
     public interface IClientCollection
     {

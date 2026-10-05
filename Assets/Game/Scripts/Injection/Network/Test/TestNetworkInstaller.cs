@@ -7,7 +7,7 @@ using Zenject;
 
 namespace Bw.Injection.Network
 {
-    public class TestNetworkInstaller : MonoInstaller
+    public class TestNetworkInstaller : MonoInstaller //TODO: нигде не используется и в рантайме не соберётся: таблице не хватает владения и коллекций клиентов
     {
         [SerializeField] private NetworkObject _networkObject;
 

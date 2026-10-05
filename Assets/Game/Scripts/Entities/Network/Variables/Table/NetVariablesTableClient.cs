@@ -13,7 +13,12 @@ namespace Bw.Entities.Network.Variables
             NetEntriesSchema schema,
             IClientSendersCollection messageSenders,
             IOwnership ownership)
-            : base(lifetime, networkObject, schema, new NetSendGuardFactoryClient(ownership, networkObject))
+            : base(
+                lifetime,
+                networkObject,
+                schema,
+                new NetSendGuardFactoryClient(ownership, networkObject),
+                new NetReceiveGuardFactoryClient())
         {
             _messageSenders = messageSenders;
         }

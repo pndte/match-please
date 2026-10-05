@@ -200,7 +200,7 @@ MonoBehaviour:
   serverTag: server
   clientTag: client
   serverAddress: 127.0.0.1
-  port: 7777
+  port: 6666
   enableLogging: 1
   showDebugGUI: 0
 --- !u!1001 &2067038090
@@ -213,7 +213,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 933054714717963079, guid: 06b1c2facaa67e6428aa57dd9beabd9f, type: 3}
       propertyPath: ConnectionData.Port
-      value: 8888
+      value: 6666
       objectReference: {fileID: 0}
     - target: {fileID: 2303872855047892107, guid: 06b1c2facaa67e6428aa57dd9beabd9f, type: 3}
       propertyPath: NetworkConfig.EnableSceneManagement

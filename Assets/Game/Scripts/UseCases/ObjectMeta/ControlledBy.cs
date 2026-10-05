@@ -1,7 +1,8 @@
 using Bw.Entities;
 using Bw.Entities.Extensions;
+using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
-using Bw.UseCases.Players;
+using Bw.Entities.Players;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
@@ -50,7 +51,7 @@ namespace Bw.UseCases
             {
                 controlledBy.Users.View(lifetime, (userLifetime, userPlayer) =>
                 {
-                    var client = clientPlayers.ByClient.Inverse[userPlayer];
+                    var client = clientPlayers.ByClient.Inverse[userPlayer]; //TODO: у бота клиента нет — когда появятся боты, игроков без клиента здесь пропускать
                     meSignal.FireTo(client, true);
 
                     userLifetime.OnTermination(() =>
