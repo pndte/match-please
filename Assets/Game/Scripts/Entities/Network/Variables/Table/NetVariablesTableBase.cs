@@ -7,7 +7,7 @@ using Unity.Netcode;
 
 namespace Bw.Entities.Network.Variables
 {
-    public abstract class NetVariablesTableBase : INetEntries, INetSyncVisitor //TODO: too hard to understand
+    public abstract class NetVariablesTableBase : INetEntries, INetSyncVisitor //TODO: too hard to understand — разделить на общий агрегат записей и роли пиров: отправку, проверку пишущего, снимок для позднего клиента, хеш схемы
     {
         internal const ushort SchemaHashVarId = 0;
 
@@ -19,7 +19,7 @@ namespace Bw.Entities.Network.Variables
         private readonly HashSet<INetSyncEntry> _replicating = new();
         private readonly uint _schemaHash;
 
-        protected NetRegistryInfo CurrentRegistration { get; private set; }
+        protected NetRegistryInfo CurrentRegistration { get; private set; } //TODO: состояние на время одного вызова — передавать доставку посетителю параметром
 
         private protected NetVariablesTableBase(
             Lifetime lifetime,
@@ -62,7 +62,7 @@ namespace Bw.Entities.Network.Variables
 
         private protected abstract void CheckWriter(ulong senderClientId, INetSyncEntry entry);
 
-        private protected void VisitReplicating(INetSyncVisitor visitor)
+        private protected void VisitReplicating(INetSyncVisitor visitor) //TODO: нужен только серверу — перенести в серверную отправку вместе со снимком для позднего клиента
         {
             for (var index = 0; index < _entries.Count; index++)
             {
