@@ -7,9 +7,7 @@ using Bw.Entities.Network.Variables;
 using Bw.Injection.ControlledBy;
 using Bw.Injection.Network;
 using Bw.Injection.Network.Variables;
-using JetBrains.Collections.Viewable;
 using Bw.Injection.Ownership;
-using Bw.UseCases;
 using Bw.UseCases.Character;
 using Bw.UseCases.Character.Network;
 using Bw.UseCases.Camera.View.Follow;
@@ -75,6 +73,7 @@ namespace Bw.Injection
                 case PeerType.Client:
                     Container.Bind<IReadonlyHealth>().To<Health>().AsSingle().NonLazy();
                     Container.BindInterfacesTo<ClientCharacter>().AsSingle();
+                    Container.InstantiateComponent<ReadonlyCharacterHolder>(gameObject);
                     BindClientVisuals();
                     BindClientSounds();
                     break;

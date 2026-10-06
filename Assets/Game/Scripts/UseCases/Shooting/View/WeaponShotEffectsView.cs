@@ -1,9 +1,11 @@
 using Bw.Entities;
 using Bw.Entities.Extensions;
+using Bw.Entities.Pool;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Shooting.Graphics;
 using Bw.UseCases.Shooting.View.Audio.Abstractions;
-using Bw.UseCases.Shooting.View.Impact;
+using Bw.UseCases.Character;
+using Bw.UseCases.Shooting.View.Impact.Abstractions;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Cysharp.Threading.Tasks;
@@ -19,6 +21,8 @@ namespace Bw.UseCases.Shooting.View
         private readonly IShotVfxPlayer _vfxPlayer;
         private readonly IShotSfxPlayer _sfxPlayer;
         private readonly LineRendererVfxConfig _vfxConfig;
+        private readonly IPool<IImpactEffect> _impacts;
+        private readonly Lifetime _lifetime;
 
         private bool _held;
         private bool _remote;
@@ -27,18 +31,21 @@ namespace Bw.UseCases.Shooting.View
 
         public WeaponShotEffectsView(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
+            IReadonlyControlledBy controlledBy, //TODO: чрезвычайное к-во аргументов в конструкторе
             IReadonlyWeapon weapon,
             IWeaponHold hold,
             IShotTracer tracer,
             IShotVfxPlayer vfxPlayer,
             IShotSfxPlayer sfxPlayer,
-            LineRendererVfxConfig vfxConfig)
+            LineRendererVfxConfig vfxConfig,
+            IPool<IImpactEffect> impacts)
         {
             _tracer = tracer;
             _vfxPlayer = vfxPlayer;
             _sfxPlayer = sfxPlayer;
             _vfxConfig = vfxConfig;
+            _impacts = impacts;
+            _lifetime = lifetime;
 
             hold.HeldLifetime.WhenAlive(lifetime, heldLifetime =>
             {
@@ -75,8 +82,8 @@ namespace Bw.UseCases.Shooting.View
             _sfxPlayer.Play(trace);
             if (trace.From != trace.To)
                 _vfxPlayer.Play(trace.From, trace.To).Forget();
-            if (trace.Hit && trace.Hit.collider.TryGetComponent<ShotImpactEffect>(out var impact)) //TODO: кровь рисуется по локальному трассеру, а урон считает сервер — изредка будет кровь без урона или урон без крови
-                impact.Play(trace.To, ray.Direction, Vector2.Distance(trace.From, trace.To) / _vfxConfig.TrailSpeed);
+            if (trace.Hit && trace.Hit.collider.TryGetComponent<IHolder<IReadonlyCharacter>>(out _)) //TODO: кровь рисуется по локальному трассеру, а урон считает сервер — изредка будет кровь без урона или урон без крови
+                _impacts.OneShot(_lifetime).Play(trace.To, ray.Direction, Vector2.Distance(trace.From, trace.To) / _vfxConfig.TrailSpeed);
         }
     }
 }
