@@ -13,18 +13,17 @@ using JetBrains.Lifetimes;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
-using Bw.UseCases;
 using Random = UnityEngine.Random;
 
 namespace Bw.UseCases.Spawning.Network
 {
-    public class NetworkCharactersSpawner : ICharacterSpawner
+    public class NetworkCharactersSpawner : ICharacterSpawner //todo: refactor
     {
         public struct Data
         {
             public Transform[] SpawnPoints;
             public float SpawnRandomOffset;
-            public NetworkObject CharacterPrefab;
+            public NetworkObject[] CharacterPrefabs;
             public NetworkObject WeaponPrefab;
         }
 
@@ -67,8 +66,9 @@ namespace Bw.UseCases.Spawning.Network
             var spawnPosition = GetSpawnPosition();
             var spawnRotation = Quaternion.identity;
 
+            var characterPrefab = RandomCharacterPrefab();
             var characterObject = NetworkPrefabInstantiationHelper.Instantiate(
-                _container, _data.CharacterPrefab, spawnPosition, spawnRotation);
+                _container, characterPrefab, spawnPosition, spawnRotation);
 
             characterObject.SpawnAsPlayerObject(client.Id, destroyWithScene: true);
 
@@ -88,7 +88,7 @@ namespace Bw.UseCases.Spawning.Network
 
             SpawnWeaponFor(character, characterLifetime, characterObject.transform.position, spawnRotation);
 
-            Debug.Log($"[PlayerSpawner] Player character spawned for client {client.Id} at {spawnPosition}");
+            Debug.Log($"[PlayerSpawner] Character '{characterPrefab.name}' spawned for client {client.Id} at {spawnPosition}");
             return character;
         }
 
@@ -107,6 +107,9 @@ namespace Bw.UseCases.Spawning.Network
             character.State.WhenAlive(characterLifetime, aliveLifetime =>
                 _heldWeapons.ByCharacter.AddLifetimed(aliveLifetime, character, weapon));
         }
+
+        private NetworkObject RandomCharacterPrefab() =>
+            _data.CharacterPrefabs[Random.Range(0, _data.CharacterPrefabs.Length)];
 
         private Vector3 GetSpawnPosition()
         {
@@ -131,6 +134,5 @@ namespace Bw.UseCases.Spawning.Network
             throw new InvalidOperationException(
                 $"Component {typeof(T).Name} is missing on '{gameObject.name}' after prefab install.");
         }
-
     }
 }

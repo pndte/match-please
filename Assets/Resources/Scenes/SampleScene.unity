@@ -682,7 +682,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f9a9d68361e48008ce590b621fd3e07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.SpawnerInstaller
-  _character: {fileID: 1768199406601822194, guid: fc8b285af66260547821ffb4b60738cc, type: 3}
+  _characters:
+  - {fileID: 1768199406601822194, guid: fc8b285af66260547821ffb4b60738cc, type: 3}
+  - {fileID: 5148817816689952103, guid: 842fe65765e750b4e93f6463190b8f76, type: 3}
+  - {fileID: 5663921868032589438, guid: 36e40c069b7a9a74baad29a6310ed3b0, type: 3}
+  - {fileID: 1582203581188544168, guid: 24f8c767fbe7f114193bc5a6f77967c7, type: 3}
   _weapon: {fileID: 8409776997951654046, guid: 89e7304b27ad8224bbe0532a7c2496c1, type: 3}
   _spawnPoints:
   - {fileID: 953766044}
@@ -738,9 +742,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c530bcc05acf47e6938fcfdf6cd91f03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Prefabs.PrefabHandlersInstaller
-  _networkPrefabs:
-  - {fileID: 5172013928666437337, guid: fc8b285af66260547821ffb4b60738cc, type: 3}
-  - {fileID: 2477611210009415474, guid: 89e7304b27ad8224bbe0532a7c2496c1, type: 3}
 --- !u!1 &1614011708
 GameObject:
   m_ObjectHideFlags: 0
