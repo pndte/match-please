@@ -9,5 +9,6 @@ namespace Bw.UseCases.Shooting.Weapon
         [Min(0)] public float ShootCooldown;
         [Min(0)] public float ReloadTime;
         public float Damage;
+        [Min(0)] public float UnheldDespawnTime = 25f;
     }
 }

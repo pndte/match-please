@@ -92,7 +92,7 @@ namespace Bw.UseCases.Spawning.Network
             return character;
         }
 
-        private void SpawnWeaponFor( //TODO: каждый спавн создаёт новое оружие, а выброшенное копится на полу — решить, когда появится подбор
+        private void SpawnWeaponFor(
             ICharacter character,
             Lifetime characterLifetime,
             Vector3 position,

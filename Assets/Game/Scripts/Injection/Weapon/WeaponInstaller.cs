@@ -106,6 +106,7 @@ namespace Bw.Injection.Weapon
             Container.Bind<RaycastShooter>().AsSingle().NonLazy();
             Container.Bind<WeaponHoldServerHandler>().AsSingle().NonLazy();
             Container.Bind<WeaponDropServerHandler>().AsSingle().NonLazy();
+            Container.Bind<UnheldWeaponDespawner>().AsSingle().NonLazy();
             Container.Bind<HeldWeaponBody>().AsSingle().WithArguments(_body).NonLazy();
             Container.InstantiateComponent<WeaponHolder>(gameObject);
         }
