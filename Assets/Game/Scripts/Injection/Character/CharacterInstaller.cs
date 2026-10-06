@@ -12,6 +12,7 @@ using Bw.Injection.Ownership;
 using Bw.UseCases;
 using Bw.UseCases.Character;
 using Bw.UseCases.Character.Network;
+using Bw.UseCases.Character.View.Hit;
 using Bw.UseCases.Movement;
 using Unity.Netcode;
 using UnityEngine;
@@ -32,6 +33,7 @@ namespace Bw.Injection
         [SerializeField] private MovementConfig _movementConfig;
         [SerializeField] private Animator _animator;
         [SerializeField] private SpriteRenderer _sprite;
+        [SerializeField] private HitFeedbackConfig _hitFeedbackConfig;
 
         public override void InstallBindings()
         {
@@ -71,10 +73,18 @@ namespace Bw.Injection
                 case PeerType.Client:
                     Container.Bind<IReadonlyHealth>().To<Health>().AsSingle().NonLazy();
                     Container.BindInterfacesTo<ClientCharacter>().AsSingle();
+                    BindHitFeedback();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private void BindHitFeedback()
+        {
+            Container.Bind<HitFeedbackConfig>().FromInstance(_hitFeedbackConfig).AsSingle();
+            Container.Bind<HitFlash>().AsSingle().NonLazy();
+            Container.Bind<HitCameraShake>().AsSingle().NonLazy();
         }
     }
 }

@@ -10,6 +10,7 @@ using Bw.Injection.Network.Variables;
 using Bw.Injection.Ownership;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.View;
+using Bw.UseCases.Shooting.View.Recoil;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network;
@@ -35,6 +36,7 @@ namespace Bw.Injection.Weapon
         [SerializeField] private ShootingWeaponConfig _shootingWeaponConfig;
         [SerializeField] private WeaponRotationConfig _rotationConfig;
         [SerializeField] private LineRendererVfxConfig _vfxConfig;
+        [SerializeField] private WeaponCameraKickConfig _cameraKickConfig;
 
         [Header("Network")]
         [SerializeField] private NetworkObject _networkObject;
@@ -109,14 +111,20 @@ namespace Bw.Injection.Weapon
         private void BindClient()
         {
             Container.BindInterfacesTo<WeaponInputSampler>().AsSingle().WithArguments(transform);
+            Container.Bind<HeldWeaponNetworkTransform>().AsSingle().WithArguments(_networkTransform).NonLazy();
+            Container.Bind<WeaponDropClientHandler>().AsSingle().NonLazy();
+            BindClientVisuals();
+        }
+
+        private void BindClientVisuals()
+        {
             Container.BindInterfacesTo<LineRendererVfxPlayer>().AsSingle().WithArguments(_trailPrefab);
             Container.Bind<IStateView<WeaponState>>()
                 .FromMethod(ctx => new CompositeStateView<WeaponState>(
                     ctx.Container.Instantiate<WeaponStateView>(new object[] { transform }),
                     ctx.Container.Instantiate<WeaponShotEffectsView>()))
                 .AsSingle();
-            Container.Bind<HeldWeaponNetworkTransform>().AsSingle().WithArguments(_networkTransform).NonLazy();
-            Container.Bind<WeaponDropClientHandler>().AsSingle().NonLazy();
+            Container.Bind<WeaponCameraKick>().AsSingle().NonLazy();
         }
 
         private void BindSprite()
@@ -131,6 +139,7 @@ namespace Bw.Injection.Weapon
             Container.BindInstance(_shootingWeaponConfig).AsSingle();
             Container.BindInstance(_shootingWeaponConfig.AmmoSettings).AsSingle();
             Container.BindInstance(_rotationConfig).AsSingle();
+            Container.BindInstance(_cameraKickConfig).AsSingle();
         }
 
         private void BindLifetime()

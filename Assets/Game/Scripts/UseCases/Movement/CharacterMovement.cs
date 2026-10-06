@@ -23,7 +23,7 @@ namespace Bw.UseCases.Movement
             IMovementBody body)
         {
             _motor = motor;
-            Previous = new MovementState(body.Position, Vector2.zero, false);
+            Previous = new MovementState(body.Position, Vector2.zero, false, 0, 0);
             _state = new ViewableProperty<MovementState>(Previous);
 
             inputs.Advise(lifetime, Step);

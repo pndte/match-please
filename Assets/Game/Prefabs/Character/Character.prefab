@@ -59,7 +59,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 796eda3ce80d4d888b7926f77a7ce0a1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -210,6 +210,7 @@ MonoBehaviour:
   _movementConfig: {fileID: 11400000, guid: 69583fc462e9fe145a5a5101d5d42728, type: 2}
   _animator: {fileID: 6533880697772444689}
   _sprite: {fileID: 8303433349971610731}
+  _hitFeedbackConfig: {fileID: 11400000, guid: 4359f2675494472b93a9f1010f583111, type: 2}
 --- !u!114 &666931174670692420
 MonoBehaviour:
   m_ObjectHideFlags: 0

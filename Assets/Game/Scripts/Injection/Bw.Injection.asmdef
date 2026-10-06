@@ -6,6 +6,8 @@
         "Bw.Entities",
         "Bw.Setup",
         "Bw.UseCases",
+        "Bw.UseCases.Camera.View",
+        "Bw.UseCases.Character.View",
         "Bw.UseCases.Movement",
         "Bw.UseCases.Movement.Network",
         "Bw.UseCases.Movement.View",

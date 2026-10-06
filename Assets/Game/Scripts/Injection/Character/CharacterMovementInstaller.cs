@@ -29,17 +29,22 @@ namespace Bw.Injection
             Container.BindInterfacesTo<CharacterBody>().AsSingle();
             Container.BindInterfacesTo<PlatformerMotor>().AsSingle();
             Container.BindInterfacesTo<CharacterMovement>().AsSingle().NonLazy();
+            Container.BindInterfacesTo<MovementInputSampler>().AsSingle();
+            Container.BindInterfacesTo<MovementInputPolicy>().AsSingle();
+            BindVisuals();
+
+            PredictionInstaller<MovementInput, MovementState>.Install(Container, _runtimeSettings, _netSchema);
+            LagCompensationInstaller<MovementState, MovementStateView>.Install(Container, _runtimeSettings);
+        }
+
+        private void BindVisuals()
+        {
             Container.BindInterfacesTo<SpriteMovementAnimator>().AsSingle();
             Container.Bind<IStateView<MovementState>>()
                 .FromMethod(context => new CompositeStateView<MovementState>(
                     context.Container.Instantiate<MovementStateView>(),
                     context.Container.Instantiate<MovementAnimationView>()))
                 .AsSingle();
-            Container.BindInterfacesTo<MovementInputSampler>().AsSingle();
-            Container.BindInterfacesTo<MovementInputPolicy>().AsSingle();
-
-            PredictionInstaller<MovementInput, MovementState>.Install(Container, _runtimeSettings, _netSchema);
-            LagCompensationInstaller<MovementState, MovementStateView>.Install(Container, _runtimeSettings);
         }
     }
 }

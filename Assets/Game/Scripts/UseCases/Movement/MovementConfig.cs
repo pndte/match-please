@@ -9,5 +9,9 @@ namespace Bw.UseCases.Movement
         public float JumpForce;
         public float GravityScale = 3f;
         public LayerMask GroundLayer;
+
+        [Header("Jump assist")]
+        [Min(0f)] public float CoyoteTime = 0.1f;
+        [Min(0f)] public float JumpBufferTime = 0.1f;
     }
 }

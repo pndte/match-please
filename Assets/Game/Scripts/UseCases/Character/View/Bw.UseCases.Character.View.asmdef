@@ -1,11 +1,9 @@
 {
-    "name": "Bw.UseCases.Shooting.View",
+    "name": "Bw.UseCases.Character.View",
     "rootNamespace": "Bw",
     "references": [
         "Bw.Entities",
-        "Bw.UseCases.Shooting",
         "Bw.UseCases.Camera.View",
-        "UniTask",
         "R3.Unity"
     ],
     "includePlatforms": [],

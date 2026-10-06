@@ -1,5 +1,6 @@
 using Bw.Entities.Extensions;
 using Bw.Entities.Simulation;
+using Bw.UseCases.Movement.Extensions;
 using Bw.UseCases.Movement.Physics.Abstractions;
 using UnityEngine;
 
@@ -23,9 +24,12 @@ namespace Bw.UseCases.Movement.Physics
         public MovementState Step(MovementState state, MovementInput input)
         {
             var deltaTime = _step.Duration;
+            var jumps = WantsToJump(state, input) && CanJump(state);
+            var coyoteTicks = jumps ? 0 : NextCoyoteTicks(state);
+            var bufferedJumpTicks = jumps ? 0 : NextBufferedJumpTicks(state, input);
 
             var velocity = state.Velocity.WithX(Mathf.Clamp(input.Horizontal, -1f, 1f) * _config.Speed);
-            if (input.Jump && state.Grounded)
+            if (jumps)
                 velocity = velocity.WithY(_config.JumpForce);
             velocity = velocity.WithY(velocity.y + _gravity * deltaTime);
 
@@ -36,10 +40,25 @@ namespace Bw.UseCases.Movement.Physics
             var verticalDirection = velocity.y > 0f ? Vector2.up : Vector2.down;
             var verticalDistance = Mathf.Abs(velocity.y) * deltaTime;
             if (Sweep(ref position, verticalDirection, verticalDistance) >= verticalDistance)
-                return new MovementState(position, velocity, false);
+                return new MovementState(position, velocity, false, coyoteTicks, bufferedJumpTicks);
 
-            return new MovementState(position, velocity.WithY(0f), verticalDirection == Vector2.down);
+            return new MovementState(position, velocity.WithY(0f), verticalDirection == Vector2.down, coyoteTicks, bufferedJumpTicks);
         }
+
+        private static bool WantsToJump(MovementState state, MovementInput input) =>
+            input.Jump || state.BufferedJumpTicks > 0;
+
+        private static bool CanJump(MovementState state) =>
+            state.Grounded || state.CoyoteTicks > 0;
+
+        private int NextCoyoteTicks(MovementState state) =>
+            state.Grounded ? _config.CoyoteTicks(_step) : Countdown(state.CoyoteTicks);
+
+        private int NextBufferedJumpTicks(MovementState state, MovementInput input) =>
+            input.Jump ? _config.JumpBufferTicks(_step) : Countdown(state.BufferedJumpTicks);
+
+        private static int Countdown(int ticks) =>
+            Mathf.Max(0, ticks - 1);
 
         private float Sweep(ref Vector2 position, Vector2 direction, float distance)
         {

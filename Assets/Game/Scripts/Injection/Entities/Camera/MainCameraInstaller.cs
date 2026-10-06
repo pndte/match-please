@@ -1,5 +1,6 @@
 ﻿using Bw.Entities;
 using Bw.Entities.Network;
+using Bw.UseCases.Camera.View.Shake;
 using UnityEngine;
 using Zenject;
 
@@ -13,8 +14,11 @@ namespace Bw.Injection.Entities.Camera
 
         public override void InstallBindings()
         {
-            if (_runtimeSettings.CurrentPeerType == PeerType.Client)
-                Container.BindInterfacesTo<PlayerCamera>().AsSingle().WithArguments(_camera).NonLazy(); 
+            if (_runtimeSettings.CurrentPeerType != PeerType.Client)
+                return;
+
+            Container.BindInterfacesTo<PlayerCamera>().AsSingle().WithArguments(_camera).NonLazy();
+            Container.Bind<ICameraShake>().To<CameraShake>().FromComponentOn(_camera.gameObject).AsSingle();
         }
     }
 }
