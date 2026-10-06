@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffcdc02dd1b70f14c830e5dedb854648, type: 3}
+  m_Name: SoundSettings
+  m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Audio.SoundSettingsInstaller
+  _player:
+    Voices: 32
+    SpatialBlend: 1
+    Spread: 60
+    MinDistance: 12
+    MaxDistance: 45
+  _weapon:
+    Shot:
+      Clips:
+      - {fileID: 8300000, guid: c1694969b85b6164fbe466a9b185a29e, type: 3}
+      - {fileID: 8300000, guid: 14ec802b8df0ffa48a7f920d8d9b9927, type: 3}
+      - {fileID: 8300000, guid: 84c80eed6cfb1f84999ed58dc61eb23f, type: 3}
+      Volume: 0.6
+      PitchVariation: 0.04
+    GroundHit:
+      Clips:
+      - {fileID: 8300000, guid: dd93c03c7af93964fbc64d0478156732, type: 3}
+      - {fileID: 8300000, guid: 2c45f87132822ac4f9be9a4616677aa0, type: 3}
+      - {fileID: 8300000, guid: e9059c0c38fe823439b61e138266ac99, type: 3}
+      - {fileID: 8300000, guid: cd4a9e69da65224459d58d43bef4cc27, type: 3}
+      - {fileID: 8300000, guid: f4c4dd18546d6854c9662fd89ef2b9ce, type: 3}
+      Volume: 0.8
+      PitchVariation: 0.1
+    GroundLayers:
+      serializedVersion: 2
+      m_Bits: 16384
+    MagazineOut:
+      Clips:
+      - {fileID: 8300000, guid: 76bfb669dc26afa4fa8af9cb1fb6dbce, type: 3}
+      Volume: 0.45
+      PitchVariation: 0.02
+    MagazineIn:
+      Clips:
+      - {fileID: 8300000, guid: de96c4f3e8dedbc43a0e989209c69064, type: 3}
+      Volume: 0.3
+      PitchVariation: 0.02
+    MagazineInBeforeEnd: 1.1
+    BoltRack:
+      Clips:
+      - {fileID: 8300000, guid: 739b90a5ea0659b4abb912c018e95501, type: 3}
+      Volume: 0.2
+      PitchVariation: 0.02
+    BoltRackBeforeEnd: 0.6
+  _movement:
+    Step:
+      Clips:
+      - {fileID: 8300000, guid: 19bb880cae21df44fa018eedfc2df75e, type: 3}
+      - {fileID: 8300000, guid: 8b07385f9e0c78242a214bd4b9906226, type: 3}
+      - {fileID: 8300000, guid: b01bb0a124fecdf449c54818f00bf824, type: 3}
+      - {fileID: 8300000, guid: eab457b4b63658b4ca31cffa5d361375, type: 3}
+      - {fileID: 8300000, guid: c02964025c753ce46ae9b884792e719f, type: 3}
+      - {fileID: 8300000, guid: 94054ed5e6f85fa41a36239b0cb27c3f, type: 3}
+      Volume: 0.105
+      PitchVariation: 0.08
+    Jump:
+      Clips:
+      - {fileID: 8300000, guid: 1349f0cce07404940825faf34c26a95f, type: 3}
+      - {fileID: 8300000, guid: 89b06bd15d0dbfa489d58f3e7415b4ff, type: 3}
+      - {fileID: 8300000, guid: 2957cebefd38bf442a8d181c923a7642, type: 3}
+      - {fileID: 8300000, guid: 328243071a44f3548b1546f294bba765, type: 3}
+      Volume: 0.3
+      PitchVariation: 0.06
+    Land:
+      Clips:
+      - {fileID: 8300000, guid: 73d6d53706448034a9cfb49ebf52157f, type: 3}
+      - {fileID: 8300000, guid: 261aa6427960c4d4c94fa9b17d2e29e0, type: 3}
+      - {fileID: 8300000, guid: 98002dd5f17863b458874a1f2798669b, type: 3}
+      - {fileID: 8300000, guid: 0dcfd80fc0049a94687ffe5564779af5, type: 3}
+      - {fileID: 8300000, guid: 90f312472f3b2d04b84f037f35d7ab61, type: 3}
+      - {fileID: 8300000, guid: 6fdb6dd5a5333f04a9ee3e83aaf53cad, type: 3}
+      - {fileID: 8300000, guid: e97d733574fe9e74eb1dc22a106864c8, type: 3}
+      - {fileID: 8300000, guid: ddedd5d8f5ec6214fae1b0471df27eab, type: 3}
+      Volume: 0.45
+      PitchVariation: 0.06
+    StepInterval: 0.4
+    MinStepSpeed: 0.05
+  _character:
+    BodyHit:
+      Clips:
+      - {fileID: 8300000, guid: c244297206f3e1b4990e64926891d6f9, type: 3}
+      - {fileID: 8300000, guid: 23864a47149a08f4681697e7b91ae51e, type: 3}
+      - {fileID: 8300000, guid: 67b8692086bc7534e9905955033682de, type: 3}
+      Volume: 1
+      PitchVariation: 0.08

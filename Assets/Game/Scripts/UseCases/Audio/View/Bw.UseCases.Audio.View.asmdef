@@ -1,10 +1,7 @@
 {
-    "name": "Bw.UseCases.Character.View",
+    "name": "Bw.UseCases.Audio.View",
     "rootNamespace": "Bw",
     "references": [
-        "Bw.Entities",
-        "Bw.UseCases.Camera.View",
-        "Bw.UseCases.Audio.View",
         "R3.Unity"
     ],
     "includePlatforms": [],

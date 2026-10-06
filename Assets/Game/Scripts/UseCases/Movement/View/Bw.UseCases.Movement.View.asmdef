@@ -3,13 +3,16 @@
     "rootNamespace": "Bw",
     "references": [
         "Bw.Entities",
-        "Bw.UseCases.Movement"
+        "Bw.UseCases.Movement",
+        "Bw.UseCases.Audio.View"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
-    "precompiledReferences": [],
+    "precompiledReferences": [
+        "JetBrains.Lifetimes.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],

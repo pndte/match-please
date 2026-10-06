@@ -10,6 +10,7 @@ using Bw.Injection.Network.Variables;
 using Bw.Injection.Ownership;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.View;
+using Bw.UseCases.Shooting.View.Audio;
 using Bw.UseCases.Shooting.View.Crosshair;
 using Bw.UseCases.Shooting.View.Recoil;
 using Bw.UseCases.Shooting.Weapon;
@@ -115,6 +116,7 @@ namespace Bw.Injection.Weapon
             Container.Bind<HeldWeaponNetworkTransform>().AsSingle().WithArguments(_networkTransform).NonLazy();
             Container.Bind<WeaponDropClientHandler>().AsSingle().NonLazy();
             BindClientVisuals();
+            BindClientSounds();
         }
 
         private void BindClientVisuals()
@@ -124,10 +126,16 @@ namespace Bw.Injection.Weapon
                 .FromMethod(ctx => new CompositeStateView<WeaponState>(
                     ctx.Container.Instantiate<WeaponStateView>(new object[] { transform }),
                     ctx.Container.Instantiate<WeaponShotEffectsView>(),
-                    ctx.Container.Instantiate<WeaponReloadCursor>()))
+                    ctx.Container.Instantiate<WeaponReloadCursor>(),
+                    ctx.Container.Instantiate<WeaponReloadSoundsView>(new object[] { transform })))
                 .AsSingle();
             Container.Bind<WeaponCameraKick>().AsSingle().NonLazy();
             Container.Bind<WeaponCursorKick>().AsSingle().NonLazy();
+        }
+
+        private void BindClientSounds()
+        {
+            Container.BindInterfacesTo<ShotSfxPlayer>().AsSingle();
         }
 
         private void BindSprite()

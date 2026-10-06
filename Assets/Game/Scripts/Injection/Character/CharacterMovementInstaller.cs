@@ -1,9 +1,11 @@
+using System;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using Bw.Injection.Network;
 using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.View.Animation;
+using Bw.UseCases.Movement.View.Audio;
 using Bw.UseCases.Movement.Network;
 using Bw.UseCases.Movement.Physics;
 using Zenject;
@@ -40,11 +42,26 @@ namespace Bw.Injection
         private void BindVisuals()
         {
             Container.BindInterfacesTo<SpriteMovementAnimator>().AsSingle();
-            Container.Bind<IStateView<MovementState>>()
-                .FromMethod(context => new CompositeStateView<MovementState>(
-                    context.Container.Instantiate<MovementStateView>(),
-                    context.Container.Instantiate<MovementAnimationView>()))
-                .AsSingle();
+            switch (_runtimeSettings.CurrentPeerType)
+            {
+                case PeerType.Server:
+                    Container.Bind<IStateView<MovementState>>()
+                        .FromMethod(context => new CompositeStateView<MovementState>(
+                            context.Container.Instantiate<MovementStateView>(),
+                            context.Container.Instantiate<MovementAnimationView>()))
+                        .AsSingle();
+                    break;
+                case PeerType.Client:
+                    Container.Bind<IStateView<MovementState>>()
+                        .FromMethod(context => new CompositeStateView<MovementState>(
+                            context.Container.Instantiate<MovementStateView>(),
+                            context.Container.Instantiate<MovementAnimationView>(),
+                            context.Container.Instantiate<MovementSoundsView>()))
+                        .AsSingle();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

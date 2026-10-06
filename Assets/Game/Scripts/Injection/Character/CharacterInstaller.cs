@@ -13,6 +13,7 @@ using Bw.UseCases;
 using Bw.UseCases.Character;
 using Bw.UseCases.Character.Network;
 using Bw.UseCases.Camera.View.Follow;
+using Bw.UseCases.Character.View.Audio;
 using Bw.UseCases.Character.View.Hit;
 using Bw.UseCases.Movement;
 using Unity.Netcode;
@@ -75,10 +76,16 @@ namespace Bw.Injection
                     Container.Bind<IReadonlyHealth>().To<Health>().AsSingle().NonLazy();
                     Container.BindInterfacesTo<ClientCharacter>().AsSingle();
                     BindClientVisuals();
+                    BindClientSounds();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private void BindClientSounds()
+        {
+            Container.Bind<BodyHitSound>().AsSingle().WithArguments(transform).NonLazy();
         }
 
         private void BindClientVisuals()

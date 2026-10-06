@@ -5,6 +5,7 @@
         "Bw.Entities",
         "Bw.UseCases.Shooting",
         "Bw.UseCases.Camera.View",
+        "Bw.UseCases.Audio.View",
         "UniTask",
         "R3.Unity",
         "UnityEngine.UI"

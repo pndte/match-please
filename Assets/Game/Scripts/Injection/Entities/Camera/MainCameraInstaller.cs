@@ -1,6 +1,7 @@
 ﻿using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
+using Bw.UseCases.Audio.View.Playback;
 using Bw.UseCases.Camera.View.Follow;
 using Bw.UseCases.Camera.View.Shake;
 using Bw.UseCases.Shooting.View.Crosshair;
@@ -27,6 +28,7 @@ namespace Bw.Injection.Entities.Camera
             Container.Bind<IAimCursor>().To<AimCursor>().FromComponentOn(_camera.gameObject).AsSingle();
             Container.BindInterfacesTo<CameraTargets>().AsSingle();
             Container.Bind<CameraFollow>().AsSingle().WithArguments(_camera.gameObject.Lifetime(), _camera, _followConfig).NonLazy();
+            Container.BindInterfacesTo<SoundPlayer>().AsSingle().WithArguments(_camera.gameObject.Lifetime());
         }
     }
 }

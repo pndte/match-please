@@ -6,6 +6,7 @@
         "Bw.Entities",
         "Bw.Setup",
         "Bw.UseCases",
+        "Bw.UseCases.Audio.View",
         "Bw.UseCases.Camera.View",
         "Bw.UseCases.Character.View",
         "Bw.UseCases.Movement",
