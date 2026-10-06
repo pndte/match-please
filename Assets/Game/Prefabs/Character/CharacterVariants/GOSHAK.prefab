@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &8846705757051637108
+--- !u!1001 &2425899971028542882
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3773905357652456202, guid: 28c1d05763d5c724987f5766ef8d8a60, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1612251123
+      value: 1979811269
       objectReference: {fileID: 0}
     - target: {fileID: 3889167905082118075, guid: 28c1d05763d5c724987f5766ef8d8a60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -52,10 +52,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6533880697772444689, guid: 28c1d05763d5c724987f5766ef8d8a60, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 22100000, guid: ae139523a26add14985b68c5590b982d, type: 2}
     - target: {fileID: 7714897418022992417, guid: 28c1d05763d5c724987f5766ef8d8a60, type: 3}
       propertyPath: m_Name
-      value: CharacterGreen
+      value: GOSHAK
       objectReference: {fileID: 0}
+    - target: {fileID: 8303433349971610731, guid: 28c1d05763d5c724987f5766ef8d8a60, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -483441462, guid: d31afdac7321b334a9dde2198a0dfb1c, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -52,10 +52,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6533880697772444689, guid: 28c1d05763d5c724987f5766ef8d8a60, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 22100000, guid: 14b66ca8dc2022f4081c973a67351ff5, type: 2}
     - target: {fileID: 7714897418022992417, guid: 28c1d05763d5c724987f5766ef8d8a60, type: 3}
       propertyPath: m_Name
-      value: Character Red
+      value: Seva
       objectReference: {fileID: 0}
+    - target: {fileID: 8303433349971610731, guid: 28c1d05763d5c724987f5766ef8d8a60, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 2060785540, guid: d31afdac7321b334a9dde2198a0dfb1c, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

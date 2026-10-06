@@ -36,7 +36,7 @@
     "sanya",
     "seva",
     "matvey",
-    "GOSHA"
+    "GOSHAK"
   ],
   "sprites": [
     {
@@ -520,8 +520,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_idle_0",
-      "character": "GOSHA",
+      "name": "GOSHAK_idle_0",
+      "character": "GOSHAK",
       "animation": "idle",
       "frame": 0,
       "x": 0,
@@ -530,8 +530,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_walk_0",
-      "character": "GOSHA",
+      "name": "GOSHAK_walk_0",
+      "character": "GOSHAK",
       "animation": "walk",
       "frame": 0,
       "x": 512,
@@ -540,8 +540,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_walk_1",
-      "character": "GOSHA",
+      "name": "GOSHAK_walk_1",
+      "character": "GOSHAK",
       "animation": "walk",
       "frame": 1,
       "x": 1024,
@@ -550,8 +550,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_walk_2",
-      "character": "GOSHA",
+      "name": "GOSHAK_walk_2",
+      "character": "GOSHAK",
       "animation": "walk",
       "frame": 2,
       "x": 1536,
@@ -560,8 +560,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_walk_3",
-      "character": "GOSHA",
+      "name": "GOSHAK_walk_3",
+      "character": "GOSHAK",
       "animation": "walk",
       "frame": 3,
       "x": 2048,
@@ -570,8 +570,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_walk_4",
-      "character": "GOSHA",
+      "name": "GOSHAK_walk_4",
+      "character": "GOSHAK",
       "animation": "walk",
       "frame": 4,
       "x": 2560,
@@ -580,8 +580,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_walk_5",
-      "character": "GOSHA",
+      "name": "GOSHAK_walk_5",
+      "character": "GOSHAK",
       "animation": "walk",
       "frame": 5,
       "x": 3072,
@@ -590,8 +590,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_walk_6",
-      "character": "GOSHA",
+      "name": "GOSHAK_walk_6",
+      "character": "GOSHAK",
       "animation": "walk",
       "frame": 6,
       "x": 3584,
@@ -600,8 +600,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_walk_7",
-      "character": "GOSHA",
+      "name": "GOSHAK_walk_7",
+      "character": "GOSHAK",
       "animation": "walk",
       "frame": 7,
       "x": 4096,
@@ -610,8 +610,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_jump_0",
-      "character": "GOSHA",
+      "name": "GOSHAK_jump_0",
+      "character": "GOSHAK",
       "animation": "jump",
       "frame": 0,
       "x": 4608,
@@ -620,8 +620,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_jump_1",
-      "character": "GOSHA",
+      "name": "GOSHAK_jump_1",
+      "character": "GOSHAK",
       "animation": "jump",
       "frame": 1,
       "x": 5120,
@@ -630,8 +630,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_jump_2",
-      "character": "GOSHA",
+      "name": "GOSHAK_jump_2",
+      "character": "GOSHAK",
       "animation": "jump",
       "frame": 2,
       "x": 5632,
@@ -640,8 +640,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_jump_3",
-      "character": "GOSHA",
+      "name": "GOSHAK_jump_3",
+      "character": "GOSHAK",
       "animation": "jump",
       "frame": 3,
       "x": 6144,
@@ -650,8 +650,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_fall_0",
-      "character": "GOSHA",
+      "name": "GOSHAK_fall_0",
+      "character": "GOSHAK",
       "animation": "fall",
       "frame": 0,
       "x": 6656,
@@ -660,8 +660,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_fall_1",
-      "character": "GOSHA",
+      "name": "GOSHAK_fall_1",
+      "character": "GOSHAK",
       "animation": "fall",
       "frame": 1,
       "x": 7168,
@@ -670,8 +670,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_land_0",
-      "character": "GOSHA",
+      "name": "GOSHAK_land_0",
+      "character": "GOSHAK",
       "animation": "land",
       "frame": 0,
       "x": 7680,
@@ -1040,8 +1040,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_run_0",
-      "character": "GOSHA",
+      "name": "GOSHAK_run_0",
+      "character": "GOSHAK",
       "animation": "run",
       "frame": 0,
       "x": 512,
@@ -1050,8 +1050,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_run_1",
-      "character": "GOSHA",
+      "name": "GOSHAK_run_1",
+      "character": "GOSHAK",
       "animation": "run",
       "frame": 1,
       "x": 1024,
@@ -1060,8 +1060,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_run_2",
-      "character": "GOSHA",
+      "name": "GOSHAK_run_2",
+      "character": "GOSHAK",
       "animation": "run",
       "frame": 2,
       "x": 1536,
@@ -1070,8 +1070,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_run_3",
-      "character": "GOSHA",
+      "name": "GOSHAK_run_3",
+      "character": "GOSHAK",
       "animation": "run",
       "frame": 3,
       "x": 2048,
@@ -1080,8 +1080,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_run_4",
-      "character": "GOSHA",
+      "name": "GOSHAK_run_4",
+      "character": "GOSHAK",
       "animation": "run",
       "frame": 4,
       "x": 2560,
@@ -1090,8 +1090,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_run_5",
-      "character": "GOSHA",
+      "name": "GOSHAK_run_5",
+      "character": "GOSHAK",
       "animation": "run",
       "frame": 5,
       "x": 3072,
@@ -1100,8 +1100,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_run_6",
-      "character": "GOSHA",
+      "name": "GOSHAK_run_6",
+      "character": "GOSHAK",
       "animation": "run",
       "frame": 6,
       "x": 3584,
@@ -1110,8 +1110,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_run_7",
-      "character": "GOSHA",
+      "name": "GOSHAK_run_7",
+      "character": "GOSHAK",
       "animation": "run",
       "frame": 7,
       "x": 4096,
@@ -1120,8 +1120,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_hurt_0",
-      "character": "GOSHA",
+      "name": "GOSHAK_hurt_0",
+      "character": "GOSHAK",
       "animation": "hurt",
       "frame": 0,
       "x": 4608,
@@ -1130,8 +1130,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_hurt_1",
-      "character": "GOSHA",
+      "name": "GOSHAK_hurt_1",
+      "character": "GOSHAK",
       "animation": "hurt",
       "frame": 1,
       "x": 5120,
@@ -1140,8 +1140,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_hurt_2",
-      "character": "GOSHA",
+      "name": "GOSHAK_hurt_2",
+      "character": "GOSHAK",
       "animation": "hurt",
       "frame": 2,
       "x": 5632,
@@ -1150,8 +1150,8 @@
       "h": 512
     },
     {
-      "name": "GOSHA_hurt_3",
-      "character": "GOSHA",
+      "name": "GOSHAK_hurt_3",
+      "character": "GOSHAK",
       "animation": "hurt",
       "frame": 3,
       "x": 6144,

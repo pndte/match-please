@@ -1815,7 +1815,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_idle_0
+      name: GOSHAK_idle_0
       rect:
         serializedVersion: 2
         x: 0
@@ -1837,7 +1837,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_walk_0
+      name: GOSHAK_walk_0
       rect:
         serializedVersion: 2
         x: 256
@@ -1859,7 +1859,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_walk_1
+      name: GOSHAK_walk_1
       rect:
         serializedVersion: 2
         x: 512
@@ -1881,7 +1881,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_walk_2
+      name: GOSHAK_walk_2
       rect:
         serializedVersion: 2
         x: 768
@@ -1903,7 +1903,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_walk_3
+      name: GOSHAK_walk_3
       rect:
         serializedVersion: 2
         x: 1024
@@ -1925,7 +1925,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_walk_4
+      name: GOSHAK_walk_4
       rect:
         serializedVersion: 2
         x: 1280
@@ -1947,7 +1947,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_walk_5
+      name: GOSHAK_walk_5
       rect:
         serializedVersion: 2
         x: 1536
@@ -1969,7 +1969,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_walk_6
+      name: GOSHAK_walk_6
       rect:
         serializedVersion: 2
         x: 1792
@@ -1991,7 +1991,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_walk_7
+      name: GOSHAK_walk_7
       rect:
         serializedVersion: 2
         x: 2048
@@ -2013,7 +2013,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_jump_0
+      name: GOSHAK_jump_0
       rect:
         serializedVersion: 2
         x: 2304
@@ -2035,7 +2035,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_jump_1
+      name: GOSHAK_jump_1
       rect:
         serializedVersion: 2
         x: 2560
@@ -2057,7 +2057,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_jump_2
+      name: GOSHAK_jump_2
       rect:
         serializedVersion: 2
         x: 2816
@@ -2079,7 +2079,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_jump_3
+      name: GOSHAK_jump_3
       rect:
         serializedVersion: 2
         x: 3072
@@ -2101,7 +2101,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_fall_0
+      name: GOSHAK_fall_0
       rect:
         serializedVersion: 2
         x: 3328
@@ -2123,7 +2123,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_fall_1
+      name: GOSHAK_fall_1
       rect:
         serializedVersion: 2
         x: 3584
@@ -2145,7 +2145,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_land_0
+      name: GOSHAK_land_0
       rect:
         serializedVersion: 2
         x: 3840
@@ -2959,7 +2959,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_run_0
+      name: GOSHAK_run_0
       rect:
         serializedVersion: 2
         x: 256
@@ -2981,7 +2981,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_run_1
+      name: GOSHAK_run_1
       rect:
         serializedVersion: 2
         x: 512
@@ -3003,7 +3003,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_run_2
+      name: GOSHAK_run_2
       rect:
         serializedVersion: 2
         x: 768
@@ -3025,7 +3025,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_run_3
+      name: GOSHAK_run_3
       rect:
         serializedVersion: 2
         x: 1024
@@ -3047,7 +3047,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_run_4
+      name: GOSHAK_run_4
       rect:
         serializedVersion: 2
         x: 1280
@@ -3069,7 +3069,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_run_5
+      name: GOSHAK_run_5
       rect:
         serializedVersion: 2
         x: 1536
@@ -3091,7 +3091,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_run_6
+      name: GOSHAK_run_6
       rect:
         serializedVersion: 2
         x: 1792
@@ -3113,7 +3113,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_run_7
+      name: GOSHAK_run_7
       rect:
         serializedVersion: 2
         x: 2048
@@ -3135,7 +3135,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_hurt_0
+      name: GOSHAK_hurt_0
       rect:
         serializedVersion: 2
         x: 2304
@@ -3157,7 +3157,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_hurt_1
+      name: GOSHAK_hurt_1
       rect:
         serializedVersion: 2
         x: 2560
@@ -3179,7 +3179,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_hurt_2
+      name: GOSHAK_hurt_2
       rect:
         serializedVersion: 2
         x: 2816
@@ -3201,7 +3201,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOSHA_hurt_3
+      name: GOSHAK_hurt_3
       rect:
         serializedVersion: 2
         x: 3072
@@ -3236,34 +3236,34 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      GOSHA_fall_0: 625551107
-      GOSHA_fall_1: -1875752465
-      GOSHA_hurt_0: 1327941540
-      GOSHA_hurt_1: 666473932
-      GOSHA_hurt_2: 645457496
-      GOSHA_hurt_3: 756226681
-      GOSHA_idle_0: -483441462
-      GOSHA_jump_0: 2116901612
-      GOSHA_jump_1: -1978454582
-      GOSHA_jump_2: 1620617381
-      GOSHA_jump_3: -32949067
-      GOSHA_land_0: 393335124
-      GOSHA_run_0: -746242474
-      GOSHA_run_1: 1380147126
-      GOSHA_run_2: -1362265181
-      GOSHA_run_3: 513201192
-      GOSHA_run_4: 102266429
-      GOSHA_run_5: 1662372095
-      GOSHA_run_6: -949043755
-      GOSHA_run_7: -1176991471
-      GOSHA_walk_0: -455249032
-      GOSHA_walk_1: -1728530679
-      GOSHA_walk_2: 1473253930
-      GOSHA_walk_3: -1796365969
-      GOSHA_walk_4: 1961515227
-      GOSHA_walk_5: 331086945
-      GOSHA_walk_6: -682203446
-      GOSHA_walk_7: 597881625
+      GOSHAK_fall_0: 625551107
+      GOSHAK_fall_1: -1875752465
+      GOSHAK_hurt_0: 1327941540
+      GOSHAK_hurt_1: 666473932
+      GOSHAK_hurt_2: 645457496
+      GOSHAK_hurt_3: 756226681
+      GOSHAK_idle_0: -483441462
+      GOSHAK_jump_0: 2116901612
+      GOSHAK_jump_1: -1978454582
+      GOSHAK_jump_2: 1620617381
+      GOSHAK_jump_3: -32949067
+      GOSHAK_land_0: 393335124
+      GOSHAK_run_0: -746242474
+      GOSHAK_run_1: 1380147126
+      GOSHAK_run_2: -1362265181
+      GOSHAK_run_3: 513201192
+      GOSHAK_run_4: 102266429
+      GOSHAK_run_5: 1662372095
+      GOSHAK_run_6: -949043755
+      GOSHAK_run_7: -1176991471
+      GOSHAK_walk_0: -455249032
+      GOSHAK_walk_1: -1728530679
+      GOSHAK_walk_2: 1473253930
+      GOSHAK_walk_3: -1796365969
+      GOSHAK_walk_4: 1961515227
+      GOSHAK_walk_5: 331086945
+      GOSHAK_walk_6: -682203446
+      GOSHAK_walk_7: 597881625
       matvey_fall_0: -358510641
       matvey_fall_1: -991380803
       matvey_hurt_0: -1130999141
