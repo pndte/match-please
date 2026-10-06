@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3722719973410144185}
   - component: {fileID: 4557794692304115249}
+  - component: {fileID: 2668877959654885376}
   m_Layer: 15
   m_Name: LineRenderer
   m_TagString: Untagged
@@ -160,3 +161,17 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &2668877959654885376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3845862069358243844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48ab538e02532704fad1e351a3898be6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Bw.UseCases.Shooting.View::Bw.UseCases.Shooting.View.Tracer.LineTracer
+  _line: {fileID: 4557794692304115249}
+  _length: 0.1

@@ -4918,7 +4918,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7bcb20fa2e2348368b1bedab8824f1f5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Bw.UseCases.Shooting.View::Bw.UseCases.Shooting.View.Impact.ParticleImpactEffect
+  m_EditorClassIdentifier: Bw.UseCases.Vfx.View::Bw.UseCases.Vfx.View.Effects.ParticleEffect
   _particles: {fileID: 7041730113962319542}
 --- !u!1 &1001
 GameObject:

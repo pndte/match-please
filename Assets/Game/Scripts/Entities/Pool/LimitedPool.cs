@@ -5,7 +5,7 @@ using JetBrains.Lifetimes;
 
 namespace Bw.Entities.Pool
 {
-    public sealed class LimitedPool<T> : IPool<T>, IPrewarmable
+    public sealed class LimitedPool<T> : IPool<T>
     {
         private readonly Stack<IResource<T>> _resources = new();
         private readonly Dictionary<IResource<T>, LifetimeDefinition> _resourceLifetimes = new();
@@ -14,22 +14,22 @@ namespace Bw.Entities.Pool
         private readonly PoolSettings _settings;
         private readonly Func<Lifetime, IResource<T>> _factory;
 
-        public LimitedPool(Lifetime lifetime, Func<Lifetime, IResource<T>> factory, PoolSettings settings)
+        private LimitedPool(Lifetime lifetime, Func<Lifetime, IResource<T>> factory, PoolSettings settings)
         {
             _settings = settings;
             _factory = factory;
             _lifetime = lifetime;
         }
 
-        public void Prewarm()
+        public static LimitedPool<T> Create(Lifetime lifetime, Func<Lifetime, IResource<T>> factory, PoolSettings settings)
         {
-            _lifetime.ThrowIfNotAlive();
-            if (_settings.Prewarm > _settings.Limit)
-                throw new InvalidOperationException(
-                    $"A pool can't prewarm {_settings.Prewarm} resources when it keeps at most {_settings.Limit} free.");
+            lifetime.ThrowIfNotAlive();
+            if (settings.Prewarm > settings.Limit)
+                throw new ArgumentException($"A pool can't prewarm {settings.Prewarm} resources when it keeps at most {settings.Limit} free.", nameof(settings));
 
-            while (_resources.Count < _settings.Prewarm)
-                _resources.Push(Create());
+            var pool = new LimitedPool<T>(lifetime, factory, settings);
+            pool.Prewarm();
+            return pool;
         }
 
         public T Resource(Lifetime lifetime)
@@ -39,7 +39,7 @@ namespace Bw.Entities.Pool
             _settings.Cap.Switch(this, static _ => { }, static (pool, max) => pool.ReclaimOldest(max), static (pool, max) => pool.RequireRoom(max));
 
             if (!_resources.TryPop(out var resource))
-                resource = Create();
+                resource = CreateResource();
 
             var use = Lifetime.DefineIntersection(lifetime, _resourceLifetimes[resource].Lifetime);
             var node = _uses.AddLast(use);
@@ -61,7 +61,13 @@ namespace Bw.Entities.Pool
             return resource.Facade(use.Lifetime);
         }
 
-        private IResource<T> Create()
+        private void Prewarm()
+        {
+            while (_resources.Count < _settings.Prewarm)
+                _resources.Push(CreateResource());
+        }
+
+        private IResource<T> CreateResource()
         {
             var definition = _lifetime.CreateNested();
             var resourceLifetime = definition.Lifetime;

@@ -2,6 +2,7 @@
     "name": "Bw.UseCases.Audio.View",
     "rootNamespace": "Bw",
     "references": [
+        "Bw.Entities",
         "R3.Unity"
     ],
     "includePlatforms": [],

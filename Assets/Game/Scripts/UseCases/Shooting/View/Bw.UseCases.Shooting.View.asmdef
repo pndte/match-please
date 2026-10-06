@@ -7,6 +7,7 @@
         "Bw.UseCases.Shooting",
         "Bw.UseCases.Camera.View",
         "Bw.UseCases.Audio.View",
+        "Bw.UseCases.Vfx.View",
         "UniTask",
         "R3.Unity",
         "UnityEngine.UI"

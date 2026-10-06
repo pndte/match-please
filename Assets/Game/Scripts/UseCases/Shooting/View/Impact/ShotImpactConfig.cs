@@ -1,12 +1,11 @@
 using System;
-using Bw.Entities.Pool.GameObjects;
+using UnityEngine;
 
 namespace Bw.UseCases.Shooting.View.Impact
 {
     [Serializable]
     public sealed class ShotImpactConfig
     {
-        public ParticleImpactEffect Prefab;
-        public PoolConfig Pool = new();
+        public GameObject Prefab;
     }
 }

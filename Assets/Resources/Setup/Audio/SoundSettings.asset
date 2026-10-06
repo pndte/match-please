@@ -13,11 +13,7 @@ MonoBehaviour:
   m_Name: SoundSettings
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Audio.SoundSettingsInstaller
   _player:
-    Voices: 32
-    SpatialBlend: 1
-    Spread: 60
-    MinDistance: 12
-    MaxDistance: 45
+    Voice: {fileID: 1000, guid: 5bd6aa44685b41de92c8585ee6274c58, type: 3}
   _weapon:
     Shot:
       Clips:

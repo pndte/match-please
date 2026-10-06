@@ -29,15 +29,14 @@ namespace Bw.Injection.Weapon
     {
         [Inject] private IRuntimeSettings _runtimeSettings;
 
-        [Header("Graphics")] [SerializeField] private LineRenderer _trailPrefab;
-        [SerializeField] private SpriteRenderer _sprite;
+        [Header("Graphics")] [SerializeField] private SpriteRenderer _sprite;
 
         [Header("WeaponMuzzle")] [SerializeField] private Transform _muzzleTransform;
 
         [Header("Configs")] [SerializeField] private RaycastShootConfig _raycastShootConfig;
         [SerializeField] private ShootingWeaponConfig _shootingWeaponConfig;
         [SerializeField] private WeaponRotationConfig _rotationConfig;
-        [SerializeField] private LineRendererVfxConfig _vfxConfig;
+        [SerializeField] private ShotVfxConfig _vfxConfig;
         [SerializeField] private WeaponCameraKickConfig _cameraKickConfig;
 
         [Header("Network")]
@@ -122,7 +121,6 @@ namespace Bw.Injection.Weapon
 
         private void BindClientVisuals()
         {
-            Container.BindInterfacesTo<LineRendererVfxPlayer>().AsSingle().WithArguments(_trailPrefab);
             Container.Bind<IStateView<WeaponState>>()
                 .FromMethod(ctx => new CompositeStateView<WeaponState>(
                     ctx.Container.Instantiate<WeaponStateView>(new object[] { transform }),

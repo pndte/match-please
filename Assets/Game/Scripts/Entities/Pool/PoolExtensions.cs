@@ -10,7 +10,7 @@ namespace Bw.Entities.Pool
             try
             {
                 var facade = pool.Resource(shot.Lifetime);
-                facade.Finished.Advise(shot.Lifetime, _ => shot.Terminate());
+                facade.Finished.Advise(shot.Lifetime, _ => shot.Terminate()); //TODO: если пул отберёт выдачу по потолку (ReclaimOldest), Finished не придёт и shot доживёт до конца lifetime — небольшая утечка на каждую отобранную выдачу
                 return facade;
             }
             catch

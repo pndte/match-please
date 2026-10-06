@@ -9,8 +9,6 @@
         "Unity.Netcode.Runtime",
         "Unity.Collections",
         "Zenject",
-        "UniTask.DOTween",
-        "UniTask",
         "R3.Unity"
     ],
     "includePlatforms": [],
@@ -20,7 +18,6 @@
     "precompiledReferences": [
         "JetBrains.Lifetimes.dll",
         "Zenject-usage.dll",
-        "DOTween.dll",
         "R3.dll"
     ],
     "autoReferenced": true,

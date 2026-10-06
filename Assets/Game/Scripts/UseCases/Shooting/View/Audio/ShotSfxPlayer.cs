@@ -1,3 +1,4 @@
+using Bw.Entities.Extensions;
 using Bw.UseCases.Audio.View.Playback.Abstractions;
 using Bw.UseCases.Shooting.View.Audio.Abstractions;
 using Bw.UseCases.Shooting.Weapon;
@@ -13,28 +14,24 @@ namespace Bw.UseCases.Shooting.View.Audio
         private readonly IWeaponMuzzle _muzzle;
         private readonly ISoundPlayer _player;
         private readonly WeaponSoundsConfig _config;
-        private readonly LineRendererVfxConfig _trailConfig;
 
         public ShotSfxPlayer(
             Lifetime lifetime,
             IWeaponMuzzle muzzle,
             ISoundPlayer player,
-            WeaponSoundsConfig config,
-            LineRendererVfxConfig trailConfig)
+            WeaponSoundsConfig config)
         {
             _lifetime = lifetime;
             _muzzle = muzzle;
             _player = player;
             _config = config;
-            _trailConfig = trailConfig;
         }
 
-        public void Play(ShotTrace trace)
+        public void Play(ShotTrace trace, float arrival)
         {
             _player.Play(_lifetime, _config.Shot, _muzzle.Transform);
-            //TODO: время подлёта пули считается так же, как задержка частиц попадания в WeaponShotEffectsView — вынести в одно место
             if (trace.Hit && HitsGround(trace.Hit.collider))
-                _player.PlayDelayed(_config.GroundHit, trace.To, Vector2.Distance(trace.From, trace.To) / _trailConfig.TrailSpeed);
+                _lifetime.WhenElapsed(arrival, () => _player.Play(_config.GroundHit, trace.To));
         }
 
         private bool HitsGround(Collider2D collider) =>

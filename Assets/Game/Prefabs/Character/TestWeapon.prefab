@@ -185,7 +185,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 949c2604aa86458a9edf8f1b29b0bf05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Weapon.WeaponInstaller
-  _trailPrefab: {fileID: 4557794692304115249, guid: 834baa140fa4a3643b92af2da947ad35, type: 3}
   _sprite: {fileID: 7982959669375519713}
   _muzzleTransform: {fileID: 8117144414725150372}
   _raycastShootConfig: {fileID: 11400000, guid: 028f3f7f1f83f474697f765f7043df94, type: 2}
