@@ -22,3 +22,12 @@ MonoBehaviour:
   WobbleTime: 0.35
   PunchScale: 1.18
   PunchTime: 0.2
+  PressScale: 0.86
+  PressTime: 0.06
+  ReleaseTime: 0.28
+  ReleaseOvershoot: 2.6
+  KickScale: 0.18
+  KickAngle: 6
+  KickShake: 2.5
+  KickVibrato: 40
+  KickTime: 0.1

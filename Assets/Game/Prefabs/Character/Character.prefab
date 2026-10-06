@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 666931174670692420}
   - component: {fileID: 7303288911383704076}
   - component: {fileID: 8557818833694399266}
+  - component: {fileID: 282890213046728092}
   m_Layer: 15
   m_Name: Character
   m_TagString: Untagged
@@ -303,3 +304,16 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 2}
   m_EdgeRadius: 0
+--- !u!114 &282890213046728092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7714897418022992417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95974268127f90542a95ebb9951af691, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Bw.UseCases.Shooting.View::Bw.UseCases.Shooting.View.Impact.ShotImpactEffect
+  _effect: {fileID: 7041730113962319542, guid: 01117806cb1f2ff46ad99329bdd08826, type: 3}
