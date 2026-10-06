@@ -11,6 +11,8 @@ namespace Bw.UseCases.Shooting.View.Crosshair
     {
         [SerializeField] private AimCursorConfig _config;
         [SerializeField] private RectTransform _pointer;
+        [SerializeField] private RectTransform _press;
+        [SerializeField] private RectTransform _kick;
 
         [Header("Aim")]
         [SerializeField] private Image _ring;
@@ -29,6 +31,8 @@ namespace Bw.UseCases.Shooting.View.Crosshair
         private IReloadTimer _timer = new IdleTimer();
         private Sequence _morph;
         private int _reload;
+        private bool _pressed;
+        private float _twist = 1f;
 
         public void ShowReload(Lifetime reloadLifetime, IReloadTimer timer)
         {
@@ -37,6 +41,21 @@ namespace Bw.UseCases.Shooting.View.Crosshair
             PlaceNotches(timer.Seconds);
             _morph.PlayForward();
             reloadLifetime.OnTermination(() => Finish(reload));
+        }
+
+        public void ShowShot()
+        {
+            _twist = -_twist;
+            _kick.DOComplete();
+            _kick.DOPunchScale(Vector3.one * _config.KickScale, _config.KickTime, 1, 0f)
+                .SetUpdate(true)
+                .SetLink(gameObject);
+            _kick.DOPunchRotation(new Vector3(0f, 0f, _twist * _config.KickAngle), _config.KickTime, 2, 0.5f)
+                .SetUpdate(true)
+                .SetLink(gameObject);
+            _kick.DOShakePosition(_config.KickTime, new Vector3(_config.KickShake, _config.KickShake, 0f), _config.KickVibrato)
+                .SetUpdate(true)
+                .SetLink(gameObject);
         }
 
         private void Awake()
@@ -55,6 +74,13 @@ namespace Bw.UseCases.Shooting.View.Crosshair
         private void LateUpdate()
         {
             _pointer.position = Input.mousePosition; //TODO: new input system
+            var pressed = Input.GetMouseButton(0); //TODO: new input system
+            if (pressed != _pressed)
+            {
+                _pressed = pressed;
+                Squeeze(pressed);
+            }
+
             var done = 1f - Mathf.Clamp01(_timer.SecondsLeft / _timer.Seconds);
             _arc.fillAmount = done;
             _knob.localRotation = Quaternion.Euler(0f, 0f, -done * 360f);
@@ -104,6 +130,15 @@ namespace Bw.UseCases.Shooting.View.Crosshair
             _morph.PlayBackwards();
             if (_timer.SecondsLeft <= 0f)
                 Punch();
+        }
+
+        private void Squeeze(bool pressed)
+        {
+            _press.DOKill();
+            var squeeze = pressed
+                ? _press.DOScale(_config.PressScale, _config.PressTime).SetEase(Ease.OutQuad)
+                : _press.DOScale(1f, _config.ReleaseTime).SetEase(Ease.OutBack, _config.ReleaseOvershoot);
+            squeeze.SetUpdate(true).SetLink(gameObject);
         }
 
         private void Punch()

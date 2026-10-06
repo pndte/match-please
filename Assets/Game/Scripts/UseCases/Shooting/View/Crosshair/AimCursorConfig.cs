@@ -20,5 +20,18 @@ namespace Bw.UseCases.Shooting.View.Crosshair
         [Header("Reloaded")]
         public float PunchScale = 1.18f;
         [Min(0.01f)] public float PunchTime = 0.2f;
+
+        [Header("Trigger Held")]
+        public float PressScale = 0.86f;
+        [Min(0.01f)] public float PressTime = 0.06f;
+        [Min(0.01f)] public float ReleaseTime = 0.28f;
+        public float ReleaseOvershoot = 2.6f;
+
+        [Header("Shot")]
+        public float KickScale = 0.18f;
+        public float KickAngle = 6f;
+        public float KickShake = 2.5f;
+        [Min(1)] public int KickVibrato = 40;
+        [Min(0.01f)] public float KickTime = 0.1f;
     }
 }

@@ -127,6 +127,7 @@ namespace Bw.Injection.Weapon
                     ctx.Container.Instantiate<WeaponReloadCursor>()))
                 .AsSingle();
             Container.Bind<WeaponCameraKick>().AsSingle().NonLazy();
+            Container.Bind<WeaponCursorKick>().AsSingle().NonLazy();
         }
 
         private void BindSprite()
