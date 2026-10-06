@@ -10,6 +10,7 @@ using Bw.Injection.Network.Variables;
 using Bw.Injection.Ownership;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.View;
+using Bw.UseCases.Shooting.View.Crosshair;
 using Bw.UseCases.Shooting.View.Recoil;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
@@ -122,7 +123,8 @@ namespace Bw.Injection.Weapon
             Container.Bind<IStateView<WeaponState>>()
                 .FromMethod(ctx => new CompositeStateView<WeaponState>(
                     ctx.Container.Instantiate<WeaponStateView>(new object[] { transform }),
-                    ctx.Container.Instantiate<WeaponShotEffectsView>()))
+                    ctx.Container.Instantiate<WeaponShotEffectsView>(),
+                    ctx.Container.Instantiate<WeaponReloadCursor>()))
                 .AsSingle();
             Container.Bind<WeaponCameraKick>().AsSingle().NonLazy();
         }

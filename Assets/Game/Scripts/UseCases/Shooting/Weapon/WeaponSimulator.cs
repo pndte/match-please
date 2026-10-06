@@ -34,7 +34,7 @@ namespace Bw.UseCases.Shooting.Weapon
                 if (reload == 0)
                     ammo = maxAmmo;
             }
-            else if (input.Reload && ammo < maxAmmo)
+            else if ((input.Reload && ammo < maxAmmo) || (input.Trigger && ammo == 0))
             {
                 reload = Math.Max(1, Ticks(_weaponConfig.ReloadTime));
             }

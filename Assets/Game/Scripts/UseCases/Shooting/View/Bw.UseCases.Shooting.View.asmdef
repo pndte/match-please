@@ -6,7 +6,8 @@
         "Bw.UseCases.Shooting",
         "Bw.UseCases.Camera.View",
         "UniTask",
-        "R3.Unity"
+        "R3.Unity",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -14,7 +15,8 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "JetBrains.Lifetimes.dll",
-        "R3.dll"
+        "R3.dll",
+        "DOTween.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

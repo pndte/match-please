@@ -50,8 +50,10 @@ namespace Bw.UseCases.Shooting.Weapon.Network
 
         public WeaponInput Sample() //TODO: нажатие курка теряется, если пропадут два пакета ввода подряд (Unreliable и один прошлый ввод в пакете) — для стрельбы нужна избыточность больше
         {
-            var viewDelay = _triggerPressed ? (float)(_ticks.Current - _triggerViewTick) : 0f;
-            var input = new WeaponInput(SampleAim(), _triggerPressed, _reloadPressed, viewDelay);
+            var trigger = _triggerPressed || Input.GetMouseButton(0); //TODO: new input system
+            var viewTick = _triggerPressed ? _triggerViewTick : _interpolationTicks.InterpolationTick;
+            var viewDelay = trigger ? (float)(_ticks.Current - viewTick) : 0f;
+            var input = new WeaponInput(SampleAim(), trigger, _reloadPressed, viewDelay);
             _triggerPressed = false;
             _reloadPressed = false;
             return input;
