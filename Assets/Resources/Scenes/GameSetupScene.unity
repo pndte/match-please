@@ -199,8 +199,6 @@ MonoBehaviour:
   enableAutoStart: 1
   serverTag: server
   clientTag: client
-  serverAddress: 127.0.0.1
-  port: 6666
   enableLogging: 1
   showDebugGUI: 0
 --- !u!1001 &2067038090

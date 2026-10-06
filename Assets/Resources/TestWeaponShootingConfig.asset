@@ -15,4 +15,4 @@ MonoBehaviour:
   AmmoSettings: {fileID: 11400000, guid: ab8392d6e9a0be14a9b05d592a5f2dfe, type: 2}
   ShootCooldown: 0.1
   ReloadTime: 3
-  Damage: 25
+  Damage: 15
