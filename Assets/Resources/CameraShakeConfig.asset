@@ -18,3 +18,4 @@ MonoBehaviour:
   Decay: 1.8
   MaxKick: 0.25
   KickReturn: 14
+  MaskingPanSpeed: 2

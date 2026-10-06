@@ -255,7 +255,6 @@ GameObject:
   - component: {fileID: 6628710305156434144}
   - component: {fileID: 1227471182570332310}
   - component: {fileID: 3867556944815905233}
-  - component: {fileID: 275719312837520189}
   - component: {fileID: 3852831529733027027}
   m_Layer: 0
   m_Name: Main Camera
@@ -384,21 +383,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!114 &275719312837520189
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6722575912165033607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d3c28ab97074718929b46f66834b6bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Bw.UseCases::DefaultNamespace.LocalPlayerCameraFollow
-  _config: {fileID: 11400000, guid: 51184a0ebae8d884f874a69cdf9075b1, type: 2}
-  _enableLogging: 0
-  _camera: {fileID: 6628710305156434144}
 --- !u!114 &3852831529733027027
 MonoBehaviour:
   m_ObjectHideFlags: 0

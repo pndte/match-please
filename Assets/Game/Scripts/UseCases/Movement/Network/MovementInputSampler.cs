@@ -19,7 +19,7 @@ namespace Bw.UseCases.Movement.Network
 
         public MovementInput Sample()
         {
-            var input = new MovementInput(Input.GetAxisRaw("Horizontal"), _jumpRequested); //TODO: new input system
+            var input = new MovementInput(Input.GetAxisRaw("Horizontal"), _jumpRequested, Input.GetKey(KeyCode.Space)); //TODO: new input system
             _jumpRequested = false;
             return input;
         }

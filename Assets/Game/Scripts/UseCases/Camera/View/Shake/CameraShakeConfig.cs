@@ -14,5 +14,6 @@ namespace Bw.UseCases.Camera.View.Shake
         [Header("Kick")]
         [Min(0f)] public float MaxKick = 0.25f;
         [Min(0f)] public float KickReturn = 14f;
+        [Min(0f)] public float MaskingPanSpeed = 2f;
     }
 }

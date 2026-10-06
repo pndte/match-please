@@ -725,6 +725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Entities.Camera.MainCameraInstaller
   _camera: {fileID: 542587466158643787}
+  _followConfig: {fileID: 11400000, guid: f45639b6fab348ad9217ba0a00ead047, type: 2}
 --- !u!114 &1377258039
 MonoBehaviour:
   m_ObjectHideFlags: 0

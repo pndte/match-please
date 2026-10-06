@@ -31,7 +31,7 @@ namespace Bw.UseCases.Movement.Physics
             var velocity = state.Velocity.WithX(Mathf.Clamp(input.Horizontal, -1f, 1f) * _config.Speed);
             if (jumps)
                 velocity = velocity.WithY(_config.JumpForce);
-            velocity = velocity.WithY(velocity.y + _gravity * deltaTime);
+            velocity = velocity.WithY(velocity.y + Gravity(velocity, input) * deltaTime);
 
             var position = state.Position;
             if (velocity.x != 0f)
@@ -59,6 +59,9 @@ namespace Bw.UseCases.Movement.Physics
 
         private static int Countdown(int ticks) =>
             Mathf.Max(0, ticks - 1);
+
+        private float Gravity(Vector2 velocity, MovementInput input) => //TODO: сильнее тянет любой подъём без зажатого прыжка — когда появятся другие подбрасывания (батуты, отдача), понадобится признак «поднимается от прыжка» в состоянии
+            velocity.y > 0f && !input.JumpHeld ? _gravity * _config.ReleasedJumpGravity : _gravity;
 
         private float Sweep(ref Vector2 position, Vector2 direction, float distance)
         {

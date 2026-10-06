@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fa897ca01674b4ca01229cf71a8c3ed, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b11e1dea50444df9b45b5808865079d, type: 3}
   m_Name: CameraFollowConfig
-  m_EditorClassIdentifier: Bw.UseCases::DefaultNamespace.CameraFollowConfig
-  FollowSharpness: 20
-  Offset: {x: 0, y: 0, z: -10}
-  UseBoundaries: 0
-  MinBounds: {x: -100, y: -100, z: -100}
-  MaxBounds: {x: 100, y: 100, z: 100}
+  m_EditorClassIdentifier: Bw.UseCases.Camera.View::Bw.UseCases.Camera.View.Follow.CameraFollowConfig
+  Offset: {x: 0, y: 1.5}
+  HorizontalSmoothing: 0.18
+  VerticalSmoothing: 0.3
+  MaxLookAhead: {x: 4, y: 2.5}
+  LookAheadCurve: 1.5
+  LookAheadSmoothing: 0.35

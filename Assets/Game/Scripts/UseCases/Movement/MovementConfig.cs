@@ -13,5 +13,8 @@ namespace Bw.UseCases.Movement
         [Header("Jump assist")]
         [Min(0f)] public float CoyoteTime = 0.1f;
         [Min(0f)] public float JumpBufferTime = 0.1f;
+
+        [Header("Variable jump")]
+        [Min(1f)] public float ReleasedJumpGravity = 3f;
     }
 }
