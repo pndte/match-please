@@ -200,6 +200,7 @@ MonoBehaviour:
   serverTag: server
   clientTag: client
   enableLogging: 1
+  _gameScene: ConstructionSite
   showDebugGUI: 0
 --- !u!1001 &2067038090
 PrefabInstance:
