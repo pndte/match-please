@@ -27,24 +27,18 @@ namespace Setup
         [Tooltip("Tag name for client instances (default: 'client')")] [SerializeField]
         private string clientTag = "client";
 
-        [Header("Connection Settings")]
-        [Tooltip("IP address for client to connect to (default: 127.0.0.1)")]
-        [SerializeField]
-        private string serverAddress = "127.0.0.1";
-
-        [Tooltip("Port for network communication (default: 7777)")] [SerializeField]
-        private ushort port = 7777;
-
         [Header("Debug")] [Tooltip("Enable detailed logging")] [SerializeField]
         private bool enableLogging = true;
 
         // Injected dependency
         private IRuntimeSettings _runtimeSettings;
         private INetworkHolder _networkHolder;
+        private ConnectionConfig _connection;
 
         [Inject]
-        private void Construct(IRuntimeSettings runtimeSettings, INetworkHolder networkHolder)
+        private void Construct(IRuntimeSettings runtimeSettings, INetworkHolder networkHolder, ConnectionConfig connection)
         {
+            _connection = connection;
             _networkHolder = networkHolder;
             _runtimeSettings = runtimeSettings;
         }
@@ -130,7 +124,7 @@ namespace Setup
 
         private void StartAsServer()
         {
-            Log($"<color=green>Starting as SERVER on port {port}...</color>");
+            Log($"<color=green>Starting as SERVER on port {_connection.Port}...</color>");
 
             // Configure transport if needed
             ConfigureTransport();
@@ -139,7 +133,7 @@ namespace Setup
 
             if (success)
             {
-                Log($"<color=green>✓ Server started successfully on port {port}</color>");
+                Log($"<color=green>✓ Server started successfully on port {_connection.Port}</color>");
                 _networkHolder.NetworkManager.Value = NetworkManager.Singleton;
             }
             else
@@ -150,7 +144,7 @@ namespace Setup
 
         private void StartAsClient()
         {
-            Log($"<color=cyan>Starting as CLIENT connecting to {serverAddress}:{port}...</color>");
+            Log($"<color=cyan>Starting as CLIENT connecting to {_connection.ServerAddress}:{_connection.Port}...</color>");
 
             // Configure transport if needed
             ConfigureTransport();
@@ -159,7 +153,7 @@ namespace Setup
 
             if (success)
             {
-                Log($"<color=cyan>✓ Client started successfully, connecting to {serverAddress}:{port}</color>");
+                Log($"<color=cyan>✓ Client started successfully, connecting to {_connection.ServerAddress}:{_connection.Port}</color>");
                 _networkHolder.NetworkManager.Value = NetworkManager.Singleton;
             }
             else
@@ -194,18 +188,18 @@ namespace Setup
                             var addressField = connectionDataType.GetField("Address");
                             if (addressField != null)
                             {
-                                addressField.SetValue(connectionData, serverAddress);
+                                addressField.SetValue(connectionData, _connection.ServerAddress);
                             }
 
                             // Set Port
                             var portField = connectionDataType.GetField("Port");
                             if (portField != null)
                             {
-                                portField.SetValue(connectionData, port);
+                                portField.SetValue(connectionData, _connection.Port);
                             }
 
                             connectionDataField.SetValue(transport, connectionData);
-                            Log($"Transport configured: {serverAddress}:{port}");
+                            Log($"Transport configured: {_connection.ServerAddress}:{_connection.Port}");
                         }
                     }
                     catch (System.Exception ex)

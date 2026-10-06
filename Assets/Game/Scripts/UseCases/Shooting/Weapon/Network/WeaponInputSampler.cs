@@ -1,6 +1,7 @@
 using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network.Prediction;
+using Bw.Entities.Network.Ticks;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
@@ -15,10 +16,13 @@ namespace Bw.UseCases.Shooting.Weapon.Network
 
         private readonly Transform _weapon;
         private readonly IChangableCamera _camera;
+        private readonly INetworkTicks _ticks;
+        private readonly IInterpolationTicks _interpolationTicks;
 
         private bool _held;
         private float _aim;
         private bool _triggerPressed;
+        private double _triggerViewTick;
         private bool _reloadPressed;
 
         public WeaponInputSampler(
@@ -26,10 +30,14 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             IReadonlyControlledBy controlledBy,
             IWeaponHold hold,
             IChangableCamera camera,
+            INetworkTicks ticks,
+            IInterpolationTicks interpolationTicks,
             Transform weapon)
         {
             _weapon = weapon;
             _camera = camera;
+            _ticks = ticks;
+            _interpolationTicks = interpolationTicks;
 
             hold.HeldLifetime.WhenAlive(lifetime, heldLifetime =>
             {
@@ -42,7 +50,8 @@ namespace Bw.UseCases.Shooting.Weapon.Network
 
         public WeaponInput Sample() //TODO: нажатие курка теряется, если пропадут два пакета ввода подряд (Unreliable и один прошлый ввод в пакете) — для стрельбы нужна избыточность больше
         {
-            var input = new WeaponInput(SampleAim(), _triggerPressed, _reloadPressed);
+            var viewDelay = _triggerPressed ? (float)(_ticks.Current - _triggerViewTick) : 0f;
+            var input = new WeaponInput(SampleAim(), _triggerPressed, _reloadPressed, viewDelay);
             _triggerPressed = false;
             _reloadPressed = false;
             return input;
@@ -50,8 +59,11 @@ namespace Bw.UseCases.Shooting.Weapon.Network
 
         private void LatchPresses()
         {
-            if (Input.GetMouseButtonDown(0)) //TODO: new input system
+            if (Input.GetMouseButtonDown(0) && !_triggerPressed) //TODO: new input system
+            {
                 _triggerPressed = true;
+                _triggerViewTick = _interpolationTicks.InterpolationTick;
+            }
 
             if (Input.GetKeyDown(KeyCode.R)) //TODO: new input system
                 _reloadPressed = true;

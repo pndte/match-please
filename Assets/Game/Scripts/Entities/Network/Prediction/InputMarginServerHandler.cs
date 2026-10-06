@@ -27,7 +27,7 @@ namespace Bw.Entities.Network.Prediction
             _config = config;
 
             inputRequest.Requested.Advise(lifetime, request => Measure(request.Tick - _ticks.Current - 1));
-            ticks.Ticked.Advise(lifetime, _ => ReportWhenDue());
+            ticks.Ticked(TickPhase.Default).Advise(lifetime, _ => ReportWhenDue());
         }
 
         private void Measure(int margin)

@@ -12,9 +12,8 @@ namespace Bw.Entities.Network.Ticks
         public int Current { get; private set; }
         public float Progress => Mathf.Clamp01((float)(_time / Duration - Current));
         public double InterpolationTick => _network.ServerTime.Time / Duration - _config.InterpolationDelayTicks;
-        public ISource<int> Ticked => _ticked;
 
-        private readonly Signal<int> _ticked = new();
+        private readonly TickPhaseSignals _phases = new();
         private readonly NetworkTicksConfig _config;
         private NetworkManager _network;
         private double _time;
@@ -36,6 +35,9 @@ namespace Bw.Entities.Network.Ticks
             });
         }
 
+        public ISource<int> Ticked(TickPhase phase) =>
+            _phases.Of(phase);
+
         public void NetworkUpdate(NetworkUpdateStage updateStage)
         {
             if (!_network.IsConnectedClient)
@@ -48,7 +50,7 @@ namespace Bw.Entities.Network.Ticks
                 Current = tick - 1;
 
             while (Current < tick)
-                _ticked.Fire(++Current);
+                _phases.Fire(++Current);
         }
 
         public void Report(int marginTicks)

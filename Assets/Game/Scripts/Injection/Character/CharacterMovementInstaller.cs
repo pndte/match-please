@@ -39,6 +39,7 @@ namespace Bw.Injection
             Container.BindInterfacesTo<MovementInputPolicy>().AsSingle();
 
             PredictionInstaller<MovementInput, MovementState>.Install(Container, _runtimeSettings, _netSchema);
+            LagCompensationInstaller<MovementState, MovementStateView>.Install(Container, _runtimeSettings);
         }
     }
 }

@@ -4,6 +4,7 @@ using Bw.Entities.Simulation;
 using Bw.UseCases.Shooting.Graphics;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
+using Bw.UseCases.Shooting.Weapon.Extensions;
 using Cysharp.Threading.Tasks;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
@@ -37,7 +38,7 @@ namespace Bw.UseCases.Shooting.View
                 heldLifetime.OnTermination(() => _held = false);
             });
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
-                weapon.Fired.Advise(controlledLifetime, state => Play(state.Aim)));
+                weapon.Fired.Advise(controlledLifetime, shot => Play(shot.Aim)));
             controlledBy.Me.WhenFalse(lifetime, remoteLifetime =>
             {
                 _remote = true;

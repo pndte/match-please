@@ -26,7 +26,7 @@ namespace Bw.Entities.Network.Prediction
             _inputRequest = inputRequest;
 
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
-                ticks.Ticked.Advise(controlledLifetime, Send));
+                ticks.Ticked(TickPhase.Default).Advise(controlledLifetime, Send));
         }
 
         private void Send(int tick)

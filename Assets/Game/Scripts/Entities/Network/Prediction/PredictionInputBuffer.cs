@@ -8,13 +8,12 @@ namespace Bw.Entities.Network.Prediction
 {
     public sealed class PredictionInputBuffer<TInput> where TInput : struct
     {
-        private const int MaxBufferedTicks = 32;
-
         public ISource<TInput> Simulated => _simulated;
 
         private readonly Signal<TInput> _simulated = new();
         private readonly Dictionary<int, TInput> _buffered = new();
         private readonly INetworkTicks _ticks;
+        private readonly NetworkTicksConfig _config;
         private readonly IInputPolicy<TInput> _policy;
 
         private TInput _lastInput;
@@ -22,14 +21,16 @@ namespace Bw.Entities.Network.Prediction
         public PredictionInputBuffer(
             Lifetime lifetime,
             INetworkTicks ticks,
+            NetworkTicksConfig config,
             IInputPolicy<TInput> policy,
             IPredictionInputRequest<TInput> inputRequest)
         {
             _ticks = ticks;
+            _config = config;
             _policy = policy;
 
             inputRequest.Requested.Advise(lifetime, Buffer);
-            ticks.Ticked.Advise(lifetime, Simulate);
+            ticks.Ticked(TickPhase.Default).Advise(lifetime, Simulate);
         }
 
         private void Buffer(TickedInput<TInput> request)
@@ -40,7 +41,7 @@ namespace Bw.Entities.Network.Prediction
 
         private void Store(int tick, TInput input)
         {
-            if (tick <= _ticks.Current || tick > _ticks.Current + MaxBufferedTicks || !_policy.IsValid(input))
+            if (tick <= _ticks.Current || tick > _ticks.Current + _config.MaxBufferedInputTicks || !_policy.IsValid(input))
                 return;
 
             _buffered.TryAdd(tick, input); //TODO: при смене управляющего вводы прежнего на несколько тиков вперёд остаются в буфере и применятся к новому (станет важно с подбором оружия) — чистить буфер при смене управления

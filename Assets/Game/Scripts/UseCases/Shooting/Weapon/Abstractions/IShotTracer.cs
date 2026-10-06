@@ -2,6 +2,7 @@ namespace Bw.UseCases.Shooting.Weapon.Abstractions
 {
     public interface IShotTracer
     {
-        public ShotTrace Trace(float aim);
+        public ShotRay Aim(float aim);
+        public ShotTrace Cast(ShotRay ray);
     }
 }

@@ -80,6 +80,14 @@ namespace Bw.Entities.Extensions
             });
         }
 
+        public static IReadonlyProperty<TValue> Select<T, TValue>(this IReadonlyProperty<T> property, Lifetime lifetime,
+            Func<T, TValue> selector) where TValue : IEquatable<TValue>
+        {
+            var selected = new ViewableProperty<TValue>();
+            property.Advise(lifetime, value => selected.Value = selector(value));
+            return selected;
+        }
+
         public static void View<T>(this IViewableList<T> list, Lifetime lifetime, Action<Lifetime, T> handler)
         {
             list.View(lifetime, (itemLifetime, _, item) =>

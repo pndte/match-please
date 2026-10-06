@@ -8,9 +8,8 @@ namespace Bw.Entities.Network.Ticks
     {
         public float Duration { get; private set; }
         public int Current { get; private set; }
-        public ISource<int> Ticked => _ticked;
 
-        private readonly Signal<int> _ticked = new();
+        private readonly TickPhaseSignals _phases = new();
         private NetworkManager _network;
 
         public ServerNetworkTicks(Lifetime lifetime, INetworkHolder networkHolder)
@@ -26,10 +25,13 @@ namespace Bw.Entities.Network.Ticks
             });
         }
 
+        public ISource<int> Ticked(TickPhase phase) =>
+            _phases.Of(phase);
+
         private void OnTick()
         {
             Current = _network.ServerTime.Tick;
-            _ticked.Fire(Current);
+            _phases.Fire(Current);
         }
     }
 }

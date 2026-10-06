@@ -26,27 +26,40 @@ namespace Bw.UseCases.Shooting.Weapon
             };
         }
 
-        public ShotTrace Trace(float aim)
+        public ShotRay Aim(float aim)
+        {
+            var holder = Holder();
+            var rotation = Quaternion.Euler(0f, 0f, aim);
+            var muzzleOffset = _muzzle.Transform.localPosition;
+            var radius = ((Vector2)_weapon.localPosition).magnitude;
+
+            return new ShotRay(
+                holder.position,
+                holder.TransformPoint(rotation * new Vector3(radius + muzzleOffset.x, muzzleOffset.y)),
+                holder.TransformDirection(rotation * Vector3.right));
+        }
+
+        public ShotTrace Cast(ShotRay ray)
+        {
+            var shooter = Holder().root;
+
+            Physics2D.Linecast(ray.Pivot, ray.Muzzle, _filter, _hits);
+            if (TryFindForeignHit(shooter, out var blocking))
+                return new ShotTrace(blocking.point, blocking.point, blocking);
+
+            Physics2D.Raycast(ray.Muzzle, ray.Direction, _filter, _hits, _config.MaxDistance);
+            return TryFindForeignHit(shooter, out var hit)
+                ? new ShotTrace(ray.Muzzle, hit.point, hit)
+                : new ShotTrace(ray.Muzzle, ray.Muzzle + ray.Direction * _config.MaxDistance, hit);
+        }
+
+        private Transform Holder()
         {
             var holder = _weapon.parent;
             if (holder == null)
                 throw new InvalidOperationException($"Weapon '{_weapon.name}' traces a shot only while it is held.");
 
-            var rotation = Quaternion.Euler(0f, 0f, aim);
-            var muzzleOffset = _muzzle.Transform.localPosition;
-            var radius = ((Vector2)_weapon.localPosition).magnitude;
-            var pivot = (Vector2)holder.position;
-            var muzzle = (Vector2)holder.TransformPoint(rotation * new Vector3(radius + muzzleOffset.x, muzzleOffset.y));
-            var direction = (Vector2)holder.TransformDirection(rotation * Vector3.right);
-
-            Physics2D.Linecast(pivot, muzzle, _filter, _hits);
-            if (TryFindForeignHit(holder.root, out var blocking))
-                return new ShotTrace(blocking.point, blocking.point, blocking);
-
-            Physics2D.Raycast(muzzle, direction, _filter, _hits, _config.MaxDistance);
-            return TryFindForeignHit(holder.root, out var hit)
-                ? new ShotTrace(muzzle, hit.point, hit)
-                : new ShotTrace(muzzle, muzzle + direction * _config.MaxDistance, hit);
+            return holder;
         }
 
         private bool TryFindForeignHit(Transform shooter, out RaycastHit2D hit)

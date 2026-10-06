@@ -12,11 +12,11 @@ namespace Bw.UseCases.Shooting.Weapon
         public IReadonlyProperty<WeaponState> State => _state;
         public WeaponState Previous { get; private set; }
         public ISource<WeaponState> Stepped => _stepped;
-        public ISource<WeaponState> Fired => _fired;
+        public ISource<WeaponShot> Fired => _fired;
 
         private readonly ViewableProperty<WeaponState> _state;
         private readonly Signal<WeaponState> _stepped = new();
-        private readonly Signal<WeaponState> _fired = new();
+        private readonly Signal<WeaponShot> _fired = new();
         private readonly ISimulator<WeaponInput, WeaponState> _simulator;
 
         public ShootingWeapon(
@@ -47,7 +47,7 @@ namespace Bw.UseCases.Shooting.Weapon
             _stepped.Fire(_state.Value);
 
             if (_state.Value.Shots != Previous.Shots)
-                _fired.Fire(_state.Value);
+                _fired.Fire(new WeaponShot(_state.Value.Aim, input.ViewDelay));
         }
 
         private void InterruptReload() =>
