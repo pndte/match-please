@@ -7,7 +7,7 @@ using Bw.UseCases.Character;
 using Bw.UseCases.Character.Extensions;
 using Bw.UseCases.Character.Network;
 using Bw.UseCases.Shooting.Weapon;
-using Cysharp.Threading.Tasks;
+using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
@@ -32,6 +32,7 @@ namespace Bw.UseCases.Spawning.Network
         private readonly ICharacterRegistry _characterRegistry;
         private readonly IGameObjectByCharacterCollection _gameObjectByCharacterCollection;
         private readonly IClientPlayerCollection _clientPlayerCollection;
+        private readonly IHeldWeaponCollection _heldWeapons;
         private readonly DiContainer _container;
         private int _nextSpawnPointIndex;
         private int _weaponNameCounter;
@@ -42,12 +43,14 @@ namespace Bw.UseCases.Spawning.Network
             ICharacterRegistry characterRegistry,
             IGameObjectByCharacterCollection gameObjectByCharacterCollection,
             IClientPlayerCollection clientPlayerCollection,
+            IHeldWeaponCollection heldWeapons,
             DiContainer container,
             Data data)
         {
             _characterRegistry = characterRegistry;
             _gameObjectByCharacterCollection = gameObjectByCharacterCollection;
             _clientPlayerCollection = clientPlayerCollection;
+            _heldWeapons = heldWeapons;
             _container = container;
             _data = data;
 
@@ -83,16 +86,14 @@ namespace Bw.UseCases.Spawning.Network
             characterOwnership.AddOwner(characterLifetime, player);
             characterControlledBy.Set(characterLifetime, player);
 
-            SpawnAndAttachWeapon(player, client, characterHolder, characterLifetime, characterObject.transform.position, spawnRotation).Forget();
+            SpawnWeaponFor(character, characterLifetime, characterObject.transform.position, spawnRotation);
 
             Debug.Log($"[PlayerSpawner] Player character spawned for client {client.Id} at {spawnPosition}");
             return character;
         }
 
-        private async UniTaskVoid SpawnAndAttachWeapon(
-            IPlayer player,
-            IClient client,
-            CharacterHolder characterHolder,
+        private void SpawnWeaponFor( //TODO: каждый спавн создаёт новое оружие, а выброшенное копится на полу — решить, когда появится подбор
+            ICharacter character,
             Lifetime characterLifetime,
             Vector3 position,
             Quaternion rotation)
@@ -100,21 +101,11 @@ namespace Bw.UseCases.Spawning.Network
             var weaponObject = NetworkPrefabInstantiationHelper.Instantiate(
                 _container, _data.WeaponPrefab, position, rotation);
             weaponObject.name += $", {_weaponNameCounter++}";
+            weaponObject.Spawn(destroyWithScene: true);
 
-            if (weaponObject.TryGetComponent(out Rigidbody2D weaponRb))
-                weaponRb.simulated = false;
-
-            weaponObject.SpawnWithOwnership(client.Id, destroyWithScene: true);
-
-            var weaponHolder = RequireComponent<WeaponHolder>(weaponObject.gameObject);
-
-            await UniTask.Delay(TimeSpan.FromSeconds(3));//TODO: костыль, фиксить
-            characterHolder.Value.State.WhenAlive(characterLifetime, aliveLifetime =>
-            {
-                weaponHolder.OwnershipController.AddOwner(aliveLifetime, player);
-                weaponHolder.ControlledBy.Set(aliveLifetime, player);
-                weaponHolder.PickUpWeapon(aliveLifetime, characterHolder);
-            });
+            var weapon = RequireComponent<WeaponHolder>(weaponObject.gameObject).Value;
+            character.State.WhenAlive(characterLifetime, aliveLifetime =>
+                _heldWeapons.ByCharacter.AddLifetimed(aliveLifetime, character, weapon));
         }
 
         private Vector3 GetSpawnPosition()

@@ -16,9 +16,6 @@ namespace Bw.UseCases.Shooting
 
         [Header("Rotation Settings")]
         public float RotationSpeed = 0f;
-
-        [Header("Weapon Orientation")]
-        public bool RotateWeaponTowardsMouse = true;
     }
 }
 

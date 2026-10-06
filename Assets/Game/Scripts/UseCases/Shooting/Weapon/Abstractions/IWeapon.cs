@@ -1,15 +1,14 @@
-﻿using JetBrains.Collections.Viewable;
-using UnityEngine;
+using Bw.Entities.Simulation;
+using JetBrains.Collections.Viewable;
 
 namespace Bw.UseCases.Shooting.Weapon.Abstractions
 {
-    public interface IWeapon
+    public interface IReadonlyWeapon : IReadonlySimulation<WeaponState>
     {
-        /// <summary>
-        /// Shot event, vector3 argument is a shot target position in global space
-        /// </summary>
-        public ISource<Vector3> OnShot { get; }
-        public void Shoot(Vector3 targetPosition);
-        public IReadonlyProperty<bool> CanShoot { get; }
+        public ISource<WeaponState> Fired { get; }
+    }
+
+    public interface IWeapon : IReadonlyWeapon, ISimulation<WeaponState>
+    {
     }
 }

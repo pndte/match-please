@@ -16,10 +16,8 @@ namespace Bw.Injection.Network
             RegisterCodec<JetBrains.Core.Unit, Bw.Entities.Network.Codecs.UnitCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Requests.TickedInput<Bw.UseCases.Movement.MovementInput>, Bw.UseCases.Movement.Network.Codecs.TickedMovementInputCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Requests.TickedState<Bw.UseCases.Movement.MovementState>, Bw.UseCases.Movement.Network.Codecs.TickedMovementStateCodec>(receivers, senders);
-            RegisterCodec<Bw.UseCases.Shooting.Weapon.Network.Requests.ReloadRequestDto, Bw.UseCases.Shooting.Weapon.Network.Requests.ReloadRequestDtoCodec>(receivers, senders);
-            RegisterCodec<Bw.UseCases.Shooting.Weapon.Network.Requests.ReloadRequestResultDto, Bw.UseCases.Shooting.Weapon.Network.Requests.ReloadRequestResultDtoCodec>(receivers, senders);
-            RegisterCodec<Bw.UseCases.Shooting.Weapon.Network.Requests.ShootRequestDto, Bw.UseCases.Shooting.Weapon.Network.Requests.ShootRequestDtoCodec>(receivers, senders);
-            RegisterCodec<Bw.UseCases.Shooting.Weapon.Network.Requests.ShootRequestResultDto, Bw.UseCases.Shooting.Weapon.Network.Requests.ShootRequestResultDtoCodec>(receivers, senders);
+            RegisterCodec<Bw.Entities.Network.Prediction.Requests.TickedInput<Bw.UseCases.Shooting.Weapon.WeaponInput>, Bw.UseCases.Shooting.Weapon.Network.Codecs.TickedWeaponInputCodec>(receivers, senders);
+            RegisterCodec<Bw.Entities.Network.Prediction.Requests.TickedState<Bw.UseCases.Shooting.Weapon.WeaponState>, Bw.UseCases.Shooting.Weapon.Network.Codecs.TickedWeaponStateCodec>(receivers, senders);
         }
     }
 }

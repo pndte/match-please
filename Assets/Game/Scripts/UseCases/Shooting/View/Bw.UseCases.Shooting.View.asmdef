@@ -2,6 +2,9 @@
     "name": "Bw.UseCases.Shooting.View",
     "rootNamespace": "Bw",
     "references": [
+        "Bw.Entities",
+        "Bw.UseCases.Shooting",
+        "UniTask",
         "R3.Unity"
     ],
     "includePlatforms": [],

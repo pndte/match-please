@@ -1,9 +1,9 @@
-using Bw.Entities;
+using System;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
-using Bw.Entities.Network.Repository;
 using Bw.Entities.Network.Variables;
+using Bw.Entities.Simulation;
 using Bw.Injection.ControlledBy;
 using Bw.Injection.Network;
 using Bw.Injection.Network.Variables;
@@ -14,8 +14,9 @@ using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network;
 using Bw.UseCases.Shooting.Weapon.Network.Requests;
-using JetBrains.Collections.Viewable;
+using JetBrains.Core;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using Zenject;
 
@@ -32,13 +33,15 @@ namespace Bw.Injection.Weapon
 
         [Header("Configs")] [SerializeField] private RaycastShootConfig _raycastShootConfig;
         [SerializeField] private ShootingWeaponConfig _shootingWeaponConfig;
+        [SerializeField] private WeaponRotationConfig _rotationConfig;
         [SerializeField] private LineRendererVfxConfig _vfxConfig;
 
         [Header("Network")]
         [SerializeField] private NetworkObject _networkObject;
-        [SerializeField] private WeaponRotation _weaponRotation;
+        [SerializeField] private NetworkWeaponHold _weaponHold;
+        [SerializeField] private NetworkTransform _networkTransform;
 
-        [Header("Loop")] [SerializeField] private ShootingWeaponLoopRunner _weaponLoopRunner;
+        [Header("Physics")] [SerializeField] private Rigidbody2D _body;
 
         public override void InstallBindings()
         {
@@ -46,7 +49,7 @@ namespace Bw.Injection.Weapon
             ControlledByInstaller.Install(Container, _runtimeSettings);
 
             Container.Bind<NetworkObject>().FromInstance(_networkObject).AsSingle();
-            Container.Bind<INetworkLifetimedObject>().FromInstance(_weaponRotation).AsSingle();
+            Container.Bind(typeof(INetworkLifetimedObject), typeof(IWeaponHold)).FromInstance(_weaponHold).AsSingle();
             BindLifetime();
 
             var netSchema = new NetEntriesSchemaBuilder();
@@ -54,88 +57,66 @@ namespace Bw.Injection.Weapon
             ControlledByServicesInstaller.Install(Container, _runtimeSettings, netSchema);
 
             BindConfigs();
-
-            BindAmmo(netSchema);
-            BindWeaponRequests(netSchema);
+            BindWeapon(netSchema);
+            BindDropRequest(netSchema);
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
-            BindCommonWeaponLogic();
-            BindVfxRenderer();
             BindSprite();
-            BindRequestHandlers();
 
-            BindSpecialWeaponLogic();
-
-            BindLoop();
-
-            BindWeaponHolder();
-
-            Container.Bind<WeaponRotation>().FromInstance(_weaponRotation).AsSingle().NonLazy();
-        }
-
-        private void BindWeaponHolder()
-        {
-            if (_runtimeSettings.CurrentPeerType == PeerType.Server)
-                Container.InstantiateComponent<WeaponHolder>(gameObject);
-        }
-
-        private void BindLoop()
-        {
-            Container.Bind<ShootingWeaponLoopRunner>().FromInstance(_weaponLoopRunner).AsSingle().NonLazy();
-        }
-
-        private void BindSpecialWeaponLogic()
-        {
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.Bind<RaycastShooter>().AsSingle().NonLazy();
-                    Container.Bind<WeaponAmmoManager>().AsSingle().NonLazy();
+                    BindServer();
                     break;
                 case PeerType.Client:
-                    Container.Bind<BulletTrailRenderer>().AsSingle().NonLazy();
+                    BindClient();
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
-        private void BindRequestHandlers()
+        private void BindWeapon(INetEntriesSchemaBuilder netSchema)
         {
-            switch (_runtimeSettings.CurrentPeerType)
-            {
-                case PeerType.Client:
-                    Container.BindInterfacesTo<RequestIdsRepository>().AsSingle();
-                    Container.Bind<PendingReloadLifetimes>().AsSingle();
-                    Container.Bind<WeaponRequestsClientHandler>().AsSingle().NonLazy();
-                    Container.Bind<ShootingWeapon.NetworkHandler>().AsSingle().NonLazy();
-                    Container.Bind<InterruptableReloader.NetworkHandler>().AsSingle().NonLazy();
-                    break;
-                case PeerType.Server:
-                    Container.Bind<WeaponRequestsServerHandler>().AsSingle().NonLazy();
-                    break;
-            }
+            Container.BindInterfacesTo<WeaponSimulator>().AsSingle();
+            Container.BindInterfacesTo<ShootingWeapon>().AsSingle().NonLazy();
+            Container.BindInterfacesTo<WeaponMuzzle>().AsSingle().WithArguments(_muzzleTransform);
+            Container.BindInterfacesTo<ShotTracer>().AsSingle().WithArguments(transform);
+
+            PredictionInstaller<WeaponInput, WeaponState>.Install(Container, _runtimeSettings, netSchema);
         }
 
-        private void BindWeaponRequests(INetEntriesSchemaBuilder netSchema)
+        private void BindDropRequest(INetEntriesSchemaBuilder netSchema)
         {
-            var mouseShootRequestDeclaration = netSchema.DeclareSignal<ShootRequestDto>(NetworkDelivery.Reliable, NetworkPermissions.Client);
-            var reloadRequestDeclaration = netSchema.DeclareSignal<ReloadRequestDto>(NetworkDelivery.Reliable, NetworkPermissions.Client);
-            var shootReceivedDeclaration = netSchema.DeclareSignal<ShootRequestResultDto>(NetworkDelivery.Reliable, NetworkPermissions.Server);
-            var reloadReceivedDeclaration = netSchema.DeclareSignal<ReloadRequestResultDto>(NetworkDelivery.Reliable, NetworkPermissions.Server);
+            var dropRequestDeclaration = netSchema.DeclareSignal<Unit>(NetworkDelivery.Reliable, NetworkPermissions.Client);
 
-            Container.BindInterfacesAndSelfTo<WeaponSignals>().FromMethod(ctx =>
-            {
-                var entries = ctx.Container.Resolve<INetEntries>();
-                return new WeaponSignals(
-                    entries.Get(mouseShootRequestDeclaration),
-                    entries.Get(reloadRequestDeclaration),
-                    entries.Get(shootReceivedDeclaration),
-                    entries.Get(reloadReceivedDeclaration));
-            }).AsSingle();
+            Container.BindInterfacesTo<WeaponSignals>()
+                .FromMethod(ctx => new WeaponSignals(ctx.Container.Resolve<INetEntries>().Get(dropRequestDeclaration)))
+                .AsSingle();
         }
 
-        private void BindVfxRenderer()
+        private void BindServer()
         {
+            Container.BindInterfacesTo<WeaponInputPolicy>().AsSingle();
+            Container.Bind<IStateView<WeaponState>>().To<WeaponStateView>().AsSingle().WithArguments(transform);
+            Container.Bind<RaycastShooter>().AsSingle().NonLazy();
+            Container.Bind<WeaponHoldServerHandler>().AsSingle().NonLazy();
+            Container.Bind<WeaponDropServerHandler>().AsSingle().NonLazy();
+            Container.Bind<HeldWeaponBody>().AsSingle().WithArguments(_body).NonLazy();
+            Container.InstantiateComponent<WeaponHolder>(gameObject);
+        }
+
+        private void BindClient()
+        {
+            Container.BindInterfacesTo<WeaponInputSampler>().AsSingle().WithArguments(transform);
             Container.BindInterfacesTo<LineRendererVfxPlayer>().AsSingle().WithArguments(_trailPrefab);
+            Container.Bind<IStateView<WeaponState>>()
+                .FromMethod(ctx => new CompositeStateView<WeaponState>(
+                    ctx.Container.Instantiate<WeaponStateView>(new object[] { transform }),
+                    ctx.Container.Instantiate<WeaponShotEffectsView>()))
+                .AsSingle();
+            Container.Bind<HeldWeaponNetworkTransform>().AsSingle().WithArguments(_networkTransform).NonLazy();
+            Container.Bind<WeaponDropClientHandler>().AsSingle().NonLazy();
         }
 
         private void BindSprite()
@@ -149,34 +130,7 @@ namespace Bw.Injection.Weapon
             Container.BindInstance(_vfxConfig).AsSingle();
             Container.BindInstance(_shootingWeaponConfig).AsSingle();
             Container.BindInstance(_shootingWeaponConfig.AmmoSettings).AsSingle();
-        }
-
-        private void BindCommonWeaponLogic()
-        {
-            Container.Bind<IViewableProperty<ReloadState>>()
-                .FromInstance(new ViewableProperty<ReloadState>(ReloadState.Complete))
-                .WhenInjectedInto<InterruptableReloader>();
-            Container.BindInterfacesAndSelfTo<InterruptableReloader>().AsSingle();
-            Container.BindInterfacesAndSelfTo<WeaponMuzzle>().AsSingle().WithArguments(_muzzleTransform);
-            Container.BindInterfacesAndSelfTo<ShootingWeapon>().AsSingle();
-        }
-
-        private void BindAmmo(INetEntriesSchemaBuilder netSchema)
-        {
-            var ammoDeclaration = netSchema.DeclareProperty(
-                _shootingWeaponConfig.AmmoSettings.OnSpawnValue,
-                NetworkDelivery.Reliable,
-                NetworkPermissions.Server);
-            Container.BindNetPropertyFor<int, Ammo>(ammoDeclaration);
-
-            if (_runtimeSettings.CurrentPeerType == PeerType.Client)
-            {
-                Container.Bind<IReadonlyAmmo>().To<Ammo>().AsSingle();
-            }
-            else if (_runtimeSettings.CurrentPeerType == PeerType.Server)
-            {
-                Container.Bind(typeof(IAmmo), typeof(IReadonlyAmmo)).To<Ammo>().AsSingle();
-            }
+            Container.BindInstance(_rotationConfig).AsSingle();
         }
 
         private void BindLifetime()

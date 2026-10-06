@@ -29,7 +29,7 @@ namespace Bw.Entities.Network.Prediction
             _simulation = simulation;
             _simulator = simulator;
 
-            controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
+            controlledBy.Me.WhenTrue(lifetime, controlledLifetime => //TODO: у чужого объекта локальное состояние не обновлялось (снимки идут только в показ) — получив управление (подбор оружия), клиент до первого состояния сервера предсказывает от устаревшего: патроны, счётчик выстрелов
             {
                 inputRequest.Requested.Advise(controlledLifetime, Remember);
                 stateResult.Received.Advise(controlledLifetime, Reconcile);

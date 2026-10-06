@@ -43,7 +43,7 @@ namespace Bw.Entities.Network.Prediction
             if (tick <= _ticks.Current || tick > _ticks.Current + MaxBufferedTicks || !_policy.IsValid(input))
                 return;
 
-            _buffered.TryAdd(tick, input);
+            _buffered.TryAdd(tick, input); //TODO: при смене управляющего вводы прежнего на несколько тиков вперёд остаются в буфере и применятся к новому (станет важно с подбором оружия) — чистить буфер при смене управления
         }
 
         private void Simulate(int tick)

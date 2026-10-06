@@ -45,7 +45,6 @@ GameObject:
   - component: {fileID: 5480233075956149962}
   - component: {fileID: 6095048442294211056}
   - component: {fileID: 63440579415710661}
-  - component: {fileID: 2715088513661146607}
   - component: {fileID: 4999205492878388941}
   - component: {fileID: 7982959669375519713}
   - component: {fileID: 6422472588081055441}
@@ -172,9 +171,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45267f75b8e242bea41faaf288333192, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Bw.UseCases.Shooting::Bw.UseCases.Shooting.WeaponRotation
+  m_EditorClassIdentifier: Bw.UseCases.Shooting::Bw.UseCases.Shooting.Weapon.Network.NetworkWeaponHold
   ShowTopMostFoldoutHeaderGroup: 1
-  _config: {fileID: 11400000, guid: b56c1b3c160b00d42a198f5c9218d945, type: 2}
 --- !u!114 &63440579415710661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,22 +190,12 @@ MonoBehaviour:
   _muzzleTransform: {fileID: 8117144414725150372}
   _raycastShootConfig: {fileID: 11400000, guid: 028f3f7f1f83f474697f765f7043df94, type: 2}
   _shootingWeaponConfig: {fileID: 11400000, guid: c7210083ab45bac4eb075b9602232847, type: 2}
+  _rotationConfig: {fileID: 11400000, guid: b56c1b3c160b00d42a198f5c9218d945, type: 2}
   _vfxConfig: {fileID: 11400000, guid: 702bc1ea939f2784495afb093193db74, type: 2}
   _networkObject: {fileID: 8409776997951654046}
-  _weaponRotation: {fileID: 6095048442294211056}
-  _weaponLoopRunner: {fileID: 2715088513661146607}
---- !u!114 &2715088513661146607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2477611210009415474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 189dac8014e64dea9fef260e0141ddd1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Bw.UseCases.Shooting::Bw.UseCases.Shooting.Weapon.ShootingWeaponLoopRunner
+  _weaponHold: {fileID: 6095048442294211056}
+  _networkTransform: {fileID: 5480233075956149962}
+  _body: {fileID: 6422472588081055441}
 --- !u!114 &4999205492878388941
 MonoBehaviour:
   m_ObjectHideFlags: 0

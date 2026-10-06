@@ -20,4 +20,3 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 16385
   RotationSpeed: 0
-  RotateWeaponTowardsMouse: 1

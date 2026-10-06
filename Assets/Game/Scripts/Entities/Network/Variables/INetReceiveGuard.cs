@@ -36,7 +36,7 @@ namespace Bw.Entities.Network.Variables
 
         public void Check(ulong senderClientId)
         {
-            if (!SenderOwns(senderClientId))
+            if (!SenderOwns(senderClientId)) //TODO: честная гонка — ввод, отправленный до снятия владения (выброс оружия, смерть), ещё в пути: ввод идёт каждый тик, и сервер бросает на каждый такой пакет — отличать гонку от нарушения
                 throw new InvalidOperationException(
                     $"Only an owner writes this entry, client {senderClientId.ToString()} doesn't own object {_networkObject.NetworkObjectId.ToString()}.");
         }
