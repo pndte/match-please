@@ -13,35 +13,38 @@ MonoBehaviour:
   m_Name: PoolSettings
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Pool.PoolSettingsInstaller
   _pools:
-    UnlistedLimit: 8
+    UnlistedMaxIdle: 8
     Prefabs:
     - Prefab: {fileID: 1000, guid: 01117806cb1f2ff46ad99329bdd08826, type: 3}
+      ViewOnly: 1
       Prewarm: 8
-      Limit: 24
-      Mode:
-        rid: 7245772975991160934
+      MaxIdle: 24
+      InUseCap:
+        rid: 7245772975991160940
     - Prefab: {fileID: 1000, guid: 5bd6aa44685b41de92c8585ee6274c58, type: 3}
+      ViewOnly: 1
       Prewarm: 32
-      Limit: 32
-      Mode:
-        rid: 7245772975991160935
+      MaxIdle: 32
+      InUseCap:
+        rid: 7245772975991160941
     - Prefab: {fileID: 3845862069358243844, guid: 834baa140fa4a3643b92af2da947ad35, type: 3}
+      ViewOnly: 1
       Prewarm: 4
-      Limit: 8
-      Mode:
-        rid: 7245772975991160936
+      MaxIdle: 8
+      InUseCap:
+        rid: 7245772975991160942
   references:
     version: 2
     RefIds:
-    - rid: 7245772975991160934
+    - rid: 7245772975991160940
       type: {class: ReclaimOldestMode, ns: Bw.Entities.Pool.GameObjects.Modes, asm: Bw.Entities}
       data:
         Max: 48
-    - rid: 7245772975991160935
+    - rid: 7245772975991160941
       type: {class: ReclaimOldestMode, ns: Bw.Entities.Pool.GameObjects.Modes, asm: Bw.Entities}
       data:
         Max: 32
-    - rid: 7245772975991160936
+    - rid: 7245772975991160942
       type: {class: ReclaimOldestMode, ns: Bw.Entities.Pool.GameObjects.Modes, asm: Bw.Entities}
       data:
         Max: 16

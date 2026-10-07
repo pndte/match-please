@@ -19,7 +19,7 @@ namespace Bw.EditorTools.Pool
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var unlisted = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
-            EditorGUI.PropertyField(unlisted, property.FindPropertyRelative(nameof(PrefabPoolsConfig.UnlistedLimit)));
+            EditorGUI.PropertyField(unlisted, property.FindPropertyRelative(nameof(PrefabPoolsConfig.UnlistedMaxIdle)));
 
             var prefabs = Prefabs(property);
             var y = unlisted.yMax + EditorGUIUtility.standardVerticalSpacing;
@@ -54,10 +54,10 @@ namespace Bw.EditorTools.Pool
 
                 if (!listed.Add(prefab))
                     yield return $"{prefab.name} is in the list twice.";
-                if (pool.FindPropertyRelative(nameof(PrefabPoolConfig.Prewarm)).intValue > pool.FindPropertyRelative(nameof(PrefabPoolConfig.Limit)).intValue)
-                    yield return $"{prefab.name}: Prewarm is above Limit, the pool can't keep that many free objects.";
-                if (pool.FindPropertyRelative(nameof(PrefabPoolConfig.Mode)).managedReferenceFullTypename.Length == 0)
-                    yield return $"{prefab.name} has no cap mode.";
+                if (pool.FindPropertyRelative(nameof(PrefabPoolConfig.Prewarm)).intValue > pool.FindPropertyRelative(nameof(PrefabPoolConfig.MaxIdle)).intValue)
+                    yield return $"{prefab.name}: Prewarm is above Max Idle, the pool can't keep that many free objects.";
+                if (pool.FindPropertyRelative(nameof(PrefabPoolConfig.InUseCap)).managedReferenceFullTypename.Length == 0)
+                    yield return $"{prefab.name} has no in-use cap.";
             }
         }
     }

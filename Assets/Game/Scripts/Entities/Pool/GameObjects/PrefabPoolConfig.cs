@@ -9,8 +9,9 @@ namespace Bw.Entities.Pool.GameObjects
     public sealed class PrefabPoolConfig
     {
         public GameObject Prefab;
+        public bool ViewOnly;
         [Min(0)] public int Prewarm = 4;
-        [Min(0)] public int Limit = 8;
-        [SerializeReference, TypePicker] public IPoolCapMode Mode = new ReclaimOldestMode();
+        [Min(0)] public int MaxIdle = 8;
+        [SerializeReference, TypePicker] public IPoolCapMode InUseCap = new ReclaimOldestMode();
     }
 }

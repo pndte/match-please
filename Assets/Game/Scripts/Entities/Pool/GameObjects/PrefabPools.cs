@@ -11,6 +11,7 @@ namespace Bw.Entities.Pool.GameObjects
     {
         private readonly Dictionary<GameObject, IPool<IPrefabInstance>> _instances = new();
         private readonly Dictionary<(GameObject Prefab, Type Facade), IPool<object>> _pools = new();
+        private readonly List<LimitedPool<IPrefabInstance>> _listed = new();
         private readonly Lifetime _lifetime;
         private readonly Transform _root;
         private readonly Func<GameObject, Transform, GameObject> _instantiate;
@@ -24,23 +25,29 @@ namespace Bw.Entities.Pool.GameObjects
             _unlisted = unlisted;
         }
 
-        public static PrefabPools Create(Lifetime lifetime, PrefabPoolsConfig config, Func<GameObject, Transform, GameObject> instantiate)
+        public static PrefabPools Create(Lifetime lifetime, PrefabPoolsConfig config, bool withViews, Func<GameObject, Transform, GameObject> instantiate)
         {
             var root = new GameObject("Pools");
+            Object.DontDestroyOnLoad(root);
             var poolsLifetime = lifetime.Intersect(root.Lifetime());
             poolsLifetime.OnTermination(() => Object.Destroy(root));
 
-            var pools = new PrefabPools(poolsLifetime, root.transform, instantiate, new PoolSettings(0, config.UnlistedLimit, PoolCap.None));
+            var pools = new PrefabPools(poolsLifetime, root.transform, instantiate, new PoolSettings(0, config.UnlistedMaxIdle, PoolCap.None));
+            var listed = new HashSet<GameObject>();
             foreach (var pool in config.Prefabs)
             {
                 if (pool.Prefab == null)
                     throw new ArgumentException("A pool in the settings has no prefab.", nameof(config));
-                if (pool.Mode == null)
-                    throw new ArgumentException($"The pool of {pool.Prefab.name} has no cap mode.", nameof(config));
-                if (pools._instances.ContainsKey(pool.Prefab))
+                if (pool.InUseCap == null)
+                    throw new ArgumentException($"The pool of {pool.Prefab.name} has no in-use cap.", nameof(config));
+                if (!listed.Add(pool.Prefab))
                     throw new ArgumentException($"{pool.Prefab.name} is in the pool settings twice.", nameof(config));
+                if (pool.ViewOnly && !withViews)
+                    continue;
 
-                pools._instances.Add(pool.Prefab, pools.Instances(pool.Prefab, new PoolSettings(pool.Prewarm, pool.Limit, pool.Mode.Cap())));
+                var instances = pools.Instances(pool.Prefab, new PoolSettings(pool.Prewarm, pool.MaxIdle, pool.InUseCap.Cap()));
+                pools._instances.Add(pool.Prefab, instances);
+                pools._listed.Add(instances);
             }
 
             return pools;
@@ -57,6 +64,13 @@ namespace Bw.Entities.Pool.GameObjects
             return created;
         }
 
+        public void Prewarm()
+        {
+            _lifetime.ThrowIfNotAlive();
+            foreach (var pool in _listed)
+                pool.Prewarm();
+        }
+
         private IPool<T> Pool<T>(GameObject prefab) where T : class
         {
             if (!prefab.TryGetComponent<IResource<T>>(out _) && !prefab.TryGetComponent<T>(out _))
@@ -71,7 +85,7 @@ namespace Bw.Entities.Pool.GameObjects
             return new PrefabPool<T>(instances);
         }
 
-        private IPool<IPrefabInstance> Instances(GameObject prefab, PoolSettings settings)
+        private LimitedPool<IPrefabInstance> Instances(GameObject prefab, PoolSettings settings)
         {
             var parent = new GameObject(prefab.name).transform;
             parent.SetParent(_root, false);
@@ -83,7 +97,7 @@ namespace Bw.Entities.Pool.GameObjects
             var instance = _instantiate(prefab, parent);
             instance.SetActive(false);
             lifetime.OnTermination(() => Object.Destroy(instance));
-            return new GameObjectResource(instance);
+            return new GameObjectResource(instance, instance.Lifetime());
         }
     }
 }

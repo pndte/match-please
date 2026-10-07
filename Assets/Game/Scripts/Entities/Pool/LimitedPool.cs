@@ -24,12 +24,10 @@ namespace Bw.Entities.Pool
         public static LimitedPool<T> Create(Lifetime lifetime, Func<Lifetime, IResource<T>> factory, PoolSettings settings)
         {
             lifetime.ThrowIfNotAlive();
-            if (settings.Prewarm > settings.Limit)
-                throw new ArgumentException($"A pool can't prewarm {settings.Prewarm} resources when it keeps at most {settings.Limit} free.", nameof(settings));
+            if (settings.Prewarm > settings.MaxIdle)
+                throw new ArgumentException($"A pool can't prewarm {settings.Prewarm} resources when it keeps at most {settings.MaxIdle} free.", nameof(settings));
 
-            var pool = new LimitedPool<T>(lifetime, factory, settings);
-            pool.Prewarm();
-            return pool;
+            return new LimitedPool<T>(lifetime, factory, settings);
         }
 
         public T Resource(Lifetime lifetime)
@@ -49,7 +47,7 @@ namespace Bw.Entities.Pool
                 if (!_resourceLifetimes.TryGetValue(resource, out var resourceDefinition))
                     return;
 
-                if (_resources.Count >= _settings.Limit)
+                if (_resources.Count >= _settings.MaxIdle)
                 {
                     resourceDefinition.Terminate();
                     return;
@@ -61,8 +59,9 @@ namespace Bw.Entities.Pool
             return resource.Facade(use.Lifetime);
         }
 
-        private void Prewarm()
+        public void Prewarm()
         {
+            _lifetime.ThrowIfNotAlive();
             while (_resources.Count < _settings.Prewarm)
                 _resources.Push(CreateResource());
         }

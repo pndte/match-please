@@ -6,7 +6,7 @@ namespace Bw.Entities.Pool.GameObjects
     [Serializable]
     public sealed class PrefabPoolsConfig
     {
-        [Min(0)] public int UnlistedLimit = 8;
+        [Min(0)] public int UnlistedMaxIdle = 8;
         public PrefabPoolConfig[] Prefabs = Array.Empty<PrefabPoolConfig>();
     }
 }
