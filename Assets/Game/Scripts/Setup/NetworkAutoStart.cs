@@ -30,6 +30,9 @@ namespace Setup
         [Header("Debug")] [Tooltip("Enable detailed logging")] [SerializeField]
         private bool enableLogging = true;
 
+        [Header("Game Scene")] [SerializeField]
+        private string _gameScene = "SampleScene";
+
         // Injected dependency
         private IRuntimeSettings _runtimeSettings;
         private INetworkHolder _networkHolder;
@@ -79,9 +82,9 @@ namespace Setup
         private async UniTask LoadServicesAndGame()
         {
             await SceneManager.LoadSceneAsync("Network", LoadSceneMode.Additive).ToUniTask(); //TODO: addresables for scene loading
-            await SceneManager.LoadSceneAsync("SampleScene", LoadSceneMode.Additive).ToUniTask();
+            await SceneManager.LoadSceneAsync(_gameScene, LoadSceneMode.Additive).ToUniTask();
 
-            var gameScene = SceneManager.GetSceneByName("SampleScene");
+            var gameScene = SceneManager.GetSceneByName(_gameScene);
             SceneManager.SetActiveScene(gameScene);
         }
 

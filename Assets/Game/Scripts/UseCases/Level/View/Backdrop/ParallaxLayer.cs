@@ -20,6 +20,7 @@ namespace Bw.UseCases.Level.View.Backdrop
             if (_renderer.size != size)
                 _renderer.size = size;
 
+            //TODO: horizontal parallax only: vertically the layers stay pinned to the camera, so on tall levels (ConstructionSite) the far fence and city ride along at the bottom of the screen while the camera climbs
             var travel = _camera.transform.position.x * (1f - _depth) / unit;
             var position = transform.localPosition;
             position.x = Mathf.Repeat(-travel, period) - period / 2f;
