@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using Bw.Entities.Network.Prediction.Requests;
+using Bw.Entities.Network.Prediction.Stream.Requests;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Simulation;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using R3;
 
-namespace Bw.Entities.Network.Prediction
+namespace Bw.Entities.Network.Prediction.Stream
 {
     public sealed class SnapshotInterpolation<TState> where TState : struct
     {

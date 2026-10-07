@@ -1,5 +1,5 @@
 using Bw.Entities.Network;
-using Bw.Entities.Network.Prediction.Requests;
+using Bw.Entities.Network.Prediction.Stream.Requests;
 using Bw.Entities.Network.Serialization;
 using Unity.Netcode;
 

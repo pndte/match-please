@@ -6,6 +6,7 @@ using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using Bw.Injection.ControlledBy;
 using Bw.Injection.Network;
+using Bw.Injection.Network.Prediction;
 using Bw.Injection.Network.Variables;
 using Bw.Injection.Ownership;
 using Bw.UseCases.Shooting;
@@ -86,7 +87,7 @@ namespace Bw.Injection.Weapon
             Container.BindInterfacesTo<WeaponMuzzle>().AsSingle().WithArguments(_muzzleTransform);
             Container.BindInterfacesTo<ShotTracer>().AsSingle().WithArguments(transform);
 
-            PredictionInstaller<WeaponInput, WeaponState>.Install(Container, _runtimeSettings, netSchema);
+            StreamPredictionInstaller<WeaponInput, WeaponState>.Install(Container, _runtimeSettings, netSchema);
         }
 
         private void BindDropRequest(INetEntriesSchemaBuilder netSchema)

@@ -1,4 +1,4 @@
-using Bw.Entities.Network.Prediction;
+using Bw.Entities.Network.Prediction.Stream;
 using Bw.UseCases.Movement.Extensions;
 
 namespace Bw.UseCases.Movement.Network

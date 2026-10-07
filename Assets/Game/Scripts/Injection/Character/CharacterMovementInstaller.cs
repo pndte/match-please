@@ -3,6 +3,7 @@ using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using Bw.Injection.Network;
+using Bw.Injection.Network.Prediction;
 using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.View.Animation;
 using Bw.UseCases.Movement.View.Audio;
@@ -35,7 +36,7 @@ namespace Bw.Injection
             Container.BindInterfacesTo<MovementInputPolicy>().AsSingle();
             BindVisuals();
 
-            PredictionInstaller<MovementInput, MovementState>.Install(Container, _runtimeSettings, _netSchema);
+            StreamPredictionInstaller<MovementInput, MovementState>.Install(Container, _runtimeSettings, _netSchema);
             LagCompensationInstaller<MovementState, MovementStateView>.Install(Container, _runtimeSettings);
         }
 

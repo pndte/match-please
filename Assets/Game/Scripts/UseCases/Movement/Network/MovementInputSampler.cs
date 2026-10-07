@@ -1,5 +1,5 @@
 using Bw.Entities;
-using Bw.Entities.Network.Prediction;
+using Bw.Entities.Network.Prediction.Stream;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using R3;

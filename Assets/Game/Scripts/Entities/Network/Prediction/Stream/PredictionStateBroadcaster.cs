@@ -1,9 +1,9 @@
-using Bw.Entities.Network.Prediction.Requests;
+using Bw.Entities.Network.Prediction.Stream.Requests;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Simulation;
 using JetBrains.Lifetimes;
 
-namespace Bw.Entities.Network.Prediction
+namespace Bw.Entities.Network.Prediction.Stream
 {
     public sealed class PredictionStateBroadcaster<TState> where TState : struct
     {

@@ -1,4 +1,4 @@
-using Bw.Entities.Network.Prediction;
+using Bw.Entities.Network.Prediction.Stream;
 using Bw.UseCases.Shooting.Weapon.Extensions;
 
 namespace Bw.UseCases.Shooting.Weapon.Network

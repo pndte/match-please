@@ -4,7 +4,7 @@ using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using R3;
 
-namespace Bw.Entities.Network.Prediction
+namespace Bw.Entities.Network.Prediction.Stream
 {
     public sealed class PredictionInterpolation<TState> where TState : struct
     {

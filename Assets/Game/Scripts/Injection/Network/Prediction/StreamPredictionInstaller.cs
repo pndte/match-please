@@ -1,24 +1,24 @@
 using System;
 using Bw.Entities.Network;
-using Bw.Entities.Network.Prediction;
-using Bw.Entities.Network.Prediction.Requests;
+using Bw.Entities.Network.Prediction.Stream;
+using Bw.Entities.Network.Prediction.Stream.Requests;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using JetBrains.Collections.Viewable;
 using Unity.Netcode;
 using Zenject;
 
-namespace Bw.Injection.Network
+namespace Bw.Injection.Network.Prediction
 {
-    public class PredictionInstaller<TInput, TState>
-        : Installer<IRuntimeSettings, INetEntriesSchemaBuilder, PredictionInstaller<TInput, TState>>
+    public class StreamPredictionInstaller<TInput, TState>
+        : Installer<IRuntimeSettings, INetEntriesSchemaBuilder, StreamPredictionInstaller<TInput, TState>>
         where TInput : struct
         where TState : struct
     {
         private readonly IRuntimeSettings _runtimeSettings;
         private readonly INetEntriesSchemaBuilder _netSchema;
 
-        public PredictionInstaller(
+        public StreamPredictionInstaller(
             IRuntimeSettings runtimeSettings,
             INetEntriesSchemaBuilder netSchema)
         {

@@ -1,6 +1,6 @@
 using Bw.Entities;
 using Bw.Entities.Extensions;
-using Bw.Entities.Network.Prediction;
+using Bw.Entities.Network.Prediction.Stream;
 using Bw.Entities.Network.Ticks;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;

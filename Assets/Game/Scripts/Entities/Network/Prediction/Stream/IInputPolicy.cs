@@ -1,4 +1,4 @@
-namespace Bw.Entities.Network.Prediction
+namespace Bw.Entities.Network.Prediction.Stream
 {
     public interface IInputPolicy<TInput> where TInput : struct
     {

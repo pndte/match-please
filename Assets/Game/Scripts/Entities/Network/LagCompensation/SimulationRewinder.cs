@@ -1,5 +1,5 @@
 using System;
-using Bw.Entities.Network.Prediction.Requests;
+using Bw.Entities.Network.Prediction.Stream.Requests;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Simulation;
 using JetBrains.Lifetimes;

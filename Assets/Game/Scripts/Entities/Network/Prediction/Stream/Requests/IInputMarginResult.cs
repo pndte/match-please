@@ -1,6 +1,6 @@
 using Bw.Entities.Network.Variables;
 
-namespace Bw.Entities.Network.Prediction.Requests
+namespace Bw.Entities.Network.Prediction.Stream.Requests
 {
     public interface IInputMarginResult
     {

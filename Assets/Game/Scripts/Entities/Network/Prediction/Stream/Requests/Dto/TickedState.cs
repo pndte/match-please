@@ -1,4 +1,4 @@
-namespace Bw.Entities.Network.Prediction.Requests
+namespace Bw.Entities.Network.Prediction.Stream.Requests
 {
     public readonly struct TickedState<TState> where TState : struct
     {

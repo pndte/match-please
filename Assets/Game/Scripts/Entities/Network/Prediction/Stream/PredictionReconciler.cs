@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using Bw.Entities.Network.Prediction.Requests;
+using Bw.Entities.Network.Prediction.Stream.Requests;
 using Bw.Entities.Simulation;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
-namespace Bw.Entities.Network.Prediction
+namespace Bw.Entities.Network.Prediction.Stream
 {
     public sealed class PredictionReconciler<TInput, TState>
         where TInput : struct
