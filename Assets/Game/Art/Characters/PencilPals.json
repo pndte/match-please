@@ -16,7 +16,8 @@
     "jump": 10,
     "fall": 10,
     "land": 10,
-    "hurt": 12
+    "hurt": 12,
+    "death": 15
   },
   "loop": {
     "walk": true,
@@ -24,14 +25,15 @@
     "fall": true,
     "jump": false,
     "land": false,
-    "hurt": false
+    "hurt": false,
+    "death": false
   },
   "speedUnitsPerFrame": {
     "walk": 10,
     "run": 19
   },
   "cellUnits": 256,
-  "layout": "rows 0-3: col 0 idle, cols 1-8 walk, cols 9-12 jump (crouch, launch, rise, apex), cols 13-14 fall loop, col 15 land; rows 4-7: cols 1-8 run, cols 9-12 hurt; same character order in both halves; facing right, in place (the game moves the root)",
+  "layout": "rows 0-3: col 0 idle, cols 1-8 walk, cols 9-12 jump (crouch, launch, rise, apex), cols 13-14 fall loop, col 15 land; rows 4-7: col 0 death 3 (burst), cols 1-8 run, cols 9-12 hurt, cols 13-15 death 0-2 (swelling); same character order in both halves; facing right, in place (the game moves the root); death plays hurt 0, death 0-3, then nothing",
   "characters": [
     "sanya",
     "seva",
@@ -680,6 +682,16 @@
       "h": 512
     },
     {
+      "name": "sanya_death_3",
+      "character": "sanya",
+      "animation": "death",
+      "frame": 3,
+      "x": 0,
+      "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
       "name": "sanya_run_0",
       "character": "sanya",
       "animation": "run",
@@ -796,6 +808,46 @@
       "frame": 3,
       "x": 6144,
       "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_death_0",
+      "character": "sanya",
+      "animation": "death",
+      "frame": 0,
+      "x": 6656,
+      "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_death_1",
+      "character": "sanya",
+      "animation": "death",
+      "frame": 1,
+      "x": 7168,
+      "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_death_2",
+      "character": "sanya",
+      "animation": "death",
+      "frame": 2,
+      "x": 7680,
+      "y": 2048,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_death_3",
+      "character": "seva",
+      "animation": "death",
+      "frame": 3,
+      "x": 0,
+      "y": 2560,
       "w": 512,
       "h": 512
     },
@@ -920,6 +972,46 @@
       "h": 512
     },
     {
+      "name": "seva_death_0",
+      "character": "seva",
+      "animation": "death",
+      "frame": 0,
+      "x": 6656,
+      "y": 2560,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_death_1",
+      "character": "seva",
+      "animation": "death",
+      "frame": 1,
+      "x": 7168,
+      "y": 2560,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_death_2",
+      "character": "seva",
+      "animation": "death",
+      "frame": 2,
+      "x": 7680,
+      "y": 2560,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_death_3",
+      "character": "matvey",
+      "animation": "death",
+      "frame": 3,
+      "x": 0,
+      "y": 3072,
+      "w": 512,
+      "h": 512
+    },
+    {
       "name": "matvey_run_0",
       "character": "matvey",
       "animation": "run",
@@ -1040,6 +1132,46 @@
       "h": 512
     },
     {
+      "name": "matvey_death_0",
+      "character": "matvey",
+      "animation": "death",
+      "frame": 0,
+      "x": 6656,
+      "y": 3072,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_death_1",
+      "character": "matvey",
+      "animation": "death",
+      "frame": 1,
+      "x": 7168,
+      "y": 3072,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_death_2",
+      "character": "matvey",
+      "animation": "death",
+      "frame": 2,
+      "x": 7680,
+      "y": 3072,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_death_3",
+      "character": "GOSHAK",
+      "animation": "death",
+      "frame": 3,
+      "x": 0,
+      "y": 3584,
+      "w": 512,
+      "h": 512
+    },
+    {
       "name": "GOSHAK_run_0",
       "character": "GOSHAK",
       "animation": "run",
@@ -1155,6 +1287,36 @@
       "animation": "hurt",
       "frame": 3,
       "x": 6144,
+      "y": 3584,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_death_0",
+      "character": "GOSHAK",
+      "animation": "death",
+      "frame": 0,
+      "x": 6656,
+      "y": 3584,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_death_1",
+      "character": "GOSHAK",
+      "animation": "death",
+      "frame": 1,
+      "x": 7168,
+      "y": 3584,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_death_2",
+      "character": "GOSHAK",
+      "animation": "death",
+      "frame": 2,
+      "x": 7680,
       "y": 3584,
       "w": 512,
       "h": 512
