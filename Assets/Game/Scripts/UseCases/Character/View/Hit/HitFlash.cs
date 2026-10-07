@@ -24,7 +24,7 @@ namespace Bw.UseCases.Character.View.Hit
             _config = config;
             _flashes = new SequentialLifetimes(lifetime);
 
-            health.AdviseDamage(lifetime, _ => Flash()); //TODO: опоздавшему клиенту здоровье приходит отдельным сообщением уже после создания персонажа — раненый до его входа персонаж мигнёт один раз
+            health.AdviseDamage(lifetime, _ => Flash());
         }
 
         private void Flash()

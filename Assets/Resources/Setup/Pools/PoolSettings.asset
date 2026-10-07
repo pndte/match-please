@@ -33,6 +33,12 @@ MonoBehaviour:
       MaxIdle: 8
       InUseCap:
         rid: 7245772975991160942
+    - Prefab: {fileID: 1000, guid: 0a15f72084f716842bc2ff2b01807b31, type: 3}
+      ViewOnly: 1
+      Prewarm: 2
+      MaxIdle: 4
+      InUseCap:
+        rid: 7245772998661374040
   references:
     version: 2
     RefIds:
@@ -45,6 +51,10 @@ MonoBehaviour:
       data:
         Max: 32
     - rid: 7245772975991160942
+      type: {class: ReclaimOldestMode, ns: Bw.Entities.Pool.GameObjects.Modes, asm: Bw.Entities}
+      data:
+        Max: 16
+    - rid: 7245772998661374040
       type: {class: ReclaimOldestMode, ns: Bw.Entities.Pool.GameObjects.Modes, asm: Bw.Entities}
       data:
         Max: 16

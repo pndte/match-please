@@ -21,5 +21,11 @@ namespace Bw.UseCases.Character.Extensions
                 if (state == CharacterState.Alive) handler(stateLifetime);
             });
         }
+
+        public static CharacterVitals Vitals(this IReadonlyCharacter character) =>
+            new(character.Health.State.Value, character.State.Value);
+
+        public static void Hit(this ICharacter character, float damage) =>
+            character.Apply(character.Vitals().AfterHit(damage));
     }
 }

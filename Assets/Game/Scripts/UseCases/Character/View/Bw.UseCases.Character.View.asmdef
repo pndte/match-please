@@ -3,8 +3,10 @@
     "rootNamespace": "Bw",
     "references": [
         "Bw.Entities",
+        "Bw.UseCases.Character",
         "Bw.UseCases.Camera.View",
         "Bw.UseCases.Audio.View",
+        "Bw.UseCases.Vfx.View",
         "R3.Unity"
     ],
     "includePlatforms": [],

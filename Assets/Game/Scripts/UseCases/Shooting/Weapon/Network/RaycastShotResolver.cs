@@ -3,6 +3,7 @@ using Bw.Entities;
 using Bw.Entities.Network.LagCompensation;
 using Bw.Entities.Network.Ticks;
 using Bw.UseCases.Character;
+using Bw.UseCases.Character.Extensions;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Lifetimes;
 
@@ -32,7 +33,8 @@ namespace Bw.UseCases.Shooting.Weapon.Network
                     Trace(tick, _shots[index]);
 
                 for (var index = 0; index < _hits.Count; index++)
-                    _hits[index].Character.Health.Current.Value -= _hits[index].Damage;
+                    if (_hits[index].Character.State.Value == CharacterState.Alive)
+                        _hits[index].Character.Hit(_hits[index].Damage);
             }
             finally
             {

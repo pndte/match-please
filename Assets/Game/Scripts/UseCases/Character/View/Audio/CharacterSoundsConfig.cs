@@ -7,5 +7,6 @@ namespace Bw.UseCases.Character.View.Audio
     public sealed class CharacterSoundsConfig
     {
         public Sound BodyHit = new();
+        public Sound Death = new();
     }
 }

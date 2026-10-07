@@ -10,8 +10,10 @@ using Bw.Injection.Network.Variables;
 using Bw.Injection.Ownership;
 using Bw.UseCases.Character;
 using Bw.UseCases.Character.Network;
+using Bw.UseCases.Character.Network.Requests;
 using Bw.UseCases.Camera.View.Follow;
 using Bw.UseCases.Character.View.Audio;
+using Bw.UseCases.Character.View.Death;
 using Bw.UseCases.Character.View.Hit;
 using Bw.UseCases.Movement;
 using Unity.Netcode;
@@ -20,7 +22,7 @@ using Zenject;
 
 namespace Bw.Injection
 {
-    public class CharacterInstaller : MonoInstaller
+    public class CharacterInstaller : MonoInstaller //todo: maybe decompose
     {
         [Inject] private IRuntimeSettings _runtimeSettings;
 
@@ -34,6 +36,7 @@ namespace Bw.Injection
         [SerializeField] private Animator _animator;
         [SerializeField] private SpriteRenderer _sprite;
         [SerializeField] private HitFeedbackConfig _hitFeedbackConfig;
+        [SerializeField] private CharacterDeathConfig _death = new();
 
         public override void InstallBindings()
         {
@@ -41,7 +44,7 @@ namespace Bw.Injection
 
             OwnershipInstaller.Install(Container, _runtimeSettings);
             ControlledByInstaller.Install(Container, _runtimeSettings);
-            
+
             Container.Bind<NetworkObject>().FromInstance(_networkObject).AsSingle();
             Container.Bind<INetworkLifetimedObject>().FromInstance(_networkLifetimedBehaviour).AsSingle().NonLazy();
             var gameObjectLifetime = gameObject.Lifetime();
@@ -53,26 +56,27 @@ namespace Bw.Injection
             Container.Bind<MovementConfig>().FromInstance(_movementConfig).AsSingle();
             Container.Bind<Animator>().FromInstance(_animator).AsSingle();
             Container.Bind<SpriteRenderer>().FromInstance(_sprite).AsSingle();
+            Container.BindInstance(_death).AsSingle();
 
             var netSchema = new NetEntriesSchemaBuilder();
             OwnershipServicesInstaller.Install(Container, _runtimeSettings, netSchema);
             ControlledByServicesInstaller.Install(Container, _runtimeSettings, netSchema);
             CharacterMovementInstaller.Install(Container, _runtimeSettings, netSchema);
-            var healthDeclaration = netSchema.DeclareProperty(_healthConfig.Max, NetworkDelivery.Reliable, NetworkPermissions.Server);
-            Container.BindNetPropertyFor<float, Health>(healthDeclaration);
+            BindCharacterSignals(netSchema);
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
+
+            BindCharacter();
 
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.BindInterfacesTo<ServerCharacter>().AsSingle();
-                    Container.BindInterfacesAndSelfTo<Health>().AsSingle().NonLazy();
-                    Container.Bind<DamageProcessor>().AsSingle().NonLazy();
+                    Container.Bind<DeadCharacterDespawner>().AsSingle().NonLazy();
+                    Container.Bind<VitalsBroadcaster>().AsSingle().NonLazy();
+                    Container.Bind<LateJoinVitalsSender>().AsSingle().NonLazy();
                     Container.InstantiateComponent<CharacterHolder>(gameObject);
                     break;
                 case PeerType.Client:
-                    Container.Bind<IReadonlyHealth>().To<Health>().AsSingle().NonLazy();
-                    Container.BindInterfacesTo<ClientCharacter>().AsSingle();
+                    Container.Bind<VitalsReceiver>().AsSingle().NonLazy();
                     Container.InstantiateComponent<ReadonlyCharacterHolder>(gameObject);
                     BindClientVisuals();
                     BindClientSounds();
@@ -82,9 +86,35 @@ namespace Bw.Injection
             }
         }
 
+        private void BindCharacterSignals(INetEntriesSchemaBuilder netSchema)
+        {
+            var vitalsDeclaration = netSchema.DeclareSignal<CharacterVitals>(NetworkDelivery.Reliable, NetworkPermissions.Server);
+
+            Container.BindInterfacesTo<CharacterSignals>()
+                .FromMethod(context => new CharacterSignals(context.Container.Resolve<INetEntries>().Get(vitalsDeclaration)))
+                .AsSingle();
+        }
+
+        private void BindCharacter()
+        {
+            Container.BindInterfacesTo<Health>().AsSingle();
+            Container.BindInterfacesTo<MortalCharacter>().AsSingle();
+            Container.Bind<CorpseHitbox>().AsSingle().WithArguments(SingleLayer(_death.CorpseLayer)).NonLazy();
+        }
+
+        private static int SingleLayer(LayerMask mask)
+        {
+            for (var layer = 0; layer < 32; layer++)
+                if (mask.value == 1 << layer)
+                    return layer;
+
+            throw new ArgumentException($"The corpse layer must be exactly one layer, the mask is {mask.value}.", nameof(mask));
+        }
+
         private void BindClientSounds()
         {
             Container.Bind<BodyHitSound>().AsSingle().WithArguments(transform).NonLazy();
+            Container.Bind<CharacterDeathSound>().AsSingle().WithArguments(transform).NonLazy();
         }
 
         private void BindClientVisuals()
@@ -93,6 +123,8 @@ namespace Bw.Injection
             Container.Bind<HitFlash>().AsSingle().NonLazy();
             Container.Bind<HitCameraShake>().AsSingle().NonLazy();
             Container.Bind<CameraTargetRegistration>().AsSingle().WithArguments(transform).NonLazy();
+            Container.Bind<CharacterDeathAnimation>().AsSingle().NonLazy();
+            Container.Bind<CharacterDeathBurst>().AsSingle().WithArguments(transform).NonLazy();
         }
     }
 }

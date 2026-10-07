@@ -10,13 +10,13 @@ namespace Bw.UseCases.Character.View.Hit
     {
         public HitCameraShake(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
+            IOwnership ownership,
             IReadonlyHealth health,
             ICameraShake cameraShake,
             HitFeedbackConfig config)
         {
-            controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
-                health.AdviseDamage(controlledLifetime, _ => cameraShake.Shake(config.CameraShake)));
+            ownership.Mine.WhenTrue(lifetime, mineLifetime =>
+                health.AdviseDamage(mineLifetime, _ => cameraShake.Shake(config.CameraShake)));
         }
     }
 }

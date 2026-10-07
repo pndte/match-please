@@ -14,6 +14,7 @@ namespace Bw.Injection.Network
             RegisterCodec<System.Single, Bw.Entities.Network.Codecs.FloatCodec>(receivers, senders);
             RegisterCodec<System.Int32, Bw.Entities.Network.Codecs.IntCodec>(receivers, senders);
             RegisterCodec<JetBrains.Core.Unit, Bw.Entities.Network.Codecs.UnitCodec>(receivers, senders);
+            RegisterCodec<Bw.UseCases.Character.CharacterVitals, Bw.UseCases.Character.Network.Codecs.CharacterVitalsCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Requests.TickedInput<Bw.UseCases.Movement.MovementInput>, Bw.UseCases.Movement.Network.Codecs.TickedMovementInputCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Requests.TickedState<Bw.UseCases.Movement.MovementState>, Bw.UseCases.Movement.Network.Codecs.TickedMovementStateCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Requests.TickedInput<Bw.UseCases.Shooting.Weapon.WeaponInput>, Bw.UseCases.Shooting.Weapon.Network.Codecs.TickedWeaponInputCodec>(receivers, senders);

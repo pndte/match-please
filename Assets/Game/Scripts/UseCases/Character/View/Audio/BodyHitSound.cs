@@ -15,7 +15,7 @@ namespace Bw.UseCases.Character.View.Audio
             ISoundPlayer player,
             CharacterSoundsConfig config)
         {
-            health.AdviseDamage(lifetime, _ => player.Play(config.BodyHit, body.position)); //TODO: опоздавшему клиенту здоровье приходит отдельным сообщением уже после создания персонажа — у раненого до его входа персонажа один раз прозвучит лишнее попадание
+            health.AdviseDamage(lifetime, _ => player.Play(config.BodyHit, body.position));
         }
     }
 }

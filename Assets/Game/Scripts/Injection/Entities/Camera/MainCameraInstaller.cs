@@ -6,6 +6,7 @@ using Bw.UseCases.Camera.View.Follow;
 using Bw.UseCases.Camera.View.Shake;
 using Bw.UseCases.Shooting.View.Crosshair;
 using Bw.UseCases.Shooting.View.Crosshair.Abstractions;
+using Bw.UseCases.Vfx.View.Effects;
 using UnityEngine;
 using Zenject;
 
@@ -29,6 +30,7 @@ namespace Bw.Injection.Entities.Camera
             Container.BindInterfacesTo<CameraTargets>().AsSingle();
             Container.Bind<CameraFollow>().AsSingle().WithArguments(_camera.gameObject.Lifetime(), _camera, _followConfig).NonLazy();
             Container.BindInterfacesTo<SoundPlayer>().AsSingle().WithArguments(_camera.gameObject.Lifetime());
+            Container.BindInterfacesTo<EffectPlayer>().AsSingle().WithArguments(_camera.gameObject.Lifetime());
         }
     }
 }

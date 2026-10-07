@@ -10,7 +10,8 @@
         "Bw.UseCases.Vfx.View",
         "UniTask",
         "R3.Unity",
-        "UnityEngine.UI"
+        "UnityEngine.UI",
+        "Bw.UseCases.Character"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

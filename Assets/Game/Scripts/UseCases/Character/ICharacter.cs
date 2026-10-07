@@ -1,20 +1,19 @@
-﻿using Bw.Entities;
+using Bw.Entities;
 using JetBrains.Collections.Viewable;
-using JetBrains.Lifetimes;
+using JetBrains.Core;
 
 namespace Bw.UseCases.Character
 {
     public interface ICharacter : IReadonlyCharacter
     {
-        public IHealth Health { get; }
-        public IViewableProperty<CharacterState> State { get; }
-        public void Die();
+        public void Apply(CharacterVitals vitals);
     }
-    
+
     public interface IReadonlyCharacter
     {
         public IReadonlyHealth Health { get; }
         public IReadonlyProperty<CharacterState> State { get; }
-        public IReadonlyProperty<Lifetime> Lifetime { get; } //TODO: по сути дублирует State.Alive, ещё и неверно, надо думать как исправлять
+        public ISource<Unit> Died { get; }
+        public ISource<CharacterVitals> Applied { get; }
     }
 }

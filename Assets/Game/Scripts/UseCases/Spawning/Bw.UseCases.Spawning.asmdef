@@ -10,7 +10,9 @@
         "Unity.Netcode.Runtime",
         "Zenject",
         "UniTask.DOTween",
-        "UniTask"
+        "UniTask",
+        "Bw.UseCases.Character",
+        "Bw.UseCases.Character.Network"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -84,7 +84,7 @@ namespace Bw.UseCases.Spawning.Network
             var characterControlledBy = characterContext.Container.Resolve<IControlledBy>();
             var characterOwnership = characterContext.Container.Resolve<IOwnershipController>();
             characterOwnership.AddOwner(characterLifetime, player);
-            characterControlledBy.Set(characterLifetime, player);
+            character.State.WhenAlive(characterLifetime, aliveLifetime => characterControlledBy.Set(aliveLifetime, player));
 
             SpawnWeaponFor(character, characterLifetime, characterObject.transform.position, spawnRotation);
 

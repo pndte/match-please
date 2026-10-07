@@ -1,6 +1,7 @@
 ﻿using System;
 using Bw.Entities.Network.Objects;
 using Bw.UseCases.Character;
+using Bw.UseCases.Character.Extensions;
 using UnityEngine;
 
 namespace Bw.UseCases.Shooting
@@ -33,7 +34,7 @@ namespace Bw.UseCases.Shooting
             if (!IsServer) return;
             if (other.gameObject.layer != LayerMask.NameToLayer("Character")) NetworkObject.Despawn(true);
             if (!other.gameObject.TryGetComponent<ICharacter>(out var character)) return;
-            character.Health.Current.Value -= 10;
+            character.Hit(10);
             NetworkObject.Despawn(true);
         }
     }

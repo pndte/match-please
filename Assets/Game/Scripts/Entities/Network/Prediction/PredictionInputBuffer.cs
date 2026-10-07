@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Bw.Entities.Extensions;
 using Bw.Entities.Network.Prediction.Requests;
 using Bw.Entities.Network.Ticks;
 using JetBrains.Collections.Viewable;
@@ -15,6 +16,7 @@ namespace Bw.Entities.Network.Prediction
         private readonly INetworkTicks _ticks;
         private readonly NetworkTicksConfig _config;
         private readonly IInputPolicy<TInput> _policy;
+        private readonly IControlledBy _controlledBy;
 
         private TInput _lastInput;
 
@@ -23,12 +25,19 @@ namespace Bw.Entities.Network.Prediction
             INetworkTicks ticks,
             NetworkTicksConfig config,
             IInputPolicy<TInput> policy,
+            IControlledBy controlledBy,
             IPredictionInputRequest<TInput> inputRequest)
         {
             _ticks = ticks;
             _config = config;
             _policy = policy;
+            _controlledBy = controlledBy;
 
+            controlledBy.Users.View(lifetime, (userLifetime, _) =>
+            {
+                _buffered.Clear();
+                userLifetime.OnTermination(_buffered.Clear);
+            });
             inputRequest.Requested.Advise(lifetime, Buffer);
             ticks.Ticked(TickPhase.Default).Advise(lifetime, Simulate);
         }
@@ -41,15 +50,18 @@ namespace Bw.Entities.Network.Prediction
 
         private void Store(int tick, TInput input)
         {
-            if (tick <= _ticks.Current || tick > _ticks.Current + _config.MaxBufferedInputTicks || !_policy.IsValid(input))
+            if (_controlledBy.Users.Count == 0 || tick <= _ticks.Current || tick > _ticks.Current + _config.MaxBufferedInputTicks || !_policy.IsValid(input))
                 return;
 
-            _buffered.TryAdd(tick, input); //TODO: при смене управляющего вводы прежнего на несколько тиков вперёд остаются в буфере и применятся к новому (станет важно с подбором оружия) — чистить буфер при смене управления
+            _buffered.TryAdd(tick, input);
         }
 
         private void Simulate(int tick)
         {
-            _lastInput = _buffered.Remove(tick, out var input) ? input : _policy.Substitute(_lastInput);
+            if (_controlledBy.Users.Count == 0)
+                _lastInput = default;
+            else
+                _lastInput = _buffered.Remove(tick, out var input) ? input : _policy.Substitute(_lastInput);
             _simulated.Fire(_lastInput);
         }
     }

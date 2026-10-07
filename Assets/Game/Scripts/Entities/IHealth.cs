@@ -1,42 +1,45 @@
-﻿using JetBrains.Collections.Viewable;
-using JetBrains.Lifetimes;
-using UnityEngine;
+using System;
+using JetBrains.Collections.Viewable;
 
 namespace Bw.Entities
 {
     public interface IReadonlyHealth
     {
         public float Max { get; }
-        public IReadonlyProperty<float> Current { get; }
+        public IReadonlyProperty<HealthState> State { get; }
+        public ISource<float> Changed { get; }
     }
 
     public interface IHealth : IReadonlyHealth
     {
-        public new IViewableProperty<float> Current { get; }
+        public void Apply(HealthState state);
     }
-    
+
     public sealed class Health : IHealth
     {
         public float Max => _config.Max;
-        public IViewableProperty<float> Current { get; }
+        public IReadonlyProperty<HealthState> State => _state;
+        public ISource<float> Changed => _changed;
 
         private readonly HealthConfig _config;
-        private bool _isSynchronizing;
-        IReadonlyProperty<float> IReadonlyHealth.Current => Current;
+        private readonly ViewableProperty<HealthState> _state;
+        private readonly Signal<float> _changed = new();
 
-        public Health(Lifetime lifetime, HealthConfig config, IViewableProperty<float> valueProperty)
+        public Health(HealthConfig config)
         {
-            Debug.Log("health initialized");
             _config = config;
-            Current = valueProperty;
-            OnAlive(lifetime);
+            _state = new ViewableProperty<HealthState>(new HealthState(config.Max, 0f));
         }
 
-        private void OnAlive(Lifetime lifetime)
+        public void Apply(HealthState state)
         {
-            Debug.Log("health changed subscription");
-            
-            Current.Advise(lifetime, health => Debug.Log("Health changed: " + health));
+            if (state.Current < 0f || state.Current > Max)
+                throw new ArgumentOutOfRangeException(nameof(state), "Health must be between zero and the maximum.");
+
+            if (state.Change != 0f)
+                _changed.Fire(state.Change);
+
+            _state.Value = state;
         }
     }
 }

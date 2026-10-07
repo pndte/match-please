@@ -21,7 +21,6 @@ namespace Bw.Injection
             Container.BindInterfacesTo<RewindableCollection>().AsSingle();
             Container.BindInterfacesTo<LagCompensator>().AsSingle();
             Container.BindInterfacesTo<RaycastShotResolver>().AsSingle().NonLazy();
-            Container.Bind<DeadCharactersDestroyer>().AsSingle().NonLazy();
         }
     }
 }

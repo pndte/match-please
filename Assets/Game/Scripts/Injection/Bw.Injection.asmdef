@@ -15,8 +15,11 @@
         "Bw.UseCases.Shooting",
         "Bw.UseCases.Shooting.View",
         "Bw.UseCases.Spawning",
+        "Bw.UseCases.Vfx.View",
         "Zenject",
-        "Unity.Netcode.Runtime"
+        "Unity.Netcode.Runtime",
+        "Bw.UseCases.Character",
+        "Bw.UseCases.Character.Network"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

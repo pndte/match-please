@@ -7,12 +7,10 @@ namespace Bw.Entities.Extensions
     {
         public static void AdviseDamage(this IReadonlyHealth health, Lifetime lifetime, Action<float> handler)
         {
-            var previous = health.Current.Value;
-            health.Current.Advise(lifetime, current =>
+            health.Changed.Advise(lifetime, change =>
             {
-                if (current < previous)
-                    handler(previous - current);
-                previous = current;
+                if (change < 0f)
+                    handler(-change);
             });
         }
     }

@@ -92,3 +92,10 @@ MonoBehaviour:
       - {fileID: 8300000, guid: 67b8692086bc7534e9905955033682de, type: 3}
       Volume: 1
       PitchVariation: 0.08
+    Death:
+      Clips:
+      - {fileID: 8300000, guid: 8090bc8428e80c44fbf201c325b23b46, type: 3}
+      - {fileID: 8300000, guid: be6df812ea539a44f9786f6f526b4ad0, type: 3}
+      - {fileID: 8300000, guid: 344f33af925f5d54e837ecabeeb0fb29, type: 3}
+      Volume: 1
+      PitchVariation: 0.05
