@@ -31,12 +31,12 @@ namespace Bw.UseCases
         {
             public ClientNetworkHandler(
                 Lifetime lifetime,
-                INetSignal<bool> meSignal,
+                INetResultReceiver<bool> me,
                 ControlledBy controlledBy)
             {
-                meSignal.Advise(lifetime, me =>
+                me.Received.Advise(lifetime, value =>
                 {
-                    controlledBy._me.Value = me;
+                    controlledBy._me.Value = value;
                 });
             }
         }
@@ -45,17 +45,17 @@ namespace Bw.UseCases
         {
             public ServerNetworkHandler(
                 Lifetime lifetime,
-                INetSignal<bool> meSignal,
+                INetResultSender<bool> me,
                 IControlledBy controlledBy,
                 IClientPlayerCollection clientPlayers)
             {
                 controlledBy.Users.View(lifetime, (userLifetime, userPlayer) =>
                 {
                     var client = clientPlayers.ByClient.Inverse[userPlayer]; //TODO: у бота клиента нет — когда появятся боты, игроков без клиента здесь пропускать
-                    meSignal.FireTo(client, true);
+                    me.SendTo(client, true);
 
                     userLifetime.OnTermination(() =>
-                        meSignal.FireTo(client, false));
+                        me.SendTo(client, false));
                 });
             }
         }

@@ -1,0 +1,342 @@
+{
+  "image": "weapons.png",
+  "width": 512,
+  "height": 196,
+  "ppu": 100,
+  "sprites": [
+    {
+      "name": "ak_body",
+      "x": 0,
+      "y": 0,
+      "w": 157,
+      "h": 50,
+      "pivot": [
+        79,
+        20
+      ]
+    },
+    {
+      "name": "ak_magazine",
+      "x": 157,
+      "y": 0,
+      "w": 36,
+      "h": 39,
+      "pivot": [
+        15,
+        8
+      ]
+    },
+    {
+      "name": "ak_bolt",
+      "x": 193,
+      "y": 0,
+      "w": 24,
+      "h": 18,
+      "pivot": [
+        11,
+        9
+      ]
+    },
+    {
+      "name": "shotgun_body",
+      "x": 0,
+      "y": 50,
+      "w": 200,
+      "h": 45,
+      "pivot": [
+        96,
+        15
+      ]
+    },
+    {
+      "name": "shotgun_pump",
+      "x": 200,
+      "y": 50,
+      "w": 52,
+      "h": 25,
+      "pivot": [
+        26,
+        11
+      ]
+    },
+    {
+      "name": "shotgun_shell",
+      "x": 252,
+      "y": 50,
+      "w": 28,
+      "h": 20,
+      "pivot": [
+        14,
+        10
+      ]
+    },
+    {
+      "name": "pistol_frame",
+      "x": 0,
+      "y": 95,
+      "w": 71,
+      "h": 44,
+      "pivot": [
+        35,
+        8
+      ]
+    },
+    {
+      "name": "pistol_slide",
+      "x": 71,
+      "y": 95,
+      "w": 74,
+      "h": 28,
+      "pivot": [
+        36,
+        15
+      ]
+    },
+    {
+      "name": "pistol_magazine",
+      "x": 145,
+      "y": 95,
+      "w": 28,
+      "h": 45,
+      "pivot": [
+        14,
+        8
+      ]
+    },
+    {
+      "name": "sniper_body",
+      "x": 0,
+      "y": 140,
+      "w": 235,
+      "h": 56,
+      "pivot": [
+        113,
+        23
+      ]
+    },
+    {
+      "name": "sniper_bolt",
+      "x": 235,
+      "y": 140,
+      "w": 18,
+      "h": 26,
+      "pivot": [
+        9,
+        8
+      ]
+    },
+    {
+      "name": "sniper_magazine",
+      "x": 253,
+      "y": 140,
+      "w": 28,
+      "h": 24,
+      "pivot": [
+        14,
+        8
+      ]
+    }
+  ],
+  "guns": {
+    "ak": {
+      "anchors": {
+        "muzzle": [
+          71,
+          0
+        ],
+        "grip": [
+          -26,
+          14
+        ],
+        "support": [
+          22,
+          6
+        ],
+        "magazine": [
+          -2,
+          7
+        ],
+        "bolt": [
+          5,
+          -2
+        ]
+      },
+      "parts": {
+        "body": {
+          "sprite": "ak_body",
+          "at": [
+            0,
+            0
+          ],
+          "order": 0
+        },
+        "magazine": {
+          "sprite": "ak_magazine",
+          "at": [
+            -2,
+            7
+          ],
+          "order": -1
+        },
+        "bolt": {
+          "sprite": "ak_bolt",
+          "at": [
+            5,
+            -2
+          ],
+          "order": 1
+        }
+      }
+    },
+    "shotgun": {
+      "anchors": {
+        "muzzle": [
+          86,
+          -2
+        ],
+        "grip": [
+          -37,
+          7
+        ],
+        "support": [
+          30,
+          4
+        ],
+        "port": [
+          -17,
+          7
+        ],
+        "pump": [
+          30,
+          4
+        ]
+      },
+      "parts": {
+        "body": {
+          "sprite": "shotgun_body",
+          "at": [
+            0,
+            0
+          ],
+          "order": 0
+        },
+        "pump": {
+          "sprite": "shotgun_pump",
+          "at": [
+            30,
+            4
+          ],
+          "order": 1
+        },
+        "shell": {
+          "sprite": "shotgun_shell",
+          "at": [
+            -17,
+            7
+          ],
+          "order": 2
+        }
+      }
+    },
+    "pistol": {
+      "anchors": {
+        "muzzle": [
+          31,
+          -5.5
+        ],
+        "grip": [
+          -17,
+          10
+        ],
+        "support": [
+          -15,
+          19
+        ],
+        "magazine": [
+          -18,
+          1
+        ],
+        "slide": [
+          1,
+          -5.5
+        ]
+      },
+      "parts": {
+        "frame": {
+          "sprite": "pistol_frame",
+          "at": [
+            0,
+            0
+          ],
+          "order": 0
+        },
+        "slide": {
+          "sprite": "pistol_slide",
+          "at": [
+            1,
+            -5.5
+          ],
+          "order": 1
+        },
+        "magazine": {
+          "sprite": "pistol_magazine",
+          "at": [
+            -18,
+            1
+          ],
+          "order": -1
+        }
+      }
+    },
+    "sniper": {
+      "anchors": {
+        "muzzle": [
+          112,
+          -1
+        ],
+        "grip": [
+          -40,
+          12
+        ],
+        "support": [
+          24,
+          6
+        ],
+        "magazine": [
+          -17,
+          6
+        ],
+        "bolt": [
+          -8,
+          -1
+        ]
+      },
+      "parts": {
+        "body": {
+          "sprite": "sniper_body",
+          "at": [
+            0,
+            0
+          ],
+          "order": 0
+        },
+        "bolt": {
+          "sprite": "sniper_bolt",
+          "at": [
+            -8,
+            -1
+          ],
+          "order": 1
+        },
+        "magazine": {
+          "sprite": "sniper_magazine",
+          "at": [
+            -17,
+            6
+          ],
+          "order": -1
+        }
+      }
+    }
+  }
+}

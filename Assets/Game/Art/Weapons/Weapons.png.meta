@@ -1,0 +1,455 @@
+fileFormatVersion: 2
+guid: 0275f2ef2176eac4abe9488d7f4f15b2
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5601323976189978565
+    second: Weapons_0
+  - first:
+      213: -761887118410055393
+    second: Weapons_1
+  - first:
+      213: 9147546874185701050
+    second: Weapons_2
+  - first:
+      213: -8951780388439148649
+    second: Weapons_3
+  - first:
+      213: -5082318553336741150
+    second: Weapons_4
+  - first:
+      213: -3087264978319007404
+    second: Weapons_5
+  - first:
+      213: -21522807587195298
+    second: Weapons_6
+  - first:
+      213: -3776783329477156521
+    second: Weapons_7
+  - first:
+      213: 7834802711767081893
+    second: Weapons_8
+  - first:
+      213: 7569684938147083892
+    second: Weapons_9
+  - first:
+      213: 8789762969407134151
+    second: Weapons_10
+  - first:
+      213: -7651578999465136024
+    second: Weapons_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ak_body
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 146
+        width: 157
+        height: 50
+      alignment: 9
+      pivot: {x: 0.50318474, y: 0.6}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae9f039d193143541b48924013a09211
+      internalID: 1230290079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ak_magazine
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 157
+        width: 36
+        height: 39
+      alignment: 9
+      pivot: {x: 0.41666666, y: 0.7948718}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03ea83d0d2613a24a9522557b046d33c
+      internalID: -1195601972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ak_bolt
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 178
+        width: 24
+        height: 18
+      alignment: 9
+      pivot: {x: 0.45833334, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db8c075cd54f938459b40e64a3bfda07
+      internalID: -1998068009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shotgun_body
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 101
+        width: 200
+        height: 45
+      alignment: 9
+      pivot: {x: 0.48, y: 0.6666667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 566b8ce5829ddab47aaf5be81d6772e3
+      internalID: 1843733627
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shotgun_pump
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 121
+        width: 52
+        height: 25
+      alignment: 9
+      pivot: {x: 0.5, y: 0.56}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9cc147fc04b98834aaac7af97bf43325
+      internalID: 1300995496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shotgun_shell
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 126
+        width: 28
+        height: 20
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc39dba019f57ba43a73c1b4dd72377a
+      internalID: 367132706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pistol_frame
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 57
+        width: 71
+        height: 44
+      alignment: 9
+      pivot: {x: 0.49295774, y: 0.8181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b65d67aa341242242a650523f2d1a228
+      internalID: 455239849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pistol_slide
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 73
+        width: 74
+        height: 28
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.4642857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84c11abbdf2c24b449c917153a81f21c
+      internalID: 1495152546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pistol_magazine
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 56
+        width: 28
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5, y: 0.82222223}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42982257df30e9a46affbe2e14500b58
+      internalID: -645624490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sniper_body
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 235
+        height: 56
+      alignment: 9
+      pivot: {x: 0.48085105, y: 0.58928573}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1122263b340ee03498e074c19e5e4d9f
+      internalID: 1676977834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sniper_bolt
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 30
+        width: 18
+        height: 26
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6923077}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1cc79f29daf88347b3d765f231e2459
+      internalID: 640544451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sniper_magazine
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 32
+        width: 28
+        height: 24
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6666667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d64a505a611ba04f9a1f1b80e911e90
+      internalID: -1251804700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: c1133efb35434e745b591f1d12d0e926
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ak_body: 1230290079
+      ak_bolt: -1998068009
+      ak_magazine: -1195601972
+      pistol_frame: 455239849
+      pistol_magazine: -645624490
+      pistol_slide: 1495152546
+      shotgun_body: 1843733627
+      shotgun_pump: 1300995496
+      shotgun_shell: 367132706
+      sniper_body: 1676977834
+      sniper_bolt: 640544451
+      sniper_magazine: -1251804700
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

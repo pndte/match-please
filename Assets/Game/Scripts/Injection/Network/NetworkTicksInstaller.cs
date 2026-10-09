@@ -26,6 +26,7 @@ namespace Bw.Injection.Network
                             typeof(INetworkTicks),
                             typeof(ISimulationStep),
                             typeof(IInterpolationTicks),
+                            typeof(IServerTime),
                             typeof(IInputMarginFeedback))
                         .To<ClientNetworkTicks>()
                         .AsSingle()

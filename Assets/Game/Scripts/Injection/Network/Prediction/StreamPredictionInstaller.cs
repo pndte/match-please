@@ -28,42 +28,32 @@ namespace Bw.Injection.Network.Prediction
 
         public override void InstallBindings()
         {
-            var requestedDeclaration = _netSchema.DeclareSignal<TickedInput<TInput>>(
-                NetworkDelivery.Unreliable,
-                NetworkPermissions.Client);
-            var receivedDeclaration = _netSchema.DeclareSignal<TickedState<TState>>(
-                NetworkDelivery.UnreliableSequenced,
-                NetworkPermissions.Server);
-            var inputMarginReceivedDeclaration = _netSchema.DeclareSignal<int>(
-                NetworkDelivery.UnreliableSequenced,
-                NetworkPermissions.Server);
-
-            Container.BindInterfacesTo<PredictionSignals<TInput, TState>>()
-                .FromMethod(context =>
-                {
-                    var entries = context.Container.Resolve<INetEntries>();
-                    return new PredictionSignals<TInput, TState>(
-                        entries.Get(requestedDeclaration),
-                        entries.Get(receivedDeclaration),
-                        entries.Get(inputMarginReceivedDeclaration));
-                })
-                .AsSingle();
+            var input = _netSchema.DeclareRequest<TickedInput<TInput>>(NetworkDelivery.Unreliable);
+            var state = _netSchema.DeclareResult<TickedState<TState>>(NetworkDelivery.UnreliableSequenced);
+            var inputMargin = _netSchema.DeclareResult<int>(NetworkDelivery.UnreliableSequenced);
 
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Client:
-                    BindClient();
+                    BindClient(input, state, inputMargin);
                     break;
                 case PeerType.Server:
-                    BindServer();
+                    BindServer(input, state, inputMargin);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        private void BindClient()
+        private void BindClient(
+            NetRequestDeclaration<TickedInput<TInput>> input,
+            NetResultDeclaration<TickedState<TState>> state,
+            NetResultDeclaration<int> inputMargin)
         {
+            Container.BindRequestSender(input).WhenInjectedInto(typeof(PredictionInputSender<TInput>), typeof(PredictionReconciler<TInput, TState>));
+            Container.BindResultReceiver(state).WhenInjectedInto(typeof(PredictionReconciler<TInput, TState>), typeof(SnapshotInterpolation<TState>));
+            Container.BindResultReceiver(inputMargin).WhenInjectedInto<InputMarginClientHandler>();
+
             Container.Bind<PredictionInputSender<TInput>>().AsSingle().NonLazy();
             Container.Bind<ISource<TInput>>()
                 .FromResolveGetter<PredictionInputSender<TInput>>(sender => sender.Predicted)
@@ -75,8 +65,15 @@ namespace Bw.Injection.Network.Prediction
             Container.Bind<SnapshotInterpolation<TState>>().AsSingle().NonLazy();
         }
 
-        private void BindServer()
+        private void BindServer(
+            NetRequestDeclaration<TickedInput<TInput>> input,
+            NetResultDeclaration<TickedState<TState>> state,
+            NetResultDeclaration<int> inputMargin)
         {
+            Container.BindRequestReceiver(input).WhenInjectedInto(typeof(PredictionInputBuffer<TInput>), typeof(InputMarginServerHandler<TInput>));
+            Container.BindResultSender(state).WhenInjectedInto<PredictionStateBroadcaster<TState>>();
+            Container.BindResultSender(inputMargin).WhenInjectedInto<InputMarginServerHandler<TInput>>();
+
             Container.Bind<PredictionInputBuffer<TInput>>().AsSingle().NonLazy();
             Container.Bind<ISource<TInput>>()
                 .FromResolveGetter<PredictionInputBuffer<TInput>>(buffer => buffer.Simulated)

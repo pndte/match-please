@@ -1,4 +1,5 @@
 using Bw.Entities.Extensions;
+using Bw.UseCases.Character.Extensions;
 using Bw.UseCases.Vfx.View.Effects.Abstractions;
 using JetBrains.Lifetimes;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace Bw.UseCases.Character.View.Death
             _effects = effects;
             _config = config;
 
-            character.Died.Advise(lifetime, _ => lifetime.WhenElapsed(config.BurstTime, Burst));
+            character.AdviseKilled(lifetime, () => lifetime.WhenElapsed(config.BurstTime, Burst));
         }
 
         private void Burst() =>

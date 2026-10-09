@@ -6,6 +6,6 @@ namespace Bw.UseCases.Spawning
 {
     public interface ICharacterSpawner
     {
-        public ICharacter SpawnCharacterFor(Lifetime lifetime, IPlayer player);
+        public IReadonlyCharacter SpawnCharacterFor(Lifetime lifetime, IPlayer player);
     }
 }

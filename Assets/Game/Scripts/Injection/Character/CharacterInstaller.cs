@@ -3,14 +3,16 @@ using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
+using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Variables;
 using Bw.Injection.ControlledBy;
 using Bw.Injection.Network;
+using Bw.Injection.Network.Prediction;
 using Bw.Injection.Network.Variables;
 using Bw.Injection.Ownership;
 using Bw.UseCases.Character;
 using Bw.UseCases.Character.Network;
-using Bw.UseCases.Character.Network.Requests;
+using Bw.UseCases.Character.Network.Prediction;
 using Bw.UseCases.Camera.View.Follow;
 using Bw.UseCases.Character.View.Audio;
 using Bw.UseCases.Character.View.Death;
@@ -62,22 +64,20 @@ namespace Bw.Injection
             OwnershipServicesInstaller.Install(Container, _runtimeSettings, netSchema);
             ControlledByServicesInstaller.Install(Container, _runtimeSettings, netSchema);
             CharacterMovementInstaller.Install(Container, _runtimeSettings, netSchema);
-            BindCharacterSignals(netSchema);
+            EventPredictionTargetInstaller<CharacterVitals, float>.Install(Container, _runtimeSettings, netSchema);
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
             BindCharacter();
+            Container.InstantiateComponent<ReadonlyCharacterHolder>(gameObject);
 
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
                     Container.Bind<DeadCharacterDespawner>().AsSingle().NonLazy();
-                    Container.Bind<VitalsBroadcaster>().AsSingle().NonLazy();
-                    Container.Bind<LateJoinVitalsSender>().AsSingle().NonLazy();
-                    Container.InstantiateComponent<CharacterHolder>(gameObject);
+                    Container.BindInterfacesTo<VitalsEffectRules>().AsSingle();
                     break;
                 case PeerType.Client:
-                    Container.Bind<VitalsReceiver>().AsSingle().NonLazy();
-                    Container.InstantiateComponent<ReadonlyCharacterHolder>(gameObject);
+                    Container.BindInterfacesTo<VitalsPredictionRules>().AsSingle();
                     BindClientVisuals();
                     BindClientSounds();
                     break;
@@ -86,19 +86,14 @@ namespace Bw.Injection
             }
         }
 
-        private void BindCharacterSignals(INetEntriesSchemaBuilder netSchema)
-        {
-            var vitalsDeclaration = netSchema.DeclareSignal<CharacterVitals>(NetworkDelivery.Reliable, NetworkPermissions.Server);
-
-            Container.BindInterfacesTo<CharacterSignals>()
-                .FromMethod(context => new CharacterSignals(context.Container.Resolve<INetEntries>().Get(vitalsDeclaration)))
-                .AsSingle();
-        }
-
         private void BindCharacter()
         {
-            Container.BindInterfacesTo<Health>().AsSingle();
-            Container.BindInterfacesTo<MortalCharacter>().AsSingle();
+            Container.Bind(typeof(IReadonlyHealth), typeof(IHealth)).To<Health>().AsSingle()
+                .WriterOnlyInto<IHealth>(typeof(MortalCharacter));
+            Container.Bind(typeof(IReadonlyCharacter), typeof(IReadonlyAppliedState<CharacterVitals>), typeof(IAppliedState<CharacterVitals>))
+                .To<MortalCharacter>().AsSingle()
+                .WriterOnlyInto<IAppliedState<CharacterVitals>>(
+                    typeof(AuthoritativeState<CharacterVitals, float>), typeof(PredictedState<CharacterVitals, float>));
             Container.Bind<CorpseHitbox>().AsSingle().WithArguments(SingleLayer(_death.CorpseLayer)).NonLazy();
         }
 

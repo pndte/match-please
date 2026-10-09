@@ -7,7 +7,7 @@ namespace Bw.Entities.Network
     {
     }
 
-    public interface IMessageReceiver<T> : IMessageReceiver
+    internal interface IMessageReceiver<T> : IMessageReceiver
     {
         void ReceiveProperty(ref FastBufferReader reader, INetProperty<T> property);
         void ReceiveSignal(ref FastBufferReader reader, INetSignal<T> signal);
@@ -16,13 +16,13 @@ namespace Bw.Entities.Network
     public sealed class MessageReceiver<TValue, TCodec> : IMessageReceiver<TValue>
         where TCodec : struct, INetworkSerializable, ICodec<TValue>
     {
-        public void ReceiveProperty(ref FastBufferReader reader, INetProperty<TValue> property)
+        void IMessageReceiver<TValue>.ReceiveProperty(ref FastBufferReader reader, INetProperty<TValue> property)
         {
             reader.ReadNetworkSerializable(out TCodec codec);
             property.ApplyFromNetwork(codec.Value);
         }
 
-        public void ReceiveSignal(ref FastBufferReader reader, INetSignal<TValue> signal)
+        void IMessageReceiver<TValue>.ReceiveSignal(ref FastBufferReader reader, INetSignal<TValue> signal)
         {
             reader.ReadNetworkSerializable(out TCodec codec);
             signal.ApplyFromNetwork(codec.Value);

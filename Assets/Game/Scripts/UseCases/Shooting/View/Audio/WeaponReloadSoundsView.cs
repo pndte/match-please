@@ -1,5 +1,4 @@
 using Bw.Entities.Simulation;
-using Bw.UseCases.Audio.View.Playback;
 using Bw.UseCases.Audio.View.Playback.Abstractions;
 using Bw.UseCases.Shooting.Weapon;
 using JetBrains.Lifetimes;
@@ -13,23 +12,27 @@ namespace Bw.UseCases.Shooting.View.Audio
         private readonly Transform _weapon;
         private readonly ISoundPlayer _player;
         private readonly ISimulationStep _step;
-        private readonly WeaponSoundsConfig _config;
+        private readonly ShootingWeaponConfig _weaponConfig;
+        private readonly WeaponSoundsConfig _sounds;
 
-        private float _secondsLeft;
+        private bool _reloading;
         private bool _empty;
+        private float _progress;
 
         public WeaponReloadSoundsView(
             Lifetime lifetime,
             Transform weapon,
             ISoundPlayer player,
             ISimulationStep step,
-            WeaponSoundsConfig config)
+            ShootingWeaponConfig weaponConfig,
+            WeaponSoundsConfig sounds)
         {
             _lifetime = lifetime;
             _weapon = weapon;
             _player = player;
             _step = step;
-            _config = config;
+            _weaponConfig = weaponConfig;
+            _sounds = sounds;
         }
 
         public void Show(WeaponState from, WeaponState to, float progress)
@@ -37,35 +40,28 @@ namespace Bw.UseCases.Shooting.View.Audio
             var ticksLeft = from.ReloadTicks > 0 && to.ReloadTicks > 0
                 ? Mathf.Lerp(from.ReloadTicks, to.ReloadTicks, progress)
                 : to.ReloadTicks;
-            var secondsLeft = ticksLeft * _step.Duration;
-            if (secondsLeft <= 0f)
+            if (ticksLeft <= 0f)
             {
-                _secondsLeft = 0f;
+                _reloading = false;
                 return;
             }
 
-            if (_secondsLeft <= 0f)
-                Start(to);
+            var current = 1f - ticksLeft / ReloadTicks();
+            if (!_reloading)
+            {
+                _reloading = true;
+                _empty = to.Ammo == 0;
+                _progress = current;
+            }
 
-            if (Reaches(secondsLeft, _config.MagazineInBeforeEnd))
-                Play(_config.MagazineIn);
-            if (_empty && Reaches(secondsLeft, _config.BoltRackBeforeEnd))
-                Play(_config.BoltRack);
+            foreach (var cue in _sounds.Reload)
+                if ((!cue.OnlyEmpty || _empty) && _progress < cue.At && current >= cue.At)
+                    _player.Play(_lifetime, cue.Sound, _weapon);
 
-            _secondsLeft = secondsLeft;
+            _progress = current;
         }
 
-        private void Start(WeaponState state)
-        {
-            _empty = state.Ammo == 0;
-            _secondsLeft = float.PositiveInfinity;
-            Play(_config.MagazineOut);
-        }
-
-        private bool Reaches(float secondsLeft, float mark) =>
-            _secondsLeft > mark && secondsLeft <= mark;
-
-        private void Play(Sound sound) =>
-            _player.Play(_lifetime, sound, _weapon);
+        private float ReloadTicks() =>
+            Mathf.Max(1, Mathf.CeilToInt(_weaponConfig.ReloadTime / _step.Duration));
     }
 }

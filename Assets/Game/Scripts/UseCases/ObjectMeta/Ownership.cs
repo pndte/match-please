@@ -31,10 +31,10 @@ namespace Bw.UseCases
         {
             public ClientNetworkHandler(
                 Lifetime lifetime,
-                INetSignal<bool> mineSignal,
+                INetResultReceiver<bool> mine,
                 Ownership ownership)
             {
-                mineSignal.Advise(lifetime, mine => ownership._mine.Value = mine);
+                mine.Received.Advise(lifetime, value => ownership._mine.Value = value);
             }
         }
 
@@ -42,17 +42,17 @@ namespace Bw.UseCases
         {
             public ServerNetworkHandler(
                 Lifetime lifetime,
-                INetSignal<bool> mineSignal,
+                INetResultSender<bool> mine,
                 IOwnershipController ownershipController,
                 IClientPlayerCollection clientPlayers)
             {
                 ownershipController.Owners.View(lifetime, (ownerLifetime, ownerPlayer) =>
                 {
                     var client = clientPlayers.ByClient.Inverse[ownerPlayer]; //TODO: у бота клиента нет — когда появятся боты, игроков без клиента здесь пропускать
-                    mineSignal.FireTo(client, true);
+                    mine.SendTo(client, true);
 
                     ownerLifetime.OnTermination(() =>
-                        mineSignal.FireTo(client, false));
+                        mine.SendTo(client, false));
                 });
             }
         }

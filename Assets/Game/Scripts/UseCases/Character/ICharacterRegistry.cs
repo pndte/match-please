@@ -6,11 +6,11 @@ namespace Bw.UseCases
 {
     public interface ICharacterRegistry
     {
-        public IViewableMap<ICharacter, IPlayer> PlayerByCharacter { get; }
+        public IViewableMap<IReadonlyCharacter, IPlayer> PlayerByCharacter { get; }
     }
 
     public class CharacterRegistry : ICharacterRegistry
     {
-        public IViewableMap<ICharacter, IPlayer> PlayerByCharacter { get; } = new ViewableMap<ICharacter, IPlayer>();
+        public IViewableMap<IReadonlyCharacter, IPlayer> PlayerByCharacter { get; } = new ViewableMap<IReadonlyCharacter, IPlayer>();
     }
 }

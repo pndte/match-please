@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Bw.Entities.Network.Prediction.Stream.Requests;
 using Bw.Entities.Network.Ticks;
+using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
@@ -20,7 +21,7 @@ namespace Bw.Entities.Network.Prediction.Stream
             Lifetime lifetime,
             IReadonlyControlledBy controlledBy,
             IInterpolationTicks ticks,
-            IPredictionStateResult<TState> stateResult,
+            INetResultReceiver<TickedState<TState>> state,
             IStateView<TState> view)
         {
             _ticks = ticks;
@@ -28,7 +29,7 @@ namespace Bw.Entities.Network.Prediction.Stream
 
             controlledBy.Me.WhenFalse(lifetime, remoteLifetime =>
             {
-                stateResult.Received.Advise(remoteLifetime, Remember);
+                state.Received.Advise(remoteLifetime, Remember);
                 Observable.EveryUpdate(UnityFrameProvider.Update, remoteLifetime).Subscribe(UpdateView);
                 remoteLifetime.OnTermination(_snapshots.Clear);
             });

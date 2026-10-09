@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Bw.UseCases.Character
 {
-    public interface IGameObjectByCharacterCollection : IViewableMap<ICharacter, GameObject>
+    public interface IGameObjectByCharacterCollection : IViewableMap<IReadonlyCharacter, GameObject>
     {
         
     }
 
-    public class GameObjectByCharacterCollection : ViewableMap<ICharacter, GameObject>, IGameObjectByCharacterCollection
+    public class GameObjectByCharacterCollection : ViewableMap<IReadonlyCharacter, GameObject>, IGameObjectByCharacterCollection
     {
     }
 }

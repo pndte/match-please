@@ -25,12 +25,12 @@ namespace Bw.Entities.Network.Variables
                 NetworkPermissions.Server => new ForbiddenSendGuard("Entry with Server permissions is sent only by the server, a client can't send it."),
                 NetworkPermissions.Owner => WhileMine(),
                 NetworkPermissions.Client => WhileMine(),
-                NetworkPermissions.Everyone => new AllowedSendGuard(canTargetClients: false),
+                NetworkPermissions.Everyone => new AllowedSendGuard(),
                 _ => throw new ArgumentOutOfRangeException(nameof(permissions), $"Unknown NetworkPermissions value {((byte)permissions).ToString()}.")
             };
 
         private INetSendGuard WhileMine() =>
-            new WhileMineSendGuard(new AllowedSendGuard(canTargetClients: false), _ownership, _networkObject);
+            new WhileMineSendGuard(new AllowedSendGuard(), _ownership, _networkObject);
     }
 
     internal sealed class NetSendGuardFactoryServer : INetSendGuardFactory
@@ -47,10 +47,10 @@ namespace Bw.Entities.Network.Variables
         public INetSendGuard Create(NetworkPermissions permissions) =>
             permissions switch
             {
-                NetworkPermissions.Server => new AllowedSendGuard(canTargetClients: true),
-                NetworkPermissions.Owner => new WhileMineSendGuard(new AllowedSendGuard(canTargetClients: true), _ownership, _networkObject), //TODO: Mine на сервере не выставляется — Owner-записи сервер отправить не может
+                NetworkPermissions.Server => new AllowedSendGuard(),
+                NetworkPermissions.Owner => new WhileMineSendGuard(new AllowedSendGuard(), _ownership, _networkObject), //TODO: Mine на сервере не выставляется — Owner-записи сервер отправить не может
                 NetworkPermissions.Client => new ForbiddenSendGuard("Entry with Client permissions is sent only by its owning client, the server can't send it."),
-                NetworkPermissions.Everyone => new AllowedSendGuard(canTargetClients: true),
+                NetworkPermissions.Everyone => new AllowedSendGuard(),
                 _ => throw new ArgumentOutOfRangeException(nameof(permissions), $"Unknown NetworkPermissions value {((byte)permissions).ToString()}.")
             };
     }

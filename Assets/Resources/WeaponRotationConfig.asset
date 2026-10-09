@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68a4cf0293e74298a3c7aa4df3a8c9e2, type: 3}
   m_Name: WeaponRotationConfig
   m_EditorClassIdentifier: Bw.UseCases::DefaultNamespace.WeaponRotationConfig
-  MinOrbitRadius: 0.5
-  MaxOrbitRadius: 1.5
+  MinOrbitRadius: 0
+  MaxOrbitRadius: 0.4
   RadiusChangeSpeed: 10
   ObstacleDetectionDistance: 1.5
   ObstacleLayerMask:

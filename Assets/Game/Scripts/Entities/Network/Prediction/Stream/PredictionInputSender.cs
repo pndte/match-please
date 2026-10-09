@@ -1,5 +1,6 @@
 using Bw.Entities.Network.Prediction.Stream.Requests;
 using Bw.Entities.Network.Ticks;
+using Bw.Entities.Network.Variables;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
@@ -11,7 +12,7 @@ namespace Bw.Entities.Network.Prediction.Stream
 
         private readonly Signal<TInput> _predicted = new();
         private readonly IInputSampler<TInput> _sampler;
-        private readonly IPredictionInputRequest<TInput> _inputRequest;
+        private readonly INetRequestSender<TickedInput<TInput>> _input;
 
         private TInput _previousInput;
 
@@ -20,10 +21,10 @@ namespace Bw.Entities.Network.Prediction.Stream
             IReadonlyControlledBy controlledBy,
             INetworkTicks ticks,
             IInputSampler<TInput> sampler,
-            IPredictionInputRequest<TInput> inputRequest)
+            INetRequestSender<TickedInput<TInput>> input)
         {
             _sampler = sampler;
-            _inputRequest = inputRequest;
+            _input = input;
 
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
                 ticks.Ticked(TickPhase.Default).Advise(controlledLifetime, Send));
@@ -33,7 +34,7 @@ namespace Bw.Entities.Network.Prediction.Stream
         {
             var input = _sampler.Sample();
 
-            _inputRequest.Requested.Fire(new TickedInput<TInput>(tick, input, _previousInput));
+            _input.Send(new TickedInput<TInput>(tick, input, _previousInput));
             _previousInput = input;
             _predicted.Fire(input);
         }

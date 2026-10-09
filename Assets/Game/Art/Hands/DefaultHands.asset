@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf7c34a0dc4e6348bea04faa70406ee, type: 3}
+  m_Name: DefaultHands
+  m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteLibraryAsset
+  m_Labels:
+  - m_Name: Hand
+    m_Hash: 122744241
+    m_CategoryList:
+    - m_Name: Grip
+      m_Hash: 348693108
+      m_Sprite: {fileID: -1910438043, guid: 00fc80a6bc6cbcb4490ca5743ce532a1, type: 3}
+    - m_Name: Pinch
+      m_Hash: 938456955
+      m_Sprite: {fileID: 848035903, guid: 00fc80a6bc6cbcb4490ca5743ce532a1, type: 3}
+    - m_Name: Open
+      m_Hash: 71445658
+      m_Sprite: {fileID: 1487035369, guid: 00fc80a6bc6cbcb4490ca5743ce532a1, type: 3}
+    - m_Name: Relaxed
+      m_Hash: 653308008
+      m_Sprite: {fileID: 151539877, guid: 00fc80a6bc6cbcb4490ca5743ce532a1, type: 3}
+    - m_Name: Fist
+      m_Hash: 189249346
+      m_Sprite: {fileID: 1272031753, guid: 00fc80a6bc6cbcb4490ca5743ce532a1, type: 3}
+  m_ModificationHash: 0
+  m_Version: 1

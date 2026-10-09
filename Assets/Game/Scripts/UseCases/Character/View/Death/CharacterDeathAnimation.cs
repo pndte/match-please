@@ -11,7 +11,7 @@ namespace Bw.UseCases.Character.View.Death
         public CharacterDeathAnimation(Lifetime lifetime, IReadonlyCharacter character, Animator animator)
         {
             character.State.WhenDead(lifetime, _ => animator.Play(Death, 0, 1f));
-            character.Died.Advise(lifetime, _ => animator.Play(Death, 0, 0f));
+            character.AdviseKilled(lifetime, () => animator.Play(Death, 0, 0f));
         }
     }
 }

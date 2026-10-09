@@ -5,14 +5,16 @@ namespace Bw.UseCases.Shooting.Weapon
     public readonly struct RaycastShot
     {
         public readonly IShotTracer Tracer;
-        public readonly WeaponShot Shot;
+        public readonly WeaponShot WeaponShot;
         public readonly float Damage;
+        public readonly IReadonlyWeapon Weapon;
 
-        public RaycastShot(IShotTracer tracer, WeaponShot shot, float damage)
+        public RaycastShot(IShotTracer tracer, WeaponShot weaponShot, float damage, IReadonlyWeapon weapon)
         {
             Tracer = tracer;
-            Shot = shot;
+            WeaponShot = weaponShot;
             Damage = damage;
+            Weapon = weapon;
         }
     }
 }

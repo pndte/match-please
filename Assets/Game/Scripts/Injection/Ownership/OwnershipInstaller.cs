@@ -49,18 +49,16 @@ namespace Bw.Injection.Ownership
 
         public override void InstallBindings()
         {
-            var mineDeclaration = _netSchema.DeclareSignal<bool>(
-                NetworkDelivery.Reliable,
-                NetworkPermissions.Server);
+            var mineDeclaration = _netSchema.DeclareResult<bool>(NetworkDelivery.Reliable);
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
-                Container.BindNetSignalFor<bool, UseCases.Ownership.ClientNetworkHandler>(mineDeclaration);
+                Container.BindResultReceiver(mineDeclaration).WhenInjectedInto<UseCases.Ownership.ClientNetworkHandler>();
                 Container.Bind<UseCases.Ownership.ClientNetworkHandler>().ToSelf().AsSingle().NonLazy();
             }
             else if (_runtimeSettings.CurrentPeerType == PeerType.Server)
             {
-                Container.BindNetSignalFor<bool, UseCases.Ownership.ServerNetworkHandler>(mineDeclaration);
+                Container.BindResultSender(mineDeclaration).WhenInjectedInto<UseCases.Ownership.ServerNetworkHandler>();
                 Container.Bind<UseCases.Ownership.ServerNetworkHandler>().ToSelf().AsSingle().NonLazy();
             }
         }

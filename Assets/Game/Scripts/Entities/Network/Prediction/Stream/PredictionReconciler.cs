@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Bw.Entities.Network.Prediction.Stream.Requests;
+using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
@@ -21,8 +22,8 @@ namespace Bw.Entities.Network.Prediction.Stream
         public PredictionReconciler(
             Lifetime lifetime,
             IReadonlyControlledBy controlledBy,
-            IPredictionInputRequest<TInput> inputRequest,
-            IPredictionStateResult<TState> stateResult,
+            INetRequestSender<TickedInput<TInput>> input,
+            INetResultReceiver<TickedState<TState>> state,
             ISimulation<TState> simulation,
             ISimulator<TInput, TState> simulator)
         {
@@ -31,8 +32,8 @@ namespace Bw.Entities.Network.Prediction.Stream
 
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime => //TODO: у чужого объекта локальное состояние не обновлялось (снимки идут только в показ) — получив управление (подбор оружия), клиент до первого состояния сервера предсказывает от устаревшего: патроны, счётчик выстрелов
             {
-                inputRequest.Requested.Advise(controlledLifetime, Remember);
-                stateResult.Received.Advise(controlledLifetime, Reconcile);
+                input.Sent.Advise(controlledLifetime, Remember);
+                state.Received.Advise(controlledLifetime, Reconcile);
                 controlledLifetime.OnTermination(_pending.Clear);
             });
         }

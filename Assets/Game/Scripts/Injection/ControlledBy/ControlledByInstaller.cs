@@ -49,18 +49,16 @@ namespace Bw.Injection.ControlledBy
 
         public override void InstallBindings()
         {
-            var meDeclaration = _netSchema.DeclareSignal<bool>(
-                NetworkDelivery.Reliable,
-                NetworkPermissions.Server);
+            var meDeclaration = _netSchema.DeclareResult<bool>(NetworkDelivery.Reliable);
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
-                Container.BindNetSignalFor<bool, UseCases.ControlledBy.ClientNetworkHandler>(meDeclaration);
+                Container.BindResultReceiver(meDeclaration).WhenInjectedInto<UseCases.ControlledBy.ClientNetworkHandler>();
                 Container.Bind<UseCases.ControlledBy.ClientNetworkHandler>().ToSelf().AsSingle().NonLazy();
             }
             else if (_runtimeSettings.CurrentPeerType == PeerType.Server)
             {
-                Container.BindNetSignalFor<bool, UseCases.ControlledBy.ServerNetworkHandler>(meDeclaration);
+                Container.BindResultSender(meDeclaration).WhenInjectedInto<UseCases.ControlledBy.ServerNetworkHandler>();
                 Container.Bind<UseCases.ControlledBy.ServerNetworkHandler>().ToSelf().AsSingle().NonLazy();
             }
         }

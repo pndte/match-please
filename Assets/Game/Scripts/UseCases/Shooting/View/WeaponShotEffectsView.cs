@@ -87,7 +87,7 @@ namespace Bw.UseCases.Shooting.View
            
             _sfxPlayer.Play(trace, arrival);
             
-            if (trace.Hit && trace.Hit.collider.TryGetComponent<IHolder<IReadonlyCharacter>>(out _)) //TODO: кровь рисуется по локальному трассеру, а урон считает сервер — изредка будет кровь без урона или урон без крови
+            if (trace.Hit && trace.Hit.collider.TryGetComponent<IHolder<IReadonlyCharacter>>(out _)) //TODO: кровь рисуется по локальному трассеру, а урон решает сервер (свой выстрел предсказан той же трассировкой, но сервер может его отменить) — изредка будет кровь без урона или урон без крови
                 _lifetime.WhenElapsed(arrival, () => _pools.For<IEffect>(_impact.Prefab).OneShot(_lifetime).Play(trace.To, ray.Direction));
         }
     }

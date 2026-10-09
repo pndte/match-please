@@ -1,6 +1,7 @@
 using System;
 using Bw.Entities.Network.Prediction.Stream.Requests;
 using Bw.Entities.Network.Ticks;
+using Bw.Entities.Network.Variables;
 using JetBrains.Lifetimes;
 
 namespace Bw.Entities.Network.Prediction.Stream
@@ -8,7 +9,7 @@ namespace Bw.Entities.Network.Prediction.Stream
     public sealed class InputMarginServerHandler<TInput> where TInput : struct
     {
         private readonly INetworkTicks _ticks;
-        private readonly IInputMarginResult _marginResult;
+        private readonly INetResultSender<int> _margin;
         private readonly NetworkTicksConfig _config;
 
         private int _minMargin;
@@ -18,15 +19,15 @@ namespace Bw.Entities.Network.Prediction.Stream
         public InputMarginServerHandler(
             Lifetime lifetime,
             INetworkTicks ticks,
-            IPredictionInputRequest<TInput> inputRequest,
-            IInputMarginResult marginResult,
+            INetRequestReceiver<TickedInput<TInput>> input,
+            INetResultSender<int> margin,
             NetworkTicksConfig config)
         {
             _ticks = ticks;
-            _marginResult = marginResult;
+            _margin = margin;
             _config = config;
 
-            inputRequest.Requested.Advise(lifetime, request => Measure(request.Tick - _ticks.Current - 1));
+            input.Received.Advise(lifetime, request => Measure(request.Tick - _ticks.Current - 1));
             ticks.Ticked(TickPhase.Default).Advise(lifetime, _ => ReportWhenDue());
         }
 
@@ -46,7 +47,7 @@ namespace Bw.Entities.Network.Prediction.Stream
                 return;
 
             _measured = false;
-            _marginResult.Received.Fire(_minMargin);
+            _margin.Broadcast(_minMargin);
         }
     }
 }

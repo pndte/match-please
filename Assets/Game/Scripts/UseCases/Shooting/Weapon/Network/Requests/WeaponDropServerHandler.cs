@@ -1,5 +1,7 @@
 using System;
+using Bw.Entities.Network.Variables;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
+using JetBrains.Core;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Shooting.Weapon.Network.Requests
@@ -9,10 +11,10 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
         public WeaponDropServerHandler(
             Lifetime lifetime,
             IWeapon weapon,
-            IWeaponDropRequest dropRequest,
+            INetRequestReceiver<Unit> drop,
             IHeldWeaponCollection heldWeapons)
         {
-            dropRequest.Requested.Advise(lifetime, _ =>
+            drop.Received.Advise(lifetime, _ =>
             {
                 if (!heldWeapons.ByCharacter.RemoveRight(weapon))
                     throw new InvalidOperationException(

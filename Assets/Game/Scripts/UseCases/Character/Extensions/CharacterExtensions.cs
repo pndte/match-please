@@ -22,10 +22,16 @@ namespace Bw.UseCases.Character.Extensions
             });
         }
 
-        public static CharacterVitals Vitals(this IReadonlyCharacter character) =>
-            new(character.Health.State.Value, character.State.Value);
-
-        public static void Hit(this ICharacter character, float damage) =>
-            character.Apply(character.Vitals().AfterHit(damage));
+        public static void AdviseKilled(this IReadonlyCharacter character, Lifetime lifetime, Action handler)
+        {
+            var previous = character.Current;
+            character.Applied.Advise(lifetime, vitals =>
+            {
+                var killed = vitals.IsKillAfter(previous);
+                previous = vitals;
+                if (killed)
+                    handler();
+            });
+        }
     }
 }

@@ -36,8 +36,17 @@ namespace Bw.Entities.Network.Variables
                 AddEntry(lifetime, varId++, declaration, sendGuards.Create(declaration.Permissions));
         }
 
-        public INetSignal<T> Get<T>(NetSignalDeclaration<T> declaration) =>
-            (INetSignal<T>)EntryFor(declaration);
+        public INetRequestSender<T> Sender<T>(NetRequestDeclaration<T> declaration) =>
+            (INetRequestSender<T>)EntryFor(declaration);
+
+        public INetRequestReceiver<T> Receiver<T>(NetRequestDeclaration<T> declaration) =>
+            (INetRequestReceiver<T>)EntryFor(declaration);
+
+        public INetResultSender<T> Sender<T>(NetResultDeclaration<T> declaration) =>
+            (INetResultSender<T>)EntryFor(declaration);
+
+        public INetResultReceiver<T> Receiver<T>(NetResultDeclaration<T> declaration) =>
+            (INetResultReceiver<T>)EntryFor(declaration);
 
         public INetProperty<T> Get<T>(NetPropertyDeclaration<T> declaration) =>
             (INetProperty<T>)EntryFor(declaration);
@@ -113,9 +122,9 @@ namespace Bw.Entities.Network.Variables
         void INetSyncVisitor.VisitSignal<T>(INetSignal<T> entry) =>
             DispatchSignalUpdate(entry);
 
-        protected abstract void DispatchPropertyUpdate<T>(INetProperty<T> property);
+        private protected abstract void DispatchPropertyUpdate<T>(INetProperty<T> property);
 
-        protected abstract void DispatchSignalUpdate<T>(INetSignal<T> entry);
+        private protected abstract void DispatchSignalUpdate<T>(INetSignal<T> entry);
 
         protected NetworkMessageHeader HeaderFor(INetSyncEntry entry)
         {

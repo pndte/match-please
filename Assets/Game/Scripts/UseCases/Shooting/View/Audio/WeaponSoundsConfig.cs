@@ -1,5 +1,6 @@
 using System;
 using Bw.UseCases.Audio.View.Playback;
+using Bw.UseCases.Shooting.Weapon;
 using UnityEngine;
 
 namespace Bw.UseCases.Shooting.View.Audio
@@ -7,16 +8,16 @@ namespace Bw.UseCases.Shooting.View.Audio
     [Serializable]
     public sealed class WeaponSoundsConfig
     {
-        [Header("Shot")]
+        public ShootingWeaponConfig Weapon;
         public Sound Shot = new();
-        public Sound GroundHit = new();
-        public LayerMask GroundLayers;
+        public ReloadCue[] Reload = Array.Empty<ReloadCue>();
+    }
 
-        [Header("Reload")]
-        public Sound MagazineOut = new();
-        public Sound MagazineIn = new();
-        [Min(0f)] public float MagazineInBeforeEnd = 1.1f;
-        public Sound BoltRack = new();
-        [Min(0f)] public float BoltRackBeforeEnd = 0.6f;
+    [Serializable]
+    public sealed class ReloadCue
+    {
+        public Sound Sound = new();
+        [Range(0f, 1f)] public float At;
+        public bool OnlyEmpty;
     }
 }

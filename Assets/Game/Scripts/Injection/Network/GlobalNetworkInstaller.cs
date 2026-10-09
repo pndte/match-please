@@ -1,3 +1,4 @@
+using Bw.Injection.Network.Prediction;
 using UnityEngine;
 using Zenject;
 
@@ -10,6 +11,7 @@ namespace Bw.Injection.Network
         {
             MessageHandlersInstaller.Install(Container);
             NetworkTicksInstaller.Install(Container);
+            EventPredictionInstaller.Install(Container);
             Debug.Log($"[{nameof(GlobalNetworkInstaller)}]: Network Services Successfully Installed");
         }
     }

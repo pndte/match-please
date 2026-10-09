@@ -16,5 +16,9 @@ namespace Bw.UseCases.Character.Extensions
 
         public static CharacterVitals WithoutChange(this CharacterVitals vitals) =>
             new(vitals.Health.WithoutChange(), vitals.State);
+
+        public static bool IsKillAfter(this CharacterVitals vitals, CharacterVitals previous) =>
+            previous.State == CharacterState.Alive && vitals.State == CharacterState.Dead &&
+            (vitals.Health.Change < 0f || previous.Health.Current <= 0f);
     }
 }

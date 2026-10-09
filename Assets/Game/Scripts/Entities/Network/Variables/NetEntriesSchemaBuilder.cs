@@ -6,7 +6,8 @@ namespace Bw.Entities.Network.Variables
 {
     public interface INetEntriesSchemaBuilder
     {
-        public NetSignalDeclaration<T> DeclareSignal<T>(NetworkDelivery deliveryType, NetworkPermissions permissions);
+        public NetRequestDeclaration<T> DeclareRequest<T>(NetworkDelivery deliveryType);
+        public NetResultDeclaration<T> DeclareResult<T>(NetworkDelivery deliveryType);
         public NetPropertyDeclaration<T> DeclareProperty<T>(T initial, NetworkDelivery deliveryType, NetworkPermissions permissions);
     }
 
@@ -15,9 +16,16 @@ namespace Bw.Entities.Network.Variables
         private readonly List<NetEntryDeclaration> _declarations = new();
         private bool _built;
 
-        public NetSignalDeclaration<T> DeclareSignal<T>(NetworkDelivery deliveryType, NetworkPermissions permissions)
+        public NetRequestDeclaration<T> DeclareRequest<T>(NetworkDelivery deliveryType)
         {
-            var declaration = new NetSignalDeclaration<T>(deliveryType, permissions);
+            var declaration = new NetRequestDeclaration<T>(deliveryType);
+            Add(declaration);
+            return declaration;
+        }
+
+        public NetResultDeclaration<T> DeclareResult<T>(NetworkDelivery deliveryType)
+        {
+            var declaration = new NetResultDeclaration<T>(deliveryType);
             Add(declaration);
             return declaration;
         }

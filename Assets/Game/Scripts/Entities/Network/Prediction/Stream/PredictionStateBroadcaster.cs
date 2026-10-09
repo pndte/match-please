@@ -1,5 +1,6 @@
 using Bw.Entities.Network.Prediction.Stream.Requests;
 using Bw.Entities.Network.Ticks;
+using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using JetBrains.Lifetimes;
 
@@ -11,10 +12,10 @@ namespace Bw.Entities.Network.Prediction.Stream
             Lifetime lifetime,
             INetworkTicks ticks,
             IReadonlySimulation<TState> simulation,
-            IPredictionStateResult<TState> stateResult)
+            INetResultSender<TickedState<TState>> result)
         {
             simulation.Stepped.Advise(lifetime, state =>
-                stateResult.Received.Fire(new TickedState<TState>(ticks.Current, state)));
+                result.Broadcast(new TickedState<TState>(ticks.Current, state)));
         }
     }
 }

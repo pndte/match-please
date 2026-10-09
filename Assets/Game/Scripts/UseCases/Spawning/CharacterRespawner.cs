@@ -23,7 +23,7 @@ namespace Bw.UseCases.Spawning
             characterRegistry.PlayerByCharacter.ForEach(lifetime, HandleCharacter);
         }
 
-        private void HandleCharacter(Lifetime lifetime, ICharacter character, IPlayer player)
+        private void HandleCharacter(Lifetime lifetime, IReadonlyCharacter character, IPlayer player)
         {
             character.State.WhenDead(lifetime, _ => RespawnCharacter(player).Forget());
         }

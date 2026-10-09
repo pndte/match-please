@@ -1,5 +1,6 @@
 using Bw.Entities.Extensions;
 using Bw.UseCases.Audio.View.Playback.Abstractions;
+using Bw.UseCases.Character.Extensions;
 using Bw.UseCases.Character.View.Death;
 using JetBrains.Lifetimes;
 using UnityEngine;
@@ -26,7 +27,7 @@ namespace Bw.UseCases.Character.View.Audio
             _sounds = sounds;
             _death = death;
 
-            character.Died.Advise(lifetime, _ => lifetime.WhenElapsed(death.BurstTime, Burst));
+            character.AdviseKilled(lifetime, () => lifetime.WhenElapsed(death.BurstTime, Burst));
         }
 
         private void Burst() =>

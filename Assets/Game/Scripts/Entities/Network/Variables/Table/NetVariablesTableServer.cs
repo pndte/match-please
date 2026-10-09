@@ -34,13 +34,13 @@ namespace Bw.Entities.Network.Variables
             clients.ByIds.View(lifetime, (_, _, client) => SendCurrentStateTo(client));
         }
 
-        protected override void DispatchPropertyUpdate<T>(INetProperty<T> property)
+        private protected override void DispatchPropertyUpdate<T>(INetProperty<T> property)
         {
             var sender = _messageSenders.Get<T>();
             sender.Broadcast(HeaderFor(property), property.Value, CurrentRegistration.DeliveryType);
         }
 
-        protected override void DispatchSignalUpdate<T>(INetSignal<T> entry)
+        private protected override void DispatchSignalUpdate<T>(INetSignal<T> entry)
         {
             var outgoing = (
                 Sender: _messageSenders.Get<T>(),

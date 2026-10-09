@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network.Prediction.Stream.Requests;
 using Bw.Entities.Network.Ticks;
+using Bw.Entities.Network.Variables;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
@@ -26,7 +27,7 @@ namespace Bw.Entities.Network.Prediction.Stream
             NetworkTicksConfig config,
             IInputPolicy<TInput> policy,
             IControlledBy controlledBy,
-            IPredictionInputRequest<TInput> inputRequest)
+            INetRequestReceiver<TickedInput<TInput>> input)
         {
             _ticks = ticks;
             _config = config;
@@ -38,7 +39,7 @@ namespace Bw.Entities.Network.Prediction.Stream
                 _buffered.Clear();
                 userLifetime.OnTermination(_buffered.Clear);
             });
-            inputRequest.Requested.Advise(lifetime, Buffer);
+            input.Received.Advise(lifetime, Buffer);
             ticks.Ticked(TickPhase.Default).Advise(lifetime, Simulate);
         }
 
@@ -62,6 +63,7 @@ namespace Bw.Entities.Network.Prediction.Stream
                 _lastInput = default;
             else
                 _lastInput = _buffered.Remove(tick, out var input) ? input : _policy.Substitute(_lastInput);
+
             _simulated.Fire(_lastInput);
         }
     }

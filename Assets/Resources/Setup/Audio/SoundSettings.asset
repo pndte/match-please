@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Audio.SoundSettingsInstaller
   _player:
     Voice: {fileID: 1000, guid: 5bd6aa44685b41de92c8585ee6274c58, type: 3}
-  _weapon:
+  _weapons:
+  - Weapon: {fileID: 11400000, guid: c7210083ab45bac4eb075b9602232847, type: 2}
     Shot:
       Clips:
       - {fileID: 8300000, guid: c1694969b85b6164fbe466a9b185a29e, type: 3}
@@ -22,6 +23,121 @@ MonoBehaviour:
       - {fileID: 8300000, guid: 84c80eed6cfb1f84999ed58dc61eb23f, type: 3}
       Volume: 0.6
       PitchVariation: 0.04
+    Reload:
+    - Sound:
+        Clips:
+        - {fileID: 8300000, guid: 76bfb669dc26afa4fa8af9cb1fb6dbce, type: 3}
+        Volume: 0.45
+        PitchVariation: 0.02
+      At: 0.1
+      OnlyEmpty: 0
+    - Sound:
+        Clips:
+        - {fileID: 8300000, guid: de96c4f3e8dedbc43a0e989209c69064, type: 3}
+        Volume: 0.3
+        PitchVariation: 0.02
+      At: 0.54
+      OnlyEmpty: 0
+    - Sound:
+        Clips:
+        - {fileID: 8300000, guid: 739b90a5ea0659b4abb912c018e95501, type: 3}
+        Volume: 0.2
+        PitchVariation: 0.02
+      At: 0.618
+      OnlyEmpty: 1
+  - Weapon: {fileID: 11400000, guid: ffaa7d60a8aa3e8478a21abd827a5f60, type: 2}
+    Shot:
+      Clips:
+      - {fileID: 8300000, guid: c01bf4c97847080459a0d1910735b67b, type: 3}
+      Volume: 0.8
+      PitchVariation: 0.05
+    Reload:
+    - Sound:
+        Clips:
+        - {fileID: 8300000, guid: d0cf3eefd16d2d349bb6847e5d86a55f, type: 3}
+        Volume: 1
+        PitchVariation: 0.02
+      At: 0.1615625
+      OnlyEmpty: 0
+    - Sound:
+        Clips:
+        - {fileID: 8300000, guid: d0cf3eefd16d2d349bb6847e5d86a55f, type: 3}
+        Volume: 1
+        PitchVariation: 0.02
+      At: 0.3490625
+      OnlyEmpty: 0
+    - Sound:
+        Clips:
+        - {fileID: 8300000, guid: d0cf3eefd16d2d349bb6847e5d86a55f, type: 3}
+        Volume: 1
+        PitchVariation: 0.02
+      At: 0.5365625
+      OnlyEmpty: 0
+    - Sound:
+        Clips:
+        - {fileID: 8300000, guid: c709bed08fe34074eaedfd370b82954e, type: 3}
+        Volume: 0.4
+        PitchVariation: 0.02
+      At: 0.7009375
+      OnlyEmpty: 1
+  - Weapon: {fileID: 11400000, guid: afc0231ee46e3b4429d8947bdf114a38, type: 2}
+    Shot:
+      Clips:
+      - {fileID: 8300000, guid: 50bd76907abd45142a6c624c60fb2616, type: 3}
+      - {fileID: 8300000, guid: 718c4ed0582ee354d8e5c7c9125fbf62, type: 3}
+      Volume: 0.35
+      PitchVariation: 0.05
+    Reload:
+    - Sound:
+        Clips:
+        - {fileID: 8300000, guid: 4c31140a5afaa24428fd7a3c955bcffa, type: 3}
+        Volume: 0.5
+        PitchVariation: 0.02
+      At: 0.0725
+      OnlyEmpty: 0
+    - Sound:
+        Clips:
+        - {fileID: 8300000, guid: b077c3cf503c65643a9ab739d4a6b90c, type: 3}
+        Volume: 0.65
+        PitchVariation: 0.02
+      At: 0.389375
+      OnlyEmpty: 0
+    - Sound:
+        Clips:
+        - {fileID: 8300000, guid: 644c37f64e4addd4cbad943c05254a84, type: 3}
+        Volume: 0.35
+        PitchVariation: 0.02
+      At: 0.705
+      OnlyEmpty: 1
+  - Weapon: {fileID: 11400000, guid: b9d527b2ed6a4f34d9e4ba72455ef8f2, type: 2}
+    Shot:
+      Clips:
+      - {fileID: 8300000, guid: 99b5c0a1e2fda99409c1cc7ac53df75d, type: 3}
+      Volume: 0.6
+      PitchVariation: 0.03
+    Reload:
+    - Sound:
+        Clips:
+        - {fileID: 8300000, guid: be6871395cbf4024294c668422c5fd57, type: 3}
+        Volume: 0.45
+        PitchVariation: 0.02
+      At: 0.036666665
+      OnlyEmpty: 0
+    - Sound:
+        Clips:
+        - {fileID: 8300000, guid: 4215a293d9f5d7049966c9c84ca6a7ba, type: 3}
+        Volume: 0.7
+        PitchVariation: 0.02
+      At: 0.333
+      OnlyEmpty: 0
+    - Sound:
+        Clips:
+        - {fileID: 8300000, guid: 3fd7bd3678e192d438b70b7931d97ee8, type: 3}
+        Volume: 0.3
+        PitchVariation: 0.02
+      At: 0.59666663
+      OnlyEmpty: 1
+  _shotImpact:
     GroundHit:
       Clips:
       - {fileID: 8300000, guid: dd93c03c7af93964fbc64d0478156732, type: 3}
@@ -34,23 +150,6 @@ MonoBehaviour:
     GroundLayers:
       serializedVersion: 2
       m_Bits: 16384
-    MagazineOut:
-      Clips:
-      - {fileID: 8300000, guid: 76bfb669dc26afa4fa8af9cb1fb6dbce, type: 3}
-      Volume: 0.45
-      PitchVariation: 0.02
-    MagazineIn:
-      Clips:
-      - {fileID: 8300000, guid: de96c4f3e8dedbc43a0e989209c69064, type: 3}
-      Volume: 0.3
-      PitchVariation: 0.02
-    MagazineInBeforeEnd: 1.1
-    BoltRack:
-      Clips:
-      - {fileID: 8300000, guid: 739b90a5ea0659b4abb912c018e95501, type: 3}
-      Volume: 0.2
-      PitchVariation: 0.02
-    BoltRackBeforeEnd: 0.6
   _movement:
     Step:
       Clips:

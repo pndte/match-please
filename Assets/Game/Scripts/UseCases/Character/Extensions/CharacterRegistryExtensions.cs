@@ -7,7 +7,7 @@ namespace Bw.UseCases.Character.Extensions
 {
     public static class CharacterRegistryExtensions
     {
-        public static void ForEach<V>(this IViewableMap<ICharacter, V> charactersMap, Lifetime lifetime, Action<Lifetime, ICharacter, V> handler)
+        public static void ForEach<V>(this IViewableMap<IReadonlyCharacter, V> charactersMap, Lifetime lifetime, Action<Lifetime, IReadonlyCharacter, V> handler)
         {
             charactersMap.AdviseAdd(lifetime, (character, _) =>
                 charactersMap.ViewForKey(lifetime, character, (characterLifetime, value) =>

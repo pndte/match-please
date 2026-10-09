@@ -18,7 +18,7 @@ namespace Bw.Injection
 
         [Header("Spawn Configuration")]
         [SerializeField] private NetworkObject[] _characters;
-        [SerializeField] private NetworkObject _weapon;
+        [SerializeField] private NetworkObject[] _weapons;
         [SerializeField] private Transform[] _spawnPoints;
         [SerializeField] private float _spawnRandomOffset = 2f;
 
@@ -32,26 +32,26 @@ namespace Bw.Injection
             if (_runtimeSettings.CurrentPeerType != PeerType.Server)
                 return;
 
-            RequireCharacterPrefabs(NetworkManager.Singleton.NetworkConfig.Prefabs);
-            RequireNetworkPrefab(NetworkManager.Singleton.NetworkConfig.Prefabs, _weapon);
+            RequirePrefabs(NetworkManager.Singleton.NetworkConfig.Prefabs, _characters, "character");
+            RequirePrefabs(NetworkManager.Singleton.NetworkConfig.Prefabs, _weapons, "weapon");
             Container.BindInterfacesTo<NetworkCharactersSpawner>().AsSingle().WithArguments(
                 new NetworkCharactersSpawner.Data
                 {
                     SpawnPoints = _spawnPoints,
                     SpawnRandomOffset = _spawnRandomOffset,
                     CharacterPrefabs = _characters,
-                    WeaponPrefab = _weapon,
+                    WeaponPrefabs = _weapons,
                 });
             Container.Bind<CharacterRespawner>().AsSingle().NonLazy();
         }
 
-        private void RequireCharacterPrefabs(NetworkPrefabs registered)
+        private static void RequirePrefabs(NetworkPrefabs registered, NetworkObject[] prefabs, string kind)
         {
-            if (_characters.Length == 0)
-                throw new InvalidOperationException("The spawner has no character prefabs: add at least one to its list.");
+            if (prefabs.Length == 0)
+                throw new InvalidOperationException($"The spawner has no {kind} prefabs: add at least one to its list.");
 
-            foreach (var character in _characters)
-                RequireNetworkPrefab(registered, character);
+            foreach (var prefab in prefabs)
+                RequireNetworkPrefab(registered, prefab);
         }
 
         private static void RequireNetworkPrefab(NetworkPrefabs registered, NetworkObject prefab)

@@ -1,18 +1,23 @@
+using System;
 using System.Collections.Generic;
 using Bw.Entities;
 using Bw.Entities.Network.LagCompensation;
+using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Ticks;
 using Bw.UseCases.Character;
-using Bw.UseCases.Character.Extensions;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Shooting.Weapon.Network
 {
-    public sealed class RaycastShotResolver : IRaycastShots
+    public sealed class RaycastShotResolver : IRaycastShots, IOutcomes<IReadonlyWeapon, IReadonlyCharacter, float>
     {
+        public ISource<ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, float>> Reported => _reported;
+
+        private readonly Signal<ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, float>> _reported = new();
         private readonly List<RaycastShot> _shots = new();
-        private readonly List<CharacterHit> _hits = new();
+        private readonly List<ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, float>> _outcomes = new();
         private readonly ILagCompensator _lagCompensator;
 
         public RaycastShotResolver(Lifetime lifetime, INetworkTicks ticks, ILagCompensator lagCompensator)
@@ -30,42 +35,31 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             try
             {
                 for (var index = 0; index < _shots.Count; index++)
-                    Trace(tick, _shots[index]);
+                    _outcomes.Add(Trace(tick, _shots[index]));
 
-                for (var index = 0; index < _hits.Count; index++)
-                    if (_hits[index].Character.State.Value == CharacterState.Alive)
-                        _hits[index].Character.Hit(_hits[index].Damage);
+                for (var index = 0; index < _outcomes.Count; index++)
+                    _reported.Fire(_outcomes[index]);
             }
             finally
             {
                 _shots.Clear();
-                _hits.Clear();
+                _outcomes.Clear();
             }
         }
 
-        private void Trace(int tick, RaycastShot shot)
+        private ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, float> Trace(int tick, RaycastShot shot)
         {
-            var ray = shot.Tracer.Aim(shot.Shot.Aim);
+            var ray = shot.Tracer.Aim(shot.WeaponShot.Aim);
             var hit = Lifetime.Using(rewindLifetime =>
             {
-                _lagCompensator.Rewind(rewindLifetime, tick - shot.Shot.ViewDelay);
+                _lagCompensator.Rewind(rewindLifetime, tick - shot.WeaponShot.ViewDelay); //TODO: откатываются только позиции персонажей, а жизнь и смерть (слой трупа), потом и целость ящиков, берутся из настоящего: цель, умершая на сервере уже после тика, который видел стрелок, пропускает пулю насквозь, хотя на его экране она ещё стояла
                 return shot.Tracer.Cast(ray).Hit;
             });
 
-            if (hit && hit.collider.TryGetComponent<IHolder<ICharacter>>(out var characterHolder))
-                _hits.Add(new CharacterHit(characterHolder.Value, shot.Damage));
-        }
-
-        private readonly struct CharacterHit
-        {
-            public readonly ICharacter Character;
-            public readonly float Damage;
-
-            public CharacterHit(ICharacter character, float damage)
-            {
-                Character = character;
-                Damage = damage;
-            }
+            var affected = hit && hit.collider.TryGetComponent<IHolder<IReadonlyCharacter>>(out var characterHolder)
+                ? new[] { new AffectedTarget<IReadonlyCharacter, float>(characterHolder.Value, shot.Damage) } //TODO: выделение массива на выстрел - плохо, в идеале пуллировать массивы и переиспользовать их
+                : Array.Empty<AffectedTarget<IReadonlyCharacter, float>>();
+            return new ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, float>(shot.Weapon, tick, affected);
         }
     }
 }

@@ -1,5 +1,5 @@
-using Bw.Entities.Network.Prediction.Stream.Requests;
 using Bw.Entities.Network.Ticks;
+using Bw.Entities.Network.Variables;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
@@ -10,11 +10,11 @@ namespace Bw.Entities.Network.Prediction.Stream
         public InputMarginClientHandler(
             Lifetime lifetime,
             IReadonlyControlledBy controlledBy,
-            IInputMarginResult marginResult,
+            INetResultReceiver<int> margin,
             IInputMarginFeedback marginFeedback)
         {
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
-                marginResult.Received.Advise(controlledLifetime, marginFeedback.Report));
+                margin.Received.Advise(controlledLifetime, marginFeedback.Report));
         }
     }
 }

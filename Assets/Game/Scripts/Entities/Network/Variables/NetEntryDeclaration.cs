@@ -16,15 +16,26 @@ namespace Bw.Entities.Network.Variables
         internal abstract INetSyncEntry Create(INetSendGuard sendGuard);
     }
 
-    public sealed class NetSignalDeclaration<T> : NetEntryDeclaration
+    public sealed class NetRequestDeclaration<T> : NetEntryDeclaration
     {
-        internal NetSignalDeclaration(NetworkDelivery deliveryType, NetworkPermissions permissions)
-            : base(deliveryType, permissions)
+        internal NetRequestDeclaration(NetworkDelivery deliveryType)
+            : base(deliveryType, NetworkPermissions.Client)
         {
         }
 
         internal override INetSyncEntry Create(INetSendGuard sendGuard) =>
-            new NetSignal<T>(sendGuard);
+            new NetRequest<T>(sendGuard);
+    }
+
+    public sealed class NetResultDeclaration<T> : NetEntryDeclaration
+    {
+        internal NetResultDeclaration(NetworkDelivery deliveryType)
+            : base(deliveryType, NetworkPermissions.Server)
+        {
+        }
+
+        internal override INetSyncEntry Create(INetSendGuard sendGuard) =>
+            new NetResult<T>(sendGuard);
     }
 
     public sealed class NetPropertyDeclaration<T> : NetEntryDeclaration

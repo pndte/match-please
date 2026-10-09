@@ -30,3 +30,5 @@ MonoBehaviour:
     MaxTimeScaleCorrection: 0.05
   _lagCompensation:
     MaxRewindSeconds: 0.4
+  _eventPrediction:
+    ExpiryTicks: 15

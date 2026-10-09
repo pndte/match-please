@@ -13,7 +13,7 @@ namespace Bw.UseCases.Shooting
             IRaycastShots shots,
             ShootingWeaponConfig config)
         {
-            weapon.Fired.Advise(lifetime, shot => shots.Submit(new RaycastShot(tracer, shot, config.Damage)));
+            weapon.Fired.Advise(lifetime, shot => shots.Submit(new RaycastShot(tracer, shot, config.Damage, weapon)));
         }
     }
 }

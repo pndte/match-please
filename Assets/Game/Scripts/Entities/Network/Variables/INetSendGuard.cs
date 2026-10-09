@@ -13,17 +13,8 @@ namespace Bw.Entities.Network.Variables
 
     internal sealed class AllowedSendGuard : INetSendGuard
     {
-        private readonly bool _canTargetClients;
-
-        public AllowedSendGuard(bool canTargetClients)
-        {
-            _canTargetClients = canTargetClients;
-        }
-
         public void Check(NetSendTarget target)
         {
-            if (target.IsTargeted && !_canTargetClients)
-                throw new InvalidOperationException("A client sends only to the server, FireTo is server-only.");
         }
 
         public void WhenOpen(Lifetime lifetime, Action<Lifetime> handler) =>

@@ -28,6 +28,7 @@ namespace Bw.UseCases.Shooting.Weapon
 
         public ShotRay Aim(float aim)
         {
+            //TODO: дробовик стреляет одним лучом, как остальные пушки: дроби с разбросом пока нет
             var holder = Holder();
             var rotation = Quaternion.Euler(0f, 0f, aim);
             var muzzleOffset = _muzzle.Transform.localPosition;

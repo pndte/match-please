@@ -7,8 +7,6 @@ namespace Bw.Entities.Network.Variables
     {
         public static readonly NetSendTarget Untargeted = new UntargetedSend();
 
-        public abstract bool IsTargeted { get; }
-
         private NetSendTarget()
         {
         }
@@ -20,16 +18,12 @@ namespace Bw.Entities.Network.Variables
 
         private sealed class UntargetedSend : NetSendTarget
         {
-            public override bool IsTargeted => false;
-
             public override void Switch<TState>(TState state, Action<TState> untargeted, Action<TState, IClient> targeted) =>
                 untargeted(state);
         }
 
         private sealed class TargetedSend : NetSendTarget
         {
-            public override bool IsTargeted => true;
-
             private readonly IClient _recipient;
 
             public TargetedSend(IClient recipient)

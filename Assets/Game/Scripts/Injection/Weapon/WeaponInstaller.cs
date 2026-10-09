@@ -9,14 +9,17 @@ using Bw.Injection.Network;
 using Bw.Injection.Network.Prediction;
 using Bw.Injection.Network.Variables;
 using Bw.Injection.Ownership;
+using Bw.UseCases.Character;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.View;
 using Bw.UseCases.Shooting.View.Audio;
 using Bw.UseCases.Shooting.View.Crosshair;
 using Bw.UseCases.Shooting.View.Recoil;
+using Bw.UseCases.Shooting.View.Rig;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network;
+using Bw.UseCases.Shooting.Weapon.Network.Prediction;
 using Bw.UseCases.Shooting.Weapon.Network.Requests;
 using JetBrains.Core;
 using Unity.Netcode;
@@ -30,7 +33,8 @@ namespace Bw.Injection.Weapon
     {
         [Inject] private IRuntimeSettings _runtimeSettings;
 
-        [Header("Graphics")] [SerializeField] private SpriteRenderer _sprite;
+        [Header("Graphics")] [SerializeField] private Transform _visual;
+        [SerializeField] private Animator _rig;
 
         [Header("WeaponMuzzle")] [SerializeField] private Transform _muzzleTransform;
 
@@ -63,9 +67,10 @@ namespace Bw.Injection.Weapon
             BindConfigs();
             BindWeapon(netSchema);
             BindDropRequest(netSchema);
+            EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyCharacter, float>.Install(Container, _runtimeSettings, netSchema);
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
-            BindSprite();
+            BindVisualFlip();
 
             switch (_runtimeSettings.CurrentPeerType)
             {
@@ -92,11 +97,19 @@ namespace Bw.Injection.Weapon
 
         private void BindDropRequest(INetEntriesSchemaBuilder netSchema)
         {
-            var dropRequestDeclaration = netSchema.DeclareSignal<Unit>(NetworkDelivery.Reliable, NetworkPermissions.Client);
+            var drop = netSchema.DeclareRequest<Unit>(NetworkDelivery.Reliable);
 
-            Container.BindInterfacesTo<WeaponSignals>()
-                .FromMethod(ctx => new WeaponSignals(ctx.Container.Resolve<INetEntries>().Get(dropRequestDeclaration)))
-                .AsSingle();
+            switch (_runtimeSettings.CurrentPeerType)
+            {
+                case PeerType.Server:
+                    Container.BindRequestReceiver(drop).WhenInjectedInto<WeaponDropServerHandler>();
+                    break;
+                case PeerType.Client:
+                    Container.BindRequestSender(drop).WhenInjectedInto<WeaponDropClientHandler>();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private void BindServer()
@@ -116,6 +129,7 @@ namespace Bw.Injection.Weapon
             Container.BindInterfacesTo<WeaponInputSampler>().AsSingle().WithArguments(transform);
             Container.Bind<HeldWeaponNetworkTransform>().AsSingle().WithArguments(_networkTransform).NonLazy();
             Container.Bind<WeaponDropClientHandler>().AsSingle().NonLazy();
+            Container.Bind<HitPredictor>().AsSingle().NonLazy();
             BindClientVisuals();
             BindClientSounds();
         }
@@ -127,7 +141,8 @@ namespace Bw.Injection.Weapon
                     ctx.Container.Instantiate<WeaponStateView>(new object[] { transform }),
                     ctx.Container.Instantiate<WeaponShotEffectsView>(),
                     ctx.Container.Instantiate<WeaponReloadCursor>(),
-                    ctx.Container.Instantiate<WeaponReloadSoundsView>(new object[] { transform })))
+                    ctx.Container.Instantiate<WeaponReloadSoundsView>(new object[] { transform }),
+                    ctx.Container.Instantiate<WeaponRigView>(new object[] { _rig })))
                 .AsSingle();
             Container.Bind<WeaponCameraKick>().AsSingle().NonLazy();
             Container.Bind<WeaponCursorKick>().AsSingle().NonLazy();
@@ -135,12 +150,13 @@ namespace Bw.Injection.Weapon
 
         private void BindClientSounds()
         {
+            Container.Bind<WeaponSoundsConfig>().FromMethod(ctx => ctx.Container.Resolve<WeaponSoundsCatalog>().For(_shootingWeaponConfig)).AsSingle();
             Container.BindInterfacesTo<ShotSfxPlayer>().AsSingle();
         }
 
-        private void BindSprite()
+        private void BindVisualFlip()
         {
-            Container.Bind<WeaponSpriteFlip>().AsSingle().WithArguments(transform, _sprite).NonLazy();
+            Container.Bind<WeaponVisualFlip>().AsSingle().WithArguments(transform, _visual).NonLazy();
         }
 
         private void BindConfigs()

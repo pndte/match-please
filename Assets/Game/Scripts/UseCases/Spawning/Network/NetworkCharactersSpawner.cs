@@ -24,7 +24,7 @@ namespace Bw.UseCases.Spawning.Network
             public Transform[] SpawnPoints;
             public float SpawnRandomOffset;
             public NetworkObject[] CharacterPrefabs;
-            public NetworkObject WeaponPrefab;
+            public NetworkObject[] WeaponPrefabs;
         }
 
         private readonly Data _data;
@@ -57,7 +57,7 @@ namespace Bw.UseCases.Spawning.Network
                 SpawnCharacterFor(playerLifetime, player));
         }
 
-        public ICharacter SpawnCharacterFor(Lifetime lifetime, IPlayer player)
+        public IReadonlyCharacter SpawnCharacterFor(Lifetime lifetime, IPlayer player)
         {
             if (!_clientPlayerCollection.ByClient.TryGetLeft(player, out var client)) //TODO: боты — спавнить персонажа и без клиента
                 throw new InvalidOperationException(
@@ -72,7 +72,7 @@ namespace Bw.UseCases.Spawning.Network
 
             characterObject.SpawnAsPlayerObject(client.Id, destroyWithScene: true);
 
-            var characterHolder = RequireComponent<CharacterHolder>(characterObject.gameObject);
+            var characterHolder = RequireComponent<ReadonlyCharacterHolder>(characterObject.gameObject);
             var characterLifetime = characterHolder.gameObject.Lifetime();
             var character = characterHolder.Value;
 
@@ -93,13 +93,13 @@ namespace Bw.UseCases.Spawning.Network
         }
 
         private void SpawnWeaponFor(
-            ICharacter character,
+            IReadonlyCharacter character,
             Lifetime characterLifetime,
             Vector3 position,
             Quaternion rotation)
         {
             var weaponObject = NetworkPrefabInstantiationHelper.Instantiate(
-                _container, _data.WeaponPrefab, position, rotation);
+                _container, RandomWeaponPrefab(), position, rotation);
             weaponObject.name += $", {_weaponNameCounter++}";
             weaponObject.Spawn(destroyWithScene: true);
 
@@ -110,6 +110,9 @@ namespace Bw.UseCases.Spawning.Network
 
         private NetworkObject RandomCharacterPrefab() =>
             _data.CharacterPrefabs[Random.Range(0, _data.CharacterPrefabs.Length)];
+
+        private NetworkObject RandomWeaponPrefab() =>
+            _data.WeaponPrefabs[Random.Range(0, _data.WeaponPrefabs.Length)];
 
         private Vector3 GetSpawnPosition()
         {

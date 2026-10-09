@@ -36,7 +36,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             heldWeapons.ByCharacter.Inverse.ViewForKey(lifetime, weapon, Hold);
         }
 
-        private void Hold(Lifetime heldLifetime, ICharacter character)
+        private void Hold(Lifetime heldLifetime, IReadonlyCharacter character)
         {
             var player = _characterRegistry.PlayerByCharacter[character];
             _ownershipController.AddOwner(heldLifetime, player);

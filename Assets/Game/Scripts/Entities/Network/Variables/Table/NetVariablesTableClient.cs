@@ -18,13 +18,13 @@ namespace Bw.Entities.Network.Variables
             _messageSenders = messageSenders;
         }
 
-        protected override void DispatchPropertyUpdate<T>(INetProperty<T> property)
+        private protected override void DispatchPropertyUpdate<T>(INetProperty<T> property)
         {
             var sender = _messageSenders.Get<T>();
             sender.SendToServer(HeaderFor(property), property.Value, CurrentRegistration.DeliveryType);
         }
 
-        protected override void DispatchSignalUpdate<T>(INetSignal<T> entry)
+        private protected override void DispatchSignalUpdate<T>(INetSignal<T> entry)
         {
             var sender = _messageSenders.Get<T>();
             sender.SendToServer(HeaderFor(entry), entry.PendingPayload, CurrentRegistration.DeliveryType);
