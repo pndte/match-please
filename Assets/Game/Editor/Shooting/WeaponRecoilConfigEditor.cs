@@ -13,8 +13,10 @@ namespace Bw.EditorTools.Shooting
             PreviewWeapon.ForRecoil((WeaponRecoilConfig)target);
 
         protected override IReadOnlyList<LinkedConfigSection> LinkedSections(PreviewWeapon weapon) =>
-            AssetDatabase.Contains(weapon.Shooting.Config)
-                ? new[] { new LinkedConfigSection(weapon.Shooting.Config, "Spread", nameof(ShootingWeaponConfig.Spread)) }
-                : Array.Empty<LinkedConfigSection>();
+            weapon.Shooting.Switch(
+                gun => AssetDatabase.Contains(gun)
+                    ? new[] { new LinkedConfigSection(gun, "Spread", nameof(ShootingWeaponConfig.Spread)) }
+                    : Array.Empty<LinkedConfigSection>(),
+                melee => Array.Empty<LinkedConfigSection>());
     }
 }

@@ -11,25 +11,25 @@ namespace Bw.UseCases.Shooting.Weapon
         private readonly Transform _weapon;
         private readonly WeaponRotationConfig _config;
 
-        private bool _held;
+        private bool _drawn;
         private float _radius;
 
-        public WeaponStateView(Lifetime lifetime, Transform weapon, IWeaponHold hold, WeaponRotationConfig config)
+        public WeaponStateView(Lifetime lifetime, Transform weapon, IReadonlyWeaponDraw draw, WeaponRotationConfig config)
         {
             _weapon = weapon;
             _config = config;
             _radius = config.MaxOrbitRadius;
 
-            hold.HeldLifetime.WhenAlive(lifetime, heldLifetime =>
+            draw.DrawnLifetime.WhenAlive(lifetime, drawnLifetime =>
             {
-                _held = true;
-                heldLifetime.OnTermination(() => _held = false);
+                _drawn = true;
+                drawnLifetime.OnTermination(() => _drawn = false);
             });
         }
 
         public void Show(WeaponState from, WeaponState to, float progress)
         {
-            if (!_held)
+            if (!_drawn)
                 return;
 
             var rotation = Quaternion.Euler(0f, 0f, Mathf.LerpAngle(from.Aim, to.Aim, progress));

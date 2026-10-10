@@ -80,7 +80,9 @@ namespace Bw.EditorTools.Shooting
             DrawStage(track);
             DrawPlot(track, track.Kick, "Kick", "u", KickColor);
             DrawPlot(track, track.Tilt, "Tilt", "°", TiltColor);
-            DrawBarrelPlot(track);
+
+            if (Shoots())
+                DrawBarrelPlot(track);
         }
 
         public void Dispose() =>
@@ -122,16 +124,21 @@ namespace Bw.EditorTools.Shooting
 
         private float[] Inputs()
         {
-            var shooting = Weapon.Shooting.Config;
             var recoil = Weapon.Recoil;
-            return new[]
+            var timing = new[]
             {
-                _step.Duration, _shots, _interval, Weapon.Shooting.Rotation.RotationSpeed,
-                shooting.ShootCooldown, shooting.ReloadTime, shooting.AmmoSettings.Max, shooting.Spread.Climb, shooting.Spread.Jitter,
+                _step.Duration, _shots, _interval,
                 recoil.Kick.Amount, recoil.Kick.OutTime, recoil.Kick.ReturnTime, recoil.Kick.Overshoot,
                 recoil.Tilt.Amount, recoil.Tilt.OutTime, recoil.Tilt.ReturnTime, recoil.Tilt.Overshoot
             };
+
+            return timing.Concat(Weapon.Shooting.Switch(
+                gun => new[] { gun.TurnSpeed, gun.ShootCooldown, gun.ReloadTime, gun.AmmoSettings.Max, gun.Spread.Climb, gun.Spread.Jitter },
+                melee => new[] { melee.TurnSpeed, melee.SwingTime, melee.StrikeTime })).ToArray();
         }
+
+        private bool Shoots() =>
+            Weapon.Shooting.Switch(gun => true, melee => false);
 
         private void Play(int shots)
         {
@@ -180,10 +187,16 @@ namespace Bw.EditorTools.Shooting
             DrawBody(worldToGui);
             DrawTarget(worldToGui);
             DrawAim(worldToGui);
-            DrawTraces(track, worldToGui);
+
+            if (Shoots())
+                DrawTraces(track, worldToGui);
+
             DrawBarrel(worldToGui, barrel);
             DrawGun(track, frame, worldToGui, barrel);
-            DrawFlash(track, frame, worldToGui, barrel);
+
+            if (Shoots())
+                DrawFlash(track, frame, worldToGui, barrel);
+
             DrawCursor(worldToGui, track.Cursor[frame]);
             DrawCaption(stage, track, barrel);
         }

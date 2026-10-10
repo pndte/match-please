@@ -19,7 +19,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
         private readonly INetworkTicks _ticks;
         private readonly IInterpolationTicks _interpolationTicks;
 
-        private bool _held;
+        private bool _drawn;
         private float _aim;
         private bool _triggerPressed;
         private double _triggerViewTick;
@@ -28,7 +28,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
         public WeaponInputSampler(
             Lifetime lifetime,
             IReadonlyControlledBy controlledBy,
-            IWeaponHold hold,
+            IReadonlyWeaponDraw draw,
             IChangableCamera camera,
             INetworkTicks ticks,
             IInterpolationTicks interpolationTicks,
@@ -39,10 +39,10 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             _ticks = ticks;
             _interpolationTicks = interpolationTicks;
 
-            hold.HeldLifetime.WhenAlive(lifetime, heldLifetime =>
+            draw.DrawnLifetime.WhenAlive(lifetime, drawnLifetime =>
             {
-                _held = true;
-                heldLifetime.OnTermination(() => _held = false);
+                _drawn = true;
+                drawnLifetime.OnTermination(() => _drawn = false);
             });
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
                 Observable.EveryUpdate(UnityFrameProvider.Update, controlledLifetime).Subscribe(_ => LatchPresses()));
@@ -73,7 +73,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
 
         private float SampleAim()
         {
-            if (!_held)
+            if (!_drawn)
                 return _aim;
 
             var camera = _camera.Current.Value;

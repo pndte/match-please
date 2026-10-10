@@ -24,6 +24,7 @@ namespace Bw.UseCases.Spawning.Network
             public Transform[] SpawnPoints;
             public float SpawnRandomOffset;
             public NetworkObject[] CharacterPrefabs;
+            public NetworkObject FistsPrefab;
             public NetworkObject[] WeaponPrefabs;
         }
 
@@ -31,7 +32,7 @@ namespace Bw.UseCases.Spawning.Network
         private readonly ICharacterRegistry _characterRegistry;
         private readonly IGameObjectByCharacterCollection _gameObjectByCharacterCollection;
         private readonly IClientPlayerCollection _clientPlayerCollection;
-        private readonly IHeldWeaponCollection _heldWeapons;
+        private readonly IWeaponInventories _inventories;
         private readonly DiContainer _container;
         private int _nextSpawnPointIndex;
         private int _weaponNameCounter;
@@ -42,14 +43,14 @@ namespace Bw.UseCases.Spawning.Network
             ICharacterRegistry characterRegistry,
             IGameObjectByCharacterCollection gameObjectByCharacterCollection,
             IClientPlayerCollection clientPlayerCollection,
-            IHeldWeaponCollection heldWeapons,
+            IWeaponInventories inventories,
             DiContainer container,
             Data data)
         {
             _characterRegistry = characterRegistry;
             _gameObjectByCharacterCollection = gameObjectByCharacterCollection;
             _clientPlayerCollection = clientPlayerCollection;
-            _heldWeapons = heldWeapons;
+            _inventories = inventories;
             _container = container;
             _data = data;
 
@@ -86,26 +87,45 @@ namespace Bw.UseCases.Spawning.Network
             characterOwnership.AddOwner(characterLifetime, player);
             character.State.WhenAlive(characterLifetime, aliveLifetime => characterControlledBy.Set(aliveLifetime, player));
 
-            SpawnWeaponFor(character, characterLifetime, characterObject.transform.position, spawnRotation);
+            ArmCharacter(character, characterLifetime, characterObject.transform.position, spawnRotation);
 
             Debug.Log($"[PlayerSpawner] Character '{characterPrefab.name}' spawned for client {client.Id} at {spawnPosition}");
             return character;
         }
 
-        private void SpawnWeaponFor(
+        private void ArmCharacter(
             IReadonlyCharacter character,
             Lifetime characterLifetime,
             Vector3 position,
             Quaternion rotation)
         {
-            var weaponObject = NetworkPrefabInstantiationHelper.Instantiate(
-                _container, RandomWeaponPrefab(), position, rotation);
+            var gun = WeaponOf(SpawnWeapon(RandomWeaponPrefab(), position, rotation));
+
+            character.State.WhenAlive(characterLifetime, aliveLifetime =>
+            {
+                var fists = SpawnWeapon(_data.FistsPrefab, position, rotation);
+                aliveLifetime.OnTermination(() => Despawn(fists));
+                _inventories.Give(aliveLifetime, character, WeaponSlot.Fists, WeaponOf(fists));
+                _inventories.Give(aliveLifetime, character, WeaponSlot.Primary, gun);
+                _inventories.Draw(gun);
+            });
+        }
+
+        private NetworkObject SpawnWeapon(NetworkObject prefab, Vector3 position, Quaternion rotation)
+        {
+            var weaponObject = NetworkPrefabInstantiationHelper.Instantiate(_container, prefab, position, rotation);
             weaponObject.name += $", {_weaponNameCounter++}";
             weaponObject.Spawn(destroyWithScene: true);
+            return weaponObject;
+        }
 
-            var weapon = RequireComponent<WeaponHolder>(weaponObject.gameObject).Value;
-            character.State.WhenAlive(characterLifetime, aliveLifetime =>
-                _heldWeapons.ByCharacter.AddLifetimed(aliveLifetime, character, weapon));
+        private static IWeapon WeaponOf(NetworkObject weaponObject) =>
+            RequireComponent<WeaponHolder>(weaponObject.gameObject).Value;
+
+        private static void Despawn(NetworkObject weaponObject)
+        {
+            if (weaponObject.IsSpawned)
+                weaponObject.Despawn();
         }
 
         private NetworkObject RandomCharacterPrefab() =>

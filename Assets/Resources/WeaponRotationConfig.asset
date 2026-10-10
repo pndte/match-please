@@ -19,4 +19,3 @@ MonoBehaviour:
   ObstacleLayerMask:
     serializedVersion: 2
     m_Bits: 16385
-  RotationSpeed: 0

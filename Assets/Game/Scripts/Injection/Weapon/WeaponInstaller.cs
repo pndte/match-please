@@ -1,18 +1,12 @@
 using System;
-using Bw.Entities.Extensions;
 using Bw.Entities.Network;
-using Bw.Entities.Network.Objects;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
-using Bw.Injection.ControlledBy;
 using Bw.Injection.Network;
-using Bw.Injection.Network.Prediction;
 using Bw.Injection.Network.Variables;
-using Bw.Injection.Ownership;
 using Bw.UseCases.Character;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.View;
-using Bw.UseCases.Shooting.View.Abstractions;
 using Bw.UseCases.Shooting.View.Audio;
 using Bw.UseCases.Shooting.View.Crosshair;
 using Bw.UseCases.Shooting.View.Recoil;
@@ -20,7 +14,6 @@ using Bw.UseCases.Shooting.View.Rig;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network;
-using Bw.UseCases.Shooting.Weapon.Network.Prediction;
 using Bw.UseCases.Shooting.Weapon.Network.Requests;
 using JetBrains.Core;
 using Unity.Netcode;
@@ -30,7 +23,7 @@ using Zenject;
 
 namespace Bw.Injection.Weapon
 {
-    public class WeaponInstaller : MonoInstaller // todo: decompose
+    public class WeaponInstaller : MonoInstaller
     {
         public const string VisualField = nameof(_visual);
         public const string MuzzleField = nameof(_muzzleTransform);
@@ -61,24 +54,14 @@ namespace Bw.Injection.Weapon
 
         public override void InstallBindings()
         {
-            OwnershipInstaller.Install(Container, _runtimeSettings);
-            ControlledByInstaller.Install(Container, _runtimeSettings);
-
-            Container.Bind<NetworkObject>().FromInstance(_networkObject).AsSingle();
-            Container.Bind(typeof(INetworkLifetimedObject), typeof(IWeaponHold)).FromInstance(_weaponHold).AsSingle();
-            BindLifetime();
+            RequireTurnSpeed();
+            BindConfigs();
+            BindGun();
 
             var netSchema = new NetEntriesSchemaBuilder();
-            OwnershipServicesInstaller.Install(Container, _runtimeSettings, netSchema);
-            ControlledByServicesInstaller.Install(Container, _runtimeSettings, netSchema);
-
-            BindConfigs();
-            BindWeapon(netSchema);
+            HeldWeaponInstaller.Install(Container, _runtimeSettings, netSchema, Parts());
             BindDropRequest(netSchema);
-            EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyCharacter, Hit>.Install(Container, _runtimeSettings, netSchema);
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
-
-            BindVisualFlip();
 
             switch (_runtimeSettings.CurrentPeerType)
             {
@@ -93,14 +76,29 @@ namespace Bw.Injection.Weapon
             }
         }
 
-        private void BindWeapon(INetEntriesSchemaBuilder netSchema)
+        private void RequireTurnSpeed()
+        {
+            if (_shootingWeaponConfig.TurnSpeed <= 0f)
+                throw new InvalidOperationException(
+                    $"Weapon config '{_shootingWeaponConfig.name}' has no turn speed: the gun would never turn to the cursor.");
+        }
+
+        private HeldWeaponParts Parts() =>
+            new(
+                transform,
+                _visual,
+                _networkObject,
+                _weaponHold,
+                _networkTransform,
+                _body,
+                new WeaponState(0f, _shootingWeaponConfig.AmmoSettings.OnSpawnValue, 0, 0, 0),
+                KeyCode.Alpha2); //TODO: new input system
+
+        private void BindGun()
         {
             Container.BindInterfacesTo<WeaponSimulator>().AsSingle();
-            Container.BindInterfacesTo<ShootingWeapon>().AsSingle().NonLazy();
             Container.BindInterfacesTo<WeaponMuzzle>().AsSingle().WithArguments(_muzzleTransform);
             Container.BindInterfacesTo<ShotTracer>().AsSingle().WithArguments(transform);
-
-            StreamPredictionInstaller<WeaponInput, WeaponState>.Install(Container, _runtimeSettings, netSchema);
         }
 
         private void BindDropRequest(INetEntriesSchemaBuilder netSchema)
@@ -122,31 +120,22 @@ namespace Bw.Injection.Weapon
 
         private void BindServer()
         {
-            Container.BindInterfacesTo<WeaponInputPolicy>().AsSingle();
-            Container.Bind<IStateView<WeaponState>>().To<WeaponStateView>().AsSingle().WithArguments(transform);
-            Container.Bind<RaycastShooter>().AsSingle().NonLazy();
-            Container.Bind<WeaponHoldServerHandler>().AsSingle().NonLazy();
             Container.Bind<WeaponDropServerHandler>().AsSingle().NonLazy();
             Container.Bind<UnheldWeaponDespawner>().AsSingle().NonLazy();
-            Container.Bind<HeldWeaponBody>().AsSingle().WithArguments(_body).NonLazy();
             Container.InstantiateComponent<WeaponHolder>(gameObject);
         }
 
         private void BindClient()
         {
-            Container.BindInterfacesTo<WeaponInputSampler>().AsSingle().WithArguments(transform);
+            Container.Bind<WeaponDropClientHandler>().AsSingle().NonLazy();
             Container.BindInterfacesTo<Spread>().AsSingle();
             Container.Bind<WeaponSpreadCursor>().AsSingle().WithArguments(transform).NonLazy();
-            Container.Bind<HeldWeaponNetworkTransform>().AsSingle().WithArguments(_networkTransform).NonLazy();
-            Container.Bind<WeaponDropClientHandler>().AsSingle().NonLazy();
-            Container.Bind<HitPredictor>().AsSingle().NonLazy();
             BindClientVisuals();
             BindClientSounds();
         }
 
         private void BindClientVisuals()
         {
-            Container.Bind(typeof(ISeenShots), typeof(SeenShots)).To<SeenShots>().AsSingle();
             Container.Bind<IStateView<WeaponState>>()
                 .FromMethod(ctx => new CompositeStateView<WeaponState>(
                     ctx.Container.Instantiate<WeaponStateView>(new object[] { transform }),
@@ -156,9 +145,6 @@ namespace Bw.Injection.Weapon
                     ctx.Container.Instantiate<WeaponRigView>(new object[] { _rig })))
                 .AsSingle();
             Container.Bind<WeaponShotEffectsView>().AsSingle().NonLazy();
-            Container.Bind<WeaponRecoilView>().AsSingle().WithArguments(_visual).NonLazy();
-            Container.Bind<WeaponCameraKick>().AsSingle().NonLazy();
-            Container.Bind<WeaponCursorKick>().AsSingle().NonLazy();
         }
 
         private void BindClientSounds()
@@ -167,27 +153,15 @@ namespace Bw.Injection.Weapon
             Container.BindInterfacesTo<ShotSfxPlayer>().AsSingle();
         }
 
-        private void BindVisualFlip()
-        {
-            Container.Bind<WeaponVisualFlip>().AsSingle().WithArguments(transform, _visual).NonLazy();
-        }
-
         private void BindConfigs()
         {
             Container.BindInstance(_raycastShootConfig).AsSingle();
             Container.BindInstance(_vfxConfig).AsSingle();
             Container.BindInstance(_shootingWeaponConfig).AsSingle();
             Container.Bind<IHitConfig>().FromInstance(_shootingWeaponConfig).AsSingle();
-            Container.BindInstance(_shootingWeaponConfig.AmmoSettings).AsSingle();
             Container.BindInstance(_rotationConfig).AsSingle();
             Container.BindInstance(_cameraKickConfig).AsSingle();
             Container.BindInstance(_recoilConfig).AsSingle();
-        }
-
-        private void BindLifetime()
-        {
-            var gameObjectLifetime = gameObject.Lifetime();
-            Container.BindInstance(gameObjectLifetime).AsSingle();
         }
     }
 }

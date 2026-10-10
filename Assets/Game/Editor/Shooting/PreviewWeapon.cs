@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Bw.Injection.Weapon;
 using Bw.UseCases.Shooting;
+using Bw.UseCases.Shooting.Melee;
 using Bw.UseCases.Shooting.View.Recoil;
 using Bw.UseCases.Shooting.Weapon;
 using UnityEditor;
@@ -49,30 +50,33 @@ namespace Bw.EditorTools.Shooting
 
         public static PreviewWeapon ForRecoil(WeaponRecoilConfig recoil)
         {
-            foreach (var gun in WeaponInstallers())
-                if (IsLinked(gun, WeaponInstaller.RecoilConfigField, recoil))
+            foreach (var prefab in Prefabs())
+            {
+                if (prefab.TryGetComponent<WeaponInstaller>(out var gun) && IsLinked(gun, WeaponInstaller.RecoilConfigField, recoil))
                     return Gun(gun);
+
+                if (prefab.TryGetComponent<MeleeWeaponInstaller>(out var melee) && IsLinked(melee, MeleeWeaponInstaller.RecoilConfigField, recoil))
+                    return Melee(melee);
+            }
 
             var ammo = ScriptableObject.CreateInstance<AmmoConfig>();
             ammo.Max = StandInAmmo;
             var shooting = ScriptableObject.CreateInstance<ShootingWeaponConfig>();
             shooting.AmmoSettings = ammo;
             shooting.ShootCooldown = StandInCooldown;
-            var rotation = ScriptableObject.CreateInstance<WeaponRotationConfig>();
-            Hide(ammo, shooting, rotation);
-            return new PreviewWeapon(StandInName, Array.Empty<PreviewPart>(), StandInMuzzle, StandInOrbit, PreviewShooting.Gun(shooting, rotation), recoil, ammo, shooting, rotation);
+            Hide(ammo, shooting);
+            return new PreviewWeapon(StandInName, Array.Empty<PreviewPart>(), StandInMuzzle, StandInOrbit, PreviewShooting.Gun(shooting), recoil, ammo, shooting);
         }
 
         public static PreviewWeapon ForShooting(ShootingWeaponConfig shooting)
         {
-            foreach (var gun in WeaponInstallers())
-                if (IsLinked(gun, WeaponInstaller.ShootingConfigField, shooting))
+            foreach (var prefab in Prefabs())
+                if (prefab.TryGetComponent<WeaponInstaller>(out var gun) && IsLinked(gun, WeaponInstaller.ShootingConfigField, shooting))
                     return Gun(gun);
 
             var recoil = ScriptableObject.CreateInstance<WeaponRecoilConfig>();
-            var rotation = ScriptableObject.CreateInstance<WeaponRotationConfig>();
-            Hide(recoil, rotation);
-            return new PreviewWeapon(StandInName, Array.Empty<PreviewPart>(), StandInMuzzle, StandInOrbit, PreviewShooting.Gun(shooting, rotation), recoil, recoil, rotation);
+            Hide(recoil);
+            return new PreviewWeapon(StandInName, Array.Empty<PreviewPart>(), StandInMuzzle, StandInOrbit, PreviewShooting.Gun(shooting), recoil, recoil);
         }
 
         public void Dispose()
@@ -81,13 +85,11 @@ namespace Bw.EditorTools.Shooting
                 Object.DestroyImmediate(standIn);
         }
 
-        private static IEnumerable<WeaponInstaller> WeaponInstallers() =>
+        private static IEnumerable<GameObject> Prefabs() =>
             AssetDatabase.FindAssets("t:Prefab")
-                .Select(guid => AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(guid)))
-                .Select(prefab => prefab.GetComponent<WeaponInstaller>())
-                .Where(installer => installer != null);
+                .Select(guid => AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(guid)));
 
-        private static bool IsLinked(WeaponInstaller installer, string field, Object config)
+        private static bool IsLinked(Component installer, string field, Object config)
         {
             using var serialized = new SerializedObject(installer);
             return serialized.FindProperty(field).objectReferenceValue == config;
@@ -98,15 +100,36 @@ namespace Bw.EditorTools.Shooting
             using var installer = new SerializedObject(gun);
             var muzzle = (Transform)installer.FindProperty(WeaponInstaller.MuzzleField).objectReferenceValue;
             var shooting = (ShootingWeaponConfig)installer.FindProperty(WeaponInstaller.ShootingConfigField).objectReferenceValue;
-            var rotation = (WeaponRotationConfig)installer.FindProperty(WeaponInstaller.RotationConfigField).objectReferenceValue;
-            return Read(gun.gameObject, installer, muzzle.localPosition, PreviewShooting.Gun(shooting, rotation));
+            return Read(
+                gun.gameObject,
+                (Transform)installer.FindProperty(WeaponInstaller.VisualField).objectReferenceValue,
+                (WeaponRotationConfig)installer.FindProperty(WeaponInstaller.RotationConfigField).objectReferenceValue,
+                (WeaponRecoilConfig)installer.FindProperty(WeaponInstaller.RecoilConfigField).objectReferenceValue,
+                muzzle.localPosition,
+                PreviewShooting.Gun(shooting));
         }
 
-        private static PreviewWeapon Read(GameObject prefab, SerializedObject installer, Vector2 muzzle, PreviewShooting shooting)
+        private static PreviewWeapon Melee(MeleeWeaponInstaller melee)
         {
-            var visual = (Transform)installer.FindProperty(WeaponInstaller.VisualField).objectReferenceValue;
-            var rotation = (WeaponRotationConfig)installer.FindProperty(WeaponInstaller.RotationConfigField).objectReferenceValue;
-            var recoil = (WeaponRecoilConfig)installer.FindProperty(WeaponInstaller.RecoilConfigField).objectReferenceValue;
+            using var installer = new SerializedObject(melee);
+            var swing = (MeleeWeaponConfig)installer.FindProperty(MeleeWeaponInstaller.MeleeConfigField).objectReferenceValue;
+            return Read(
+                melee.gameObject,
+                (Transform)installer.FindProperty(MeleeWeaponInstaller.VisualField).objectReferenceValue,
+                (WeaponRotationConfig)installer.FindProperty(MeleeWeaponInstaller.RotationConfigField).objectReferenceValue,
+                (WeaponRecoilConfig)installer.FindProperty(MeleeWeaponInstaller.RecoilConfigField).objectReferenceValue,
+                Vector2.zero,
+                PreviewShooting.Melee(swing));
+        }
+
+        private static PreviewWeapon Read(
+            GameObject prefab,
+            Transform visual,
+            WeaponRotationConfig rotation,
+            WeaponRecoilConfig recoil,
+            Vector2 muzzle,
+            PreviewShooting shooting)
+        {
             var parts = visual.GetComponentsInChildren<SpriteRenderer>(true)
                 .Where(renderer => renderer.enabled && renderer.sprite != null && ActiveUnder(renderer.transform, visual))
                 .OrderBy(renderer => renderer.sortingOrder)

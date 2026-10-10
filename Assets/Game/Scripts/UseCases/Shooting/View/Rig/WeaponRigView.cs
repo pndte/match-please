@@ -23,7 +23,7 @@ namespace Bw.UseCases.Shooting.View.Rig
         public WeaponRigView(
             Lifetime lifetime,
             Animator rig,
-            IWeaponHold hold,
+            IReadonlyWeaponDraw draw,
             ISimulationStep step,
             ShootingWeaponConfig config)
         {
@@ -31,10 +31,10 @@ namespace Bw.UseCases.Shooting.View.Rig
             _step = step;
             _config = config;
 
-            hold.HeldLifetime.WhenAlive(lifetime, heldLifetime =>
+            draw.DrawnLifetime.WhenAlive(lifetime, drawnLifetime =>
             {
                 rig.SetBool(HeldId, true);
-                heldLifetime.OnTermination(() => rig.SetBool(HeldId, false));
+                drawnLifetime.OnTermination(() => rig.SetBool(HeldId, false));
             });
         }
 
@@ -47,8 +47,10 @@ namespace Bw.UseCases.Shooting.View.Rig
 
             if (reloading && !_reloading)
                 _rig.SetBool(EmptyId, to.Ammo == 0);
+
             if (reloading)
                 _rig.SetFloat(ReloadProgressId, 1f - ticksLeft / ReloadTicks());
+
             if (reloading != _reloading)
                 _rig.SetBool(ReloadingId, reloading);
 

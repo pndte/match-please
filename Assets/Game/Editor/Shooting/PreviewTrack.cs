@@ -76,7 +76,7 @@ namespace Bw.EditorTools.Shooting
 
                 if (next.Shots != state.Shots)
                 {
-                    var thrown = weapon.Shooting.Spread.ThrowOf(next.Aim, (float)(rolls.NextDouble() * 2.0 - 1.0));
+                    var thrown = weapon.Shooting.ThrowOf(next.Aim, (float)(rolls.NextDouble() * 2.0 - 1.0));
                     Shots.Add(new PreviewShot(tick * step.Duration, next.Aim, thrown));
                     cursor = Mathf.DeltaAngle(0f, cursor + thrown);
                 }

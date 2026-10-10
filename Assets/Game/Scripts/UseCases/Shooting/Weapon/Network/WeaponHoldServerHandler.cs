@@ -15,33 +15,41 @@ namespace Bw.UseCases.Shooting.Weapon.Network
         private readonly IGameObjectByCharacterCollection _characterObjects;
         private readonly IOwnershipController _ownershipController;
         private readonly IControlledBy _controlledBy;
+        private readonly IWeaponDraw _draw;
         private readonly NetworkObject _networkObject;
 
         public WeaponHoldServerHandler(
             Lifetime lifetime,
             IWeapon weapon,
-            IHeldWeaponCollection heldWeapons,
+            IWeaponInventories inventories,
             ICharacterRegistry characterRegistry,
             IGameObjectByCharacterCollection characterObjects,
             IOwnershipController ownershipController,
             IControlledBy controlledBy,
+            IWeaponDraw draw,
             NetworkObject networkObject)
         {
             _characterRegistry = characterRegistry;
             _characterObjects = characterObjects;
             _ownershipController = ownershipController;
             _controlledBy = controlledBy;
+            _draw = draw;
             _networkObject = networkObject;
 
-            heldWeapons.ByCharacter.Inverse.ViewForKey(lifetime, weapon, Hold);
+            inventories.Carriers.ViewForKey(lifetime, weapon, Hold);
+            inventories.Drawn.Inverse.ViewForKey(lifetime, weapon, Draw);
         }
 
         private void Hold(Lifetime heldLifetime, IReadonlyCharacter character)
         {
-            var player = _characterRegistry.PlayerByCharacter[character];
-            _ownershipController.AddOwner(heldLifetime, player);
-            _controlledBy.Set(heldLifetime, player);
+            _ownershipController.AddOwner(heldLifetime, _characterRegistry.PlayerByCharacter[character]);
             AttachTo(heldLifetime, _characterObjects[character]);
+        }
+
+        private void Draw(Lifetime drawnLifetime, IReadonlyCharacter character)
+        {
+            _controlledBy.Set(drawnLifetime, _characterRegistry.PlayerByCharacter[character]);
+            _draw.Draw(drawnLifetime);
         }
 
         private void AttachTo(Lifetime heldLifetime, GameObject character)

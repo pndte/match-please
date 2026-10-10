@@ -13,9 +13,6 @@ namespace Bw.UseCases.Shooting
         [Header("Obstacle Detection")]
         public float ObstacleDetectionDistance = 1.5f;
         public LayerMask ObstacleLayerMask;
-
-        [Header("Rotation Settings")]
-        public float RotationSpeed = 0f;
     }
 }
 

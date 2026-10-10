@@ -17,6 +17,7 @@ MonoBehaviour:
   ReloadTime: 3
   Damage: 15
   Knockback: 3
+  TurnSpeed: 600
   UnheldDespawnTime: 25
   Spread:
     Climb: 0.9

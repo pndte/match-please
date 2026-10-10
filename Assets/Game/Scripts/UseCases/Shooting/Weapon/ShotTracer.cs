@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
+using Bw.UseCases.Shooting.Weapon.Extensions;
 using UnityEngine;
 
 namespace Bw.UseCases.Shooting.Weapon
@@ -45,11 +46,11 @@ namespace Bw.UseCases.Shooting.Weapon
             var shooter = Holder().root;
 
             Physics2D.Linecast(ray.Pivot, ray.Muzzle, _filter, _hits);
-            if (TryFindForeignHit(shooter, out var blocking))
+            if (_hits.TryFindForeign(shooter, out var blocking))
                 return new ShotTrace(blocking.point, blocking.point, blocking);
 
             Physics2D.Raycast(ray.Muzzle, ray.Direction, _filter, _hits, _config.MaxDistance);
-            return TryFindForeignHit(shooter, out var hit)
+            return _hits.TryFindForeign(shooter, out var hit)
                 ? new ShotTrace(ray.Muzzle, hit.point, hit)
                 : new ShotTrace(ray.Muzzle, ray.Muzzle + ray.Direction * _config.MaxDistance, hit);
         }
@@ -61,21 +62,6 @@ namespace Bw.UseCases.Shooting.Weapon
                 throw new InvalidOperationException($"Weapon '{_weapon.name}' traces a shot only while it is held.");
 
             return holder;
-        }
-
-        private bool TryFindForeignHit(Transform shooter, out RaycastHit2D hit)
-        {
-            for (var index = 0; index < _hits.Count; index++)
-            {
-                if (_hits[index].transform.root == shooter)
-                    continue;
-
-                hit = _hits[index];
-                return true;
-            }
-
-            hit = default;
-            return false;
         }
     }
 }

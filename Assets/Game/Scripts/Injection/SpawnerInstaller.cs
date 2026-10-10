@@ -18,6 +18,7 @@ namespace Bw.Injection
 
         [Header("Spawn Configuration")]
         [SerializeField] private NetworkObject[] _characters;
+        [SerializeField] private NetworkObject _fists;
         [SerializeField] private NetworkObject[] _weapons;
         [SerializeField] private Transform[] _spawnPoints;
         [SerializeField] private float _spawnRandomOffset = 2f;
@@ -33,6 +34,7 @@ namespace Bw.Injection
                 return;
 
             RequirePrefabs(NetworkManager.Singleton.NetworkConfig.Prefabs, _characters, "character");
+            RequireNetworkPrefab(NetworkManager.Singleton.NetworkConfig.Prefabs, _fists);
             RequirePrefabs(NetworkManager.Singleton.NetworkConfig.Prefabs, _weapons, "weapon");
             Container.BindInterfacesTo<NetworkCharactersSpawner>().AsSingle().WithArguments(
                 new NetworkCharactersSpawner.Data
@@ -40,6 +42,7 @@ namespace Bw.Injection
                     SpawnPoints = _spawnPoints,
                     SpawnRandomOffset = _spawnRandomOffset,
                     CharacterPrefabs = _characters,
+                    FistsPrefab = _fists,
                     WeaponPrefabs = _weapons,
                 });
             Container.Bind<CharacterRespawner>().AsSingle().NonLazy();

@@ -17,7 +17,7 @@ namespace Bw.Injection
                 return;
             
             Container.BindInterfacesTo<GameObjectByCharacterCollection>().AsSingle();
-            Container.BindInterfacesTo<HeldWeaponCollection>().AsSingle();
+            Container.BindInterfacesTo<WeaponInventories>().AsSingle();
             Container.BindInterfacesTo<RewindableCollection>().AsSingle();
             Container.BindInterfacesTo<LagCompensator>().AsSingle();
             Container.BindInterfacesTo<RaycastShotResolver>().AsSingle().NonLazy();

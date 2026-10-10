@@ -15,7 +15,7 @@ namespace Bw.UseCases.Shooting.View
 
         private readonly Signal<float> _seen = new();
 
-        private bool _held;
+        private bool _drawn;
         private bool _remote;
         private bool _synchronized;
         private int _shots;
@@ -24,12 +24,12 @@ namespace Bw.UseCases.Shooting.View
             Lifetime lifetime,
             IReadonlyControlledBy controlledBy,
             IReadonlyWeapon weapon,
-            IWeaponHold hold)
+            IReadonlyWeaponDraw draw)
         {
-            hold.HeldLifetime.WhenAlive(lifetime, heldLifetime =>
+            draw.DrawnLifetime.WhenAlive(lifetime, drawnLifetime =>
             {
-                _held = true;
-                heldLifetime.OnTermination(() => _held = false);
+                _drawn = true;
+                drawnLifetime.OnTermination(() => _drawn = false);
             });
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
                 weapon.Fired.Advise(controlledLifetime, shot => _seen.Fire(shot.Aim)));
@@ -50,7 +50,7 @@ namespace Bw.UseCases.Shooting.View
             _shots = to.Shots;
             _synchronized = true;
 
-            if (fired && _held)
+            if (fired && _drawn)
                 _seen.Fire(to.Aim);
         }
     }

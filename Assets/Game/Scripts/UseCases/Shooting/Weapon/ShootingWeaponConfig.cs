@@ -11,6 +11,7 @@ namespace Bw.UseCases.Shooting.Weapon
         [Min(0)] public float ReloadTime;
         public float Damage;
         [Min(0)] public float Knockback;
+        [Min(1)] public float TurnSpeed = 600f;
         [Min(0)] public float UnheldDespawnTime = 25f;
 
         [Header("Spread (degrees every shot throws the cursor around the shooter; the player brings it back)")]
