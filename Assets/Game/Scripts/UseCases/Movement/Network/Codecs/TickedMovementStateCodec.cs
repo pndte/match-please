@@ -23,9 +23,9 @@ namespace Bw.UseCases.Movement.Network.Codecs
             var horizontalPush = Value.State.HorizontalPush;
             var pushed = horizontalPush != 0f;
             var grounded = Value.State.Grounded;
-            var risingFromJump = Value.State.RisingFromJump;
-            var coyoteTicks = Value.State.CoyoteTicks;
-            var bufferedJumpTicks = Value.State.BufferedJumpTicks;
+            var rising = Value.State.Jump.Rising;
+            var coyoteTicks = Value.State.Jump.CoyoteTicks;
+            var bufferedTicks = Value.State.Jump.BufferedTicks;
 
             serializer.SerializePacked(ref tick);
             serializer.SerializeValue(ref position);
@@ -35,13 +35,13 @@ namespace Bw.UseCases.Movement.Network.Codecs
                 serializer.SerializeValue(ref horizontalPush);
 
             serializer.SerializeValue(ref grounded);
-            serializer.SerializeValue(ref risingFromJump);
+            serializer.SerializeValue(ref rising);
             serializer.SerializePacked(ref coyoteTicks);
-            serializer.SerializePacked(ref bufferedJumpTicks);
+            serializer.SerializePacked(ref bufferedTicks);
 
             Value = new TickedState<MovementState>(
                 tick,
-                new MovementState(position, velocity, horizontalPush, grounded, risingFromJump, coyoteTicks, bufferedJumpTicks));
+                new MovementState(position, velocity, horizontalPush, grounded, new JumpState(rising, coyoteTicks, bufferedTicks)));
         }
     }
 }

@@ -10,17 +10,9 @@ namespace Bw.UseCases.Movement.Extensions
                 state.Velocity.WithY(state.Velocity.y + impulse.y),
                 state.HorizontalPush + impulse.x,
                 state.Grounded,
-                state.RisingFromJump && impulse.y <= 0f,
-                state.CoyoteTicks,
-                state.BufferedJumpTicks);
+                state.Jump);
 
         public static MovementState Shifted(this MovementState state, Vector2 offset) =>
-            new(state.Position + offset,
-                state.Velocity,
-                state.HorizontalPush,
-                state.Grounded,
-                state.RisingFromJump,
-                state.CoyoteTicks,
-                state.BufferedJumpTicks);
+            new(state.Position + offset, state.Velocity, state.HorizontalPush, state.Grounded, state.Jump);
     }
 }
