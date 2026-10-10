@@ -21,3 +21,4 @@ MonoBehaviour:
   CoyoteTime: 0.1
   JumpBufferTime: 0.1
   ReleasedJumpGravity: 3
+  PushDeceleration: 40

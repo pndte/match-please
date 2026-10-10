@@ -11,13 +11,13 @@ using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Shooting.Weapon.Network
 {
-    public sealed class RaycastShotResolver : IRaycastShots, IOutcomes<IReadonlyWeapon, IReadonlyCharacter, float>
+    public sealed class RaycastShotResolver : IRaycastShots, IOutcomes<IReadonlyWeapon, IReadonlyCharacter, Hit>
     {
-        public ISource<ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, float>> Reported => _reported;
+        public ISource<ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, Hit>> Reported => _reported;
 
-        private readonly Signal<ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, float>> _reported = new();
+        private readonly Signal<ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, Hit>> _reported = new();
         private readonly List<RaycastShot> _shots = new();
-        private readonly List<ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, float>> _outcomes = new();
+        private readonly List<ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, Hit>> _outcomes = new();
         private readonly ILagCompensator _lagCompensator;
 
         public RaycastShotResolver(Lifetime lifetime, INetworkTicks ticks, ILagCompensator lagCompensator)
@@ -47,7 +47,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             }
         }
 
-        private ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, float> Trace(int tick, RaycastShot shot)
+        private ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, Hit> Trace(int tick, RaycastShot shot)
         {
             var ray = shot.Tracer.Aim(shot.WeaponShot.Aim);
             var hit = Lifetime.Using(rewindLifetime =>
@@ -57,9 +57,9 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             });
 
             var affected = hit && hit.collider.TryGetComponent<IHolder<IReadonlyCharacter>>(out var characterHolder)
-                ? new[] { new AffectedTarget<IReadonlyCharacter, float>(characterHolder.Value, shot.Damage) } //TODO: выделение массива на выстрел - плохо, в идеале пуллировать массивы и переиспользовать их
-                : Array.Empty<AffectedTarget<IReadonlyCharacter, float>>();
-            return new ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, float>(shot.Weapon, tick, affected);
+                ? new[] { new AffectedTarget<IReadonlyCharacter, Hit>(characterHolder.Value, shot.Hit) } //TODO: выделение массива на выстрел - плохо, в идеале пуллировать массивы и переиспользовать их
+                : Array.Empty<AffectedTarget<IReadonlyCharacter, Hit>>();
+            return new ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, Hit>(shot.Weapon, tick, affected);
         }
     }
 }

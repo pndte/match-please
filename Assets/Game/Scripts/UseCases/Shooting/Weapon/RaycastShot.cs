@@ -1,3 +1,4 @@
+using Bw.UseCases.Character;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 
 namespace Bw.UseCases.Shooting.Weapon
@@ -6,14 +7,14 @@ namespace Bw.UseCases.Shooting.Weapon
     {
         public readonly IShotTracer Tracer;
         public readonly WeaponShot WeaponShot;
-        public readonly float Damage;
+        public readonly Hit Hit;
         public readonly IReadonlyWeapon Weapon;
 
-        public RaycastShot(IShotTracer tracer, WeaponShot weaponShot, float damage, IReadonlyWeapon weapon)
+        public RaycastShot(IShotTracer tracer, WeaponShot weaponShot, Hit hit, IReadonlyWeapon weapon)
         {
             Tracer = tracer;
             WeaponShot = weaponShot;
-            Damage = damage;
+            Hit = hit;
             Weapon = weapon;
         }
     }

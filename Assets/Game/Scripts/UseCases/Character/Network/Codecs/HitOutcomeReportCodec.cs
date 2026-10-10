@@ -1,19 +1,22 @@
 using System;
+using Bw.Entities.Network;
+using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Prediction.Events.Requests;
 using Bw.Entities.Network.Serialization;
 using Unity.Netcode;
+using UnityEngine;
 
-namespace Bw.Entities.Network.Prediction.Events.Codecs
+namespace Bw.UseCases.Character.Network.Codecs
 {
-    public struct FloatOutcomeReportCodec : ICodec<OutcomeReport<float>>
+    public struct HitOutcomeReportCodec : ICodec<OutcomeReport<Hit>>
     {
-        public OutcomeReport<float> Value
+        public OutcomeReport<Hit> Value
         {
             get => _value;
             set => _value = value;
         }
 
-        private OutcomeReport<float> _value;
+        private OutcomeReport<Hit> _value;
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
@@ -28,25 +31,29 @@ namespace Bw.Entities.Network.Prediction.Events.Codecs
                 for (var index = 0; index < count; index++)
                 {
                     var target = Value.Affected[index].Target;
-                    var effect = Value.Affected[index].Effect;
+                    var damage = Value.Affected[index].Effect.Damage;
+                    var knockback = Value.Affected[index].Effect.Knockback;
                     serializer.SerializePacked(ref target);
-                    serializer.SerializeValue(ref effect);
+                    serializer.SerializeValue(ref damage);
+                    serializer.SerializeValue(ref knockback);
                 }
 
                 return;
             }
 
-            var affected = count == 0 ? Array.Empty<AffectedTarget<ulong, float>>() : new AffectedTarget<ulong, float>[count];
+            var affected = count == 0 ? Array.Empty<AffectedTarget<ulong, Hit>>() : new AffectedTarget<ulong, Hit>[count];
             for (var index = 0; index < count; index++)
             {
                 var target = 0UL;
-                var effect = 0f;
+                var damage = 0f;
+                var knockback = Vector2.zero;
                 serializer.SerializePacked(ref target);
-                serializer.SerializeValue(ref effect);
-                affected[index] = new AffectedTarget<ulong, float>(target, effect);
+                serializer.SerializeValue(ref damage);
+                serializer.SerializeValue(ref knockback);
+                affected[index] = new AffectedTarget<ulong, Hit>(target, new Hit(damage, knockback));
             }
 
-            Value = new OutcomeReport<float>(tick, affected);
+            Value = new OutcomeReport<Hit>(tick, affected);
         }
     }
 }

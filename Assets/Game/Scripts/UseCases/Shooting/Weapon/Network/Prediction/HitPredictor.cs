@@ -12,8 +12,8 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Prediction
     {
         private readonly IShotTracer _tracer;
         private readonly INetworkTicks _ticks;
-        private readonly ShootingWeaponConfig _config;
-        private readonly IOutcomePrediction<IReadonlyCharacter, float> _outcomePrediction;
+        private readonly IHitConfig _config;
+        private readonly IOutcomePrediction<IReadonlyCharacter, Hit> _outcomePrediction;
 
         public HitPredictor(
             Lifetime lifetime,
@@ -21,8 +21,8 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Prediction
             IReadonlyWeapon weapon,
             IShotTracer tracer,
             INetworkTicks ticks,
-            ShootingWeaponConfig config,
-            IOutcomePrediction<IReadonlyCharacter, float> outcomePrediction)
+            IHitConfig config,
+            IOutcomePrediction<IReadonlyCharacter, Hit> outcomePrediction)
         {
             _tracer = tracer;
             _ticks = ticks;
@@ -35,9 +35,10 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Prediction
 
         private void Predict(WeaponShot shot)
         {
-            var hit = _tracer.Cast(_tracer.Aim(shot.Aim)).Hit;
+            var ray = _tracer.Aim(shot.Aim);
+            var hit = _tracer.Cast(ray).Hit;
             if (hit && hit.collider.TryGetComponent<IHolder<IReadonlyCharacter>>(out var character))
-                _outcomePrediction.Predict(_ticks.Current, character.Value, _config.Damage); //TODO: удар показывается в тик выстрела, а кровь — когда долетит трассер (ShotVfxConfig.BulletSpeed): издалека цель мигает раньше, чем в неё попадает пуля; отложить можно только показ, записать удар в предсказание итогов нужно сразу — итог может прийти раньше пули
+                _outcomePrediction.Predict(_ticks.Current, character.Value, Hit.Along(ray.Direction, _config)); //TODO: удар показывается в тик выстрела, а кровь — когда долетит трассер (ShotVfxConfig.BulletSpeed): издалека цель мигает раньше, чем в неё попадает пуля; отложить можно только показ, записать удар в предсказание итогов нужно сразу — итог может прийти раньше пули
         }
     }
 }

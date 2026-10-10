@@ -58,7 +58,7 @@ namespace Bw.Entities.Network.Prediction.Stream
             foreach (var request in _pending)
                 state = _simulator.Step(state, request.Input);
 
-            _simulation.Apply(state);
+            _simulation.Apply(state); //TODO: поправка сервера ставится сразу — толчок от чужого удара (и любое другое расхождение) свой персонаж получает рывком; сгладить показ поправки
         }
     }
 }

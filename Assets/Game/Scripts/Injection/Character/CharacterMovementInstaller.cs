@@ -1,10 +1,13 @@
 using System;
 using Bw.Entities.Network;
+using Bw.Entities.Network.Prediction.Events;
+using Bw.Entities.Network.Prediction.Stream;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using Bw.Injection.Network;
 using Bw.Injection.Network.Prediction;
 using Bw.UseCases.Movement;
+using Bw.UseCases.Movement.Abstractions;
 using Bw.UseCases.Movement.View.Animation;
 using Bw.UseCases.Movement.View.Audio;
 using Bw.UseCases.Movement.Network;
@@ -31,7 +34,10 @@ namespace Bw.Injection
         {
             Container.BindInterfacesTo<CharacterBody>().AsSingle();
             Container.BindInterfacesTo<PlatformerMotor>().AsSingle();
-            Container.BindInterfacesTo<CharacterMovement>().AsSingle().NonLazy();
+            Container.Bind(typeof(IReadonlyMovement), typeof(IReadonlySimulation<MovementState>), typeof(ISimulation<MovementState>))
+                .To<CharacterMovement>().AsSingle()
+                .WriterOnlyInto<ISimulation<MovementState>>(typeof(PredictionReconciler<MovementInput, MovementState>), typeof(SimulationAffectable<,>))
+                .NonLazy();
             Container.BindInterfacesTo<MovementInputSampler>().AsSingle();
             Container.BindInterfacesTo<MovementInputPolicy>().AsSingle();
             BindVisuals();

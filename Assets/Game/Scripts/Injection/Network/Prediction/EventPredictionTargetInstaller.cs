@@ -8,8 +8,9 @@ using Zenject;
 
 namespace Bw.Injection.Network.Prediction
 {
-    public class EventPredictionTargetInstaller<TState, TEffect>
-        : Installer<IRuntimeSettings, INetEntriesSchemaBuilder, EventPredictionTargetInstaller<TState, TEffect>>
+    public class EventPredictionTargetInstaller<TTarget, TState, TEffect>
+        : Installer<IRuntimeSettings, INetEntriesSchemaBuilder, EventPredictionTargetInstaller<TTarget, TState, TEffect>>
+        where TTarget : class
         where TState : struct
         where TEffect : struct
     {
@@ -32,14 +33,14 @@ namespace Bw.Injection.Network.Prediction
             {
                 case PeerType.Server:
                     Container.BindResultSender(state).WhenInjectedInto(typeof(AuthoritativeState<TState, TEffect>), typeof(LateJoinStateSender<TState>));
-                    Container.BindInterfacesTo<AuthoritativeState<TState, TEffect>>().AsSingle();
+                    Container.Bind<AuthoritativeState<TState, TEffect>>().AsSingle();
                     Container.Bind<LateJoinStateSender<TState>>().AsSingle().NonLazy();
-                    Container.Bind<AffectableRegistration<TState, TEffect>>().AsSingle().NonLazy();
+                    Container.Bind<AffectableRegistration<TTarget, AuthoritativeState<TState, TEffect>, TEffect>>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:
                     Container.BindResultReceiver(state).WhenInjectedInto<PredictedState<TState, TEffect>>();
-                    Container.BindInterfacesTo<PredictedState<TState, TEffect>>().AsSingle().NonLazy();
-                    Container.Bind<PredictionTargetRegistration<TState, TEffect>>().AsSingle().NonLazy();
+                    Container.Bind<PredictedState<TState, TEffect>>().AsSingle().NonLazy();
+                    Container.Bind<PredictionTargetRegistration<TTarget, PredictedState<TState, TEffect>, TEffect>>().AsSingle().NonLazy();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

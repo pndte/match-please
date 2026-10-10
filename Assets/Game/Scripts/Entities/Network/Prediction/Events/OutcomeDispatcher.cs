@@ -48,7 +48,7 @@ namespace Bw.Entities.Network.Prediction.Events
                 throw new InvalidOperationException(
                     $"An initiator acts once per tick: its outcome of tick {outcome.Tick.ToString()} came after tick {_lastTick.ToString()}.");
 
-            var controller = ControllerClient();
+            var reported = TryGetController(out var controller);
             var affected = outcome.Affected.Count == 0
                 ? Array.Empty<AffectedTarget<ulong, TEffect>>()
                 : new AffectedTarget<ulong, TEffect>[outcome.Affected.Count];
@@ -63,7 +63,8 @@ namespace Bw.Entities.Network.Prediction.Events
             for (var index = 0; index < _targets.Count; index++)
                 _targets[index].Affect(action, outcome.Affected[index].Effect);
 
-            _report.SendTo(controller, new OutcomeReport<TEffect>(outcome.Tick, affected));
+            if (reported)
+                _report.SendTo(controller, new OutcomeReport<TEffect>(outcome.Tick, affected));
         }
 
         private AffectedTarget<ulong, TEffect> Resolve(IReadOnlyList<AffectedTarget<TTarget, TEffect>> affected, int index)
@@ -74,18 +75,23 @@ namespace Bw.Entities.Network.Prediction.Events
 
             if (!_affectables.TryGet(affected[index].Target, out var targetId, out var affectable))
                 throw new InvalidOperationException(
-                    $"The outcome names a {typeof(TTarget).Name} that is not registered as affectable: install EventPredictionTargetInstaller<its state type, {typeof(TEffect).Name}> on its object and name the object that holds that state.");
+                    $"The outcome names a {typeof(TTarget).Name} that is not registered as affectable: install a target part on its object, such as EventPredictionTargetInstaller<{typeof(TTarget).Name}, its state type, {typeof(TEffect).Name}>, and name the object its parts are registered under.");
 
             _targets.Add(affectable);
             return new AffectedTarget<ulong, TEffect>(targetId, affected[index].Effect);
         }
 
-        private IClient ControllerClient()
+        private bool TryGetController(out IClient controller)
         {
-            if (_controlledBy.Users.Count != 1)
-                throw new InvalidOperationException("An outcome is reported to the one player who controls the initiator.");
+            controller = default;
+            if (_controlledBy.Users.Count == 0)
+                return false;
 
-            return _clientPlayers.ByClient.Inverse[_controlledBy.Users[0]]; //TODO: у бота клиента нет — когда появятся боты, их итоги применять без отчёта
+            if (_controlledBy.Users.Count > 1)
+                throw new InvalidOperationException("An outcome is reported to the one player who controls the initiator, and several players control it.");
+
+            controller = _clientPlayers.ByClient.Inverse[_controlledBy.Users[0]]; //TODO: у бота клиента нет — когда появятся боты, их итоги применять без отчёта
+            return true;
         }
     }
 }

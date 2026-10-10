@@ -1,3 +1,4 @@
+using Bw.UseCases.Character;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Lifetimes;
@@ -11,9 +12,10 @@ namespace Bw.UseCases.Shooting
             IReadonlyWeapon weapon,
             IShotTracer tracer,
             IRaycastShots shots,
-            ShootingWeaponConfig config)
+            IHitConfig config)
         {
-            weapon.Fired.Advise(lifetime, shot => shots.Submit(new RaycastShot(tracer, shot, config.Damage, weapon)));
+            weapon.Fired.Advise(lifetime, shot =>
+                shots.Submit(new RaycastShot(tracer, shot, Hit.Along(tracer.Aim(shot.Aim).Direction, config), weapon)));
         }
     }
 }

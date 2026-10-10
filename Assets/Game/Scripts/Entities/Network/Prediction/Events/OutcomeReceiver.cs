@@ -56,7 +56,7 @@ namespace Bw.Entities.Network.Prediction.Events
         {
             if (!_targets.TryGet(networkObjectId, out var target))
                 throw new InvalidOperationException(
-                    $"The outcome names object {networkObjectId.ToString()}, which is not a spawned prediction target on this client: its object needs EventPredictionTargetInstaller<its state type, {typeof(TEffect).Name}>.");
+                    $"The outcome names object {networkObjectId.ToString()}, which is not a spawned prediction target on this client: its object needs a target part for {typeof(TEffect).Name}, such as EventPredictionTargetInstaller<{typeof(TTarget).Name}, its state type, {typeof(TEffect).Name}>.");
 
             return target;
         }

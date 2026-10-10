@@ -16,5 +16,8 @@ namespace Bw.UseCases.Movement
 
         [Header("Variable jump")]
         [Min(1f)] public float ReleasedJumpGravity = 3f;
+
+        [Header("Push")]
+        [Min(0f)] public float PushDeceleration = 40f;
     }
 }

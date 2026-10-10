@@ -43,6 +43,7 @@ namespace Bw.Injection
         public override void InstallBindings()
         {
             Debug.Log("Character installer executed");
+            RequirePushDeceleration();
 
             OwnershipInstaller.Install(Container, _runtimeSettings);
             ControlledByInstaller.Install(Container, _runtimeSettings);
@@ -64,10 +65,12 @@ namespace Bw.Injection
             OwnershipServicesInstaller.Install(Container, _runtimeSettings, netSchema);
             ControlledByServicesInstaller.Install(Container, _runtimeSettings, netSchema);
             CharacterMovementInstaller.Install(Container, _runtimeSettings, netSchema);
-            EventPredictionTargetInstaller<CharacterVitals, float>.Install(Container, _runtimeSettings, netSchema);
+            EventPredictionTargetInstaller<IReadonlyCharacter, CharacterVitals, Hit>.Install(Container, _runtimeSettings, netSchema);
+            PushTargetInstaller<IReadonlyCharacter, Hit>.Install(Container, _runtimeSettings);
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
             BindCharacter();
+            Container.BindInterfacesTo<KnockbackRules>().AsSingle();
             Container.InstantiateComponent<ReadonlyCharacterHolder>(gameObject);
 
             switch (_runtimeSettings.CurrentPeerType)
@@ -93,8 +96,15 @@ namespace Bw.Injection
             Container.Bind(typeof(IReadonlyCharacter), typeof(IReadonlyAppliedState<CharacterVitals>), typeof(IAppliedState<CharacterVitals>))
                 .To<MortalCharacter>().AsSingle()
                 .WriterOnlyInto<IAppliedState<CharacterVitals>>(
-                    typeof(AuthoritativeState<CharacterVitals, float>), typeof(PredictedState<CharacterVitals, float>));
+                    typeof(AuthoritativeState<CharacterVitals, Hit>), typeof(PredictedState<CharacterVitals, Hit>));
             Container.Bind<CorpseHitbox>().AsSingle().WithArguments(SingleLayer(_death.CorpseLayer)).NonLazy();
+        }
+
+        private void RequirePushDeceleration()
+        {
+            if (_movementConfig.PushDeceleration <= 0f)
+                throw new InvalidOperationException(
+                    $"Movement config '{_movementConfig.name}' has no push deceleration: a knockback would carry the body forever, and the shooter's predicted push would never meet the server's.");
         }
 
         private static int SingleLayer(LayerMask mask)

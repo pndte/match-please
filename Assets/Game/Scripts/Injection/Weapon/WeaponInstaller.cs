@@ -67,7 +67,7 @@ namespace Bw.Injection.Weapon
             BindConfigs();
             BindWeapon(netSchema);
             BindDropRequest(netSchema);
-            EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyCharacter, float>.Install(Container, _runtimeSettings, netSchema);
+            EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyCharacter, Hit>.Install(Container, _runtimeSettings, netSchema);
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
             BindVisualFlip();
@@ -164,6 +164,7 @@ namespace Bw.Injection.Weapon
             Container.BindInstance(_raycastShootConfig).AsSingle();
             Container.BindInstance(_vfxConfig).AsSingle();
             Container.BindInstance(_shootingWeaponConfig).AsSingle();
+            Container.Bind<IHitConfig>().FromInstance(_shootingWeaponConfig).AsSingle();
             Container.BindInstance(_shootingWeaponConfig.AmmoSettings).AsSingle();
             Container.BindInstance(_rotationConfig).AsSingle();
             Container.BindInstance(_cameraKickConfig).AsSingle();

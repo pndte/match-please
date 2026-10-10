@@ -20,7 +20,7 @@ namespace Bw.Entities.Network.Prediction.Events
         {
             if (!_targets.TryGet(target, out var predictionTarget))
                 throw new InvalidOperationException(
-                    $"The {typeof(TTarget).Name} is not a spawned prediction target: install EventPredictionTargetInstaller<its state type, {typeof(TEffect).Name}> on its object and predict on the object that holds that state.");
+                    $"The {typeof(TTarget).Name} is not a spawned prediction target: install a target part on its object, such as EventPredictionTargetInstaller<{typeof(TTarget).Name}, its state type, {typeof(TEffect).Name}>, and predict on the object its parts are registered under.");
 
             var action = new ActionId(_initiator.NetworkObjectId, tick);
             if (!Booked(action, predictionTarget))

@@ -32,3 +32,5 @@ MonoBehaviour:
     MaxRewindSeconds: 0.4
   _eventPrediction:
     ExpiryTicks: 15
+  _pushPrediction:
+    RejectedFadeSeconds: 0.15

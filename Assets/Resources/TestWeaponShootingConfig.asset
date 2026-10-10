@@ -16,4 +16,5 @@ MonoBehaviour:
   ShootCooldown: 0.1
   ReloadTime: 3
   Damage: 15
+  Knockback: 3
   UnheldDespawnTime: 25

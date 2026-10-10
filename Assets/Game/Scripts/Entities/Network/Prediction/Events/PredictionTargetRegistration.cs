@@ -5,14 +5,17 @@ using Unity.Netcode;
 
 namespace Bw.Entities.Network.Prediction.Events
 {
-    public sealed class PredictionTargetRegistration<TState, TEffect> where TState : struct where TEffect : struct
+    public sealed class PredictionTargetRegistration<TTarget, TPredictionTarget, TEffect>
+        where TTarget : class
+        where TPredictionTarget : class, IPredictionTarget<TEffect>
+        where TEffect : struct
     {
         public PredictionTargetRegistration(
             Lifetime lifetime,
             INetworkLifetimedObject lifetimedObject,
             NetworkObject networkObject,
-            IReadonlyAppliedState<TState> target,
-            IPredictionTarget<TEffect> predictionTarget,
+            TTarget target,
+            TPredictionTarget predictionTarget,
             IPredictionTargets<TEffect> targets)
         {
             lifetimedObject.SpawnedLifetime.WhenAlive(lifetime, spawnedLifetime =>

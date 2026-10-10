@@ -27,22 +27,33 @@ namespace Bw.UseCases.Movement.Physics
             var jumps = WantsToJump(state, input) && CanJump(state);
             var coyoteTicks = jumps ? 0 : NextCoyoteTicks(state);
             var bufferedJumpTicks = jumps ? 0 : NextBufferedJumpTicks(state, input);
+            var risingFromJump = jumps || state.RisingFromJump;
 
             var velocity = state.Velocity.WithX(Mathf.Clamp(input.Horizontal, -1f, 1f) * _config.Speed);
             if (jumps)
                 velocity = velocity.WithY(_config.JumpForce);
-            velocity = velocity.WithY(velocity.y + Gravity(velocity, input) * deltaTime);
+
+            velocity = velocity.WithY(velocity.y + Gravity(velocity, risingFromJump, input) * deltaTime);
 
             var position = state.Position;
-            if (velocity.x != 0f)
-                Sweep(ref position, new Vector2(Mathf.Sign(velocity.x), 0f), Mathf.Abs(velocity.x) * deltaTime);
+            var push = state.HorizontalPush;
+            var horizontal = velocity.x + push;
+            if (horizontal != 0f)
+            {
+                var direction = Mathf.Sign(horizontal);
+                var distance = Mathf.Abs(horizontal) * deltaTime;
+                if (Sweep(ref position, new Vector2(direction, 0f), distance) < distance && Mathf.Sign(push) == direction)
+                    push = 0f;
+            }
+
+            push = _config.DeceleratedPush(push, _step);
 
             var verticalDirection = velocity.y > 0f ? Vector2.up : Vector2.down;
             var verticalDistance = Mathf.Abs(velocity.y) * deltaTime;
             if (Sweep(ref position, verticalDirection, verticalDistance) >= verticalDistance)
-                return new MovementState(position, velocity, false, coyoteTicks, bufferedJumpTicks);
+                return new MovementState(position, velocity, push, false, risingFromJump && velocity.y > 0f, coyoteTicks, bufferedJumpTicks);
 
-            return new MovementState(position, velocity.WithY(0f), verticalDirection == Vector2.down, coyoteTicks, bufferedJumpTicks);
+            return new MovementState(position, velocity.WithY(0f), push, verticalDirection == Vector2.down, false, coyoteTicks, bufferedJumpTicks);
         }
 
         private static bool WantsToJump(MovementState state, MovementInput input) =>
@@ -60,8 +71,8 @@ namespace Bw.UseCases.Movement.Physics
         private static int Countdown(int ticks) =>
             Mathf.Max(0, ticks - 1);
 
-        private float Gravity(Vector2 velocity, MovementInput input) => //TODO: сильнее тянет любой подъём без зажатого прыжка — когда появятся другие подбрасывания (батуты, отдача), понадобится признак «поднимается от прыжка» в состоянии
-            velocity.y > 0f && !input.JumpHeld ? _gravity * _config.ReleasedJumpGravity : _gravity;
+        private float Gravity(Vector2 velocity, bool risingFromJump, MovementInput input) =>
+            risingFromJump && velocity.y > 0f && !input.JumpHeld ? _gravity * _config.ReleasedJumpGravity : _gravity;
 
         private float Sweep(ref Vector2 position, Vector2 direction, float distance)
         {
