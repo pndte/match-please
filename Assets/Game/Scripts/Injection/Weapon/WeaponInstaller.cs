@@ -12,6 +12,7 @@ using Bw.Injection.Ownership;
 using Bw.UseCases.Character;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.View;
+using Bw.UseCases.Shooting.View.Abstractions;
 using Bw.UseCases.Shooting.View.Audio;
 using Bw.UseCases.Shooting.View.Crosshair;
 using Bw.UseCases.Shooting.View.Recoil;
@@ -31,6 +32,12 @@ namespace Bw.Injection.Weapon
 {
     public class WeaponInstaller : MonoInstaller // todo: decompose
     {
+        public const string VisualField = nameof(_visual);
+        public const string MuzzleField = nameof(_muzzleTransform);
+        public const string ShootingConfigField = nameof(_shootingWeaponConfig);
+        public const string RotationConfigField = nameof(_rotationConfig);
+        public const string RecoilConfigField = nameof(_recoilConfig);
+
         [Inject] private IRuntimeSettings _runtimeSettings;
 
         [Header("Graphics")] [SerializeField] private Transform _visual;
@@ -43,6 +50,7 @@ namespace Bw.Injection.Weapon
         [SerializeField] private WeaponRotationConfig _rotationConfig;
         [SerializeField] private ShotVfxConfig _vfxConfig;
         [SerializeField] private WeaponCameraKickConfig _cameraKickConfig;
+        [SerializeField] private WeaponRecoilConfig _recoilConfig;
 
         [Header("Network")]
         [SerializeField] private NetworkObject _networkObject;
@@ -127,6 +135,8 @@ namespace Bw.Injection.Weapon
         private void BindClient()
         {
             Container.BindInterfacesTo<WeaponInputSampler>().AsSingle().WithArguments(transform);
+            Container.BindInterfacesTo<Spread>().AsSingle();
+            Container.Bind<WeaponSpreadCursor>().AsSingle().WithArguments(transform).NonLazy();
             Container.Bind<HeldWeaponNetworkTransform>().AsSingle().WithArguments(_networkTransform).NonLazy();
             Container.Bind<WeaponDropClientHandler>().AsSingle().NonLazy();
             Container.Bind<HitPredictor>().AsSingle().NonLazy();
@@ -136,14 +146,17 @@ namespace Bw.Injection.Weapon
 
         private void BindClientVisuals()
         {
+            Container.Bind(typeof(ISeenShots), typeof(SeenShots)).To<SeenShots>().AsSingle();
             Container.Bind<IStateView<WeaponState>>()
                 .FromMethod(ctx => new CompositeStateView<WeaponState>(
                     ctx.Container.Instantiate<WeaponStateView>(new object[] { transform }),
-                    ctx.Container.Instantiate<WeaponShotEffectsView>(),
+                    ctx.Container.Resolve<SeenShots>(),
                     ctx.Container.Instantiate<WeaponReloadCursor>(),
                     ctx.Container.Instantiate<WeaponReloadSoundsView>(new object[] { transform }),
                     ctx.Container.Instantiate<WeaponRigView>(new object[] { _rig })))
                 .AsSingle();
+            Container.Bind<WeaponShotEffectsView>().AsSingle().NonLazy();
+            Container.Bind<WeaponRecoilView>().AsSingle().WithArguments(_visual).NonLazy();
             Container.Bind<WeaponCameraKick>().AsSingle().NonLazy();
             Container.Bind<WeaponCursorKick>().AsSingle().NonLazy();
         }
@@ -168,6 +181,7 @@ namespace Bw.Injection.Weapon
             Container.BindInstance(_shootingWeaponConfig.AmmoSettings).AsSingle();
             Container.BindInstance(_rotationConfig).AsSingle();
             Container.BindInstance(_cameraKickConfig).AsSingle();
+            Container.BindInstance(_recoilConfig).AsSingle();
         }
 
         private void BindLifetime()

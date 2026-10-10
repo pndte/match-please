@@ -11,6 +11,7 @@
         "UniTask",
         "R3.Unity",
         "UnityEngine.UI",
+        "Unity.InputSystem",
         "Bw.UseCases.Character"
     ],
     "includePlatforms": [],

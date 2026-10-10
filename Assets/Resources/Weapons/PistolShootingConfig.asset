@@ -18,3 +18,6 @@ MonoBehaviour:
   Damage: 20
   Knockback: 4
   UnheldDespawnTime: 25
+  Spread:
+    Climb: 2.5
+    Jitter: 1.5
