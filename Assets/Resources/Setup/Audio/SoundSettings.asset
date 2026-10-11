@@ -150,6 +150,29 @@ MonoBehaviour:
     GroundLayers:
       serializedVersion: 2
       m_Bits: 16384
+  _melee:
+  - Weapon: {fileID: 11400000, guid: c1df4db9df884a340b5571179d76add6, type: 2}
+    Swing:
+      Clips:
+      - {fileID: 8300000, guid: 8ca55a79aa499024baf49cc44a5598d2, type: 3}
+      - {fileID: 8300000, guid: 1ebf8f10f73503e4db3da16a3a3afc1d, type: 3}
+      - {fileID: 8300000, guid: 6caa8e872ddd2dd4c95b46dd411985ce, type: 3}
+      Volume: 0.3
+      PitchVariation: 0.08
+    BodyHit:
+      Clips:
+      - {fileID: 8300000, guid: a1649f834de5c89449b4440bd790a01c, type: 3}
+      - {fileID: 8300000, guid: 233408d7ab1b4f440ab9ba9592ba8df6, type: 3}
+      - {fileID: 8300000, guid: 4853a69a2570a4248a0730541abb2b3d, type: 3}
+      Volume: 0.75
+      PitchVariation: 0.06
+    SurfaceHit:
+      Clips:
+      - {fileID: 8300000, guid: 1c47e7559db79da4da505b76bb309394, type: 3}
+      - {fileID: 8300000, guid: ed3bd92c6e4540242a03f06a782975fc, type: 3}
+      - {fileID: 8300000, guid: e44ffcf2f6e28f447b9e3795cd33f989, type: 3}
+      Volume: 0.5
+      PitchVariation: 0.08
   _movement:
     Step:
       Clips:

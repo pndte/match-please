@@ -31,5 +31,17 @@ MonoBehaviour:
     - m_Name: Fist
       m_Hash: 189249346
       m_Sprite: {fileID: 1272031753, guid: 00fc80a6bc6cbcb4490ca5743ce532a1, type: 3}
+  - m_Name: Fist
+    m_Hash: 189249346
+    m_CategoryList:
+    - m_Name: Guard
+      m_Hash: 785595592
+      m_Sprite: {fileID: -96931282, guid: 52f00c7de7fb48041b45f5214d6856c9, type: 3}
+    - m_Name: Strike
+      m_Hash: 174793462
+      m_Sprite: {fileID: -1857553948, guid: 52f00c7de7fb48041b45f5214d6856c9, type: 3}
+    - m_Name: Smear
+      m_Hash: 1009528549
+      m_Sprite: {fileID: 997222368, guid: 52f00c7de7fb48041b45f5214d6856c9, type: 3}
   m_ModificationHash: 0
   m_Version: 1

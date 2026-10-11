@@ -7,6 +7,9 @@ using Bw.UseCases.Character;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.Melee;
 using Bw.UseCases.Shooting.View;
+using Bw.UseCases.Shooting.View.Abstractions;
+using Bw.UseCases.Shooting.View.Audio;
+using Bw.UseCases.Shooting.View.Impact;
 using Bw.UseCases.Shooting.View.Recoil;
 using Bw.UseCases.Shooting.View.Rig;
 using Bw.UseCases.Shooting.Weapon;
@@ -35,6 +38,7 @@ namespace Bw.Injection.Weapon
         [SerializeField] private WeaponRotationConfig _rotationConfig;
         [SerializeField] private WeaponCameraKickConfig _cameraKickConfig;
         [SerializeField] private WeaponRecoilConfig _recoilConfig;
+        [SerializeField] private StrikeFeelConfig _strikeFeelConfig;
 
         [Header("Network")]
         [SerializeField] private NetworkObject _networkObject;
@@ -61,6 +65,7 @@ namespace Bw.Injection.Weapon
                     break;
                 case PeerType.Client:
                     BindClientVisuals();
+                    BindClientSounds();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -100,12 +105,30 @@ namespace Bw.Injection.Weapon
 
         private void BindClientVisuals()
         {
+            Container.Bind(typeof(IMeleeSwings), typeof(MeleeSwings)).To<MeleeSwings>().AsSingle();
             Container.Bind<IStateView<WeaponState>>()
                 .FromMethod(ctx => new CompositeStateView<WeaponState>(
                     ctx.Container.Instantiate<WeaponStateView>(new object[] { transform }),
                     ctx.Container.Resolve<SeenShots>(),
-                    ctx.Container.Instantiate<MeleeRigView>(new object[] { _rig })))
+                    ctx.Container.Resolve<MeleeSwings>()))
                 .AsSingle();
+            Container.Bind<MeleeRigView>().AsSingle().WithArguments(_rig).NonLazy();
+            BindStrikeVisuals();
+        }
+
+        private void BindStrikeVisuals()
+        {
+            Container.BindInstance(_strikeFeelConfig).AsSingle();
+            Container.BindInterfacesTo<StrikeImpacts>().AsSingle();
+            Container.Bind<StrikeImpactEffectsView>().AsSingle().NonLazy();
+            Container.Bind<StrikeHitStop>().AsSingle().WithArguments(_rig).NonLazy();
+            Container.Bind<StrikeCameraKick>().AsSingle().NonLazy();
+        }
+
+        private void BindClientSounds()
+        {
+            Container.Bind<MeleeSoundsConfig>().FromMethod(ctx => ctx.Container.Resolve<MeleeSoundsCatalog>().For(_meleeConfig)).AsSingle();
+            Container.Bind<MeleeSoundsView>().AsSingle().WithArguments(transform).NonLazy();
         }
 
         private void BindConfigs()

@@ -6,8 +6,6 @@ namespace Bw.UseCases.Shooting.View.Rig
         public const string Reloading = "Reloading";
         public const string Empty = "Empty";
         public const string ReloadProgress = "ReloadProgress";
-        public const string Punch = "Punch";
-        public const string PunchVariant = "PunchVariant";
-        public const int PunchVariants = 3;
+        //TODO: удар пушкой на ПКМ не запрограммирован: в WeaponRig.controller есть триггер Punch и PunchVariant (0..2) для трёх ударов кулаком вместо пушки, их пока никто не выставляет
     }
 }

@@ -1,0 +1,41 @@
+{
+  "image": "fists.png",
+  "width": 208,
+  "height": 192,
+  "ppu": 100,
+  "sprites": [
+    {
+      "name": "fist_guard",
+      "x": 0,
+      "y": 0,
+      "w": 96,
+      "h": 96,
+      "pivot": [
+        48,
+        48
+      ]
+    },
+    {
+      "name": "fist_strike",
+      "x": 96,
+      "y": 0,
+      "w": 96,
+      "h": 96,
+      "pivot": [
+        48,
+        48
+      ]
+    },
+    {
+      "name": "fist_smear",
+      "x": 0,
+      "y": 96,
+      "w": 208,
+      "h": 96,
+      "pivot": [
+        160,
+        48
+      ]
+    }
+  ]
+}

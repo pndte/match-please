@@ -14,6 +14,7 @@ namespace Bw.Injection.Audio
         [SerializeField] private SoundPlayerConfig _player = new();
         [SerializeField] private WeaponSoundsConfig[] _weapons = Array.Empty<WeaponSoundsConfig>();
         [SerializeField] private ShotImpactSoundsConfig _shotImpact = new();
+        [SerializeField] private MeleeSoundsConfig[] _melee = Array.Empty<MeleeSoundsConfig>();
         [SerializeField] private MovementSoundsConfig _movement = new();
         [SerializeField] private CharacterSoundsConfig _character = new();
 
@@ -22,6 +23,7 @@ namespace Bw.Injection.Audio
             Container.BindInstance(_player).AsSingle();
             Container.Bind<WeaponSoundsCatalog>().AsSingle().WithArguments(_weapons);
             Container.BindInstance(_shotImpact).AsSingle();
+            Container.Bind<MeleeSoundsCatalog>().AsSingle().WithArguments(_melee);
             Container.BindInstance(_movement).AsSingle();
             Container.BindInstance(_character).AsSingle();
         }
