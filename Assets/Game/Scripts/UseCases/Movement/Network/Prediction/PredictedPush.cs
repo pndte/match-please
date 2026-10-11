@@ -79,7 +79,7 @@ namespace Bw.UseCases.Movement.Network.Prediction
             return offset;
         }
 
-        private float OffsetOf(Push push, double shown, double interpolated) => //TODO: наложенные толчки сервер гасит как одну скорость, а здесь каждый гаснет отдельно — пока снимки не догнали, сдвиг от двух толчков подряд показывается короче настоящего; и стену на пути здесь не видно: тело заходит в неё, пока снимки не догонят
+        private float OffsetOf(Push push, double shown, double interpolated) => //TODO: наложенные толчки сервер гасит как одну скорость, а здесь каждый гаснет отдельно — пока снимки не догнали, сдвиг от двух толчков подряд показывается короче настоящего; толчок, упёршийся в стену, сервер гасит сразу, а здесь его остаток ещё прижимает тело к стене (вид лишь обрезается стеной), даже если тело уже отходит от неё
             _movement.PushDistance(push.Impulse, shown - push.Action.Tick, _ticks)
             - _movement.PushDistance(push.Impulse, interpolated - push.Action.Tick, _ticks);
 
