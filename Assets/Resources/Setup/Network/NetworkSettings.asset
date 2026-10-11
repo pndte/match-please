@@ -34,3 +34,5 @@ MonoBehaviour:
     ExpiryTicks: 15
   _pushPrediction:
     RejectedFadeSeconds: 0.15
+  _weaponPickup:
+    ReachSlack: 1

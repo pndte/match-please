@@ -59,6 +59,18 @@ namespace Bw.UseCases.Shooting.Weapon
                 Draw(fists);
         }
 
+        public void PickUp(Lifetime lifetime, IReadonlyCharacter character, IWeapon weapon)
+        {
+            if (_carries.ContainsKey(weapon))
+                throw new InvalidOperationException("Only a weapon nobody carries can be picked up.");
+
+            if (TryFind(character, WeaponSlot.Primary, out var carried))
+                _carries[carried].Definition.Terminate();
+
+            Give(lifetime, character, WeaponSlot.Primary, weapon);
+            Draw(weapon);
+        }
+
         private Carry CarryOf(IWeapon weapon)
         {
             if (!_carries.TryGetValue(weapon, out var carry))

@@ -112,7 +112,7 @@ namespace Bw.Injection.Weapon
             Container.BindInterfacesTo<WeaponInputPolicy>().AsSingle();
             Container.Bind<IStateView<WeaponState>>().To<WeaponStateView>().AsSingle().WithArguments(_parts.Weapon);
             Container.Bind<RaycastShooter>().AsSingle().NonLazy();
-            Container.Bind<WeaponHoldServerHandler>().AsSingle().NonLazy();
+            Container.Bind<WeaponHoldServerHandler>().AsSingle().WithArguments(_parts.NetworkTransform).NonLazy();
             Container.Bind<HeldWeaponBody>().AsSingle().WithArguments(_parts.Body).NonLazy();
         }
 

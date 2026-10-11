@@ -289,6 +289,7 @@ MonoBehaviour:
   _weaponHold: {fileID: 6095048442294211056}
   _networkTransform: {fileID: 5480233075956149962}
   _body: {fileID: 6422472588081055441}
+  _collider: {fileID: 4632970846314451859}
 --- !u!114 &4999205492878388941
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,7 +5,7 @@ using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Shooting.Weapon.Abstractions
 {
-    public interface IWeaponInventories //TODO: подбор с пола: запрос подбора и серверная проверка (слот Primary свободен, оружие ничьё, рядом) — сюда же, методом реестра; Carriers и Drawn тогда наружу только для чтения, чтобы запись с чужим лайфтаймом не пережила персонажа
+    public interface IWeaponInventories //TODO: Carriers и Drawn наружу только для чтения, чтобы запись с чужим лайфтаймом не пережила персонажа
     {
         public IViewableMap<IWeapon, IReadonlyCharacter> Carriers { get; }
         public IViewableBiMap<IReadonlyCharacter, IWeapon> Drawn { get; }
@@ -13,5 +13,6 @@ namespace Bw.UseCases.Shooting.Weapon.Abstractions
         public void Give(Lifetime lifetime, IReadonlyCharacter character, WeaponSlot slot, IWeapon weapon);
         public void Draw(IWeapon weapon);
         public void Drop(IWeapon weapon);
+        public void PickUp(Lifetime lifetime, IReadonlyCharacter character, IWeapon weapon);
     }
 }

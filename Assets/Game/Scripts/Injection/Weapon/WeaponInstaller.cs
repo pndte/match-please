@@ -9,12 +9,14 @@ using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.View;
 using Bw.UseCases.Shooting.View.Audio;
 using Bw.UseCases.Shooting.View.Crosshair;
+using Bw.UseCases.Shooting.View.Highlight;
 using Bw.UseCases.Shooting.View.Recoil;
 using Bw.UseCases.Shooting.View.Rig;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network;
 using Bw.UseCases.Shooting.Weapon.Network.Requests;
+using Bw.UseCases.Shooting.Weapon.Pickup;
 using JetBrains.Core;
 using Unity.Netcode;
 using Unity.Netcode.Components;
@@ -51,6 +53,7 @@ namespace Bw.Injection.Weapon
         [SerializeField] private NetworkTransform _networkTransform;
 
         [Header("Physics")] [SerializeField] private Rigidbody2D _body;
+        [SerializeField] private Collider2D _collider;
 
         public override void InstallBindings()
         {
@@ -130,6 +133,8 @@ namespace Bw.Injection.Weapon
             Container.Bind<WeaponDropClientHandler>().AsSingle().NonLazy();
             Container.BindInterfacesTo<Spread>().AsSingle();
             Container.Bind<WeaponSpreadCursor>().AsSingle().WithArguments(transform).NonLazy();
+            Container.BindInterfacesTo<FloorWeapon>().AsSingle().WithArguments(_collider);
+            Container.Bind<FloorWeaponRegistration>().AsSingle().NonLazy();
             BindClientVisuals();
             BindClientSounds();
         }
@@ -145,6 +150,7 @@ namespace Bw.Injection.Weapon
                     ctx.Container.Instantiate<WeaponRigView>(new object[] { _rig })))
                 .AsSingle();
             Container.Bind<WeaponShotEffectsView>().AsSingle().NonLazy();
+            Container.BindInterfacesTo<WeaponHighlightView>().AsSingle().WithArguments(_visual, _visual.GetComponentsInChildren<SpriteRenderer>(true));
         }
 
         private void BindClientSounds()

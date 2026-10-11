@@ -10,6 +10,7 @@ using Bw.Injection.Network;
 using Bw.Injection.Network.Prediction;
 using Bw.Injection.Network.Variables;
 using Bw.Injection.Ownership;
+using Bw.Injection.Weapon;
 using Bw.UseCases.Character;
 using Bw.UseCases.Character.Network;
 using Bw.UseCases.Character.Network.Prediction;
@@ -67,6 +68,7 @@ namespace Bw.Injection
             CharacterMovementInstaller.Install(Container, _runtimeSettings, netSchema);
             EventPredictionTargetInstaller<IReadonlyCharacter, CharacterVitals, Hit>.Install(Container, _runtimeSettings, netSchema);
             PushTargetInstaller<IReadonlyCharacter, Hit>.Install(Container, _runtimeSettings);
+            WeaponPickupInstaller.Install(Container, _runtimeSettings, netSchema, transform);
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
             BindCharacter();
