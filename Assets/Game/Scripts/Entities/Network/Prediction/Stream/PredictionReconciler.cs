@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Bw.Entities.Network.Prediction.Stream.Requests;
+using Bw.Entities.Network.Ticks;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using JetBrains.Collections.Viewable;
@@ -16,6 +17,8 @@ namespace Bw.Entities.Network.Prediction.Stream
         private readonly Queue<TickedInput<TInput>> _pending = new();
         private readonly ISimulation<TState> _simulation;
         private readonly ISimulator<TInput, TState> _simulator;
+        private readonly IScheduledCollection _scheduled;
+        private readonly INetworkTicks _ticks;
 
         private int _lastReconciledTick;
 
@@ -25,10 +28,14 @@ namespace Bw.Entities.Network.Prediction.Stream
             INetRequestSender<TickedInput<TInput>> input,
             INetResultReceiver<TickedState<TState>> state,
             ISimulation<TState> simulation,
-            ISimulator<TInput, TState> simulator)
+            ISimulator<TInput, TState> simulator,
+            IScheduledCollection scheduled,
+            INetworkTicks ticks)
         {
             _simulation = simulation;
             _simulator = simulator;
+            _scheduled = scheduled;
+            _ticks = ticks;
 
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime => //TODO: у чужого объекта локальное состояние не обновлялось (снимки идут только в показ) — получив управление (подбор оружия), клиент до первого состояния сервера предсказывает от устаревшего: патроны, счётчик выстрелов
             {
@@ -56,8 +63,12 @@ namespace Bw.Entities.Network.Prediction.Stream
 
             var state = result.State;
             foreach (var request in _pending)
+            {
+                _scheduled.PoseAt(request.Tick);
                 state = _simulator.Step(state, request.Input);
+            }
 
+            _scheduled.PoseAt(_ticks.Current);
             _simulation.Apply(state); //TODO: поправка сервера ставится сразу — толчок от чужого удара (и любое другое расхождение) свой персонаж получает рывком; сгладить показ поправки
         }
     }

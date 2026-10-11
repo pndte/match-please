@@ -22,27 +22,36 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Codecs
             var trigger = Value.Input.Trigger;
             var reload = Value.Input.Reload;
             var viewDelay = Value.Input.ViewDelay;
+            var predictedDelay = Value.Input.PredictedDelay;
             var previousAim = Value.PreviousInput.Aim;
             var previousTrigger = Value.PreviousInput.Trigger;
             var previousReload = Value.PreviousInput.Reload;
             var previousViewDelay = Value.PreviousInput.ViewDelay;
+            var previousPredictedDelay = Value.PreviousInput.PredictedDelay;
 
             serializer.SerializePacked(ref tick);
             serializer.SerializeValue(ref aim);
             serializer.SerializeValue(ref trigger);
             serializer.SerializeValue(ref reload);
             if (trigger)
+            {
                 serializer.SerializeValue(ref viewDelay);
+                serializer.SerializeValue(ref predictedDelay);
+            }
+
             serializer.SerializeValue(ref previousAim);
             serializer.SerializeValue(ref previousTrigger);
             serializer.SerializeValue(ref previousReload);
             if (previousTrigger)
+            {
                 serializer.SerializeValue(ref previousViewDelay);
+                serializer.SerializeValue(ref previousPredictedDelay);
+            }
 
             Value = new TickedInput<WeaponInput>(
                 tick,
-                new WeaponInput(aim, trigger, reload, viewDelay),
-                new WeaponInput(previousAim, previousTrigger, previousReload, previousViewDelay));
+                new WeaponInput(aim, trigger, reload, viewDelay, predictedDelay),
+                new WeaponInput(previousAim, previousTrigger, previousReload, previousViewDelay, previousPredictedDelay));
         }
     }
 }

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3093100450119357330}
   - component: {fileID: 3148659323012351765}
   - component: {fileID: 2291597805429559288}
+  - component: {fileID: 9057810141803407385}
   m_Layer: 14
   m_Name: JumpPad
   m_TagString: Untagged
@@ -138,3 +139,16 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2, y: 0.5}
   m_EdgeRadius: 0
+--- !u!114 &9057810141803407385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5654646584544229061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2c61859186bdc44d896d736c2ec2a37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Bw.UseCases.Level::Bw.UseCases.Level.Springboard
+  _launchSpeed: 40

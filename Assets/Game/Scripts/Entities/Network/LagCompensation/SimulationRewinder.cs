@@ -36,8 +36,9 @@ namespace Bw.Entities.Network.LagCompensation
             simulation.Stepped.Advise(lifetime, Record);
         }
 
-        public void Rewind(Lifetime lifetime, double tick)
+        public void Rewind(Lifetime lifetime, SeenTicks seen)
         {
+            var tick = seen.Interpolated;
             var from = (int)Math.Floor(tick);
             _view.Show(StateAt(from), StateAt(from + 1), (float)(tick - from));
             lifetime.OnTermination(_restore);

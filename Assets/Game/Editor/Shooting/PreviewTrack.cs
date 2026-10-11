@@ -70,7 +70,7 @@ namespace Bw.EditorTools.Shooting
             {
                 var time = (tick - 1) * step.Duration;
                 var trigger = accepted < requested && accepted * interval <= time + step.Duration * 0.5f;
-                var next = simulator.Step(state, new WeaponInput(cursor, trigger, false, 0f));
+                var next = simulator.Step(state, new WeaponInput(cursor, trigger, false, 0f, 0f));
                 if (weapon.Shooting.Accepted(state, next))
                     accepted++;
 

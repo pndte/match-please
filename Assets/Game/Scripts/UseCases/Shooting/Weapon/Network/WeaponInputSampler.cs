@@ -23,6 +23,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
         private float _aim;
         private bool _triggerPressed;
         private double _triggerViewTick;
+        private double _triggerPredictedTick;
         private bool _reloadPressed;
 
         public WeaponInputSampler(
@@ -52,8 +53,10 @@ namespace Bw.UseCases.Shooting.Weapon.Network
         {
             var trigger = _triggerPressed || Input.GetMouseButton(0); //TODO: new input system
             var viewTick = _triggerPressed ? _triggerViewTick : _interpolationTicks.InterpolationTick;
+            var predictedTick = _triggerPressed ? _triggerPredictedTick : _ticks.PredictedViewTick(_interpolationTicks);
             var viewDelay = trigger ? (float)(_ticks.Current - viewTick) : 0f;
-            var input = new WeaponInput(SampleAim(), trigger, _reloadPressed, viewDelay);
+            var predictedDelay = trigger ? (float)(_ticks.Current - predictedTick) : 0f;
+            var input = new WeaponInput(SampleAim(), trigger, _reloadPressed, viewDelay, predictedDelay);
             _triggerPressed = false;
             _reloadPressed = false;
             return input;
@@ -65,6 +68,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             {
                 _triggerPressed = true;
                 _triggerViewTick = _interpolationTicks.InterpolationTick;
+                _triggerPredictedTick = _ticks.PredictedViewTick(_interpolationTicks);
             }
 
             if (Input.GetKeyDown(KeyCode.R)) //TODO: new input system

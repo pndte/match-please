@@ -20,7 +20,9 @@
         "Zenject",
         "Unity.Netcode.Runtime",
         "Bw.UseCases.Character",
-        "Bw.UseCases.Character.Network"
+        "Bw.UseCases.Character.Network",
+        "Bw.UseCases.Level",
+        "Bw.UseCases.Level.Network"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -18,6 +18,7 @@ namespace Bw.UseCases.Shooting.Weapon
         private readonly IWeaponSimulator _simulator;
 
         private float _triggerViewDelay;
+        private float _triggerPredictedDelay;
 
         public ShootingWeapon(
             Lifetime lifetime,
@@ -43,14 +44,17 @@ namespace Bw.UseCases.Shooting.Weapon
         private void Step(WeaponInput input)
         {
             if (input.Trigger)
+            {
                 _triggerViewDelay = input.ViewDelay;
+                _triggerPredictedDelay = input.PredictedDelay;
+            }
 
             Previous = _state.Value;
             _state.Value = _simulator.Step(Previous, input);
             _stepped.Fire(_state.Value);
 
             if (_state.Value.Shots != Previous.Shots)
-                _fired.Fire(new WeaponShot(_state.Value.Aim, _triggerViewDelay));
+                _fired.Fire(new WeaponShot(_state.Value.Aim, _triggerViewDelay, _triggerPredictedDelay));
         }
 
         private void Interrupt() =>

@@ -54,7 +54,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             _affected.Clear();
             Lifetime.Using(rewindLifetime =>
             {
-                _lagCompensator.Rewind(rewindLifetime, tick - shot.WeaponShot.ViewDelay); //TODO: откатываются только позиции персонажей, а жизнь и смерть (слой трупа), потом и целость ящиков, берутся из настоящего: цель, умершая на сервере уже после тика, который видел стрелок, пропускает пулю насквозь, хотя на его экране она ещё стояла
+                _lagCompensator.Rewind(rewindLifetime, new SeenTicks(tick - shot.WeaponShot.ViewDelay, tick - shot.WeaponShot.PredictedDelay)); //TODO: откатываются только позиции персонажей, а жизнь и смерть (слой трупа), потом и целость ящиков, берутся из настоящего: цель, умершая на сервере уже после тика, который видел стрелок, пропускает пулю насквозь, хотя на его экране она ещё стояла
                 shot.Tracer.CastPellets(ray, shot.Hit, _affected);
             });
 

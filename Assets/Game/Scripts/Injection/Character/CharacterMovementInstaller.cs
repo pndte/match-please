@@ -1,5 +1,6 @@
 using System;
 using Bw.Entities.Network;
+using Bw.Entities.Network.LagCompensation;
 using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Prediction.Stream;
 using Bw.Entities.Network.Variables;
@@ -11,6 +12,7 @@ using Bw.UseCases.Movement.Abstractions;
 using Bw.UseCases.Movement.View.Animation;
 using Bw.UseCases.Movement.View.Audio;
 using Bw.UseCases.Movement.Network;
+using Bw.UseCases.Movement.Network.Platforms;
 using Bw.UseCases.Movement.Physics;
 using Zenject;
 
@@ -44,6 +46,9 @@ namespace Bw.Injection
 
             StreamPredictionInstaller<MovementInput, MovementState>.Install(Container, _runtimeSettings, _netSchema);
             LagCompensationInstaller<MovementState, MovementStateView>.Install(Container, _runtimeSettings);
+
+            if (_runtimeSettings.CurrentPeerType == PeerType.Server)
+                Container.Decorate<IRewindable>().With<RiderRewinder>();
         }
 
         private void BindVisuals()
@@ -65,6 +70,7 @@ namespace Bw.Injection
                             context.Container.Instantiate<MovementAnimationView>(),
                             context.Container.Instantiate<MovementSoundsView>()))
                         .AsSingle();
+                    Container.Decorate<IStateView<MovementState>>().With<RiderStateView>();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

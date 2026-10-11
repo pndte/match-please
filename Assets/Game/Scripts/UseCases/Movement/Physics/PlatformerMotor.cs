@@ -24,18 +24,23 @@ namespace Bw.UseCases.Movement.Physics
         public MovementState Step(MovementState state, MovementInput input)
         {
             var deltaTime = _step.Duration;
+            var position = _collider.Carry(state.Position, state.Grounded);
+            var launchSpeed = 0f;
+            var launched = state.Grounded && _collider.TryGetLaunch(position, out launchSpeed);
             var jumps = WantsToJump(state, input) && CanJump(state);
-            var coyoteTicks = jumps ? 0 : NextCoyoteTicks(state);
+            var coyoteTicks = jumps || launched ? 0 : NextCoyoteTicks(state);
             var bufferedTicks = jumps ? 0 : NextBufferedTicks(state, input);
-            var rising = jumps || state.Jump.Rising;
+            var rising = !launched && (jumps || state.Jump.Rising);
 
             var velocity = state.Velocity.WithX(Mathf.Clamp(input.Horizontal, -1f, 1f) * _config.Speed);
             if (jumps)
                 velocity = velocity.WithY(_config.JumpForce);
 
+            if (launched)
+                velocity = velocity.WithY(launchSpeed);
+
             velocity = velocity.WithY(velocity.y + Gravity(velocity, rising, input) * deltaTime);
 
-            var position = state.Position;
             var push = state.HorizontalPush;
             var horizontal = velocity.x + push;
             if (horizontal != 0f)

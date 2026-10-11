@@ -21,15 +21,11 @@ namespace Bw.Injection.Network
             if (_runtimeSettings.CurrentPeerType != PeerType.Server)
                 return;
 
-            Container.Bind<SimulationRewinder<TState>>()
+            Container.Bind<IRewindable>()
                 .FromMethod(context => context.Container.Instantiate<SimulationRewinder<TState>>(
                     new object[] { context.Container.Instantiate(typeof(TView)) }))
                 .AsSingle();
-            Container.Bind<RewindableRegistration>()
-                .FromMethod(context => context.Container.Instantiate<RewindableRegistration>(
-                    new object[] { context.Container.Resolve<SimulationRewinder<TState>>() }))
-                .AsSingle()
-                .NonLazy();
+            Container.Bind<RewindableRegistration>().AsSingle().NonLazy();
         }
     }
 }
