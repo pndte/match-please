@@ -9,6 +9,7 @@
         "Bw.UseCases.Audio.View",
         "Bw.UseCases.Camera.View",
         "Bw.UseCases.Character.View",
+        "Bw.UseCases.FogOfWar.View",
         "Bw.UseCases.Movement",
         "Bw.UseCases.Movement.Network",
         "Bw.UseCases.Movement.View",

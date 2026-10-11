@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd3d96c64c575914e946c2cd9536af1d, type: 3}
+  m_Name: FogOfWarConfig
+  m_EditorClassIdentifier: Bw.UseCases.FogOfWar.View::Bw.UseCases.FogOfWar.View.FogOfWarConfig
+  Blockers:
+    serializedVersion: 2
+    m_Bits: 16384
+  EyeOffset: {x: 0, y: 0.6}
+  FanRays: 64
+  ViewMargin: 1.5
+  WallDepth: 0.6
+  HidingDepth: 0.15
+  FogColor: {r: 0.9, g: 0.88, b: 0.84, a: 0.9}
+  Softness: 0.35
+  Grain: 0.1
+  HatchColor: {r: 0.3, g: 0.3, b: 0.35, a: 0.32}
+  HatchAngle: 45
+  HatchSpacing: 0.13
+  HatchWidth: 0.32
+  HatchLength: 1.3
+  MaskTexelsPerUnit: 8
+  HidingOrder: -3
+  FogOrder: 900
+  MaskShader: {fileID: 4800000, guid: a4237f9929624ab49bcd9974bb8bd432, type: 3}
+  HidingShader: {fileID: 4800000, guid: cf5a2283dea491c498d35492536df1fe, type: 3}
+  FogShader: {fileID: 4800000, guid: a3f145dcfcc1ed5478d5f27bdf46abb6, type: 3}

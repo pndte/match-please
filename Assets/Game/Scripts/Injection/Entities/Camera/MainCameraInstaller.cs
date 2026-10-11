@@ -1,9 +1,11 @@
-﻿using Bw.Entities;
+﻿using System;
+using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.UseCases.Audio.View.Playback;
 using Bw.UseCases.Camera.View.Follow;
 using Bw.UseCases.Camera.View.Shake;
+using Bw.UseCases.FogOfWar.View;
 using Bw.UseCases.Shooting.View.Crosshair;
 using Bw.UseCases.Shooting.View.Crosshair.Abstractions;
 using Bw.UseCases.Vfx.View.Effects;
@@ -19,6 +21,10 @@ namespace Bw.Injection.Entities.Camera
         [SerializeField] private UnityEngine.Camera _camera;
         [SerializeField] private CameraFollowConfig _followConfig;
 
+        [Header("Fog of war")]
+        [SerializeField] private bool _fogOfWar = true;
+        [SerializeField] private FogOfWarConfig _fogOfWarConfig;
+
         public override void InstallBindings()
         {
             if (_runtimeSettings.CurrentPeerType != PeerType.Client)
@@ -32,6 +38,33 @@ namespace Bw.Injection.Entities.Camera
             Container.Bind<CameraFollow>().AsSingle().WithArguments(_camera.gameObject.Lifetime(), _camera, _followConfig).NonLazy();
             Container.BindInterfacesTo<SoundPlayer>().AsSingle().WithArguments(_camera.gameObject.Lifetime());
             Container.BindInterfacesTo<EffectPlayer>().AsSingle().WithArguments(_camera.gameObject.Lifetime());
+
+            if (_fogOfWar)
+                BindFogOfWar();
+        }
+
+        private void BindFogOfWar()
+        {
+            RequireFogOfWarConfig();
+            Container.Bind<FogOfWarView>()
+                .FromMethod(_ => FogOfWarView.Create(_camera.gameObject.Lifetime(), _camera, Container.Resolve<ICameraTargets>(), _fogOfWarConfig))
+                .AsSingle()
+                .NonLazy();
+        }
+
+        private void RequireFogOfWarConfig()
+        {
+            if (_fogOfWarConfig == null)
+                throw new InvalidOperationException("The fog of war is on, but the main camera installer has no fog of war config.");
+
+            if (_fogOfWarConfig.Blockers.value == 0)
+                throw new InvalidOperationException($"Fog of war config '{_fogOfWarConfig.name}' has no blocker layers: nothing would hide anything.");
+
+            if (_fogOfWarConfig.MaskShader == null || _fogOfWarConfig.HidingShader == null || _fogOfWarConfig.FogShader == null)
+                throw new InvalidOperationException($"Fog of war config '{_fogOfWarConfig.name}' misses one of its shaders.");
+
+            if (!_camera.orthographic)
+                throw new InvalidOperationException("The fog of war traces an orthographic view, but the main camera is perspective.");
         }
     }
 }
