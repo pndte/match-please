@@ -12,12 +12,24 @@ namespace Bw.UseCases.Spawning.Network
             Vector3 position,
             Quaternion rotation)
         {
-            var instance = container.InstantiatePrefabForComponent<NetworkObject>(
-                prefab, position, rotation, null);
-            var context = instance.GetComponent<GameObjectContext>();
-            if (context != null && context.Container == null)
-                context.Run();
-            return instance;
+            var inactiveParent = new GameObject(nameof(NetworkPrefabInstantiationHelper));
+            inactiveParent.SetActive(false);
+            inactiveParent.transform.SetParent(container.Resolve<Context>().transform, false);
+            try
+            {
+                var instance = Object.Instantiate(prefab, position, rotation, inactiveParent.transform);
+                container.InjectGameObject(instance.gameObject);
+                instance.transform.SetParent(null, true);
+                var context = instance.GetComponent<GameObjectContext>();
+                if (context != null && context.Container == null)
+                    context.Run();
+
+                return instance;
+            }
+            finally
+            {
+                Object.Destroy(inactiveParent);
+            }
         }
     }
 }

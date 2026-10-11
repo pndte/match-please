@@ -60,6 +60,7 @@ namespace Bw.Entities.Infrastructure
                     case AddRemove.Add:
                         if (_inverseStorage.ContainsKey(right))
                             throw new InvalidOperationException($"Right key already exists: {right}");
+
                         _inverseStorage.Add(right, left);
                         break;
                     case AddRemove.Remove:
@@ -72,10 +73,7 @@ namespace Bw.Entities.Infrastructure
         }
 
         public void Advise(Lifetime lifetime, Action<MapEvent<TLeft, TRight>> handler)
-            => _forward.Change.Advise(lifetime, handler);
-
-        public void View(Lifetime lifetime, Action<Lifetime, TLeft, TRight> action)
-            => _forward.View(lifetime, action);
+            => _forward.Advise(lifetime, handler);
 
         public bool TryGetLeft(TRight right, out TLeft left) => _inverseStorage.TryGetValue(right, out left);
         public bool TryGetRight(TLeft left, out TRight right) => _forward.TryGetValue(left, out right);
@@ -176,10 +174,7 @@ namespace Bw.Entities.Infrastructure
             public ISource<MapEvent<TRight, TLeft>> Change => _owner._inverseStorage.Change;
 
             public void Advise(Lifetime lifetime, Action<MapEvent<TRight, TLeft>> handler)
-                => _owner._inverseStorage.Change.Advise(lifetime, handler);
-
-            public void View(Lifetime lifetime, Action<Lifetime, TRight, TLeft> action)
-                => _owner._inverseStorage.View(lifetime, action);
+                => _owner._inverseStorage.Advise(lifetime, handler);
 
             public bool ContainsKey(TRight key) => _owner._inverseStorage.ContainsKey(key);
             public bool TryGetValue(TRight key, out TLeft value) => _owner._inverseStorage.TryGetValue(key, out value);

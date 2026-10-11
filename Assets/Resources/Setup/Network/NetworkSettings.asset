@@ -36,3 +36,5 @@ MonoBehaviour:
     RejectedFadeSeconds: 0.15
   _weaponPickup:
     ReachSlack: 1
+  _receive:
+    StaleWriterSeconds: 1

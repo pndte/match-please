@@ -2,6 +2,7 @@ using Bw.Entities.Network;
 using Bw.Entities.Network.LagCompensation;
 using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Ticks;
+using Bw.Entities.Network.Variables;
 using Bw.UseCases.Movement.Network.Prediction;
 using Bw.UseCases.Shooting.Weapon.Network;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace Bw.Injection.Network
         [SerializeField] private EventPredictionConfig _eventPrediction = new();
         [SerializeField] private PushPredictionConfig _pushPrediction = new();
         [SerializeField] private WeaponPickupNetworkConfig _weaponPickup = new();
+        [SerializeField] private NetReceiveConfig _receive = new();
 
         public override void InstallBindings()
         {
@@ -27,6 +29,7 @@ namespace Bw.Injection.Network
             Container.BindInstance(_eventPrediction).AsSingle();
             Container.BindInstance(_pushPrediction).AsSingle();
             Container.BindInstance(_weaponPickup).AsSingle();
+            Container.BindInstance(_receive).AsSingle();
         }
     }
 }

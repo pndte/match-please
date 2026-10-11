@@ -18,12 +18,14 @@ namespace Bw.Entities.Network.Variables
             IOwnership ownership,
             IOwnershipController ownershipController,
             IClientCollection clients,
-            IClientPlayerCollection clientPlayers)
+            IClientPlayerCollection clientPlayers,
+            NetReceiveConfig receiveConfig)
             : base(lifetime, networkObject, schema, new NetSendGuardFactoryServer(ownership, networkObject))
         {
             _messageSenders = messageSenders;
 
-            var receiveGuards = new NetReceiveGuardFactoryServer(ownershipController, clients, clientPlayers, networkObject);
+            var staleWriters = new StaleWriters(lifetime, ownershipController, receiveConfig.StaleWriterSeconds);
+            var receiveGuards = new NetReceiveGuardFactoryServer(ownershipController, staleWriters, clients, clientPlayers, networkObject);
             var declarations = schema.Declarations;
             for (var index = 0; index < declarations.Count; index++)
             {
@@ -55,8 +57,8 @@ namespace Bw.Entities.Network.Variables
                     message.Sender.SendToClient(message.Header, message.Payload, message.Delivery, recipient));
         }
 
-        private protected override void CheckWriter(ulong senderClientId, INetSyncEntry entry) =>
-            _receiveGuards[entry].Check(senderClientId);
+        private protected override bool TryAdmitWriter(ulong senderClientId, INetSyncEntry entry) =>
+            _receiveGuards[entry].TryAdmit(senderClientId);
 
         private void SendCurrentStateTo(IClient client)
         {

@@ -7,7 +7,7 @@ namespace Bw.Entities.Network.Variables
         public INetResultSender<T> Sender<T>(NetResultDeclaration<T> declaration);
         public INetResultReceiver<T> Receiver<T>(NetResultDeclaration<T> declaration);
         public INetProperty<T> Get<T>(NetPropertyDeclaration<T> declaration);
-        internal INetSyncEntry EntryWritableBy(ulong senderClientId, ushort varId);
+        internal bool TryGetEntryWritableBy(ulong senderClientId, ushort varId, out INetSyncEntry entry);
         internal void CheckSchemaOf(ulong senderClientId, uint schemaHash); //TODO: нужен только серверу, а контракт общий для обоих пиров — сделать хеш схемы обычной записью
     }
 }

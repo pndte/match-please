@@ -59,7 +59,8 @@ namespace Bw.Entities.Network.Routing
                 return;
             }
 
-            var targetEntry = netEntries.EntryWritableBy(senderClientId, header.VarId);
+            if (!netEntries.TryGetEntryWritableBy(senderClientId, header.VarId, out var targetEntry))
+                return;
 
             _currentReader = reader;
             targetEntry.Accept(this); // it goes directly to VisitProperty or VisitSignal down below

@@ -51,14 +51,13 @@ namespace Bw.Entities.Network.Variables
         public INetProperty<T> Get<T>(NetPropertyDeclaration<T> declaration) =>
             (INetProperty<T>)EntryFor(declaration);
 
-        INetSyncEntry INetEntries.EntryWritableBy(ulong senderClientId, ushort varId)
+        bool INetEntries.TryGetEntryWritableBy(ulong senderClientId, ushort varId, out INetSyncEntry entry)
         {
-            if (!_entriesByVarId.TryGetValue(varId, out var entry))
+            if (!_entriesByVarId.TryGetValue(varId, out entry))
                 throw new InvalidOperationException(
                     $"No net entry with id {varId.ToString()} on object {NetworkObject.NetworkObjectId.ToString()}:{NetworkObject.name}, sender: client {senderClientId.ToString()}.");
 
-            CheckWriter(senderClientId, entry);
-            return entry;
+            return TryAdmitWriter(senderClientId, entry);
         }
 
         void INetEntries.CheckSchemaOf(ulong senderClientId, uint schemaHash)
@@ -69,7 +68,7 @@ namespace Bw.Entities.Network.Variables
                     $"{schemaHash.ToString("X8")} there, {_schemaHash.ToString("X8")} here. The peers declare other entries or in another order.");
         }
 
-        private protected abstract void CheckWriter(ulong senderClientId, INetSyncEntry entry);
+        private protected abstract bool TryAdmitWriter(ulong senderClientId, INetSyncEntry entry);
 
         private protected void VisitReplicating(INetSyncVisitor visitor) //TODO: нужен только серверу — перенести в серверную отправку вместе со снимком для позднего клиента
         {

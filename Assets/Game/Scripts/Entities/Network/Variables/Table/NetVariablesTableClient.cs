@@ -30,8 +30,9 @@ namespace Bw.Entities.Network.Variables
             sender.SendToServer(HeaderFor(entry), entry.PendingPayload, CurrentRegistration.DeliveryType);
         }
 
-        private protected override void CheckWriter(ulong senderClientId, INetSyncEntry entry)
+        private protected override bool TryAdmitWriter(ulong senderClientId, INetSyncEntry entry)
         { //TODO: нарушенный принцип Лисков
+            return true;
         }
     }
 }
