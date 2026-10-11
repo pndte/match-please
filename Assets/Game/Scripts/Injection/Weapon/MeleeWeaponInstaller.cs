@@ -3,9 +3,9 @@ using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using Bw.Injection.Network.Variables;
-using Bw.UseCases.Character;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.Melee;
+using Bw.UseCases.Shooting.Melee.Network;
 using Bw.UseCases.Shooting.View;
 using Bw.UseCases.Shooting.View.Abstractions;
 using Bw.UseCases.Shooting.View.Audio;
@@ -52,11 +52,13 @@ namespace Bw.Injection.Weapon
         {
             RequireTurnSpeed();
             RequireStrikeInsideSwing();
+            RequireStrongStrikeInsideStrongSwing();
+            RequireMinChargeWithinFullCharge();
             BindConfigs();
             BindMelee();
 
             var netSchema = new NetEntriesSchemaBuilder();
-            HeldWeaponInstaller.Install(Container, _runtimeSettings, netSchema, Parts());
+            HeldWeaponInstaller<MeleeState>.Install(Container, _runtimeSettings, netSchema, Parts());
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
             switch (_runtimeSettings.CurrentPeerType)
@@ -87,7 +89,21 @@ namespace Bw.Injection.Weapon
                     $"Melee config '{_meleeConfig.name}' strikes after its swing is over: StrikeTime must be shorter than SwingTime.");
         }
 
-        private HeldWeaponParts Parts() =>
+        private void RequireStrongStrikeInsideStrongSwing()
+        {
+            if (_meleeConfig.StrongStrikeTime >= _meleeConfig.StrongSwingTime)
+                throw new InvalidOperationException(
+                    $"Melee config '{_meleeConfig.name}' strikes after its strong swing is over: StrongStrikeTime must be shorter than StrongSwingTime.");
+        }
+
+        private void RequireMinChargeWithinFullCharge()
+        {
+            if (_meleeConfig.MinChargeTime > _meleeConfig.FullChargeTime)
+                throw new InvalidOperationException(
+                    $"Melee config '{_meleeConfig.name}' keeps the strong punch charging past its full charge: MinChargeTime must not exceed FullChargeTime.");
+        }
+
+        private HeldWeaponParts<MeleeState> Parts() =>
             new(
                 transform,
                 _visual,
@@ -102,15 +118,17 @@ namespace Bw.Injection.Weapon
         {
             Container.BindInterfacesTo<MeleeSimulator>().AsSingle();
             Container.BindInterfacesTo<MeleeTracer>().AsSingle().WithArguments(transform);
+            Container.BindInterfacesTo<ChargedShotPower>().AsSingle();
+            Container.Bind<StrongSwingRoot>().AsSingle().WithArguments(transform).NonLazy();
         }
 
         private void BindClientVisuals()
         {
             Container.Bind(typeof(IMeleeSwings), typeof(MeleeSwings)).To<MeleeSwings>().AsSingle();
-            Container.Bind<IStateView<WeaponState>>()
-                .FromMethod(ctx => new CompositeStateView<WeaponState>(
-                    ctx.Container.Instantiate<WeaponStateView>(new object[] { transform }),
-                    ctx.Container.Resolve<SeenShots>(),
+            Container.Bind<IStateView<MeleeState>>()
+                .FromMethod(ctx => new CompositeStateView<MeleeState>(
+                    ctx.Container.Instantiate<WeaponStateView<MeleeState>>(new object[] { transform }),
+                    ctx.Container.Resolve<SeenShots<MeleeState>>(),
                     ctx.Container.Resolve<MeleeSwings>()))
                 .AsSingle();
             Container.Bind<MeleeRigView>().AsSingle().WithArguments(_rig).NonLazy();
@@ -126,6 +144,7 @@ namespace Bw.Injection.Weapon
             Container.Bind<StrikeImpactEffectsView>().AsSingle().NonLazy();
             Container.Bind<StrikeHitStop>().AsSingle().WithArguments(_rig).NonLazy();
             Container.Bind<StrikeCameraKick>().AsSingle().NonLazy();
+            Container.Bind<FullChargeGlow>().AsSingle().WithArguments(_visual, _visual.GetComponentsInChildren<SpriteRenderer>(true)).NonLazy();
         }
 
         private void BindClientSounds()
@@ -137,7 +156,6 @@ namespace Bw.Injection.Weapon
         private void BindConfigs()
         {
             Container.BindInstance(_meleeConfig).AsSingle();
-            Container.Bind<IHitConfig>().FromInstance(_meleeConfig).AsSingle();
             Container.BindInstance(_rotationConfig).AsSingle();
             Container.BindInstance(_cameraKickConfig).AsSingle();
             Container.BindInstance(_recoilConfig).AsSingle();

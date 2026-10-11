@@ -77,6 +77,7 @@ namespace Bw.Injection
             BindCharacter();
             Container.BindInterfacesTo<KnockbackRules>().AsSingle();
             Container.InstantiateComponent<ReadonlyCharacterHolder>(gameObject);
+            Container.InstantiateComponent<MovementRootHolder>(gameObject);
 
             switch (_runtimeSettings.CurrentPeerType)
             {

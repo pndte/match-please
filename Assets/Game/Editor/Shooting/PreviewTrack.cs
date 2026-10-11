@@ -29,8 +29,8 @@ namespace Bw.EditorTools.Shooting
         public static PreviewTrack Simulate(PreviewWeapon weapon, ISimulationStep step, int requested, float interval)
         {
             var track = new PreviewTrack();
-            var states = track.Fire(weapon, step, requested, interval);
-            track.Animate(weapon.Recoil, states, step.Duration);
+            var aims = track.Fire(weapon, step, requested, interval);
+            track.Animate(weapon.Recoil, aims, step.Duration);
             return track;
         }
 
@@ -57,49 +57,45 @@ namespace Bw.EditorTools.Shooting
             return since;
         }
 
-        private List<WeaponState> Fire(PreviewWeapon weapon, ISimulationStep step, int requested, float interval)
+        private List<float> Fire(PreviewWeapon weapon, ISimulationStep step, int requested, float interval)
         {
-            var simulator = weapon.Shooting.SimulatorFor(step);
+            var simulation = weapon.Shooting.SimulationFor(step);
             var rolls = new Random(RollSeed);
-            var state = weapon.Shooting.Initial;
-            var states = new List<WeaponState> { state };
+            var aims = new List<float> { simulation.Aim };
             var cursor = 0f;
-            var accepted = 0;
 
             for (var tick = 1; tick * step.Duration <= MaxTime; tick++)
             {
                 var time = (tick - 1) * step.Duration;
-                var trigger = accepted < requested && accepted * interval <= time + step.Duration * 0.5f;
-                var next = simulator.Step(state, new WeaponInput(cursor, trigger, false, 0f, 0f));
-                if (weapon.Shooting.Accepted(state, next))
-                    accepted++;
+                var trigger = simulation.Accepted < requested && simulation.Accepted * interval <= time + step.Duration * 0.5f;
+                var shots = simulation.Shots;
+                simulation.Step(new WeaponInput(cursor, trigger, false, 0f, 0f));
 
-                if (next.Shots != state.Shots)
+                if (simulation.Shots != shots)
                 {
-                    var thrown = weapon.Shooting.ThrowOf(next.Aim, (float)(rolls.NextDouble() * 2.0 - 1.0));
-                    Shots.Add(new PreviewShot(tick * step.Duration, next.Aim, thrown));
+                    var thrown = weapon.Shooting.ThrowOf(simulation.Aim, (float)(rolls.NextDouble() * 2.0 - 1.0));
+                    Shots.Add(new PreviewShot(tick * step.Duration, simulation.Aim, thrown));
                     cursor = Mathf.DeltaAngle(0f, cursor + thrown);
                 }
 
-                state = next;
-                states.Add(state);
+                aims.Add(simulation.Aim);
 
                 if (Shots.Count >= requested && tick * step.Duration - Shots[^1].Time >= SettleTime)
                     break;
             }
 
-            return states;
+            return aims;
         }
 
-        private void Animate(WeaponRecoilConfig recoil, List<WeaponState> states, float tickDuration)
+        private void Animate(WeaponRecoilConfig recoil, List<float> aims, float tickDuration)
         {
-            var frames = Mathf.CeilToInt((states.Count - 1) * tickDuration / Frame) + 1;
+            var frames = Mathf.CeilToInt((aims.Count - 1) * tickDuration / Frame) + 1;
             for (var frame = 0; frame < frames; frame++)
             {
                 var time = frame * Frame;
                 Kick.Add(Punched(recoil.Kick, time));
                 Tilt.Add(Punched(recoil.Tilt, time));
-                Barrel.Add(ShownBarrel(states, time / tickDuration));
+                Barrel.Add(ShownBarrel(aims, time / tickDuration));
                 Cursor.Add(ThrownBy(time));
             }
         }
@@ -123,11 +119,11 @@ namespace Bw.EditorTools.Shooting
             return cursor;
         }
 
-        private static float ShownBarrel(List<WeaponState> states, float ticks)
+        private static float ShownBarrel(List<float> aims, float ticks)
         {
-            var to = Mathf.Clamp(Mathf.FloorToInt(ticks), 0, states.Count - 1);
+            var to = Mathf.Clamp(Mathf.FloorToInt(ticks), 0, aims.Count - 1);
             var from = Mathf.Max(0, to - 1);
-            return Mathf.DeltaAngle(0f, Mathf.LerpAngle(states[from].Aim, states[to].Aim, ticks - Mathf.Floor(ticks)));
+            return Mathf.DeltaAngle(0f, Mathf.LerpAngle(aims[from], aims[to], ticks - Mathf.Floor(ticks)));
         }
     }
 

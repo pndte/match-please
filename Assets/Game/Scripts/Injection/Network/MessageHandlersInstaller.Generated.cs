@@ -18,8 +18,9 @@ namespace Bw.Injection.Network
             RegisterCodec<Bw.Entities.Network.Prediction.Events.Requests.OutcomeReport<Bw.UseCases.Character.Hit>, Bw.UseCases.Character.Network.Codecs.HitOutcomeReportCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedInput<Bw.UseCases.Movement.MovementInput>, Bw.UseCases.Movement.Network.Codecs.TickedMovementInputCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Movement.MovementState>, Bw.UseCases.Movement.Network.Codecs.TickedMovementStateCodec>(receivers, senders);
+            RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Shooting.Melee.MeleeState>, Bw.UseCases.Shooting.Melee.Network.Codecs.TickedMeleeStateCodec>(receivers, senders);
+            RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Shooting.Weapon.GunState>, Bw.UseCases.Shooting.Weapon.Network.Codecs.TickedGunStateCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedInput<Bw.UseCases.Shooting.Weapon.WeaponInput>, Bw.UseCases.Shooting.Weapon.Network.Codecs.TickedWeaponInputCodec>(receivers, senders);
-            RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Shooting.Weapon.WeaponState>, Bw.UseCases.Shooting.Weapon.Network.Codecs.TickedWeaponStateCodec>(receivers, senders);
             RegisterCodec<Bw.UseCases.Shooting.Weapon.Network.Requests.WeaponPickup, Bw.UseCases.Shooting.Weapon.Network.Codecs.WeaponPickupCodec>(receivers, senders);
         }
     }

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Bw.UseCases.Shooting.View.Rig
 {
-    public sealed class WeaponRigView : IStateView<WeaponState>
+    public sealed class WeaponRigView : IStateView<GunState>
     {
         private static readonly int HeldId = Animator.StringToHash(WeaponRigParameters.Held);
         private static readonly int ReloadingId = Animator.StringToHash(WeaponRigParameters.Reloading);
@@ -38,7 +38,7 @@ namespace Bw.UseCases.Shooting.View.Rig
             });
         }
 
-        public void Show(WeaponState from, WeaponState to, float progress)
+        public void Show(GunState from, GunState to, float progress)
         {
             var ticksLeft = from.ReloadTicks > 0 && to.ReloadTicks > 0
                 ? Mathf.Lerp(from.ReloadTicks, to.ReloadTicks, progress)

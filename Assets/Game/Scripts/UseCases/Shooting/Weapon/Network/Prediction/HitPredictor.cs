@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Bw.Entities;
 using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Ticks;
+using Bw.Entities.Simulation;
 using Bw.UseCases.Character;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network.Extensions;
@@ -10,12 +11,13 @@ using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Shooting.Weapon.Network.Prediction
 {
-    public sealed class HitPredictor
+    public sealed class HitPredictor<TState> where TState : struct
     {
+        private readonly IReadonlySimulation<TState> _simulation;
         private readonly IShotTracer _tracer;
         private readonly INetworkTicks _ticks;
         private readonly IScheduledCollection _scheduled;
-        private readonly IHitConfig _config;
+        private readonly IShotPower<TState> _power;
         private readonly IOutcomePrediction<IReadonlyCharacter, Hit> _outcomePrediction;
         private readonly List<AffectedTarget<IReadonlyCharacter, Hit>> _affected = new();
 
@@ -23,16 +25,18 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Prediction
             Lifetime lifetime,
             IReadonlyControlledBy controlledBy,
             IReadonlyWeapon weapon,
+            IReadonlySimulation<TState> simulation,
             IShotTracer tracer,
             INetworkTicks ticks,
             IScheduledCollection scheduled,
-            IHitConfig config,
+            IShotPower<TState> power,
             IOutcomePrediction<IReadonlyCharacter, Hit> outcomePrediction)
         {
+            _simulation = simulation;
             _tracer = tracer;
             _ticks = ticks;
             _scheduled = scheduled;
-            _config = config;
+            _power = power;
             _outcomePrediction = outcomePrediction;
 
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
@@ -46,7 +50,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Prediction
             _scheduled.PoseAt(_ticks.Current - (double)shot.PredictedDelay);
             try
             {
-                _tracer.CastPellets(ray, Hit.Along(ray.Direction, _config), _affected);
+                _tracer.CastPellets(ray, _power.Along(ray.Direction, _simulation.State.Value), _affected);
             }
             finally
             {

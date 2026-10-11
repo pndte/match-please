@@ -9,7 +9,7 @@ using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Shooting.View.Crosshair
 {
-    public sealed class WeaponRoundsCursor : IStateView<WeaponState>
+    public sealed class WeaponRoundsCursor : IStateView<GunState>
     {
         private readonly ViewableProperty<int> _rounds;
 
@@ -27,7 +27,7 @@ namespace Bw.UseCases.Shooting.View.Crosshair
                     cursor.ShowRounds(drawnLifetime, _rounds, config.AmmoSettings.Max)));
         }
 
-        public void Show(WeaponState from, WeaponState to, float progress) =>
+        public void Show(GunState from, GunState to, float progress) =>
             _rounds.Value = to.Ammo;
     }
 }

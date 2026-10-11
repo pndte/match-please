@@ -12,17 +12,13 @@ namespace Bw.EditorTools.Shooting
         {
         }
 
-        public abstract WeaponState Initial { get; }
-
         public static PreviewShooting Gun(ShootingWeaponConfig config) =>
             new GunShooting(config, new Spread(config));
 
         public static PreviewShooting Melee(MeleeWeaponConfig config) =>
             new MeleeShooting(config);
 
-        public abstract IWeaponSimulator SimulatorFor(ISimulationStep step);
-
-        public abstract bool Accepted(WeaponState before, WeaponState after);
+        public abstract IPreviewSimulation SimulationFor(ISimulationStep step);
 
         public abstract float ThrowOf(float aim, float roll);
 
@@ -39,14 +35,11 @@ namespace Bw.EditorTools.Shooting
                 _spread = spread;
             }
 
-            public override WeaponState Initial =>
-                new(0f, _config.AmmoSettings.Max, 0, 0, 0);
-
-            public override IWeaponSimulator SimulatorFor(ISimulationStep step) =>
-                new WeaponSimulator(step, _config);
-
-            public override bool Accepted(WeaponState before, WeaponState after) =>
-                after.Shots != before.Shots;
+            public override IPreviewSimulation SimulationFor(ISimulationStep step) =>
+                new PreviewSimulation<GunState>(
+                    new GunSimulator(step, _config),
+                    new GunState(0f, _config.AmmoSettings.Max, 0, 0, 0),
+                    (before, after) => after.Shots != before.Shots);
 
             public override float ThrowOf(float aim, float roll) =>
                 _spread.ThrowOf(aim, roll);
@@ -64,14 +57,11 @@ namespace Bw.EditorTools.Shooting
                 _config = config;
             }
 
-            public override WeaponState Initial =>
-                default;
-
-            public override IWeaponSimulator SimulatorFor(ISimulationStep step) =>
-                new MeleeSimulator(step, _config);
-
-            public override bool Accepted(WeaponState before, WeaponState after) =>
-                after.CooldownTicks > before.CooldownTicks;
+            public override IPreviewSimulation SimulationFor(ISimulationStep step) =>
+                new PreviewSimulation<MeleeState>(
+                    new MeleeSimulator(step, _config),
+                    default,
+                    (_, after) => after.PhaseTicks == 0 && (after.Phase == MeleePhase.Jab || after.Phase == MeleePhase.StrongSwing));
 
             public override float ThrowOf(float aim, float roll) =>
                 0f;

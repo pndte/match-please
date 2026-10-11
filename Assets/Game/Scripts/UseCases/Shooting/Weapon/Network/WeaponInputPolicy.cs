@@ -8,7 +8,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
         public bool IsValid(WeaponInput input) =>
             float.IsFinite(input.Aim) && float.IsFinite(input.ViewDelay) && float.IsFinite(input.PredictedDelay);
 
-        public WeaponInput Substitute(WeaponInput lastInput) => //TODO: зажатый курок повторяется — если игрок отпустил кнопку ровно в потерянных тиках, сервер выстрелит лишний раз
+        public WeaponInput Substitute(WeaponInput lastInput) => //TODO: зажатый курок повторяется — если игрок отпустил кнопку ровно в потерянных тиках, сервер выстрелит лишний раз, а сильный удар кулаков сорвётся позже, чем у клиента
             lastInput.WithoutReloadPress();
     }
 }

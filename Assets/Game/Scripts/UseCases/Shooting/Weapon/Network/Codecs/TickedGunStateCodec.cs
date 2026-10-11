@@ -5,15 +5,15 @@ using Unity.Netcode;
 
 namespace Bw.UseCases.Shooting.Weapon.Network.Codecs
 {
-    public struct TickedWeaponStateCodec : ICodec<TickedState<WeaponState>>
+    public struct TickedGunStateCodec : ICodec<TickedState<GunState>>
     {
-        public TickedState<WeaponState> Value
+        public TickedState<GunState> Value
         {
             get => _value;
             set => _value = value;
         }
 
-        private TickedState<WeaponState> _value;
+        private TickedState<GunState> _value;
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
@@ -31,9 +31,9 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Codecs
             serializer.SerializePacked(ref reloadTicks);
             serializer.SerializePacked(ref shots);
 
-            Value = new TickedState<WeaponState>(
+            Value = new TickedState<GunState>(
                 tick,
-                new WeaponState(aim, ammo, cooldownTicks, reloadTicks, shots));
+                new GunState(aim, ammo, cooldownTicks, reloadTicks, shots));
         }
     }
 }

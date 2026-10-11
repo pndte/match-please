@@ -6,18 +6,18 @@ using UnityEngine;
 
 namespace Bw.UseCases.Shooting.Weapon
 {
-    public sealed class WeaponSimulator : IWeaponSimulator
+    public sealed class GunSimulator : IWeaponSimulator<GunState>
     {
         private readonly ISimulationStep _step;
         private readonly ShootingWeaponConfig _config;
 
-        public WeaponSimulator(ISimulationStep step, ShootingWeaponConfig config)
+        public GunSimulator(ISimulationStep step, ShootingWeaponConfig config)
         {
             _step = step;
             _config = config;
         }
 
-        public WeaponState Step(WeaponState state, WeaponInput input)
+        public GunState Step(GunState state, WeaponInput input)
         {
             var maxAmmo = _config.AmmoSettings.Max;
             var ammo = state.Ammo;
@@ -44,10 +44,10 @@ namespace Bw.UseCases.Shooting.Weapon
                 shots++;
             }
 
-            return new WeaponState(aim, ammo, cooldown, reload, shots);
+            return new GunState(aim, ammo, cooldown, reload, shots);
         }
 
-        public WeaponState Interrupted(WeaponState state) => //TODO: пауза между выстрелами замирает, пока оружие убрано: снайперка, убранная сразу после выстрела, после возврата ждёт остаток паузы, сколько бы ни пролежала; честнее хранить тик, с которого можно стрелять
+        public GunState Interrupted(GunState state) => //TODO: пауза между выстрелами замирает, пока оружие убрано: снайперка, убранная сразу после выстрела, после возврата ждёт остаток паузы, сколько бы ни пролежала; честнее хранить тик, с которого можно стрелять
             state.WithoutReload();
 
         private int Ticks(float seconds) =>

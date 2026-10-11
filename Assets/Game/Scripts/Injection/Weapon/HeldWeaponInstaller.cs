@@ -26,16 +26,17 @@ using Zenject;
 
 namespace Bw.Injection.Weapon
 {
-    public class HeldWeaponInstaller : Installer<IRuntimeSettings, INetEntriesSchemaBuilder, HeldWeaponParts, HeldWeaponInstaller>
+    public class HeldWeaponInstaller<TState> : Installer<IRuntimeSettings, INetEntriesSchemaBuilder, HeldWeaponParts<TState>, HeldWeaponInstaller<TState>>
+        where TState : struct, IWeaponState, IEquatable<TState>
     {
         private readonly IRuntimeSettings _runtimeSettings;
         private readonly INetEntriesSchemaBuilder _netSchema;
-        private readonly HeldWeaponParts _parts;
+        private readonly HeldWeaponParts<TState> _parts;
 
         public HeldWeaponInstaller(
             IRuntimeSettings runtimeSettings,
             INetEntriesSchemaBuilder netSchema,
-            HeldWeaponParts parts)
+            HeldWeaponParts<TState> parts)
         {
             _runtimeSettings = runtimeSettings;
             _netSchema = netSchema;
@@ -77,9 +78,9 @@ namespace Bw.Injection.Weapon
         {
             Container.Bind(typeof(IReadonlyWeaponDraw), typeof(IWeaponDraw)).To<WeaponDraw>().AsSingle()
                 .WriterOnlyInto<IWeaponDraw>(typeof(WeaponHoldServerHandler), typeof(WeaponDrawReceiver));
-            Container.BindInterfacesTo<ShootingWeapon>().AsSingle().WithArguments(_parts.Initial).NonLazy();
+            Container.BindInterfacesTo<ShootingWeapon<TState>>().AsSingle().WithArguments(_parts.Initial).NonLazy();
 
-            StreamPredictionInstaller<WeaponInput, WeaponState>.Install(Container, _runtimeSettings, _netSchema);
+            StreamPredictionInstaller<WeaponInput, TState>.Install(Container, _runtimeSettings, _netSchema);
         }
 
         private void BindDraw()
@@ -110,8 +111,8 @@ namespace Bw.Injection.Weapon
         private void BindServer()
         {
             Container.BindInterfacesTo<WeaponInputPolicy>().AsSingle();
-            Container.Bind<IStateView<WeaponState>>().To<WeaponStateView>().AsSingle().WithArguments(_parts.Weapon);
-            Container.Bind<RaycastShooter>().AsSingle().NonLazy();
+            Container.Bind<IStateView<TState>>().To<WeaponStateView<TState>>().AsSingle().WithArguments(_parts.Weapon);
+            Container.Bind<RaycastShooter<TState>>().AsSingle().NonLazy();
             Container.Bind<WeaponHoldServerHandler>().AsSingle().WithArguments(_parts.NetworkTransform).NonLazy();
             Container.Bind<HeldWeaponBody>().AsSingle().WithArguments(_parts.Body).NonLazy();
         }
@@ -120,13 +121,13 @@ namespace Bw.Injection.Weapon
         {
             Container.BindInterfacesTo<WeaponInputSampler>().AsSingle().WithArguments(_parts.Weapon);
             Container.Bind<HeldWeaponNetworkTransform>().AsSingle().WithArguments(_parts.NetworkTransform).NonLazy();
-            Container.Bind<HitPredictor>().AsSingle().NonLazy();
+            Container.Bind<HitPredictor<TState>>().AsSingle().NonLazy();
             BindClientVisuals();
         }
 
         private void BindClientVisuals()
         {
-            Container.Bind(typeof(ISeenShots), typeof(SeenShots)).To<SeenShots>().AsSingle();
+            Container.Bind(typeof(ISeenShots), typeof(SeenShots<TState>)).To<SeenShots<TState>>().AsSingle();
             Container.Bind<StowedWeaponView>().AsSingle().WithArguments(_parts.Visual.GetComponentsInChildren<Renderer>(true)).NonLazy();
             Container.Bind<WeaponRecoilView>().AsSingle().WithArguments(_parts.Visual).NonLazy();
             Container.Bind<WeaponCameraKick>().AsSingle().NonLazy();

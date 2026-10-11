@@ -10,7 +10,8 @@
         "Unity.Collections",
         "Zenject",
         "R3.Unity",
-        "Bw.UseCases.Character"
+        "Bw.UseCases.Character",
+        "Bw.UseCases.Movement.Network"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Bw.UseCases.Shooting.View.Audio
 {
-    public sealed class WeaponReloadSoundsView : IStateView<WeaponState>
+    public sealed class WeaponReloadSoundsView : IStateView<GunState>
     {
         private readonly Lifetime _lifetime;
         private readonly Transform _weapon;
@@ -35,7 +35,7 @@ namespace Bw.UseCases.Shooting.View.Audio
             _sounds = sounds;
         }
 
-        public void Show(WeaponState from, WeaponState to, float progress)
+        public void Show(GunState from, GunState to, float progress)
         {
             var ticksLeft = from.ReloadTicks > 0 && to.ReloadTicks > 0
                 ? Mathf.Lerp(from.ReloadTicks, to.ReloadTicks, progress)

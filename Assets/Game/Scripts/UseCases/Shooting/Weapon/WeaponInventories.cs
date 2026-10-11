@@ -39,7 +39,7 @@ namespace Bw.UseCases.Shooting.Weapon
         public void Draw(IWeapon weapon)
         {
             var carry = CarryOf(weapon);
-            if (Drawn.TryGetRight(carry.Character, out var drawn) && drawn == weapon)
+            if (Drawn.TryGetRight(carry.Character, out var drawn) && (drawn == weapon || !drawn.Stowable))
                 return;
 
             Drawn.Remove(carry.Character);
@@ -63,6 +63,9 @@ namespace Bw.UseCases.Shooting.Weapon
         {
             if (_carries.ContainsKey(weapon))
                 throw new InvalidOperationException("Only a weapon nobody carries can be picked up.");
+
+            if (Drawn.TryGetRight(character, out var drawn) && !drawn.Stowable)
+                return;
 
             if (TryFind(character, WeaponSlot.Primary, out var carried))
                 _carries[carried].Definition.Terminate();

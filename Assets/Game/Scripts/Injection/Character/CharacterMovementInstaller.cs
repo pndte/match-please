@@ -13,7 +13,9 @@ using Bw.UseCases.Movement.View.Animation;
 using Bw.UseCases.Movement.View.Audio;
 using Bw.UseCases.Movement.Network;
 using Bw.UseCases.Movement.Network.Platforms;
+using Bw.UseCases.Movement.Network.Root;
 using Bw.UseCases.Movement.Physics;
+using JetBrains.Collections.Viewable;
 using Zenject;
 
 namespace Bw.Injection
@@ -42,6 +44,7 @@ namespace Bw.Injection
                 .NonLazy();
             Container.BindInterfacesTo<MovementInputSampler>().AsSingle();
             Container.BindInterfacesTo<MovementInputPolicy>().AsSingle();
+            BindRoot();
             BindVisuals();
 
             StreamPredictionInstaller<MovementInput, MovementState>.Install(Container, _runtimeSettings, _netSchema);
@@ -49,6 +52,24 @@ namespace Bw.Injection
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Server)
                 Container.Decorate<IRewindable>().With<RiderRewinder>();
+        }
+
+        private void BindRoot()
+        {
+            Container.Bind(typeof(IReadonlyMovementRoot), typeof(IMovementRoot)).To<MovementRoot>().AsSingle()
+                .WriterOnlyInto<IMovementRoot>(typeof(MovementRootHolder));
+
+            switch (_runtimeSettings.CurrentPeerType)
+            {
+                case PeerType.Server:
+                    Container.Decorate<ISource<MovementInput>>().With<RootedMovementInputs>();
+                    break;
+                case PeerType.Client:
+                    Container.Decorate<IInputSampler<MovementInput>>().With<RootedMovementSampler>();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private void BindVisuals()

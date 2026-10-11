@@ -2,14 +2,13 @@ using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Shooting.View.Abstractions;
-using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Shooting.View
 {
-    public sealed class SeenShots : IStateView<WeaponState>, ISeenShots
+    public sealed class SeenShots<TState> : IStateView<TState>, ISeenShots where TState : struct, IWeaponState
     {
         public ISource<float> Seen => _seen;
 
@@ -41,7 +40,7 @@ namespace Bw.UseCases.Shooting.View
             });
         }
 
-        public void Show(WeaponState from, WeaponState to, float progress)
+        public void Show(TState from, TState to, float progress)
         {
             if (!_remote)
                 return;

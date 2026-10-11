@@ -65,7 +65,7 @@ namespace Bw.Injection.Weapon
             BindGun();
 
             var netSchema = new NetEntriesSchemaBuilder();
-            HeldWeaponInstaller.Install(Container, _runtimeSettings, netSchema, Parts());
+            HeldWeaponInstaller<GunState>.Install(Container, _runtimeSettings, netSchema, Parts());
             BindDropRequest(netSchema);
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
@@ -89,7 +89,7 @@ namespace Bw.Injection.Weapon
                     $"Weapon config '{_shootingWeaponConfig.name}' has no turn speed: the gun would never turn to the cursor.");
         }
 
-        private HeldWeaponParts Parts() =>
+        private HeldWeaponParts<GunState> Parts() =>
             new(
                 transform,
                 _visual,
@@ -97,14 +97,15 @@ namespace Bw.Injection.Weapon
                 _weaponHold,
                 _networkTransform,
                 _body,
-                new WeaponState(0f, _shootingWeaponConfig.AmmoSettings.OnSpawnValue, 0, 0, 0),
+                new GunState(0f, _shootingWeaponConfig.AmmoSettings.OnSpawnValue, 0, 0, 0),
                 KeyCode.Alpha2); //TODO: new input system
 
         private void BindGun()
         {
-            Container.BindInterfacesTo<WeaponSimulator>().AsSingle();
+            Container.BindInterfacesTo<GunSimulator>().AsSingle();
             Container.BindInterfacesTo<WeaponMuzzle>().AsSingle().WithArguments(_muzzleTransform);
             Container.BindInterfacesTo<ShotTracer>().AsSingle().WithArguments(transform);
+            Container.BindInterfacesTo<FixedShotPower>().AsSingle();
         }
 
         private void BindDropRequest(INetEntriesSchemaBuilder netSchema)
@@ -144,10 +145,10 @@ namespace Bw.Injection.Weapon
 
         private void BindClientVisuals()
         {
-            Container.Bind<IStateView<WeaponState>>()
-                .FromMethod(ctx => new CompositeStateView<WeaponState>(
-                    ctx.Container.Instantiate<WeaponStateView>(new object[] { transform }),
-                    ctx.Container.Resolve<SeenShots>(),
+            Container.Bind<IStateView<GunState>>()
+                .FromMethod(ctx => new CompositeStateView<GunState>(
+                    ctx.Container.Instantiate<WeaponStateView<GunState>>(new object[] { transform }),
+                    ctx.Container.Resolve<SeenShots<GunState>>(),
                     ctx.Container.Instantiate<WeaponReloadCursor>(),
                     ctx.Container.Instantiate<WeaponRoundsCursor>(),
                     ctx.Container.Instantiate<WeaponReloadSoundsView>(new object[] { transform }),

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Bw.UseCases.Shooting.Weapon
 {
-    public sealed class WeaponStateView : IStateView<WeaponState>
+    public sealed class WeaponStateView<TState> : IStateView<TState> where TState : struct, IWeaponState
     {
         private readonly Transform _weapon;
         private readonly WeaponRotationConfig _config;
@@ -27,7 +27,7 @@ namespace Bw.UseCases.Shooting.Weapon
             });
         }
 
-        public void Show(WeaponState from, WeaponState to, float progress)
+        public void Show(TState from, TState to, float progress)
         {
             if (!_drawn)
                 return;

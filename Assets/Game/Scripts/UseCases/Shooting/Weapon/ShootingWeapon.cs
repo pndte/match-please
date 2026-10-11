@@ -1,21 +1,25 @@
+using System;
 using Bw.Entities.Extensions;
+using Bw.Entities.Simulation;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Shooting.Weapon
 {
-    public sealed class ShootingWeapon : IWeapon
+    public sealed class ShootingWeapon<TState> : IWeapon, ISimulation<TState>
+        where TState : struct, IWeaponState, IEquatable<TState>
     {
-        public IReadonlyProperty<WeaponState> State => _state;
-        public WeaponState Previous { get; private set; }
-        public ISource<WeaponState> Stepped => _stepped;
+        public IReadonlyProperty<TState> State => _state;
+        public TState Previous { get; private set; }
+        public ISource<TState> Stepped => _stepped;
         public ISource<WeaponShot> Fired => _fired;
+        public bool Stowable => _state.Value.Stowable;
 
-        private readonly ViewableProperty<WeaponState> _state;
-        private readonly Signal<WeaponState> _stepped = new();
+        private readonly ViewableProperty<TState> _state;
+        private readonly Signal<TState> _stepped = new();
         private readonly Signal<WeaponShot> _fired = new();
-        private readonly IWeaponSimulator _simulator;
+        private readonly IWeaponSimulator<TState> _simulator;
 
         private float _triggerViewDelay;
         private float _triggerPredictedDelay;
@@ -24,12 +28,12 @@ namespace Bw.UseCases.Shooting.Weapon
             Lifetime lifetime,
             ISource<WeaponInput> inputs,
             IReadonlyWeaponDraw draw,
-            IWeaponSimulator simulator,
-            WeaponState initial)
+            IWeaponSimulator<TState> simulator,
+            TState initial)
         {
             _simulator = simulator;
             Previous = initial;
-            _state = new ViewableProperty<WeaponState>(initial);
+            _state = new ViewableProperty<TState>(initial);
 
             draw.DrawnLifetime.WhenAlive(lifetime, drawnLifetime =>
             {
@@ -38,7 +42,7 @@ namespace Bw.UseCases.Shooting.Weapon
             });
         }
 
-        public void Apply(WeaponState state) =>
+        public void Apply(TState state) =>
             _state.Value = state;
 
         private void Step(WeaponInput input)

@@ -2,8 +2,8 @@ using Bw.Entities.Simulation;
 
 namespace Bw.UseCases.Shooting.Weapon.Abstractions
 {
-    public interface IWeaponSimulator : ISimulator<WeaponInput, WeaponState>
+    public interface IWeaponSimulator<TState> : ISimulator<WeaponInput, TState> where TState : struct
     {
-        public WeaponState Interrupted(WeaponState state);
+        public TState Interrupted(TState state);
     }
 }

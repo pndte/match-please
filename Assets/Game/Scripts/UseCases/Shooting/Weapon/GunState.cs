@@ -1,8 +1,9 @@
 using System;
+using Bw.UseCases.Shooting.Weapon.Abstractions;
 
 namespace Bw.UseCases.Shooting.Weapon
 {
-    public readonly struct WeaponState : IEquatable<WeaponState>
+    public readonly struct GunState : IWeaponState, IEquatable<GunState>
     {
         public readonly float Aim;
         public readonly int Ammo;
@@ -10,7 +11,11 @@ namespace Bw.UseCases.Shooting.Weapon
         public readonly int ReloadTicks;
         public readonly int Shots;
 
-        public WeaponState(float aim, int ammo, int cooldownTicks, int reloadTicks, int shots)
+        float IWeaponState.Aim => Aim;
+        int IWeaponState.Shots => Shots;
+        bool IWeaponState.Stowable => true;
+
+        public GunState(float aim, int ammo, int cooldownTicks, int reloadTicks, int shots)
         {
             Aim = aim;
             Ammo = ammo;
@@ -19,7 +24,7 @@ namespace Bw.UseCases.Shooting.Weapon
             Shots = shots;
         }
 
-        public bool Equals(WeaponState other) =>
+        public bool Equals(GunState other) =>
             Aim.Equals(other.Aim)
             && Ammo == other.Ammo
             && CooldownTicks == other.CooldownTicks

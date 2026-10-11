@@ -4,6 +4,8 @@ namespace Bw.UseCases.Shooting.View.Abstractions
 {
     public interface IMeleeSwings
     {
-        public ISource<int> Started { get; }
+        public ISource<MeleeSwing> Started { get; }
+        public IReadonlyProperty<bool> Charging { get; }
+        public IReadonlyProperty<bool> FullyCharged { get; }
     }
 }

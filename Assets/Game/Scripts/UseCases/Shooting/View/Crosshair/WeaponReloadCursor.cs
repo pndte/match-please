@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Bw.UseCases.Shooting.View.Crosshair
 {
-    public sealed class WeaponReloadCursor : IStateView<WeaponState>, IReloadTimer
+    public sealed class WeaponReloadCursor : IStateView<GunState>, IReloadTimer
     {
         public float Seconds => _ticks * _step.Duration;
         public float SecondsLeft { get; private set; }
@@ -46,7 +46,7 @@ namespace Bw.UseCases.Shooting.View.Crosshair
                 }));
         }
 
-        public void Show(WeaponState from, WeaponState to, float progress)
+        public void Show(GunState from, GunState to, float progress)
         {
             if (!_shown)
                 return;
