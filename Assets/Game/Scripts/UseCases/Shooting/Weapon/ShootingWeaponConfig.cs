@@ -17,6 +17,9 @@ namespace Bw.UseCases.Shooting.Weapon
         [Header("Spread (degrees every shot throws the cursor around the shooter; the player brings it back)")]
         public SpreadConfig Spread = new();
 
+        [Header("Pellets (a shot fans Count pellets evenly across Cone degrees; Damage and Knockback count per pellet)")]
+        public PelletsConfig Pellets = new();
+
         float IHitConfig.Damage => Damage;
         float IHitConfig.Knockback => Knockback;
     }

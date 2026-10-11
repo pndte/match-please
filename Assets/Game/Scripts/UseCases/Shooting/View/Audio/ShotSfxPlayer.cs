@@ -30,9 +30,11 @@ namespace Bw.UseCases.Shooting.View.Audio
             _impacts = impacts;
         }
 
-        public void Play(ShotTrace trace, float arrival)
-        {
+        public void Play() =>
             _player.Play(_lifetime, _sounds.Shot, _muzzle.Transform);
+
+        public void PlayImpact(ShotTrace trace, float arrival)
+        {
             if (trace.Hit && HitsGround(trace.Hit.collider))
                 _lifetime.WhenElapsed(arrival, () => _player.Play(_impacts.GroundHit, trace.To));
         }

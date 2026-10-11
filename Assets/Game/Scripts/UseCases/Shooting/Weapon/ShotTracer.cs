@@ -8,17 +8,21 @@ namespace Bw.UseCases.Shooting.Weapon
 {
     public sealed class ShotTracer : IShotTracer
     {
+        public int Pellets => _pellets.Count;
+
         private readonly Transform _weapon;
         private readonly IWeaponMuzzle _muzzle;
         private readonly RaycastShootConfig _config;
+        private readonly PelletsConfig _pellets;
         private readonly ContactFilter2D _filter;
         private readonly List<RaycastHit2D> _hits = new(8);
 
-        public ShotTracer(Transform weapon, IWeaponMuzzle muzzle, RaycastShootConfig config)
+        public ShotTracer(Transform weapon, IWeaponMuzzle muzzle, RaycastShootConfig config, PelletsConfig pellets)
         {
             _weapon = weapon;
             _muzzle = muzzle;
             _config = config;
+            _pellets = pellets;
             _filter = new ContactFilter2D
             {
                 useLayerMask = true,
@@ -29,7 +33,6 @@ namespace Bw.UseCases.Shooting.Weapon
 
         public ShotRay Aim(float aim)
         {
-            //TODO: дробовик стреляет одним лучом, как остальные пушки: дроби с разбросом пока нет
             var holder = Holder();
             var rotation = Quaternion.Euler(0f, 0f, aim);
             var muzzleOffset = _muzzle.Transform.localPosition;
@@ -39,6 +42,14 @@ namespace Bw.UseCases.Shooting.Weapon
                 holder.position,
                 holder.TransformPoint(rotation * new Vector3(radius + muzzleOffset.x, muzzleOffset.y)),
                 holder.TransformDirection(rotation * Vector3.right));
+        }
+
+        public ShotRay Pellet(ShotRay ray, int pellet)
+        {
+            if (pellet < 0 || pellet >= _pellets.Count)
+                throw new ArgumentOutOfRangeException(nameof(pellet), pellet, $"Weapon '{_weapon.name}' fires {_pellets.Count.ToString()} pellets a shot.");
+
+            return ray.Turned(_pellets.AngleOf(pellet));
         }
 
         public ShotTrace Cast(ShotRay ray)

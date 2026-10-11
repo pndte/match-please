@@ -164,6 +164,7 @@ namespace Bw.Injection.Weapon
             Container.BindInstance(_raycastShootConfig).AsSingle();
             Container.BindInstance(_vfxConfig).AsSingle();
             Container.BindInstance(_shootingWeaponConfig).AsSingle();
+            Container.BindInstance(_shootingWeaponConfig.Pellets).AsSingle();
             Container.Bind<IHitConfig>().FromInstance(_shootingWeaponConfig).AsSingle();
             Container.BindInstance(_rotationConfig).AsSingle();
             Container.BindInstance(_cameraKickConfig).AsSingle();

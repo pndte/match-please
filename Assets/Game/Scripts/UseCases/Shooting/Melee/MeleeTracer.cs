@@ -9,6 +9,8 @@ namespace Bw.UseCases.Shooting.Melee
 {
     public sealed class MeleeTracer : IShotTracer
     {
+        public int Pellets => 1;
+
         private readonly Transform _weapon;
         private readonly MeleeWeaponConfig _config;
         private readonly ContactFilter2D _filter;
@@ -33,6 +35,14 @@ namespace Bw.UseCases.Shooting.Melee
                 holder.position,
                 holder.position,
                 holder.TransformDirection(Quaternion.Euler(0f, 0f, aim) * Vector3.right));
+        }
+
+        public ShotRay Pellet(ShotRay ray, int pellet)
+        {
+            if (pellet != 0)
+                throw new ArgumentOutOfRangeException(nameof(pellet), pellet, $"Melee weapon '{_weapon.name}' strikes along one ray.");
+
+            return ray;
         }
 
         public ShotTrace Cast(ShotRay ray)
