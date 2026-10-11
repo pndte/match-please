@@ -113,6 +113,7 @@ namespace Bw.Injection.Weapon
                     ctx.Container.Resolve<MeleeSwings>()))
                 .AsSingle();
             Container.Bind<MeleeRigView>().AsSingle().WithArguments(_rig).NonLazy();
+            Container.Bind<BodyPunchPose>().AsSingle().WithArguments(transform).NonLazy();
             BindStrikeVisuals();
         }
 

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Bw.UseCases.Shooting.View.Rig
 {
-    public sealed class MeleeRigView //TODO: тело персонажа не встаёт в позу удара (состояние Punch в Sanya.controller и его overrides): кулакам нужен доступ к аниматору того, кто их держит
+    public sealed class MeleeRigView
     {
         private static readonly int HeldId = Animator.StringToHash(MeleeRigParameters.Held);
         private static readonly int PunchId = Animator.StringToHash(MeleeRigParameters.Punch);

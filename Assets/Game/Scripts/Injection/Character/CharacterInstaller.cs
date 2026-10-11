@@ -15,9 +15,11 @@ using Bw.UseCases.Character;
 using Bw.UseCases.Character.Network;
 using Bw.UseCases.Character.Network.Prediction;
 using Bw.UseCases.Camera.View.Follow;
+using Bw.UseCases.Character.View.Abstractions;
 using Bw.UseCases.Character.View.Audio;
 using Bw.UseCases.Character.View.Death;
 using Bw.UseCases.Character.View.Hit;
+using Bw.UseCases.Character.View.Pose;
 using Bw.UseCases.Movement;
 using Unity.Netcode;
 using UnityEngine;
@@ -132,6 +134,8 @@ namespace Bw.Injection
             Container.Bind<CameraTargetRegistration>().AsSingle().WithArguments(transform).NonLazy();
             Container.Bind<CharacterDeathAnimation>().AsSingle().NonLazy();
             Container.Bind<CharacterDeathBurst>().AsSingle().WithArguments(transform).NonLazy();
+            Container.Bind<ICharacterPoses>().To<CharacterPoses>().AsSingle();
+            Container.InstantiateComponent<CharacterPosesHolder>(gameObject);
         }
     }
 }
