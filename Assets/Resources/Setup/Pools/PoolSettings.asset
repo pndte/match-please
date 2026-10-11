@@ -27,18 +27,48 @@ MonoBehaviour:
       MaxIdle: 32
       InUseCap:
         rid: 7245772975991160941
-    - Prefab: {fileID: 3845862069358243844, guid: 834baa140fa4a3643b92af2da947ad35, type: 3}
+    - Prefab: {fileID: 5510151799779146027, guid: 1aa62028084ebec4995dab37a52b0961, type: 3}
       ViewOnly: 1
-      Prewarm: 4
-      MaxIdle: 8
+      Prewarm: 8
+      MaxIdle: 16
       InUseCap:
-        rid: 7245772975991160942
+        rid: 7245773095584923749
     - Prefab: {fileID: 1000, guid: 0a15f72084f716842bc2ff2b01807b31, type: 3}
       ViewOnly: 1
       Prewarm: 2
       MaxIdle: 4
       InUseCap:
         rid: 7245772998661374040
+    - Prefab: {fileID: 7810228158729415027, guid: aab64aa6b81dc0f40bd784650f741adc, type: 3}
+      ViewOnly: 1
+      Prewarm: 8
+      MaxIdle: 24
+      InUseCap:
+        rid: 7245773095584923751
+    - Prefab: {fileID: 6128328914576395465, guid: 033c591566a65ed49b3c6aeb1c7a6447, type: 3}
+      ViewOnly: 1
+      Prewarm: 4
+      MaxIdle: 12
+      InUseCap:
+        rid: 7245773095584923752
+    - Prefab: {fileID: 9043015292040743490, guid: 69101f3b70e0ebf4fa6208d7e23a3360, type: 3}
+      ViewOnly: 1
+      Prewarm: 8
+      MaxIdle: 24
+      InUseCap:
+        rid: 7245773095584923753
+    - Prefab: {fileID: 6568465306243402915, guid: 148e537fe6e399a40997e8db8ffab01d, type: 3}
+      ViewOnly: 1
+      Prewarm: 14
+      MaxIdle: 28
+      InUseCap:
+        rid: 7245773095584923754
+    - Prefab: {fileID: 2261431765866283244, guid: bd376c1dd984b834da613c8999b565a1, type: 3}
+      ViewOnly: 1
+      Prewarm: 14
+      MaxIdle: 28
+      InUseCap:
+        rid: 7245773095584923750
   references:
     version: 2
     RefIds:
@@ -50,11 +80,31 @@ MonoBehaviour:
       type: {class: ReclaimOldestMode, ns: Bw.Entities.Pool.GameObjects.Modes, asm: Bw.Entities}
       data:
         Max: 32
-    - rid: 7245772975991160942
-      type: {class: ReclaimOldestMode, ns: Bw.Entities.Pool.GameObjects.Modes, asm: Bw.Entities}
-      data:
-        Max: 16
     - rid: 7245772998661374040
       type: {class: ReclaimOldestMode, ns: Bw.Entities.Pool.GameObjects.Modes, asm: Bw.Entities}
       data:
         Max: 16
+    - rid: 7245773095584923749
+      type: {class: ReclaimOldestMode, ns: Bw.Entities.Pool.GameObjects.Modes, asm: Bw.Entities}
+      data:
+        Max: 48
+    - rid: 7245773095584923750
+      type: {class: ReclaimOldestMode, ns: Bw.Entities.Pool.GameObjects.Modes, asm: Bw.Entities}
+      data:
+        Max: 56
+    - rid: 7245773095584923751
+      type: {class: ReclaimOldestMode, ns: Bw.Entities.Pool.GameObjects.Modes, asm: Bw.Entities}
+      data:
+        Max: 64
+    - rid: 7245773095584923752
+      type: {class: ReclaimOldestMode, ns: Bw.Entities.Pool.GameObjects.Modes, asm: Bw.Entities}
+      data:
+        Max: 32
+    - rid: 7245773095584923753
+      type: {class: ReclaimOldestMode, ns: Bw.Entities.Pool.GameObjects.Modes, asm: Bw.Entities}
+      data:
+        Max: 64
+    - rid: 7245773095584923754
+      type: {class: ReclaimOldestMode, ns: Bw.Entities.Pool.GameObjects.Modes, asm: Bw.Entities}
+      data:
+        Max: 64

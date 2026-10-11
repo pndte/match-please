@@ -278,6 +278,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Weapon.WeaponInstaller
   _visual: {fileID: 1585143936675570925}
   _rig: {fileID: 2221452468816880513}
+  _flashPoint: {fileID: 929406897848750056}
+  _ejector: {fileID: 3315585804788884574}
   _muzzleTransform: {fileID: 8117144414725150372}
   _raycastShootConfig: {fileID: 11400000, guid: 028f3f7f1f83f474697f765f7043df94, type: 2}
   _shootingWeaponConfig: {fileID: 11400000, guid: c7210083ab45bac4eb075b9602232847, type: 2}
@@ -382,6 +384,37 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.45, y: 0.46}
   m_EdgeRadius: 0
+--- !u!1 &2480837781867210871
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3315585804788884574}
+  m_Layer: 0
+  m_Name: Ejector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3315585804788884574
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2480837781867210871}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.04, y: 0.04, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6252075096326985070}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2522205482695347990
 GameObject:
   m_ObjectHideFlags: 0
@@ -814,7 +847,40 @@ Transform:
   - {fileID: 8354512348002518183}
   - {fileID: 5686531129107345630}
   - {fileID: 1517404698950774746}
+  - {fileID: 929406897848750056}
+  - {fileID: 3315585804788884574}
   m_Father: {fileID: 1585143936675570925}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8043006329855656481
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 929406897848750056}
+  m_Layer: 0
+  m_Name: FlashPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &929406897848750056
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8043006329855656481}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.71, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6252075096326985070}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8122809051850558088
 GameObject:

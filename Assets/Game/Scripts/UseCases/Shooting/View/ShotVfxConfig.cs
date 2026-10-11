@@ -7,5 +7,8 @@ namespace Bw.UseCases.Shooting.View
     {
         public GameObject Tracer;
         [Min(0.01f)] public float BulletSpeed = 80f;
+        public GameObject MuzzleFlash;
+        public GameObject Casing;
+        public GameObject Impact;
     }
 }

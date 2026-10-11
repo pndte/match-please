@@ -13,7 +13,8 @@
         "UnityEngine.UI",
         "Unity.InputSystem",
         "Bw.UseCases.Character",
-        "Bw.UseCases.Character.View"
+        "Bw.UseCases.Character.View",
+        "Unity.RenderPipelines.Universal.2D.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

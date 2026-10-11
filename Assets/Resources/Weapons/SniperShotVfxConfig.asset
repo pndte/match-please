@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a72cbcb2a52a4b98b35d7adfb1c35a8d, type: 3}
+  m_Name: SniperShotVfxConfig
+  m_EditorClassIdentifier: Bw.UseCases.Shooting.View::Bw.UseCases.Shooting.View.ShotVfxConfig
+  Tracer: {fileID: 5510151799779146027, guid: 1aa62028084ebec4995dab37a52b0961, type: 3}
+  BulletSpeed: 140
+  MuzzleFlash: {fileID: 6532407807240913912, guid: eda978f3ca085374fbbc51a34b4e249e, type: 3}
+  Casing: {fileID: 7810228158729415027, guid: aab64aa6b81dc0f40bd784650f741adc, type: 3}
+  Impact: {fileID: 9043015292040743490, guid: 69101f3b70e0ebf4fa6208d7e23a3360, type: 3}

@@ -7,6 +7,7 @@ using Bw.Injection.Network.Variables;
 using Bw.UseCases.Character;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.View;
+using Bw.UseCases.Shooting.View.Abstractions;
 using Bw.UseCases.Shooting.View.Audio;
 using Bw.UseCases.Shooting.View.Crosshair;
 using Bw.UseCases.Shooting.View.Highlight;
@@ -37,6 +38,8 @@ namespace Bw.Injection.Weapon
 
         [Header("Graphics")] [SerializeField] private Transform _visual;
         [SerializeField] private Animator _rig;
+        [SerializeField] private Transform _flashPoint;
+        [SerializeField] private Transform _ejector;
 
         [Header("WeaponMuzzle")] [SerializeField] private Transform _muzzleTransform;
 
@@ -150,6 +153,8 @@ namespace Bw.Injection.Weapon
                     ctx.Container.Instantiate<WeaponRigView>(new object[] { _rig })))
                 .AsSingle();
             Container.Bind<WeaponShotEffectsView>().AsSingle().NonLazy();
+            Container.Bind<IMuzzleFlash>().FromComponentInNewPrefab(_vfxConfig.MuzzleFlash).UnderTransform(_flashPoint).AsSingle();
+            Container.Bind<MuzzleEffectsView>().AsSingle().WithArguments(_ejector).NonLazy();
             Container.BindInterfacesTo<WeaponHighlightView>().AsSingle().WithArguments(_visual, _visual.GetComponentsInChildren<SpriteRenderer>(true));
         }
 

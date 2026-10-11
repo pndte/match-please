@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a72cbcb2a52a4b98b35d7adfb1c35a8d, type: 3}
   m_Name: ShotVfxConfig
   m_EditorClassIdentifier: Bw.UseCases.Shooting.View::Bw.UseCases.Shooting.View.ShotVfxConfig
-  Tracer: {fileID: 3845862069358243844, guid: 834baa140fa4a3643b92af2da947ad35, type: 3}
+  Tracer: {fileID: 5510151799779146027, guid: 1aa62028084ebec4995dab37a52b0961, type: 3}
   BulletSpeed: 80
+  MuzzleFlash: {fileID: 8725119316256689936, guid: 0158411740f607e47be436b41ec33557, type: 3}
+  Casing: {fileID: 7810228158729415027, guid: aab64aa6b81dc0f40bd784650f741adc, type: 3}
+  Impact: {fileID: 9043015292040743490, guid: 69101f3b70e0ebf4fa6208d7e23a3360, type: 3}
