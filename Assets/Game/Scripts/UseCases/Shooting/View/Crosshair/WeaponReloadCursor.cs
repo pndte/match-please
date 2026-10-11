@@ -1,7 +1,9 @@
 using Bw.Entities;
+using Bw.Entities.Extensions;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Shooting.View.Crosshair.Abstractions;
 using Bw.UseCases.Shooting.Weapon;
+using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using UnityEngine;
@@ -17,13 +19,14 @@ namespace Bw.UseCases.Shooting.View.Crosshair
         private readonly ISimulationStep _step;
         private readonly SequentialLifetimes _reloads;
 
-        private bool _mine;
+        private bool _shown;
         private bool _reloading;
         private int _ticks;
 
         public WeaponReloadCursor(
             Lifetime lifetime,
             IReadonlyControlledBy controlledBy,
+            IReadonlyWeaponDraw draw,
             IAimCursor cursor,
             ISimulationStep step)
         {
@@ -32,19 +35,20 @@ namespace Bw.UseCases.Shooting.View.Crosshair
             _reloads = new SequentialLifetimes(lifetime);
 
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
-            {
-                _mine = true;
-                controlledLifetime.OnTermination(() =>
+                draw.DrawnLifetime.WhenAlive(controlledLifetime, drawnLifetime =>
                 {
-                    _mine = false;
-                    Stop();
-                });
-            });
+                    _shown = true;
+                    drawnLifetime.OnTermination(() =>
+                    {
+                        _shown = false;
+                        Stop();
+                    });
+                }));
         }
 
         public void Show(WeaponState from, WeaponState to, float progress)
         {
-            if (!_mine)
+            if (!_shown)
                 return;
 
             var ticksLeft = from.ReloadTicks > 0 ? Mathf.Lerp(from.ReloadTicks, to.ReloadTicks, progress) : to.ReloadTicks;

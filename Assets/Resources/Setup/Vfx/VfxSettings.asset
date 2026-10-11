@@ -19,5 +19,5 @@ MonoBehaviour:
     Surface: {fileID: 7609153402843707051, guid: f463bf6f5bb49ea4fa066366710d5fa2, type: 3}
   _characterDeath:
     Blood: {fileID: 1000, guid: 0a15f72084f716842bc2ff2b01807b31, type: 3}
-    BurstTime: 0.3
+    BurstTime: 0.083333336
     BurstOffset: {x: 0, y: 0.1}

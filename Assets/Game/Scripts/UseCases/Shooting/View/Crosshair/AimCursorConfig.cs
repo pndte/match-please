@@ -33,5 +33,28 @@ namespace Bw.UseCases.Shooting.View.Crosshair
         public float KickShake = 2.5f;
         [Min(1)] public int KickVibrato = 40;
         [Min(0.01f)] public float KickTime = 0.1f;
+
+        [Header("Aim To Fists")]
+        [Min(0.01f)] public float FistsTime = 0.24f;
+        public float FistsSlide = 14f;
+        public float FistsGrow = 0.6f;
+
+        [Header("Jab")]
+        public float JabReach = 5f;
+        public float JabScale = 0.2f;
+        public float JabKick = 0.08f;
+        [Min(0.01f)] public float JabTime = 0.16f;
+
+        [Header("Rounds")]
+        [Range(0f, 1f)] public float RoundsLowShare = 0.25f;
+        [Min(0.01f)] public float RoundsShowTime = 0.2f;
+        [Min(0.01f)] public float RoundsHideTime = 0.12f;
+        public float RoundsTuck = 0.55f;
+        public float RoundsTickScale = 0.22f;
+        public float RoundsTickDrop = 2.5f;
+        [Min(0.01f)] public float RoundsTickTime = 0.14f;
+        [Min(0.01f)] public float RoundsPopTime = 0.28f;
+        public float RoundsPulseScale = 1.12f;
+        [Min(0.01f)] public float RoundsPulseTime = 0.32f;
     }
 }

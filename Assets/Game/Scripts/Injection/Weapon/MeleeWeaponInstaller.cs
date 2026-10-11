@@ -9,6 +9,7 @@ using Bw.UseCases.Shooting.Melee;
 using Bw.UseCases.Shooting.View;
 using Bw.UseCases.Shooting.View.Abstractions;
 using Bw.UseCases.Shooting.View.Audio;
+using Bw.UseCases.Shooting.View.Crosshair;
 using Bw.UseCases.Shooting.View.Impact;
 using Bw.UseCases.Shooting.View.Recoil;
 using Bw.UseCases.Shooting.View.Rig;
@@ -114,6 +115,7 @@ namespace Bw.Injection.Weapon
                 .AsSingle();
             Container.Bind<MeleeRigView>().AsSingle().WithArguments(_rig).NonLazy();
             Container.Bind<BodyPunchPose>().AsSingle().WithArguments(transform).NonLazy();
+            Container.Bind<FistsCursor>().AsSingle().NonLazy();
             BindStrikeVisuals();
         }
 

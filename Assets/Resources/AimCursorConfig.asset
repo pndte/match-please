@@ -31,3 +31,20 @@ MonoBehaviour:
   KickShake: 2.5
   KickVibrato: 40
   KickTime: 0.1
+  FistsTime: 0.24
+  FistsSlide: 14
+  FistsGrow: 0.6
+  JabReach: 5
+  JabScale: 0.2
+  JabKick: 0.08
+  JabTime: 0.16
+  RoundsLowShare: 0.25
+  RoundsShowTime: 0.2
+  RoundsHideTime: 0.12
+  RoundsTuck: 0.55
+  RoundsTickScale: 0.22
+  RoundsTickDrop: 2.5
+  RoundsTickTime: 0.14
+  RoundsPopTime: 0.28
+  RoundsPulseScale: 1.12
+  RoundsPulseTime: 0.32

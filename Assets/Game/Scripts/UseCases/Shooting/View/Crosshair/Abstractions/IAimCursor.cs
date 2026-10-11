@@ -1,3 +1,4 @@
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Shooting.View.Crosshair.Abstractions
@@ -6,5 +7,7 @@ namespace Bw.UseCases.Shooting.View.Crosshair.Abstractions
     {
         public void ShowReload(Lifetime reloadLifetime, IReloadTimer timer);
         public void ShowShot();
+        public void ShowRounds(Lifetime shownLifetime, IReadonlyProperty<int> rounds, int capacity);
+        public void ShowFists(Lifetime drawnLifetime);
     }
 }

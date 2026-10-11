@@ -149,6 +149,7 @@ namespace Bw.Injection.Weapon
                     ctx.Container.Instantiate<WeaponStateView>(new object[] { transform }),
                     ctx.Container.Resolve<SeenShots>(),
                     ctx.Container.Instantiate<WeaponReloadCursor>(),
+                    ctx.Container.Instantiate<WeaponRoundsCursor>(),
                     ctx.Container.Instantiate<WeaponReloadSoundsView>(new object[] { transform }),
                     ctx.Container.Instantiate<WeaponRigView>(new object[] { _rig })))
                 .AsSingle();

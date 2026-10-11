@@ -5,6 +5,8 @@ using Bw.Entities.Network;
 using Bw.UseCases.Audio.View.Playback;
 using Bw.UseCases.Camera.View.Follow;
 using Bw.UseCases.Camera.View.Shake;
+using Bw.UseCases.Character.View.Abstractions;
+using Bw.UseCases.Character.View.HealthBar;
 using Bw.UseCases.FogOfWar.View;
 using Bw.UseCases.Shooting.View.Crosshair;
 using Bw.UseCases.Shooting.View.Crosshair.Abstractions;
@@ -38,10 +40,14 @@ namespace Bw.Injection.Entities.Camera
             Container.Bind<CameraFollow>().AsSingle().WithArguments(_camera.gameObject.Lifetime(), _camera, _followConfig).NonLazy();
             Container.BindInterfacesTo<SoundPlayer>().AsSingle().WithArguments(_camera.gameObject.Lifetime());
             Container.BindInterfacesTo<EffectPlayer>().AsSingle().WithArguments(_camera.gameObject.Lifetime());
+            BindHealthBars();
 
             if (_fogOfWar)
                 BindFogOfWar();
         }
+
+        private void BindHealthBars() =>
+            Container.Bind<IHealthBars>().To<HealthBars>().FromComponentOn(_camera.gameObject).AsSingle();
 
         private void BindFogOfWar()
         {
