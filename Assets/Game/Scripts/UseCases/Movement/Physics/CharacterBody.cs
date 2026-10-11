@@ -44,11 +44,29 @@ namespace Bw.UseCases.Movement.Physics
             for (var i = 0; i < hitCount; i++)
             {
                 var hit = _hits[i];
-                if (Vector2.Dot(hit.normal, direction) < 0f)
+                if (Vector2.Dot(hit.normal, direction) < 0f && !IsPlatform(hit.collider))
                     distance = Mathf.Min(distance, hit.distance - Skin);
             }
 
             return Mathf.Max(0f, distance);
         }
+
+        public float Fall(Vector2 position, float distance)
+        {
+            var feet = position.y + _offset.y - _size.y / 2f;
+            var hitCount = Physics2D.BoxCast(position + _offset, _size, 0f, Vector2.down, _filter, _hits, distance + Skin);
+
+            for (var i = 0; i < hitCount; i++)
+            {
+                var hit = _hits[i];
+                if (hit.normal.y > 0f && (!IsPlatform(hit.collider) || hit.collider.bounds.max.y <= feet + Skin))
+                    distance = Mathf.Min(distance, hit.distance - Skin);
+            }
+
+            return Mathf.Max(0f, distance);
+        }
+
+        private static bool IsPlatform(Collider2D collider) => //TODO: мотор понимает только доски, которые ловят сверху: поворот и дуга эффектора (rotationalOffset, surfaceArc) не учитываются
+            collider.usedByEffector && collider.TryGetComponent(out PlatformEffector2D effector) && effector.enabled && effector.useOneWay;
     }
 }

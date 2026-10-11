@@ -50,7 +50,11 @@ namespace Bw.UseCases.Movement.Physics
 
             var verticalDirection = velocity.y > 0f ? Vector2.up : Vector2.down;
             var verticalDistance = Mathf.Abs(velocity.y) * deltaTime;
-            if (Sweep(ref position, verticalDirection, verticalDistance) >= verticalDistance)
+            var travelled = verticalDirection == Vector2.down && !input.Down
+                ? Fall(ref position, verticalDistance)
+                : Sweep(ref position, verticalDirection, verticalDistance);
+
+            if (travelled >= verticalDistance)
                 return new MovementState(position, velocity, push, false, new JumpState(rising && velocity.y > 0f, coyoteTicks, bufferedTicks));
 
             return new MovementState(position, velocity.WithY(0f), push, verticalDirection == Vector2.down, new JumpState(false, coyoteTicks, bufferedTicks));
@@ -78,6 +82,13 @@ namespace Bw.UseCases.Movement.Physics
         {
             var allowed = _collider.Cast(position, direction, distance);
             position += direction * allowed;
+            return allowed;
+        }
+
+        private float Fall(ref Vector2 position, float distance)
+        {
+            var allowed = _collider.Fall(position, distance);
+            position += Vector2.down * allowed;
             return allowed;
         }
     }

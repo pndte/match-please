@@ -21,22 +21,26 @@ namespace Bw.UseCases.Movement.Network.Codecs
             var horizontal = Value.Input.Horizontal;
             var jump = Value.Input.Jump;
             var jumpHeld = Value.Input.JumpHeld;
+            var down = Value.Input.Down;
             var previousHorizontal = Value.PreviousInput.Horizontal;
             var previousJump = Value.PreviousInput.Jump;
             var previousJumpHeld = Value.PreviousInput.JumpHeld;
+            var previousDown = Value.PreviousInput.Down;
 
             serializer.SerializePacked(ref tick);
             serializer.SerializeValue(ref horizontal);
             serializer.SerializeValue(ref jump);
             serializer.SerializeValue(ref jumpHeld);
+            serializer.SerializeValue(ref down);
             serializer.SerializeValue(ref previousHorizontal);
             serializer.SerializeValue(ref previousJump);
             serializer.SerializeValue(ref previousJumpHeld);
+            serializer.SerializeValue(ref previousDown);
 
             Value = new TickedInput<MovementInput>(
                 tick,
-                new MovementInput(horizontal, jump, jumpHeld),
-                new MovementInput(previousHorizontal, previousJump, previousJumpHeld));
+                new MovementInput(horizontal, jump, jumpHeld, down),
+                new MovementInput(previousHorizontal, previousJump, previousJumpHeld, previousDown));
         }
     }
 }
