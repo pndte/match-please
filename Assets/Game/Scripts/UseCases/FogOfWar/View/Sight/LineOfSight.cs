@@ -118,7 +118,7 @@ namespace Bw.UseCases.FogOfWar.View.Sight
             _rays[_count++] = ray;
         }
 
-        private static bool IsSeeThrough(Collider2D collider) => //TODO: та же проверка доски, что CharacterBody.IsPlatform в движении: свести в одно место, когда у досок появится свой компонент
+        private static bool IsSeeThrough(Collider2D collider) => //TODO: та же проверка доски, что BoxBody.IsPlatform в движении: свести в одно место, когда у досок появится свой компонент
             collider.usedByEffector && collider.TryGetComponent(out PlatformEffector2D effector) && effector.enabled && effector.useOneWay;
 
         private static float Reach(Vector2 eye, Vector2 direction, Rect area) =>

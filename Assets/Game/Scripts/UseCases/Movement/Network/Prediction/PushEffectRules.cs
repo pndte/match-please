@@ -1,9 +1,12 @@
 using Bw.Entities.Network.Prediction.Events;
+using Bw.UseCases.Movement.Abstractions;
 using Bw.UseCases.Movement.Extensions;
 
 namespace Bw.UseCases.Movement.Network.Prediction
 {
-    public sealed class PushEffectRules<TEffect> : IEffectRules<MovementState, TEffect> where TEffect : struct
+    public sealed class PushEffectRules<TState, TEffect> : IEffectRules<TState, TEffect>
+        where TState : struct, IBodyState<TState>
+        where TEffect : struct
     {
         private readonly IPushRules<TEffect> _rules;
 
@@ -12,7 +15,7 @@ namespace Bw.UseCases.Movement.Network.Prediction
             _rules = rules;
         }
 
-        public MovementState Apply(MovementState state, TEffect effect) =>
+        public TState Apply(TState state, TEffect effect) =>
             state.Pushed(_rules.Impulse(effect));
     }
 }

@@ -1,6 +1,7 @@
 using Bw.Entities.Extensions;
 using Bw.UseCases.Audio.View.Playback.Abstractions;
-using Bw.UseCases.Character.Extensions;
+using Bw.UseCases.Mortality;
+using Bw.UseCases.Mortality.Extensions;
 using Bw.UseCases.Character.View.Death;
 using JetBrains.Lifetimes;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace Bw.UseCases.Character.View.Audio
 
         public CharacterDeathSound(
             Lifetime lifetime,
-            IReadonlyCharacter character,
+            IReadonlyMortal character,
             Transform body,
             ISoundPlayer player,
             CharacterSoundsConfig sounds,

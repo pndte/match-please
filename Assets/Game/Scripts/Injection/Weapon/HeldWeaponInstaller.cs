@@ -8,7 +8,7 @@ using Bw.Injection.ControlledBy;
 using Bw.Injection.Network;
 using Bw.Injection.Network.Prediction;
 using Bw.Injection.Ownership;
-using Bw.UseCases.Character;
+using Bw.UseCases.Mortality;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.View;
 using Bw.UseCases.Shooting.View.Abstractions;
@@ -57,7 +57,7 @@ namespace Bw.Injection.Weapon
 
             BindWeapon();
             BindDraw();
-            EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyCharacter, Hit>.Install(Container, _runtimeSettings, _netSchema);
+            EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyMortal, Hit>.Install(Container, _runtimeSettings, _netSchema);
 
             BindVisualFlip();
 

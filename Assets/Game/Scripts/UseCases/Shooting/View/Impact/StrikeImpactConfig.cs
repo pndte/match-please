@@ -8,5 +8,6 @@ namespace Bw.UseCases.Shooting.View.Impact
     {
         public GameObject Body;
         public GameObject Surface;
+        public LayerMask BodyLayers = 1 << 15;
     }
 }

@@ -3,7 +3,7 @@ using Bw.Entities;
 using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Simulation;
-using Bw.UseCases.Character;
+using Bw.UseCases.Mortality;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network.Extensions;
 using JetBrains.Collections.Viewable;
@@ -18,8 +18,8 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Prediction
         private readonly INetworkTicks _ticks;
         private readonly IScheduledCollection _scheduled;
         private readonly IShotPower<TState> _power;
-        private readonly IOutcomePrediction<IReadonlyCharacter, Hit> _outcomePrediction;
-        private readonly List<AffectedTarget<IReadonlyCharacter, Hit>> _affected = new();
+        private readonly IOutcomePrediction<IReadonlyMortal, Hit> _outcomePrediction;
+        private readonly List<AffectedTarget<IReadonlyMortal, Hit>> _affected = new();
 
         public HitPredictor(
             Lifetime lifetime,
@@ -30,7 +30,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Prediction
             INetworkTicks ticks,
             IScheduledCollection scheduled,
             IShotPower<TState> power,
-            IOutcomePrediction<IReadonlyCharacter, Hit> outcomePrediction)
+            IOutcomePrediction<IReadonlyMortal, Hit> outcomePrediction)
         {
             _simulation = simulation;
             _tracer = tracer;

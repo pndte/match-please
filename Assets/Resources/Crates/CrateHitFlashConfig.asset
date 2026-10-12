@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f8c78f2e82db5045a3b3b3e0001a7a8, type: 3}
+  m_Name: CrateHitFlashConfig
+  m_EditorClassIdentifier: Bw.UseCases.Mortality.View::Bw.UseCases.Mortality.View.Hit.HitFlashConfig
+  FlashColor: {r: 1, g: 0.96, b: 0.86, a: 1}
+  FlashStrength: 0.8
+  FlashDuration: 0.15

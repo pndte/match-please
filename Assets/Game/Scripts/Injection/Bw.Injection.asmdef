@@ -21,6 +21,10 @@
         "Unity.Netcode.Runtime",
         "Bw.UseCases.Character",
         "Bw.UseCases.Character.Network",
+        "Bw.UseCases.Mortality",
+        "Bw.UseCases.Mortality.Network",
+        "Bw.UseCases.Mortality.View",
+        "Bw.UseCases.Crates.View",
         "Bw.UseCases.Level",
         "Bw.UseCases.Level.Network"
     ],

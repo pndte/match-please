@@ -1,5 +1,6 @@
 using Bw.Entities.Extensions;
-using Bw.UseCases.Character.Extensions;
+using Bw.UseCases.Mortality;
+using Bw.UseCases.Mortality.Extensions;
 using Bw.UseCases.Vfx.View.Effects.Abstractions;
 using JetBrains.Lifetimes;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace Bw.UseCases.Character.View.Death
 
         public CharacterDeathBurst(
             Lifetime lifetime,
-            IReadonlyCharacter character,
+            IReadonlyMortal character,
             Transform body,
             IEffectPlayer effects,
             CharacterDeathViewConfig config)

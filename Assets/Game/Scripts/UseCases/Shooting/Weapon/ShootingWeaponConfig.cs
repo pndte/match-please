@@ -1,4 +1,4 @@
-﻿using Bw.UseCases.Character;
+﻿using Bw.UseCases.Mortality;
 using UnityEngine;
 
 namespace Bw.UseCases.Shooting.Weapon

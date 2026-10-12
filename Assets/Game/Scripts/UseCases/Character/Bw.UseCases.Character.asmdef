@@ -2,7 +2,8 @@
     "name": "Bw.UseCases.Character",
     "rootNamespace": "Bw",
     "references": [
-        "Bw.Entities"
+        "Bw.Entities",
+        "Bw.UseCases.Mortality"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

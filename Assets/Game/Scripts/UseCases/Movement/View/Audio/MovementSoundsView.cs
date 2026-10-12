@@ -23,9 +23,9 @@ namespace Bw.UseCases.Movement.View.Audio
 
         public void Show(MovementState from, MovementState to, float progress)
         {
-            var position = Vector2.Lerp(from.Position, to.Position, progress);
-            var velocity = Vector2.Lerp(from.Velocity, to.Velocity, progress);
-            var grounded = progress < 0.5f ? from.Grounded : to.Grounded;
+            var position = Vector2.Lerp(from.Body.Position, to.Body.Position, progress);
+            var velocity = Vector2.Lerp(from.Body.Velocity, to.Body.Velocity, progress);
+            var grounded = progress < 0.5f ? from.Body.Grounded : to.Body.Grounded;
 
             if (_shown && grounded && !_grounded)
                 Land(position);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Bw.Entities.Network.LagCompensation;
 using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Ticks;
-using Bw.UseCases.Character;
+using Bw.UseCases.Mortality;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network.Extensions;
 using JetBrains.Collections.Viewable;
@@ -11,14 +11,14 @@ using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Shooting.Weapon.Network
 {
-    public sealed class RaycastShotResolver : IRaycastShots, IOutcomes<IReadonlyWeapon, IReadonlyCharacter, Hit>
+    public sealed class RaycastShotResolver : IRaycastShots, IOutcomes<IReadonlyWeapon, IReadonlyMortal, Hit>
     {
-        public ISource<ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, Hit>> Reported => _reported;
+        public ISource<ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Hit>> Reported => _reported;
 
-        private readonly Signal<ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, Hit>> _reported = new();
+        private readonly Signal<ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Hit>> _reported = new();
         private readonly List<RaycastShot> _shots = new();
-        private readonly List<ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, Hit>> _outcomes = new();
-        private readonly List<AffectedTarget<IReadonlyCharacter, Hit>> _affected = new();
+        private readonly List<ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Hit>> _outcomes = new();
+        private readonly List<AffectedTarget<IReadonlyMortal, Hit>> _affected = new();
         private readonly ILagCompensator _lagCompensator;
 
         public RaycastShotResolver(Lifetime lifetime, INetworkTicks ticks, ILagCompensator lagCompensator)
@@ -48,7 +48,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             }
         }
 
-        private ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, Hit> Trace(int tick, RaycastShot shot)
+        private ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Hit> Trace(int tick, RaycastShot shot)
         {
             var ray = shot.Tracer.Aim(shot.WeaponShot.Aim);
             _affected.Clear();
@@ -60,8 +60,8 @@ namespace Bw.UseCases.Shooting.Weapon.Network
 
             var affected = _affected.Count > 0
                 ? _affected.ToArray() //TODO: выделение массива на выстрел - плохо, в идеале пуллировать массивы и переиспользовать их
-                : Array.Empty<AffectedTarget<IReadonlyCharacter, Hit>>();
-            return new ActionOutcome<IReadonlyWeapon, IReadonlyCharacter, Hit>(shot.Weapon, tick, affected);
+                : Array.Empty<AffectedTarget<IReadonlyMortal, Hit>>();
+            return new ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Hit>(shot.Weapon, tick, affected);
         }
     }
 }

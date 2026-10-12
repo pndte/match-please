@@ -20,12 +20,12 @@ namespace Bw.UseCases.Movement.View.Animation
 
         public void Show(MovementState from, MovementState to, float progress)
         {
-            var velocity = Vector2.Lerp(from.Velocity, to.Velocity, progress);
+            var velocity = Vector2.Lerp(from.Body.Velocity, to.Body.Velocity, progress);
             var speed = Mathf.Abs(velocity.x) / _config.Speed;
             if (speed > TurnSpeed)
                 _facing = Mathf.Sign(velocity.x);
 
-            var grounded = progress < 0.5f ? from.Grounded : to.Grounded;
+            var grounded = progress < 0.5f ? from.Body.Grounded : to.Body.Grounded;
             _animator.Animate(new MovementAnimationPose(speed, velocity.y / _config.JumpForce, grounded, _facing));
         }
     }

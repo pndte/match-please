@@ -1,16 +1,16 @@
 ﻿using Bw.Entities.Players;
-using Bw.UseCases.Character;
+using Bw.UseCases.Mortality;
 using JetBrains.Collections.Viewable;
 
 namespace Bw.UseCases
 {
     public interface ICharacterRegistry
     {
-        public IViewableMap<IReadonlyCharacter, IPlayer> PlayerByCharacter { get; }
+        public IViewableMap<IReadonlyMortal, IPlayer> PlayerByCharacter { get; }
     }
 
     public class CharacterRegistry : ICharacterRegistry
     {
-        public IViewableMap<IReadonlyCharacter, IPlayer> PlayerByCharacter { get; } = new ViewableMap<IReadonlyCharacter, IPlayer>();
+        public IViewableMap<IReadonlyMortal, IPlayer> PlayerByCharacter { get; } = new ViewableMap<IReadonlyMortal, IPlayer>();
     }
 }

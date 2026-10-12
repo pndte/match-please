@@ -1,6 +1,7 @@
 using System;
 using Bw.UseCases.Audio.View.Playback;
 using Bw.UseCases.Character.View.Audio;
+using Bw.UseCases.Crates.View.Audio;
 using Bw.UseCases.Movement.View.Audio;
 using Bw.UseCases.Shooting.View.Audio;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace Bw.Injection.Audio
         [SerializeField] private MeleeSoundsConfig[] _melee = Array.Empty<MeleeSoundsConfig>();
         [SerializeField] private MovementSoundsConfig _movement = new();
         [SerializeField] private CharacterSoundsConfig _character = new();
+        [SerializeField] private CrateSoundsConfig _crate = new();
 
         public override void InstallBindings()
         {
@@ -26,6 +28,7 @@ namespace Bw.Injection.Audio
             Container.Bind<MeleeSoundsCatalog>().AsSingle().WithArguments(_melee);
             Container.BindInstance(_movement).AsSingle();
             Container.BindInstance(_character).AsSingle();
+            Container.BindInstance(_crate).AsSingle();
         }
     }
 }

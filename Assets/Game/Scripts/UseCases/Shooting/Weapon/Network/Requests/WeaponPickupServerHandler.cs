@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Bw.Entities;
 using Bw.Entities.Network.Variables;
-using Bw.UseCases.Character;
-using Bw.UseCases.Character.Extensions;
+using Bw.UseCases.Mortality;
+using Bw.UseCases.Mortality.Extensions;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Pickup;
 using Bw.UseCases.Shooting.Weapon.Pickup.Extensions;
@@ -13,7 +13,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
 {
     public sealed class WeaponPickupServerHandler
     {
-        private readonly IReadonlyCharacter _character;
+        private readonly IReadonlyMortal _character;
         private readonly IWeaponInventories _inventories;
         private readonly WeaponPickupConfig _config;
         private readonly WeaponPickupNetworkConfig _networkConfig;
@@ -23,7 +23,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
 
         public WeaponPickupServerHandler(
             Lifetime lifetime,
-            IReadonlyCharacter character,
+            IReadonlyMortal character,
             INetRequestReceiver<WeaponPickup> pickup,
             IWeaponInventories inventories,
             WeaponPickupConfig config,

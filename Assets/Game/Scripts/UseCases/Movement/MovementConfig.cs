@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+using Bw.UseCases.Movement.Abstractions;
+using UnityEngine;
 
 namespace Bw.UseCases.Movement
 {
     [CreateAssetMenu(fileName = "MovementConfig", menuName = "Configs/MovementConfig")]
-    public class MovementConfig : ScriptableObject
+    public class MovementConfig : ScriptableObject, IBodyConfig
     {
         public float Speed;
         public float JumpForce;
@@ -19,5 +20,9 @@ namespace Bw.UseCases.Movement
 
         [Header("Push")]
         [Min(0f)] public float PushDeceleration = 40f;
+
+        float IBodyConfig.GravityScale => GravityScale;
+        LayerMask IBodyConfig.GroundLayer => GroundLayer;
+        float IBodyConfig.PushDeceleration => PushDeceleration;
     }
 }

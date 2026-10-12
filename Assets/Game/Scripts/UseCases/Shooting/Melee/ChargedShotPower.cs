@@ -1,5 +1,5 @@
 using Bw.Entities.Simulation;
-using Bw.UseCases.Character;
+using Bw.UseCases.Mortality;
 using Bw.UseCases.Shooting.Melee.Extensions;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using UnityEngine;

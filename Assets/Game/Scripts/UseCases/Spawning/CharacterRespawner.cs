@@ -1,8 +1,8 @@
 ﻿using System;
 using Bw.Entities;
 using Bw.Entities.Players;
-using Bw.UseCases.Character;
 using Bw.UseCases.Character.Extensions;
+using Bw.UseCases.Mortality.Extensions;
 using Cysharp.Threading.Tasks;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;

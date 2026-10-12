@@ -12,7 +12,8 @@
         "UniTask.DOTween",
         "UniTask",
         "Bw.UseCases.Character",
-        "Bw.UseCases.Character.Network"
+        "Bw.UseCases.Mortality",
+        "Bw.UseCases.Mortality.Network"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

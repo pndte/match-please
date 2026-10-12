@@ -1,9 +1,8 @@
-using Bw.Entities;
-using Bw.UseCases.Character;
 using Bw.UseCases.Shooting.View.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
+using UnityEngine;
 
 namespace Bw.UseCases.Shooting.View.Impact
 {
@@ -15,10 +14,12 @@ namespace Bw.UseCases.Shooting.View.Impact
         private readonly Signal<StrikeImpact> _bodies = new();
         private readonly Signal<StrikeImpact> _surfaces = new();
         private readonly IShotTracer _tracer;
+        private readonly StrikeImpactConfig _config;
 
-        public StrikeImpacts(Lifetime lifetime, ISeenShots strikes, IShotTracer tracer)
+        public StrikeImpacts(Lifetime lifetime, ISeenShots strikes, IShotTracer tracer, StrikeImpactConfig config)
         {
             _tracer = tracer;
+            _config = config;
 
             strikes.Seen.Advise(lifetime, Trace);
         }
@@ -31,10 +32,13 @@ namespace Bw.UseCases.Shooting.View.Impact
                 return;
 
             var impact = new StrikeImpact(trace.To, ray.Direction);
-            if (trace.Hit.collider.TryGetComponent<IHolder<IReadonlyCharacter>>(out _))
+            if (IsBody(trace.Hit.collider))
                 _bodies.Fire(impact);
             else
                 _surfaces.Fire(impact);
         }
+
+        private bool IsBody(Collider2D collider) =>
+            (_config.BodyLayers.value & (1 << collider.gameObject.layer)) != 0;
     }
 }

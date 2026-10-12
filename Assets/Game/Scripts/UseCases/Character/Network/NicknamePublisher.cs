@@ -1,5 +1,6 @@
 using Bw.Entities.Extensions;
 using Bw.Entities.Network.Objects;
+using Bw.UseCases.Mortality;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
@@ -10,7 +11,7 @@ namespace Bw.UseCases.Character.Network
         public NicknamePublisher(
             Lifetime lifetime,
             INetworkLifetimedObject networkLifetimed,
-            IReadonlyCharacter character,
+            IReadonlyMortal character,
             ICharacterRegistry registry,
             IViewableProperty<string> published)
         {

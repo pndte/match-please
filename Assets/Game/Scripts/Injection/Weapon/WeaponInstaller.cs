@@ -4,7 +4,7 @@ using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using Bw.Injection.Network;
 using Bw.Injection.Network.Variables;
-using Bw.UseCases.Character;
+using Bw.UseCases.Mortality;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.View;
 using Bw.UseCases.Shooting.View.Abstractions;

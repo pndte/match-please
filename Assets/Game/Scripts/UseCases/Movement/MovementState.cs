@@ -1,30 +1,24 @@
 using System;
-using UnityEngine;
+using Bw.UseCases.Movement.Abstractions;
 
 namespace Bw.UseCases.Movement
 {
-    public readonly struct MovementState : IEquatable<MovementState>
+    public readonly struct MovementState : IBodyState<MovementState>, IEquatable<MovementState>
     {
-        public readonly Vector2 Position;
-        public readonly Vector2 Velocity;
-        public readonly float HorizontalPush;
-        public readonly bool Grounded;
+        public readonly BodyState Body;
         public readonly JumpState Jump;
 
-        public MovementState(Vector2 position, Vector2 velocity, float horizontalPush, bool grounded, JumpState jump)
+        BodyState IBodyState<MovementState>.Body => Body;
+        MovementState IBodyState<MovementState>.WithBody(BodyState body) => new(body, Jump);
+
+        public MovementState(BodyState body, JumpState jump)
         {
-            Position = position;
-            Velocity = velocity;
-            HorizontalPush = horizontalPush;
-            Grounded = grounded;
+            Body = body;
             Jump = jump;
         }
 
         public bool Equals(MovementState other) =>
-            Position.Equals(other.Position)
-            && Velocity.Equals(other.Velocity)
-            && HorizontalPush.Equals(other.HorizontalPush)
-            && Grounded == other.Grounded
+            Body.Equals(other.Body)
             && Jump.Equals(other.Jump);
     }
 }

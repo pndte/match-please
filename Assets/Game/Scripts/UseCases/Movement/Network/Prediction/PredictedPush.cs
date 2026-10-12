@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Ticks;
+using Bw.UseCases.Movement.Abstractions;
 using Bw.UseCases.Movement.Extensions;
 using JetBrains.Lifetimes;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace Bw.UseCases.Movement.Network.Prediction
         private readonly IPushRules<TEffect> _rules;
         private readonly INetworkTicks _ticks;
         private readonly IInterpolationTicks _interpolation;
-        private readonly MovementConfig _movement;
+        private readonly IBodyConfig _body;
         private readonly PushPredictionConfig _config;
 
         public PredictedPush(
@@ -24,13 +25,13 @@ namespace Bw.UseCases.Movement.Network.Prediction
             IPushRules<TEffect> rules,
             INetworkTicks ticks,
             IInterpolationTicks interpolation,
-            MovementConfig movement,
+            IBodyConfig body,
             PushPredictionConfig config)
         {
             _rules = rules;
             _ticks = ticks;
             _interpolation = interpolation;
-            _movement = movement;
+            _body = body;
             _config = config;
 
             ticks.Ticked(TickPhase.Default).Advise(lifetime, _ => DropFinished());
@@ -80,8 +81,8 @@ namespace Bw.UseCases.Movement.Network.Prediction
         }
 
         private float OffsetOf(Push push, double shown, double interpolated) => //TODO: наложенные толчки сервер гасит как одну скорость, а здесь каждый гаснет отдельно — пока снимки не догнали, сдвиг от двух толчков подряд показывается короче настоящего; толчок, упёршийся в стену, сервер гасит сразу, а здесь его остаток ещё прижимает тело к стене (вид лишь обрезается стеной), даже если тело уже отходит от неё
-            _movement.PushDistance(push.Impulse, shown - push.Action.Tick, _ticks)
-            - _movement.PushDistance(push.Impulse, interpolated - push.Action.Tick, _ticks);
+            _body.PushDistance(push.Impulse, shown - push.Action.Tick, _ticks)
+            - _body.PushDistance(push.Impulse, interpolated - push.Action.Tick, _ticks);
 
         private float Remaining(Fade fade, double shown) =>
             Mathf.Clamp01(1f - (float)((shown - fade.Since) * _ticks.Duration / _config.RejectedFadeSeconds));
@@ -90,7 +91,7 @@ namespace Bw.UseCases.Movement.Network.Prediction
         {
             var interpolated = _interpolation.InterpolationTick;
             for (var index = _pushes.Count - 1; index >= 0; index--)
-                if (interpolated - _pushes[index].Action.Tick >= _movement.PushTicks(_pushes[index].Impulse, _ticks))
+                if (interpolated - _pushes[index].Action.Tick >= _body.PushTicks(_pushes[index].Impulse, _ticks))
                     _pushes.RemoveAt(index);
 
             var shown = ShownTick();

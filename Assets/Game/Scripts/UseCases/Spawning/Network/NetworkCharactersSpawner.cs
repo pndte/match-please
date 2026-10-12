@@ -4,8 +4,9 @@ using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.Entities.Players;
 using Bw.UseCases.Character;
-using Bw.UseCases.Character.Extensions;
-using Bw.UseCases.Character.Network;
+using Bw.UseCases.Mortality;
+using Bw.UseCases.Mortality.Extensions;
+using Bw.UseCases.Mortality.Network;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
@@ -58,7 +59,7 @@ namespace Bw.UseCases.Spawning.Network
                 SpawnCharacterFor(playerLifetime, player));
         }
 
-        public IReadonlyCharacter SpawnCharacterFor(Lifetime lifetime, IPlayer player)
+        public IReadonlyMortal SpawnCharacterFor(Lifetime lifetime, IPlayer player)
         {
             if (!_clientPlayerCollection.ByClient.TryGetLeft(player, out var client)) //TODO: боты — спавнить персонажа и без клиента
                 throw new InvalidOperationException(
@@ -73,7 +74,7 @@ namespace Bw.UseCases.Spawning.Network
 
             characterObject.SpawnAsPlayerObject(client.Id, destroyWithScene: true);
 
-            var characterHolder = RequireComponent<ReadonlyCharacterHolder>(characterObject.gameObject);
+            var characterHolder = RequireComponent<ReadonlyMortalHolder>(characterObject.gameObject);
             var characterLifetime = characterHolder.gameObject.Lifetime();
             var character = characterHolder.Value;
 
@@ -94,7 +95,7 @@ namespace Bw.UseCases.Spawning.Network
         }
 
         private void ArmCharacter(
-            IReadonlyCharacter character,
+            IReadonlyMortal character,
             Lifetime characterLifetime,
             Vector3 position,
             Quaternion rotation)

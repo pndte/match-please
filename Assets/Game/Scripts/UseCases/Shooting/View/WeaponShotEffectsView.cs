@@ -1,10 +1,8 @@
-using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Pool;
 using Bw.Entities.Pool.GameObjects;
 using Bw.UseCases.Shooting.View.Abstractions;
 using Bw.UseCases.Shooting.View.Audio.Abstractions;
-using Bw.UseCases.Character;
 using Bw.UseCases.Shooting.View.Impact;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
@@ -64,10 +62,13 @@ namespace Bw.UseCases.Shooting.View
             if (!trace.Hit)
                 return;
 
-            if (trace.Hit.collider.TryGetComponent<IHolder<IReadonlyCharacter>>(out _)) //TODO: кровь рисуется по локальному трассеру, а урон решает сервер (свой выстрел предсказан той же трассировкой, но сервер может его отменить) — изредка будет кровь без урона или урон без крови
+            if (IsBody(trace.Hit.collider)) //TODO: кровь рисуется по локальному трассеру, а урон решает сервер (свой выстрел предсказан той же трассировкой, но сервер может его отменить) — изредка будет кровь без урона или урон без крови
                 _lifetime.WhenElapsed(arrival, () => _pools.For<IEffect>(_impact.Prefab).OneShot(_lifetime).Play(trace.To, ray.Direction));
             else //TODO: любая поверхность бьётся одинаково (искры, серая крошка, пыль, дырка) — дереву, металлу и земле нужны свои частицы, как и звуки попадания; дырка остаётся там, куда попала пуля, и на едущем лифте повиснет в воздухе
                 _lifetime.WhenElapsed(arrival, () => _pools.For<IEffect>(_vfx.Impact).OneShot(_lifetime).Play(trace.To, trace.Hit.normal));
         }
+
+        private bool IsBody(Collider2D collider) =>
+            (_impact.BodyLayers.value & (1 << collider.gameObject.layer)) != 0;
     }
 }

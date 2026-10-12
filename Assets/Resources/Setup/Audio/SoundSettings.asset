@@ -221,3 +221,11 @@ MonoBehaviour:
       - {fileID: 8300000, guid: 344f33af925f5d54e837ecabeeb0fb29, type: 3}
       Volume: 1
       PitchVariation: 0.05
+  _crate:
+    Break:
+      Clips:
+      - {fileID: 8300000, guid: 1c47e7559db79da4da505b76bb309394, type: 3}
+      - {fileID: 8300000, guid: ed3bd92c6e4540242a03f06a782975fc, type: 3}
+      - {fileID: 8300000, guid: e44ffcf2f6e28f447b9e3795cd33f989, type: 3}
+      Volume: 0.5
+      PitchVariation: 0.08

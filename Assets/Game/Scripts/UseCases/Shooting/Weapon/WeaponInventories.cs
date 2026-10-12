@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Bw.Entities.Extensions;
 using Bw.Entities.Infrastructure;
-using Bw.UseCases.Character;
+using Bw.UseCases.Mortality;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
@@ -11,18 +11,18 @@ namespace Bw.UseCases.Shooting.Weapon
 {
     public sealed class WeaponInventories : IWeaponInventories
     {
-        public IViewableMap<IWeapon, IReadonlyCharacter> Carriers => _carriers;
-        public IViewableBiMap<IReadonlyCharacter, IWeapon> Drawn { get; }
+        public IViewableMap<IWeapon, IReadonlyMortal> Carriers => _carriers;
+        public IViewableBiMap<IReadonlyMortal, IWeapon> Drawn { get; }
 
-        private readonly ViewableMap<IWeapon, IReadonlyCharacter> _carriers = new();
+        private readonly ViewableMap<IWeapon, IReadonlyMortal> _carriers = new();
         private readonly Dictionary<IWeapon, Carry> _carries = new();
 
         public WeaponInventories(Lifetime lifetime)
         {
-            Drawn = new ViewableBiMap<IReadonlyCharacter, IWeapon>(lifetime);
+            Drawn = new ViewableBiMap<IReadonlyMortal, IWeapon>(lifetime);
         }
 
-        public void Give(Lifetime lifetime, IReadonlyCharacter character, WeaponSlot slot, IWeapon weapon)
+        public void Give(Lifetime lifetime, IReadonlyMortal character, WeaponSlot slot, IWeapon weapon)
         {
             if (_carries.ContainsKey(weapon))
                 throw new InvalidOperationException("A weapon is carried by one character at a time.");
@@ -59,7 +59,7 @@ namespace Bw.UseCases.Shooting.Weapon
                 Draw(fists);
         }
 
-        public void PickUp(Lifetime lifetime, IReadonlyCharacter character, IWeapon weapon)
+        public void PickUp(Lifetime lifetime, IReadonlyMortal character, IWeapon weapon)
         {
             if (_carries.ContainsKey(weapon))
                 throw new InvalidOperationException("Only a weapon nobody carries can be picked up.");
@@ -82,7 +82,7 @@ namespace Bw.UseCases.Shooting.Weapon
             return carry;
         }
 
-        private bool TryFind(IReadonlyCharacter character, WeaponSlot slot, out IWeapon weapon)
+        private bool TryFind(IReadonlyMortal character, WeaponSlot slot, out IWeapon weapon)
         {
             foreach (var (carried, carry) in _carries)
             {
@@ -99,11 +99,11 @@ namespace Bw.UseCases.Shooting.Weapon
 
         private readonly struct Carry
         {
-            public readonly IReadonlyCharacter Character;
+            public readonly IReadonlyMortal Character;
             public readonly WeaponSlot Slot;
             public readonly LifetimeDefinition Definition;
 
-            public Carry(IReadonlyCharacter character, WeaponSlot slot, LifetimeDefinition definition)
+            public Carry(IReadonlyMortal character, WeaponSlot slot, LifetimeDefinition definition)
             {
                 Character = character;
                 Slot = slot;

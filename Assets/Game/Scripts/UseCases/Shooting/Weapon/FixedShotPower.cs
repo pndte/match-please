@@ -1,4 +1,4 @@
-using Bw.UseCases.Character;
+using Bw.UseCases.Mortality;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using UnityEngine;
 

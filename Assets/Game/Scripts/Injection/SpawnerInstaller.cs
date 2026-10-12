@@ -23,6 +23,10 @@ namespace Bw.Injection
         [SerializeField] private Transform[] _spawnPoints;
         [SerializeField] private float _spawnRandomOffset = 2f;
 
+        [Header("Crates")]
+        [SerializeField] private NetworkObject _crate;
+        [SerializeField] private Transform[] _crateSpots = Array.Empty<Transform>();
+
         public override void InstallBindings()
         {
             Container.BindInterfacesTo<NetworkClientCollection>().AsSingle()
@@ -46,6 +50,15 @@ namespace Bw.Injection
                     WeaponPrefabs = _weapons,
                 });
             Container.Bind<CharacterRespawner>().AsSingle().NonLazy();
+
+            if (_crateSpots.Length > 0)
+                BindCrates(NetworkManager.Singleton.NetworkConfig.Prefabs);
+        }
+
+        private void BindCrates(NetworkPrefabs registered)
+        {
+            RequireNetworkPrefab(registered, _crate);
+            Container.Bind<NetworkCratesSpawner>().AsSingle().WithArguments(_crate, _crateSpots).NonLazy();
         }
 
         private static void RequirePrefabs(NetworkPrefabs registered, NetworkObject[] prefabs, string kind)

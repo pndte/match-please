@@ -2,14 +2,15 @@ using System;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Simulation;
-using Bw.UseCases.Movement;
+using Bw.UseCases.Movement.Abstractions;
 using Bw.UseCases.Movement.Network.Prediction;
 using Zenject;
 
 namespace Bw.Injection.Network.Prediction
 {
-    public class PushTargetInstaller<TTarget, TEffect> : Installer<IRuntimeSettings, PushTargetInstaller<TTarget, TEffect>>
+    public class PushTargetInstaller<TTarget, TState, TEffect> : Installer<IRuntimeSettings, PushTargetInstaller<TTarget, TState, TEffect>>
         where TTarget : class
+        where TState : struct, IBodyState<TState>
         where TEffect : struct
     {
         private readonly IRuntimeSettings _runtimeSettings;
@@ -24,9 +25,9 @@ namespace Bw.Injection.Network.Prediction
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.Bind<IEffectRules<MovementState, TEffect>>().To<PushEffectRules<TEffect>>().AsSingle();
-                    Container.Bind<SimulationAffectable<MovementState, TEffect>>().AsSingle();
-                    Container.Bind<AffectableRegistration<TTarget, SimulationAffectable<MovementState, TEffect>, TEffect>>().AsSingle().NonLazy();
+                    Container.Bind<IEffectRules<TState, TEffect>>().To<PushEffectRules<TState, TEffect>>().AsSingle();
+                    Container.Bind<SimulationAffectable<TState, TEffect>>().AsSingle();
+                    Container.Bind<AffectableRegistration<TTarget, SimulationAffectable<TState, TEffect>, TEffect>>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:
                     Container.Bind(typeof(PredictedPush<TEffect>), typeof(IPredictedPush)).To<PredictedPush<TEffect>>().AsSingle();
@@ -39,6 +40,6 @@ namespace Bw.Injection.Network.Prediction
         }
 
         private void BindClientVisuals() =>
-            Container.Decorate<IStateView<MovementState>>().With<PushedStateView>();
+            Container.Decorate<IStateView<TState>>().With<PushedStateView<TState>>();
     }
 }

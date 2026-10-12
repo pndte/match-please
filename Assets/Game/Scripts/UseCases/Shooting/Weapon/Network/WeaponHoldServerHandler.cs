@@ -2,6 +2,7 @@ using System;
 using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.UseCases.Character;
+using Bw.UseCases.Mortality;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
@@ -44,13 +45,13 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             inventories.Drawn.Inverse.ViewForKey(lifetime, weapon, Draw);
         }
 
-        private void Hold(Lifetime heldLifetime, IReadonlyCharacter character)
+        private void Hold(Lifetime heldLifetime, IReadonlyMortal character)
         {
             _ownershipController.AddOwner(heldLifetime, _characterRegistry.PlayerByCharacter[character]);
             AttachTo(heldLifetime, _characterObjects[character]);
         }
 
-        private void Draw(Lifetime drawnLifetime, IReadonlyCharacter character)
+        private void Draw(Lifetime drawnLifetime, IReadonlyMortal character)
         {
             _controlledBy.Set(drawnLifetime, _characterRegistry.PlayerByCharacter[character]);
             _draw.Draw(drawnLifetime);
