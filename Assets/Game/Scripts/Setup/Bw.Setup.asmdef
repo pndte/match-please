@@ -5,6 +5,7 @@
         "Bw.Entities.Network",
         "Bw.Entities",
         "Unity.Netcode.Runtime",
+        "Unity.Networking.Transport",
         "Zenject",
         "UniTask"
     ],
