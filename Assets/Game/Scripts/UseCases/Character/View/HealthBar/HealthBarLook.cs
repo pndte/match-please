@@ -32,7 +32,7 @@ namespace Bw.UseCases.Character.View.HealthBar
             HealthBarWidget widget,
             Material material,
             IReadonlyHealth health,
-            IReadonlyControlledBy controlledBy,
+            IOwnership ownership,
             HealthBarConfig config)
         {
             _widget = widget;
@@ -46,7 +46,7 @@ namespace Bw.UseCases.Character.View.HealthBar
             _flash = new MaterialChannel(material, FlashId, widget.gameObject);
             _low = new MaterialChannel(material, LowId, widget.gameObject);
 
-            controlledBy.Me.Advise(lifetime, Paint);
+            ownership.Mine.Advise(lifetime, Paint);
             health.State.Advise(lifetime, Apply);
         }
 

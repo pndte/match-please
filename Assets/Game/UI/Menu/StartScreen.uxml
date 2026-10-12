@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Template name="Backdrop" src="Backdrop.uxml" />
+    <ui:Template name="Cast" src="Cast.uxml" />
+    <ui:Template name="MainMenu" src="MainMenu.uxml" />
+    <ui:Template name="CreateRoomWindow" src="CreateRoomWindow.uxml" />
+    <ui:Template name="RoomOpenWindow" src="RoomOpenWindow.uxml" />
+    <ui:Template name="JoinRoomWindow" src="JoinRoomWindow.uxml" />
+    <ui:Template name="ConnectingWindow" src="ConnectingWindow.uxml" />
+    <ui:Template name="ConnectionFailedWindow" src="ConnectionFailedWindow.uxml" />
+    <ui:Template name="CharacterSelect" src="CharacterSelect.uxml" />
+    <Style src="../Kit.uss" />
+    <Style src="Menu.uss" />
+    <ui:VisualElement name="start-screen" class="start-screen">
+        <ui:Instance template="Backdrop" name="backdrop-layer" class="layer" picking-mode="Ignore" />
+        <ui:Instance template="Cast" name="cast-layer" class="layer" picking-mode="Ignore" />
+        <ui:Instance template="MainMenu" name="main-menu-layer" class="layer" picking-mode="Ignore" />
+        <ui:Instance template="CreateRoomWindow" name="create-room-layer" class="layer hidden" />
+        <ui:Instance template="RoomOpenWindow" name="room-open-layer" class="layer hidden" />
+        <ui:Instance template="JoinRoomWindow" name="join-room-layer" class="layer hidden" />
+        <ui:Instance template="ConnectingWindow" name="connecting-layer" class="layer hidden" />
+        <ui:Instance template="ConnectionFailedWindow" name="connection-failed-layer" class="layer hidden" />
+        <ui:Instance template="CharacterSelect" name="character-select-layer" class="layer hidden" />
+    </ui:VisualElement>
+</ui:UXML>

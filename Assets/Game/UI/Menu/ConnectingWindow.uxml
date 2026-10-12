@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="../Kit.uss" />
+    <Style src="Menu.uss" />
+    <ui:VisualElement class="dim" />
+    <ui:VisualElement name="connecting-window" class="modal" picking-mode="Ignore">
+        <ui:VisualElement class="card window window--status">
+            <ui:VisualElement name="spinner" class="spinner" picking-mode="Ignore" />
+            <ui:Label text="Подключаемся…" class="title" />
+            <ui:Label name="endpoint" text="26.12.34.56:7777" class="subtitle" />
+            <ui:VisualElement class="actions actions--center">
+                <ui:Button name="cancel" text="Отмена" class="button button--paper" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

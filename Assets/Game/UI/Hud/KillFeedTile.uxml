@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="../Kit.uss" />
+    <Style src="Hud.uss" />
+    <ui:VisualElement name="kill" class="kill" picking-mode="Ignore">
+        <ui:Label name="killer" text="Лёха" class="kill__name" picking-mode="Ignore" />
+        <ui:VisualElement name="weapon" class="kill__weapon weapon-icon weapon-icon--sniper" picking-mode="Ignore" />
+        <ui:Label name="victim" text="Котлета" class="kill__name" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

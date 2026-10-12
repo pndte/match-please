@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="../Kit.uss" />
+    <Style src="Hud.uss" />
+    <ui:VisualElement name="row" class="score-row" picking-mode="Ignore">
+        <ui:Label name="place" text="1" class="score-row__place" picking-mode="Ignore" />
+        <ui:VisualElement class="score-row__player" picking-mode="Ignore">
+            <ui:VisualElement name="crown" class="score-row__crown" picking-mode="Ignore" />
+            <ui:Label name="nickname" text="Player" class="score-row__name" picking-mode="Ignore" />
+            <ui:Label name="you" text="ты" class="score-row__you" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:Label name="kills" text="0" class="score-row__number" picking-mode="Ignore" />
+        <ui:Label name="deaths" text="0" class="score-row__number" picking-mode="Ignore" />
+        <ui:Label name="kd" text="0.00" class="score-row__number score-row__kd" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

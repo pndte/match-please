@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="../Kit.uss" />
+    <Style src="Menu.uss" />
+    <ui:VisualElement name="main-menu" class="main" picking-mode="Ignore">
+        <ui:VisualElement name="logo" class="logo" picking-mode="Ignore" />
+        <ui:VisualElement class="name-block">
+            <ui:Label text="Твоё имя" class="label" />
+            <ui:TextField name="player-name" max-length="16" placeholder-text="от 3 символов" class="field" />
+        </ui:VisualElement>
+        <ui:VisualElement class="menu-buttons">
+            <ui:Button name="create-room" text="Создать комнату" class="button button--locked">
+                <ui:Label text="Сначала введи имя" class="lock-tip" picking-mode="Ignore" />
+            </ui:Button>
+            <ui:Button name="join-room" text="Подключиться" class="button button--amber button--locked">
+                <ui:Label text="Сначала введи имя" class="lock-tip" picking-mode="Ignore" />
+            </ui:Button>
+            <ui:Button name="quit" text="Выйти" class="button button--paper button--small" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:Label name="version" text="игра по локальной сети · v0.1" class="footer" picking-mode="Ignore" />
+</ui:UXML>

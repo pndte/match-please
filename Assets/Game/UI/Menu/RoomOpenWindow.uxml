@@ -1,0 +1,42 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="../Kit.uss" />
+    <Style src="Menu.uss" />
+    <ui:VisualElement class="dim" />
+    <ui:VisualElement name="room-open-window" class="modal" picking-mode="Ignore">
+        <ui:VisualElement class="card window">
+            <ui:VisualElement class="tape tape--left" picking-mode="Ignore" />
+            <ui:VisualElement class="tape tape--right" picking-mode="Ignore" />
+            <ui:Label text="Комната открыта" class="title" />
+            <ui:VisualElement class="divider" />
+            <ui:VisualElement class="wrap">
+                <ui:VisualElement class="chip">
+                    <ui:VisualElement class="status-dot" />
+                    <ui:Label text="работает" class="chip__text" />
+                </ui:VisualElement>
+                <ui:VisualElement class="chip">
+                    <ui:Label name="port" text="Порт 7777" class="chip__text" />
+                </ui:VisualElement>
+                <ui:VisualElement class="chip">
+                    <ui:Label name="players" text="Игроков: 3" class="chip__text" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Label text="Адрес для друзей" class="label" />
+            <ui:VisualElement name="addresses" class="wrap">
+                <ui:VisualElement class="chip">
+                    <ui:Label text="192.168.1.5" class="chip__text" />
+                    <ui:Button name="copy" class="chip__copy" />
+                </ui:VisualElement>
+                <ui:VisualElement class="chip">
+                    <ui:Label text="26.12.34.56" class="chip__text" />
+                    <ui:Label text="Radmin" class="chip__note" />
+                    <ui:Button name="copy" class="chip__copy" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Label text="Чтобы играть самому, открой второе окно игры и подключись к 127.0.0.1." class="hint" />
+            <ui:VisualElement class="actions">
+                <ui:VisualElement class="grow" />
+                <ui:Button name="close-room" text="Закрыть комнату" class="button button--paper button--wide" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

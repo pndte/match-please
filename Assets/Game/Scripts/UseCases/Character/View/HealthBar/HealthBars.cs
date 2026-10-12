@@ -17,7 +17,7 @@ namespace Bw.UseCases.Character.View.HealthBar
         [SerializeField] private HealthBarWidget _prefab;
         [SerializeField] private HealthBarConfig _config;
 
-        public void Show(Lifetime lifetime, IReadonlyHealth health, IReadonlyControlledBy controlledBy, Transform body)
+        public void Show(Lifetime lifetime, IReadonlyHealth health, IOwnership ownership, IReadonlyNickname nickname, Transform body)
         {
             var widget = Instantiate(_prefab, _layer);
             var shown = widget.gameObject;
@@ -34,7 +34,8 @@ namespace Bw.UseCases.Character.View.HealthBar
             widget.Bar.material = material;
 
             new HealthBarMotion(barLifetime, widget, body, _camera, _config);
-            new HealthBarLook(barLifetime, widget, material, health, controlledBy, _config);
+            new HealthBarLook(barLifetime, widget, material, health, ownership, _config);
+            new HealthBarNickname(barLifetime, widget, nickname, ownership);
             new HealthBarPresence(barLifetime, widget, health, _config);
         }
     }

@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="../Kit.uss" />
+    <Style src="Menu.uss" />
+    <ui:VisualElement name="cast" class="backdrop" picking-mode="Ignore">
+        <ui:VisualElement class="pal pal--sanya" picking-mode="Ignore" />
+        <ui:VisualElement class="pal pal--seva" picking-mode="Ignore" />
+        <ui:VisualElement class="pal pal--matvey" picking-mode="Ignore" />
+        <ui:VisualElement class="pal pal--goshak" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

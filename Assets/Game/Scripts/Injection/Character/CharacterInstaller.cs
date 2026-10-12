@@ -72,6 +72,7 @@ namespace Bw.Injection
             EventPredictionTargetInstaller<IReadonlyCharacter, CharacterVitals, Hit>.Install(Container, _runtimeSettings, netSchema);
             PushTargetInstaller<IReadonlyCharacter, Hit>.Install(Container, _runtimeSettings);
             WeaponPickupInstaller.Install(Container, _runtimeSettings, netSchema, transform);
+            NicknameInstaller.Install(Container, _runtimeSettings, netSchema);
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
             BindCharacter();

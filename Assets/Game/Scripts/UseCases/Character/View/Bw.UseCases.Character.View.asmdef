@@ -8,6 +8,7 @@
         "Bw.UseCases.Audio.View",
         "Bw.UseCases.Vfx.View",
         "R3.Unity",
+        "Unity.TextMeshPro",
         "UnityEngine.UI"
     ],
     "includePlatforms": [],

@@ -1,0 +1,284 @@
+.start-screen {
+    flex-grow: 1;
+    overflow: hidden;
+    -unity-font-definition: var(--font-regular);
+    color: var(--graphite);
+}
+
+.backdrop, .backdrop__sky, .main, .select {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.backdrop__sky {
+    background-image: url("project://database/Assets/Game/Art/Level/PencilLevel.png?fileID=-2147033534&guid=6cfed3923713e484293dad45fd6b9fff&type=3#sky");
+    background-size: cover;
+    background-position-x: center;
+    background-position-y: top;
+}
+
+.backdrop__sun {
+    position: absolute;
+    right: 150px;
+    top: 70px;
+    width: 170px;
+    height: 170px;
+    background-image: url("project://database/Assets/Game/Art/Level/PencilLevel.png?fileID=708811439&guid=6cfed3923713e484293dad45fd6b9fff&type=3#sun");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.backdrop__far {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 150px;
+    height: 420px;
+    background-image: url("project://database/Assets/Game/Art/Level/PencilLevel.png?fileID=16718985&guid=6cfed3923713e484293dad45fd6b9fff&type=3#hillsFar");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.backdrop__near {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -60px;
+    height: 520px;
+    background-image: url("project://database/Assets/Game/Art/Level/PencilLevel.png?fileID=-531170782&guid=6cfed3923713e484293dad45fd6b9fff&type=3#hillsNear");
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.pal {
+    position: absolute;
+    bottom: 30px;
+    width: 300px;
+    height: 300px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.pal--sanya {
+    left: 150px;
+    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=-31160892&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#sanya_idle_0");
+}
+
+.pal--seva {
+    left: 380px;
+    bottom: 60px;
+    width: 260px;
+    height: 260px;
+    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=2060785540&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#seva_idle_0");
+    scale: -1 1;
+}
+
+.pal--matvey {
+    right: 380px;
+    bottom: 60px;
+    width: 260px;
+    height: 260px;
+    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=-1530501530&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#matvey_idle_0");
+}
+
+.pal--goshak {
+    right: 150px;
+    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=-483441462&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#GOSHAK_idle_0");
+    scale: -1 1;
+}
+
+.main {
+    align-items: center;
+    padding-top: 40px;
+}
+
+.logo {
+    width: 760px;
+    height: 304px;
+    background-image: url("project://database/Assets/Game/Art/UI/Menu/logo.png?fileID=21300000&guid=6e472e6eb4965634398f95bca169620e&type=3#logo");
+    -unity-background-scale-mode: scale-to-fit;
+    rotate: -2deg;
+}
+
+.name-block {
+    width: 460px;
+    margin-top: 6px;
+}
+
+.menu-buttons {
+    width: 460px;
+    margin-top: 24px;
+}
+
+.menu-buttons > .button {
+    margin-bottom: 18px;
+}
+
+.footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 22px;
+    -unity-text-align: middle-center;
+    font-size: 22px;
+    color: var(--graphite-soft);
+}
+
+.field--port {
+    width: 240px;
+}
+
+.side-hint {
+    padding-bottom: 14px;
+}
+
+.port-column {
+    width: 200px;
+}
+
+.window {
+    width: 820px;
+}
+
+.window--alert {
+    width: 760px;
+}
+
+.window--status {
+    width: 700px;
+    align-items: center;
+}
+
+.spinner {
+    width: 112px;
+    height: 112px;
+    margin: 6px 0 14px 0;
+    background-image: url("project://database/Assets/Game/Art/UI/Menu/spinner.png?fileID=21300000&guid=988ce8cc3c62ae54c8a1216d95af7d3e&type=3#spinner");
+    -unity-background-scale-mode: scale-to-fit;
+    rotate: 40deg;
+}
+
+.select {
+    align-items: center;
+    padding-top: 70px;
+}
+
+.select > .title {
+    font-size: 72px;
+    margin-top: -8.64px;
+    margin-bottom: -2.64px;
+}
+
+.select__server {
+    position: absolute;
+    right: 40px;
+    top: 36px;
+}
+
+.cast {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    margin-top: 46px;
+}
+
+.character {
+    width: 340px;
+    height: 470px;
+    margin: 0 16px;
+    padding: 52px 60px 66px 56px;
+    border-width: 0;
+    border-radius: 0;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url("project://database/Assets/Game/Art/UI/Menu/card.png?fileID=21300000&guid=f0ffc4c29b0d62041becd9bcf2e5fe76&type=3#card");
+    -unity-slice-left: 56;
+    -unity-slice-top: 52;
+    -unity-slice-right: 60;
+    -unity-slice-bottom: 60;
+    transition-property: translate, rotate, scale;
+    transition-duration: 0.15s;
+    transition-timing-function: ease-out-back;
+}
+
+.character:hover {
+    background-color: rgba(0, 0, 0, 0);
+    translate: 0 -8px;
+}
+
+.character:active, .character:focus {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.character--selected {
+    background-image: url("project://database/Assets/Game/Art/UI/Menu/cardSelected.png?fileID=21300000&guid=5487983c605b57f42a6a7a2c6b116f5d&type=3#cardSelected");
+    translate: 0 -18px;
+    rotate: -1.5deg;
+    scale: 1.04 1.04;
+}
+
+.character--selected:hover {
+    translate: 0 -18px;
+}
+
+.character__portrait {
+    width: 300px;
+    height: 300px;
+    margin-top: -26px;
+    overflow: hidden;
+}
+
+.character__figure {
+    position: absolute;
+    left: -75px;
+    top: -108px;
+    width: 450px;
+    height: 450px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.character__figure--sanya {
+    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=-31160892&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#sanya_idle_0");
+}
+
+.character__figure--seva {
+    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=2060785540&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#seva_idle_0");
+}
+
+.character__figure--matvey {
+    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=-1530501530&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#matvey_idle_0");
+}
+
+.character__figure--goshak {
+    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=-483441462&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#GOSHAK_idle_0");
+}
+
+.character__name {
+    -unity-font-definition: var(--font-extrabold);
+    font-size: 40px;
+    margin-top: 4px;
+}
+
+.character__check {
+    position: absolute;
+    right: 18px;
+    top: 8px;
+    width: 64px;
+    height: 64px;
+    display: none;
+    background-image: url("project://database/Assets/Game/Art/UI/Menu/check.png?fileID=21300000&guid=3a574dd8f19d4c1489a01ae50e47ebf9&type=3#check");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.character--selected > .character__check {
+    display: flex;
+}
+
+.select__actions {
+    position: absolute;
+    left: 60px;
+    right: 60px;
+    bottom: 50px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+}

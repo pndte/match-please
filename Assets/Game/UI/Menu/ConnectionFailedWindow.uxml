@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="../Kit.uss" />
+    <Style src="Menu.uss" />
+    <ui:VisualElement class="dim" />
+    <ui:VisualElement name="connection-failed-window" class="modal" picking-mode="Ignore">
+        <ui:VisualElement class="card window window--alert">
+            <ui:VisualElement class="tape tape--left" picking-mode="Ignore" />
+            <ui:Label text="Не удалось подключиться" class="title" />
+            <ui:VisualElement class="divider" />
+            <ui:Label name="reason" text="Сервер 26.12.34.56:7777 не отвечает. Проверь адрес и что комната уже создана." class="hint hint--big" />
+            <ui:VisualElement class="actions">
+                <ui:Button name="back" text="Назад" class="button button--paper" />
+                <ui:Button name="retry" text="Ещё раз" class="button button--wide" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

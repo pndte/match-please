@@ -1,0 +1,37 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="../Kit.uss" />
+    <Style src="Menu.uss" />
+    <ui:VisualElement class="dim" />
+    <ui:VisualElement name="join-room-window" class="modal" picking-mode="Ignore">
+        <ui:VisualElement class="card window">
+            <ui:VisualElement class="tape tape--left" picking-mode="Ignore" />
+            <ui:VisualElement class="tape tape--right" picking-mode="Ignore" />
+            <ui:Label text="Подключиться" class="title" />
+            <ui:VisualElement class="divider" />
+            <ui:VisualElement class="row">
+                <ui:VisualElement class="grow">
+                    <ui:Label text="IP-адрес" class="label" />
+                    <ui:TextField name="address" value="26.12.34.56" max-length="15" class="field" />
+                </ui:VisualElement>
+                <ui:VisualElement class="gap" />
+                <ui:VisualElement class="port-column">
+                    <ui:Label text="Порт" class="label" />
+                    <ui:TextField name="port" value="7777" max-length="5" class="field" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Label name="error" text="Нужен адрес вида 26.12.34.56" class="error hidden" />
+            <ui:VisualElement class="spacer" />
+            <ui:VisualElement class="wrap">
+                <ui:Button name="recent" class="chip">
+                    <ui:Label text="недавно:" class="chip__note chip__note--before" />
+                    <ui:Label name="recent-address" text="26.12.34.56:7777" class="chip__text" />
+                </ui:Button>
+            </ui:VisualElement>
+            <ui:Label text="Адрес и порт скажет тот, кто создал комнату." class="hint" />
+            <ui:VisualElement class="actions">
+                <ui:Button name="back" text="Назад" class="button button--paper" />
+                <ui:Button name="connect" text="Подключиться" class="button button--amber button--wide" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

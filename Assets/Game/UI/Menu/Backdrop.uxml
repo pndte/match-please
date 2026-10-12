@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="../Kit.uss" />
+    <Style src="Menu.uss" />
+    <ui:VisualElement name="backdrop" class="backdrop" picking-mode="Ignore">
+        <ui:VisualElement class="backdrop__sky" picking-mode="Ignore" />
+        <ui:VisualElement class="backdrop__sun" picking-mode="Ignore" />
+        <ui:VisualElement class="backdrop__far" picking-mode="Ignore" />
+        <ui:VisualElement class="backdrop__near" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>
