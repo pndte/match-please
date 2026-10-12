@@ -12,7 +12,8 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "JetBrains.Lifetimes.dll"
+        "JetBrains.Lifetimes.dll",
+        "DOTween.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

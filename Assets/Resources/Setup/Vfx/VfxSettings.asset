@@ -28,5 +28,5 @@ MonoBehaviour:
     BurstTime: 0.083333336
     BurstOffset: {x: 0, y: 0.1}
   _crateBreak:
-    Debris: {fileID: 7609153402843707051, guid: f463bf6f5bb49ea4fa066366710d5fa2, type: 3}
+    Debris: {fileID: 829313885574634999, guid: 13d1464b4bf8a694286ec46e58a03d0e, type: 3}
     DebrisOffset: {x: 0, y: 0.5}

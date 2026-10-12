@@ -40,6 +40,6 @@ namespace Bw.UseCases.Shooting.View.Audio
         }
 
         private bool HitsGround(Collider2D collider) =>
-            (_impacts.GroundLayers.value & (1 << collider.gameObject.layer)) != 0; //TODO: вся земля звучит как трава — для других поверхностей нужен звук попадания у самой поверхности
+            (_impacts.GroundLayers.value & (1 << collider.gameObject.layer)) != 0; //TODO: вся земля звучит как трава — для других поверхностей нужен звук попадания у самой поверхности; ящик на слое Ground, поэтому пуля по нему звучит и травой, и своим деревянным стуком
     }
 }

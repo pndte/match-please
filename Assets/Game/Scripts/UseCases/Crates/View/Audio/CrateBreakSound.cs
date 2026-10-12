@@ -15,7 +15,7 @@ namespace Bw.UseCases.Crates.View.Audio
             ISoundPlayer player,
             CrateSoundsConfig config)
         {
-            crate.AdviseKilled(lifetime, () => player.Play(config.Break, body.position)); //TODO: своего звука нет — ящик ломается со стуком кулака о стену
+            crate.AdviseKilled(lifetime, () => player.Play(config.Break, body.position));
         }
     }
 }

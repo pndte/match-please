@@ -222,10 +222,17 @@ MonoBehaviour:
       Volume: 1
       PitchVariation: 0.05
   _crate:
+    Hit:
+      Clips:
+      - {fileID: 8300000, guid: c818a12ad4f6e484d863f0a19a0110b4, type: 3}
+      - {fileID: 8300000, guid: 7cccaebbc957b394faba0cb89ed8d3ce, type: 3}
+      - {fileID: 8300000, guid: 25ccd82384ce31447af8bd6c2357f025, type: 3}
+      Volume: 0.6
+      PitchVariation: 0.08
     Break:
       Clips:
-      - {fileID: 8300000, guid: 1c47e7559db79da4da505b76bb309394, type: 3}
-      - {fileID: 8300000, guid: ed3bd92c6e4540242a03f06a782975fc, type: 3}
-      - {fileID: 8300000, guid: e44ffcf2f6e28f447b9e3795cd33f989, type: 3}
-      Volume: 0.5
-      PitchVariation: 0.08
+      - {fileID: 8300000, guid: ff3d8f306bcca9e4193bfdb4b581aed2, type: 3}
+      - {fileID: 8300000, guid: 4315e8acf15b0574c8ca1ea6a0d431fd, type: 3}
+      - {fileID: 8300000, guid: 74e79068f7182524abb5b62b2204ca1f, type: 3}
+      Volume: 0.75
+      PitchVariation: 0.06

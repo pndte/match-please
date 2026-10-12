@@ -14,6 +14,7 @@ using Bw.Injection.Network.Variables;
 using Bw.Injection.Ownership;
 using Bw.UseCases.Crates.View.Audio;
 using Bw.UseCases.Crates.View.Break;
+using Bw.UseCases.Crates.View.Damage;
 using Bw.UseCases.Mortality;
 using Bw.UseCases.Mortality.Network.Prediction;
 using Bw.UseCases.Mortality.View.Hit;
@@ -42,8 +43,10 @@ namespace Bw.Injection.Crates
         [SerializeField] private DeathConfig _death = new() { CorpseTime = 0f };
 
         [Header("Visuals")]
+        [SerializeField] private Transform _visual;
         [SerializeField] private SpriteRenderer _sprite;
         [SerializeField] private HitFlashConfig _hitFlashConfig;
+        [SerializeField] private CrateDamageConfig _damage = new();
 
         public override void InstallBindings()
         {
@@ -69,7 +72,10 @@ namespace Bw.Injection.Crates
             Container.BindInterfacesTo<KnockbackRules>().AsSingle(); //TODO: ящик толкается только ударами и выстрелами — толкать его телом, подойдя вплотную, пока нельзя: тогда клиенту толкающего придётся предсказывать чужой ящик вместе со своим движением и переигрывать его при сверке
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
+            {
                 BindClientVisuals();
+                BindClientSounds();
+            }
         }
 
         private void BindBody(INetEntriesSchemaBuilder netSchema)
@@ -90,7 +96,15 @@ namespace Bw.Injection.Crates
             Container.Bind<SpriteRenderer>().FromInstance(_sprite).AsSingle();
             Container.Bind<IHitFlashConfig>().FromInstance(_hitFlashConfig).AsSingle();
             Container.Bind<HitFlash>().AsSingle().NonLazy();
+            Container.BindInstance(_damage).AsSingle();
+            Container.Bind<CrateCracks>().AsSingle().NonLazy();
+            Container.Bind<CrateHitJolt>().AsSingle().WithArguments(_visual).NonLazy();
             Container.Bind<CrateBreak>().AsSingle().WithArguments(transform).NonLazy();
+        }
+
+        private void BindClientSounds()
+        {
+            Container.Bind<CrateHitSound>().AsSingle().WithArguments(transform).NonLazy();
             Container.Bind<CrateBreakSound>().AsSingle().WithArguments(transform).NonLazy();
         }
     }

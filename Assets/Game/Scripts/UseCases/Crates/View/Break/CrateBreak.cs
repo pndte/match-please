@@ -28,7 +28,7 @@ namespace Bw.UseCases.Crates.View.Break
             crate.AdviseKilled(lifetime, Burst);
         }
 
-        private void Burst() => //TODO: щепок нет — ящик разлетается крошкой и пылью от удара кулаком в стену, пока для него не нарисованы свои обломки
+        private void Burst() =>
             _effects.Play(_config.Debris, (Vector2)_body.position + _config.DebrisOffset, Vector2.up);
     }
 }
