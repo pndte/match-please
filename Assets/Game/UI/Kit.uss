@@ -159,6 +159,15 @@
     translate: 0 -50%;
 }
 
+.panel {
+    background-image: url("project://database/Assets/Game/Art/UI/Hud/panel.png?fileID=21300000&guid=b111cad4ea42ece459a34d63ef537386&type=3#panel");
+    -unity-slice-left: 24;
+    -unity-slice-top: 22;
+    -unity-slice-right: 28;
+    -unity-slice-bottom: 28;
+    padding: 22px 28px 28px 24px;
+}
+
 .card {
     background-image: url("project://database/Assets/Game/Art/UI/Menu/card.png?fileID=21300000&guid=f0ffc4c29b0d62041becd9bcf2e5fe76&type=3#card");
     -unity-slice-left: 56;

@@ -1,10 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <ui:Template name="KillFeed" src="KillFeed.uxml" />
     <ui:Template name="Scoreboard" src="Scoreboard.uxml" />
+    <ui:Template name="Winner" src="Winner.uxml" />
     <Style src="../Kit.uss" />
     <Style src="Hud.uss" />
     <ui:VisualElement name="match-hud" class="match-hud" picking-mode="Ignore">
-        <ui:Instance template="Scoreboard" name="scoreboard-layer" class="layer hidden" picking-mode="Ignore" />
         <ui:Instance template="KillFeed" name="kill-feed-layer" class="layer" picking-mode="Ignore" />
+        <ui:Instance template="Scoreboard" name="scoreboard-layer" class="layer hidden" picking-mode="Ignore" />
+        <ui:Instance template="Winner" name="winner-layer" class="layer hidden" picking-mode="Ignore" />
     </ui:VisualElement>
 </ui:UXML>

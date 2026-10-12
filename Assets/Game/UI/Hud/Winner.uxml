@@ -1,0 +1,32 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="../Kit.uss" />
+    <Style src="Hud.uss" />
+    <ui:VisualElement name="winner" class="modal" picking-mode="Ignore">
+        <ui:VisualElement class="card winner">
+            <ui:VisualElement class="tape tape--left" picking-mode="Ignore" />
+            <ui:VisualElement class="tape tape--right" picking-mode="Ignore" />
+            <ui:Label name="title" text="Победитель матча" class="winner__title" picking-mode="Ignore" />
+            <ui:VisualElement class="winner__stage" picking-mode="Ignore">
+                <ui:VisualElement class="winner__burst" picking-mode="Ignore" />
+                <ui:VisualElement name="figure" class="winner__figure winner__figure--matvey" picking-mode="Ignore" />
+                <ui:VisualElement class="winner__crown" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:Label name="nickname" text="Лёха" class="winner__name" picking-mode="Ignore" />
+            <ui:VisualElement class="winner__stats" picking-mode="Ignore">
+                <ui:VisualElement class="chip" picking-mode="Ignore">
+                    <ui:Label text="убийства" class="chip__note chip__note--before" picking-mode="Ignore" />
+                    <ui:Label name="kills" text="12" class="chip__text" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement class="chip" picking-mode="Ignore">
+                    <ui:Label text="смерти" class="chip__note chip__note--before" picking-mode="Ignore" />
+                    <ui:Label name="deaths" text="4" class="chip__text" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement class="chip" picking-mode="Ignore">
+                    <ui:Label text="К/Д" class="chip__note chip__note--before" picking-mode="Ignore" />
+                    <ui:Label name="kd" text="3.00" class="chip__text" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Label name="next" text="Новый матч через 10 с" class="hint winner__next" picking-mode="Ignore" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

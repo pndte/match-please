@@ -4,10 +4,6 @@
     color: var(--graphite);
 }
 
-.dim--light {
-    background-color: rgba(42, 42, 49, 0.22);
-}
-
 .kill-feed {
     position: absolute;
     top: 20px;
@@ -94,19 +90,37 @@
     background-image: url("project://database/Assets/Game/Art/UI/Hud/weapon_fists.png?fileID=21300000&guid=7c40235f06d4e944cba5b16e121184a1&type=3#weapon_fists");
 }
 
+.scoreboard-dock {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 48px;
+    align-items: center;
+}
+
 .scoreboard {
-    width: 980px;
+    width: 760px;
+}
+
+.scoreboard__title {
+    -unity-font-definition: var(--font-extrabold);
+    font-size: 28px;
+    margin: 0 0 4px 8px;
 }
 
 .scoreboard__columns {
     flex-direction: row;
     align-items: flex-end;
-    padding: 0 12px;
-    margin-bottom: 4px;
+    padding: 0 10px;
+    margin-bottom: 2px;
+}
+
+.scoreboard__columns > .label {
+    font-size: 18px;
 }
 
 .scoreboard__place {
-    width: 56px;
+    width: 40px;
     margin-bottom: 0;
     -unity-text-align: middle-center;
 }
@@ -117,7 +131,7 @@
 }
 
 .scoreboard__number {
-    width: 140px;
+    width: 112px;
     margin-bottom: 0;
     -unity-text-align: middle-center;
 }
@@ -125,9 +139,9 @@
 .score-row {
     flex-direction: row;
     align-items: center;
-    height: 54px;
-    padding: 0 12px;
-    border-radius: 10px;
+    height: 42px;
+    padding: 0 10px;
+    border-radius: 8px;
 }
 
 .score-row--odd {
@@ -143,9 +157,9 @@
 }
 
 .score-row__place {
-    width: 56px;
+    width: 40px;
     -unity-font-definition: var(--font-bold);
-    font-size: 24px;
+    font-size: 20px;
     color: var(--graphite-soft);
     -unity-text-align: middle-center;
 }
@@ -158,9 +172,9 @@
 
 .score-row__crown {
     display: none;
-    width: 40px;
-    height: 35px;
-    margin-right: 8px;
+    width: 32px;
+    height: 28px;
+    margin-right: 6px;
     background-image: url("project://database/Assets/Game/Art/UI/Hud/crown.png?fileID=21300000&guid=d6a7eaa34d9243f48a2b55bbf2fba08e&type=3#crown");
     -unity-background-scale-mode: scale-to-fit;
     rotate: -12deg;
@@ -172,7 +186,7 @@
 
 .score-row__name {
     -unity-font-definition: var(--font-bold);
-    font-size: 26px;
+    font-size: 22px;
     color: var(--graphite);
     white-space: nowrap;
 }
@@ -183,12 +197,12 @@
 
 .score-row__you {
     display: none;
-    margin-left: 10px;
-    padding: 0 10px 2px 10px;
-    border-radius: 9px;
+    margin-left: 8px;
+    padding: 0 8px 2px 8px;
+    border-radius: 8px;
     background-color: var(--me);
     -unity-font-definition: var(--font-bold);
-    font-size: 16px;
+    font-size: 14px;
     color: #ffffff;
 }
 
@@ -197,13 +211,97 @@
 }
 
 .score-row__number {
-    width: 140px;
+    width: 112px;
     -unity-font-definition: var(--font-bold);
-    font-size: 26px;
+    font-size: 22px;
     color: var(--graphite);
     -unity-text-align: middle-center;
 }
 
 .score-row__kd {
     color: var(--graphite-soft);
+}
+
+.winner {
+    width: 640px;
+    align-items: center;
+}
+
+.winner__title {
+    -unity-font-definition: var(--font-bold);
+    font-size: 26px;
+    color: var(--graphite-soft);
+}
+
+.winner__stage {
+    width: 320px;
+    height: 300px;
+    margin-top: 8px;
+}
+
+.winner__burst {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 320px;
+    height: 300px;
+    background-image: url("project://database/Assets/Game/Art/UI/Hud/burst.png?fileID=21300000&guid=8f04ade77d3798a46bf10ec42e382b22&type=3#burst");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.winner__figure {
+    position: absolute;
+    left: 50px;
+    top: 62px;
+    width: 220px;
+    height: 220px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.winner__figure--sanya {
+    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=-31160892&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#sanya_idle_0");
+}
+
+.winner__figure--seva {
+    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=2060785540&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#seva_idle_0");
+}
+
+.winner__figure--matvey {
+    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=-1530501530&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#matvey_idle_0");
+}
+
+.winner__figure--goshak {
+    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=-483441462&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#GOSHAK_idle_0");
+}
+
+.winner__crown {
+    position: absolute;
+    left: 116px;
+    top: 34px;
+    width: 88px;
+    height: 77px;
+    background-image: url("project://database/Assets/Game/Art/UI/Hud/crown.png?fileID=21300000&guid=d6a7eaa34d9243f48a2b55bbf2fba08e&type=3#crown");
+    -unity-background-scale-mode: scale-to-fit;
+    rotate: -10deg;
+}
+
+.winner__name {
+    -unity-font-definition: var(--font-extrabold);
+    font-size: 60px;
+    margin-top: 2px;
+    white-space: nowrap;
+}
+
+.winner__stats {
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.winner__stats > .chip {
+    margin: 0 6px;
+}
+
+.winner__next {
+    margin-top: 16px;
 }

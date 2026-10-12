@@ -1,11 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <Style src="../Kit.uss" />
     <Style src="Hud.uss" />
-    <ui:VisualElement class="dim dim--light" picking-mode="Ignore" />
-    <ui:VisualElement name="scoreboard" class="modal" picking-mode="Ignore">
-        <ui:VisualElement class="card scoreboard" picking-mode="Ignore">
-            <ui:Label text="Статистика матча" class="title" picking-mode="Ignore" />
-            <ui:VisualElement class="divider" picking-mode="Ignore" />
+    <ui:VisualElement name="scoreboard" class="scoreboard-dock" picking-mode="Ignore">
+        <ui:VisualElement class="panel scoreboard" picking-mode="Ignore">
+            <ui:Label text="Статистика матча" class="scoreboard__title" picking-mode="Ignore" />
             <ui:VisualElement class="scoreboard__columns" picking-mode="Ignore">
                 <ui:Label text="#" class="label scoreboard__place" picking-mode="Ignore" />
                 <ui:Label text="Игрок" class="label scoreboard__player" picking-mode="Ignore" />
