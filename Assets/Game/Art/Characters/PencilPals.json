@@ -1,10 +1,10 @@
 {
   "image": "atlas.png",
   "width": 8192,
-  "height": 6144,
+  "height": 8192,
   "cell": 512,
   "cols": 16,
-  "rows": 12,
+  "rows": 16,
   "pivot": {
     "x": 0.5,
     "y": 0.0625
@@ -18,7 +18,12 @@
     "land": 10,
     "hurt": 12,
     "death": 15,
-    "punch": 15
+    "punch": 15,
+    "block": 15,
+    "crouch": 10,
+    "crouchwalk": 10,
+    "crouchpunch": 15,
+    "crouchblock": 15
   },
   "loop": {
     "walk": true,
@@ -28,14 +33,20 @@
     "land": false,
     "hurt": false,
     "death": false,
-    "punch": false
+    "punch": false,
+    "block": false,
+    "crouch": false,
+    "crouchwalk": true,
+    "crouchpunch": false,
+    "crouchblock": false
   },
   "speedUnitsPerFrame": {
     "walk": 10,
-    "run": 19
+    "run": 19,
+    "crouchwalk": 5
   },
   "cellUnits": 256,
-  "layout": "rows 0-3: col 0 idle, cols 1-8 walk, cols 9-12 jump (crouch, launch, rise, apex), cols 13-14 fall loop, col 15 land; rows 4-7: col 0 death 3 (burst), cols 1-8 run, cols 9-12 hurt, cols 13-15 death 0-2 (swelling); same character order in both halves; rows 8-11: cols 0-2 punch; facing right, in place (the game moves the root); death plays hurt 0, death 0-3, then nothing",
+  "layout": "rows 0-3: col 0 idle, cols 1-8 walk, cols 9-12 jump (crouch, launch, rise, apex), cols 13-14 fall loop, col 15 land; rows 4-7: col 0 death 3 (burst), cols 1-8 run, cols 9-12 hurt, cols 13-15 death 0-2 (swelling); same character order in both halves; rows 8-11: cols 0-2 punch, cols 3-4 block (parry); rows 12-15: col 0 crouch, cols 1-8 crouch walk, cols 9-11 crouch punch, cols 12-13 crouch block; facing right, in place (the game moves the root); death plays hurt 0, death 0-3, then nothing",
   "characters": [
     "sanya",
     "seva",
@@ -1354,6 +1365,26 @@
       "h": 512
     },
     {
+      "name": "sanya_block_0",
+      "character": "sanya",
+      "animation": "block",
+      "frame": 0,
+      "x": 1536,
+      "y": 4096,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_block_1",
+      "character": "sanya",
+      "animation": "block",
+      "frame": 1,
+      "x": 2048,
+      "y": 4096,
+      "w": 512,
+      "h": 512
+    },
+    {
       "name": "seva_punch_0",
       "character": "seva",
       "animation": "punch",
@@ -1379,6 +1410,26 @@
       "animation": "punch",
       "frame": 2,
       "x": 1024,
+      "y": 4608,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_block_0",
+      "character": "seva",
+      "animation": "block",
+      "frame": 0,
+      "x": 1536,
+      "y": 4608,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_block_1",
+      "character": "seva",
+      "animation": "block",
+      "frame": 1,
+      "x": 2048,
       "y": 4608,
       "w": 512,
       "h": 512
@@ -1414,6 +1465,26 @@
       "h": 512
     },
     {
+      "name": "matvey_block_0",
+      "character": "matvey",
+      "animation": "block",
+      "frame": 0,
+      "x": 1536,
+      "y": 5120,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_block_1",
+      "character": "matvey",
+      "animation": "block",
+      "frame": 1,
+      "x": 2048,
+      "y": 5120,
+      "w": 512,
+      "h": 512
+    },
+    {
       "name": "GOSHAK_punch_0",
       "character": "GOSHAK",
       "animation": "punch",
@@ -1440,6 +1511,586 @@
       "frame": 2,
       "x": 1024,
       "y": 5632,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_block_0",
+      "character": "GOSHAK",
+      "animation": "block",
+      "frame": 0,
+      "x": 1536,
+      "y": 5632,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_block_1",
+      "character": "GOSHAK",
+      "animation": "block",
+      "frame": 1,
+      "x": 2048,
+      "y": 5632,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_crouch_0",
+      "character": "sanya",
+      "animation": "crouch",
+      "frame": 0,
+      "x": 0,
+      "y": 6144,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_crouchwalk_0",
+      "character": "sanya",
+      "animation": "crouchwalk",
+      "frame": 0,
+      "x": 512,
+      "y": 6144,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_crouchwalk_1",
+      "character": "sanya",
+      "animation": "crouchwalk",
+      "frame": 1,
+      "x": 1024,
+      "y": 6144,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_crouchwalk_2",
+      "character": "sanya",
+      "animation": "crouchwalk",
+      "frame": 2,
+      "x": 1536,
+      "y": 6144,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_crouchwalk_3",
+      "character": "sanya",
+      "animation": "crouchwalk",
+      "frame": 3,
+      "x": 2048,
+      "y": 6144,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_crouchwalk_4",
+      "character": "sanya",
+      "animation": "crouchwalk",
+      "frame": 4,
+      "x": 2560,
+      "y": 6144,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_crouchwalk_5",
+      "character": "sanya",
+      "animation": "crouchwalk",
+      "frame": 5,
+      "x": 3072,
+      "y": 6144,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_crouchwalk_6",
+      "character": "sanya",
+      "animation": "crouchwalk",
+      "frame": 6,
+      "x": 3584,
+      "y": 6144,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_crouchwalk_7",
+      "character": "sanya",
+      "animation": "crouchwalk",
+      "frame": 7,
+      "x": 4096,
+      "y": 6144,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_crouchpunch_0",
+      "character": "sanya",
+      "animation": "crouchpunch",
+      "frame": 0,
+      "x": 4608,
+      "y": 6144,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_crouchpunch_1",
+      "character": "sanya",
+      "animation": "crouchpunch",
+      "frame": 1,
+      "x": 5120,
+      "y": 6144,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_crouchpunch_2",
+      "character": "sanya",
+      "animation": "crouchpunch",
+      "frame": 2,
+      "x": 5632,
+      "y": 6144,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_crouchblock_0",
+      "character": "sanya",
+      "animation": "crouchblock",
+      "frame": 0,
+      "x": 6144,
+      "y": 6144,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "sanya_crouchblock_1",
+      "character": "sanya",
+      "animation": "crouchblock",
+      "frame": 1,
+      "x": 6656,
+      "y": 6144,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_crouch_0",
+      "character": "seva",
+      "animation": "crouch",
+      "frame": 0,
+      "x": 0,
+      "y": 6656,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_crouchwalk_0",
+      "character": "seva",
+      "animation": "crouchwalk",
+      "frame": 0,
+      "x": 512,
+      "y": 6656,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_crouchwalk_1",
+      "character": "seva",
+      "animation": "crouchwalk",
+      "frame": 1,
+      "x": 1024,
+      "y": 6656,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_crouchwalk_2",
+      "character": "seva",
+      "animation": "crouchwalk",
+      "frame": 2,
+      "x": 1536,
+      "y": 6656,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_crouchwalk_3",
+      "character": "seva",
+      "animation": "crouchwalk",
+      "frame": 3,
+      "x": 2048,
+      "y": 6656,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_crouchwalk_4",
+      "character": "seva",
+      "animation": "crouchwalk",
+      "frame": 4,
+      "x": 2560,
+      "y": 6656,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_crouchwalk_5",
+      "character": "seva",
+      "animation": "crouchwalk",
+      "frame": 5,
+      "x": 3072,
+      "y": 6656,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_crouchwalk_6",
+      "character": "seva",
+      "animation": "crouchwalk",
+      "frame": 6,
+      "x": 3584,
+      "y": 6656,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_crouchwalk_7",
+      "character": "seva",
+      "animation": "crouchwalk",
+      "frame": 7,
+      "x": 4096,
+      "y": 6656,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_crouchpunch_0",
+      "character": "seva",
+      "animation": "crouchpunch",
+      "frame": 0,
+      "x": 4608,
+      "y": 6656,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_crouchpunch_1",
+      "character": "seva",
+      "animation": "crouchpunch",
+      "frame": 1,
+      "x": 5120,
+      "y": 6656,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_crouchpunch_2",
+      "character": "seva",
+      "animation": "crouchpunch",
+      "frame": 2,
+      "x": 5632,
+      "y": 6656,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_crouchblock_0",
+      "character": "seva",
+      "animation": "crouchblock",
+      "frame": 0,
+      "x": 6144,
+      "y": 6656,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "seva_crouchblock_1",
+      "character": "seva",
+      "animation": "crouchblock",
+      "frame": 1,
+      "x": 6656,
+      "y": 6656,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_crouch_0",
+      "character": "matvey",
+      "animation": "crouch",
+      "frame": 0,
+      "x": 0,
+      "y": 7168,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_crouchwalk_0",
+      "character": "matvey",
+      "animation": "crouchwalk",
+      "frame": 0,
+      "x": 512,
+      "y": 7168,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_crouchwalk_1",
+      "character": "matvey",
+      "animation": "crouchwalk",
+      "frame": 1,
+      "x": 1024,
+      "y": 7168,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_crouchwalk_2",
+      "character": "matvey",
+      "animation": "crouchwalk",
+      "frame": 2,
+      "x": 1536,
+      "y": 7168,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_crouchwalk_3",
+      "character": "matvey",
+      "animation": "crouchwalk",
+      "frame": 3,
+      "x": 2048,
+      "y": 7168,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_crouchwalk_4",
+      "character": "matvey",
+      "animation": "crouchwalk",
+      "frame": 4,
+      "x": 2560,
+      "y": 7168,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_crouchwalk_5",
+      "character": "matvey",
+      "animation": "crouchwalk",
+      "frame": 5,
+      "x": 3072,
+      "y": 7168,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_crouchwalk_6",
+      "character": "matvey",
+      "animation": "crouchwalk",
+      "frame": 6,
+      "x": 3584,
+      "y": 7168,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_crouchwalk_7",
+      "character": "matvey",
+      "animation": "crouchwalk",
+      "frame": 7,
+      "x": 4096,
+      "y": 7168,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_crouchpunch_0",
+      "character": "matvey",
+      "animation": "crouchpunch",
+      "frame": 0,
+      "x": 4608,
+      "y": 7168,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_crouchpunch_1",
+      "character": "matvey",
+      "animation": "crouchpunch",
+      "frame": 1,
+      "x": 5120,
+      "y": 7168,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_crouchpunch_2",
+      "character": "matvey",
+      "animation": "crouchpunch",
+      "frame": 2,
+      "x": 5632,
+      "y": 7168,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_crouchblock_0",
+      "character": "matvey",
+      "animation": "crouchblock",
+      "frame": 0,
+      "x": 6144,
+      "y": 7168,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "matvey_crouchblock_1",
+      "character": "matvey",
+      "animation": "crouchblock",
+      "frame": 1,
+      "x": 6656,
+      "y": 7168,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_crouch_0",
+      "character": "GOSHAK",
+      "animation": "crouch",
+      "frame": 0,
+      "x": 0,
+      "y": 7680,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_crouchwalk_0",
+      "character": "GOSHAK",
+      "animation": "crouchwalk",
+      "frame": 0,
+      "x": 512,
+      "y": 7680,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_crouchwalk_1",
+      "character": "GOSHAK",
+      "animation": "crouchwalk",
+      "frame": 1,
+      "x": 1024,
+      "y": 7680,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_crouchwalk_2",
+      "character": "GOSHAK",
+      "animation": "crouchwalk",
+      "frame": 2,
+      "x": 1536,
+      "y": 7680,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_crouchwalk_3",
+      "character": "GOSHAK",
+      "animation": "crouchwalk",
+      "frame": 3,
+      "x": 2048,
+      "y": 7680,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_crouchwalk_4",
+      "character": "GOSHAK",
+      "animation": "crouchwalk",
+      "frame": 4,
+      "x": 2560,
+      "y": 7680,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_crouchwalk_5",
+      "character": "GOSHAK",
+      "animation": "crouchwalk",
+      "frame": 5,
+      "x": 3072,
+      "y": 7680,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_crouchwalk_6",
+      "character": "GOSHAK",
+      "animation": "crouchwalk",
+      "frame": 6,
+      "x": 3584,
+      "y": 7680,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_crouchwalk_7",
+      "character": "GOSHAK",
+      "animation": "crouchwalk",
+      "frame": 7,
+      "x": 4096,
+      "y": 7680,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_crouchpunch_0",
+      "character": "GOSHAK",
+      "animation": "crouchpunch",
+      "frame": 0,
+      "x": 4608,
+      "y": 7680,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_crouchpunch_1",
+      "character": "GOSHAK",
+      "animation": "crouchpunch",
+      "frame": 1,
+      "x": 5120,
+      "y": 7680,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_crouchpunch_2",
+      "character": "GOSHAK",
+      "animation": "crouchpunch",
+      "frame": 2,
+      "x": 5632,
+      "y": 7680,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_crouchblock_0",
+      "character": "GOSHAK",
+      "animation": "crouchblock",
+      "frame": 0,
+      "x": 6144,
+      "y": 7680,
+      "w": 512,
+      "h": 512
+    },
+    {
+      "name": "GOSHAK_crouchblock_1",
+      "character": "GOSHAK",
+      "animation": "crouchblock",
+      "frame": 1,
+      "x": 6656,
+      "y": 7680,
       "w": 512,
       "h": 512
     }
