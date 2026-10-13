@@ -4,8 +4,14 @@
     <ui:Template name="Winner" src="Winner.uxml" />
     <Style src="../Kit.uss" />
     <Style src="Hud.uss" />
+    <Style src="MatchTimer.uss" />
     <ui:VisualElement name="match-hud" class="match-hud" picking-mode="Ignore">
         <ui:Instance template="KillFeed" name="kill-feed-layer" class="layer" picking-mode="Ignore" />
+        <ui:VisualElement name="timer-layer" class="layer match-timer-layer hidden" picking-mode="Ignore">
+            <ui:VisualElement class="chip match-timer" picking-mode="Ignore">
+                <ui:Label name="match-timer" text="0:30" class="chip__text match-timer__text" picking-mode="Ignore" />
+            </ui:VisualElement>
+        </ui:VisualElement>
         <ui:Instance template="Scoreboard" name="scoreboard-layer" class="layer hidden" picking-mode="Ignore" />
         <ui:Instance template="Winner" name="winner-layer" class="layer hidden" picking-mode="Ignore" />
     </ui:VisualElement>

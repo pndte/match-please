@@ -8,8 +8,10 @@
                 <ui:Label text="#" class="label scoreboard__place" picking-mode="Ignore" />
                 <ui:Label text="Игрок" class="label scoreboard__player" picking-mode="Ignore" />
                 <ui:Label text="Убийства" class="label scoreboard__number" picking-mode="Ignore" />
+                <ui:Label text="Урон" class="label scoreboard__number" picking-mode="Ignore" />
                 <ui:Label text="Смерти" class="label scoreboard__number" picking-mode="Ignore" />
                 <ui:Label text="К/Д" class="label scoreboard__number" picking-mode="Ignore" />
+                <ui:Label text="УР/К" class="label scoreboard__number" picking-mode="Ignore" />
             </ui:VisualElement>
             <ui:VisualElement name="rows" class="scoreboard__rows" picking-mode="Ignore" />
         </ui:VisualElement>

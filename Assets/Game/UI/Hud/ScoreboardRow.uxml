@@ -9,7 +9,9 @@
             <ui:Label name="you" text="ты" class="score-row__you" picking-mode="Ignore" />
         </ui:VisualElement>
         <ui:Label name="kills" text="0" class="score-row__number" picking-mode="Ignore" />
+        <ui:Label name="damage" text="0" class="score-row__number" picking-mode="Ignore" />
         <ui:Label name="deaths" text="0" class="score-row__number" picking-mode="Ignore" />
-        <ui:Label name="kd" text="0.00" class="score-row__number score-row__kd" picking-mode="Ignore" />
+        <ui:Label name="kd" text="0.00" class="score-row__number score-row__ratio" picking-mode="Ignore" />
+        <ui:Label name="damage-per-kill" text="—" class="score-row__number score-row__ratio" picking-mode="Ignore" />
     </ui:VisualElement>
 </ui:UXML>

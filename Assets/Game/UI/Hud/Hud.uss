@@ -99,7 +99,7 @@
 }
 
 .scoreboard {
-    width: 760px;
+    width: 860px;
 }
 
 .scoreboard__title {
@@ -131,7 +131,7 @@
 }
 
 .scoreboard__number {
-    width: 112px;
+    width: 100px;
     margin-bottom: 0;
     -unity-text-align: middle-center;
 }
@@ -211,14 +211,14 @@
 }
 
 .score-row__number {
-    width: 112px;
+    width: 100px;
     -unity-font-definition: var(--font-bold);
     font-size: 22px;
     color: var(--graphite);
     -unity-text-align: middle-center;
 }
 
-.score-row__kd {
+.score-row__ratio {
     color: var(--graphite-soft);
 }
 
@@ -294,12 +294,27 @@
 
 .winner__stats {
     flex-direction: row;
-    justify-content: center;
-    margin-top: 10px;
+    margin-top: 12px;
+    padding: 8px 6px 10px 6px;
+    border-radius: 12px;
+    background-color: rgba(255, 240, 179, 0.75);
 }
 
-.winner__stats > .chip {
-    margin: 0 6px;
+.winner__stat {
+    width: 92px;
+    align-items: center;
+}
+
+.winner__stat-label {
+    font-size: 16px;
+    color: var(--graphite-soft);
+    white-space: nowrap;
+}
+
+.winner__stat-value {
+    -unity-font-definition: var(--font-extrabold);
+    font-size: 26px;
+    white-space: nowrap;
 }
 
 .winner__next {

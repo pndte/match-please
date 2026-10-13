@@ -1,0 +1,15 @@
+.match-timer-layer {
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 14px;
+}
+
+.match-timer {
+    min-width: 132px;
+    justify-content: center;
+}
+
+.match-timer__text {
+    font-size: 36px;
+    -unity-text-align: middle-center;
+}

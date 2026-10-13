@@ -13,17 +13,25 @@
             </ui:VisualElement>
             <ui:Label name="nickname" text="Лёха" class="winner__name" picking-mode="Ignore" />
             <ui:VisualElement class="winner__stats" picking-mode="Ignore">
-                <ui:VisualElement class="chip" picking-mode="Ignore">
-                    <ui:Label text="убийства" class="chip__note chip__note--before" picking-mode="Ignore" />
-                    <ui:Label name="kills" text="12" class="chip__text" picking-mode="Ignore" />
+                <ui:VisualElement class="winner__stat" picking-mode="Ignore">
+                    <ui:Label text="убийства" class="winner__stat-label" picking-mode="Ignore" />
+                    <ui:Label name="kills" text="12" class="winner__stat-value" picking-mode="Ignore" />
                 </ui:VisualElement>
-                <ui:VisualElement class="chip" picking-mode="Ignore">
-                    <ui:Label text="смерти" class="chip__note chip__note--before" picking-mode="Ignore" />
-                    <ui:Label name="deaths" text="4" class="chip__text" picking-mode="Ignore" />
+                <ui:VisualElement class="winner__stat" picking-mode="Ignore">
+                    <ui:Label text="урон" class="winner__stat-label" picking-mode="Ignore" />
+                    <ui:Label name="damage" text="1840" class="winner__stat-value" picking-mode="Ignore" />
                 </ui:VisualElement>
-                <ui:VisualElement class="chip" picking-mode="Ignore">
-                    <ui:Label text="К/Д" class="chip__note chip__note--before" picking-mode="Ignore" />
-                    <ui:Label name="kd" text="3.00" class="chip__text" picking-mode="Ignore" />
+                <ui:VisualElement class="winner__stat" picking-mode="Ignore">
+                    <ui:Label text="смерти" class="winner__stat-label" picking-mode="Ignore" />
+                    <ui:Label name="deaths" text="4" class="winner__stat-value" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement class="winner__stat" picking-mode="Ignore">
+                    <ui:Label text="К/Д" class="winner__stat-label" picking-mode="Ignore" />
+                    <ui:Label name="kd" text="3.00" class="winner__stat-value" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement class="winner__stat" picking-mode="Ignore">
+                    <ui:Label text="УР/К" class="winner__stat-label" picking-mode="Ignore" />
+                    <ui:Label name="damage-per-kill" text="153" class="winner__stat-value" picking-mode="Ignore" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:Label name="next" text="Новый матч через 10 с" class="hint winner__next" picking-mode="Ignore" />
