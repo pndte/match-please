@@ -12,6 +12,7 @@ namespace Bw.UseCases.Movement
         [Header("Push")]
         [Min(0f)] public float PushDeceleration = 40f;
         [Min(0f)] public float AirPushDeceleration = 3f;
+        [Min(0f)] public float PushLift = 1f;
 
         [Header("Shove")]
         [Min(0f)] public float ShoveSpeed;
@@ -20,6 +21,7 @@ namespace Bw.UseCases.Movement
         LayerMask IBodyConfig.GroundLayer => GroundLayer;
         float IBodyConfig.PushDeceleration => PushDeceleration;
         float IBodyConfig.AirPushDeceleration => AirPushDeceleration;
+        float IBodyConfig.PushLift => PushLift;
         float IBodyConfig.ShoveSpeed => ShoveSpeed;
     }
 }

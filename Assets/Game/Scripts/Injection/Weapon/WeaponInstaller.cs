@@ -1,5 +1,6 @@
 using System;
 using Bw.Entities.Network;
+using Bw.Entities.Network.Prediction.Stream;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using Bw.Injection.Network;
@@ -136,7 +137,9 @@ namespace Bw.Injection.Weapon
         {
             Container.Bind<WeaponDropClientHandler>().AsSingle().NonLazy();
             Container.BindInterfacesTo<Spread>().AsSingle();
-            Container.Bind<WeaponSpreadCursor>().AsSingle().WithArguments(transform).NonLazy();
+            Container.BindInterfacesTo<AimDeflection>().AsSingle();
+            Container.Decorate<IInputSampler<WeaponInput>>().With<SpreadAimSampler>();
+            Container.Bind<SpreadKick>().AsSingle().NonLazy();
             Container.BindInterfacesTo<FloorWeapon>().AsSingle().WithArguments(_collider);
             Container.Bind<FloorWeaponRegistration>().AsSingle().NonLazy();
             BindClientVisuals();

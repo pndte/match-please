@@ -133,7 +133,7 @@ namespace Bw.EditorTools.Shooting
             };
 
             return timing.Concat(Weapon.Shooting.Switch(
-                gun => new[] { gun.TurnSpeed, gun.ShootCooldown, gun.ReloadTime, gun.AmmoSettings.Max, gun.Spread.Climb, gun.Spread.Jitter },
+                gun => new[] { gun.TurnSpeed, gun.ShootCooldown, gun.ReloadTime, gun.AmmoSettings.Max, gun.Spread.Climb, gun.Spread.Jitter, gun.Spread.Return },
                 melee => new[] { melee.TurnSpeed, melee.SwingTime, melee.StrikeTime })).ToArray();
         }
 
@@ -197,7 +197,7 @@ namespace Bw.EditorTools.Shooting
             if (Shoots())
                 DrawFlash(track, frame, worldToGui, barrel);
 
-            DrawCursor(worldToGui, track.Cursor[frame]);
+            DrawCursor(worldToGui);
             DrawCaption(stage, track, barrel);
         }
 
@@ -288,8 +288,8 @@ namespace Bw.EditorTools.Shooting
                    Matrix4x4.TRS(new Vector3(-track.Kick[frame], 0f), Quaternion.Euler(0f, 0f, track.Tilt[frame]), Vector3.one);
         }
 
-        private static void DrawCursor(Matrix4x4 worldToGui, float cursor) =>
-            DrawCrosshair(worldToGui.MultiplyPoint3x4(Quaternion.Euler(0f, 0f, cursor) * new Vector3(TargetDistance, 0f)), CursorColor);
+        private static void DrawCursor(Matrix4x4 worldToGui) =>
+            DrawCrosshair(worldToGui.MultiplyPoint3x4(new Vector3(TargetDistance, 0f)), CursorColor);
 
         private static void DrawCrosshair(Vector3 center, Color color)
         {
@@ -397,7 +397,7 @@ namespace Bw.EditorTools.Shooting
 
             DrawPlayhead(rect, track);
             var now = track.Barrel[track.FrameAt(_time)];
-            GUI.Label(new Rect(rect.x + 4f, rect.y + 2f, rect.width - 8f, 16f), $"Barrel off the target while nobody pulls the cursor back (dots: shots)   now {now:+0.00;-0.00;0.00}°", EditorStyles.miniLabel);
+            GUI.Label(new Rect(rect.x + 4f, rect.y + 2f, rect.width - 8f, 16f), $"Barrel off the cursor, which stays on the target (dots: shots)   now {now:+0.00;-0.00;0.00}°", EditorStyles.miniLabel);
         }
 
         private static float Peak(IReadOnlyList<float> values, float floor)

@@ -114,7 +114,7 @@ namespace Bw.UseCases.Movement.Physics
             return Scooped(position);
         }
 
-        public bool TryGetLaunch(Vector2 position, out float speed)
+        public bool TryGetLaunch(Vector2 position, out float height)
         {
             var hitCount = Physics2D.BoxCast(position + _offset, _size, 0f, Vector2.down, _filter, _hits, LaunchProbe);
 
@@ -123,12 +123,12 @@ namespace Bw.UseCases.Movement.Physics
                 var hit = _hits[i];
                 if (hit.normal.y > 0f && hit.collider.TryGetComponent(out ISpringboard springboard))
                 {
-                    speed = springboard.LaunchSpeed;
+                    height = springboard.LaunchHeight;
                     return true;
                 }
             }
 
-            speed = 0f;
+            height = 0f;
             return false;
         }
 

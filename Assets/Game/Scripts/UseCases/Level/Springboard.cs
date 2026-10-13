@@ -5,8 +5,8 @@ namespace Bw.UseCases.Level
 {
     public sealed class Springboard : MonoBehaviour, ISpringboard
     {
-        public float LaunchSpeed => _launchSpeed;
+        public float LaunchHeight => _launchHeight;
 
-        [SerializeField, Min(0f)] private float _launchSpeed = 40f;
+        [SerializeField, Min(0f)] private float _launchHeight = 12.93f;
     }
 }

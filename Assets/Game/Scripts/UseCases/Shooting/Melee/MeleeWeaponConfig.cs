@@ -11,7 +11,7 @@ namespace Bw.UseCases.Shooting.Melee
         [Min(1)] public float TurnSpeed = 2160f;
 
         [Header("Hit")]
-        public float Damage = 12f;
+        public float Damage = 24f;
         [Min(0)] public float Knockback = 9f;
         [Min(0.01f)] public float Reach = 1.4f;
         [Min(0f)] public float Radius = 0.35f;

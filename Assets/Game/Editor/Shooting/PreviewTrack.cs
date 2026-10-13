@@ -19,7 +19,6 @@ namespace Bw.EditorTools.Shooting
         public List<float> Kick { get; } = new();
         public List<float> Tilt { get; } = new();
         public List<float> Barrel { get; } = new();
-        public List<float> Cursor { get; } = new();
         public List<PreviewShot> Shots { get; } = new();
 
         private PreviewTrack()
@@ -62,22 +61,23 @@ namespace Bw.EditorTools.Shooting
             var simulation = weapon.Shooting.SimulationFor(step);
             var rolls = new Random(RollSeed);
             var aims = new List<float> { simulation.Aim };
-            var cursor = 0f;
+            var deflection = 0f;
 
             for (var tick = 1; tick * step.Duration <= MaxTime; tick++)
             {
                 var time = (tick - 1) * step.Duration;
                 var trigger = simulation.Accepted < requested && simulation.Accepted * interval <= time + step.Duration * 0.5f;
                 var shots = simulation.Shots;
-                simulation.Step(new WeaponInput(cursor, trigger, false, 0f, 0f));
+                simulation.Step(new WeaponInput(deflection, trigger, false, 0f, 0f));
 
                 if (simulation.Shots != shots)
                 {
                     var thrown = weapon.Shooting.ThrowOf(simulation.Aim, (float)(rolls.NextDouble() * 2.0 - 1.0));
-                    Shots.Add(new PreviewShot(tick * step.Duration, simulation.Aim, thrown));
-                    cursor = Mathf.DeltaAngle(0f, cursor + thrown);
+                    Shots.Add(new PreviewShot(tick * step.Duration, simulation.Aim));
+                    deflection = Mathf.DeltaAngle(0f, deflection + thrown);
                 }
 
+                deflection = weapon.Shooting.Returned(deflection, step.Duration);
                 aims.Add(simulation.Aim);
 
                 if (Shots.Count >= requested && tick * step.Duration - Shots[^1].Time >= SettleTime)
@@ -96,7 +96,6 @@ namespace Bw.EditorTools.Shooting
                 Kick.Add(Punched(recoil.Kick, time));
                 Tilt.Add(Punched(recoil.Tilt, time));
                 Barrel.Add(ShownBarrel(aims, time / tickDuration));
-                Cursor.Add(ThrownBy(time));
             }
         }
 
@@ -107,16 +106,6 @@ namespace Bw.EditorTools.Shooting
                 offset += punch.OffsetAt(time - shot.Time);
 
             return offset;
-        }
-
-        private float ThrownBy(float time)
-        {
-            var cursor = 0f;
-            foreach (var shot in Shots)
-                if (shot.Time <= time)
-                    cursor = Mathf.DeltaAngle(0f, cursor + shot.Thrown);
-
-            return cursor;
         }
 
         private static float ShownBarrel(List<float> aims, float ticks)
@@ -131,13 +120,11 @@ namespace Bw.EditorTools.Shooting
     {
         public readonly float Time;
         public readonly float Aim;
-        public readonly float Thrown;
 
-        public PreviewShot(float time, float aim, float thrown)
+        public PreviewShot(float time, float aim)
         {
             Time = time;
             Aim = aim;
-            Thrown = thrown;
         }
     }
 }

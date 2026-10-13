@@ -14,7 +14,7 @@ namespace Bw.UseCases.Shooting.Weapon
         [Min(1)] public float TurnSpeed = 600f;
         [Min(0)] public float UnheldDespawnTime = 25f;
 
-        [Header("Spread (degrees every shot throws the cursor around the shooter; the player brings it back)")]
+        [Header("Spread (degrees every shot throws the barrel off the cursor; the barrel comes back at Return degrees a second)")]
         public SpreadConfig Spread = new();
 
         [Header("Pellets (a shot fans Count pellets evenly across Cone degrees; Damage and Knockback count per pellet)")]

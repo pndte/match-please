@@ -18,10 +18,10 @@ namespace Bw.UseCases.Shooting.Weapon.Network
         private readonly IChangableCamera _camera;
         private readonly INetworkTicks _ticks;
         private readonly IInterpolationTicks _interpolationTicks;
+        private readonly TriggerLatch _trigger = new();
 
         private bool _drawn;
         private float _aim;
-        private bool _triggerPressed;
         private double _triggerViewTick;
         private double _triggerPredictedTick;
         private bool _reloadPressed;
@@ -46,33 +46,43 @@ namespace Bw.UseCases.Shooting.Weapon.Network
                 drawnLifetime.OnTermination(() => _drawn = false);
             });
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
-                Observable.EveryUpdate(UnityFrameProvider.Update, controlledLifetime).Subscribe(_ => LatchPresses()));
+            {
+                _trigger.Begin(Input.GetMouseButton(0)); //TODO: new input system
+                Observable.EveryUpdate(UnityFrameProvider.Update, controlledLifetime).Subscribe(_ => LatchPresses());
+                controlledLifetime.OnTermination(ForgetPresses);
+            });
         }
 
         public WeaponInput Sample() //TODO: нажатие курка теряется, если пропадут два пакета ввода подряд (Unreliable и один прошлый ввод в пакете) — для стрельбы нужна избыточность больше
         {
-            var trigger = _triggerPressed || Input.GetMouseButton(0); //TODO: new input system
-            var viewTick = _triggerPressed ? _triggerViewTick : _interpolationTicks.InterpolationTick;
-            var predictedTick = _triggerPressed ? _triggerPredictedTick : _ticks.PredictedViewTick(_interpolationTicks);
+            var trigger = _trigger.Pulled(Input.GetMouseButton(0)); //TODO: new input system
+            var viewTick = _trigger.Latched ? _triggerViewTick : _interpolationTicks.InterpolationTick;
+            var predictedTick = _trigger.Latched ? _triggerPredictedTick : _ticks.PredictedViewTick(_interpolationTicks);
             var viewDelay = trigger ? (float)(_ticks.Current - viewTick) : 0f;
             var predictedDelay = trigger ? (float)(_ticks.Current - predictedTick) : 0f;
             var input = new WeaponInput(SampleAim(), trigger, _reloadPressed, viewDelay, predictedDelay);
-            _triggerPressed = false;
+            _trigger.Clear();
             _reloadPressed = false;
             return input;
         }
 
         private void LatchPresses()
         {
-            if (Input.GetMouseButtonDown(0) && !_triggerPressed) //TODO: new input system
+            if (Input.GetMouseButtonDown(0) && !_trigger.Latched) //TODO: new input system
             {
-                _triggerPressed = true;
+                _trigger.Latch();
                 _triggerViewTick = _interpolationTicks.InterpolationTick;
                 _triggerPredictedTick = _ticks.PredictedViewTick(_interpolationTicks);
             }
 
             if (Input.GetKeyDown(KeyCode.R)) //TODO: new input system
                 _reloadPressed = true;
+        }
+
+        private void ForgetPresses()
+        {
+            _trigger.Clear();
+            _reloadPressed = false;
         }
 
         private float SampleAim()

@@ -22,3 +22,7 @@ MonoBehaviour:
   Spread:
     Climb: 6
     Jitter: 2
+    Return: 8
+  Pellets:
+    Count: 1
+    Cone: 0

@@ -31,10 +31,10 @@ namespace Bw.UseCases.Movement.Physics
         {
             var deltaTime = _step.Duration;
             var position = _collider.Carry(state.Position, state.Grounded);
-            var launchSpeed = 0f;
-            launched = state.Grounded && _collider.TryGetLaunch(position, out launchSpeed);
+            var launchHeight = 0f;
+            launched = state.Grounded && _collider.TryGetLaunch(position, out launchHeight);
 
-            var velocity = launched ? drive.Velocity.WithY(launchSpeed) : drive.Velocity;
+            var velocity = launched ? drive.Velocity.WithY(LaunchSpeed(launchHeight)) : drive.Velocity;
             var gravityScale = launched ? 1f : drive.GravityScale;
             velocity = velocity.WithY(velocity.y + _gravity * gravityScale * deltaTime);
 
@@ -85,6 +85,9 @@ namespace Bw.UseCases.Movement.Physics
                 nearest.Shovable.Shove(direction, distance - nearest.Gap, shover);
             }
         }
+
+        private float LaunchSpeed(float height) =>
+            -_gravity * _step.Duration / 2f + Mathf.Sqrt(-2f * _gravity * height);
 
         private float HorizontalTravel(Vector2 position, Vector2 direction, float distance, BodyDrive drive) =>
             Walking(direction, drive)

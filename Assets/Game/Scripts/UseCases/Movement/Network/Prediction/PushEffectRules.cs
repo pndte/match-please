@@ -9,13 +9,15 @@ namespace Bw.UseCases.Movement.Network.Prediction
         where TEffect : struct
     {
         private readonly IPushRules<TEffect> _rules;
+        private readonly IBodyConfig _body;
 
-        public PushEffectRules(IPushRules<TEffect> rules)
+        public PushEffectRules(IPushRules<TEffect> rules, IBodyConfig body)
         {
             _rules = rules;
+            _body = body;
         }
 
         public TState Apply(TState state, TEffect effect) =>
-            state.Pushed(_rules.Impulse(effect));
+            state.Pushed(_body.Lifted(_rules.Impulse(effect)));
     }
 }

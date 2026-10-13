@@ -12,13 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f94487ffb9e4410abd0e7b0cc5a6494f, type: 3}
   m_Name: Movement2DConfig
   m_EditorClassIdentifier: Bw.Entities::Entities.Movement2DConfig
-  Speed: 14
-  JumpForce: 28.6
-  GravityScale: 6
+  Speed: 12.8
+  JumpForce: 25.9187
+  GravityScale: 4.9539
   GroundLayer:
     serializedVersion: 2
     m_Bits: 16384
   CoyoteTime: 0.1
   JumpBufferTime: 0.1
   ReleasedJumpGravity: 3
+  FallGravity: 1.21
   PushDeceleration: 40
+  PushLift: 0.9062
+  ShoveSpeed: 6

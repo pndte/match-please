@@ -15,7 +15,7 @@ MonoBehaviour:
   SwingTime: 0.28
   StrikeTime: 0.1
   TurnSpeed: 2160
-  Damage: 12
+  Damage: 24
   Knockback: 9
   Reach: 1.4
   Radius: 0.35

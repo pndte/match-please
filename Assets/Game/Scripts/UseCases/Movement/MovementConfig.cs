@@ -18,8 +18,12 @@ namespace Bw.UseCases.Movement
         [Header("Variable jump")]
         [Min(1f)] public float ReleasedJumpGravity = 3f;
 
+        [Header("Fall")]
+        [Min(1f)] public float FallGravity = 1f;
+
         [Header("Push")]
         [Min(0f)] public float PushDeceleration = 40f;
+        [Min(0f)] public float PushLift = 1f;
 
         [Header("Shove")]
         [Min(0f)] public float ShoveSpeed = 6f;
@@ -28,6 +32,7 @@ namespace Bw.UseCases.Movement
         LayerMask IBodyConfig.GroundLayer => GroundLayer;
         float IBodyConfig.PushDeceleration => PushDeceleration;
         float IBodyConfig.AirPushDeceleration => PushDeceleration;
+        float IBodyConfig.PushLift => PushLift;
         float IBodyConfig.ShoveSpeed => ShoveSpeed;
     }
 }

@@ -22,6 +22,8 @@ namespace Bw.EditorTools.Shooting
 
         public abstract float ThrowOf(float aim, float roll);
 
+        public abstract float Returned(float deflection, float seconds);
+
         public abstract TResult Switch<TResult>(Func<ShootingWeaponConfig, TResult> gun, Func<MeleeWeaponConfig, TResult> melee);
 
         private sealed class GunShooting : PreviewShooting
@@ -44,6 +46,9 @@ namespace Bw.EditorTools.Shooting
             public override float ThrowOf(float aim, float roll) =>
                 _spread.ThrowOf(aim, roll);
 
+            public override float Returned(float deflection, float seconds) =>
+                _spread.Returned(deflection, seconds);
+
             public override TResult Switch<TResult>(Func<ShootingWeaponConfig, TResult> gun, Func<MeleeWeaponConfig, TResult> melee) =>
                 gun(_config);
         }
@@ -64,6 +69,9 @@ namespace Bw.EditorTools.Shooting
                     (_, after) => after.PhaseTicks == 0 && (after.Phase == MeleePhase.Jab || after.Phase == MeleePhase.StrongSwing));
 
             public override float ThrowOf(float aim, float roll) =>
+                0f;
+
+            public override float Returned(float deflection, float seconds) =>
                 0f;
 
             public override TResult Switch<TResult>(Func<ShootingWeaponConfig, TResult> gun, Func<MeleeWeaponConfig, TResult> melee) =>

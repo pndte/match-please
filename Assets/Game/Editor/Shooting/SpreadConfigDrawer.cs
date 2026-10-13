@@ -10,8 +10,9 @@ namespace Bw.EditorTools.Shooting
         private const float FieldLabelWidth = 70f;
         private const float Gap = 6f;
 
-        private static readonly GUIContent ClimbLabel = new("Climb °", "How far every shot throws the cursor up around the shooter. The real mouse cursor moves, so it stays where the shot threw it: the player brings the aim back.");
-        private static readonly GUIContent JitterLabel = new("Jitter ±°", "A random throw of the cursor up or down added to the climb of every shot.");
+        private static readonly GUIContent ClimbLabel = new("Climb °", "How far every shot throws the barrel up off the cursor. The cursor stays where the player points.");
+        private static readonly GUIContent JitterLabel = new("Jitter ±°", "A random throw of the barrel up or down added to the climb of every shot.");
+        private static readonly GUIContent ReturnLabel = new("Return °/s", "How fast the barrel comes back to the cursor, degrees a second, also while firing.");
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) =>
             EditorGUIUtility.singleLineHeight;
@@ -25,9 +26,10 @@ namespace Bw.EditorTools.Shooting
             EditorGUI.indentLevel = 0;
             EditorGUIUtility.labelWidth = FieldLabelWidth;
 
-            var half = (fields.width - Gap) * 0.5f;
-            Field(new Rect(fields.x, fields.y, half, fields.height), property, nameof(SpreadConfig.Climb), ClimbLabel);
-            Field(new Rect(fields.x + half + Gap, fields.y, half, fields.height), property, nameof(SpreadConfig.Jitter), JitterLabel);
+            var third = (fields.width - Gap * 2f) / 3f;
+            Field(new Rect(fields.x, fields.y, third, fields.height), property, nameof(SpreadConfig.Climb), ClimbLabel);
+            Field(new Rect(fields.x + third + Gap, fields.y, third, fields.height), property, nameof(SpreadConfig.Jitter), JitterLabel);
+            Field(new Rect(fields.x + (third + Gap) * 2f, fields.y, third, fields.height), property, nameof(SpreadConfig.Return), ReturnLabel);
 
             EditorGUIUtility.labelWidth = labelWidth;
             EditorGUI.indentLevel = indent;

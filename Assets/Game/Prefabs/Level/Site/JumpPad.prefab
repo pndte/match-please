@@ -151,4 +151,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2c61859186bdc44d896d736c2ec2a37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Bw.UseCases.Level::Bw.UseCases.Level.Springboard
-  _launchSpeed: 40
+  _launchHeight: 12.933082

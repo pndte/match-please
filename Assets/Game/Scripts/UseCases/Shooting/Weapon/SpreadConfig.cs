@@ -8,5 +8,6 @@ namespace Bw.UseCases.Shooting.Weapon
     {
         public float Climb;
         [Min(0f)] public float Jitter;
+        [Min(0f)] public float Return;
     }
 }

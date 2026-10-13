@@ -13,6 +13,9 @@ namespace Bw.UseCases.Movement.Extensions
         public static float DeceleratedPush(this IBodyConfig config, float push, bool grounded, ISimulationStep step) =>
             grounded ? config.DeceleratedPush(push, step) : Mathf.MoveTowards(push, 0f, config.AirPushDeceleration * step.Duration);
 
+        public static Vector2 Lifted(this IBodyConfig config, Vector2 impulse) =>
+            new(impulse.x, impulse.y * config.PushLift);
+
         public static int PushTicks(this IBodyConfig config, float push, ISimulationStep step)
         {
             RequireStopping(config, push);
