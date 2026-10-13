@@ -1,13 +1,13 @@
+using System;
 using Bw.Entities.Simulation;
+using Bw.UseCases.Movement.Extensions;
 using Bw.UseCases.Movement.Physics.Abstractions;
 using JetBrains.Collections.Viewable;
-using JetBrains.Core;
-using JetBrains.Lifetimes;
 using UnityEngine;
 
 namespace Bw.UseCases.Movement
 {
-    public sealed class FreeBody : ISimulation<BodyState>
+    public sealed class FreeBody : ISimulation<BodyState>, ISteppable, IShovable
     {
         public IReadonlyProperty<BodyState> State => _state;
         public BodyState Previous { get; private set; }
@@ -16,31 +16,41 @@ namespace Bw.UseCases.Movement
         private readonly ViewableProperty<BodyState> _state;
         private readonly Signal<BodyState> _stepped = new();
         private readonly IBodyMotor _motor;
+        private readonly IMovementBody _body;
 
-        public FreeBody(
-            Lifetime lifetime,
-            ISource<Unit> steps,
-            IBodyMotor motor,
-            IMovementBody body)
+        private Vector2 _shoved;
+
+        public FreeBody(IBodyMotor motor, IMovementBody body)
         {
             _motor = motor;
+            _body = body;
             Previous = new BodyState(body.Position, Vector2.zero, 0f, false);
             _state = new ViewableProperty<BodyState>(Previous);
-
-            steps.Advise(lifetime, _ => Step());
         }
 
         public void Apply(BodyState state) =>
             _state.Value = state;
 
-        private void Step()
+        public float PossibleShove(Vector2 direction, float distance, IMovementCollider shover) =>
+            _motor.PossibleShove(_state.Value.Position + _shoved, direction, distance, shover);
+
+        public void Shove(Vector2 direction, float distance, IMovementCollider shover)
         {
-            Previous = _state.Value;
-            _state.Value = _motor.Step(Previous, Drive(Previous), out _);
-            _stepped.Fire(_state.Value);
+            if (distance <= 0f)
+                throw new ArgumentOutOfRangeException(nameof(distance), distance, "A shove moves a body forward, so its distance must be positive.");
+
+            var from = _state.Value.Position + _shoved;
+            _motor.MakeWay(from, direction, distance, shover);
+            _shoved += direction * distance;
+            _body.Place(from + direction * distance);
         }
 
-        private static BodyDrive Drive(BodyState state) =>
-            new(new Vector2(0f, state.Velocity.y), 1f, false);
+        public void Step()
+        {
+            Previous = _state.Value;
+            _state.Value = _motor.Step(Previous, _shoved);
+            _shoved = Vector2.zero;
+            _stepped.Fire(_state.Value);
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Bw.Entities.Network;
 using Bw.Entities.Network.LagCompensation;
+using Bw.Entities.Network.Prediction.Stream;
 using Bw.Entities.Network.Ticks;
 using Bw.UseCases.Character;
 using Bw.UseCases.Movement.Physics;
@@ -35,6 +36,7 @@ namespace Bw.Injection
         {
             Container.BindInterfacesTo<GameObjectByCharacterCollection>().AsSingle();
             Container.BindInterfacesTo<MovingPlatformCollection>().AsSingle();
+            Container.BindInterfacesTo<ShovableCollection>().AsSingle();
             Container.BindInterfacesTo<ScheduledCollection>().AsSingle();
             Container.BindInterfacesTo<WeaponInventories>().AsSingle();
             Container.BindInterfacesTo<RewindableCollection>().AsSingle();
@@ -45,7 +47,9 @@ namespace Bw.Injection
         private void BindClient()
         {
             Container.BindInterfacesTo<MovingPlatformCollection>().AsSingle();
+            Container.BindInterfacesTo<ShovableCollection>().AsSingle();
             Container.BindInterfacesTo<ScheduledCollection>().AsSingle();
+            Container.BindInterfacesTo<PredictedBodyCollection>().AsSingle();
             Container.Bind(typeof(IReadonlyFloorWeapons), typeof(IFloorWeapons)).To<FloorWeapons>().AsSingle()
                 .WriterOnlyInto<IFloorWeapons>(typeof(FloorWeaponRegistration));
         }

@@ -21,7 +21,7 @@ namespace Bw.UseCases.Movement.View.Animation
         public void Show(MovementState from, MovementState to, float progress)
         {
             var velocity = Vector2.Lerp(from.Body.Velocity, to.Body.Velocity, progress);
-            var speed = Mathf.Abs(velocity.x) / _config.Speed;
+            var speed = Mathf.Abs(velocity.x) / _config.Speed; //TODO: скорость бега берётся из управления, а не из пройденного: персонаж, который толкает ящик или упёрся в стену, бежит на месте полным шагом
             if (speed > TurnSpeed)
                 _facing = Mathf.Sign(velocity.x);
 

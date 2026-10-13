@@ -18,6 +18,7 @@ namespace Bw.Entities.Network.Prediction.Stream
         private readonly ISimulation<TState> _simulation;
         private readonly ISimulator<TInput, TState> _simulator;
         private readonly IScheduledCollection _scheduled;
+        private readonly IPredictedBodyCollection _predictedBodies;
         private readonly INetworkTicks _ticks;
 
         private int _lastReconciledTick;
@@ -30,11 +31,13 @@ namespace Bw.Entities.Network.Prediction.Stream
             ISimulation<TState> simulation,
             ISimulator<TInput, TState> simulator,
             IScheduledCollection scheduled,
+            IPredictedBodyCollection predictedBodies,
             INetworkTicks ticks)
         {
             _simulation = simulation;
             _simulator = simulator;
             _scheduled = scheduled;
+            _predictedBodies = predictedBodies;
             _ticks = ticks;
 
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime => //TODO: у чужого объекта локальное состояние не обновлялось (снимки идут только в показ) — получив управление (подбор оружия), клиент до первого состояния сервера предсказывает от устаревшего: патроны, счётчик выстрелов
@@ -65,6 +68,7 @@ namespace Bw.Entities.Network.Prediction.Stream
             foreach (var request in _pending)
             {
                 _scheduled.PoseAt(request.Tick);
+                _predictedBodies.PoseFor(request.Tick);
                 state = _simulator.Step(state, request.Input);
             }
 

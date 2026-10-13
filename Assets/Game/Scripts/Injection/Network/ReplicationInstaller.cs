@@ -5,8 +5,6 @@ using Bw.Entities.Network.Prediction.Stream.Requests;
 using Bw.Entities.Network.Replication;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
-using JetBrains.Collections.Viewable;
-using JetBrains.Core;
 using Unity.Netcode;
 using Zenject;
 
@@ -34,14 +32,16 @@ namespace Bw.Injection.Network
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.Bind<ISource<Unit>>().To<TickSteps>().AsSingle();
-                    Container.BindResultSender(state).WhenInjectedInto<StateChangeBroadcaster<TState>>();
+                    Container.Bind<PassiveStepper>().AsSingle().NonLazy();
+                    Container.BindResultSender(state).WhenInjectedInto(typeof(StateChangeBroadcaster<TState>), typeof(LateJoinTickedStateSender<TState>));
                     Container.Bind<StateChangeBroadcaster<TState>>().AsSingle().NonLazy();
+                    Container.Bind<LateJoinTickedStateSender<TState>>().AsSingle().NonLazy();
                     Container.Bind<SimulationViewSync<TState>>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:
-                    Container.BindResultReceiver(state).WhenInjectedInto<SnapshotInterpolation<TState>>();
+                    Container.BindResultReceiver(state).WhenInjectedInto(typeof(SnapshotInterpolation<TState>), typeof(ReplicatedStates<TState>));
                     Container.Bind<SnapshotInterpolation<TState>>().AsSingle().NonLazy();
+                    Container.Bind<IReplicatedStates<TState>>().To<ReplicatedStates<TState>>().AsSingle().NonLazy();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

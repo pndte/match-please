@@ -20,9 +20,11 @@ namespace Bw.UseCases.Movement.Physics
         private readonly Vector2 _offset;
         private readonly ContactFilter2D _filter;
         private readonly IMovingPlatformCollection _platforms;
+        private readonly IShovableCollection _shovables;
         private readonly List<RaycastHit2D> _hits = new(4);
+        private readonly List<ShovableContact> _ahead = new();
 
-        public BoxBody(Rigidbody2D rigidbody, BoxCollider2D collider, IBodyConfig config, IMovingPlatformCollection platforms)
+        public BoxBody(Rigidbody2D rigidbody, BoxCollider2D collider, IBodyConfig config, IMovingPlatformCollection platforms, IShovableCollection shovables)
         {
             _rigidbody = rigidbody;
             _collider = collider;
@@ -36,6 +38,7 @@ namespace Bw.UseCases.Movement.Physics
                 useTriggers = false
             };
             _platforms = platforms;
+            _shovables = shovables;
         }
 
         public void Place(Vector2 position)
@@ -56,6 +59,36 @@ namespace Bw.UseCases.Movement.Physics
             }
 
             return Mathf.Max(0f, distance);
+        }
+
+        public float WallDistance(Vector2 position, Vector2 direction, float distance, IMovementCollider shover)
+        {
+            var hitCount = Physics2D.BoxCast(position + _offset, _size, 0f, direction, _filter, _hits, distance + Skin);
+
+            for (var i = 0; i < hitCount; i++)
+            {
+                var hit = _hits[i];
+                if (Opposing(hit, direction, shover) && !_shovables.TryGetValue(hit.collider, out _))
+                    distance = Mathf.Min(distance, hit.distance - Skin);
+            }
+
+            return Mathf.Max(0f, distance);
+        }
+
+        public IReadOnlyList<ShovableContact> ShovablesAhead(Vector2 position, Vector2 direction, float distance, IMovementCollider shover)
+        {
+            _ahead.Clear();
+            var front = Vector2.Dot(position + _offset, direction) + Mathf.Abs(Vector2.Dot(_size, direction)) / 2f;
+            var hitCount = Physics2D.BoxCast(position + _offset, _size, 0f, direction, _filter, _hits, distance + Skin);
+
+            for (var i = 0; i < hitCount; i++)
+            {
+                var hit = _hits[i];
+                if (Opposing(hit, direction, shover) && _shovables.TryGetValue(hit.collider, out var shovable))
+                    _ahead.Add(new ShovableContact(shovable, Near(hit.collider.bounds, direction) - front - Skin));
+            }
+
+            return _ahead;
         }
 
         public float Fall(Vector2 position, float distance)
@@ -117,6 +150,9 @@ namespace Bw.UseCases.Movement.Physics
 
             return shift;
         }
+
+        public bool Is(Collider2D collider) =>
+            collider == _collider;
 
         private bool TryGetRidden(Vector2 position, out Vector2 shift)
         {
@@ -184,6 +220,12 @@ namespace Bw.UseCases.Movement.Physics
             var left = position.x + _offset.x - _size.x / 2f;
             return left < area.xMax && left + _size.x > area.xMin;
         }
+
+        private bool Opposing(RaycastHit2D hit, Vector2 direction, IMovementCollider shover) =>
+            hit.collider != _collider && !shover.Is(hit.collider) && Vector2.Dot(hit.normal, direction) < 0f && !IsPlatform(hit.collider);
+
+        private static float Near(Bounds bounds, Vector2 direction) =>
+            Vector2.Dot(bounds.center, direction) - Mathf.Abs(Vector2.Dot(bounds.extents, direction));
 
         private static bool IsPlatform(Collider2D collider) => //TODO: мотор понимает только доски, которые ловят сверху: поворот и дуга эффектора (rotationalOffset, surfaceArc) не учитываются
             collider.usedByEffector && collider.TryGetComponent(out PlatformEffector2D effector) && effector.enabled && effector.useOneWay;

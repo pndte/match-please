@@ -19,6 +19,7 @@ using Bw.UseCases.Mortality;
 using Bw.UseCases.Mortality.Network.Prediction;
 using Bw.UseCases.Mortality.View.Hit;
 using Bw.UseCases.Movement;
+using Bw.UseCases.Movement.Physics.Abstractions;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
@@ -69,7 +70,7 @@ namespace Bw.Injection.Crates
             PushTargetInstaller<IReadonlyMortal, BodyState, Hit>.Install(Container, _runtimeSettings);
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
-            Container.BindInterfacesTo<KnockbackRules>().AsSingle(); //TODO: ящик толкается только ударами и выстрелами — толкать его телом, подойдя вплотную, пока нельзя: тогда клиенту толкающего придётся предсказывать чужой ящик вместе со своим движением и переигрывать его при сверке
+            Container.BindInterfacesTo<KnockbackRules>().AsSingle();
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
@@ -81,11 +82,12 @@ namespace Bw.Injection.Crates
         private void BindBody(INetEntriesSchemaBuilder netSchema)
         {
             Container.Bind<IStateView<BodyState>>().To<BodyStateView<BodyState>>().AsSingle();
+            ShovableInstaller<BodyState>.Install(Container, _runtimeSettings);
             BodyInstaller<BodyState>.Install(Container, _runtimeSettings, _bodyConfig);
             ReplicationInstaller<BodyState>.Install(Container, _runtimeSettings, netSchema);
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Server)
-                Container.Bind(typeof(IReadonlySimulation<BodyState>), typeof(ISimulation<BodyState>))
+                Container.Bind(typeof(IReadonlySimulation<BodyState>), typeof(ISimulation<BodyState>), typeof(ISteppable), typeof(IShovable))
                     .To<FreeBody>().AsSingle()
                     .WriterOnlyInto<ISimulation<BodyState>>(typeof(SimulationAffectable<,>))
                     .NonLazy();
