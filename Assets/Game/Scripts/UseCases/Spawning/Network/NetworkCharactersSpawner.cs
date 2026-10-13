@@ -144,6 +144,7 @@ namespace Bw.UseCases.Spawning.Network
             if (_data.SpawnRandomOffset <= 0f)
                 return basePosition;
 
+            //TODO: the shift doesn't look at what stands there: spawn points are laid out with SpawnRandomOffset + 0.5 of free room, but a crate pushed next to one can take a new body inside it, and a body never pushes out of an overlap
             return basePosition + new Vector3(
                 Random.Range(-_data.SpawnRandomOffset, _data.SpawnRandomOffset),
                 0f,

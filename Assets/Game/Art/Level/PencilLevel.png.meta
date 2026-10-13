@@ -1096,6 +1096,94 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: excavator
+      rect:
+        serializedVersion: 2
+        x: 2056
+        y: 816
+        width: 820
+        height: 560
+      alignment: 9
+      pivot: {x: 0.024390243, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ad322039a96f6f40b12e53829dc9313
+      internalID: 823568701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cabin
+      rect:
+        serializedVersion: 2
+        x: 2908
+        y: 1096
+        width: 600
+        height: 280
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 183117ecabdf7804190857b2511635a4
+      internalID: 983735687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cabinBlue
+      rect:
+        serializedVersion: 2
+        x: 2908
+        y: 784
+        width: 600
+        height: 280
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8164be1525a44c8479ea06eab47bdba6
+      internalID: -433094214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ring
+      rect:
+        serializedVersion: 2
+        x: 3540
+        y: 1276
+        width: 180
+        height: 100
+      alignment: 9
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef11621e30e14d84997db4d3638263e8
+      internalID: -21728914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -1118,6 +1206,8 @@ TextureImporter:
       boom3: 878080948
       bricks: 1421374727
       cab: 1247691881
+      cabin: 983735687
+      cabinBlue: -433094214
       cable: 522695983
       cementBags: -1505732609
       city: -864743578
@@ -1127,6 +1217,7 @@ TextureImporter:
       craneHook: 1253878090
       crate: -1945571931
       crateCracked: 1072710024
+      excavator: 823568701
       gasCylinder: 989016174
       gasCylinderHit: -1595188556
       girder: 1752571948
@@ -1142,6 +1233,7 @@ TextureImporter:
       plank: -921973350
       platform: 1237506260
       rail: 1231638691
+      ring: -21728914
       scaffold: 1662843289
       shard0: 406336193
       shard1: -672036583
