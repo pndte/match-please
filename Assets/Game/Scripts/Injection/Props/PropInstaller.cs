@@ -132,13 +132,8 @@ namespace Bw.Injection.Props
             Container.Bind<PropRelease>().AsSingle().WithArguments(_parts.Prop).NonLazy();
             Container.Bind<DestroyedPropDrop>().AsSingle().NonLazy();
             Container.Decorate<ISteppable>().With<UnheldSteppable>();
-            Container.Decorate<IRewindable>().With<UnheldRewindable>();
             Container.Bind<SimulationRewinder<PropState>>().AsSingle();
-            Container.Bind<RewindableRegistration>()
-                .FromMethod(context => context.Container.Instantiate<RewindableRegistration>(
-                    new object[] { context.Container.Resolve<SimulationRewinder<PropState>>() }))
-                .AsCached()
-                .NonLazy();
+            Container.Decorate<IRewindable>().With<PropRewindable>();
             Container.Bind<WeaponHolder>().FromNewComponentOn(_parts.Prop.gameObject).AsSingle().NonLazy();
         }
 

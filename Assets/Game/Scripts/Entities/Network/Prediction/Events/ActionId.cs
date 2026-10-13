@@ -15,11 +15,5 @@ namespace Bw.Entities.Network.Prediction.Events
 
         public bool Equals(ActionId other) =>
             Initiator == other.Initiator && Tick == other.Tick;
-
-        public override bool Equals(object obj) =>
-            obj is ActionId other && Equals(other);
-
-        public override int GetHashCode() =>
-            HashCode.Combine(Initiator, Tick);
     }
 }

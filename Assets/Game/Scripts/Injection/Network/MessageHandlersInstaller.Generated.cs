@@ -25,6 +25,7 @@ namespace Bw.Injection.Network
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Shooting.Weapon.GunState>, Bw.UseCases.Shooting.Weapon.Network.Codecs.TickedGunStateCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedInput<Bw.UseCases.Shooting.Weapon.WeaponInput>, Bw.UseCases.Shooting.Weapon.Network.Codecs.TickedWeaponInputCodec>(receivers, senders);
             RegisterCodec<Bw.UseCases.Shooting.Weapon.Network.Requests.WeaponPickup, Bw.UseCases.Shooting.Weapon.Network.Codecs.WeaponPickupCodec>(receivers, senders);
+            RegisterCodec<Bw.UseCases.Shooting.Weapon.Network.Requests.WeaponSwitch, Bw.UseCases.Shooting.Weapon.Network.Codecs.WeaponSwitchCodec>(receivers, senders);
         }
     }
 }

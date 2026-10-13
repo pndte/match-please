@@ -8,5 +8,6 @@ namespace Bw.UseCases.Movement.Abstractions
         public LayerMask GroundLayer { get; }
         public float PushDeceleration { get; }
         public float AirPushDeceleration { get; }
+        public float ShoveSpeed { get; }
     }
 }

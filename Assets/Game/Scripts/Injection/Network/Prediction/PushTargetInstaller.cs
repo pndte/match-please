@@ -27,10 +27,14 @@ namespace Bw.Injection.Network.Prediction
                 case PeerType.Server:
                     Container.Bind<IEffectRules<TState, TEffect>>().To<PushEffectRules<TState, TEffect>>().AsSingle();
                     Container.Bind<SimulationAffectable<TState, TEffect>>().AsSingle();
+                    Container.Bind<IAffectable<TEffect>>().To<SimulationAffectable<TState, TEffect>>().FromResolve()
+                        .WhenInjectedInto<AffectableRegistration<TTarget, SimulationAffectable<TState, TEffect>, TEffect>>();
                     Container.Bind<AffectableRegistration<TTarget, SimulationAffectable<TState, TEffect>, TEffect>>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:
                     Container.Bind(typeof(PredictedPush<TEffect>), typeof(IPredictedPush)).To<PredictedPush<TEffect>>().AsSingle();
+                    Container.Bind<IPredictionTarget<TEffect>>().To<PredictedPush<TEffect>>().FromResolve()
+                        .WhenInjectedInto<PredictionTargetRegistration<TTarget, PredictedPush<TEffect>, TEffect>>();
                     Container.Bind<PredictionTargetRegistration<TTarget, PredictedPush<TEffect>, TEffect>>().AsSingle().NonLazy();
                     BindClientVisuals();
                     break;

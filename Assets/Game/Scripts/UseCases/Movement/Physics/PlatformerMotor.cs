@@ -26,7 +26,7 @@ namespace Bw.UseCases.Movement.Physics
                 Mathf.Clamp(input.Horizontal, -1f, 1f) * _config.Speed,
                 jumps ? _config.JumpForce : state.Body.Velocity.y);
 
-            var body = _body.Step(state.Body, new BodyDrive(velocity, GravityScale(velocity, rising, input), input.Down, _config.ShoveSpeed), out var launched);
+            var body = _body.Step(state.Body, new BodyDrive(velocity, GravityScale(velocity, rising, input), input.Down), out var launched);
             var coyoteTicks = jumps || launched ? 0 : NextCoyoteTicks(state);
             var bufferedTicks = jumps ? 0 : NextBufferedTicks(state, input);
             return new MovementState(body, new JumpState(!launched && rising && body.Velocity.y > 0f, coyoteTicks, bufferedTicks));

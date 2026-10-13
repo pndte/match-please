@@ -76,6 +76,38 @@ namespace Bw.UseCases.Shooting.Weapon.Extensions
             throw new InvalidOperationException($"No droppable {kind.ToString()} weapon is carried to be replaced.");
         }
 
+        public static bool TryFindLast(this IReadonlyWeaponInventory inventory, out IWeapon last)
+        {
+            for (var index = inventory.DrawOrder.Count - 1; index >= 0; index--)
+            {
+                last = inventory.DrawOrder[index];
+                if (inventory.Drawable(last))
+                    return true;
+            }
+
+            last = null;
+            return false;
+        }
+
+        public static bool TryFindScrolled(this IReadonlyWeaponInventory inventory, int direction, out IWeapon scrolled)
+        {
+            if (direction != 1 && direction != -1)
+                throw new ArgumentOutOfRangeException(
+                    nameof(direction), $"A scroll moves one slot forward (1) or back (-1), not {direction.ToString()}.");
+
+            var count = inventory.Slots.Count;
+            var start = inventory.TryFindDrawn(out var drawn) ? IndexOf(inventory, inventory.Carried[drawn]) : direction > 0 ? -1 : count;
+            for (var offset = 1; offset <= count; offset++)
+            {
+                var index = ((start + direction * offset) % count + count) % count;
+                if (inventory.TryFindTop(inventory.Slots[index], out scrolled) && inventory.Drawable(scrolled))
+                    return true;
+            }
+
+            scrolled = null;
+            return false;
+        }
+
         public static bool TryFindNext(this IReadonlyWeaponInventory inventory, WeaponSlot vacated, out IWeapon next) =>
             inventory.TryFindTop(vacated, out next)
             || TryFindLatestUncovered(inventory, out next)
@@ -140,6 +172,15 @@ namespace Bw.UseCases.Shooting.Weapon.Extensions
 
             top = null;
             return false;
+        }
+
+        private static int IndexOf(IReadonlyWeaponInventory inventory, WeaponSlot slot)
+        {
+            for (var index = 0; index < inventory.Slots.Count; index++)
+                if (inventory.Slots[index] == slot)
+                    return index;
+
+            throw new InvalidOperationException("The slot is not in this inventory's layout.");
         }
 
         private static bool Replaceable(IReadonlyWeaponInventory inventory, IWeapon weapon, WeaponKind kind) =>

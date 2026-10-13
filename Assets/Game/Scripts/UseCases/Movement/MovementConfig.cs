@@ -28,5 +28,6 @@ namespace Bw.UseCases.Movement
         LayerMask IBodyConfig.GroundLayer => GroundLayer;
         float IBodyConfig.PushDeceleration => PushDeceleration;
         float IBodyConfig.AirPushDeceleration => PushDeceleration;
+        float IBodyConfig.ShoveSpeed => ShoveSpeed;
     }
 }

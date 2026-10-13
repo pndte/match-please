@@ -13,9 +13,13 @@ namespace Bw.UseCases.Movement
         [Min(0f)] public float PushDeceleration = 40f;
         [Min(0f)] public float AirPushDeceleration = 3f;
 
+        [Header("Shove")]
+        [Min(0f)] public float ShoveSpeed;
+
         float IBodyConfig.GravityScale => GravityScale;
         LayerMask IBodyConfig.GroundLayer => GroundLayer;
         float IBodyConfig.PushDeceleration => PushDeceleration;
         float IBodyConfig.AirPushDeceleration => AirPushDeceleration;
+        float IBodyConfig.ShoveSpeed => ShoveSpeed;
     }
 }

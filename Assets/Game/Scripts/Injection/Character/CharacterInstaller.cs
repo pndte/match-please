@@ -71,6 +71,7 @@ namespace Bw.Injection
             MortalInstaller.Install(Container, _runtimeSettings, netSchema, _death, gameObject);
             PushTargetInstaller<IReadonlyMortal, MovementState, Hit>.Install(Container, _runtimeSettings);
             WeaponPickupInstaller.Install(Container, _runtimeSettings, netSchema, transform);
+            WeaponSwitchInstaller.Install(Container, _runtimeSettings, netSchema);
             NicknameInstaller.Install(Container, _runtimeSettings, netSchema);
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 

@@ -15,8 +15,8 @@ namespace Bw.Entities.Network.Prediction.Events
             INetworkLifetimedObject lifetimedObject,
             NetworkObject networkObject,
             TTarget target,
-            TPredictionTarget predictionTarget,
-            IPredictionTargets<TEffect> targets)
+            IPredictionTarget<TEffect> predictionTarget,
+            IPredictionTargets<TTarget, TEffect> targets)
         {
             lifetimedObject.SpawnedLifetime.WhenAlive(lifetime, spawnedLifetime =>
                 targets.AddLifetimed(spawnedLifetime, target, networkObject.NetworkObjectId, predictionTarget));

@@ -35,11 +35,15 @@ namespace Bw.Injection.Network.Prediction
                     Container.BindResultSender(state).WhenInjectedInto(typeof(AuthoritativeState<TState, TEffect>), typeof(LateJoinStateSender<TState>));
                     Container.Bind<AuthoritativeState<TState, TEffect>>().AsSingle();
                     Container.Bind<LateJoinStateSender<TState>>().AsSingle().NonLazy();
+                    Container.Bind<IAffectable<TEffect>>().To<AuthoritativeState<TState, TEffect>>().FromResolve()
+                        .WhenInjectedInto<AffectableRegistration<TTarget, AuthoritativeState<TState, TEffect>, TEffect>>();
                     Container.Bind<AffectableRegistration<TTarget, AuthoritativeState<TState, TEffect>, TEffect>>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:
                     Container.BindResultReceiver(state).WhenInjectedInto<PredictedState<TState, TEffect>>();
                     Container.Bind<PredictedState<TState, TEffect>>().AsSingle().NonLazy();
+                    Container.Bind<IPredictionTarget<TEffect>>().To<PredictedState<TState, TEffect>>().FromResolve()
+                        .WhenInjectedInto<PredictionTargetRegistration<TTarget, PredictedState<TState, TEffect>, TEffect>>();
                     Container.Bind<PredictionTargetRegistration<TTarget, PredictedState<TState, TEffect>, TEffect>>().AsSingle().NonLazy();
                     break;
                 default:

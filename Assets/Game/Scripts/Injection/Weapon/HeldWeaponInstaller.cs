@@ -18,8 +18,6 @@ using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network;
 using Bw.UseCases.Shooting.Weapon.Network.Prediction;
-using Bw.UseCases.Shooting.Weapon.Network.Requests;
-using JetBrains.Core;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
@@ -56,7 +54,7 @@ namespace Bw.Injection.Weapon
             ControlledByServicesInstaller.Install(Container, _runtimeSettings, _netSchema);
 
             BindWeapon();
-            BindDraw();
+            BindDrawn();
             EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyMortal, Hit>.Install(Container, _runtimeSettings, _netSchema);
 
             BindVisualFlip();
@@ -83,24 +81,19 @@ namespace Bw.Injection.Weapon
             StreamPredictionInstaller<WeaponInput, TState>.Install(Container, _runtimeSettings, _netSchema);
         }
 
-        private void BindDraw()
+        private void BindDrawn()
         {
-            var draw = _netSchema.DeclareRequest<Unit>(NetworkDelivery.Reliable);
             var drawn = _netSchema.DeclareResult<bool>(NetworkDelivery.Reliable);
 
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.BindRequestReceiver(draw).WhenInjectedInto<WeaponDrawServerHandler>();
                     Container.BindResultSender(drawn).WhenInjectedInto(typeof(WeaponDrawBroadcaster), typeof(LateJoinWeaponDrawSender));
-                    Container.Bind<WeaponDrawServerHandler>().AsSingle().NonLazy();
                     Container.Bind<WeaponDrawBroadcaster>().AsSingle().NonLazy();
                     Container.Bind<LateJoinWeaponDrawSender>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:
-                    Container.BindRequestSender(draw).WhenInjectedInto<WeaponDrawClientHandler>();
                     Container.BindResultReceiver(drawn).WhenInjectedInto<WeaponDrawReceiver>();
-                    Container.Bind<WeaponDrawClientHandler>().AsSingle().WithArguments(_parts.DrawKey).NonLazy();
                     Container.Bind<WeaponDrawReceiver>().AsSingle().NonLazy();
                     break;
                 default:

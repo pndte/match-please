@@ -25,8 +25,11 @@ MonoBehaviour:
   _inventory:
     Slots:
     - Kinds: 00000000
+      Key: 49
     - Kinds: 01000000
+      Key: 50
     - Kinds: 02000000
+      Key: 0
     Rules:
     - Kind: 0
       Droppable: 0
@@ -37,3 +40,4 @@ MonoBehaviour:
     - Kind: 2
       Droppable: 1
       HandsOnly: 1
+    LastKey: 113

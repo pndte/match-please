@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Bw.UseCases.Shooting.View.Highlight;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
@@ -20,6 +21,7 @@ namespace Bw.Injection.Weapon
         {
             RequireOneRowOfRulesPerKind();
             RequireSlotForEveryKind();
+            RequireDistinctSwitchKeys();
             Container.BindInstance(_pickup).AsSingle();
             Container.BindInstance(_highlight).AsSingle();
             Container.BindInstance(_inventory).AsSingle();
@@ -52,6 +54,15 @@ namespace Bw.Injection.Weapon
                     throw new InvalidOperationException(
                         $"Weapon settings '{name}' have no inventory slot for {kind.ToString()} weapons: such a weapon could never be carried.");
             }
+        }
+
+        private void RequireDistinctSwitchKeys()
+        {
+            var keys = new HashSet<KeyCode> { _inventory.LastKey };
+            foreach (var slot in _inventory.Slots)
+                if (slot.Key != KeyCode.None && !keys.Add(slot.Key))
+                    throw new InvalidOperationException(
+                        $"Weapon settings '{name}' bind {slot.Key.ToString()} to two weapon switches: one press would send both requests.");
         }
     }
 }

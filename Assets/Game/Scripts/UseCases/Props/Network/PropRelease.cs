@@ -86,7 +86,7 @@ namespace Bw.UseCases.Props.Network
                 });
         }
 
-        private Vector2 ReleasePosition(Collider2D holder)
+        private Vector2 ReleasePosition(Collider2D holder) //TODO: ящик, отпущенный прицелом вниз на земле, тянется к центру держателя и встаёт ему в ноги, перекрывая его; отпускать его надо в сторону от держателя
         {
             var scale = (Vector2)_transform.lossyScale;
             var offset = Vector2.Scale(_shape.offset, scale);

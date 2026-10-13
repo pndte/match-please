@@ -98,8 +98,7 @@ namespace Bw.Injection.Weapon
                 _networkTransform,
                 _body,
                 new GunState(0f, _shootingWeaponConfig.AmmoSettings.OnSpawnValue, 0, 0, 0),
-                WeaponKind.Gun,
-                KeyCode.Alpha2); //TODO: new input system
+                WeaponKind.Gun);
 
         private void BindGun()
         {

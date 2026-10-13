@@ -9,12 +9,7 @@ namespace Bw.UseCases.Props.Extensions
             var reach = holderHalfSize + propHalfSize + new Vector2(config.Gap, config.Gap);
             var radians = aim * Mathf.Deg2Rad;
             var direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
-            var offset = direction * Mathf.Min(Along(reach.x, direction.x), Along(reach.y, direction.y));
-            var lowest = propHalfSize.y + config.FeetClearance - holderHalfSize.y;
-
-            return offset.y >= lowest
-                ? offset
-                : new Vector2(direction.x < 0f ? -reach.x : reach.x, lowest);
+            return direction * Mathf.Min(Along(reach.x, direction.x), Along(reach.y, direction.y));
         }
 
         private static float Along(float reach, float component) =>

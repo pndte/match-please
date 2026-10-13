@@ -4,12 +4,12 @@ using JetBrains.Lifetimes;
 
 namespace Bw.Entities.Network.Prediction.Events
 {
-    public sealed class PredictionTargets<TEffect> : IPredictionTargets<TEffect> where TEffect : struct
+    public sealed class PredictionTargets<TTarget, TEffect> : IPredictionTargets<TTarget, TEffect> where TTarget : class where TEffect : struct
     {
-        private readonly Dictionary<object, Target> _byTarget = new(new SameObjectComparer());
+        private readonly Dictionary<TTarget, Target> _byTarget = new();
         private readonly Dictionary<ulong, Target> _byNetworkObjectId = new();
 
-        public void AddLifetimed<TTarget>(Lifetime lifetime, TTarget target, ulong networkObjectId, IPredictionTarget<TEffect> part) where TTarget : class
+        public void AddLifetimed(Lifetime lifetime, TTarget target, ulong networkObjectId, IPredictionTarget<TEffect> part)
         {
             var known = _byTarget.TryGetValue(target, out var entry);
             if (known && entry.NetworkObjectId != networkObjectId)
@@ -34,7 +34,7 @@ namespace Bw.Entities.Network.Prediction.Events
             lifetime.OnTermination(() => Remove(target, entry, part));
         }
 
-        public bool TryGet<TTarget>(TTarget target, out IPredictionTarget<TEffect> predictionTarget) where TTarget : class
+        public bool TryGet(TTarget target, out IPredictionTarget<TEffect> predictionTarget)
         {
             var found = _byTarget.TryGetValue(target, out var entry);
             predictionTarget = entry;
@@ -48,7 +48,7 @@ namespace Bw.Entities.Network.Prediction.Events
             return found;
         }
 
-        private void Remove(object target, Target entry, IPredictionTarget<TEffect> part)
+        private void Remove(TTarget target, Target entry, IPredictionTarget<TEffect> part)
         {
             entry.Parts.Remove(part);
             if (entry.Parts.Count > 0)

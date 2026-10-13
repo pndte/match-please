@@ -14,10 +14,10 @@ namespace Bw.Injection.Network.Prediction
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.Bind(typeof(IAffectables<>)).To(typeof(Affectables<>)).AsSingle();
+                    Container.Bind(typeof(IAffectables<,>)).To(typeof(Affectables<,>)).AsSingle();
                     break;
                 case PeerType.Client:
-                    Container.Bind(typeof(IPredictionTargets<>)).To(typeof(PredictionTargets<>)).AsSingle();
+                    Container.Bind(typeof(IPredictionTargets<,>)).To(typeof(PredictionTargets<,>)).AsSingle();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

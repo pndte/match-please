@@ -11,7 +11,7 @@ namespace Bw.Entities.Network.Prediction.Events
     public sealed class OutcomeReceiver<TTarget, TEffect> where TTarget : class where TEffect : struct
     {
         private readonly IServerTime _serverTime;
-        private readonly IPredictionTargets<TEffect> _targets;
+        private readonly IPredictionTargets<TTarget, TEffect> _targets;
         private readonly EventPredictionConfig _config;
         private readonly OutcomePrediction<TTarget, TEffect> _outcomePrediction;
         private readonly List<AffectedTarget<IPredictionTarget<TEffect>, TEffect>> _affected = new();
@@ -22,7 +22,7 @@ namespace Bw.Entities.Network.Prediction.Events
             INetResultReceiver<OutcomeReport<TEffect>> report,
             INetworkTicks ticks,
             IServerTime serverTime,
-            IPredictionTargets<TEffect> targets,
+            IPredictionTargets<TTarget, TEffect> targets,
             EventPredictionConfig config,
             OutcomePrediction<TTarget, TEffect> outcomePrediction)
         {

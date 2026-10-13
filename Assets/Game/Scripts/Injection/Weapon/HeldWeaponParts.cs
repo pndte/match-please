@@ -16,7 +16,6 @@ namespace Bw.Injection.Weapon
         public Rigidbody2D Body { get; }
         public TState Initial { get; }
         public WeaponKind Kind { get; }
-        public KeyCode DrawKey { get; }
 
         public HeldWeaponParts(
             Transform weapon,
@@ -26,8 +25,7 @@ namespace Bw.Injection.Weapon
             NetworkTransform networkTransform,
             Rigidbody2D body,
             TState initial,
-            WeaponKind kind,
-            KeyCode drawKey)
+            WeaponKind kind)
         {
             Weapon = weapon;
             Visual = visual;
@@ -37,7 +35,6 @@ namespace Bw.Injection.Weapon
             Body = body;
             Initial = initial;
             Kind = kind;
-            DrawKey = drawKey;
         }
     }
 }

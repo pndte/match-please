@@ -15,8 +15,8 @@ namespace Bw.Entities.Network.Prediction.Events
             INetworkLifetimedObject lifetimedObject,
             NetworkObject networkObject,
             TTarget target,
-            TAffectable affectable,
-            IAffectables<TEffect> affectables)
+            IAffectable<TEffect> affectable,
+            IAffectables<TTarget, TEffect> affectables)
         {
             lifetimedObject.SpawnedLifetime.WhenAlive(lifetime, spawnedLifetime =>
                 affectables.AddLifetimed(spawnedLifetime, target, networkObject.NetworkObjectId, affectable));

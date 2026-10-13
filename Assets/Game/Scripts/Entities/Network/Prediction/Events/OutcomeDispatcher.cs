@@ -13,7 +13,7 @@ namespace Bw.Entities.Network.Prediction.Events
         private readonly NetworkObject _networkObject;
         private readonly IControlledBy _controlledBy;
         private readonly IClientPlayerCollection _clientPlayers;
-        private readonly IAffectables<TEffect> _affectables;
+        private readonly IAffectables<TTarget, TEffect> _affectables;
         private readonly INetResultSender<OutcomeReport<TEffect>> _report;
         private readonly List<IAffectable<TEffect>> _targets = new();
 
@@ -25,7 +25,7 @@ namespace Bw.Entities.Network.Prediction.Events
             NetworkObject networkObject,
             IControlledBy controlledBy,
             IClientPlayerCollection clientPlayers,
-            IAffectables<TEffect> affectables,
+            IAffectables<TTarget, TEffect> affectables,
             IOutcomes<TInitiator, TTarget, TEffect> outcomes,
             INetResultSender<OutcomeReport<TEffect>> report)
         {
@@ -41,7 +41,7 @@ namespace Bw.Entities.Network.Prediction.Events
 
         private void Dispatch(ActionOutcome<TInitiator, TTarget, TEffect> outcome)
         {
-            if (!ReferenceEquals(outcome.Initiator, _initiator))
+            if (!EqualityComparer<TInitiator>.Default.Equals(outcome.Initiator, _initiator))
                 return;
 
             if (outcome.Tick <= _lastTick)

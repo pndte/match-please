@@ -107,7 +107,7 @@ namespace Bw.Entities.Network.Variables
             entry.Dirty.AdviseTrue(lifetime, () =>
             {
                 entry.Dirty.Value = false;
-                if (!NetworkObject.IsSpawned) //TODO: свойства, записанные до спавна, не дойдут до уже подключённых клиентов (поздним их пришлёт снимок состояния)
+                if (!NetworkObject.IsSpawned || NetworkObject.NetworkManager.ShutdownInProgress) //TODO: свойства, записанные до спавна, не дойдут до уже подключённых клиентов (поздним их пришлёт снимок состояния)
                     return;
 
                 CurrentRegistration = info;

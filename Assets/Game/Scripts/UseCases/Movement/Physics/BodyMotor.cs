@@ -88,7 +88,7 @@ namespace Bw.UseCases.Movement.Physics
 
         private float HorizontalTravel(Vector2 position, Vector2 direction, float distance, BodyDrive drive) =>
             Walking(direction, drive)
-                ? PossibleAdvance(position, direction, distance, drive.ShoveSpeed * _step.Duration, _collider)
+                ? PossibleAdvance(position, direction, distance, _config.ShoveSpeed * _step.Duration, _collider)
                 : _collider.Cast(position, direction, distance);
 
         private float PossibleAdvance(Vector2 position, Vector2 direction, float distance, float reach, IMovementCollider shover)

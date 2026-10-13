@@ -7,10 +7,10 @@ namespace Bw.Entities.Network.Prediction.Events
     public sealed class OutcomePrediction<TTarget, TEffect> : IOutcomePrediction<TTarget, TEffect> where TTarget : class where TEffect : struct
     {
         private readonly NetworkObject _initiator;
-        private readonly IPredictionTargets<TEffect> _targets;
+        private readonly IPredictionTargets<TTarget, TEffect> _targets;
         private readonly List<Entry> _entries = new();
 
-        public OutcomePrediction(NetworkObject initiator, IPredictionTargets<TEffect> targets)
+        public OutcomePrediction(NetworkObject initiator, IPredictionTargets<TTarget, TEffect> targets)
         {
             _initiator = initiator;
             _targets = targets;
