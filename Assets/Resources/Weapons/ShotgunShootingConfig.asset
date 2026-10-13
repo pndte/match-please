@@ -15,7 +15,7 @@ MonoBehaviour:
   AmmoSettings: {fileID: 11400000, guid: 2347963ac83ad924e82854630d1cb3fd, type: 2}
   ShootCooldown: 0.85
   ReloadTime: 3.2
-  Damage: 15
+  Damage: 12.142858
   Knockback: 2
   TurnSpeed: 480
   UnheldDespawnTime: 25

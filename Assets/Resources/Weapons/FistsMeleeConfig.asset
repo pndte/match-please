@@ -22,3 +22,13 @@ MonoBehaviour:
   HitMask:
     serializedVersion: 2
     m_Bits: 49152
+  MinChargeTime: 0.3
+  FullChargeTime: 1
+  FullChargeHoldTime: 0.8
+  StrongSwingTime: 0.45
+  StrongStrikeTime: 0.1
+  StrongBaseDamage: 24
+  StrongDamage: 80
+  StrongBaseKnockback: 9
+  StrongKnockback: 24
+  RecoveryTime: 0
