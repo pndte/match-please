@@ -24,6 +24,7 @@ namespace Bw.Entities.Network.Routing
     public sealed class NetworkRouter : IClientNetworkRouter, IServerNetworkRouter
     {
         private const int ReserveSize = 16;
+        private const int MaxMessageSize = ushort.MaxValue;
         private readonly INetworkHolder _networkHolder;
 
         public NetworkRouter(INetworkHolder networkHolder)
@@ -35,7 +36,7 @@ namespace Bw.Entities.Network.Routing
             where T : struct, INetworkSerializable
         {
             var dataSize = Unsafe.SizeOf<T>() + ReserveSize;
-            using var messageBuffer = new FastBufferWriter(dataSize, Allocator.Temp, dataSize);
+            using var messageBuffer = new FastBufferWriter(dataSize, Allocator.Temp, MaxMessageSize);
 
             messageBuffer.WriteNetworkSerializable(message);
             _networkHolder.CustomMessagingManager().SendUnnamedMessage(
@@ -48,7 +49,7 @@ namespace Bw.Entities.Network.Routing
             where T : struct, INetworkSerializable
         {
             var dataSize = Unsafe.SizeOf<T>() + ReserveSize;
-            using var messageBuffer = new FastBufferWriter(dataSize, Allocator.Temp, dataSize);
+            using var messageBuffer = new FastBufferWriter(dataSize, Allocator.Temp, MaxMessageSize);
 
             messageBuffer.WriteNetworkSerializable(message);
             _networkHolder.CustomMessagingManager().SendUnnamedMessage(
@@ -60,11 +61,16 @@ namespace Bw.Entities.Network.Routing
         public void Broadcast<T>(NetworkMessage<T> message, NetworkDelivery deliveryType)
             where T : struct, INetworkSerializable
         {
+            var recipients = _networkHolder.NetworkManager.Value.ConnectedClientsIds;
+            if (recipients.Count == 0)
+                return;
+
             var dataSize = Unsafe.SizeOf<T>() + ReserveSize;
-            using var messageBuffer = new FastBufferWriter(dataSize, Allocator.Temp, dataSize);
+            using var messageBuffer = new FastBufferWriter(dataSize, Allocator.Temp, MaxMessageSize);
 
             messageBuffer.WriteNetworkSerializable(message);
-            _networkHolder.CustomMessagingManager().SendUnnamedMessageToAll(
+            _networkHolder.CustomMessagingManager().SendUnnamedMessage(
+                recipients,
                 messageBuffer,
                 deliveryType);
         }
