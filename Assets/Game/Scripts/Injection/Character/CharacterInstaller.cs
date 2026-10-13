@@ -20,6 +20,8 @@ using Bw.UseCases.Mortality;
 using Bw.UseCases.Mortality.Network.Prediction;
 using Bw.UseCases.Mortality.View.Hit;
 using Bw.UseCases.Movement;
+using Bw.UseCases.Movement.Abstractions;
+using Bw.UseCases.Movement.Physics.Abstractions;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
@@ -64,6 +66,8 @@ namespace Bw.Injection
             OwnershipServicesInstaller.Install(Container, _runtimeSettings, netSchema);
             ControlledByServicesInstaller.Install(Container, _runtimeSettings, netSchema);
             CharacterMovementInstaller.Install(Container, _runtimeSettings, netSchema, _movementConfig);
+            Container.Bind(typeof(IHands), typeof(IHeldItems)).To<Hands>().AsSingle().WithArguments(transform);
+            Container.Decorate<IMovementBody>().With<HoldingBody>();
             MortalInstaller.Install(Container, _runtimeSettings, netSchema, _death, gameObject);
             PushTargetInstaller<IReadonlyMortal, MovementState, Hit>.Install(Container, _runtimeSettings);
             WeaponPickupInstaller.Install(Container, _runtimeSettings, netSchema, transform);
@@ -72,6 +76,7 @@ namespace Bw.Injection
 
             Container.BindInterfacesTo<KnockbackRules>().AsSingle();
             Container.InstantiateComponent<MovementRootHolder>(gameObject);
+            Container.InstantiateComponent<HandsHolder>(gameObject);
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {

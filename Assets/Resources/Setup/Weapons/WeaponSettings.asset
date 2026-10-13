@@ -17,8 +17,23 @@ MonoBehaviour:
     HoverRadius: 0.35
     WeaponMask:
       serializedVersion: 2
-      m_Bits: 65536
+      m_Bits: 81920
   _highlight:
     Material: {fileID: 2100000, guid: 11a173f6ad7e43a44875cdedad088965, type: 2}
     FadeInTime: 0.12
     FadeOutTime: 0.2
+  _inventory:
+    Slots:
+    - Kinds: 00000000
+    - Kinds: 01000000
+    - Kinds: 02000000
+    Rules:
+    - Kind: 0
+      Droppable: 0
+      HandsOnly: 0
+    - Kind: 1
+      Droppable: 1
+      HandsOnly: 0
+    - Kind: 2
+      Droppable: 1
+      HandsOnly: 1

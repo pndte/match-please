@@ -6,6 +6,7 @@ using Bw.Entities.Network.Ticks;
 using Bw.UseCases.Character;
 using Bw.UseCases.Movement.Physics;
 using Bw.UseCases.Shooting.Weapon;
+using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network;
 using Bw.UseCases.Shooting.Weapon.Pickup;
 using Bw.UseCases.Shooting.Weapon.Pickup.Abstractions;
@@ -38,6 +39,8 @@ namespace Bw.Injection
             Container.BindInterfacesTo<MovingPlatformCollection>().AsSingle();
             Container.BindInterfacesTo<ShovableCollection>().AsSingle();
             Container.BindInterfacesTo<ScheduledCollection>().AsSingle();
+            Container.Bind(typeof(IReadonlyWeaponKindRegistry), typeof(IWeaponKindRegistry)).To<WeaponKindRegistry>().AsSingle()
+                .WriterOnlyInto<IWeaponKindRegistry>(typeof(WeaponKindRegistration));
             Container.BindInterfacesTo<WeaponInventories>().AsSingle();
             Container.BindInterfacesTo<RewindableCollection>().AsSingle();
             Container.BindInterfacesTo<LagCompensator>().AsSingle();

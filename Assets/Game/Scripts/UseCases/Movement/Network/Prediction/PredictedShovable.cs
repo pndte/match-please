@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Bw.UseCases.Movement.Network.Prediction
 {
-    public sealed class PredictedShovable<TState> : IShovable, IPredictedBody, IPredictedShove where TState : struct, IBodyState<TState>
+    public sealed class PredictedShovable<TState> : IShovable, IPredictedBody, IPredictedShove, IShoveHistory where TState : struct, IBodyState<TState>
     {
         private const int Capacity = 64;
 
@@ -88,6 +88,12 @@ namespace Bw.UseCases.Movement.Network.Prediction
             _motor.MakeWay(from, direction, distance, shover);
             _body.Place(from + direction * distance);
             Record(direction.x * distance);
+        }
+
+        public void Clear()
+        {
+            Array.Fill(_shoveTicks, int.MinValue);
+            _traced = false;
         }
 
         private bool Shoving(int tick) =>

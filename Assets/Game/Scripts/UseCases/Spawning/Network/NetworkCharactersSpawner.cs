@@ -9,6 +9,7 @@ using Bw.UseCases.Mortality.Extensions;
 using Bw.UseCases.Mortality.Network;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
+using Bw.UseCases.Shooting.Weapon.Extensions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
@@ -104,11 +105,14 @@ namespace Bw.UseCases.Spawning.Network
 
             character.State.WhenAlive(characterLifetime, aliveLifetime =>
             {
-                var fists = SpawnWeapon(_data.FistsPrefab, position, rotation);
-                aliveLifetime.OnTermination(() => Despawn(fists));
-                _inventories.Give(aliveLifetime, character, WeaponSlot.Fists, WeaponOf(fists));
-                _inventories.Give(aliveLifetime, character, WeaponSlot.Primary, gun);
-                _inventories.Draw(gun);
+                var fistsObject = SpawnWeapon(_data.FistsPrefab, position, rotation);
+                aliveLifetime.OnTermination(() => Despawn(fistsObject));
+                _inventories.Open(aliveLifetime, character);
+                var inventory = _inventories.InventoryOf(character);
+                var fists = WeaponOf(fistsObject);
+                inventory.Give(inventory.FreeSlotFor(fists), fists);
+                inventory.Give(inventory.FreeSlotFor(gun), gun);
+                inventory.Draw(gun);
             });
         }
 

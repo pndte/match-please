@@ -112,6 +112,7 @@ namespace Bw.Injection.Weapon
                 _networkTransform,
                 _body,
                 default,
+                WeaponKind.Fists,
                 KeyCode.Alpha1); //TODO: new input system
 
         private void BindMelee()

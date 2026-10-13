@@ -21,7 +21,7 @@ MonoBehaviour:
   Radius: 0.35
   HitMask:
     serializedVersion: 2
-    m_Bits: 49152
+    m_Bits: 180224
   MinChargeTime: 0.3
   FullChargeTime: 1
   FullChargeHoldTime: 0.8

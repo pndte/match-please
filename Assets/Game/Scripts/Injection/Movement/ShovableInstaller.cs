@@ -26,7 +26,7 @@ namespace Bw.Injection.Movement
             if (_runtimeSettings.CurrentPeerType != PeerType.Client)
                 return;
 
-            Container.Bind(typeof(IShovable), typeof(IPredictedBody), typeof(IPredictedShove)).To<PredictedShovable<TState>>().AsSingle().NonLazy();
+            Container.Bind(typeof(IShovable), typeof(IPredictedBody), typeof(IPredictedShove), typeof(IShoveHistory)).To<PredictedShovable<TState>>().AsSingle().NonLazy();
             Container.Bind<PredictedBodyRegistration>().AsSingle().NonLazy();
             BindClientVisuals();
         }

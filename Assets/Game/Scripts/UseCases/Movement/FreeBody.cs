@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Bw.UseCases.Movement
 {
-    public sealed class FreeBody : ISimulation<BodyState>, ISteppable, IShovable
+    public sealed class FreeBody : ISimulation<BodyState>, ISteppable, IRestartable<BodyState>, IShovable
     {
         public IReadonlyProperty<BodyState> State => _state;
         public BodyState Previous { get; private set; }
@@ -30,6 +30,14 @@ namespace Bw.UseCases.Movement
 
         public void Apply(BodyState state) =>
             _state.Value = state;
+
+        public void Restart(BodyState state)
+        {
+            Previous = state;
+            _shoved = Vector2.zero;
+            _state.Value = state;
+            _stepped.Fire(state);
+        }
 
         public float PossibleShove(Vector2 direction, float distance, IMovementCollider shover) =>
             _motor.PossibleShove(_state.Value.Position + _shoved, direction, distance, shover);

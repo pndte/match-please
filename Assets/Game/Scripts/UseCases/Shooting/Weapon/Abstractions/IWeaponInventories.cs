@@ -10,9 +10,7 @@ namespace Bw.UseCases.Shooting.Weapon.Abstractions
         public IViewableMap<IWeapon, IReadonlyMortal> Carriers { get; }
         public IViewableBiMap<IReadonlyMortal, IWeapon> Drawn { get; }
 
-        public void Give(Lifetime lifetime, IReadonlyMortal character, WeaponSlot slot, IWeapon weapon);
-        public void Draw(IWeapon weapon);
-        public void Drop(IWeapon weapon);
-        public void PickUp(Lifetime lifetime, IReadonlyMortal character, IWeapon weapon);
+        public IWeaponInventory InventoryOf(IReadonlyMortal character);
+        public void Open(Lifetime lifetime, IReadonlyMortal character);
     }
 }

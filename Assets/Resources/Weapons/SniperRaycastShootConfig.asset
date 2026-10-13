@@ -15,4 +15,4 @@ MonoBehaviour:
   MaxDistance: 40
   HitMask:
     serializedVersion: 2
-    m_Bits: 49152
+    m_Bits: 180224

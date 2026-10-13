@@ -4,6 +4,7 @@ using Bw.Entities.Network.Variables;
 using Bw.UseCases.Mortality;
 using Bw.UseCases.Mortality.Extensions;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
+using Bw.UseCases.Shooting.Weapon.Extensions;
 using Bw.UseCases.Shooting.Weapon.Pickup;
 using Bw.UseCases.Shooting.Weapon.Pickup.Extensions;
 using JetBrains.Lifetimes;
@@ -43,13 +44,14 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
             };
 
             character.State.WhenAlive(lifetime, aliveLifetime =>
-                pickup.Received.Advise(aliveLifetime, request => PickUp(aliveLifetime, request.Point)));
+                pickup.Received.Advise(aliveLifetime, request => PickUp(request.Point)));
         }
 
-        private void PickUp(Lifetime aliveLifetime, Vector2 point)
+        private void PickUp(Vector2 point)
         {
-            if (TryFindPickable(point, out var weapon))
-                _inventories.PickUp(aliveLifetime, _character, weapon);
+            var inventory = _inventories.InventoryOf(_character);
+            if (inventory.Switchable() && TryFindPickable(point, out var weapon))
+                inventory.PickUpSwapping(weapon);
         }
 
         private bool TryFindPickable(Vector2 point, out IWeapon pickable)

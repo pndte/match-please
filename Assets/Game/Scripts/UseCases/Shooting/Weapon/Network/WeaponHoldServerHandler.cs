@@ -6,7 +6,6 @@ using Bw.UseCases.Mortality;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace Bw.UseCases.Shooting.Weapon.Network
@@ -19,7 +18,6 @@ namespace Bw.UseCases.Shooting.Weapon.Network
         private readonly IControlledBy _controlledBy;
         private readonly IWeaponDraw _draw;
         private readonly NetworkObject _networkObject;
-        private readonly NetworkTransform _networkTransform;
 
         public WeaponHoldServerHandler(
             Lifetime lifetime,
@@ -30,8 +28,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             IOwnershipController ownershipController,
             IControlledBy controlledBy,
             IWeaponDraw draw,
-            NetworkObject networkObject,
-            NetworkTransform networkTransform)
+            NetworkObject networkObject)
         {
             _characterRegistry = characterRegistry;
             _characterObjects = characterObjects;
@@ -39,7 +36,6 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             _controlledBy = controlledBy;
             _draw = draw;
             _networkObject = networkObject;
-            _networkTransform = networkTransform;
 
             inventories.Carriers.ViewForKey(lifetime, weapon, Hold);
             inventories.Drawn.Inverse.ViewForKey(lifetime, weapon, Draw);
@@ -74,14 +70,6 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             if (!_networkObject.TryRemoveParent())
                 throw new InvalidOperationException(
                     $"Weapon {_networkObject.NetworkObjectId.ToString()} can't be detached from its holder.");
-
-            RestartClientInterpolation();
-        }
-
-        private void RestartClientInterpolation()
-        {
-            var released = _networkObject.transform;
-            _networkTransform.Teleport(released.position, released.rotation, released.localScale);
         }
     }
 }

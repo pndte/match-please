@@ -59,17 +59,8 @@ namespace Bw.Injection.Mortality
                 .To<Mortal>().AsSingle()
                 .WriterOnlyInto<IAppliedState<Vitals>>(
                     typeof(AuthoritativeState<Vitals, Hit>), typeof(PredictedState<Vitals, Hit>));
-            Container.Bind<CorpseHitbox>().AsSingle().WithArguments(SingleLayer(_death.CorpseLayer)).NonLazy();
+            Container.Bind<CorpseHitbox>().AsSingle().WithArguments(_death.CorpseLayer.SingleLayer("corpse")).NonLazy();
             Container.InstantiateComponent<ReadonlyMortalHolder>(_body);
-        }
-
-        private static int SingleLayer(LayerMask mask)
-        {
-            for (var layer = 0; layer < 32; layer++)
-                if (mask.value == 1 << layer)
-                    return layer;
-
-            throw new ArgumentException($"The corpse layer must be exactly one layer, the mask is {mask.value}.", nameof(mask));
         }
     }
 }

@@ -27,5 +27,6 @@ namespace Bw.UseCases.Movement
         float IBodyConfig.GravityScale => GravityScale;
         LayerMask IBodyConfig.GroundLayer => GroundLayer;
         float IBodyConfig.PushDeceleration => PushDeceleration;
+        float IBodyConfig.AirPushDeceleration => PushDeceleration;
     }
 }

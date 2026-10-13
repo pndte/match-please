@@ -54,7 +54,7 @@ namespace Bw.UseCases.Movement.Physics
                     push = 0f;
             }
 
-            push = _config.DeceleratedPush(push, _step);
+            push = _config.DeceleratedPush(push, state.Grounded, _step);
 
             var verticalDirection = velocity.y > 0f ? Vector2.up : Vector2.down;
             var verticalDistance = Mathf.Abs(velocity.y) * deltaTime;

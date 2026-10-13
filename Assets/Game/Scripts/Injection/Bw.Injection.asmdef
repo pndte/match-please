@@ -26,7 +26,9 @@
         "Bw.UseCases.Mortality.View",
         "Bw.UseCases.Crates.View",
         "Bw.UseCases.Level",
-        "Bw.UseCases.Level.Network"
+        "Bw.UseCases.Level.Network",
+        "Bw.UseCases.Props",
+        "Bw.UseCases.Props.View"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

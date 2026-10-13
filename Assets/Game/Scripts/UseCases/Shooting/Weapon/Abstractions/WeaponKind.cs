@@ -1,8 +1,9 @@
 namespace Bw.UseCases.Shooting.Weapon.Abstractions
 {
-    public enum WeaponSlot
+    public enum WeaponKind
     {
         Fists,
-        Primary
+        Gun,
+        Prop
     }
 }

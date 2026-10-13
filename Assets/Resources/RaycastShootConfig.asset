@@ -13,11 +13,6 @@ MonoBehaviour:
   m_Name: RaycastShootConfig
   m_EditorClassIdentifier: Bw.UseCases::DefaultNamespace.RaycastShootConfig
   MaxDistance: 20
-  Damage: 10
   HitMask:
     serializedVersion: 2
-    m_Bits: 49152
-  TrailDuration: 0.15
-  TrailSpeed: 200
-  TrailLength: 0.1
-  TrailColor: {r: 1, g: 1, b: 1, a: 1}
+    m_Bits: 180224
