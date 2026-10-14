@@ -19,6 +19,7 @@ using Bw.UseCases.Character.View.Hit;
 using Bw.UseCases.Character.View.Player;
 using Bw.UseCases.Character.View.Pose;
 using Bw.UseCases.Mortality;
+using Bw.UseCases.Mortality.Network;
 using Bw.UseCases.Mortality.Network.Prediction;
 using Bw.UseCases.Mortality.View.Adapters;
 using Bw.UseCases.Mortality.View.Death;
@@ -48,6 +49,7 @@ namespace Bw.Injection
         [SerializeField] private SpriteRenderer _sprite;
         [SerializeField] private HitFeedbackConfig _hitFeedbackConfig;
         [SerializeField] private DeathConfig _death;
+        [SerializeField] private RegenerationConfig _regeneration;
 
         public override void InstallBindings()
         {
@@ -83,6 +85,9 @@ namespace Bw.Injection
             Container.BindInterfacesTo<KnockbackRules>().AsSingle();
             Container.InstantiateComponent<MovementRootHolder>(gameObject);
             Container.InstantiateComponent<HandsHolder>(gameObject);
+
+            if (_runtimeSettings.CurrentPeerType == PeerType.Server)
+                Container.Bind<Regeneration>().AsSingle().WithArguments(_regeneration).NonLazy();
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {

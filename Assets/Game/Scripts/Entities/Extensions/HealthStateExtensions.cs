@@ -13,6 +13,15 @@ namespace Bw.Entities.Extensions
             return new HealthState(current, current - state.Current);
         }
 
+        public static HealthState AfterHeal(this HealthState state, float amount, float max)
+        {
+            if (amount <= 0f)
+                throw new ArgumentOutOfRangeException(nameof(amount), amount, "A heal must restore health.");
+
+            var current = Math.Min(max, state.Current + amount);
+            return new HealthState(current, current - state.Current);
+        }
+
         public static HealthState WithoutChange(this HealthState state) =>
             new(state.Current, 0f);
     }

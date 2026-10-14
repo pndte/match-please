@@ -1,4 +1,3 @@
-using Bw.Entities.Network.Prediction.Events.Requests;
 using Bw.Entities.Network.Serialization;
 using Unity.Netcode;
 

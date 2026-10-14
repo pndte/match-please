@@ -3,36 +3,31 @@ using Bw.Entities.Network;
 using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Prediction.Events.Requests;
 using Bw.Entities.Network.Variables;
-using Unity.Netcode;
 using Zenject;
 
 namespace Bw.Injection.Network.Prediction
 {
     public class EventPredictionTargetInstaller<TTarget, TState, TEffect>
-        : Installer<IRuntimeSettings, INetEntriesSchemaBuilder, EventPredictionTargetInstaller<TTarget, TState, TEffect>>
+        : Installer<IRuntimeSettings, NetResultDeclaration<CausedState<TState>>, EventPredictionTargetInstaller<TTarget, TState, TEffect>>
         where TTarget : class
         where TState : struct
         where TEffect : struct
     {
         private readonly IRuntimeSettings _runtimeSettings;
-        private readonly INetEntriesSchemaBuilder _netSchema;
+        private readonly NetResultDeclaration<CausedState<TState>> _state;
 
-        public EventPredictionTargetInstaller(
-            IRuntimeSettings runtimeSettings,
-            INetEntriesSchemaBuilder netSchema)
+        public EventPredictionTargetInstaller(IRuntimeSettings runtimeSettings, NetResultDeclaration<CausedState<TState>> state)
         {
             _runtimeSettings = runtimeSettings;
-            _netSchema = netSchema;
+            _state = state;
         }
 
         public override void InstallBindings()
         {
-            var state = _netSchema.DeclareResult<CausedState<TState>>(NetworkDelivery.Reliable);
-
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.BindResultSender(state).WhenInjectedInto(typeof(AuthoritativeState<TState, TEffect>), typeof(LateJoinStateSender<TState>));
+                    Container.BindResultSender(_state).WhenInjectedInto(typeof(AuthoritativeState<TState, TEffect>), typeof(LateJoinStateSender<TState>));
                     Container.Bind<AuthoritativeState<TState, TEffect>>().AsSingle();
                     Container.Bind<LateJoinStateSender<TState>>().AsSingle().NonLazy();
                     Container.Bind<IAffectable<TEffect>>().To<AuthoritativeState<TState, TEffect>>().FromResolve()
@@ -40,7 +35,7 @@ namespace Bw.Injection.Network.Prediction
                     Container.Bind<AffectableRegistration<TTarget, AuthoritativeState<TState, TEffect>, TEffect>>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:
-                    Container.BindResultReceiver(state).WhenInjectedInto<PredictedState<TState, TEffect>>();
+                    Container.BindResultReceiver(_state).WhenInjectedInto<PredictedState<TState, TEffect>>();
                     Container.Bind<PredictedState<TState, TEffect>>().AsSingle().NonLazy();
                     Container.Bind<IPredictionTarget<TEffect>>().To<PredictedState<TState, TEffect>>().FromResolve()
                         .WhenInjectedInto<PredictionTargetRegistration<TTarget, PredictedState<TState, TEffect>, TEffect>>();

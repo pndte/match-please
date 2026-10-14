@@ -1,6 +1,6 @@
 using System;
 
-namespace Bw.Entities.Network.Prediction.Events.Requests
+namespace Bw.Entities.Network.Prediction.Events
 {
     public readonly struct StateCause
     {

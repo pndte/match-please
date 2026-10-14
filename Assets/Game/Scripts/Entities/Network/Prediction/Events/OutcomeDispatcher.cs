@@ -59,9 +59,9 @@ namespace Bw.Entities.Network.Prediction.Events
 
             _lastTick = outcome.Tick;
 
-            var action = new ActionId(_networkObject.NetworkObjectId, outcome.Tick);
+            var cause = StateCause.Of(new ActionId(_networkObject.NetworkObjectId, outcome.Tick));
             for (var index = 0; index < _targets.Count; index++)
-                _targets[index].Affect(action, outcome.Affected[index].Effect);
+                _targets[index].Affect(cause, outcome.Affected[index].Effect);
 
             if (reported)
                 _report.SendTo(controller, new OutcomeReport<TEffect>(outcome.Tick, affected));

@@ -57,10 +57,10 @@ namespace Bw.Entities.Network.Prediction.Events
                 NetworkObjectId = networkObjectId;
             }
 
-            public void Affect(ActionId action, TEffect effect)
+            public void Affect(StateCause cause, TEffect effect)
             {
                 for (var index = 0; index < Parts.Count; index++)
-                    Parts[index].Affect(action, effect);
+                    Parts[index].Affect(cause, effect);
             }
         }
     }

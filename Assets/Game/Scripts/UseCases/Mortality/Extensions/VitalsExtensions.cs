@@ -14,6 +14,14 @@ namespace Bw.UseCases.Mortality.Extensions
             return new Vitals(health, health.Current <= 0f ? LifeState.Dead : LifeState.Alive);
         }
 
+        public static Vitals AfterHeal(this Vitals vitals, float amount, float max)
+        {
+            if (vitals.State == LifeState.Dead)
+                throw new InvalidOperationException("The dead can't be healed.");
+
+            return new Vitals(vitals.Health.AfterHeal(amount, max), LifeState.Alive);
+        }
+
         public static Vitals WithoutChange(this Vitals vitals) =>
             new(vitals.Health.WithoutChange(), vitals.State);
 

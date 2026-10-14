@@ -19,10 +19,10 @@ namespace Bw.Entities.Network.Prediction.Events
             _result = result;
         }
 
-        public void Affect(ActionId action, TEffect effect)
+        public void Affect(StateCause cause, TEffect effect)
         {
             var next = _rules.Apply(_state.Current, effect);
-            _result.Broadcast(new CausedState<TState>(next, StateCause.Of(action)));
+            _result.Broadcast(new CausedState<TState>(next, cause));
             _state.Apply(next);
         }
     }
