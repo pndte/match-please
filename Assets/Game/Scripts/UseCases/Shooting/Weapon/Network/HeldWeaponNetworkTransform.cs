@@ -5,7 +5,7 @@ using Unity.Netcode.Components;
 
 namespace Bw.UseCases.Shooting.Weapon.Network
 {
-    public sealed class HeldWeaponNetworkTransform //TODO: сервер продолжает слать через NetworkTransform позу оружия в руках, хотя клиенты её не применяют — выключать отправку на время удержания
+    public sealed class HeldWeaponNetworkTransform
     {
         public HeldWeaponNetworkTransform(Lifetime lifetime, IWeaponHold hold, NetworkTransform networkTransform)
         {

@@ -107,7 +107,7 @@ namespace Bw.Injection.Weapon
             Container.Bind<IStateView<TState>>().To<WeaponStateView<TState>>().AsSingle().WithArguments(_parts.Weapon);
             Container.Bind<RaycastShooter<TState>>().AsSingle().NonLazy();
             Container.Bind<WeaponHoldServerHandler>().AsSingle().NonLazy();
-            Container.Bind<ReleasedWeaponTeleport>().AsSingle().WithArguments(_parts.NetworkTransform).NonLazy();
+            Container.Bind<HeldWeaponTransformPause>().AsSingle().WithArguments(_parts.NetworkTransform).NonLazy();
             Container.Bind<HeldWeaponBody>().AsSingle().WithArguments(_parts.Body).NonLazy();
             Container.Bind<WeaponKindRegistration>().AsSingle().WithArguments(_parts.Kind).NonLazy();
         }
