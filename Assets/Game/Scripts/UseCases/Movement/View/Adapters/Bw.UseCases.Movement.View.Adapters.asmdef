@@ -1,0 +1,20 @@
+{
+    "name": "Bw.UseCases.Movement.View.Adapters",
+    "rootNamespace": "Bw",
+    "references": [
+        "Bw.Entities",
+        "Bw.UseCases.Movement",
+        "Bw.UseCases.Movement.View"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JetBrains.Lifetimes.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

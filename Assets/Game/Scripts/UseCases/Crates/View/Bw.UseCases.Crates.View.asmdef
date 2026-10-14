@@ -2,8 +2,7 @@
     "name": "Bw.UseCases.Crates.View",
     "rootNamespace": "Bw",
     "references": [
-        "Bw.Entities",
-        "Bw.UseCases.Mortality",
+        "Bw.UseCases.Mortality.View",
         "Bw.UseCases.Audio.View",
         "Bw.UseCases.Vfx.View"
     ],

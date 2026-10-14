@@ -1,33 +1,21 @@
-using Bw.Entities;
-using Bw.Entities.Extensions;
-using Bw.Entities.Simulation;
+using Bw.UseCases.Shooting.View.Abstractions;
 using Bw.UseCases.Shooting.View.Crosshair.Abstractions;
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Shooting.View.Crosshair
 {
-    public sealed class WeaponRoundsCursor : IStateView<GunState>
+    public sealed class WeaponRoundsCursor
     {
-        private readonly ViewableProperty<int> _rounds;
-
         public WeaponRoundsCursor(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
-            IReadonlyWeaponDraw draw,
-            IAimCursor cursor,
-            ShootingWeaponConfig config)
+            IWeaponCarryViewModel carry,
+            IGunViewModel gun,
+            IAimCursor cursor)
         {
-            _rounds = new ViewableProperty<int>(config.AmmoSettings.OnSpawnValue);
-
-            controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
-                draw.DrawnLifetime.WhenAlive(controlledLifetime, drawnLifetime =>
-                    cursor.ShowRounds(drawnLifetime, _rounds, config.AmmoSettings.Max)));
+            carry.Mine.WhenTrue(lifetime, mineLifetime =>
+                carry.Drawn.WhenTrue(mineLifetime, drawnLifetime =>
+                    cursor.ShowRounds(drawnLifetime, gun.Rounds, gun.Capacity)));
         }
-
-        public void Show(GunState from, GunState to, float progress) =>
-            _rounds.Value = to.Ammo;
     }
 }

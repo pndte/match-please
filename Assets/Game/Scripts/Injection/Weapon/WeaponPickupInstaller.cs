@@ -2,7 +2,7 @@ using System;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
 using Bw.Injection.Network;
-using Bw.UseCases.Shooting.View.Highlight;
+using Bw.UseCases.Shooting.View.Adapters;
 using Bw.UseCases.Shooting.Weapon.Network.Requests;
 using Bw.UseCases.Shooting.Weapon.Pickup;
 using Unity.Netcode;

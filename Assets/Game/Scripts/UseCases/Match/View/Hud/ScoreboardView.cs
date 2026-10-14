@@ -11,17 +11,17 @@ namespace Bw.UseCases.Match.View.Hud
         private const string Hidden = "hidden";
         private const KeyCode HoldKey = KeyCode.Tab;
 
-        private readonly IReadonlyMatchBoard _board;
+        private readonly IMatchViewModel _match;
         private readonly VisualTreeAsset _rowTemplate;
-        private MatchStandings _drawn = MatchStandings.None;
+        private ScoreSheet _drawn = ScoreSheet.None;
 
         public ScoreboardView(
             Lifetime lifetime,
             HudDocument hud,
             VisualTreeAsset rowTemplate,
-            IReadonlyMatchBoard board)
+            IMatchViewModel match)
         {
-            _board = board;
+            _match = match;
             _rowTemplate = rowTemplate;
 
             hud.WhenShown(lifetime, (shownLifetime, root) =>
@@ -34,29 +34,29 @@ namespace Bw.UseCases.Match.View.Hud
 
         private void Refresh(VisualElement layer, VisualElement rows)
         {
-            var standings = _board.Current.Value;
-            var shown = Input.GetKey(HoldKey) && standings.Period.Phase != MatchPhase.Ended; //TODO: new input system
+            var sheet = _match.Sheet.Value;
+            var shown = Input.GetKey(HoldKey) && sheet.Stage != MatchStage.Ended; //TODO: new input system
             layer.EnableInClassList(Hidden, !shown);
-            if (!shown || ReferenceEquals(standings, _drawn))
+            if (!shown || ReferenceEquals(sheet, _drawn))
                 return;
 
-            _drawn = standings;
-            Draw(rows, standings);
+            _drawn = sheet;
+            Draw(rows, sheet);
         }
 
-        private void Draw(VisualElement rows, MatchStandings standings)
+        private void Draw(VisualElement rows, ScoreSheet sheet)
         {
             rows.Clear();
-            for (var index = 0; index < standings.Lines.Count; index++)
+            for (var index = 0; index < sheet.Lines.Count; index++)
             {
-                var line = standings.Lines[index];
+                var line = sheet.Lines[index];
                 var row = _rowTemplate.Instantiate().Q("row");
-                row.EnableInClassList("score-row--leader", index == 0 && line.Score.Kills > 0);
-                row.EnableInClassList("score-row--me", line.IsMine);
-                row.EnableInClassList("score-row--odd", index % 2 == 1 && !line.IsMine);
+                row.EnableInClassList("score-row--leader", index == 0 && line.Stats.Kills > 0);
+                row.EnableInClassList("score-row--me", line.Mine);
+                row.EnableInClassList("score-row--odd", index % 2 == 1 && !line.Mine);
                 row.Q<Label>("place").text = (index + 1).ToString(CultureInfo.InvariantCulture);
                 row.Q<Label>("nickname").text = line.Nickname;
-                ScoreLabels.Fill(row, line.Score);
+                ScoreLabels.Fill(row, line.Stats);
                 rows.Add(row);
             }
         }

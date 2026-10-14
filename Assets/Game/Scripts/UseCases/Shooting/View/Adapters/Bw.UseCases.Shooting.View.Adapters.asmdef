@@ -1,0 +1,21 @@
+{
+    "name": "Bw.UseCases.Shooting.View.Adapters",
+    "rootNamespace": "Bw",
+    "references": [
+        "Bw.Entities",
+        "Bw.UseCases.Shooting",
+        "Bw.UseCases.Shooting.View",
+        "Bw.UseCases.Audio.View"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JetBrains.Lifetimes.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

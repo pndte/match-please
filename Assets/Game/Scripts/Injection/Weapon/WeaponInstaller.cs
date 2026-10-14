@@ -9,6 +9,8 @@ using Bw.UseCases.Mortality;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.View;
 using Bw.UseCases.Shooting.View.Abstractions;
+using Bw.UseCases.Shooting.View.Adapters;
+using Bw.UseCases.Shooting.View.Adapters.Audio;
 using Bw.UseCases.Shooting.View.Audio;
 using Bw.UseCases.Shooting.View.Crosshair;
 using Bw.UseCases.Shooting.View.Highlight;
@@ -148,25 +150,28 @@ namespace Bw.Injection.Weapon
 
         private void BindClientVisuals()
         {
+            Container.Bind(typeof(IGunViewModel), typeof(GunViewModel)).To<GunViewModel>().AsSingle();
             Container.Bind<IStateView<GunState>>()
                 .FromMethod(ctx => new CompositeStateView<GunState>(
                     ctx.Container.Instantiate<WeaponStateView<GunState>>(new object[] { transform }),
-                    ctx.Container.Resolve<SeenShots<GunState>>(),
-                    ctx.Container.Instantiate<WeaponReloadCursor>(),
-                    ctx.Container.Instantiate<WeaponRoundsCursor>(),
-                    ctx.Container.Instantiate<WeaponReloadSoundsView>(new object[] { transform }),
-                    ctx.Container.Instantiate<WeaponRigView>(new object[] { _rig })))
+                    ctx.Container.Resolve<SeenShotsViewModel<GunState>>(),
+                    ctx.Container.Resolve<GunViewModel>()))
                 .AsSingle();
+            Container.Bind<WeaponReloadCursor>().AsSingle().NonLazy();
+            Container.Bind<WeaponRoundsCursor>().AsSingle().NonLazy();
+            Container.Bind<WeaponRigView>().AsSingle().WithArguments(_rig).NonLazy();
             Container.Bind<WeaponShotEffectsView>().AsSingle().NonLazy();
             Container.Bind<IMuzzleFlash>().FromComponentInNewPrefab(_vfxConfig.MuzzleFlash).UnderTransform(_flashPoint).AsSingle();
             Container.Bind<MuzzleEffectsView>().AsSingle().WithArguments(_ejector).NonLazy();
-            Container.BindInterfacesTo<WeaponHighlightView>().AsSingle().WithArguments(_visual, _visual.GetComponentsInChildren<SpriteRenderer>(true));
+            Container.BindInterfacesTo<FloorWeaponHighlightViewModel>().AsSingle();
+            Container.Bind<WeaponHighlightView>().AsSingle().WithArguments(_visual, _visual.GetComponentsInChildren<SpriteRenderer>(true)).NonLazy();
         }
 
         private void BindClientSounds()
         {
-            Container.Bind<WeaponSoundsConfig>().FromMethod(ctx => ctx.Container.Resolve<WeaponSoundsCatalog>().For(_shootingWeaponConfig)).AsSingle();
-            Container.BindInterfacesTo<ShotSfxPlayer>().AsSingle();
+            Container.Bind<GunSounds>().FromMethod(ctx => ctx.Container.Resolve<WeaponSoundsCatalog>().For(_shootingWeaponConfig)).AsSingle();
+            Container.BindInterfacesTo<ShotSfxPlayer>().AsSingle().WithArguments(_muzzleTransform);
+            Container.Bind<WeaponReloadSoundsView>().AsSingle().WithArguments(transform).NonLazy();
         }
 
         private void BindConfigs()

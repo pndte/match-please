@@ -1,4 +1,4 @@
-using Bw.Entities;
+using Bw.UseCases.Mortality.View.Health;
 using DG.Tweening;
 using JetBrains.Lifetimes;
 using UnityEngine;
@@ -15,13 +15,13 @@ namespace Bw.UseCases.Character.View.HealthBar
         public HealthBarPresence(
             Lifetime lifetime,
             HealthBarWidget widget,
-            IReadonlyHealth health,
+            IHealthViewModel health,
             HealthBarConfig config)
         {
             _widget = widget;
             _config = config;
 
-            health.State.Advise(lifetime, state => Live(state.Current > 0f));
+            health.Level.Advise(lifetime, level => Live(level.Share > 0f));
         }
 
         private void Live(bool alive)

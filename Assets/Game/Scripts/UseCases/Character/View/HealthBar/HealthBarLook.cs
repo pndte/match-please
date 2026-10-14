@@ -1,4 +1,4 @@
-using Bw.Entities;
+using Bw.UseCases.Mortality.View.Health;
 using DG.Tweening;
 using JetBrains.Lifetimes;
 using UnityEngine;
@@ -13,12 +13,8 @@ namespace Bw.UseCases.Character.View.HealthBar
         private static readonly int HealId = Shader.PropertyToID("_Heal");
         private static readonly int FlashId = Shader.PropertyToID("_Flash");
         private static readonly int LowId = Shader.PropertyToID("_Low");
-        private static readonly int FillColorId = Shader.PropertyToID("_FillColor");
-        private static readonly int FillShadeId = Shader.PropertyToID("_FillShade");
 
         private readonly HealthBarWidget _widget;
-        private readonly Material _material;
-        private readonly IReadonlyHealth _health;
         private readonly HealthBarConfig _config;
         private readonly MaterialChannel _fill;
         private readonly MaterialChannel _trail;
@@ -31,13 +27,10 @@ namespace Bw.UseCases.Character.View.HealthBar
             Lifetime lifetime,
             HealthBarWidget widget,
             Material material,
-            IReadonlyHealth health,
-            IOwnership ownership,
+            IHealthViewModel health,
             HealthBarConfig config)
         {
             _widget = widget;
-            _material = material;
-            _health = health;
             _config = config;
             _fill = new MaterialChannel(material, FillId, widget.gameObject);
             _trail = new MaterialChannel(material, TrailId, widget.gameObject);
@@ -46,27 +39,19 @@ namespace Bw.UseCases.Character.View.HealthBar
             _flash = new MaterialChannel(material, FlashId, widget.gameObject);
             _low = new MaterialChannel(material, LowId, widget.gameObject);
 
-            ownership.Mine.Advise(lifetime, Paint);
-            health.State.Advise(lifetime, Apply);
+            health.Level.Advise(lifetime, Apply);
         }
 
-        private void Paint(bool mine)
+        private void Apply(HealthLevel level)
         {
-            _material.SetColor(FillColorId, mine ? _config.OwnFill : _config.OtherFill);
-            _material.SetColor(FillShadeId, mine ? _config.OwnShade : _config.OtherShade);
-        }
-
-        private void Apply(HealthState state)
-        {
-            var share = state.Current / _health.Max;
-            if (state.Change < 0f)
-                Hurt(share);
-            else if (state.Change > 0f)
-                Heal(share);
+            if (level.Change < 0f)
+                Hurt(level.Share);
+            else if (level.Change > 0f)
+                Heal(level.Share);
             else
-                Place(share);
+                Place(level.Share);
 
-            _low.To(share > 0f && share <= _config.LowShare ? 1f : 0f, _config.LowFadeTime);
+            _low.To(level.Share > 0f && level.Share <= _config.LowShare ? 1f : 0f, _config.LowFadeTime);
         }
 
         private void Hurt(float share)

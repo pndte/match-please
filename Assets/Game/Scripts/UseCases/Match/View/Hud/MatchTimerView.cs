@@ -8,18 +8,12 @@ namespace Bw.UseCases.Match.View.Hud
     {
         private const string Hidden = "hidden";
 
-        private readonly IReadonlyMatchBoard _board;
-        private readonly MatchCountdown _countdown;
+        private readonly IMatchViewModel _match;
         private int _shownSeconds = -1;
 
-        public MatchTimerView(
-            Lifetime lifetime,
-            HudDocument hud,
-            IReadonlyMatchBoard board,
-            MatchCountdown countdown)
+        public MatchTimerView(Lifetime lifetime, HudDocument hud, IMatchViewModel match)
         {
-            _board = board;
-            _countdown = countdown;
+            _match = match;
 
             hud.WhenShown(lifetime, (shownLifetime, root) =>
             {
@@ -31,12 +25,12 @@ namespace Bw.UseCases.Match.View.Hud
 
         private void Count(VisualElement layer, Label time)
         {
-            var running = _board.Current.Value.Period.Phase == MatchPhase.Running;
+            var running = _match.Sheet.Value.Stage == MatchStage.Running;
             layer.EnableInClassList(Hidden, !running);
             if (!running)
                 return;
 
-            var seconds = _countdown.SecondsLeft;
+            var seconds = _match.SecondsLeft;
             if (seconds == _shownSeconds)
                 return;
 

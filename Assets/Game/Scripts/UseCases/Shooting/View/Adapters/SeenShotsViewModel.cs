@@ -1,0 +1,80 @@
+using Bw.Entities;
+using Bw.Entities.Extensions;
+using Bw.Entities.Simulation;
+using Bw.UseCases.Shooting.View.Abstractions;
+using Bw.UseCases.Shooting.Weapon;
+using Bw.UseCases.Shooting.Weapon.Abstractions;
+using JetBrains.Collections.Viewable;
+using JetBrains.Lifetimes;
+using UnityEngine;
+
+namespace Bw.UseCases.Shooting.View.Adapters
+{
+    public sealed class SeenShotsViewModel<TState> : IStateView<TState>, IShotsViewModel where TState : struct, IWeaponState
+    {
+        public ISource<SeenShot> Seen => _seen;
+
+        private readonly Signal<SeenShot> _seen = new();
+        private readonly IShotTracer _tracer;
+
+        private bool _drawn;
+        private bool _remote;
+        private bool _synchronized;
+        private int _shots;
+
+        public SeenShotsViewModel(
+            Lifetime lifetime,
+            IReadonlyControlledBy controlledBy,
+            IReadonlyWeapon weapon,
+            IReadonlyWeaponDraw draw,
+            IShotTracer tracer)
+        {
+            _tracer = tracer;
+
+            draw.DrawnLifetime.WhenAlive(lifetime, drawnLifetime =>
+            {
+                _drawn = true;
+                drawnLifetime.OnTermination(() => _drawn = false);
+            });
+            controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
+                weapon.Fired.Advise(controlledLifetime, shot => See(shot.Aim)));
+            controlledBy.Me.WhenFalse(lifetime, remoteLifetime =>
+            {
+                _remote = true;
+                _synchronized = false;
+                remoteLifetime.OnTermination(() => _remote = false);
+            });
+        }
+
+        public void Show(TState from, TState to, float progress)
+        {
+            if (!_remote)
+                return;
+
+            var fired = _synchronized && to.Shots > _shots; //TODO: несколько выстрелов между двумя кадрами (низкий FPS) видны как один, с последним стволом: отдача и трассер проиграются один раз
+            _shots = to.Shots;
+            _synchronized = true;
+
+            if (fired && _drawn)
+                See(to.Aim);
+        }
+
+        private void See(float aim)
+        {
+            var ray = _tracer.Aim(aim);
+            var pellets = new PelletTrace[_tracer.Pellets];
+            for (var pellet = 0; pellet < pellets.Length; pellet++)
+                pellets[pellet] = TraceOf(_tracer.Pellet(ray, pellet));
+
+            _seen.Fire(new SeenShot(ray.Direction, pellets));
+        }
+
+        private PelletTrace TraceOf(ShotRay ray)
+        {
+            var trace = _tracer.Cast(ray);
+            return trace.Hit
+                ? new PelletTrace(trace.From, trace.To, ray.Direction, true, trace.Hit.normal, trace.Hit.collider.gameObject.layer)
+                : new PelletTrace(trace.From, trace.To, ray.Direction, false, Vector2.zero, 0);
+        }
+    }
+}

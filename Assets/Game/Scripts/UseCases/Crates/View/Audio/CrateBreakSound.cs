@@ -1,6 +1,6 @@
 using Bw.UseCases.Audio.View.Playback.Abstractions;
-using Bw.UseCases.Mortality;
-using Bw.UseCases.Mortality.Extensions;
+using Bw.UseCases.Mortality.View.Death;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using UnityEngine;
 
@@ -10,12 +10,12 @@ namespace Bw.UseCases.Crates.View.Audio
     {
         public CrateBreakSound(
             Lifetime lifetime,
-            IReadonlyMortal crate,
+            IDeathViewModel death,
             Transform body,
             ISoundPlayer player,
             CrateSoundsConfig config)
         {
-            crate.AdviseKilled(lifetime, () => player.Play(config.Break, body.position));
+            death.Killed.Advise(lifetime, _ => player.Play(config.Break, body.position));
         }
     }
 }

@@ -3,8 +3,6 @@
     "rootNamespace": "Bw",
     "references": [
         "Bw.Entities",
-        "Bw.UseCases",
-        "Bw.UseCases.Shooting",
         "Bw.UseCases.Camera.View",
         "Bw.UseCases.Audio.View",
         "Bw.UseCases.Vfx.View",
@@ -12,7 +10,6 @@
         "R3.Unity",
         "UnityEngine.UI",
         "Unity.InputSystem",
-        "Bw.UseCases.Character",
         "Bw.UseCases.Character.View",
         "Unity.RenderPipelines.Universal.2D.Runtime"
     ],

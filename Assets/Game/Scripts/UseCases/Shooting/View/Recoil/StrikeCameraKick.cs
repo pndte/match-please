@@ -1,4 +1,3 @@
-using Bw.Entities;
 using Bw.UseCases.Camera.View.Shake;
 using Bw.UseCases.Shooting.View.Abstractions;
 using Bw.UseCases.Shooting.View.Impact;
@@ -11,13 +10,13 @@ namespace Bw.UseCases.Shooting.View.Recoil
     {
         public StrikeCameraKick(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
+            IWeaponCarryViewModel carry,
             IStrikeImpacts impacts,
             ICameraShake cameraShake,
             StrikeFeelConfig config)
         {
-            controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
-                impacts.Bodies.Advise(controlledLifetime, impact => cameraShake.Kick(impact.Direction * config.CameraKick)));
+            carry.Mine.WhenTrue(lifetime, mineLifetime =>
+                impacts.Bodies.Advise(mineLifetime, impact => cameraShake.Kick(impact.Direction * config.CameraKick)));
         }
     }
 }

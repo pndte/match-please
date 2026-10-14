@@ -3,8 +3,6 @@
     "rootNamespace": "Bw",
     "references": [
         "Bw.Entities",
-        "Bw.UseCases.Character",
-        "Bw.UseCases.Mortality",
         "Bw.UseCases.Mortality.View",
         "Bw.UseCases.Camera.View",
         "Bw.UseCases.Audio.View",

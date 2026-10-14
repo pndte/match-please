@@ -1,18 +1,17 @@
-using Bw.UseCases.Shooting.Weapon.Pickup.Abstractions;
 using DG.Tweening;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using UnityEngine;
 
 namespace Bw.UseCases.Shooting.View.Highlight
 {
-    public sealed class WeaponHighlightView : IWeaponHighlight
+    public sealed class WeaponHighlightView
     {
         private static readonly int HighlightId = Shader.PropertyToID("_Highlight");
         private static readonly int SpriteUvRectId = Shader.PropertyToID("_SpriteUvRect");
         private static readonly int UvPerUnitId = Shader.PropertyToID("_UvPerUnit");
         private static readonly int SpriteCenterId = Shader.PropertyToID("_SpriteCenter");
 
-        private readonly Lifetime _lifetime;
         private readonly WeaponHighlightConfig _config;
         private readonly Transform _visual;
         private readonly SpriteRenderer[] _parts;
@@ -24,23 +23,25 @@ namespace Bw.UseCases.Shooting.View.Highlight
 
         public WeaponHighlightView(
             Lifetime lifetime,
+            IHighlightViewModel highlight,
             WeaponHighlightConfig config,
             Transform visual,
             SpriteRenderer[] parts)
         {
-            _lifetime = lifetime;
             _config = config;
             _visual = visual;
             _parts = parts;
             _materials = new Material[parts.Length];
+
+            highlight.Highlighted.WhenTrue(lifetime, Show);
         }
 
-        public void Show(Lifetime highlightLifetime)
+        private void Show(Lifetime highlightLifetime)
         {
             Wear();
             DOTween.Kill(this);
             Fade(1f, _config.FadeInTime);
-            highlightLifetime.Intersect(_lifetime).OnTermination(() =>
+            highlightLifetime.OnTermination(() =>
             {
                 DOTween.Kill(this);
                 Fade(0f, _config.FadeOutTime).OnComplete(TakeOff);

@@ -1,6 +1,5 @@
-using Bw.Entities;
 using Bw.UseCases.Camera.View.Shake;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
+using Bw.UseCases.Shooting.View.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
@@ -10,15 +9,13 @@ namespace Bw.UseCases.Shooting.View.Recoil
     {
         public WeaponCameraKick(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
-            IReadonlyWeapon weapon,
-            IShotTracer tracer,
+            IWeaponCarryViewModel carry,
+            IShotsViewModel shots,
             ICameraShake cameraShake,
             WeaponCameraKickConfig config)
         {
-            controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
-                weapon.Fired.Advise(controlledLifetime, shot =>
-                    cameraShake.Kick(-tracer.Aim(shot.Aim).Direction * config.Kick)));
+            carry.Mine.WhenTrue(lifetime, mineLifetime =>
+                shots.Seen.Advise(mineLifetime, shot => cameraShake.Kick(-shot.Direction * config.Kick)));
         }
     }
 }

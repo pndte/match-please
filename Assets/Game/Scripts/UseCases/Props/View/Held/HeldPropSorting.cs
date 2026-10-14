@@ -1,5 +1,5 @@
-using Bw.Entities.Extensions;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
+using Bw.UseCases.Shooting.View.Abstractions;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using UnityEngine;
 
@@ -9,11 +9,11 @@ namespace Bw.UseCases.Props.View.Held
     {
         public HeldPropSorting(
             Lifetime lifetime,
-            IWeaponHold hold,
+            IWeaponCarryViewModel carry,
             SpriteRenderer sprite,
             int heldOrder)
         {
-            hold.HeldLifetime.WhenAlive(lifetime, heldLifetime =>
+            carry.Held.WhenTrue(lifetime, heldLifetime =>
             {
                 var freeOrder = sprite.sortingOrder;
                 sprite.sortingOrder = heldOrder;

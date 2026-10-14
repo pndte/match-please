@@ -1,6 +1,7 @@
-using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.UseCases.Character.View.Abstractions;
+using Bw.UseCases.Character.View.Player;
+using Bw.UseCases.Mortality.View.Health;
 using JetBrains.Lifetimes;
 using UnityEngine;
 
@@ -19,10 +20,9 @@ namespace Bw.UseCases.Character.View.HealthBar
 
         public void Show(
             Lifetime lifetime,
-            IReadonlyHealth health,
-            IOwnership ownership,
-            IReadonlyNickname nickname,
-            Transform body)
+            IHealthViewModel health,
+            IPlayerViewModel player,
+            Transform anchor)
         {
             var widget = Instantiate(_prefab, _layer);
             var shown = widget.gameObject;
@@ -38,9 +38,10 @@ namespace Bw.UseCases.Character.View.HealthBar
             material.SetFloat(SeedId, Random.Range(0f, 100f));
             widget.Bar.material = material;
 
-            new HealthBarMotion(barLifetime, widget, body, _camera, _config);
-            new HealthBarLook(barLifetime, widget, material, health, ownership, _config);
-            new HealthBarNickname(barLifetime, widget, nickname, ownership);
+            new HealthBarMotion(barLifetime, widget, anchor, _camera, _config);
+            new HealthBarLook(barLifetime, widget, material, health, _config);
+            new HealthBarColors(barLifetime, material, player, _config);
+            new HealthBarNickname(barLifetime, widget, player);
             new HealthBarPresence(barLifetime, widget, health, _config);
         }
     }

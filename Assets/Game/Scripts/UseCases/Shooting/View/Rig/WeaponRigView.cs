@@ -1,13 +1,11 @@
-using Bw.Entities.Extensions;
-using Bw.Entities.Simulation;
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
+using Bw.UseCases.Shooting.View.Abstractions;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using UnityEngine;
 
 namespace Bw.UseCases.Shooting.View.Rig
 {
-    public sealed class WeaponRigView : IStateView<GunState>
+    public sealed class WeaponRigView
     {
         private static readonly int HeldId = Animator.StringToHash(WeaponRigParameters.Held);
         private static readonly int ReloadingId = Animator.StringToHash(WeaponRigParameters.Reloading);
@@ -15,49 +13,37 @@ namespace Bw.UseCases.Shooting.View.Rig
         private static readonly int ReloadProgressId = Animator.StringToHash(WeaponRigParameters.ReloadProgress);
 
         private readonly Animator _rig;
-        private readonly ISimulationStep _step;
-        private readonly ShootingWeaponConfig _config;
 
         private bool _reloading;
 
         public WeaponRigView(
             Lifetime lifetime,
             Animator rig,
-            IReadonlyWeaponDraw draw,
-            ISimulationStep step,
-            ShootingWeaponConfig config)
+            IWeaponCarryViewModel carry,
+            IGunViewModel gun)
         {
             _rig = rig;
-            _step = step;
-            _config = config;
 
-            draw.DrawnLifetime.WhenAlive(lifetime, drawnLifetime =>
+            carry.Drawn.WhenTrue(lifetime, drawnLifetime =>
             {
                 rig.SetBool(HeldId, true);
                 drawnLifetime.OnTermination(() => rig.SetBool(HeldId, false));
             });
+            gun.Reload.Advise(lifetime, Follow);
         }
 
-        public void Show(GunState from, GunState to, float progress)
+        private void Follow(GunReload reload)
         {
-            var ticksLeft = from.ReloadTicks > 0 && to.ReloadTicks > 0
-                ? Mathf.Lerp(from.ReloadTicks, to.ReloadTicks, progress)
-                : to.ReloadTicks;
-            var reloading = ticksLeft > 0f;
+            if (reload.Active && !_reloading)
+                _rig.SetBool(EmptyId, reload.Empty);
 
-            if (reloading && !_reloading)
-                _rig.SetBool(EmptyId, to.Ammo == 0);
+            if (reload.Active)
+                _rig.SetFloat(ReloadProgressId, reload.Progress);
 
-            if (reloading)
-                _rig.SetFloat(ReloadProgressId, 1f - ticksLeft / ReloadTicks());
+            if (reload.Active != _reloading)
+                _rig.SetBool(ReloadingId, reload.Active);
 
-            if (reloading != _reloading)
-                _rig.SetBool(ReloadingId, reloading);
-
-            _reloading = reloading;
+            _reloading = reload.Active;
         }
-
-        private float ReloadTicks() =>
-            Mathf.Max(1, Mathf.CeilToInt(_config.ReloadTime / _step.Duration));
     }
 }

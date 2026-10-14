@@ -11,6 +11,7 @@ using Bw.UseCases.Movement.Abstractions;
 using Bw.UseCases.Props;
 using Bw.UseCases.Props.Network;
 using Bw.UseCases.Props.View.Held;
+using Bw.UseCases.Shooting.View.Adapters;
 using Bw.UseCases.Shooting.View.Highlight;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
@@ -148,8 +149,10 @@ namespace Bw.Injection.Props
 
         private void BindClientVisuals()
         {
-            Container.BindInterfacesTo<WeaponHighlightView>().AsSingle()
-                .WithArguments(_parts.Visual, _parts.Visual.GetComponentsInChildren<SpriteRenderer>(true));
+            Container.BindInterfacesTo<FloorWeaponHighlightViewModel>().AsSingle();
+            Container.Bind<WeaponHighlightView>().AsSingle()
+                .WithArguments(_parts.Visual, _parts.Visual.GetComponentsInChildren<SpriteRenderer>(true)).NonLazy();
+            Container.BindInterfacesTo<WeaponCarryViewModel>().AsSingle();
             Container.Bind<HeldPropSorting>().AsSingle().WithArguments(_parts.HeldSortingOrder).NonLazy();
         }
     }

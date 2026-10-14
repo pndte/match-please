@@ -3,7 +3,6 @@
     "rootNamespace": "Bw",
     "references": [
         "Bw.Entities",
-        "Bw.UseCases.Movement",
         "Bw.UseCases.Audio.View"
     ],
     "includePlatforms": [],

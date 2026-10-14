@@ -1,6 +1,5 @@
-using Bw.Entities;
+using Bw.UseCases.Shooting.View.Abstractions;
 using Bw.UseCases.Shooting.View.Crosshair.Abstractions;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
@@ -10,12 +9,12 @@ namespace Bw.UseCases.Shooting.View.Crosshair
     {
         public WeaponCursorKick(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
-            IReadonlyWeapon weapon,
+            IWeaponCarryViewModel carry,
+            IShotsViewModel shots,
             IAimCursor cursor)
         {
-            controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
-                weapon.Fired.Advise(controlledLifetime, _ => cursor.ShowShot()));
+            carry.Mine.WhenTrue(lifetime, mineLifetime =>
+                shots.Seen.Advise(mineLifetime, _ => cursor.ShowShot()));
         }
     }
 }

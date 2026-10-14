@@ -12,6 +12,7 @@ using Bw.UseCases.Mortality;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.View;
 using Bw.UseCases.Shooting.View.Abstractions;
+using Bw.UseCases.Shooting.View.Adapters;
 using Bw.UseCases.Shooting.View.Crosshair;
 using Bw.UseCases.Shooting.View.Recoil;
 using Bw.UseCases.Shooting.Weapon;
@@ -122,7 +123,8 @@ namespace Bw.Injection.Weapon
 
         private void BindClientVisuals()
         {
-            Container.Bind(typeof(ISeenShots), typeof(SeenShots<TState>)).To<SeenShots<TState>>().AsSingle();
+            Container.BindInterfacesTo<WeaponCarryViewModel>().AsSingle();
+            Container.Bind(typeof(IShotsViewModel), typeof(SeenShotsViewModel<TState>)).To<SeenShotsViewModel<TState>>().AsSingle();
             Container.Bind<StowedWeaponView>().AsSingle().WithArguments(_parts.Visual.GetComponentsInChildren<Renderer>(true)).NonLazy();
             Container.Bind<WeaponRecoilView>().AsSingle().WithArguments(_parts.Visual).NonLazy();
             Container.Bind<WeaponCameraKick>().AsSingle().NonLazy();

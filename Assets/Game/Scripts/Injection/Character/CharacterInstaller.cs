@@ -9,15 +9,20 @@ using Bw.Injection.Network.Prediction;
 using Bw.Injection.Network.Variables;
 using Bw.Injection.Ownership;
 using Bw.Injection.Weapon;
-using Bw.UseCases.Camera.View.Follow;
 using Bw.UseCases.Character.View.Abstractions;
+using Bw.UseCases.Character.View.Adapters;
 using Bw.UseCases.Character.View.Audio;
 using Bw.UseCases.Character.View.Death;
+using Bw.UseCases.Character.View.Follow;
 using Bw.UseCases.Character.View.HealthBar;
 using Bw.UseCases.Character.View.Hit;
+using Bw.UseCases.Character.View.Player;
 using Bw.UseCases.Character.View.Pose;
 using Bw.UseCases.Mortality;
 using Bw.UseCases.Mortality.Network.Prediction;
+using Bw.UseCases.Mortality.View.Adapters;
+using Bw.UseCases.Mortality.View.Death;
+using Bw.UseCases.Mortality.View.Health;
 using Bw.UseCases.Mortality.View.Hit;
 using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.Abstractions;
@@ -94,6 +99,8 @@ namespace Bw.Injection
 
         private void BindClientVisuals()
         {
+            Container.Bind(typeof(IHealthViewModel), typeof(IDamageViewModel), typeof(IDeathViewModel)).To<MortalViewModel>().AsSingle();
+            Container.Bind<IPlayerViewModel>().To<CharacterPlayerViewModel>().AsSingle();
             Container.Bind(typeof(HitFeedbackConfig), typeof(IHitFlashConfig)).FromInstance(_hitFeedbackConfig).AsSingle();
             Container.Bind<HitFlash>().AsSingle().NonLazy();
             Container.Bind<HitCameraShake>().AsSingle().NonLazy();

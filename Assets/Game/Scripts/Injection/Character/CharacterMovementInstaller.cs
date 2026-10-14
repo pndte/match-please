@@ -8,6 +8,8 @@ using Bw.Injection.Movement;
 using Bw.Injection.Network.Prediction;
 using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.Abstractions;
+using Bw.UseCases.Movement.View;
+using Bw.UseCases.Movement.View.Adapters;
 using Bw.UseCases.Movement.View.Animation;
 using Bw.UseCases.Movement.View.Audio;
 using Bw.UseCases.Movement.Network;
@@ -79,20 +81,25 @@ namespace Bw.Injection
                     Container.Bind<IStateView<MovementState>>()
                         .FromMethod(context => new CompositeStateView<MovementState>(
                             context.Container.Instantiate<BodyStateView<MovementState>>(),
-                            context.Container.Instantiate<MovementAnimationView>()))
+                            MotionOf(context.Container, context.Container.Instantiate<MovementAnimationView>())))
                         .AsSingle();
                     break;
                 case PeerType.Client:
                     Container.Bind<IStateView<MovementState>>()
                         .FromMethod(context => new CompositeStateView<MovementState>(
                             context.Container.Instantiate<BodyStateView<MovementState>>(),
-                            context.Container.Instantiate<MovementAnimationView>(),
-                            context.Container.Instantiate<MovementSoundsView>()))
+                            MotionOf(
+                                context.Container,
+                                context.Container.Instantiate<MovementAnimationView>(),
+                                context.Container.Instantiate<MovementSoundsView>())))
                         .AsSingle();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        private static IStateView<MovementState> MotionOf(DiContainer container, params IStateView<MovementMotion>[] views) =>
+            container.Instantiate<MovementMotionViewModel>(new object[] { new CompositeStateView<MovementMotion>(views) });
     }
 }

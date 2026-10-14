@@ -1,5 +1,6 @@
-using Bw.Entities;
 using Bw.UseCases.Character.View.Abstractions;
+using Bw.UseCases.Character.View.Player;
+using Bw.UseCases.Mortality.View.Health;
 using JetBrains.Lifetimes;
 using UnityEngine;
 
@@ -10,10 +11,9 @@ namespace Bw.UseCases.Character.View.HealthBar
         public CharacterHealthBar(
             Lifetime lifetime,
             IHealthBars bars,
-            IReadonlyHealth health,
-            IOwnership ownership,
-            IReadonlyNickname nickname,
+            IHealthViewModel health,
+            IPlayerViewModel player,
             Transform body) =>
-            bars.Show(lifetime, health, ownership, nickname, body);
+            bars.Show(lifetime, health, player, body);
     }
 }

@@ -1,5 +1,5 @@
-using Bw.UseCases.Mortality;
-using Bw.UseCases.Mortality.Extensions;
+using Bw.UseCases.Mortality.View.Death;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using UnityEngine;
 
@@ -9,10 +9,10 @@ namespace Bw.UseCases.Character.View.Death
     {
         private static readonly int Death = Animator.StringToHash("Death");
 
-        public CharacterDeathAnimation(Lifetime lifetime, IReadonlyMortal character, Animator animator)
+        public CharacterDeathAnimation(Lifetime lifetime, IDeathViewModel death, Animator animator)
         {
-            character.State.WhenDead(lifetime, _ => animator.Play(Death, 0, 1f));
-            character.AdviseKilled(lifetime, () => animator.Play(Death, 0, 0f));
+            death.Dead.WhenTrue(lifetime, _ => animator.Play(Death, 0, 1f));
+            death.Killed.Advise(lifetime, _ => animator.Play(Death, 0, 0f));
         }
     }
 }

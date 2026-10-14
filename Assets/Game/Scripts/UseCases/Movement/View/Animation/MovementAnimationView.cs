@@ -4,29 +4,27 @@ using UnityEngine;
 
 namespace Bw.UseCases.Movement.View.Animation
 {
-    public sealed class MovementAnimationView : IStateView<MovementState>
+    public sealed class MovementAnimationView : IStateView<MovementMotion>
     {
         private const float TurnSpeed = 0.05f;
 
         private readonly IMovementAnimator _animator;
-        private readonly MovementConfig _config;
         private float _facing = 1f;
 
-        public MovementAnimationView(IMovementAnimator animator, MovementConfig config)
+        public MovementAnimationView(IMovementAnimator animator)
         {
             _animator = animator;
-            _config = config;
         }
 
-        public void Show(MovementState from, MovementState to, float progress)
+        public void Show(MovementMotion from, MovementMotion to, float progress)
         {
-            var velocity = Vector2.Lerp(from.Body.Velocity, to.Body.Velocity, progress);
-            var speed = Mathf.Abs(velocity.x) / _config.Speed; //TODO: скорость бега берётся из управления, а не из пройденного: персонаж, который толкает ящик или упёрся в стену, бежит на месте полным шагом
+            var run = Mathf.Lerp(from.Run, to.Run, progress);
+            var speed = Mathf.Abs(run); //TODO: скорость бега берётся из управления, а не из пройденного: персонаж, который толкает ящик или упёрся в стену, бежит на месте полным шагом
             if (speed > TurnSpeed)
-                _facing = Mathf.Sign(velocity.x);
+                _facing = Mathf.Sign(run);
 
-            var grounded = progress < 0.5f ? from.Body.Grounded : to.Body.Grounded;
-            _animator.Animate(new MovementAnimationPose(speed, velocity.y / _config.JumpForce, grounded, _facing));
+            var grounded = progress < 0.5f ? from.Grounded : to.Grounded;
+            _animator.Animate(new MovementAnimationPose(speed, Mathf.Lerp(from.Rise, to.Rise, progress), grounded, _facing));
         }
     }
 }

@@ -8,6 +8,8 @@ using Bw.UseCases.Shooting.Melee;
 using Bw.UseCases.Shooting.Melee.Network;
 using Bw.UseCases.Shooting.View;
 using Bw.UseCases.Shooting.View.Abstractions;
+using Bw.UseCases.Shooting.View.Adapters;
+using Bw.UseCases.Shooting.View.Adapters.Audio;
 using Bw.UseCases.Shooting.View.Audio;
 using Bw.UseCases.Shooting.View.Crosshair;
 using Bw.UseCases.Shooting.View.Impact;
@@ -124,12 +126,12 @@ namespace Bw.Injection.Weapon
 
         private void BindClientVisuals()
         {
-            Container.Bind(typeof(IMeleeSwings), typeof(MeleeSwings)).To<MeleeSwings>().AsSingle();
+            Container.Bind(typeof(IMeleeSwingsViewModel), typeof(MeleeSwingsViewModel)).To<MeleeSwingsViewModel>().AsSingle();
             Container.Bind<IStateView<MeleeState>>()
                 .FromMethod(ctx => new CompositeStateView<MeleeState>(
                     ctx.Container.Instantiate<WeaponStateView<MeleeState>>(new object[] { transform }),
-                    ctx.Container.Resolve<SeenShots<MeleeState>>(),
-                    ctx.Container.Resolve<MeleeSwings>()))
+                    ctx.Container.Resolve<SeenShotsViewModel<MeleeState>>(),
+                    ctx.Container.Resolve<MeleeSwingsViewModel>()))
                 .AsSingle();
             Container.Bind<MeleeRigView>().AsSingle().WithArguments(_rig).NonLazy();
             Container.Bind<BodyPunchPose>().AsSingle().WithArguments(transform).NonLazy();
@@ -149,7 +151,7 @@ namespace Bw.Injection.Weapon
 
         private void BindClientSounds()
         {
-            Container.Bind<MeleeSoundsConfig>().FromMethod(ctx => ctx.Container.Resolve<MeleeSoundsCatalog>().For(_meleeConfig)).AsSingle();
+            Container.Bind<MeleeSounds>().FromMethod(ctx => ctx.Container.Resolve<MeleeSoundsCatalog>().For(_meleeConfig)).AsSingle();
             Container.Bind<MeleeSoundsView>().AsSingle().WithArguments(transform).NonLazy();
         }
 

@@ -1,0 +1,21 @@
+{
+    "name": "Bw.UseCases.Match.View.Adapters",
+    "rootNamespace": "Bw",
+    "references": [
+        "Bw.Entities",
+        "Bw.Entities.Network",
+        "Bw.UseCases.Match",
+        "Bw.UseCases.Match.View"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JetBrains.Lifetimes.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

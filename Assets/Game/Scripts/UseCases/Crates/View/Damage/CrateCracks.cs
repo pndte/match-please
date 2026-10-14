@@ -1,4 +1,4 @@
-using Bw.Entities;
+using Bw.UseCases.Mortality.View.Health;
 using JetBrains.Lifetimes;
 using UnityEngine;
 
@@ -8,13 +8,13 @@ namespace Bw.UseCases.Crates.View.Damage
     {
         public CrateCracks(
             Lifetime lifetime,
-            IReadonlyHealth health,
+            IHealthViewModel health,
             SpriteRenderer sprite,
             CrateDamageConfig config)
         {
             var intact = sprite.sprite;
-            health.State.Advise(lifetime, state =>
-                sprite.sprite = state.Current <= health.Max * config.CrackedBelow ? config.Cracked : intact);
+            health.Level.Advise(lifetime, level =>
+                sprite.sprite = level.Share <= config.CrackedBelow ? config.Cracked : intact);
         }
     }
 }

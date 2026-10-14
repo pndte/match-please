@@ -1,6 +1,4 @@
-using Bw.Entities.Extensions;
 using Bw.UseCases.Shooting.View.Abstractions;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using UnityEngine;
@@ -22,12 +20,12 @@ namespace Bw.UseCases.Shooting.View.Rig
         public MeleeRigView(
             Lifetime lifetime,
             Animator rig,
-            IReadonlyWeaponDraw draw,
-            IMeleeSwings swings)
+            IWeaponCarryViewModel carry,
+            IMeleeSwingsViewModel swings)
         {
             _rig = rig;
 
-            draw.DrawnLifetime.WhenAlive(lifetime, drawnLifetime =>
+            carry.Drawn.WhenTrue(lifetime, drawnLifetime =>
             {
                 rig.SetBool(HeldId, true);
                 drawnLifetime.OnTermination(() => rig.SetBool(HeldId, false));

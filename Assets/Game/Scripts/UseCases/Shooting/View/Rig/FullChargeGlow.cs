@@ -18,7 +18,7 @@ namespace Bw.UseCases.Shooting.View.Rig
 
         public FullChargeGlow(
             Lifetime lifetime,
-            IMeleeSwings swings,
+            IMeleeSwingsViewModel swings,
             StrikeFeelConfig config,
             Transform visual,
             SpriteRenderer[] fists)

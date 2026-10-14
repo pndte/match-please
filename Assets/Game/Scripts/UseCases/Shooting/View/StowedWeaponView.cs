@@ -1,4 +1,4 @@
-using Bw.UseCases.Shooting.Weapon.Abstractions;
+using Bw.UseCases.Shooting.View.Abstractions;
 using JetBrains.Lifetimes;
 using UnityEngine;
 
@@ -6,27 +6,21 @@ namespace Bw.UseCases.Shooting.View
 {
     public sealed class StowedWeaponView
     {
-        private readonly IWeaponHold _hold;
-        private readonly IReadonlyWeaponDraw _draw;
+        private readonly IWeaponCarryViewModel _carry;
         private readonly Renderer[] _renderers;
 
-        public StowedWeaponView(
-            Lifetime lifetime,
-            IWeaponHold hold,
-            IReadonlyWeaponDraw draw,
-            Renderer[] renderers)
+        public StowedWeaponView(Lifetime lifetime, IWeaponCarryViewModel carry, Renderer[] renderers)
         {
-            _hold = hold;
-            _draw = draw;
+            _carry = carry;
             _renderers = renderers;
 
-            hold.HeldLifetime.Advise(lifetime, _ => Refresh());
-            draw.DrawnLifetime.Advise(lifetime, _ => Refresh());
+            carry.Held.Advise(lifetime, _ => Refresh());
+            carry.Drawn.Advise(lifetime, _ => Refresh());
         }
 
         private void Refresh()
         {
-            var stowed = _hold.HeldLifetime.Value.IsAlive && !_draw.DrawnLifetime.Value.IsAlive;
+            var stowed = _carry.Held.Value && !_carry.Drawn.Value;
             foreach (var renderer in _renderers)
                 renderer.forceRenderingOff = stowed;
         }

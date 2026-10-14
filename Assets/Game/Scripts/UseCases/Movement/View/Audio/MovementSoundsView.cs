@@ -4,37 +4,38 @@ using UnityEngine;
 
 namespace Bw.UseCases.Movement.View.Audio
 {
-    public sealed class MovementSoundsView : IStateView<MovementState>
+    public sealed class MovementSoundsView : IStateView<MovementMotion>
     {
         private readonly ISoundPlayer _player;
-        private readonly MovementConfig _movementConfig;
         private readonly MovementSoundsConfig _config;
 
         private bool _shown;
         private bool _grounded;
         private float _untilStep;
 
-        public MovementSoundsView(ISoundPlayer player, MovementConfig movementConfig, MovementSoundsConfig config)
+        public MovementSoundsView(ISoundPlayer player, MovementSoundsConfig config)
         {
             _player = player;
-            _movementConfig = movementConfig;
             _config = config;
         }
 
-        public void Show(MovementState from, MovementState to, float progress)
+        public void Show(MovementMotion from, MovementMotion to, float progress)
         {
-            var position = Vector2.Lerp(from.Body.Position, to.Body.Position, progress);
-            var velocity = Vector2.Lerp(from.Body.Velocity, to.Body.Velocity, progress);
-            var grounded = progress < 0.5f ? from.Body.Grounded : to.Body.Grounded;
+            var position = Vector2.Lerp(from.Position, to.Position, progress);
+            var run = Mathf.Lerp(from.Run, to.Run, progress);
+            var rise = Mathf.Lerp(from.Rise, to.Rise, progress);
+            var grounded = progress < 0.5f ? from.Grounded : to.Grounded;
 
             if (_shown && grounded && !_grounded)
                 Land(position);
-            if (_shown && !grounded && _grounded && velocity.y > 0f)
+
+            if (_shown && !grounded && _grounded && rise > 0f)
                 _player.Play(_config.Jump, position);
+
             _shown = true;
             _grounded = grounded;
 
-            if (grounded && Mathf.Abs(velocity.x) / _movementConfig.Speed > _config.MinStepSpeed)
+            if (grounded && Mathf.Abs(run) > _config.MinStepSpeed)
                 Step(position);
             else
                 _untilStep = 0f;

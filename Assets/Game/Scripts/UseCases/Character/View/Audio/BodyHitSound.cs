@@ -1,6 +1,6 @@
-using Bw.Entities;
-using Bw.Entities.Extensions;
 using Bw.UseCases.Audio.View.Playback.Abstractions;
+using Bw.UseCases.Mortality.View.Hit;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using UnityEngine;
 
@@ -10,12 +10,12 @@ namespace Bw.UseCases.Character.View.Audio
     {
         public BodyHitSound(
             Lifetime lifetime,
-            IReadonlyHealth health,
+            IDamageViewModel damage,
             Transform body,
             ISoundPlayer player,
             CharacterSoundsConfig config)
         {
-            health.AdviseDamage(lifetime, _ => player.Play(config.BodyHit, body.position));
+            damage.Taken.Advise(lifetime, _ => player.Play(config.BodyHit, body.position));
         }
     }
 }

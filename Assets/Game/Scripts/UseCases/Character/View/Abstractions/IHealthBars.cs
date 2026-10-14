@@ -1,4 +1,5 @@
-using Bw.Entities;
+using Bw.UseCases.Character.View.Player;
+using Bw.UseCases.Mortality.View.Health;
 using JetBrains.Lifetimes;
 using UnityEngine;
 
@@ -8,9 +9,8 @@ namespace Bw.UseCases.Character.View.Abstractions
     {
         public void Show(
             Lifetime lifetime,
-            IReadonlyHealth health,
-            IOwnership ownership,
-            IReadonlyNickname nickname,
-            Transform body);
+            IHealthViewModel health,
+            IPlayerViewModel player,
+            Transform anchor);
     }
 }

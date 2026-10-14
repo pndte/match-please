@@ -31,7 +31,12 @@
         "Bw.UseCases.Props.View",
         "Bw.UseCases.Match",
         "Bw.UseCases.Match.Network",
-        "Bw.UseCases.Match.View"
+        "Bw.UseCases.Match.View",
+        "Bw.UseCases.Mortality.View.Adapters",
+        "Bw.UseCases.Character.View.Adapters",
+        "Bw.UseCases.Movement.View.Adapters",
+        "Bw.UseCases.Shooting.View.Adapters",
+        "Bw.UseCases.Match.View.Adapters"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

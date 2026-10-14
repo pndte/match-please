@@ -1,6 +1,6 @@
-using Bw.Entities;
-using Bw.Entities.Extensions;
+using Bw.UseCases.Mortality.View.Hit;
 using DG.Tweening;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using UnityEngine;
 
@@ -10,11 +10,11 @@ namespace Bw.UseCases.Crates.View.Damage
     {
         public CrateHitJolt(
             Lifetime lifetime,
-            IReadonlyHealth health,
+            IDamageViewModel damage,
             Transform visual,
             CrateDamageConfig config)
         {
-            health.AdviseDamage(lifetime, _ =>
+            damage.Taken.Advise(lifetime, _ =>
             {
                 visual.DOComplete();
                 visual.DOPunchScale(config.HitPunch, config.HitPunchTime, 1, 0f).SetLink(visual.gameObject);

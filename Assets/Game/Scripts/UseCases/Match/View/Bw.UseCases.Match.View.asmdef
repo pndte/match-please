@@ -2,9 +2,6 @@
     "name": "Bw.UseCases.Match.View",
     "rootNamespace": "Bw",
     "references": [
-        "Bw.Entities",
-        "Bw.Entities.Network",
-        "Bw.UseCases.Match",
         "R3.Unity"
     ],
     "includePlatforms": [],

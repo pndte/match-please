@@ -4,9 +4,8 @@ using Bw.Entities.Pool.GameObjects;
 using Bw.UseCases.Shooting.View.Abstractions;
 using Bw.UseCases.Shooting.View.Audio.Abstractions;
 using Bw.UseCases.Shooting.View.Impact;
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Vfx.View.Effects.Abstractions;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using UnityEngine;
 
@@ -14,7 +13,6 @@ namespace Bw.UseCases.Shooting.View
 {
     public sealed class WeaponShotEffectsView
     {
-        private readonly IShotTracer _tracer;
         private readonly IShotSfxPlayer _sfxPlayer;
         private readonly IPrefabPools _pools;
         private readonly ShotVfxConfig _vfx;
@@ -23,14 +21,12 @@ namespace Bw.UseCases.Shooting.View
 
         public WeaponShotEffectsView(
             Lifetime lifetime,
-            ISeenShots shots, //TODO: чрезвычайное к-во аргументов в конструкторе
-            IShotTracer tracer,
+            IShotsViewModel shots, //TODO: чрезвычайное к-во аргументов в конструкторе
             IShotSfxPlayer sfxPlayer,
             IPrefabPools pools,
             ShotVfxConfig vfx,
             ShotImpactConfig impact)
         {
-            _tracer = tracer;
             _sfxPlayer = sfxPlayer;
             _pools = pools;
             _vfx = vfx;
@@ -40,18 +36,16 @@ namespace Bw.UseCases.Shooting.View
             shots.Seen.Advise(lifetime, Play);
         }
 
-        private void Play(float aim)
+        private void Play(SeenShot shot)
         {
-            var ray = _tracer.Aim(aim);
             _sfxPlayer.Play();
 
-            for (var pellet = 0; pellet < _tracer.Pellets; pellet++)
-                PlayPellet(_tracer.Pellet(ray, pellet));
+            for (var pellet = 0; pellet < shot.Pellets.Count; pellet++)
+                PlayPellet(shot.Pellets[pellet]);
         }
 
-        private void PlayPellet(ShotRay ray)
+        private void PlayPellet(PelletTrace trace)
         {
-            var trace = _tracer.Cast(ray);
             var arrival = Vector2.Distance(trace.From, trace.To) / _vfx.BulletSpeed;
 
             if (arrival > 0f)
@@ -59,16 +53,16 @@ namespace Bw.UseCases.Shooting.View
 
             _sfxPlayer.PlayImpact(trace, arrival);
 
-            if (!trace.Hit)
+            if (!trace.Struck)
                 return;
 
-            if (IsBody(trace.Hit.collider)) //TODO: кровь рисуется по локальному трассеру, а урон решает сервер (свой выстрел предсказан той же трассировкой, но сервер может его отменить) — изредка будет кровь без урона или урон без крови
-                _lifetime.WhenElapsed(arrival, () => _pools.For<IEffect>(_impact.Prefab).OneShot(_lifetime).Play(trace.To, ray.Direction));
+            if (IsBody(trace.Layer)) //TODO: кровь рисуется по локальному трассеру, а урон решает сервер (свой выстрел предсказан той же трассировкой, но сервер может его отменить) — изредка будет кровь без урона или урон без крови
+                _lifetime.WhenElapsed(arrival, () => _pools.For<IEffect>(_impact.Prefab).OneShot(_lifetime).Play(trace.To, trace.Direction));
             else //TODO: любая поверхность бьётся одинаково (искры, серая крошка, пыль, дырка) — дереву, металлу и земле нужны свои частицы, как и звуки попадания; дырка остаётся там, куда попала пуля, и на едущем лифте, на отброшенном выстрелом или разбитом ящике повиснет в воздухе
-                _lifetime.WhenElapsed(arrival, () => _pools.For<IEffect>(_vfx.Impact).OneShot(_lifetime).Play(trace.To, trace.Hit.normal));
+                _lifetime.WhenElapsed(arrival, () => _pools.For<IEffect>(_vfx.Impact).OneShot(_lifetime).Play(trace.To, trace.Normal));
         }
 
-        private bool IsBody(Collider2D collider) =>
-            (_impact.BodyLayers.value & (1 << collider.gameObject.layer)) != 0;
+        private bool IsBody(int layer) =>
+            (_impact.BodyLayers.value & (1 << layer)) != 0;
     }
 }

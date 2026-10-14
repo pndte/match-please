@@ -9,6 +9,7 @@ using Bw.Injection.Ownership;
 using Bw.UseCases.Match;
 using Bw.UseCases.Match.Network;
 using Bw.UseCases.Match.Network.Requests;
+using Bw.UseCases.Match.View.Adapters;
 using Bw.UseCases.Match.View.Hud;
 using Unity.Netcode;
 using UnityEngine;
@@ -69,8 +70,9 @@ namespace Bw.Injection.Match
 
         private void BindHudVisuals()
         {
-            Container.Bind<HudDocument>().AsSingle().WithArguments(_hud);
             Container.Bind<MatchCountdown>().AsSingle();
+            Container.Bind<IMatchViewModel>().To<MatchViewModel>().AsSingle();
+            Container.Bind<HudDocument>().AsSingle().WithArguments(_hud);
             Container.Bind<ScoreboardView>().AsSingle().WithArguments(_scoreRow).NonLazy();
             Container.Bind<WinnerView>().AsSingle().NonLazy();
             Container.Bind<MatchTimerView>().AsSingle().NonLazy();

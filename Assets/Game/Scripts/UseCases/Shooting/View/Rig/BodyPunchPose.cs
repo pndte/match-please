@@ -11,7 +11,7 @@ namespace Bw.UseCases.Shooting.View.Rig
     {
         private readonly Transform _weapon;
 
-        public BodyPunchPose(Lifetime lifetime, Transform weapon, IMeleeSwings swings)
+        public BodyPunchPose(Lifetime lifetime, Transform weapon, IMeleeSwingsViewModel swings)
         {
             _weapon = weapon;
 

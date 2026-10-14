@@ -1,18 +1,14 @@
-using Bw.Entities;
+using Bw.UseCases.Character.View.Player;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Character.View.HealthBar
 {
     public sealed class HealthBarNickname
     {
-        public HealthBarNickname(
-            Lifetime lifetime,
-            HealthBarWidget widget,
-            IReadonlyNickname nickname,
-            IOwnership ownership)
+        public HealthBarNickname(Lifetime lifetime, HealthBarWidget widget, IPlayerViewModel player)
         {
-            nickname.Value.Advise(lifetime, value => widget.Nickname.text = value);
-            ownership.Mine.Advise(lifetime, mine => widget.Nickname.enabled = !mine);
+            player.Nickname.Advise(lifetime, value => widget.Nickname.text = value);
+            player.Mine.Advise(lifetime, mine => widget.Nickname.enabled = !mine);
         }
     }
 }

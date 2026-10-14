@@ -1,5 +1,4 @@
-using Bw.Entities;
-using Bw.Entities.Extensions;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using R3;
 using UnityEngine;
@@ -20,7 +19,7 @@ namespace Bw.UseCases.Mortality.View.Hit
 
         public HitFlash(
             Lifetime lifetime,
-            IReadonlyHealth health,
+            IDamageViewModel damage,
             SpriteRenderer sprite,
             IHitFlashConfig config)
         {
@@ -28,7 +27,7 @@ namespace Bw.UseCases.Mortality.View.Hit
             _config = config;
             _flashes = new SequentialLifetimes(lifetime);
 
-            health.AdviseDamage(lifetime, _ => Flash());
+            damage.Taken.Advise(lifetime, _ => Flash());
         }
 
         private void Flash()

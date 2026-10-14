@@ -10,10 +10,10 @@ namespace Bw.UseCases.Shooting.View.Audio
         public MeleeSoundsView(
             Lifetime lifetime,
             Transform weapon,
-            IMeleeSwings swings,
+            IMeleeSwingsViewModel swings,
             IStrikeImpacts impacts,
             ISoundPlayer player,
-            MeleeSoundsConfig sounds)
+            MeleeSounds sounds)
         {
             swings.Started.Advise(lifetime, _ => player.Play(lifetime, sounds.Swing, weapon));
             impacts.Bodies.Advise(lifetime, impact => player.Play(sounds.BodyHit, impact.Point));

@@ -1,0 +1,20 @@
+{
+    "name": "Bw.UseCases.Character.View.Adapters",
+    "rootNamespace": "Bw",
+    "references": [
+        "Bw.Entities",
+        "Bw.UseCases.Character",
+        "Bw.UseCases.Character.View"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JetBrains.Lifetimes.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

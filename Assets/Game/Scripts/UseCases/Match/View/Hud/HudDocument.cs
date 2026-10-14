@@ -1,6 +1,5 @@
 using System;
-using Bw.Entities.Extensions;
-using Bw.Entities.Network.Objects;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using UnityEngine.UIElements;
 
@@ -8,16 +7,16 @@ namespace Bw.UseCases.Match.View.Hud
 {
     public sealed class HudDocument
     {
-        private readonly INetworkLifetimedObject _networkLifetimed;
+        private readonly IMatchViewModel _match;
         private readonly UIDocument _document;
 
-        public HudDocument(INetworkLifetimedObject networkLifetimed, UIDocument document)
+        public HudDocument(IMatchViewModel match, UIDocument document)
         {
-            _networkLifetimed = networkLifetimed;
+            _match = match;
             _document = document;
         }
 
         public void WhenShown(Lifetime lifetime, Action<Lifetime, VisualElement> handler) =>
-            _networkLifetimed.SpawnedLifetime.WhenAlive(lifetime, spawnedLifetime => handler(spawnedLifetime, _document.rootVisualElement));
+            _match.Shown.WhenTrue(lifetime, shownLifetime => handler(shownLifetime, _document.rootVisualElement));
     }
 }

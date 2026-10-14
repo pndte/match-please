@@ -1,6 +1,6 @@
-using Bw.UseCases.Mortality;
-using Bw.UseCases.Mortality.Extensions;
+using Bw.UseCases.Mortality.View.Death;
 using Bw.UseCases.Vfx.View.Effects.Abstractions;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ namespace Bw.UseCases.Crates.View.Break
 
         public CrateBreak(
             Lifetime lifetime,
-            IReadonlyMortal crate,
+            IDeathViewModel death,
             SpriteRenderer sprite,
             Transform body,
             IEffectPlayer effects,
@@ -24,8 +24,8 @@ namespace Bw.UseCases.Crates.View.Break
             _effects = effects;
             _config = config;
 
-            crate.State.WhenDead(lifetime, _ => sprite.enabled = false);
-            crate.AdviseKilled(lifetime, Burst);
+            death.Dead.WhenTrue(lifetime, _ => sprite.enabled = false);
+            death.Killed.Advise(lifetime, _ => Burst());
         }
 
         private void Burst() =>

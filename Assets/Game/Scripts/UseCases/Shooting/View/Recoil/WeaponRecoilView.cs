@@ -14,7 +14,7 @@ namespace Bw.UseCases.Shooting.View.Recoil
 
         public WeaponRecoilView(
             Lifetime lifetime,
-            ISeenShots shots,
+            IShotsViewModel shots,
             WeaponRecoilConfig config,
             Transform visual)
         {

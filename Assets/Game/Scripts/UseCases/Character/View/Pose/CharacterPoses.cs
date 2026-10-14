@@ -1,5 +1,5 @@
 using Bw.UseCases.Character.View.Abstractions;
-using Bw.UseCases.Mortality;
+using Bw.UseCases.Mortality.View.Death;
 using UnityEngine;
 
 namespace Bw.UseCases.Character.View.Pose
@@ -8,18 +8,18 @@ namespace Bw.UseCases.Character.View.Pose
     {
         private static readonly int PunchState = Animator.StringToHash("Punch");
 
-        private readonly IReadonlyMortal _character;
+        private readonly IDeathViewModel _death;
         private readonly Animator _animator;
 
-        public CharacterPoses(IReadonlyMortal character, Animator animator)
+        public CharacterPoses(IDeathViewModel death, Animator animator)
         {
-            _character = character;
+            _death = death;
             _animator = animator;
         }
 
         public void Punch()
         {
-            if (_character.State.Value == LifeState.Alive)
+            if (!_death.Dead.Value)
                 _animator.Play(PunchState, 0, 0f);
         }
     }

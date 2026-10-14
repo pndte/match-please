@@ -19,7 +19,7 @@ namespace Bw.UseCases.Shooting.View
 
         public MuzzleEffectsView(
             Lifetime lifetime,
-            ISeenShots shots,
+            IShotsViewModel shots,
             IMuzzleFlash flash,
             IPrefabPools pools,
             ShotVfxConfig vfx,

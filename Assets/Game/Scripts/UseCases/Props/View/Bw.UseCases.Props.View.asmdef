@@ -2,8 +2,7 @@
     "name": "Bw.UseCases.Props.View",
     "rootNamespace": "Bw",
     "references": [
-        "Bw.Entities",
-        "Bw.UseCases.Shooting"
+        "Bw.UseCases.Shooting.View"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -18,6 +18,9 @@ using Bw.UseCases.Crates.View.Break;
 using Bw.UseCases.Crates.View.Damage;
 using Bw.UseCases.Mortality;
 using Bw.UseCases.Mortality.Network.Prediction;
+using Bw.UseCases.Mortality.View.Adapters;
+using Bw.UseCases.Mortality.View.Death;
+using Bw.UseCases.Mortality.View.Health;
 using Bw.UseCases.Mortality.View.Hit;
 using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.Physics.Abstractions;
@@ -107,6 +110,7 @@ namespace Bw.Injection.Crates
         private void BindClientVisuals()
         {
             Container.Bind<SpriteRenderer>().FromInstance(_sprite).AsSingle();
+            Container.Bind(typeof(IHealthViewModel), typeof(IDamageViewModel), typeof(IDeathViewModel)).To<MortalViewModel>().AsSingle();
             Container.Bind<IHitFlashConfig>().FromInstance(_hitFlashConfig).AsSingle();
             Container.Bind<HitFlash>().AsSingle().NonLazy();
             Container.BindInstance(_damage).AsSingle();
