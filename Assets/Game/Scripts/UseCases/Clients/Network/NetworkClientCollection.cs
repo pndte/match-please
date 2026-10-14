@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Bw.Entities;
 using Bw.Entities.Infrastructure;
 using Bw.Entities.Network;
+using Bw.Entities.Network.Characters;
 using Bw.Entities.Players;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
@@ -13,18 +13,22 @@ namespace Bw.UseCases.Clients.Network
 {
     public class NetworkClientCollection : IClientCollection //TODO: to project Context
     {
-        private const int MaxNicknameBytes = NicknameRules.MaxLength * 4;
-
         public IViewableBiMap<ulong, IClient> ByIds { get; }
 
-        private readonly Dictionary<ulong, string> _requestedNicknames = new();
+        private readonly CharacterCatalog _characters;
+        private readonly Dictionary<ulong, ConnectionRequest> _requests = new();
 
-        private NetworkClientCollection(Lifetime lifetime, NetworkManager manager, IRuntimeSettings runtimeSettings)
+        private NetworkClientCollection(
+            Lifetime lifetime,
+            NetworkManager manager,
+            IRuntimeSettings runtimeSettings,
+            CharacterCatalog characters)
         {
+            _characters = characters;
             ByIds = new ViewableBiMap<ulong, IClient>(lifetime);
             if (runtimeSettings.CurrentPeerType != PeerType.Server)
             {
-                return; // Only server handles spawning
+                return;
             }
 
             manager.ConnectionApprovalCallback = Approve;
@@ -38,7 +42,7 @@ namespace Bw.UseCases.Clients.Network
 
         private void Approve(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
         {
-            _requestedNicknames[request.ClientNetworkId] = RequestedNickname(request.Payload);
+            _requests[request.ClientNetworkId] = Accepted(request.Payload);
             response.Approved = true;
             response.CreatePlayerObject = false;
         }
@@ -46,7 +50,7 @@ namespace Bw.UseCases.Clients.Network
         private void OnClientConnected(ulong id)
         {
             Debug.Log($"<color=cyan>Client {id} connected. Adding to client collection...</color>");
-            var client = new Client(id, TakeRequestedNickname(id));
+            var client = new Client(id, TakeRequest(id));
             ByIds.Add(id, client);
             client.ChangeState(ClientConnectionState.Connected);
         }
@@ -54,22 +58,22 @@ namespace Bw.UseCases.Clients.Network
         private void OnClientDisconnected(ulong id)
         {
             Debug.Log($"<color=yellow>Client {id} disconnected</color>");
-            _requestedNicknames.Remove(id);
+            _requests.Remove(id);
             ByIds.Remove(id);
         }
 
-        private string TakeRequestedNickname(ulong id)
+        private ConnectionRequest TakeRequest(ulong id)
         {
-            if (!_requestedNicknames.Remove(id, out var nickname))
+            if (!_requests.Remove(id, out var request))
                 throw new InvalidOperationException(
-                    $"Client {id} connected without passing the approval: turn ConnectionApproval on in the NetworkManager config, the client's nickname comes with the connection request.");
+                    $"Client {id} connected without passing the approval: turn ConnectionApproval on in the NetworkManager config, the client's nickname and character come with the connection request.");
 
-            return nickname;
+            return request;
         }
 
-        private static string RequestedNickname(byte[] payload) => //TODO: клиент пока ничего не кладёт в ConnectionData: поле имени стартового экрана не подключено, у всех NicknameRules.Fallback
-            payload.Length is > 0 and <= MaxNicknameBytes
-                ? NicknameRules.Accepted(Encoding.UTF8.GetString(payload))
-                : NicknameRules.Fallback;
+        private ConnectionRequest Accepted(byte[] payload) =>
+            ConnectionRequestPayload.TryRead(payload, out var requested)
+                ? new ConnectionRequest(NicknameRules.Accepted(requested.Nickname), _characters.Accepted(requested.CharacterKey))
+                : new ConnectionRequest(NicknameRules.Fallback, _characters.DefaultKey());
     }
 }

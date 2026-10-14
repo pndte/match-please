@@ -9,15 +9,10 @@ namespace Setup.Launch
     {
         private const string RadminPrefix = "26.";
 
-        public static string Describe()
-        {
-            var addresses = Read();
-            return addresses.Length == 0
-                ? "адрес не определился — посмотрите его в Radmin VPN"
-                : string.Join(", ", addresses.Select(address => address.StartsWith(RadminPrefix) ? address + " (Radmin)" : address));
-        }
+        public static bool IsRadmin(string address) =>
+            address.StartsWith(RadminPrefix);
 
-        private static string[] Read()
+        public static string[] Read()
         {
             try
             {

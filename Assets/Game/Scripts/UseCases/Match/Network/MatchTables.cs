@@ -8,18 +8,12 @@ namespace Bw.UseCases.Match.Network
     {
         private readonly IReadonlyMatch _match;
         private readonly IReadonlyScoreboard _scoreboard;
-        private readonly PlayerFigures _figures;
         private readonly IClientPlayerCollection _clientPlayers;
 
-        public MatchTables(
-            IReadonlyMatch match,
-            IReadonlyScoreboard scoreboard,
-            PlayerFigures figures,
-            IClientPlayerCollection clientPlayers)
+        public MatchTables(IReadonlyMatch match, IReadonlyScoreboard scoreboard, IClientPlayerCollection clientPlayers)
         {
             _match = match;
             _scoreboard = scoreboard;
-            _figures = figures;
             _clientPlayers = clientPlayers;
         }
 
@@ -32,7 +26,7 @@ namespace Bw.UseCases.Match.Network
                 if (!_clientPlayers.ByClient.TryGetLeft(player, out var client)) //TODO: боты — у игрока без клиента нет id для строки «ты»
                     throw new InvalidOperationException("The match table lists only network players, and this player has no client.");
 
-                entries[index++] = new MatchEntry(client.Id, player.Nickname, _figures.FigureOf(player), score);
+                entries[index++] = new MatchEntry(client.Id, player.Nickname, player.CharacterKey, score);
             }
 
             return new MatchTable(_match.Period.Value, entries);

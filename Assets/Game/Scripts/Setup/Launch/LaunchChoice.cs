@@ -13,9 +13,9 @@ namespace Setup.Launch
             Port = port;
         }
 
-        public abstract TResult Switch<TResult>(Func<Server, TResult> server, Func<Client, TResult> client);
+        public abstract TResult Switch<TResult>(Func<Server, TResult> server, Func<Client, TResult> client, Func<Room, TResult> room);
 
-        public abstract void Switch(Action<Server> server, Action<Client> client);
+        public abstract void Switch(Action<Server> server, Action<Client> client, Action<Room> room);
 
         public sealed class Server : LaunchChoice
         {
@@ -23,21 +23,26 @@ namespace Setup.Launch
             {
             }
 
-            public override TResult Switch<TResult>(Func<Server, TResult> server, Func<Client, TResult> client) =>
+            public override TResult Switch<TResult>(Func<Server, TResult> server, Func<Client, TResult> client, Func<Room, TResult> room) =>
                 server(this);
 
-            public override void Switch(Action<Server> server, Action<Client> client) =>
+            public override void Switch(Action<Server> server, Action<Client> client, Action<Room> room) =>
                 server(this);
         }
 
         public sealed class Client : LaunchChoice
         {
+            private const string LoopbackAddress = "127.0.0.1";
+
             public string Address { get; }
 
             private Client(string address, ushort port) : base(port)
             {
                 Address = address;
             }
+
+            public static Client Loopback(ushort port) =>
+                new(LoopbackAddress, port);
 
             public static bool TryParse(string text, ushort defaultPort, out Client client)
             {
@@ -55,11 +60,24 @@ namespace Setup.Launch
                 return true;
             }
 
-            public override TResult Switch<TResult>(Func<Server, TResult> server, Func<Client, TResult> client) =>
+            public override TResult Switch<TResult>(Func<Server, TResult> server, Func<Client, TResult> client, Func<Room, TResult> room) =>
                 client(this);
 
-            public override void Switch(Action<Server> server, Action<Client> client) =>
+            public override void Switch(Action<Server> server, Action<Client> client, Action<Room> room) =>
                 client(this);
+        }
+
+        public sealed class Room : LaunchChoice
+        {
+            public Room(ushort port) : base(port)
+            {
+            }
+
+            public override TResult Switch<TResult>(Func<Server, TResult> server, Func<Client, TResult> client, Func<Room, TResult> room) =>
+                room(this);
+
+            public override void Switch(Action<Server> server, Action<Client> client, Action<Room> room) =>
+                room(this);
         }
     }
 }

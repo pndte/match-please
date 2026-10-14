@@ -2,9 +2,9 @@
 using System.Linq;
 using Bw.Entities.Network;
 using Cysharp.Threading.Tasks;
+using JetBrains.Lifetimes;
 using Setup.Launch;
 using Unity.Netcode;
-using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -13,12 +13,6 @@ namespace Setup
 {
     public class NetworkAutoStart : MonoBehaviour
     {
-        private const string ListenAddress = "0.0.0.0";
-        private const int ServerFrameRate = 60;
-        private const int ConnectAttempts = 10;
-        private const int ServerWindowWidth = 960;
-        private const int ServerWindowHeight = 540;
-
         [Header("Auto-Start Configuration")]
         [SerializeField] private bool enableAutoStart = true;
         [SerializeField] private string serverTag = "server";
@@ -31,15 +25,21 @@ namespace Setup
         [SerializeField] private string _gameScene = "SampleScene";
 
         private IRuntimeSettings _runtimeSettings;
-        private INetworkHolder _networkHolder;
         private ConnectionConfig _connection;
+        private StartMenu _menu;
+        private NetworkLaunch _network;
 
         [Inject]
-        private void Construct(IRuntimeSettings runtimeSettings, INetworkHolder networkHolder, ConnectionConfig connection)
+        private void Construct(
+            IRuntimeSettings runtimeSettings,
+            ConnectionConfig connection,
+            StartMenu menu,
+            NetworkLaunch network)
         {
-            _connection = connection;
-            _networkHolder = networkHolder;
             _runtimeSettings = runtimeSettings;
+            _connection = connection;
+            _menu = menu;
+            _network = network;
         }
 
         private void Start()
@@ -53,28 +53,31 @@ namespace Setup
             if (NetworkManager.Singleton == null)
                 throw new InvalidOperationException("NetworkManager.Singleton is null: the setup scene must hold the network prefab.");
 
+            Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, FullScreenMode.FullScreenWindow);
             StartGame().Forget();
         }
 
         private async UniTaskVoid StartGame()
         {
-            var choice = await Choose();
-            _runtimeSettings.Initialize(choice.Switch(_ => PeerType.Server, _ => PeerType.Client));
+            if (LaunchArguments.TryReadOwner(Environment.GetCommandLineArgs(), out var ownerId))
+                OwnerProcess.QuitWhenGone(ownerId).Forget();
+
+            var choice = TryChooseWithoutMenu(out var preset) ? preset : await ChooseInMenu();
+            _network.ShowStarting(choice);
+            _runtimeSettings.Initialize(choice.Switch(_ => PeerType.Server, _ => PeerType.Client, _ => PeerType.Client));
             await LoadServicesAndGame();
-            StartNetwork(choice);
+            await _network.Start(choice);
             await SceneManager.UnloadSceneAsync("GameSetupScene").ToUniTask();
         }
 
-        private UniTask<LaunchChoice> Choose()
+        private async UniTask<LaunchChoice> ChooseInMenu()
         {
-            if (TryReadPlayModeTag(out var tagged))
-                return UniTask.FromResult(tagged);
-
-            if (LaunchArguments.TryRead(Environment.GetCommandLineArgs(), _connection.Port, out var argued))
-                return UniTask.FromResult(argued);
-
-            return gameObject.AddComponent<StartMenu>().Choose(_connection.Port, _connection.ServerAddress);
+            using var choosing = new LifetimeDefinition();
+            return await _menu.Choose(choosing.Lifetime);
         }
+
+        private bool TryChooseWithoutMenu(out LaunchChoice choice) =>
+            TryReadPlayModeTag(out choice) || LaunchArguments.TryRead(Environment.GetCommandLineArgs(), _connection.Port, out choice);
 
         private bool TryReadPlayModeTag(out LaunchChoice choice)
         {
@@ -109,41 +112,6 @@ namespace Setup
 
             var gameScene = SceneManager.GetSceneByName(_gameScene);
             SceneManager.SetActiveScene(gameScene);
-        }
-
-        private void StartNetwork(LaunchChoice choice)
-        {
-            var manager = NetworkManager.Singleton;
-            var transport = (UnityTransport)manager.NetworkConfig.NetworkTransport;
-            var started = choice.Switch(
-                server => StartServer(manager, transport, server),
-                client => StartClient(manager, transport, client));
-
-            NetworkStatusOverlay.Show(manager, choice);
-            if (!started)
-            {
-                Debug.LogError("[NetworkAutoStart] The network did not start.");
-                return;
-            }
-
-            _networkHolder.NetworkManager.Value = manager;
-        }
-
-        private bool StartServer(NetworkManager manager, UnityTransport transport, LaunchChoice.Server server)
-        {
-            Log($"Starting as the server on {ListenAddress}:{server.Port}");
-            transport.SetConnectionData(true, ListenAddress, server.Port, ListenAddress);
-            Application.targetFrameRate = ServerFrameRate;
-            Screen.SetResolution(ServerWindowWidth, ServerWindowHeight, FullScreenMode.Windowed);
-            return manager.StartServer();
-        }
-
-        private bool StartClient(NetworkManager manager, UnityTransport transport, LaunchChoice.Client client)
-        {
-            Log($"Starting as a client of {client.Address}:{client.Port}");
-            transport.SetConnectionData(true, client.Address, client.Port);
-            transport.MaxConnectAttempts = ConnectAttempts;
-            return manager.StartClient();
         }
 
         private void Log(string message)

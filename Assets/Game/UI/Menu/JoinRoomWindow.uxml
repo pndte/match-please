@@ -11,7 +11,7 @@
             <ui:VisualElement class="row">
                 <ui:VisualElement class="grow">
                     <ui:Label text="IP-адрес" class="label" />
-                    <ui:TextField name="address" value="26.12.34.56" max-length="15" class="field" />
+                    <ui:TextField name="address" value="26.12.34.56" max-length="21" class="field" />
                 </ui:VisualElement>
                 <ui:VisualElement class="gap" />
                 <ui:VisualElement class="port-column">

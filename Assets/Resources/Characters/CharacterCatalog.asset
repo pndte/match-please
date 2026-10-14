@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 940e23d09fa34f92a5526c16f2cacda5, type: 3}
+  m_Name: CharacterCatalog
+  m_EditorClassIdentifier: Bw.Entities.Network::Bw.Entities.Network.Characters.CharacterCatalog
+  Characters:
+  - Key: sanya
+    Prefab: {fileID: 1768199406601822194, guid: fc8b285af66260547821ffb4b60738cc, type: 3}
+  - Key: seva
+    Prefab: {fileID: 5148817816689952103, guid: 842fe65765e750b4e93f6463190b8f76, type: 3}
+  - Key: matvey
+    Prefab: {fileID: 5663921868032589438, guid: 36e40c069b7a9a74baad29a6310ed3b0, type: 3}
+  - Key: goshak
+    Prefab: {fileID: 1582203581188544168, guid: 24f8c767fbe7f114193bc5a6f77967c7, type: 3}

@@ -24,7 +24,7 @@ namespace Bw.Entities.Players
             return IsValid(trimmed) ? trimmed : Fallback;
         }
 
-        private static bool IsAllowed(char symbol) =>
+        public static bool IsAllowed(char symbol) =>
             symbol is >= 'a' and <= 'z' or >= 'A' and <= 'Z' or >= '0' and <= '9' or ' ' or '_' or '-' or >= 'Ѐ' and <= 'џ';
     }
 }

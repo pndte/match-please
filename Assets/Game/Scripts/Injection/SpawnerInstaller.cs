@@ -1,5 +1,6 @@
 using System;
 using Bw.Entities.Network;
+using Bw.Entities.Network.Characters;
 using Bw.Entities.Players;
 using Bw.UseCases.Clients.Network;
 using Bw.UseCases.Players.Network;
@@ -17,7 +18,7 @@ namespace Bw.Injection
         [Inject] private IRuntimeSettings _runtimeSettings;
 
         [Header("Spawn Configuration")]
-        [SerializeField] private NetworkObject[] _characters;
+        [SerializeField] private CharacterCatalog _characters;
         [SerializeField] private NetworkObject _fists;
         [SerializeField] private NetworkObject[] _weapons;
         [SerializeField] private Transform[] _spawnPoints;
@@ -33,14 +34,14 @@ namespace Bw.Injection
         public override void InstallBindings()
         {
             Container.BindInterfacesTo<NetworkClientCollection>().AsSingle()
-                .WithArguments(NetworkManager.Singleton).NonLazy();
+                .WithArguments(NetworkManager.Singleton, _characters).NonLazy();
             Container.Bind<IPlayerCollection>().To<PlayerCollection>().AsSingle();
             Container.BindInterfacesTo<NetworkPlayerCollection>().AsSingle();
 
             if (_runtimeSettings.CurrentPeerType != PeerType.Server)
                 return;
 
-            RequirePrefabs(NetworkManager.Singleton.NetworkConfig.Prefabs, _characters, "character");
+            RequireCharacters(NetworkManager.Singleton.NetworkConfig.Prefabs, _characters);
             RequireNetworkPrefab(NetworkManager.Singleton.NetworkConfig.Prefabs, _fists);
             RequirePrefabs(NetworkManager.Singleton.NetworkConfig.Prefabs, _weapons, "weapon");
             Container.BindInterfacesTo<NetworkCharactersSpawner>().AsSingle().WithArguments(
@@ -48,7 +49,7 @@ namespace Bw.Injection
                 {
                     SpawnPoints = _spawnPoints,
                     SpawnRandomOffset = _spawnRandomOffset,
-                    CharacterPrefabs = _characters,
+                    Characters = _characters,
                     FistsPrefab = _fists,
                     WeaponPrefabs = _weapons,
                 });
@@ -64,6 +65,13 @@ namespace Bw.Injection
         {
             RequireNetworkPrefab(registered, _crate);
             Container.Bind<NetworkCratesSpawner>().AsSingle().WithArguments(_crate, _crateSpots).NonLazy();
+        }
+
+        private static void RequireCharacters(NetworkPrefabs registered, CharacterCatalog characters)
+        {
+            CharacterCatalogValidation.Require(characters);
+            foreach (var character in characters.Characters)
+                RequireNetworkPrefab(registered, character.Prefab);
         }
 
         private static void RequirePrefabs(NetworkPrefabs registered, NetworkObject[] prefabs, string kind)

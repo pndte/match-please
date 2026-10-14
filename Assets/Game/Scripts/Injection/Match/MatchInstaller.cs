@@ -62,7 +62,6 @@ namespace Bw.Injection.Match
 
         private void BindPublishing(NetPropertyDeclaration<MatchTable> table)
         {
-            Container.Bind<PlayerFigures>().AsSingle();
             Container.Bind<MatchTables>().AsSingle();
             Container.Bind<MatchTableWriter>().AsSingle().WithArguments(table);
             Container.Bind<MatchPublisher>().AsSingle().NonLazy();

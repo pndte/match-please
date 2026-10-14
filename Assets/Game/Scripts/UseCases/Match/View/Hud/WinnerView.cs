@@ -1,4 +1,6 @@
+using System;
 using System.Globalization;
+using System.Linq;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using R3;
@@ -10,7 +12,6 @@ namespace Bw.UseCases.Match.View.Hud
     {
         private const string Hidden = "hidden";
         private const string FigurePrefix = "winner__figure--";
-        private static readonly string[] Figures = { "sanya", "seva", "matvey", "goshak" };
 
         private readonly IReadonlyMatchBoard _board;
         private readonly MatchCountdown _countdown;
@@ -46,8 +47,8 @@ namespace Bw.UseCases.Match.View.Hud
             var winner = standings.Lines[0];
             layer.Q<Label>("title").text = winner.IsMine ? "Ты победил!" : "Победитель матча";
             var figure = layer.Q("figure");
-            foreach (var known in Figures)
-                figure.RemoveFromClassList(FigurePrefix + known);
+            foreach (var shown in figure.GetClasses().Where(name => name.StartsWith(FigurePrefix, StringComparison.Ordinal)).ToArray())
+                figure.RemoveFromClassList(shown);
 
             figure.AddToClassList(FigurePrefix + winner.Figure);
             layer.Q<Label>("nickname").text = winner.Nickname;

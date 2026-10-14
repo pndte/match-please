@@ -5,7 +5,7 @@ namespace Bw.Entities.Network
     public interface IClient
     {
         public ulong Id { get; } //TODO: id клиента должна знать IClientCollection (обратный поиск), а не сам клиент: роутеру и спавнеру брать его оттуда
-        public string Nickname { get; }
+        public ConnectionRequest Request { get; }
         public IReadonlyProperty<ClientConnectionState> ConnectionState { get; }
         public void ChangeState(ClientConnectionState newState); //TODO: убрать, временно
     }
@@ -13,7 +13,7 @@ namespace Bw.Entities.Network
     public class Client : IClient
     {
         public ulong Id { get; }
-        public string Nickname { get; }
+        public ConnectionRequest Request { get; }
         public IReadonlyProperty<ClientConnectionState> ConnectionState => InternalState;
         public void ChangeState(ClientConnectionState newState) //TODO: убрать, временно
         {
@@ -23,10 +23,10 @@ namespace Bw.Entities.Network
         protected readonly IViewableProperty<ClientConnectionState> InternalState = //TODO: rename maybe
             new ViewableProperty<ClientConnectionState>(ClientConnectionState.Loading);
 
-        public Client(ulong id, string nickname)
+        public Client(ulong id, ConnectionRequest request)
         {
             Id = id;
-            Nickname = nickname;
+            Request = request;
         }
 
         public override string ToString()

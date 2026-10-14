@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 1858275096}
   - component: {fileID: 1858275097}
   - component: {fileID: 1858275099}
+  - component: {fileID: 1858275100}
   m_Layer: 0
   m_Name: Launcher
   m_TagString: Untagged
@@ -165,7 +166,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Zenject::Zenject.SceneContext
   _scriptableObjectInstallers: []
-  _monoInstallers: []
+  _monoInstallers:
+  - {fileID: 1858275100}
   _installerPrefabs: []
   _findSiblingMonoInstallers: 0
   _autoRun: 1
@@ -202,6 +204,21 @@ MonoBehaviour:
   enableLogging: 1
   _gameScene: ConstructionSite
   showDebugGUI: 0
+--- !u!114 &1858275100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858275092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c96c3d0e23eb49d09aa8e9ef9c14a7b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Launch.LaunchInstaller
+  _menuPanel: {fileID: 11400000, guid: 41070df745f243848a3d841ce560f62e, type: 2}
+  _menuScreen: {fileID: 9197481963319205126, guid: 0a3b31e59699cfb419c61f3a8007e762, type: 3}
+  _characters: {fileID: 11400000, guid: ac04d9c8673f4d839415f2e3cdcd8d39, type: 2}
 --- !u!1001 &2067038090
 PrefabInstance:
   m_ObjectHideFlags: 0
