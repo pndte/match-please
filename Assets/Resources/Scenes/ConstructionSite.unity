@@ -4424,7 +4424,7 @@ MonoBehaviour:
   - {fileID: 1553319613}
   _spawnRandomOffset: 2
   _match: {fileID: 8603386797099639887, guid: 4344c00d96aa676449521002d9111650, type: 3}
-  _crate: {fileID: 4376437016523511395, guid: 9034a6c368ff5b84cb82b57fcaafc5a8, type: 3}
+  _crates: {fileID: 11400000, guid: 92126c60c91e4d56a85fa47553e46842, type: 2}
   _crateSpots:
   - {fileID: 122260139}
   - {fileID: 2058961895}

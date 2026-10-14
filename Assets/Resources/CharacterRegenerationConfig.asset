@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 772c9113542544849a1ec98926bc56b0, type: 3}
   m_Name: CharacterRegenerationConfig
   m_EditorClassIdentifier: Bw.UseCases.Mortality::Bw.UseCases.Mortality.RegenerationConfig
-  Delay: 4
+  Delay: 5
   Interval: 0.5
   Amount: 10

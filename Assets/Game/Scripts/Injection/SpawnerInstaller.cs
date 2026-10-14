@@ -28,7 +28,7 @@ namespace Bw.Injection
         [SerializeField] private NetworkObject _match;
 
         [Header("Crates")]
-        [SerializeField] private NetworkObject _crate;
+        [SerializeField] private CrateSpawnConfig _crates;
         [SerializeField] private Transform[] _crateSpots = Array.Empty<Transform>();
 
         public override void InstallBindings()
@@ -63,8 +63,11 @@ namespace Bw.Injection
 
         private void BindCrates(NetworkPrefabs registered)
         {
-            RequireNetworkPrefab(registered, _crate);
-            Container.Bind<NetworkCratesSpawner>().AsSingle().WithArguments(_crate, _crateSpots).NonLazy();
+            if (_crates == null)
+                throw new InvalidOperationException("The spawner has crate spots but no crate config: assign Resources/Crates/CrateSpawnConfig.");
+
+            RequireNetworkPrefab(registered, _crates.Prefab);
+            Container.Bind<NetworkCratesSpawner>().AsSingle().WithArguments(_crates, _crateSpots).NonLazy();
         }
 
         private static void RequireCharacters(NetworkPrefabs registered, CharacterCatalog characters)
