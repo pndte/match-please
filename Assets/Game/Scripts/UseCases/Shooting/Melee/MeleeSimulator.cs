@@ -86,7 +86,12 @@ namespace Bw.UseCases.Shooting.Melee
         private static MeleeState Idle(MeleeState state) =>
             In(state, MeleePhase.Idle, 0, false, 0);
 
-        private static MeleeState In(MeleeState state, MeleePhase phase, int phaseTicks, bool held, int chargeTicks) =>
+        private static MeleeState In(
+            MeleeState state,
+            MeleePhase phase,
+            int phaseTicks,
+            bool held,
+            int chargeTicks) =>
             new(state.Aim, phase, phaseTicks, held, chargeTicks, state.Shots);
     }
 }

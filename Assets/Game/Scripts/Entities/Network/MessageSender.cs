@@ -21,7 +21,11 @@ namespace Bw.Entities.Network
         public void Broadcast(NetworkMessageHeader metadata, TValue payload, NetworkDelivery delivery) =>
             _serverRouter.Broadcast(ToMessage(metadata, payload), delivery);
 
-        public void SendToClient(NetworkMessageHeader metadata, TValue payload, NetworkDelivery delivery, IClient recipient) =>
+        public void SendToClient(
+            NetworkMessageHeader metadata,
+            TValue payload,
+            NetworkDelivery delivery,
+            IClient recipient) =>
             _serverRouter.SendToClient(ToMessage(metadata, payload), delivery, recipient);
 
         private static NetworkMessage<TCodec> ToMessage(NetworkMessageHeader metadata, TValue payload) =>

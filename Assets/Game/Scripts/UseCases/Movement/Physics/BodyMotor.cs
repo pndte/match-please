@@ -68,13 +68,21 @@ namespace Bw.UseCases.Movement.Physics
             return new BodyState(position, velocity.WithY(0f), push, verticalDirection == Vector2.down);
         }
 
-        public float PossibleShove(Vector2 position, Vector2 direction, float distance, IMovementCollider shover)
+        public float PossibleShove(
+            Vector2 position,
+            Vector2 direction,
+            float distance,
+            IMovementCollider shover)
         {
             var possible = PossibleAdvance(position, direction, distance, float.PositiveInfinity, shover);
             return possible < Touching ? 0f : possible;
         }
 
-        public void MakeWay(Vector2 position, Vector2 direction, float distance, IMovementCollider shover)
+        public void MakeWay(
+            Vector2 position,
+            Vector2 direction,
+            float distance,
+            IMovementCollider shover)
         {
             for (var shoves = 0; TryGetNearest(_collider.ShovablesAhead(position, direction, distance, shover), distance, out var nearest); shoves++)
             {
@@ -89,12 +97,21 @@ namespace Bw.UseCases.Movement.Physics
         private float LaunchSpeed(float height) =>
             -_gravity * _step.Duration / 2f + Mathf.Sqrt(-2f * _gravity * height);
 
-        private float HorizontalTravel(Vector2 position, Vector2 direction, float distance, BodyDrive drive) =>
+        private float HorizontalTravel(
+            Vector2 position,
+            Vector2 direction,
+            float distance,
+            BodyDrive drive) =>
             Walking(direction, drive)
                 ? PossibleAdvance(position, direction, distance, _config.ShoveSpeed * _step.Duration, _collider)
                 : _collider.Cast(position, direction, distance);
 
-        private float PossibleAdvance(Vector2 position, Vector2 direction, float distance, float reach, IMovementCollider shover)
+        private float PossibleAdvance(
+            Vector2 position,
+            Vector2 direction,
+            float distance,
+            float reach,
+            IMovementCollider shover)
         {
             var free = _collider.WallDistance(position, direction, distance, shover);
             var contacts = _collider.ShovablesAhead(position, direction, free, shover);

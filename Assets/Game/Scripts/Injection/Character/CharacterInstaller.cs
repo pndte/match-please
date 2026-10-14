@@ -42,7 +42,7 @@ namespace Bw.Injection
         [SerializeField] private Animator _animator;
         [SerializeField] private SpriteRenderer _sprite;
         [SerializeField] private HitFeedbackConfig _hitFeedbackConfig;
-        [SerializeField] private DeathConfig _death = new();
+        [SerializeField] private DeathConfig _death;
 
         public override void InstallBindings()
         {

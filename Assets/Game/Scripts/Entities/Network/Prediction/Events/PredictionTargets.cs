@@ -9,7 +9,11 @@ namespace Bw.Entities.Network.Prediction.Events
         private readonly Dictionary<TTarget, Target> _byTarget = new();
         private readonly Dictionary<ulong, Target> _byNetworkObjectId = new();
 
-        public void AddLifetimed(Lifetime lifetime, TTarget target, ulong networkObjectId, IPredictionTarget<TEffect> part)
+        public void AddLifetimed(
+            Lifetime lifetime,
+            TTarget target,
+            ulong networkObjectId,
+            IPredictionTarget<TEffect> part)
         {
             var known = _byTarget.TryGetValue(target, out var entry);
             if (known && entry.NetworkObjectId != networkObjectId)

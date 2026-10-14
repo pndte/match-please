@@ -19,7 +19,11 @@ namespace Bw.UseCases.Shooting.View.Rig
 
         private readonly Animator _rig;
 
-        public MeleeRigView(Lifetime lifetime, Animator rig, IReadonlyWeaponDraw draw, IMeleeSwings swings)
+        public MeleeRigView(
+            Lifetime lifetime,
+            Animator rig,
+            IReadonlyWeaponDraw draw,
+            IMeleeSwings swings)
         {
             _rig = rig;
 

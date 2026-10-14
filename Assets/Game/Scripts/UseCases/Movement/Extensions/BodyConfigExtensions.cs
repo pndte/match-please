@@ -10,7 +10,11 @@ namespace Bw.UseCases.Movement.Extensions
         public static float DeceleratedPush(this IBodyConfig config, float push, ISimulationStep step) =>
             Mathf.MoveTowards(push, 0f, config.PushDeceleration * step.Duration);
 
-        public static float DeceleratedPush(this IBodyConfig config, float push, bool grounded, ISimulationStep step) =>
+        public static float DeceleratedPush(
+            this IBodyConfig config,
+            float push,
+            bool grounded,
+            ISimulationStep step) =>
             grounded ? config.DeceleratedPush(push, step) : Mathf.MoveTowards(push, 0f, config.AirPushDeceleration * step.Duration);
 
         public static Vector2 Lifted(this IBodyConfig config, Vector2 impulse) =>
@@ -26,7 +30,11 @@ namespace Bw.UseCases.Movement.Extensions
             return ticks;
         }
 
-        public static float PushDistance(this IBodyConfig config, float push, double ticks, ISimulationStep step) //TODO: путь толчка считается с торможением на земле, а в воздухе тело тормозит по AirPushDeceleration — толчок взлетевшего ящика стрелок покажет короче, чем его проведёт сервер, и снимки потом дотянут
+        public static float PushDistance(
+            this IBodyConfig config,
+            float push,
+            double ticks,
+            ISimulationStep step) //TODO: путь толчка считается с торможением на земле, а в воздухе тело тормозит по AirPushDeceleration — толчок взлетевшего ящика стрелок покажет короче, чем его проведёт сервер, и снимки потом дотянут
         {
             RequireStopping(config, push);
             var distance = 0f;

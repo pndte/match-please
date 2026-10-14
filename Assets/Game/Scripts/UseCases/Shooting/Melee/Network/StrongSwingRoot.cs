@@ -15,7 +15,12 @@ namespace Bw.UseCases.Shooting.Melee.Network
         private readonly INetworkTicks _ticks;
         private readonly MeleeWeaponConfig _config;
 
-        public StrongSwingRoot(Lifetime lifetime, Transform weapon, IReadonlySimulation<MeleeState> fists, INetworkTicks ticks, MeleeWeaponConfig config)
+        public StrongSwingRoot(
+            Lifetime lifetime,
+            Transform weapon,
+            IReadonlySimulation<MeleeState> fists,
+            INetworkTicks ticks,
+            MeleeWeaponConfig config)
         {
             _weapon = weapon;
             _ticks = ticks;

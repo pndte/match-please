@@ -17,7 +17,13 @@ namespace Bw.UseCases.Shooting.View
         private readonly ShotVfxConfig _vfx;
         private readonly Transform _ejector;
 
-        public MuzzleEffectsView(Lifetime lifetime, ISeenShots shots, IMuzzleFlash flash, IPrefabPools pools, ShotVfxConfig vfx, Transform ejector)
+        public MuzzleEffectsView(
+            Lifetime lifetime,
+            ISeenShots shots,
+            IMuzzleFlash flash,
+            IPrefabPools pools,
+            ShotVfxConfig vfx,
+            Transform ejector)
         {
             _lifetime = lifetime;
             _flash = flash;

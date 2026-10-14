@@ -3,10 +3,6 @@ using Unity.Netcode;
 
 namespace Bw.Entities.Network.Serialization
 {
-    /// <summary>
-    /// Variable-length packing via <see cref="BytePacker"/> / <see cref="ByteUnpacker"/>,
-    /// same as <see cref="NetworkMessageHeader"/>.
-    /// </summary>
     public static class BufferSerializerPackedExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -51,6 +47,16 @@ namespace Bw.Entities.Network.Serialization
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SerializePacked<T>(this BufferSerializer<T> serializer, ref int value)
+            where T : IReaderWriter
+        {
+            if (serializer.IsWriter)
+                BytePacker.WriteValuePacked(serializer.GetFastBufferWriter(), value);
+            else
+                ByteUnpacker.ReadValuePacked(serializer.GetFastBufferReader(), out value);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void SerializePacked<T>(this BufferSerializer<T> serializer, ref long value)
             where T : IReaderWriter
         {
             if (serializer.IsWriter)

@@ -16,7 +16,11 @@ namespace Bw.UseCases.Camera.View.Follow
         private Vector2 _lookAhead;
         private Vector2 _lookAheadVelocity;
 
-        public CameraFollow(Lifetime lifetime, ICameraTargets targets, UnityEngine.Camera camera, CameraFollowConfig config)
+        public CameraFollow(
+            Lifetime lifetime,
+            ICameraTargets targets,
+            UnityEngine.Camera camera,
+            CameraFollowConfig config)
         {
             _targets = targets;
             _camera = camera;

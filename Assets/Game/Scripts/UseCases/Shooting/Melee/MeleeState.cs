@@ -16,7 +16,13 @@ namespace Bw.UseCases.Shooting.Melee
         int IWeaponState.Shots => Shots;
         bool IWeaponState.Stowable => Phase == MeleePhase.Idle || (Phase == MeleePhase.Jab && !Held);
 
-        public MeleeState(float aim, MeleePhase phase, int phaseTicks, bool held, int chargeTicks, int shots)
+        public MeleeState(
+            float aim,
+            MeleePhase phase,
+            int phaseTicks,
+            bool held,
+            int chargeTicks,
+            int shots)
         {
             Aim = aim;
             Phase = phase;

@@ -10,7 +10,11 @@ namespace Bw.UseCases.Shooting.Weapon
         public readonly Hit Hit;
         public readonly IReadonlyWeapon Weapon;
 
-        public RaycastShot(IShotTracer tracer, WeaponShot weaponShot, Hit hit, IReadonlyWeapon weapon)
+        public RaycastShot(
+            IShotTracer tracer,
+            WeaponShot weaponShot,
+            Hit hit,
+            IReadonlyWeapon weapon)
         {
             Tracer = tracer;
             WeaponShot = weaponShot;

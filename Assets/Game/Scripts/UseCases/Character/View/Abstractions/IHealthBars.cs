@@ -6,6 +6,11 @@ namespace Bw.UseCases.Character.View.Abstractions
 {
     public interface IHealthBars
     {
-        public void Show(Lifetime lifetime, IReadonlyHealth health, IOwnership ownership, IReadonlyNickname nickname, Transform body);
+        public void Show(
+            Lifetime lifetime,
+            IReadonlyHealth health,
+            IOwnership ownership,
+            IReadonlyNickname nickname,
+            Transform body);
     }
 }

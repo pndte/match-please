@@ -17,7 +17,11 @@ namespace Bw.UseCases.Shooting.Weapon
         private readonly ContactFilter2D _filter;
         private readonly List<RaycastHit2D> _hits = new(8);
 
-        public ShotTracer(Transform weapon, IWeaponMuzzle muzzle, RaycastShootConfig config, PelletsConfig pellets)
+        public ShotTracer(
+            Transform weapon,
+            IWeaponMuzzle muzzle,
+            RaycastShootConfig config,
+            PelletsConfig pellets)
         {
             _weapon = weapon;
             _muzzle = muzzle;

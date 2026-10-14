@@ -13,9 +13,9 @@ namespace Bw.Injection.Weapon
     [CreateAssetMenu(fileName = "WeaponSettings", menuName = "Installers/WeaponSettings")]
     public sealed class WeaponSettingsInstaller : ScriptableObjectInstaller<WeaponSettingsInstaller>
     {
-        [SerializeField] private WeaponPickupConfig _pickup = new();
-        [SerializeField] private WeaponHighlightConfig _highlight = new();
-        [SerializeField] private WeaponInventoryConfig _inventory = new();
+        [SerializeField] private WeaponPickupConfig _pickup;
+        [SerializeField] private WeaponHighlightConfig _highlight;
+        [SerializeField] private WeaponInventoryConfig _inventory;
 
         public override void InstallBindings()
         {

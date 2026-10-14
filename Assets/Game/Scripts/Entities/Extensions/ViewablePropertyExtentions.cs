@@ -7,7 +7,10 @@ namespace Bw.Entities.Extensions
 {
     public static class ViewablePropertyExtensions
     {
-        public static void WhenLessOrEquals<T>(this IReadonlyProperty<T> property, Lifetime lifetime, T value,
+        public static void WhenLessOrEquals<T>(
+            this IReadonlyProperty<T> property,
+            Lifetime lifetime,
+            T value,
             Action handler) where T : struct, IComparable<T>
         {
             property.Advise(lifetime, comparable =>
@@ -94,12 +97,19 @@ namespace Bw.Entities.Extensions
                 handler(itemLifetime, item));
         }
 
-        public static void AddLifetimed<K, V>(this IViewableMap<K, V> map, Lifetime lifetime, K key, V value)
+        public static void AddLifetimed<K, V>(
+            this IViewableMap<K, V> map,
+            Lifetime lifetime,
+            K key,
+            V value)
         {
             map.AddLifetimed(lifetime, new KeyValuePair<K, V>(key, value));
         }
 
-        public static void ViewForKey<K, V>(this IViewableMap<K, V> map, Lifetime lifetime, K targetKey,
+        public static void ViewForKey<K, V>(
+            this IViewableMap<K, V> map,
+            Lifetime lifetime,
+            K targetKey,
             Action<Lifetime, V> handler)
         {
             LifetimeDefinition def = null;

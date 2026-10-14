@@ -17,7 +17,12 @@ namespace Bw.UseCases.Character.View.HealthBar
         [SerializeField] private HealthBarWidget _prefab;
         [SerializeField] private HealthBarConfig _config;
 
-        public void Show(Lifetime lifetime, IReadonlyHealth health, IOwnership ownership, IReadonlyNickname nickname, Transform body)
+        public void Show(
+            Lifetime lifetime,
+            IReadonlyHealth health,
+            IOwnership ownership,
+            IReadonlyNickname nickname,
+            Transform body)
         {
             var widget = Instantiate(_prefab, _layer);
             var shown = widget.gameObject;

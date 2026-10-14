@@ -12,7 +12,11 @@ namespace Bw.UseCases.Movement.Network.Platforms
         private readonly IMovementCollider _collider;
         private readonly ISimulationStep _step;
 
-        public RiderRewinder(IRewindable rewinder, IMovementBody body, IMovementCollider collider, ISimulationStep step)
+        public RiderRewinder(
+            IRewindable rewinder,
+            IMovementBody body,
+            IMovementCollider collider,
+            ISimulationStep step)
         {
             _rewinder = rewinder;
             _body = body;

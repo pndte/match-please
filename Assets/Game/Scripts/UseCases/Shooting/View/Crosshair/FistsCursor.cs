@@ -9,7 +9,11 @@ namespace Bw.UseCases.Shooting.View.Crosshair
 {
     public sealed class FistsCursor
     {
-        public FistsCursor(Lifetime lifetime, IReadonlyControlledBy controlledBy, IReadonlyWeaponDraw draw, IAimCursor cursor)
+        public FistsCursor(
+            Lifetime lifetime,
+            IReadonlyControlledBy controlledBy,
+            IReadonlyWeaponDraw draw,
+            IAimCursor cursor)
         {
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
                 draw.DrawnLifetime.WhenAlive(controlledLifetime, cursor.ShowFists));

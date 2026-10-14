@@ -12,32 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88b7bb39dc5ba2045b5246af862f36ac, type: 3}
   m_Name: WeaponSettings
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Weapon.WeaponSettingsInstaller
-  _pickup:
-    Reach: 2.5
-    HoverRadius: 0.35
-    WeaponMask:
-      serializedVersion: 2
-      m_Bits: 81920
-  _highlight:
-    Material: {fileID: 2100000, guid: 11a173f6ad7e43a44875cdedad088965, type: 2}
-    FadeInTime: 0.12
-    FadeOutTime: 0.2
-  _inventory:
-    Slots:
-    - Kinds: 00000000
-      Key: 49
-    - Kinds: 01000000
-      Key: 50
-    - Kinds: 02000000
-      Key: 0
-    Rules:
-    - Kind: 0
-      Droppable: 0
-      HandsOnly: 0
-    - Kind: 1
-      Droppable: 1
-      HandsOnly: 0
-    - Kind: 2
-      Droppable: 1
-      HandsOnly: 1
-    LastKey: 113
+  _pickup: {fileID: 11400000, guid: 3a126147689d4e25823f5bd20676cebf, type: 2}
+  _highlight: {fileID: 11400000, guid: e35951f8da9d497dbdcd6094ebb31c21, type: 2}
+  _inventory: {fileID: 11400000, guid: a39b8726ccbd4ea9a38868ff75adea1a, type: 2}

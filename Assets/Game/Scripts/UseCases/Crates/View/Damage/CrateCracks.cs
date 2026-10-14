@@ -6,7 +6,11 @@ namespace Bw.UseCases.Crates.View.Damage
 {
     public sealed class CrateCracks
     {
-        public CrateCracks(Lifetime lifetime, IReadonlyHealth health, SpriteRenderer sprite, CrateDamageConfig config)
+        public CrateCracks(
+            Lifetime lifetime,
+            IReadonlyHealth health,
+            SpriteRenderer sprite,
+            CrateDamageConfig config)
         {
             var intact = sprite.sprite;
             health.State.Advise(lifetime, state =>

@@ -36,7 +36,11 @@ namespace Bw.EditorTools.Shooting
             EditorGUI.EndProperty();
         }
 
-        private static void Field(Rect rect, SerializedProperty property, string name, GUIContent label) =>
+        private static void Field(
+            Rect rect,
+            SerializedProperty property,
+            string name,
+            GUIContent label) =>
             EditorGUI.PropertyField(rect, property.FindPropertyRelative(name), label);
     }
 }

@@ -5,7 +5,11 @@ namespace Bw.UseCases.Shooting.Weapon.Extensions
 {
     public static class WeaponInventoryExtensions
     {
-        public static bool TryFindIn(this IReadonlyWeaponInventory inventory, WeaponSlot slot, bool droppable, out IWeapon weapon)
+        public static bool TryFindIn(
+            this IReadonlyWeaponInventory inventory,
+            WeaponSlot slot,
+            bool droppable,
+            out IWeapon weapon)
         {
             foreach (var (carried, place) in inventory.Carried)
             {

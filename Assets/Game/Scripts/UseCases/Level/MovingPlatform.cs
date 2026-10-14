@@ -17,7 +17,11 @@ namespace Bw.UseCases.Level
         private readonly MovingPlatformPath _path;
         private readonly ISimulationStep _step;
 
-        public MovingPlatform(Rigidbody2D body, BoxCollider2D collider, MovingPlatformPath path, ISimulationStep step)
+        public MovingPlatform(
+            Rigidbody2D body,
+            BoxCollider2D collider,
+            MovingPlatformPath path,
+            ISimulationStep step)
         {
             _body = body;
             _transform = body.transform;

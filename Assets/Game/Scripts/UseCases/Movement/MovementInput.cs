@@ -7,7 +7,11 @@ namespace Bw.UseCases.Movement
         public readonly bool JumpHeld;
         public readonly bool Down;
 
-        public MovementInput(float horizontal, bool jump, bool jumpHeld, bool down)
+        public MovementInput(
+            float horizontal,
+            bool jump,
+            bool jumpHeld,
+            bool down)
         {
             Horizontal = horizontal;
             Jump = jump;

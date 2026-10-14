@@ -15,7 +15,12 @@ namespace Bw.UseCases.Shooting.Weapon
         int IWeaponState.Shots => Shots;
         bool IWeaponState.Stowable => true;
 
-        public GunState(float aim, int ammo, int cooldownTicks, int reloadTicks, int shots)
+        public GunState(
+            float aim,
+            int ammo,
+            int cooldownTicks,
+            int reloadTicks,
+            int shots)
         {
             Aim = aim;
             Ammo = ammo;

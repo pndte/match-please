@@ -26,7 +26,7 @@ namespace Bw.UseCases.Shooting.Melee.Network.Codecs
             var shots = Value.State.Shots;
 
             serializer.SerializePacked(ref tick);
-            serializer.SerializeValue(ref aim); //TODO: квантование
+            serializer.SerializeAngle(ref aim);
             serializer.SerializeValue(ref phase);
             serializer.SerializePacked(ref phaseTicks);
             serializer.SerializeValue(ref held);

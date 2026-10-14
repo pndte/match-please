@@ -4,7 +4,11 @@ namespace Bw.UseCases.Props.Extensions
 {
     public static class HeldPropConfigExtensions
     {
-        public static Vector2 HeldOffset(this HeldPropConfig config, float aim, Vector2 holderHalfSize, Vector2 propHalfSize)
+        public static Vector2 HeldOffset(
+            this HeldPropConfig config,
+            float aim,
+            Vector2 holderHalfSize,
+            Vector2 propHalfSize)
         {
             var reach = holderHalfSize + propHalfSize + new Vector2(config.Gap, config.Gap);
             var radians = aim * Mathf.Deg2Rad;

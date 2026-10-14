@@ -2,12 +2,15 @@ using Bw.Entities;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Prediction.Events.Codecs;
 using Bw.Entities.Network.Prediction.Events.Requests;
+using Bw.Entities.Network.Serialization;
 using Unity.Netcode;
 
 namespace Bw.UseCases.Mortality.Network.Codecs
 {
     public struct CausedVitalsCodec : ICodec<CausedState<Vitals>>
     {
+        private static readonly Quantization Health = new(5);
+
         public CausedState<Vitals> Value
         {
             get => _value;
@@ -23,8 +26,8 @@ namespace Bw.UseCases.Mortality.Network.Codecs
             var state = (byte)Value.State.State;
             var cause = Value.Cause;
 
-            serializer.SerializeValue(ref health);
-            serializer.SerializeValue(ref change);
+            serializer.SerializeQuantized(ref health, Health);
+            serializer.SerializeQuantized(ref change, Health);
             serializer.SerializeValue(ref state);
             serializer.SerializeCause(ref cause);
 

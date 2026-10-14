@@ -80,7 +80,11 @@ namespace Bw.Entities.Network.Variables
             }
         }
 
-        private void AddEntry(Lifetime lifetime, ushort varId, NetEntryDeclaration declaration, INetSendGuard sendGuard)
+        private void AddEntry(
+            Lifetime lifetime,
+            ushort varId,
+            NetEntryDeclaration declaration,
+            INetSendGuard sendGuard)
         {
             var entry = declaration.Create(sendGuard);
             var info = new NetRegistryInfo(entry, declaration.DeliveryType, declaration.Permissions);

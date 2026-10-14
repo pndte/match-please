@@ -12,7 +12,11 @@ namespace Bw.UseCases.Shooting.View.Recoil
         private readonly Transform _visual;
         private readonly WeaponRecoilConfig _config;
 
-        public WeaponRecoilView(Lifetime lifetime, ISeenShots shots, WeaponRecoilConfig config, Transform visual)
+        public WeaponRecoilView(
+            Lifetime lifetime,
+            ISeenShots shots,
+            WeaponRecoilConfig config,
+            Transform visual)
         {
             _visual = visual;
             _config = config;

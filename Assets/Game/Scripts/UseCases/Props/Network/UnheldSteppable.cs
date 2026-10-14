@@ -14,7 +14,11 @@ namespace Bw.UseCases.Props.Network
 
         private int _releaseTick = int.MinValue;
 
-        public UnheldSteppable(Lifetime lifetime, ISteppable steppable, IWeaponHold hold, INetworkTicks ticks)
+        public UnheldSteppable(
+            Lifetime lifetime,
+            ISteppable steppable,
+            IWeaponHold hold,
+            INetworkTicks ticks)
         {
             _steppable = steppable;
             _hold = hold;

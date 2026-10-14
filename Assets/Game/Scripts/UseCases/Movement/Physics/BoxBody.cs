@@ -24,7 +24,12 @@ namespace Bw.UseCases.Movement.Physics
         private readonly List<RaycastHit2D> _hits = new(4);
         private readonly List<ShovableContact> _ahead = new();
 
-        public BoxBody(Rigidbody2D rigidbody, BoxCollider2D collider, IBodyConfig config, IMovingPlatformCollection platforms, IShovableCollection shovables)
+        public BoxBody(
+            Rigidbody2D rigidbody,
+            BoxCollider2D collider,
+            IBodyConfig config,
+            IMovingPlatformCollection platforms,
+            IShovableCollection shovables)
         {
             _rigidbody = rigidbody;
             _collider = collider;
@@ -61,7 +66,11 @@ namespace Bw.UseCases.Movement.Physics
             return Mathf.Max(0f, distance);
         }
 
-        public float WallDistance(Vector2 position, Vector2 direction, float distance, IMovementCollider shover)
+        public float WallDistance(
+            Vector2 position,
+            Vector2 direction,
+            float distance,
+            IMovementCollider shover)
         {
             var hitCount = Physics2D.BoxCast(position + _offset, _size, 0f, direction, _filter, _hits, distance + Skin);
 
@@ -75,7 +84,11 @@ namespace Bw.UseCases.Movement.Physics
             return Mathf.Max(0f, distance);
         }
 
-        public IReadOnlyList<ShovableContact> ShovablesAhead(Vector2 position, Vector2 direction, float distance, IMovementCollider shover)
+        public IReadOnlyList<ShovableContact> ShovablesAhead(
+            Vector2 position,
+            Vector2 direction,
+            float distance,
+            IMovementCollider shover)
         {
             _ahead.Clear();
             var front = Vector2.Dot(position + _offset, direction) + Mathf.Abs(Vector2.Dot(_size, direction)) / 2f;

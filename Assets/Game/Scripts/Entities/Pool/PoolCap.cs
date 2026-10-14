@@ -17,14 +17,22 @@ namespace Bw.Entities.Pool
         public static PoolCap Throwing(int max) =>
             new ThrowingCap(RequirePositive(max));
 
-        public abstract void Switch<TState>(TState state, Action<TState> none, Action<TState, int> reclaimOldest, Action<TState, int> throwing);
+        public abstract void Switch<TState>(
+            TState state,
+            Action<TState> none,
+            Action<TState, int> reclaimOldest,
+            Action<TState, int> throwing);
 
         private static int RequirePositive(int max) =>
             max > 0 ? max : throw new ArgumentOutOfRangeException(nameof(max), max, "A cap must let out at least one resource.");
 
         private sealed class Uncapped : PoolCap
         {
-            public override void Switch<TState>(TState state, Action<TState> none, Action<TState, int> reclaimOldest, Action<TState, int> throwing) =>
+            public override void Switch<TState>(
+                TState state,
+                Action<TState> none,
+                Action<TState, int> reclaimOldest,
+                Action<TState, int> throwing) =>
                 none(state);
         }
 
@@ -37,7 +45,11 @@ namespace Bw.Entities.Pool
                 _max = max;
             }
 
-            public override void Switch<TState>(TState state, Action<TState> none, Action<TState, int> reclaimOldest, Action<TState, int> throwing) =>
+            public override void Switch<TState>(
+                TState state,
+                Action<TState> none,
+                Action<TState, int> reclaimOldest,
+                Action<TState, int> throwing) =>
                 reclaimOldest(state, _max);
         }
 
@@ -50,7 +62,11 @@ namespace Bw.Entities.Pool
                 _max = max;
             }
 
-            public override void Switch<TState>(TState state, Action<TState> none, Action<TState, int> reclaimOldest, Action<TState, int> throwing) =>
+            public override void Switch<TState>(
+                TState state,
+                Action<TState> none,
+                Action<TState, int> reclaimOldest,
+                Action<TState, int> throwing) =>
                 throwing(state, _max);
         }
     }

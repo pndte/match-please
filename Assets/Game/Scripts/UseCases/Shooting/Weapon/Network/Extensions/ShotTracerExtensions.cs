@@ -9,7 +9,11 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Extensions
 {
     public static class ShotTracerExtensions
     {
-        public static void CastPellets(this IShotTracer tracer, ShotRay ray, Hit hit, List<AffectedTarget<IReadonlyMortal, Hit>> affected)
+        public static void CastPellets(
+            this IShotTracer tracer,
+            ShotRay ray,
+            Hit hit,
+            List<AffectedTarget<IReadonlyMortal, Hit>> affected)
         {
             for (var pellet = 0; pellet < tracer.Pellets; pellet++)
             {

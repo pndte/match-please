@@ -18,12 +18,16 @@ namespace Bw.UseCases.Movement.Network.Codecs
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
             var tick = Value.Tick;
-            var body = Value.State;
+            var position = Value.State.Position;
+            var velocity = Value.State.Velocity;
+            var horizontalPush = Value.State.HorizontalPush;
+            var grounded = Value.State.Grounded;
 
             serializer.SerializePacked(ref tick);
-            serializer.SerializeBody(ref body);
+            serializer.SerializeMotion(ref position, ref velocity, ref horizontalPush);
+            serializer.SerializeValue(ref grounded);
 
-            Value = new TickedState<BodyState>(tick, body);
+            Value = new TickedState<BodyState>(tick, new BodyState(position, velocity, horizontalPush, grounded));
         }
     }
 }

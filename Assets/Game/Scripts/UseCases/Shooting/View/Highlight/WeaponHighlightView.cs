@@ -22,7 +22,11 @@ namespace Bw.UseCases.Shooting.View.Highlight
         private bool _worn;
         private float _amount;
 
-        public WeaponHighlightView(Lifetime lifetime, WeaponHighlightConfig config, Transform visual, SpriteRenderer[] parts)
+        public WeaponHighlightView(
+            Lifetime lifetime,
+            WeaponHighlightConfig config,
+            Transform visual,
+            SpriteRenderer[] parts)
         {
             _lifetime = lifetime;
             _config = config;

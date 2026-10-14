@@ -7,6 +7,8 @@ namespace Bw.UseCases.Movement.Network.Codecs
 {
     public struct TickedMovementInputCodec : ICodec<TickedInput<MovementInput>>
     {
+        private static readonly Quantization Axis = new(3);
+
         public TickedInput<MovementInput> Value
         {
             get => _value;
@@ -28,14 +30,9 @@ namespace Bw.UseCases.Movement.Network.Codecs
             var previousDown = Value.PreviousInput.Down;
 
             serializer.SerializePacked(ref tick);
-            serializer.SerializeValue(ref horizontal);
-            serializer.SerializeValue(ref jump);
-            serializer.SerializeValue(ref jumpHeld);
-            serializer.SerializeValue(ref down);
-            serializer.SerializeValue(ref previousHorizontal);
-            serializer.SerializeValue(ref previousJump);
-            serializer.SerializeValue(ref previousJumpHeld);
-            serializer.SerializeValue(ref previousDown);
+            serializer.SerializeQuantized(ref horizontal, Axis);
+            serializer.SerializeQuantized(ref previousHorizontal, Axis);
+            serializer.SerializeFlags(ref jump, ref jumpHeld, ref down, ref previousJump, ref previousJumpHeld, ref previousDown);
 
             Value = new TickedInput<MovementInput>(
                 tick,

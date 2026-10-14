@@ -1,11 +1,10 @@
-using System;
 using Bw.UseCases.Mortality;
 using UnityEngine;
 
 namespace Bw.UseCases.Props
 {
-    [Serializable]
-    public sealed class PropThrowConfig : IHitConfig
+    [CreateAssetMenu(fileName = "PropThrowConfig", menuName = "Configs/PropThrowConfig")]
+    public sealed class PropThrowConfig : ScriptableObject, IHitConfig
     {
         [Min(0f)] public float Speed = 22f;
         [Min(0f)] public float Damage = 5f;

@@ -56,7 +56,11 @@ namespace Bw.UseCases.FogOfWar.View.Fog
             });
         }
 
-        public static FogCover Create(Lifetime lifetime, UnityEngine.Camera camera, SightMask mask, FogOfWarConfig config)
+        public static FogCover Create(
+            Lifetime lifetime,
+            UnityEngine.Camera camera,
+            SightMask mask,
+            FogOfWarConfig config)
         {
             var root = new GameObject("FogOfWar");
             root.transform.SetParent(camera.transform, false);
@@ -123,7 +127,12 @@ namespace Bw.UseCases.FogOfWar.View.Fog
             return quad;
         }
 
-        private static MeshRenderer CreateLayer(Transform root, string name, Mesh quad, Material material, int order)
+        private static MeshRenderer CreateLayer(
+            Transform root,
+            string name,
+            Mesh quad,
+            Material material,
+            int order)
         {
             var layer = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
             layer.transform.SetParent(root, false);

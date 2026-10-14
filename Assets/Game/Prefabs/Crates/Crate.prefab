@@ -167,19 +167,13 @@ MonoBehaviour:
   _collider: {fileID: 840330045488863506}
   _bodyConfig: {fileID: 11400000, guid: 4e38d5578a519c4469bd3f5128ff40e3, type: 2}
   _healthConfig: {fileID: 11400000, guid: e54fac7e40b4cbd4c8db7bad139c9827, type: 2}
-  _death:
-    CorpseTime: 0
-    CorpseLayer:
-      serializedVersion: 2
-      m_Bits: 4
+  _death: {fileID: 11400000, guid: e22f64863d2340bbba7a3b217d70da68, type: 2}
   _visual: {fileID: 6182788802789932197}
   _sprite: {fileID: 1994059796618544761}
   _hitFlashConfig: {fileID: 11400000, guid: 6c6b6de2063cf0343810ca4e569be06e, type: 2}
-  _damage:
-    Cracked: {fileID: 1072710024, guid: 6cfed3923713e484293dad45fd6b9fff, type: 3}
-    CrackedBelow: 0.5
-    HitPunch: {x: 0.1, y: -0.1, z: 0}
-    HitPunchTime: 0.18
+  _damage: {fileID: 11400000, guid: b8729bd82a2c4259810d8da265661a80, type: 2}
+  _held: {fileID: 11400000, guid: ce598c293cdf4aebb0a09b1908588668, type: 2}
+  _throw: {fileID: 11400000, guid: f94689a4498d4eceb590543e642d2ad9, type: 2}
 --- !u!114 &5576007068661983289
 MonoBehaviour:
   m_ObjectHideFlags: 0

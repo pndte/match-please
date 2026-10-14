@@ -35,7 +35,12 @@ namespace Bw.UseCases.FogOfWar.View.Fog
         private int _vertexCount;
         private int _indexCount;
 
-        private SightMask(RenderTexture texture, Mesh mesh, Material material, CommandBuffer commands, FogOfWarConfig config)
+        private SightMask(
+            RenderTexture texture,
+            Mesh mesh,
+            Material material,
+            CommandBuffer commands,
+            FogOfWarConfig config)
         {
             _texture = texture;
             _mesh = mesh;
@@ -114,7 +119,11 @@ namespace Bw.UseCases.FogOfWar.View.Fog
             }
         }
 
-        private void AddBand(SightRay from, SightRay to, float depth, Color32 color)
+        private void AddBand(
+            SightRay from,
+            SightRay to,
+            float depth,
+            Color32 color)
         {
             if (depth <= 0f)
                 return;

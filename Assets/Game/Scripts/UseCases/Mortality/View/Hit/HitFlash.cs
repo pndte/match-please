@@ -18,7 +18,11 @@ namespace Bw.UseCases.Mortality.View.Hit
 
         private float _elapsed;
 
-        public HitFlash(Lifetime lifetime, IReadonlyHealth health, SpriteRenderer sprite, IHitFlashConfig config)
+        public HitFlash(
+            Lifetime lifetime,
+            IReadonlyHealth health,
+            SpriteRenderer sprite,
+            IHitFlashConfig config)
         {
             _sprite = sprite;
             _config = config;

@@ -46,18 +46,18 @@ namespace Bw.Injection.Crates
 
         [Header("Mortality")]
         [SerializeField] private HealthConfig _healthConfig;
-        [SerializeField] private DeathConfig _death = new() { CorpseTime = 0f };
+        [SerializeField] private DeathConfig _death;
 
         [Header("Visuals")]
         [SerializeField] private Transform _visual;
         [SerializeField] private SpriteRenderer _sprite;
         [SerializeField] private HitFlashConfig _hitFlashConfig;
-        [SerializeField] private CrateDamageConfig _damage = new();
+        [SerializeField] private CrateDamageConfig _damage;
         [SerializeField] private int _heldSortingOrder = 4;
 
         [Header("Prop")]
-        [SerializeField] private HeldPropConfig _held = new();
-        [SerializeField] private PropThrowConfig _throw = new();
+        [SerializeField] private HeldPropConfig _held;
+        [SerializeField] private PropThrowConfig _throw;
 
         public override void InstallBindings()
         {

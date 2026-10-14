@@ -8,7 +8,12 @@ namespace Bw.UseCases.Shooting.Weapon
         public readonly float ViewDelay;
         public readonly float PredictedDelay;
 
-        public WeaponInput(float aim, bool trigger, bool reload, float viewDelay, float predictedDelay)
+        public WeaponInput(
+            float aim,
+            bool trigger,
+            bool reload,
+            float viewDelay,
+            float predictedDelay)
         {
             Aim = aim;
             Trigger = trigger;

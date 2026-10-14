@@ -25,7 +25,11 @@ namespace Bw.EditorTools.Shooting
         {
         }
 
-        public static PreviewTrack Simulate(PreviewWeapon weapon, ISimulationStep step, int requested, float interval)
+        public static PreviewTrack Simulate(
+            PreviewWeapon weapon,
+            ISimulationStep step,
+            int requested,
+            float interval)
         {
             var track = new PreviewTrack();
             var aims = track.Fire(weapon, step, requested, interval);
@@ -56,7 +60,11 @@ namespace Bw.EditorTools.Shooting
             return since;
         }
 
-        private List<float> Fire(PreviewWeapon weapon, ISimulationStep step, int requested, float interval)
+        private List<float> Fire(
+            PreviewWeapon weapon,
+            ISimulationStep step,
+            int requested,
+            float interval)
         {
             var simulation = weapon.Shooting.SimulationFor(step);
             var rolls = new Random(RollSeed);

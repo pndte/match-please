@@ -10,7 +10,11 @@ namespace Bw.UseCases.Shooting.View
         private readonly IReadonlyWeaponDraw _draw;
         private readonly Renderer[] _renderers;
 
-        public StowedWeaponView(Lifetime lifetime, IWeaponHold hold, IReadonlyWeaponDraw draw, Renderer[] renderers)
+        public StowedWeaponView(
+            Lifetime lifetime,
+            IWeaponHold hold,
+            IReadonlyWeaponDraw draw,
+            Renderer[] renderers)
         {
             _hold = hold;
             _draw = draw;

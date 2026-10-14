@@ -35,7 +35,11 @@ namespace Bw.UseCases.FogOfWar.View
             Observable.EveryUpdate(UnityFrameProvider.PostLateUpdate, lifetime).Subscribe(Draw);
         }
 
-        public static FogOfWarView Create(Lifetime lifetime, UnityEngine.Camera camera, ICameraTargets targets, FogOfWarConfig config)
+        public static FogOfWarView Create(
+            Lifetime lifetime,
+            UnityEngine.Camera camera,
+            ICameraTargets targets,
+            FogOfWarConfig config)
         {
             var area = ViewArea(camera, config);
             var sight = new LineOfSight(camera.gameObject.scene.GetPhysicsScene2D(), config);

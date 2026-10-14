@@ -21,7 +21,11 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
         public static WeaponSwitch Scrolled(int direction) =>
             new(WeaponSwitchKind.Scroll, direction);
 
-        public void Switch<TState>(TState state, Action<TState, int> slot, Action<TState> last, Action<TState, int> scrolled)
+        public void Switch<TState>(
+            TState state,
+            Action<TState, int> slot,
+            Action<TState> last,
+            Action<TState, int> scrolled)
         {
             switch (Kind)
             {

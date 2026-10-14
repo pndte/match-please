@@ -38,7 +38,12 @@ namespace Bw.UseCases.Shooting.View.Tracer
                 .OnComplete(() => _finished.Fire(Unit.Instance));
         }
 
-        private void Draw(Vector2 from, Vector2 direction, float distance, float length, float travelled)
+        private void Draw(
+            Vector2 from,
+            Vector2 direction,
+            float distance,
+            float length,
+            float travelled)
         {
             var head = from + direction * Mathf.Min(travelled, distance);
             var tail = from + direction * Mathf.Clamp(travelled - length, 0f, distance);

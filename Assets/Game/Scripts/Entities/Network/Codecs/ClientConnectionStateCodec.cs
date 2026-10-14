@@ -1,4 +1,5 @@
 using Bw.Entities;
+using Bw.Entities.Network.Serialization;
 using Unity.Netcode;
 
 namespace Bw.Entities.Network.Codecs
@@ -16,7 +17,7 @@ namespace Bw.Entities.Network.Codecs
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
             var raw = (int)_value;
-            serializer.SerializeValue(ref raw);
+            serializer.SerializePacked(ref raw);
             _value = (ClientConnectionState)raw;
         }
     }

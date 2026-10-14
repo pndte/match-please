@@ -7,7 +7,11 @@ namespace Bw.UseCases.Props
 {
     public sealed class HeldPropLayer
     {
-        public HeldPropLayer(Lifetime lifetime, IWeaponHold hold, GameObject prop, int heldLayer)
+        public HeldPropLayer(
+            Lifetime lifetime,
+            IWeaponHold hold,
+            GameObject prop,
+            int heldLayer)
         {
             hold.HeldLifetime.WhenAlive(lifetime, heldLifetime =>
             {

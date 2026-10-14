@@ -7,6 +7,8 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Codecs
 {
     public struct TickedWeaponInputCodec : ICodec<TickedInput<WeaponInput>>
     {
+        private static readonly Quantization Delay = new(8);
+
         public TickedInput<WeaponInput> Value
         {
             get => _value;
@@ -30,22 +32,19 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Codecs
             var previousPredictedDelay = Value.PreviousInput.PredictedDelay;
 
             serializer.SerializePacked(ref tick);
-            serializer.SerializeValue(ref aim);
-            serializer.SerializeValue(ref trigger);
-            serializer.SerializeValue(ref reload);
+            serializer.SerializeFlags(ref trigger, ref reload, ref previousTrigger, ref previousReload);
+            serializer.SerializeAngle(ref aim);
             if (trigger)
             {
-                serializer.SerializeValue(ref viewDelay);
-                serializer.SerializeValue(ref predictedDelay);
+                serializer.SerializeQuantized(ref viewDelay, Delay);
+                serializer.SerializeQuantized(ref predictedDelay, Delay);
             }
 
-            serializer.SerializeValue(ref previousAim);
-            serializer.SerializeValue(ref previousTrigger);
-            serializer.SerializeValue(ref previousReload);
+            serializer.SerializeAngle(ref previousAim);
             if (previousTrigger)
             {
-                serializer.SerializeValue(ref previousViewDelay);
-                serializer.SerializeValue(ref previousPredictedDelay);
+                serializer.SerializeQuantized(ref previousViewDelay, Delay);
+                serializer.SerializeQuantized(ref previousPredictedDelay, Delay);
             }
 
             Value = new TickedInput<WeaponInput>(

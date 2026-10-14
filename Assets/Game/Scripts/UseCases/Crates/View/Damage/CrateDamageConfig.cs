@@ -1,10 +1,9 @@
-using System;
 using UnityEngine;
 
 namespace Bw.UseCases.Crates.View.Damage
 {
-    [Serializable]
-    public sealed class CrateDamageConfig
+    [CreateAssetMenu(fileName = "CrateDamageConfig", menuName = "Configs/CrateDamageConfig")]
+    public sealed class CrateDamageConfig : ScriptableObject
     {
         public Sprite Cracked;
         [Range(0f, 1f)] public float CrackedBelow = 0.5f;

@@ -12,7 +12,11 @@ namespace Bw.Entities.Network.LagCompensation
         private readonly LagCompensationConfig _config;
         private readonly Action _restoreScheduled;
 
-        public LagCompensator(IRewindableCollection rewindables, IScheduledCollection scheduled, INetworkTicks ticks, LagCompensationConfig config)
+        public LagCompensator(
+            IRewindableCollection rewindables,
+            IScheduledCollection scheduled,
+            INetworkTicks ticks,
+            LagCompensationConfig config)
         {
             _rewindables = rewindables;
             _scheduled = scheduled;

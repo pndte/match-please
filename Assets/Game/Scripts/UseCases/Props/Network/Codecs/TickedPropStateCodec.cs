@@ -23,7 +23,7 @@ namespace Bw.UseCases.Props.Network.Codecs
             var triggerHeld = Value.State.TriggerHeld;
 
             serializer.SerializePacked(ref tick);
-            serializer.SerializeValue(ref aim); //TODO: квантование
+            serializer.SerializeAngle(ref aim);
             serializer.SerializePacked(ref throws);
             serializer.SerializeValue(ref triggerHeld);
 

@@ -25,7 +25,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Codecs
             var shots = Value.State.Shots;
 
             serializer.SerializePacked(ref tick);
-            serializer.SerializeValue(ref aim); //TODO: квантование
+            serializer.SerializeAngle(ref aim);
             serializer.SerializePacked(ref ammo);
             serializer.SerializePacked(ref cooldownTicks);
             serializer.SerializePacked(ref reloadTicks);

@@ -14,7 +14,11 @@ namespace Bw.UseCases.Movement
         BodyState IBodyState<BodyState>.Body => this;
         BodyState IBodyState<BodyState>.WithBody(BodyState body) => body;
 
-        public BodyState(Vector2 position, Vector2 velocity, float horizontalPush, bool grounded)
+        public BodyState(
+            Vector2 position,
+            Vector2 velocity,
+            float horizontalPush,
+            bool grounded)
         {
             Position = position;
             Velocity = velocity;

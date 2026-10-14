@@ -14,7 +14,11 @@ namespace Bw.UseCases.Shooting.Weapon
         private bool _drawn;
         private float _radius;
 
-        public WeaponStateView(Lifetime lifetime, Transform weapon, IReadonlyWeaponDraw draw, WeaponRotationConfig config)
+        public WeaponStateView(
+            Lifetime lifetime,
+            Transform weapon,
+            IReadonlyWeaponDraw draw,
+            WeaponRotationConfig config)
         {
             _weapon = weapon;
             _config = config;

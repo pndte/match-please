@@ -17,7 +17,12 @@ namespace Bw.UseCases.Character.View.HealthBar
         private Vector2 _position;
         private Vector2 _velocity;
 
-        public HealthBarMotion(Lifetime lifetime, HealthBarWidget widget, Transform body, UnityEngine.Camera camera, HealthBarConfig config)
+        public HealthBarMotion(
+            Lifetime lifetime,
+            HealthBarWidget widget,
+            Transform body,
+            UnityEngine.Camera camera,
+            HealthBarConfig config)
         {
             _widget = widget;
             _body = body;

@@ -697,6 +697,7 @@ MonoBehaviour:
   - {fileID: 953766044}
   - {fileID: 1614011709}
   _spawnRandomOffset: 2
+  _match: {fileID: 8603386797099639887, guid: 4344c00d96aa676449521002d9111650, type: 3}
 --- !u!114 &1377258036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -709,6 +710,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9428002f53f74d528d40abbe82459752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.GameSessionInstaller
+  _match: {fileID: 11400000, guid: 40ca6380182844b59ea4453ba435527e, type: 2}
 --- !u!114 &1377258037
 MonoBehaviour:
   m_ObjectHideFlags: 0

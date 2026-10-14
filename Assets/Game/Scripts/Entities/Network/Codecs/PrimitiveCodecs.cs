@@ -1,3 +1,4 @@
+using Bw.Entities.Network.Serialization;
 using JetBrains.Core;
 using Unity.Netcode;
 
@@ -9,22 +10,6 @@ namespace Bw.Entities.Network.Codecs
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-        }
-    }
-
-    public struct FloatCodec : ICodec<float>
-    {
-        public float Value
-        {
-            get => _value;
-            set => _value = value;
-        }
-
-        private float _value;
-
-        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-        {
-            serializer.SerializeValue(ref _value);
         }
     }
 
@@ -40,7 +25,7 @@ namespace Bw.Entities.Network.Codecs
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            serializer.SerializeValue(ref _value);
+            serializer.SerializePacked(ref _value);
         }
     }
 

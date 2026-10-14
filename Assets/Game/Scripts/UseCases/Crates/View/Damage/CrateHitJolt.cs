@@ -8,7 +8,11 @@ namespace Bw.UseCases.Crates.View.Damage
 {
     public sealed class CrateHitJolt
     {
-        public CrateHitJolt(Lifetime lifetime, IReadonlyHealth health, Transform visual, CrateDamageConfig config)
+        public CrateHitJolt(
+            Lifetime lifetime,
+            IReadonlyHealth health,
+            Transform visual,
+            CrateDamageConfig config)
         {
             health.AdviseDamage(lifetime, _ =>
             {

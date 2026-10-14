@@ -12,7 +12,11 @@ namespace Bw.UseCases.Shooting.View.Rig
         private readonly StrikeFeelConfig _config;
         private readonly SequentialLifetimes _stops;
 
-        public StrikeHitStop(Lifetime lifetime, Animator rig, IStrikeImpacts impacts, StrikeFeelConfig config)
+        public StrikeHitStop(
+            Lifetime lifetime,
+            Animator rig,
+            IStrikeImpacts impacts,
+            StrikeFeelConfig config)
         {
             _rig = rig;
             _config = config;

@@ -12,7 +12,11 @@ namespace Bw.UseCases.Props
     {
         private readonly Transform _item;
 
-        public HeldItemRegistration(Lifetime lifetime, IWeaponHold hold, Transform item, IHeldItem held)
+        public HeldItemRegistration(
+            Lifetime lifetime,
+            IWeaponHold hold,
+            Transform item,
+            IHeldItem held)
         {
             _item = item;
 

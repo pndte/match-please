@@ -9,7 +9,11 @@ namespace Bw.UseCases.FogOfWar.View.Sight
         public readonly Vector2 Normal;
         public readonly bool IsHit;
 
-        private SightRay(float angle, Vector2 end, Vector2 normal, bool isHit)
+        private SightRay(
+            float angle,
+            Vector2 end,
+            Vector2 normal,
+            bool isHit)
         {
             Angle = angle;
             End = end;

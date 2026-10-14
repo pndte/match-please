@@ -3,13 +3,16 @@ using Bw.Entities.Network;
 using Bw.Entities.Network.LagCompensation;
 using Bw.Entities.Network.Prediction.Stream;
 using Bw.Entities.Network.Ticks;
+using Bw.Injection.Match;
 using Bw.UseCases.Character;
+using Bw.UseCases.Match;
 using Bw.UseCases.Movement.Physics;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network;
 using Bw.UseCases.Shooting.Weapon.Pickup;
 using Bw.UseCases.Shooting.Weapon.Pickup.Abstractions;
+using UnityEngine;
 using Zenject;
 
 namespace Bw.Injection
@@ -17,6 +20,8 @@ namespace Bw.Injection
     public class GameSessionInstaller : MonoInstaller
     {
         [Inject] private IRuntimeSettings _runtimeSettings;
+
+        [SerializeField] private MatchConfig _match;
 
         public override void InstallBindings()
         {
@@ -45,6 +50,7 @@ namespace Bw.Injection
             Container.BindInterfacesTo<RewindableCollection>().AsSingle();
             Container.BindInterfacesTo<LagCompensator>().AsSingle();
             Container.BindInterfacesTo<RaycastShotResolver>().AsSingle().NonLazy();
+            MatchSessionInstaller.Install(Container, _match);
         }
 
         private void BindClient()

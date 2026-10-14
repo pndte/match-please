@@ -262,7 +262,11 @@ namespace Bw.EditorTools.Shooting
             Handles.DrawAAPolyLine(1.5f, worldToGui.MultiplyPoint3x4(MuzzleAt(barrel)), worldToGui.MultiplyPoint3x4(OnTarget(barrel)));
         }
 
-        private void DrawGun(PreviewTrack track, int frame, Matrix4x4 worldToGui, float barrel)
+        private void DrawGun(
+            PreviewTrack track,
+            int frame,
+            Matrix4x4 worldToGui,
+            float barrel)
         {
             var visual = VisualAt(track, frame, barrel);
             foreach (var part in Weapon.Parts)
@@ -272,7 +276,11 @@ namespace Bw.EditorTools.Shooting
                 DrawStandInGun(worldToGui * visual);
         }
 
-        private void DrawFlash(PreviewTrack track, int frame, Matrix4x4 worldToGui, float barrel)
+        private void DrawFlash(
+            PreviewTrack track,
+            int frame,
+            Matrix4x4 worldToGui,
+            float barrel)
         {
             if (track.SinceShot(_time) > FlashTime)
                 return;
@@ -346,7 +354,12 @@ namespace Bw.EditorTools.Shooting
             GUI.Label(new Rect(stage.x + 6f, stage.y + 4f, stage.width - 12f, 18f), caption, EditorStyles.whiteMiniLabel);
         }
 
-        private void DrawPlot(PreviewTrack track, IReadOnlyList<float> values, string title, string unit, Color color)
+        private void DrawPlot(
+            PreviewTrack track,
+            IReadOnlyList<float> values,
+            string title,
+            string unit,
+            Color color)
         {
             var rect = GUILayoutUtility.GetRect(10f, PlotHeight, GUILayout.ExpandWidth(true));
             Scrub(rect, track);

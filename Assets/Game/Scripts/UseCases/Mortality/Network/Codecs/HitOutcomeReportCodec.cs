@@ -10,6 +10,9 @@ namespace Bw.UseCases.Mortality.Network.Codecs
 {
     public struct HitOutcomeReportCodec : ICodec<OutcomeReport<Hit>>
     {
+        private static readonly Quantization Damage = new(5);
+        private static readonly Quantization Knockback = new(6);
+
         public OutcomeReport<Hit> Value
         {
             get => _value;
@@ -34,8 +37,8 @@ namespace Bw.UseCases.Mortality.Network.Codecs
                     var damage = Value.Affected[index].Effect.Damage;
                     var knockback = Value.Affected[index].Effect.Knockback;
                     serializer.SerializePacked(ref target);
-                    serializer.SerializeValue(ref damage);
-                    serializer.SerializeValue(ref knockback);
+                    serializer.SerializeQuantized(ref damage, Damage);
+                    serializer.SerializeQuantized(ref knockback, Knockback);
                 }
 
                 return;
@@ -48,8 +51,8 @@ namespace Bw.UseCases.Mortality.Network.Codecs
                 var damage = 0f;
                 var knockback = Vector2.zero;
                 serializer.SerializePacked(ref target);
-                serializer.SerializeValue(ref damage);
-                serializer.SerializeValue(ref knockback);
+                serializer.SerializeQuantized(ref damage, Damage);
+                serializer.SerializeQuantized(ref knockback, Knockback);
                 affected[index] = new AffectedTarget<ulong, Hit>(target, new Hit(damage, knockback));
             }
 

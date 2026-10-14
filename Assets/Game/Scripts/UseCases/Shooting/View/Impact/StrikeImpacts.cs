@@ -16,7 +16,11 @@ namespace Bw.UseCases.Shooting.View.Impact
         private readonly IShotTracer _tracer;
         private readonly StrikeImpactConfig _config;
 
-        public StrikeImpacts(Lifetime lifetime, ISeenShots strikes, IShotTracer tracer, StrikeImpactConfig config)
+        public StrikeImpacts(
+            Lifetime lifetime,
+            ISeenShots strikes,
+            IShotTracer tracer,
+            StrikeImpactConfig config)
         {
             _tracer = tracer;
             _config = config;

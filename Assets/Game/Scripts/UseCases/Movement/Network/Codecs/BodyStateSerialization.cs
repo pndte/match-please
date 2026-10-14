@@ -1,26 +1,23 @@
+using Bw.Entities.Network.Serialization;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace Bw.UseCases.Movement.Network.Codecs
 {
     public static class BodyStateSerialization
     {
-        public static void SerializeBody<T>(this BufferSerializer<T> serializer, ref BodyState body) where T : IReaderWriter
+        private static readonly Quantization Position = new(8);
+        private static readonly Quantization Velocity = new(6);
+
+        public static void SerializeMotion<T>(
+            this BufferSerializer<T> serializer,
+            ref Vector2 position,
+            ref Vector2 velocity,
+            ref float horizontalPush) where T : IReaderWriter
         {
-            var position = body.Position;
-            var velocity = body.Velocity;
-            var horizontalPush = body.HorizontalPush;
-            var pushed = horizontalPush != 0f;
-            var grounded = body.Grounded;
-
-            serializer.SerializeValue(ref position);
-            serializer.SerializeValue(ref velocity);
-            serializer.SerializeValue(ref pushed);
-            if (pushed)
-                serializer.SerializeValue(ref horizontalPush);
-
-            serializer.SerializeValue(ref grounded);
-
-            body = new BodyState(position, velocity, horizontalPush, grounded);
+            serializer.SerializeQuantized(ref position, Position);
+            serializer.SerializeQuantized(ref velocity, Velocity);
+            serializer.SerializeQuantized(ref horizontalPush, Velocity);
         }
     }
 }

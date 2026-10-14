@@ -1,4 +1,5 @@
 using Bw.Entities.Network;
+using Bw.Entities.Network.Serialization;
 using Bw.UseCases.Shooting.Weapon.Network.Requests;
 using Unity.Netcode;
 
@@ -19,7 +20,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Codecs
             var kind = (byte)Value.Kind;
             var value = Value.Value;
             serializer.SerializeValue(ref kind);
-            serializer.SerializeValue(ref value);
+            serializer.SerializePacked(ref value);
             Value = new WeaponSwitch((WeaponSwitchKind)kind, value);
         }
     }

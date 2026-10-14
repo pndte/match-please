@@ -17,7 +17,11 @@ namespace Bw.Entities.Pool.GameObjects
         private readonly Func<GameObject, Transform, GameObject> _instantiate;
         private readonly PoolSettings _unlisted;
 
-        private PrefabPools(Lifetime lifetime, Transform root, Func<GameObject, Transform, GameObject> instantiate, PoolSettings unlisted)
+        private PrefabPools(
+            Lifetime lifetime,
+            Transform root,
+            Func<GameObject, Transform, GameObject> instantiate,
+            PoolSettings unlisted)
         {
             _lifetime = lifetime;
             _root = root;
@@ -25,7 +29,11 @@ namespace Bw.Entities.Pool.GameObjects
             _unlisted = unlisted;
         }
 
-        public static PrefabPools Create(Lifetime lifetime, PrefabPoolsConfig config, bool withViews, Func<GameObject, Transform, GameObject> instantiate)
+        public static PrefabPools Create(
+            Lifetime lifetime,
+            PrefabPoolsConfig config,
+            bool withViews,
+            Func<GameObject, Transform, GameObject> instantiate)
         {
             var root = new GameObject("Pools");
             Object.DontDestroyOnLoad(root);

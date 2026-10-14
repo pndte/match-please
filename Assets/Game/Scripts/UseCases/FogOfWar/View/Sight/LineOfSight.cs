@@ -92,7 +92,11 @@ namespace Bw.UseCases.FogOfWar.View.Sight
                 : SightRay.Miss(Wrapped(angle), eye + direction * reach));
         }
 
-        private bool TryFindBlocker(Vector2 eye, Vector2 direction, float reach, out RaycastHit2D nearest)
+        private bool TryFindBlocker(
+            Vector2 eye,
+            Vector2 direction,
+            float reach,
+            out RaycastHit2D nearest)
         {
             nearest = default;
             var found = false;
@@ -124,7 +128,11 @@ namespace Bw.UseCases.FogOfWar.View.Sight
         private static float Reach(Vector2 eye, Vector2 direction, Rect area) =>
             Mathf.Max(0f, Mathf.Min(Exit(eye.x, direction.x, area.xMin, area.xMax), Exit(eye.y, direction.y, area.yMin, area.yMax)));
 
-        private static float Exit(float from, float step, float min, float max) =>
+        private static float Exit(
+            float from,
+            float step,
+            float min,
+            float max) =>
             step > 0f ? (max - from) / step : step < 0f ? (min - from) / step : float.PositiveInfinity;
 
         private static float Wrapped(float angle) =>

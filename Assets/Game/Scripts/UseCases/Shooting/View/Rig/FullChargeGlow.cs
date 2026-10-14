@@ -16,7 +16,12 @@ namespace Bw.UseCases.Shooting.View.Rig
 
         private float _glow;
 
-        public FullChargeGlow(Lifetime lifetime, IMeleeSwings swings, StrikeFeelConfig config, Transform visual, SpriteRenderer[] fists)
+        public FullChargeGlow(
+            Lifetime lifetime,
+            IMeleeSwings swings,
+            StrikeFeelConfig config,
+            Transform visual,
+            SpriteRenderer[] fists)
         {
             _config = config;
             _visual = visual;

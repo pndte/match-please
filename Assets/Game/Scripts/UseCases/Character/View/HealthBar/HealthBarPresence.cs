@@ -12,7 +12,11 @@ namespace Bw.UseCases.Character.View.HealthBar
 
         private bool _alive;
 
-        public HealthBarPresence(Lifetime lifetime, HealthBarWidget widget, IReadonlyHealth health, HealthBarConfig config)
+        public HealthBarPresence(
+            Lifetime lifetime,
+            HealthBarWidget widget,
+            IReadonlyHealth health,
+            HealthBarConfig config)
         {
             _widget = widget;
             _config = config;

@@ -1,11 +1,10 @@
-using System;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using UnityEngine;
 
 namespace Bw.UseCases.Shooting.Weapon
 {
-    [Serializable]
-    public sealed class WeaponInventoryConfig
+    [CreateAssetMenu(fileName = "WeaponInventoryConfig", menuName = "Configs/WeaponInventoryConfig")]
+    public sealed class WeaponInventoryConfig : ScriptableObject
     {
         public WeaponSlot[] Slots =
         {

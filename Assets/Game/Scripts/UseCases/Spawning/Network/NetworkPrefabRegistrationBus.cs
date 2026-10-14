@@ -17,7 +17,12 @@ namespace Bw.UseCases.Spawning.Network
         private readonly IPrefabPools _pools;
         private readonly IRuntimeSettings _runtimeSettings;
 
-        public NetworkPrefabRegistrationBus(Lifetime lifetime, DiContainer container, NetworkManager networkManager, IPrefabPools pools, IRuntimeSettings runtimeSettings)
+        public NetworkPrefabRegistrationBus(
+            Lifetime lifetime,
+            DiContainer container,
+            NetworkManager networkManager,
+            IPrefabPools pools,
+            IRuntimeSettings runtimeSettings)
         {
             _lifetime = lifetime;
             _container = container;

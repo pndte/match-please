@@ -11,10 +11,10 @@ namespace Bw.Injection.Network
         {
             RegisterCodec<System.Boolean, Bw.Entities.Network.Codecs.BoolCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.ClientConnectionState, Bw.Entities.Network.Codecs.ClientConnectionStateCodec>(receivers, senders);
-            RegisterCodec<System.Single, Bw.Entities.Network.Codecs.FloatCodec>(receivers, senders);
             RegisterCodec<System.Int32, Bw.Entities.Network.Codecs.IntCodec>(receivers, senders);
             RegisterCodec<System.String, Bw.Entities.Network.Codecs.StringCodec>(receivers, senders);
             RegisterCodec<JetBrains.Core.Unit, Bw.Entities.Network.Codecs.UnitCodec>(receivers, senders);
+            RegisterCodec<Bw.UseCases.Match.Network.Requests.MatchTable, Bw.UseCases.Match.Network.Codecs.MatchTableCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Events.Requests.CausedState<Bw.UseCases.Mortality.Vitals>, Bw.UseCases.Mortality.Network.Codecs.CausedVitalsCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Events.Requests.OutcomeReport<Bw.UseCases.Mortality.Hit>, Bw.UseCases.Mortality.Network.Codecs.HitOutcomeReportCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Movement.BodyState>, Bw.UseCases.Movement.Network.Codecs.TickedBodyStateCodec>(receivers, senders);
