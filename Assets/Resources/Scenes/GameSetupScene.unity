@@ -203,7 +203,6 @@ MonoBehaviour:
   clientTag: client
   enableLogging: 1
   _gameScene: ConstructionSite
-  showDebugGUI: 0
 --- !u!114 &1858275100
 MonoBehaviour:
   m_ObjectHideFlags: 0
