@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Bw.CoreAdapters.Weapons;
 using Bw.UseCases.Shooting.View.Highlight;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;

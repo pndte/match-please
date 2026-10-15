@@ -37,7 +37,8 @@
         "Bw.UseCases.Movement.View.Adapters",
         "Bw.UseCases.Shooting.View.Adapters",
         "Bw.UseCases.Match.View.Adapters",
-        "Bw.CoreAdapters"
+        "Bw.CoreAdapters",
+        "Bw.CoreAdapters.Weapons"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

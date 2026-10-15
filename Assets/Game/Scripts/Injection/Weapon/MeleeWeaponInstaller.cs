@@ -33,9 +33,6 @@ namespace Bw.Injection.Weapon
         public const string RecoilConfigField = nameof(_recoilConfig);
 
         [Inject] private IRuntimeSettings _runtimeSettings;
-        [Inject] private WeaponCatalog _weapons;
-
-        [Header("Description")] [SerializeField] private WeaponDescription _description;
 
         [Header("Graphics")] [SerializeField] private Transform _visual;
         [SerializeField] private Animator _rig;
@@ -55,7 +52,6 @@ namespace Bw.Injection.Weapon
 
         public override void InstallBindings()
         {
-            WeaponCatalogValidation.RequireListed(_weapons, _description, name);
             RequireTurnSpeed();
             RequireStrikeInsideSwing();
             RequireStrongStrikeInsideStrongSwing();
@@ -70,7 +66,6 @@ namespace Bw.Injection.Weapon
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.Bind<WeaponDescriptionRegistration>().AsSingle().WithArguments(_description).NonLazy();
                     Container.InstantiateComponent<WeaponHolder>(gameObject);
                     break;
                 case PeerType.Client:

@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
 
-namespace Bw.UseCases.Shooting.Weapon
+namespace Bw.CoreAdapters.Weapons
 {
     [CreateAssetMenu(fileName = "WeaponCatalog", menuName = "Configs/WeaponCatalog")]
     public sealed class WeaponCatalog : ScriptableObject
     {
-        public WeaponDescription[] Weapons = Array.Empty<WeaponDescription>();
+        public WeaponEntry[] Weapons = Array.Empty<WeaponEntry>();
     }
 }

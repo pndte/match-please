@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Extensions;
+using Bw.CoreAdapters.Weapons;
 
 namespace Bw.Injection.Weapon
 {
@@ -13,25 +12,19 @@ namespace Bw.Injection.Weapon
                 throw new InvalidOperationException("The weapon catalog is not set: assign Assets/Resources/Weapons/WeaponCatalog.asset to WeaponSettings.");
 
             var keys = new HashSet<int>();
-            foreach (var weapon in weapons.Weapons)
+            foreach (var entry in weapons.Weapons)
             {
-                if (weapon == null)
-                    throw new InvalidOperationException($"The weapon catalog '{weapons.name}' has an empty row: assign a weapon description or remove the row.");
-
-                if (weapon.Key == 0 || !keys.Add(weapon.Key))
+                if (entry.Weapon == null)
                     throw new InvalidOperationException(
-                        $"Weapon '{weapon.name}' is listed twice in '{weapons.name}' or has no key of its own ({weapon.Key.ToString()}): the editor issues keys on import, so open the project in the main editor.");
+                        $"The weapon catalog '{weapons.name}' has a row without a weapon: assign a weapon description from Assets/Resources/Weapons or remove the row.");
+
+                if (entry.Weapon.Key == 0 || !keys.Add(entry.Weapon.Key))
+                    throw new InvalidOperationException(
+                        $"Weapon '{entry.Weapon.name}' is listed twice in '{weapons.name}' or has no key of its own ({entry.Weapon.Key.ToString()}): the editor issues keys on import, so open the project in the main editor.");
+
+                if (entry.Prefab == null)
+                    throw new InvalidOperationException($"Weapon '{entry.Weapon.name}' in the catalog '{weapons.name}' has no prefab: the armory creates the weapon from it.");
             }
-        }
-
-        public static void RequireListed(WeaponCatalog weapons, WeaponDescription description, string weapon)
-        {
-            if (description == null)
-                throw new InvalidOperationException($"Weapon '{weapon}' has no description: assign its asset from Assets/Resources/Weapons.");
-
-            if (!weapons.Contains(description))
-                throw new InvalidOperationException(
-                    $"Weapon '{weapon}' is described by '{description.name}', which the weapon catalog '{weapons.name}' lacks: add the description to the catalog.");
         }
     }
 }

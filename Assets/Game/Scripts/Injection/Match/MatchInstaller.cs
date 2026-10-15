@@ -1,4 +1,5 @@
 using System;
+using Bw.CoreAdapters.Weapons;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
@@ -12,7 +13,6 @@ using Bw.UseCases.Match.Network;
 using Bw.UseCases.Match.Network.Requests;
 using Bw.UseCases.Match.View.Adapters;
 using Bw.UseCases.Match.View.Hud;
-using Bw.UseCases.Shooting.Weapon;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -112,9 +112,9 @@ namespace Bw.Injection.Match
             if (_weaponIcons == null)
                 throw new InvalidOperationException("The match HUD has no weapon icons: assign Resources/Match/WeaponIconsConfig.");
 
-            foreach (var weapon in _weapons.Weapons)
-                if (Array.FindIndex(_weaponIcons.Icons, row => row.Weapon == weapon && row.Icon != null) < 0)
-                    throw new InvalidOperationException($"Weapon '{weapon.name}' has no icon in '{_weaponIcons.name}': the kill feed shows the weapon of every kill.");
+            foreach (var entry in _weapons.Weapons)
+                if (Array.FindIndex(_weaponIcons.Icons, row => row.Weapon == entry.Weapon && row.Icon != null) < 0)
+                    throw new InvalidOperationException($"Weapon '{entry.Weapon.name}' has no icon in '{_weaponIcons.name}': the kill feed shows the weapon of every kill.");
         }
     }
 }

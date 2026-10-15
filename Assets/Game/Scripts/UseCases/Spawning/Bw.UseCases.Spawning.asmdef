@@ -14,7 +14,8 @@
         "Bw.UseCases.Character",
         "Bw.UseCases.Mortality",
         "Bw.UseCases.Mortality.Network",
-        "Bw.CoreAdapters"
+        "Bw.CoreAdapters",
+        "Bw.CoreAdapters.Weapons"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

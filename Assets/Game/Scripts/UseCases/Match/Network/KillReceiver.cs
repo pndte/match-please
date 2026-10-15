@@ -1,7 +1,6 @@
+using Bw.CoreAdapters.Weapons;
 using Bw.Entities.Network.Variables;
 using Bw.UseCases.Match.Network.Requests;
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Extensions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using Unity.Netcode;

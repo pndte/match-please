@@ -9,7 +9,8 @@
         "Bw.UseCases.Mortality",
         "Bw.UseCases.Shooting",
         "Unity.Netcode.Runtime",
-        "Bw.CoreAdapters"
+        "Bw.CoreAdapters",
+        "Bw.CoreAdapters.Weapons"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
