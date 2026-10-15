@@ -8,7 +8,7 @@ namespace Bw.UseCases.Shooting.View.Crosshair
 {
     public sealed class WeaponReloadCursor : IReloadTimer
     {
-        public float Seconds => _gun.Reload.Value.Seconds;
+        public float Seconds => _gun.Reload.Value.Seconds; //TODO: когда перезарядка кончается, курсор ещё анимирует шкалу, а здесь уже пустая перезарядка (GunReload.None, 0 из 0 с): AimCursor делит 0 на 0, и каждый кадр в консоль летит «localRotation … NaN»; по той же причине щелчок «перезарядка закончена» звучит и после прерванной — нужно помнить последнюю активную перезарядку и чем она кончилась
         public float SecondsLeft => _gun.Reload.Value.SecondsLeft;
 
         private readonly IGunViewModel _gun;

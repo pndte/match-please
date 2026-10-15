@@ -20,11 +20,14 @@ namespace Bw.Entities.Network.Ticks
         private double _time;
         private bool _synchronized;
         private float _leadTicks;
+        private bool _leadMeasured; //tODO: многовато всего, мб декомпозировать
+        private int _reportedMargin;
+        private bool _reported;
 
         public ClientNetworkTicks(Lifetime lifetime, INetworkHolder networkHolder, NetworkTicksConfig config)
         {
             _config = config;
-            _leadTicks = config.InitialLeadTicks;
+            _leadTicks = config.InitialLeadTicks; //TODO: до первого отчёта сервера (полсекунды и пинг) опережение — догадка: при пинге от ~40 мс ввод этого времени опаздывает, и сервер ещё не шагает персонажа
 
             networkHolder.NetworkManager.AdviseNotNull(lifetime, network =>
             {
@@ -44,6 +47,9 @@ namespace Bw.Entities.Network.Ticks
             if (!_network.IsConnectedClient)
                 return;
 
+            if (_reported)
+                CorrectLead();
+
             AdvanceTime(PredictedTime());
 
             var tick = (int)Math.Floor(_time / Duration);
@@ -56,10 +62,28 @@ namespace Bw.Entities.Network.Ticks
 
         public void Report(int marginTicks)
         {
-            var error = _config.TargetMarginTicks - marginTicks;
-            var rate = error > 0f ? _config.LeadRaiseRate : _config.LeadLowerRate;
-            _leadTicks = Mathf.Clamp(_leadTicks + error * rate, _config.MinLeadTicks, _config.MaxLeadTicks);
+            _reportedMargin = _reported ? Math.Min(_reportedMargin, marginTicks) : marginTicks;
+            _reported = true;
         }
+
+        private void CorrectLead()
+        {
+            var error = _config.TargetMarginTicks - _reportedMargin;
+            _reported = false;
+            if (!_leadMeasured) //TODO: следующий отчёт ещё мерит ввод, отправленный со старым опережением, и добавляет ту же поправку второй раз (×0.5 или ×0.25) — после старта на высоком пинге опережение перелетает и несколько секунд возвращается
+            {
+                _leadMeasured = true;
+                _synchronized = false;
+                _leadTicks = ClampedLead(_leadTicks + error);
+                return;
+            }
+
+            var rate = error > 0f ? _config.LeadRaiseRate : _config.LeadLowerRate;
+            _leadTicks = ClampedLead(_leadTicks + error * rate);
+        }
+
+        private float ClampedLead(float leadTicks) =>
+            Mathf.Clamp(leadTicks, _config.MinLeadTicks, _config.MaxLeadTicks);
 
         private void AdvanceTime(double target)
         {
@@ -75,10 +99,7 @@ namespace Bw.Entities.Network.Ticks
             _time += Time.unscaledDeltaTime * (1d + correction);
         }
 
-        private double PredictedTime()
-        {
-            var roundTrip = _network.NetworkConfig.NetworkTransport.GetCurrentRtt(NetworkManager.ServerClientId) / 1000d;
-            return _network.ServerTime.Time + _network.NetworkTimeSystem.ServerBufferSec + roundTrip + _leadTicks * Duration;
-        }
+        private double PredictedTime() =>
+            _network.ServerTime.Time + _network.NetworkTimeSystem.ServerBufferSec + _leadTicks * Duration; //TODO: фриз клиента или сервера от ~0,2 с сбивает ServerTime: NGO раз в секунду присылает время сервера, не учитывая задержку обработки, и после фриза его время перескакивает назад, потом вперёд. Около секунды ввод опаздывает (клики теряются), опережение взлетает до MaxLeadTicks и несколько секунд спускается — другие видят игрока позже. Ограничить одну поправку опережения и не учитывать отчёты сразу после сброса часов или вести свою синхронизацию времени
     }
 }

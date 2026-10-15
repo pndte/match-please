@@ -61,7 +61,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             var affected = _affected.Count > 0
                 ? _affected.ToArray() //TODO: выделение массива на выстрел - плохо, в идеале пуллировать массивы и переиспользовать их
                 : Array.Empty<AffectedTarget<IReadonlyMortal, Hit>>();
-            return new ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Hit>(shot.Weapon, tick, affected);
+            return new ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Hit>(shot.Weapon, tick - shot.WeaponShot.LateTicks, affected);
         }
     }
 }

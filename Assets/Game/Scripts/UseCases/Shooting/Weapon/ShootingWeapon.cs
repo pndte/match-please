@@ -23,6 +23,8 @@ namespace Bw.UseCases.Shooting.Weapon
 
         private float _triggerViewDelay;
         private float _triggerPredictedDelay;
+        private int _pressLateTicks;
+        private int _previousShotAge = int.MaxValue;
 
         public ShootingWeapon(
             Lifetime lifetime,
@@ -53,15 +55,31 @@ namespace Bw.UseCases.Shooting.Weapon
                 _triggerPredictedDelay = input.PredictedDelay;
             }
 
+            if (input.Press.Age == 0)
+                _pressLateTicks = input.Press.Late; //TODO: если нажатие пришло поздно и сервер его спас, оружие на сервере до следующего нажатия идёт с этим опозданием: очередь короче на опоздание (последние выстрелы клиента в ней не подтвердятся), у клиента при сверке на миг откатываются патроны и пауза, а сильный удар кулаков копит меньше заряда и засчитывается сдвинутым тиком, хотя отпускание пришло вовремя
+
+            if (_previousShotAge < int.MaxValue)
+                _previousShotAge++;
+
             Previous = _state.Value;
             _state.Value = _simulator.Step(Previous, input);
             _stepped.Fire(_state.Value);
 
             if (_state.Value.Shots != Previous.Shots)
-                _fired.Fire(new WeaponShot(_state.Value.Aim, _triggerViewDelay, _triggerPredictedDelay));
+                Fire();
         }
 
-        private void Interrupt() =>
+        private void Fire()
+        {
+            var lateTicks = Math.Min(_pressLateTicks, _previousShotAge - 1);
+            _previousShotAge = lateTicks;
+            _fired.Fire(new WeaponShot(_state.Value.Aim, _triggerViewDelay, _triggerPredictedDelay, lateTicks));
+        }
+
+        private void Interrupt()
+        {
+            _pressLateTicks = 0;
             _state.Value = _simulator.Interrupted(_state.Value);
+        }
     }
 }

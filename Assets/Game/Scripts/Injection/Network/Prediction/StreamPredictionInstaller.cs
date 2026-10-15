@@ -75,6 +75,7 @@ namespace Bw.Injection.Network.Prediction
             Container.BindResultSender(inputMargin).WhenInjectedInto<InputMarginServerHandler<TInput>>();
 
             Container.Bind<PredictionInputBuffer<TInput>>().AsSingle().NonLazy();
+            Container.Bind<InputGapLog<TInput>>().AsSingle().NonLazy();
             Container.Bind<ISource<TInput>>()
                 .FromResolveGetter<PredictionInputBuffer<TInput>>(buffer => buffer.Simulated)
                 .AsSingle();

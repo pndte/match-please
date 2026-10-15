@@ -14,7 +14,6 @@ namespace Bw.Entities.Network.Prediction.Stream
 
         private int _minMargin;
         private bool _measured;
-        private int _ticksSinceReport;
 
         public InputMarginServerHandler(
             Lifetime lifetime,
@@ -28,7 +27,7 @@ namespace Bw.Entities.Network.Prediction.Stream
             _config = config;
 
             input.Received.Advise(lifetime, request => Measure(request.Tick - _ticks.Current - 1));
-            ticks.Ticked(TickPhase.Default).Advise(lifetime, _ => ReportWhenDue());
+            ticks.Ticked(TickPhase.Default).Advise(lifetime, ReportWhenDue);
         }
 
         private void Measure(int margin)
@@ -37,13 +36,9 @@ namespace Bw.Entities.Network.Prediction.Stream
             _measured = true;
         }
 
-        private void ReportWhenDue()
+        private void ReportWhenDue(int tick)
         {
-            if (++_ticksSinceReport < _config.MarginReportIntervalTicks)
-                return;
-
-            _ticksSinceReport = 0;
-            if (!_measured)
+            if (tick % _config.MarginReportIntervalTicks != 0 || !_measured)
                 return;
 
             _measured = false;

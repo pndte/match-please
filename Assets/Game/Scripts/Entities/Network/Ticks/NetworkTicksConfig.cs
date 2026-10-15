@@ -17,6 +17,7 @@ namespace Bw.Entities.Network.Ticks
 
         [Header("Input buffer")]
         [Min(1)] public int MaxBufferedInputTicks = 32;
+        [Min(1)] public int GapReportIntervalTicks = 300;
 
         [Header("Interpolation")]
         [Min(0)] public int InterpolationDelayTicks = 1;

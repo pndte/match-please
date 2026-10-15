@@ -12,6 +12,7 @@ namespace Bw.Entities.Network.Prediction.Stream
     public sealed class PredictionInputBuffer<TInput> where TInput : struct
     {
         public ISource<TInput> Simulated => _simulated;
+        public InputGaps Gaps { get; } = new();
 
         private readonly Signal<TInput> _simulated = new();
         private readonly Dictionary<int, TInput> _buffered = new();
@@ -21,8 +22,11 @@ namespace Bw.Entities.Network.Prediction.Stream
         private readonly IControlledBy _controlledBy;
 
         private TInput _lastInput;
+        private TInput _lastKnown;
         private bool _heard;
         private int _firstTick;
+        private TInput _newest;
+        private int _newestTick;
 
         public PredictionInputBuffer(
             Lifetime lifetime,
@@ -41,6 +45,8 @@ namespace Bw.Entities.Network.Prediction.Stream
             {
                 _buffered.Clear();
                 _heard = false;
+                _newestTick = int.MinValue;
+                _lastInput = default;
                 userLifetime.OnTermination(_buffered.Clear);
             });
             input.Received.Advise(lifetime, Buffer);
@@ -49,13 +55,36 @@ namespace Bw.Entities.Network.Prediction.Stream
 
         private void Buffer(TickedInput<TInput> request)
         {
+            if (_controlledBy.Users.Count > 0)
+            {
+                CountGaps(request.Tick);
+                RememberNewest(request);
+            }
+
             if (!TryStore(request.Tick, request.Input))
                 return;
 
             _firstTick = _heard ? Math.Min(_firstTick, request.Tick) : request.Tick;
             _heard = true;
-            if (request.Tick - 1 >= _firstTick)
-                TryStore(request.Tick - 1, request.PreviousInput);
+            if (request.Tick - 1 >= _firstTick && TryStore(request.Tick - 1, request.PreviousInput))
+                Gaps.CountRecovered();
+        }
+
+        private void CountGaps(int tick)
+        {
+            if (tick <= _ticks.Current)
+                Gaps.CountLate(_ticks.Current - tick + 1);
+            else if (tick > _ticks.Current + _config.MaxBufferedInputTicks)
+                Gaps.CountEarly();
+        }
+
+        private void RememberNewest(TickedInput<TInput> request)
+        {
+            if (request.Tick <= _newestTick || !_policy.IsValid(request.Input))
+                return;
+
+            _newest = request.Input;
+            _newestTick = request.Tick;
         }
 
         private bool TryStore(int tick, TInput input) =>
@@ -68,11 +97,24 @@ namespace Bw.Entities.Network.Prediction.Stream
         private void Simulate(int tick)
         {
             if (_controlledBy.Users.Count == 0)
+            {
                 _lastInput = default;
+            }
             else if (!_heard || tick < _firstTick) //TODO: до первого ввода управляющего объект не шагает: только что появившийся персонаж висит в точке спавна около пинга, пока не придёт его ввод
+            {
                 return;
+            }
+            else if (_buffered.Remove(tick, out var input))
+            {
+                _lastKnown = input;
+                _lastInput = _policy.CaughtUp(input, _lastInput, input, 0);
+            }
             else
-                _lastInput = _buffered.Remove(tick, out var input) ? input : _policy.Substitute(_lastInput);
+            {
+                Gaps.CountSubstituted();
+                _lastKnown = _policy.Substitute(_newestTick < tick ? _newest : _lastKnown);
+                _lastInput = _policy.CaughtUp(_lastKnown, _lastInput, _newest, tick - _newestTick);
+            }
 
             _simulated.Fire(_lastInput);
         }

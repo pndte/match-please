@@ -76,7 +76,7 @@ namespace Bw.EditorTools.Shooting
                 var time = (tick - 1) * step.Duration;
                 var trigger = simulation.Accepted < requested && simulation.Accepted * interval <= time + step.Duration * 0.5f;
                 var shots = simulation.Shots;
-                simulation.Step(new WeaponInput(deflection, trigger, false, 0f, 0f));
+                simulation.Step(new WeaponInput(deflection, trigger, false, 0f, 0f, default));
 
                 if (simulation.Shots != shots)
                 {
