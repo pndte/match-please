@@ -24,7 +24,7 @@ namespace Bw.UseCases.Shooting.View.Adapters
 
         public SeenShotsViewModel(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
+            IControlledBy controlledBy,
             IReadonlyWeapon weapon,
             IReadonlyWeaponDraw draw,
             IShotTracer tracer)

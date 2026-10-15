@@ -1,63 +1,23 @@
+using System;
 using Bw.Entities;
-using Bw.Entities.Extensions;
-using Bw.Entities.Network;
-using Bw.Entities.Network.Variables;
-using Bw.Entities.Players;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases
 {
-    public class ControlledBy : IControlledBy
+    public sealed class ControlledBy : IControlledBy
     {
         public IReadonlyProperty<bool> Me => _me;
-        public IReadonlyViewableList<IPlayer> Users => _users;
 
-        private readonly IViewableProperty<bool> _me;
-        private readonly BwViewableList<IPlayer> _users;
+        private readonly IViewableProperty<bool> _me = new ViewableProperty<bool>(false);
 
-        public ControlledBy()
+        public void SetMe(Lifetime lifetime)
         {
-            _users = new BwViewableList<IPlayer>();
-            _me = new ViewableProperty<bool>(false);
-        }
+            if (_me.Value)
+                throw new InvalidOperationException("The object is already controlled by me: SetMe gives control for one lifetime, and the previous one has not ended yet.");
 
-        public void Set(Lifetime lifetime, IPlayer player)
-        {
-            _users.AddLifetimed(lifetime, player);
-        }
-
-        public class ClientNetworkHandler
-        {
-            public ClientNetworkHandler(
-                Lifetime lifetime,
-                INetResultReceiver<bool> me,
-                ControlledBy controlledBy)
-            {
-                me.Received.Advise(lifetime, value =>
-                {
-                    controlledBy._me.Value = value;
-                });
-            }
-        }
-
-        public class ServerNetworkHandler
-        {
-            public ServerNetworkHandler(
-                Lifetime lifetime,
-                INetResultSender<bool> me,
-                IControlledBy controlledBy,
-                IClientPlayerCollection clientPlayers)
-            {
-                controlledBy.Users.View(lifetime, (userLifetime, userPlayer) =>
-                {
-                    var client = clientPlayers.ByClient.Inverse[userPlayer]; //TODO: у бота клиента нет — когда появятся боты, игроков без клиента здесь пропускать
-                    me.SendTo(client, true);
-
-                    userLifetime.OnTermination(() =>
-                        me.SendTo(client, false));
-                });
-            }
+            _me.Value = true;
+            lifetime.OnTermination(() => _me.Value = false);
         }
     }
 }

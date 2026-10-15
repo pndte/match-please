@@ -1,12 +1,11 @@
-﻿using Bw.Entities.Players;
+﻿using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
 namespace Bw.Entities
 {
-    public interface IControlledBy : IReadonlyControlledBy //TODO: переименовать по принципу с Ownership и убрать наследование от IControlledBy
-                                                           //который должен стать IControlledBy.
+    public interface IControlledBy
     {
-        public void Set(Lifetime lifetime, IPlayer player);
-        public IReadonlyViewableList<IPlayer> Users { get; }
+        public IReadonlyProperty<bool> Me { get; }
+        public void SetMe(Lifetime lifetime);
     }
 }

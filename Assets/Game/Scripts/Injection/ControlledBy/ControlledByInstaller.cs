@@ -2,7 +2,7 @@ using Bw.Entities;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
 using Bw.Injection.Network;
-using Bw.UseCases;
+using Bw.UseCases.ObjectMeta.Network;
 using Unity.Netcode;
 using Zenject;
 
@@ -21,14 +21,12 @@ namespace Bw.Injection.ControlledBy
         {
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
-                Container.Bind<IReadonlyControlledBy>().To<UseCases.ControlledBy>().AsSingle();
-                Container.Bind<UseCases.ControlledBy>()
-                    .FromMethod(ctx => (UseCases.ControlledBy)ctx.Container.Resolve<IReadonlyControlledBy>())
-                    .WhenInjectedInto<UseCases.ControlledBy.ClientNetworkHandler>();
+                Container.Bind<IControlledBy>().To<UseCases.ControlledBy>().AsSingle();
             }
             else if (_runtimeSettings.CurrentPeerType == PeerType.Server)
             {
-                Container.BindInterfacesTo<UseCases.ControlledBy>().AsSingle();
+                Container.Bind<IControlledBy>().To<UseCases.ControlledBy>().AsSingle();
+                Container.Bind<IControllerRegistry>().To<UseCases.ControllerRegistry>().AsSingle();
             }
         }
     }
@@ -53,13 +51,13 @@ namespace Bw.Injection.ControlledBy
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
-                Container.BindResultReceiver(meDeclaration).WhenInjectedInto<UseCases.ControlledBy.ClientNetworkHandler>();
-                Container.Bind<UseCases.ControlledBy.ClientNetworkHandler>().ToSelf().AsSingle().NonLazy();
+                Container.BindResultReceiver(meDeclaration).WhenInjectedInto<ControlledByClientHandler>();
+                Container.Bind<ControlledByClientHandler>().AsSingle().NonLazy();
             }
             else if (_runtimeSettings.CurrentPeerType == PeerType.Server)
             {
-                Container.BindResultSender(meDeclaration).WhenInjectedInto<UseCases.ControlledBy.ServerNetworkHandler>();
-                Container.Bind<UseCases.ControlledBy.ServerNetworkHandler>().ToSelf().AsSingle().NonLazy();
+                Container.BindResultSender(meDeclaration).WhenInjectedInto<ControlledByServerHandler>();
+                Container.Bind<ControlledByServerHandler>().AsSingle().NonLazy();
             }
         }
     }

@@ -18,7 +18,7 @@ namespace Bw.Entities.Network.Prediction.Events
 
         public OutcomeReceiver( //TODO: чрезвычайно много параметров конструктора
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
+            IControlledBy controlledBy,
             INetResultReceiver<OutcomeReport<TEffect>> report,
             INetworkTicks ticks,
             IServerTime serverTime,

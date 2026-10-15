@@ -16,7 +16,7 @@ namespace Bw.Entities.Network.Variables
             NetEntriesSchema schema,
             IServerSendersCollection messageSenders,
             IOwnership ownership,
-            IOwnershipController ownershipController,
+            IOwnerRegistry ownerRegistry,
             IClientCollection clients,
             IClientPlayerCollection clientPlayers,
             NetReceiveConfig receiveConfig)
@@ -24,8 +24,8 @@ namespace Bw.Entities.Network.Variables
         {
             _messageSenders = messageSenders;
 
-            var staleWriters = new StaleWriters(lifetime, ownershipController, receiveConfig.StaleWriterSeconds);
-            var receiveGuards = new NetReceiveGuardFactoryServer(ownershipController, staleWriters, clients, clientPlayers, networkObject);
+            var staleWriters = new StaleWriters(lifetime, ownerRegistry, receiveConfig.StaleWriterSeconds);
+            var receiveGuards = new NetReceiveGuardFactoryServer(ownerRegistry, staleWriters, clients, clientPlayers, networkObject);
             var declarations = schema.Declarations;
             for (var index = 0; index < declarations.Count; index++)
             {

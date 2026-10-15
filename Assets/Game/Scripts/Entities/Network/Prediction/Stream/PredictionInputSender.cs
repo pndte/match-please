@@ -18,7 +18,7 @@ namespace Bw.Entities.Network.Prediction.Stream
 
         public PredictionInputSender(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
+            IControlledBy controlledBy,
             INetworkTicks ticks,
             IInputSampler<TInput> sampler,
             INetRequestSender<TickedInput<TInput>> input)

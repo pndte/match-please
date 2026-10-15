@@ -1,8 +1,8 @@
-﻿using Bw.Entities;
+using Bw.Entities;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
 using Bw.Injection.Network;
-using Bw.UseCases;
+using Bw.UseCases.ObjectMeta.Network;
 using Unity.Netcode;
 using Zenject;
 
@@ -22,13 +22,11 @@ namespace Bw.Injection.Ownership
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
                 Container.Bind<IOwnership>().To<UseCases.Ownership>().AsSingle();
-                Container.Bind<UseCases.Ownership>()
-                    .FromMethod(ctx => (UseCases.Ownership)ctx.Container.Resolve<IOwnership>())
-                    .WhenInjectedInto<UseCases.Ownership.ClientNetworkHandler>();
             }
             else if (_runtimeSettings.CurrentPeerType == PeerType.Server)
             {
-                Container.BindInterfacesTo<UseCases.Ownership>().AsSingle();
+                Container.Bind<IOwnership>().To<UseCases.Ownership>().AsSingle();
+                Container.Bind<IOwnerRegistry>().To<UseCases.OwnerRegistry>().AsSingle();
             }
         }
     }
@@ -53,13 +51,13 @@ namespace Bw.Injection.Ownership
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
-                Container.BindResultReceiver(mineDeclaration).WhenInjectedInto<UseCases.Ownership.ClientNetworkHandler>();
-                Container.Bind<UseCases.Ownership.ClientNetworkHandler>().ToSelf().AsSingle().NonLazy();
+                Container.BindResultReceiver(mineDeclaration).WhenInjectedInto<OwnershipClientHandler>();
+                Container.Bind<OwnershipClientHandler>().AsSingle().NonLazy();
             }
             else if (_runtimeSettings.CurrentPeerType == PeerType.Server)
             {
-                Container.BindResultSender(mineDeclaration).WhenInjectedInto<UseCases.Ownership.ServerNetworkHandler>();
-                Container.Bind<UseCases.Ownership.ServerNetworkHandler>().ToSelf().AsSingle().NonLazy();
+                Container.BindResultSender(mineDeclaration).WhenInjectedInto<OwnershipServerHandler>();
+                Container.Bind<OwnershipServerHandler>().AsSingle().NonLazy();
             }
         }
     }

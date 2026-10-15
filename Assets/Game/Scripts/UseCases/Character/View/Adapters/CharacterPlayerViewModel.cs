@@ -11,10 +11,10 @@ namespace Bw.UseCases.Character.View.Adapters
         public IReadonlyProperty<string> Nickname => _nickname.Value;
 
         private readonly IOwnership _ownership;
-        private readonly IReadonlyControlledBy _controlledBy;
+        private readonly IControlledBy _controlledBy;
         private readonly IReadonlyNickname _nickname;
 
-        public CharacterPlayerViewModel(IOwnership ownership, IReadonlyControlledBy controlledBy, IReadonlyNickname nickname)
+        public CharacterPlayerViewModel(IOwnership ownership, IControlledBy controlledBy, IReadonlyNickname nickname)
         {
             _ownership = ownership;
             _controlledBy = controlledBy;

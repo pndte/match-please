@@ -15,13 +15,13 @@ namespace Bw.UseCases.Shooting.View.Adapters
 
         private readonly ViewableProperty<bool> _held = new(false);
         private readonly ViewableProperty<bool> _drawn = new(false);
-        private readonly IReadonlyControlledBy _controlledBy;
+        private readonly IControlledBy _controlledBy;
 
         public WeaponCarryViewModel(
             Lifetime lifetime,
             IWeaponHold hold,
             IReadonlyWeaponDraw draw,
-            IReadonlyControlledBy controlledBy)
+            IControlledBy controlledBy)
         {
             _controlledBy = controlledBy;
 

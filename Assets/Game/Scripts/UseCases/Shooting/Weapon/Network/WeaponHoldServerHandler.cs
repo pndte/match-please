@@ -14,8 +14,8 @@ namespace Bw.UseCases.Shooting.Weapon.Network
     {
         private readonly ICharacterRegistry _characterRegistry;
         private readonly IGameObjectByCharacterCollection _characterObjects;
-        private readonly IOwnershipController _ownershipController;
-        private readonly IControlledBy _controlledBy;
+        private readonly IOwnerRegistry _ownerRegistry;
+        private readonly IControllerRegistry _controllerRegistry;
         private readonly IWeaponDraw _draw;
         private readonly NetworkObject _networkObject;
 
@@ -25,15 +25,15 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             IWeaponInventories inventories,
             ICharacterRegistry characterRegistry,
             IGameObjectByCharacterCollection characterObjects,
-            IOwnershipController ownershipController,
-            IControlledBy controlledBy,
+            IOwnerRegistry ownerRegistry,
+            IControllerRegistry controllerRegistry,
             IWeaponDraw draw,
             NetworkObject networkObject)
         {
             _characterRegistry = characterRegistry;
             _characterObjects = characterObjects;
-            _ownershipController = ownershipController;
-            _controlledBy = controlledBy;
+            _ownerRegistry = ownerRegistry;
+            _controllerRegistry = controllerRegistry;
             _draw = draw;
             _networkObject = networkObject;
 
@@ -43,13 +43,13 @@ namespace Bw.UseCases.Shooting.Weapon.Network
 
         private void Hold(Lifetime heldLifetime, IReadonlyMortal character)
         {
-            _ownershipController.AddOwner(heldLifetime, _characterRegistry.PlayerByCharacter[character]);
+            _ownerRegistry.AddOwner(heldLifetime, _characterRegistry.PlayerByCharacter[character]);
             AttachTo(heldLifetime, _characterObjects[character]);
         }
 
         private void Draw(Lifetime drawnLifetime, IReadonlyMortal character)
         {
-            _controlledBy.Set(drawnLifetime, _characterRegistry.PlayerByCharacter[character]);
+            _controllerRegistry.Set(drawnLifetime, _characterRegistry.PlayerByCharacter[character]);
             _draw.Draw(drawnLifetime);
         }
 

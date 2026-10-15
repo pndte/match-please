@@ -14,7 +14,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
 
         public WeaponSwitchClientHandler(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
+            IControlledBy controlledBy,
             WeaponInventoryConfig config,
             INetRequestSender<WeaponSwitch> @switch)
         {

@@ -25,7 +25,7 @@ namespace Bw.Entities.Network.Prediction.Stream
 
         public PredictionReconciler(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
+            IControlledBy controlledBy,
             INetRequestSender<TickedInput<TInput>> input,
             INetResultReceiver<TickedState<TState>> state,
             ISimulation<TState> simulation,

@@ -14,7 +14,7 @@ namespace Bw.Entities.Network.Prediction.Stream
 
         public PredictionInterpolation(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
+            IControlledBy controlledBy,
             IInterpolationTicks ticks,
             IReadonlySimulation<TState> simulation,
             IStateView<TState> view)

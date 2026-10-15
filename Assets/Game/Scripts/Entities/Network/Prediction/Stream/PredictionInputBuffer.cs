@@ -20,7 +20,7 @@ namespace Bw.Entities.Network.Prediction.Stream
         private readonly INetworkTicks _ticks;
         private readonly NetworkTicksConfig _config;
         private readonly IInputPolicy<TInput> _policy;
-        private readonly IControlledBy _controlledBy;
+        private readonly IControllerRegistry _controllerRegistry;
 
         private TInput _lastInput;
         private TInput _lastKnown;
@@ -34,15 +34,15 @@ namespace Bw.Entities.Network.Prediction.Stream
             INetworkTicks ticks,
             NetworkTicksConfig config,
             IInputPolicy<TInput> policy,
-            IControlledBy controlledBy,
+            IControllerRegistry controllerRegistry,
             INetRequestReceiver<TickedInput<TInput>> input)
         {
             _ticks = ticks;
             _config = config;
             _policy = policy;
-            _controlledBy = controlledBy;
+            _controllerRegistry = controllerRegistry;
 
-            controlledBy.Users.View(lifetime, (userLifetime, _) =>
+            controllerRegistry.Users.View(lifetime, (userLifetime, _) =>
             {
                 _buffered.Clear();
                 _heard = false;
@@ -56,7 +56,7 @@ namespace Bw.Entities.Network.Prediction.Stream
 
         private void Buffer(TickedInput<TInput> request)
         {
-            if (_controlledBy.Users.Count > 0)
+            if (_controllerRegistry.Users.Count > 0)
             {
                 ReportOutsideWindow(request.Tick);
                 RememberNewest(request);
@@ -89,7 +89,7 @@ namespace Bw.Entities.Network.Prediction.Stream
         }
 
         private bool TryStore(int tick, TInput input) =>
-            _controlledBy.Users.Count > 0
+            _controllerRegistry.Users.Count > 0
             && tick > _ticks.Current
             && tick <= _ticks.Current + _config.MaxBufferedInputTicks
             && _policy.IsValid(input)
@@ -97,7 +97,7 @@ namespace Bw.Entities.Network.Prediction.Stream
 
         private void Simulate(int tick)
         {
-            if (_controlledBy.Users.Count == 0)
+            if (_controllerRegistry.Users.Count == 0)
             {
                 _lastInput = default;
             }

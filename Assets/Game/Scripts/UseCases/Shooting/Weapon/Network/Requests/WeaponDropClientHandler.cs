@@ -13,7 +13,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
 
         public WeaponDropClientHandler(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
+            IControlledBy controlledBy,
             INetRequestSender<JetBrains.Core.Unit> drop)
         {
             _drop = drop;

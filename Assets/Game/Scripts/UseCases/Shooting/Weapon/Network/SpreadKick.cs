@@ -14,7 +14,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
 
         public SpreadKick(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
+            IControlledBy controlledBy,
             IReadonlyWeapon weapon,
             ISpread spread,
             IAimDeflection deflection)

@@ -79,10 +79,10 @@ namespace Bw.UseCases.Spawning.Network
             _characterRegistry.PlayerByCharacter.AddLifetimed(characterLifetime, character, player);
 
             var characterContext = RequireComponent<GameObjectContext>(characterObject.gameObject);
-            var characterControlledBy = characterContext.Container.Resolve<IControlledBy>();
-            var characterOwnership = characterContext.Container.Resolve<IOwnershipController>();
-            characterOwnership.AddOwner(characterLifetime, player);
-            character.State.WhenAlive(characterLifetime, aliveLifetime => characterControlledBy.Set(aliveLifetime, player));
+            var characterControllers = characterContext.Container.Resolve<IControllerRegistry>();
+            var characterOwners = characterContext.Container.Resolve<IOwnerRegistry>();
+            characterOwners.AddOwner(characterLifetime, player);
+            character.State.WhenAlive(characterLifetime, aliveLifetime => characterControllers.Set(aliveLifetime, player));
 
             _loadout.Arm(character, characterLifetime, characterObject.transform.position, spawnRotation);
 

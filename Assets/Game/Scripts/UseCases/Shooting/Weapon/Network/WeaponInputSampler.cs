@@ -35,7 +35,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
 
         public WeaponInputSampler(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
+            IControlledBy controlledBy,
             IReadonlyWeaponDraw draw,
             IChangableCamera camera,
             INetworkTicks ticks,

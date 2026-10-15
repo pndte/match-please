@@ -9,7 +9,7 @@ namespace Bw.Entities.Network.Prediction.Stream
     {
         public InputMarginClientHandler(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
+            IControlledBy controlledBy,
             INetResultReceiver<int> margin,
             IInputMarginFeedback marginFeedback)
         {

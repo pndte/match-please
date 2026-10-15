@@ -19,7 +19,7 @@ namespace Bw.Entities.Network.Prediction.Stream
 
         public SnapshotInterpolation(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
+            IControlledBy controlledBy,
             IInterpolationTicks ticks,
             INetResultReceiver<TickedState<TState>> state,
             IStateView<TState> view)

@@ -16,20 +16,20 @@ namespace Bw.Entities.Network.Variables
 
     internal sealed class OwnersOnlyReceiveGuard : INetReceiveGuard
     {
-        private readonly IOwnershipController _ownershipController;
+        private readonly IOwnerRegistry _ownerRegistry;
         private readonly StaleWriters _staleWriters;
         private readonly IClientCollection _clients;
         private readonly IClientPlayerCollection _clientPlayers;
         private readonly NetworkObject _networkObject;
 
         public OwnersOnlyReceiveGuard(
-            IOwnershipController ownershipController,
+            IOwnerRegistry ownerRegistry,
             StaleWriters staleWriters,
             IClientCollection clients,
             IClientPlayerCollection clientPlayers,
             NetworkObject networkObject)
         {
-            _ownershipController = ownershipController;
+            _ownerRegistry = ownerRegistry;
             _staleWriters = staleWriters;
             _clients = clients;
             _clientPlayers = clientPlayers;
@@ -53,7 +53,7 @@ namespace Bw.Entities.Network.Variables
 
         private bool IsOwner(IPlayer player)
         {
-            var owners = _ownershipController.Owners;
+            var owners = _ownerRegistry.Owners;
             for (var index = 0; index < owners.Count; index++)
             {
                 if (owners[index] == player)

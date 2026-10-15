@@ -12,7 +12,7 @@ namespace Bw.UseCases.Movement.Network
         private bool _jumpRequested;
         private bool _downRequested;
 
-        public MovementInputSampler(Lifetime lifetime, IReadonlyControlledBy controlledBy)
+        public MovementInputSampler(Lifetime lifetime, IControlledBy controlledBy)
         {
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
                 Observable.EveryUpdate(UnityFrameProvider.Update, controlledLifetime).Subscribe(UpdateButtons));

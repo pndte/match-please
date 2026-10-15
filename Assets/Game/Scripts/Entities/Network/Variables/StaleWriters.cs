@@ -10,10 +10,10 @@ namespace Bw.Entities.Network.Variables
         private readonly List<IPlayer> _players = new();
         private readonly float _seconds;
 
-        public StaleWriters(Lifetime lifetime, IOwnershipController ownershipController, float seconds)
+        public StaleWriters(Lifetime lifetime, IOwnerRegistry ownerRegistry, float seconds)
         {
             _seconds = seconds;
-            ownershipController.Owners.View(lifetime, (ownerLifetime, owner) =>
+            ownerRegistry.Owners.View(lifetime, (ownerLifetime, owner) =>
                 ownerLifetime.OnTermination(() => KeepFor(lifetime, owner)));
         }
 

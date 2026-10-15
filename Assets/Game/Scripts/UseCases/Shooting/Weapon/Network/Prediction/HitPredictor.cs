@@ -23,7 +23,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Prediction
 
         public HitPredictor(
             Lifetime lifetime,
-            IReadonlyControlledBy controlledBy,
+            IControlledBy controlledBy,
             IReadonlyWeapon weapon,
             IReadonlySimulation<TState> simulation,
             IShotTracer tracer,

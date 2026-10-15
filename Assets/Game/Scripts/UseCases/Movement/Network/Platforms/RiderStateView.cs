@@ -11,14 +11,14 @@ namespace Bw.UseCases.Movement.Network.Platforms
     public sealed class RiderStateView<TState> : IStateView<TState> where TState : struct, IBodyState<TState>
     {
         private readonly IStateView<TState> _view;
-        private readonly IReadonlyControlledBy _controlledBy;
+        private readonly IControlledBy _controlledBy;
         private readonly INetworkTicks _ticks;
         private readonly IInterpolationTicks _interpolation;
         private readonly IMovementCollider _collider;
 
         public RiderStateView(
             IStateView<TState> view,
-            IReadonlyControlledBy controlledBy,
+            IControlledBy controlledBy,
             INetworkTicks ticks,
             IInterpolationTicks interpolation,
             IMovementCollider collider)

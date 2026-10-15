@@ -5,20 +5,20 @@ namespace Bw.Entities.Network.Variables
 {
     internal sealed class NetReceiveGuardFactoryServer
     {
-        private readonly IOwnershipController _ownershipController;
+        private readonly IOwnerRegistry _ownerRegistry;
         private readonly StaleWriters _staleWriters;
         private readonly IClientCollection _clients;
         private readonly IClientPlayerCollection _clientPlayers;
         private readonly NetworkObject _networkObject;
 
         public NetReceiveGuardFactoryServer(
-            IOwnershipController ownershipController,
+            IOwnerRegistry ownerRegistry,
             StaleWriters staleWriters,
             IClientCollection clients,
             IClientPlayerCollection clientPlayers,
             NetworkObject networkObject)
         {
-            _ownershipController = ownershipController;
+            _ownerRegistry = ownerRegistry;
             _staleWriters = staleWriters;
             _clients = clients;
             _clientPlayers = clientPlayers;
@@ -36,6 +36,6 @@ namespace Bw.Entities.Network.Variables
             };
 
         private INetReceiveGuard OwnersOnly() =>
-            new OwnersOnlyReceiveGuard(_ownershipController, _staleWriters, _clients, _clientPlayers, _networkObject);
+            new OwnersOnlyReceiveGuard(_ownerRegistry, _staleWriters, _clients, _clientPlayers, _networkObject);
     }
 }

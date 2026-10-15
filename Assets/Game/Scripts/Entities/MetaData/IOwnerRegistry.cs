@@ -3,7 +3,7 @@ using JetBrains.Lifetimes;
 
 namespace Bw.Entities
 {
-    public interface IOwnershipController
+    public interface IOwnerRegistry
     {
         public void AddOwner(Lifetime lifetime, IPlayer player);
         public IReadonlyViewableList<IPlayer> Owners { get; } //TODO: ViewableHashset

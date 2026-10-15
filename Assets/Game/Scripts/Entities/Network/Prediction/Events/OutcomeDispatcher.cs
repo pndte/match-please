@@ -11,7 +11,7 @@ namespace Bw.Entities.Network.Prediction.Events
     {
         private readonly TInitiator _initiator;
         private readonly NetworkObject _networkObject;
-        private readonly IControlledBy _controlledBy;
+        private readonly IControllerRegistry _controllerRegistry;
         private readonly IClientPlayerCollection _clientPlayers;
         private readonly IAffectables<TTarget, TEffect> _affectables;
         private readonly INetResultSender<OutcomeReport<TEffect>> _report;
@@ -23,7 +23,7 @@ namespace Bw.Entities.Network.Prediction.Events
             Lifetime lifetime,
             TInitiator initiator,
             NetworkObject networkObject,
-            IControlledBy controlledBy,
+            IControllerRegistry controllerRegistry,
             IClientPlayerCollection clientPlayers,
             IAffectables<TTarget, TEffect> affectables,
             IOutcomes<TInitiator, TTarget, TEffect> outcomes,
@@ -31,7 +31,7 @@ namespace Bw.Entities.Network.Prediction.Events
         {
             _initiator = initiator;
             _networkObject = networkObject;
-            _controlledBy = controlledBy;
+            _controllerRegistry = controllerRegistry;
             _clientPlayers = clientPlayers;
             _affectables = affectables;
             _report = report;
@@ -84,13 +84,13 @@ namespace Bw.Entities.Network.Prediction.Events
         private bool TryGetController(out IClient controller)
         {
             controller = default;
-            if (_controlledBy.Users.Count == 0)
+            if (_controllerRegistry.Users.Count == 0)
                 return false;
 
-            if (_controlledBy.Users.Count > 1)
+            if (_controllerRegistry.Users.Count > 1)
                 throw new InvalidOperationException("An outcome is reported to the one player who controls the initiator, and several players control it.");
 
-            controller = _clientPlayers.ByClient.Inverse[_controlledBy.Users[0]]; //TODO: у бота клиента нет — когда появятся боты, их итоги применять без отчёта
+            controller = _clientPlayers.ByClient.Inverse[_controllerRegistry.Users[0]]; //TODO: у бота клиента нет — когда появятся боты, их итоги применять без отчёта
             return true;
         }
     }
