@@ -7,6 +7,8 @@ namespace Bw.UseCases.Level.View.Lighting
     [RequireComponent(typeof(Light2D))]
     public sealed class AmbientLight : MonoBehaviour
     {
+        private static readonly int AmbientLightLevelId = Shader.PropertyToID("_AmbientLightLevel");
+
         [SerializeField, Range(0f, 1f)] private float _level = 1f;
         [SerializeField] private Color _darkTint = new(0.65f, 0.76f, 1f);
 
@@ -21,6 +23,7 @@ namespace Bw.UseCases.Level.View.Lighting
             var light = GetComponent<Light2D>();
             light.intensity = Mathf.GammaToLinearSpace(_level);
             light.color = Color.Lerp(_darkTint, Color.white, _level).linear;
+            Shader.SetGlobalFloat(AmbientLightLevelId, light.intensity * light.color.maxColorComponent);
         }
     }
 }

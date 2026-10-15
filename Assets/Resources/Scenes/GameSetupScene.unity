@@ -202,7 +202,7 @@ MonoBehaviour:
   serverTag: server
   clientTag: client
   enableLogging: 1
-  _gameScene: ConstructionSite
+  _gameScene: MeatPlant
 --- !u!114 &1858275100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,7 +217,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Launch.LaunchInstaller
   _menuPanel: {fileID: 11400000, guid: 41070df745f243848a3d841ce560f62e, type: 2}
   _menuScreen: {fileID: 9197481963319205126, guid: 0a3b31e59699cfb419c61f3a8007e762, type: 3}
-  _characters: {fileID: 11400000, guid: ac04d9c8673f4d839415f2e3cdcd8d39, type: 2}
 --- !u!1001 &2067038090
 PrefabInstance:
   m_ObjectHideFlags: 0
