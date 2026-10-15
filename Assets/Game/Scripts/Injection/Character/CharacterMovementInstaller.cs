@@ -13,6 +13,7 @@ using Bw.UseCases.Movement.View.Adapters;
 using Bw.UseCases.Movement.View.Animation;
 using Bw.UseCases.Movement.View.Audio;
 using Bw.UseCases.Movement.Network;
+using Bw.UseCases.Movement.Network.Prediction;
 using Bw.UseCases.Movement.Network.Root;
 using Bw.UseCases.Movement.Physics;
 using JetBrains.Collections.Viewable;
@@ -93,6 +94,7 @@ namespace Bw.Injection
                                 context.Container.Instantiate<MovementAnimationView>(),
                                 context.Container.Instantiate<MovementSoundsView>())))
                         .AsSingle();
+                    Container.Decorate<IStateView<MovementState>>().With<SmoothedStateView<MovementState>>();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

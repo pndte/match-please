@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Bw.Entities.Network.Prediction.Stream.Requests;
 using Bw.Entities.Network.Ticks;
@@ -8,12 +9,15 @@ using JetBrains.Lifetimes;
 
 namespace Bw.Entities.Network.Prediction.Stream
 {
-    public sealed class PredictionReconciler<TInput, TState>
+    public sealed class PredictionReconciler<TInput, TState> : IStateCorrections<TState>
         where TInput : struct
-        where TState : struct
+        where TState : struct, IEquatable<TState>
     {
         private const int MaxPendingInputs = 128;
 
+        public ISource<StateCorrection<TState>> Corrected => _corrected;
+
+        private readonly Signal<StateCorrection<TState>> _corrected = new();
         private readonly Queue<TickedInput<TInput>> _pending = new();
         private readonly ISimulation<TState> _simulation;
         private readonly ISimulator<TInput, TState> _simulator;
@@ -73,7 +77,10 @@ namespace Bw.Entities.Network.Prediction.Stream
             }
 
             _scheduled.PoseAt(_ticks.Current);
-            _simulation.Apply(state); //TODO: поправка сервера ставится сразу — толчок от чужого удара (и любое другое расхождение) свой персонаж получает рывком; сгладить показ поправки
+            var before = _simulation.State.Value;
+            _simulation.Apply(state); //TODO: показ сглаживает поправку только у тел (SmoothedStateView) — прицел оружия и предмета в руках при поправке перескакивает
+            if (!before.Equals(state))
+                _corrected.Fire(new StateCorrection<TState>(before, state));
         }
     }
 }

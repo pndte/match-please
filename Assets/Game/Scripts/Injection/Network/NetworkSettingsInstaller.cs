@@ -18,6 +18,7 @@ namespace Bw.Injection.Network
         [SerializeField] private LagCompensationConfig _lagCompensation = new();
         [SerializeField] private EventPredictionConfig _eventPrediction = new();
         [SerializeField] private PushPredictionConfig _pushPrediction = new();
+        [SerializeField] private CorrectionSmoothingConfig _correctionSmoothing = new();
         [SerializeField] private WeaponPickupNetworkConfig _weaponPickup = new();
         [SerializeField] private NetReceiveConfig _receive = new();
 
@@ -28,6 +29,7 @@ namespace Bw.Injection.Network
             Container.BindInstance(_lagCompensation).AsSingle();
             Container.BindInstance(_eventPrediction).AsSingle();
             Container.BindInstance(_pushPrediction).AsSingle();
+            Container.BindInstance(_correctionSmoothing).AsSingle();
             Container.BindInstance(_weaponPickup).AsSingle();
             Container.BindInstance(_receive).AsSingle();
         }

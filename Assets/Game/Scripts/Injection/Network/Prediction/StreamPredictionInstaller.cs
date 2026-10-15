@@ -13,7 +13,7 @@ namespace Bw.Injection.Network.Prediction
     public class StreamPredictionInstaller<TInput, TState>
         : Installer<IRuntimeSettings, INetEntriesSchemaBuilder, StreamPredictionInstaller<TInput, TState>>
         where TInput : struct
-        where TState : struct
+        where TState : struct, IEquatable<TState>
     {
         private readonly IRuntimeSettings _runtimeSettings;
         private readonly INetEntriesSchemaBuilder _netSchema;
@@ -59,7 +59,7 @@ namespace Bw.Injection.Network.Prediction
                 .FromResolveGetter<PredictionInputSender<TInput>>(sender => sender.Predicted)
                 .AsSingle();
 
-            Container.Bind<PredictionReconciler<TInput, TState>>().AsSingle().NonLazy();
+            Container.Bind(typeof(IStateCorrections<TState>), typeof(PredictionReconciler<TInput, TState>)).To<PredictionReconciler<TInput, TState>>().AsSingle().NonLazy();
             Container.Bind<InputMarginClientHandler>().AsSingle().NonLazy();
             Container.Bind<PredictionInterpolation<TState>>().AsSingle().NonLazy();
             Container.Bind<SnapshotInterpolation<TState>>().AsSingle().NonLazy();
