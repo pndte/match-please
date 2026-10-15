@@ -9,7 +9,8 @@
         "Zenject",
         "UniTask",
         "Bw.CoreAdapters",
-        "Bw.UseCases.Character"
+        "Bw.UseCases.Character",
+        "Bw.UseCases.Graphics"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -38,7 +38,12 @@
         "Bw.UseCases.Shooting.View.Adapters",
         "Bw.UseCases.Match.View.Adapters",
         "Bw.CoreAdapters",
-        "Bw.CoreAdapters.Weapons"
+        "Bw.CoreAdapters.Weapons",
+        "Bw.UseCases.Graphics",
+        "Bw.UseCases.Level.View",
+        "Bw.UseCases.Level.View.Adapters",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

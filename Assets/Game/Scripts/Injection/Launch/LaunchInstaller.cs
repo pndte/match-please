@@ -18,6 +18,7 @@ namespace Bw.Injection.Launch
         {
             RequireMenu();
             RequireCharacterCard();
+            RequireGraphicsButton();
 
             BindMenu();
             BindScreens();
@@ -40,6 +41,7 @@ namespace Bw.Injection.Launch
             Container.Bind<RoomScreen>().AsSingle();
             Container.Bind<ConnectingScreen>().AsSingle();
             Container.Bind<ConnectionFailedScreen>().AsSingle();
+            Container.Bind<GraphicsButton>().AsSingle().NonLazy();
         }
 
         private void BindLaunch()
@@ -54,6 +56,13 @@ namespace Bw.Injection.Launch
         {
             if (_menuPanel == null || _menuScreen == null)
                 throw new InvalidOperationException("The start menu needs its panel settings and screen: set them on LaunchInstaller in GameSetupScene.");
+        }
+
+        private void RequireGraphicsButton()
+        {
+            if (_menuScreen.CloneTree().Q<Button>(GraphicsButton.ButtonName) == null)
+                throw new InvalidOperationException(
+                    $"The main menu of '{_menuScreen.name}' has no button '{GraphicsButton.ButtonName}': it switches the graphics presets.");
         }
 
         private void RequireCharacterCard()

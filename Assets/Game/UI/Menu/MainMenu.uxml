@@ -14,6 +14,7 @@
             <ui:Button name="join-room" text="Подключиться" class="button button--amber button--locked">
                 <ui:Label text="Сначала введи имя" class="lock-tip" picking-mode="Ignore" />
             </ui:Button>
+            <ui:Button name="graphics" text="Графика" class="button button--paper button--small" />
             <ui:Button name="quit" text="Выйти" class="button button--paper button--small" />
         </ui:VisualElement>
     </ui:VisualElement>

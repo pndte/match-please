@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e1ec96f882b2014ba188d2aad41232f, type: 3}
+  m_Name: GraphicsPresets
+  m_EditorClassIdentifier: Bw.UseCases.Graphics::Bw.UseCases.Graphics.GraphicsPresetsConfig
+  Presets:
+  - {fileID: 11400000, guid: f17a98644e8d653499d778894a33cd7c, type: 2}
+  - {fileID: 11400000, guid: c3851366d136c3243a44fb252aa9268c, type: 2}
+  Default: {fileID: 11400000, guid: f17a98644e8d653499d778894a33cd7c, type: 2}
