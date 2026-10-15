@@ -1,7 +1,9 @@
 {
     "name": "Bw.UseCases.Level.View",
     "rootNamespace": "Bw",
-    "references": [],
+    "references": [
+        "Unity.RenderPipelines.Universal.2D.Runtime"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
