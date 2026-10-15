@@ -12,9 +12,10 @@ namespace Bw.Entities.Network.Prediction.Stream
     public sealed class PredictionInputBuffer<TInput> where TInput : struct
     {
         public ISource<TInput> Simulated => _simulated;
-        public InputGaps Gaps { get; } = new();
+        public ISource<InputGap> Gaps => _gaps;
 
         private readonly Signal<TInput> _simulated = new();
+        private readonly Signal<InputGap> _gaps = new();
         private readonly Dictionary<int, TInput> _buffered = new();
         private readonly INetworkTicks _ticks;
         private readonly NetworkTicksConfig _config;
@@ -57,7 +58,7 @@ namespace Bw.Entities.Network.Prediction.Stream
         {
             if (_controlledBy.Users.Count > 0)
             {
-                CountGaps(request.Tick);
+                ReportOutsideWindow(request.Tick);
                 RememberNewest(request);
             }
 
@@ -67,15 +68,15 @@ namespace Bw.Entities.Network.Prediction.Stream
             _firstTick = _heard ? Math.Min(_firstTick, request.Tick) : request.Tick;
             _heard = true;
             if (request.Tick - 1 >= _firstTick && TryStore(request.Tick - 1, request.PreviousInput))
-                Gaps.CountRecovered();
+                _gaps.Fire(InputGap.Recovered);
         }
 
-        private void CountGaps(int tick)
+        private void ReportOutsideWindow(int tick)
         {
             if (tick <= _ticks.Current)
-                Gaps.CountLate(_ticks.Current - tick + 1);
+                _gaps.Fire(InputGap.Late(_ticks.Current - tick + 1));
             else if (tick > _ticks.Current + _config.MaxBufferedInputTicks)
-                Gaps.CountEarly();
+                _gaps.Fire(InputGap.Early);
         }
 
         private void RememberNewest(TickedInput<TInput> request)
@@ -111,7 +112,7 @@ namespace Bw.Entities.Network.Prediction.Stream
             }
             else
             {
-                Gaps.CountSubstituted();
+                _gaps.Fire(InputGap.Substituted);
                 _lastKnown = _policy.Substitute(_newestTick < tick ? _newest : _lastKnown);
                 _lastInput = _policy.CaughtUp(_lastKnown, _lastInput, _newest, tick - _newestTick);
             }
