@@ -1,10 +1,15 @@
 ﻿using System;
+using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.Entities.Network.LagCompensation;
 using Bw.Entities.Network.Prediction.Stream;
+using Bw.Entities.Network.Replication;
 using Bw.Entities.Network.Ticks;
+using Bw.Entities.Physics;
+using Bw.Entities.Simulation;
 using Bw.Injection.Match;
 using Bw.UseCases.Character;
+using Bw.UseCases.Level;
 using Bw.UseCases.Match;
 using Bw.UseCases.Movement.Physics;
 using Bw.UseCases.Shooting.Weapon;
@@ -40,6 +45,11 @@ namespace Bw.Injection
 
         private void BindServer()
         {
+            BindPhysics();
+            Container.Bind<PassiveStepper>()
+                .FromMethod(context => new PassiveStepper(gameObject.Lifetime(), context.Container.Resolve<INetworkTicks>(), context.Container.Resolve<PhysicsSpace>()))
+                .AsSingle()
+                .NonLazy();
             Container.BindInterfacesTo<GameObjectByCharacterCollection>().AsSingle();
             Container.BindInterfacesTo<MovingPlatformCollection>().AsSingle();
             Container.BindInterfacesTo<ShovableCollection>().AsSingle();
@@ -55,6 +65,7 @@ namespace Bw.Injection
 
         private void BindClient()
         {
+            BindPhysics();
             Container.BindInterfacesTo<MovingPlatformCollection>().AsSingle();
             Container.BindInterfacesTo<ShovableCollection>().AsSingle();
             Container.BindInterfacesTo<ScheduledCollection>().AsSingle();
@@ -62,5 +73,19 @@ namespace Bw.Injection
             Container.Bind(typeof(IReadonlyFloorWeapons), typeof(IFloorWeapons)).To<FloorWeapons>().AsSingle()
                 .WriterOnlyInto<IFloorWeapons>(typeof(FloorWeaponRegistration));
         }
+
+        private void BindPhysics()
+        {
+            Container.Bind(typeof(IPhysicsSpace), typeof(PhysicsSpace)).To<PhysicsSpace>()
+                .FromMethod(context => PhysicsSpace.Create(gameObject.Lifetime(), context.Container.Resolve<PhysicsConfig>(), context.Container.Resolve<ISimulationStep>()))
+                .AsSingle();
+            Container.Bind<LevelGeometry>()
+                .FromMethod(context => LevelGeometry.Create(gameObject.Lifetime(), context.Container.Resolve<IPhysicsSpace>(), LevelColliders()))
+                .AsSingle()
+                .NonLazy();
+        }
+
+        private Collider2D[] LevelColliders() =>
+            Array.FindAll(FindObjectsByType<Collider2D>(FindObjectsInactive.Exclude, FindObjectsSortMode.None), collider => collider.gameObject.scene == gameObject.scene);
     }
 }
