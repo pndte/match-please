@@ -5,7 +5,7 @@ using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Shooting.Weapon.Network
 {
-    public sealed class WeaponKindRegistration
+    public sealed class WeaponKindRegistration //TODO: предмет сам регистрирует свой вид, поэтому оружие, кулаки и ящик знают о IWeaponKindRegistry; регистрировать должен тот, кто их создаёт: Armory, спавнер ящиков или фабрика
     {
         public WeaponKindRegistration(
             Lifetime lifetime,
