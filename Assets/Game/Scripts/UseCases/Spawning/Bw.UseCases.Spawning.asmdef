@@ -13,7 +13,8 @@
         "UniTask",
         "Bw.UseCases.Character",
         "Bw.UseCases.Mortality",
-        "Bw.UseCases.Mortality.Network"
+        "Bw.UseCases.Mortality.Network",
+        "Bw.CoreAdapters"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

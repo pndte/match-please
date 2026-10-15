@@ -23,7 +23,7 @@ namespace Bw.UseCases.Players.Network
 
         private void HandleNewConnectedClient(Lifetime lifetime, IClient client)
         {
-            var player = new Player(client.Request.Nickname, client.Request.CharacterKey);
+            var player = new Player(client.Request.Nickname);
             ByClient.AddLifetimed(lifetime, client, player);
             _players.AddLifetimed(lifetime, player);
         }

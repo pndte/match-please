@@ -145,6 +145,8 @@ MonoBehaviour:
   _networkLifetimed: {fileID: 6654516257488250098}
   _hud: {fileID: 7826793935113596502}
   _scoreRow: {fileID: 9197481963319205126, guid: 95584e7891041794395c560e94c882b0, type: 3}
+  _killFeed: {fileID: 11400000, guid: b3a76b560f324f718a6b6c52d08c1967, type: 2}
+  _weaponIcons: {fileID: 11400000, guid: e1699611bb65440cb3a498548936c58c, type: 2}
 --- !u!114 &8577052497575208043
 MonoBehaviour:
   m_ObjectHideFlags: 0

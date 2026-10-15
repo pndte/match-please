@@ -425,6 +425,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9604c1588135e0f4c8c411a563340a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Weapon.MeleeWeaponInstaller
+  _description: {fileID: 11400000, guid: 7e4679416c174f5a984103270b97739d, type: 2}
   _visual: {fileID: 8417112528984293784}
   _rig: {fileID: 9215535254621554420}
   _meleeConfig: {fileID: 11400000, guid: c1df4db9df884a340b5571179d76add6, type: 2}

@@ -3,9 +3,9 @@ namespace Bw.Entities.Network
     public readonly struct ConnectionRequest
     {
         public readonly string Nickname;
-        public readonly string CharacterKey;
+        public readonly int CharacterKey;
 
-        public ConnectionRequest(string nickname, string characterKey)
+        public ConnectionRequest(string nickname, int characterKey)
         {
             Nickname = nickname;
             CharacterKey = characterKey;

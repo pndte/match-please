@@ -46,6 +46,8 @@ namespace Bw.Injection
             Container.BindInterfacesTo<ScheduledCollection>().AsSingle();
             Container.Bind(typeof(IReadonlyWeaponKindRegistry), typeof(IWeaponKindRegistry)).To<WeaponKindRegistry>().AsSingle()
                 .WriterOnlyInto<IWeaponKindRegistry>(typeof(WeaponKindRegistration));
+            Container.Bind(typeof(IReadonlyWeaponDescriptionRegistry), typeof(IWeaponDescriptionRegistry)).To<WeaponDescriptionRegistry>().AsSingle()
+                .WriterOnlyInto<IWeaponDescriptionRegistry>(typeof(WeaponDescriptionRegistration));
             Container.BindInterfacesTo<WeaponInventories>().AsSingle();
             Container.BindInterfacesTo<RewindableCollection>().AsSingle();
             Container.BindInterfacesTo<LagCompensator>().AsSingle();

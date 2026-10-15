@@ -236,22 +236,6 @@
     -unity-background-scale-mode: scale-to-fit;
 }
 
-.character__figure--sanya {
-    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=-31160892&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#sanya_idle_0");
-}
-
-.character__figure--seva {
-    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=2060785540&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#seva_idle_0");
-}
-
-.character__figure--matvey {
-    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=-1530501530&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#matvey_idle_0");
-}
-
-.character__figure--goshak {
-    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=-483441462&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#GOSHAK_idle_0");
-}
-
 .character__name {
     -unity-font-definition: var(--font-extrabold);
     font-size: 40px;

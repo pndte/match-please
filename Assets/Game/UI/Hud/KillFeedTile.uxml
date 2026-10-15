@@ -3,7 +3,9 @@
     <Style src="Hud.uss" />
     <ui:VisualElement name="kill" class="kill" picking-mode="Ignore">
         <ui:Label name="killer" text="Лёха" class="kill__name" picking-mode="Ignore" />
-        <ui:VisualElement name="weapon" class="kill__weapon weapon-icon weapon-icon--sniper" picking-mode="Ignore" />
+        <ui:VisualElement class="kill__weapon" picking-mode="Ignore">
+            <ui:VisualElement name="weapon" class="weapon-icon" picking-mode="Ignore" style="background-image: url(&apos;project://database/Assets/Game/Art/UI/Hud/weapon_sniper.png?fileID=21300000&amp;guid=4894426de8fc6fe4e88f11e90e7a9443&amp;type=3#weapon_sniper&apos;); aspect-ratio: 5.07;" />
+        </ui:VisualElement>
         <ui:Label name="victim" text="Котлета" class="kill__name" picking-mode="Ignore" />
     </ui:VisualElement>
 </ui:UXML>

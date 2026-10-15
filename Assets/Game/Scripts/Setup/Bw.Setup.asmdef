@@ -7,7 +7,9 @@
         "Unity.Netcode.Runtime",
         "Unity.Networking.Transport",
         "Zenject",
-        "UniTask"
+        "UniTask",
+        "Bw.CoreAdapters",
+        "Bw.UseCases.Character"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

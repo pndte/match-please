@@ -8,7 +8,8 @@
         "Bw.UseCases.Match",
         "Bw.UseCases.Mortality",
         "Bw.UseCases.Shooting",
-        "Unity.Netcode.Runtime"
+        "Unity.Netcode.Runtime",
+        "Bw.CoreAdapters"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

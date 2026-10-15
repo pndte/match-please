@@ -14,6 +14,7 @@ namespace Bw.Injection.Network
             RegisterCodec<System.Int32, Bw.Entities.Network.Codecs.IntCodec>(receivers, senders);
             RegisterCodec<System.String, Bw.Entities.Network.Codecs.StringCodec>(receivers, senders);
             RegisterCodec<JetBrains.Core.Unit, Bw.Entities.Network.Codecs.UnitCodec>(receivers, senders);
+            RegisterCodec<Bw.UseCases.Match.Network.Requests.KillNotice, Bw.UseCases.Match.Network.Codecs.KillNoticeCodec>(receivers, senders);
             RegisterCodec<Bw.UseCases.Match.Network.Requests.MatchTable, Bw.UseCases.Match.Network.Codecs.MatchTableCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Events.Requests.CausedState<Bw.UseCases.Mortality.Vitals>, Bw.UseCases.Mortality.Network.Codecs.CausedVitalsCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Events.Requests.OutcomeReport<Bw.UseCases.Mortality.Hit>, Bw.UseCases.Mortality.Network.Codecs.HitOutcomeReportCodec>(receivers, senders);

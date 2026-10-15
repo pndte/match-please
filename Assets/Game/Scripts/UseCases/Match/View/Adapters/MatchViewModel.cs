@@ -1,4 +1,5 @@
 using System;
+using Bw.CoreAdapters.Characters;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network.Objects;
 using Bw.UseCases.Match.Extensions;
@@ -15,21 +16,24 @@ namespace Bw.UseCases.Match.View.Adapters
         public int SecondsLeft => _countdown.SecondsLeft;
 
         private readonly MatchCountdown _countdown;
+        private readonly CharacterLooksConfig _looks;
         private readonly ViewableProperty<ScoreSheet> _sheet = new(ScoreSheet.None);
 
         public MatchViewModel(
             Lifetime lifetime,
             INetworkLifetimedObject networkLifetimed,
             IReadonlyMatchBoard board,
-            MatchCountdown countdown)
+            MatchCountdown countdown,
+            CharacterLooksConfig looks)
         {
             _countdown = countdown;
+            _looks = looks;
             Shown = networkLifetimed.SpawnedLifetime.Select(lifetime, spawnedLifetime => spawnedLifetime.IsAlive);
 
             board.Current.Advise(lifetime, standings => _sheet.Value = SheetOf(standings));
         }
 
-        private static ScoreSheet SheetOf(MatchStandings standings)
+        private ScoreSheet SheetOf(MatchStandings standings)
         {
             var lines = new ScoreLine[standings.Lines.Count];
             for (var index = 0; index < lines.Length; index++)
@@ -38,8 +42,8 @@ namespace Bw.UseCases.Match.View.Adapters
             return new ScoreSheet(StageOf(standings.Period.Phase), lines);
         }
 
-        private static ScoreLine LineOf(Standing standing) =>
-            new(standing.Nickname, standing.Figure, StatsOf(standing.Score), standing.IsMine);
+        private ScoreLine LineOf(Standing standing) =>
+            new(standing.Nickname, _looks.LookOf(standing.Character).Portrait, StatsOf(standing.Score), standing.IsMine);
 
         private static ScoreStats StatsOf(Score score)
         {

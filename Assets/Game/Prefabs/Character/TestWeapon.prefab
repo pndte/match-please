@@ -276,6 +276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 949c2604aa86458a9edf8f1b29b0bf05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Weapon.WeaponInstaller
+  _description: {fileID: 11400000, guid: 7a2e66abefd64418bd2523decce9c27f, type: 2}
   _visual: {fileID: 1585143936675570925}
   _rig: {fileID: 2221452468816880513}
   _flashPoint: {fileID: 929406897848750056}

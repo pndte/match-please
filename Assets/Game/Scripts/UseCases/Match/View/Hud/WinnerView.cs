@@ -1,6 +1,4 @@
-using System;
 using System.Globalization;
-using System.Linq;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using R3;
@@ -11,7 +9,6 @@ namespace Bw.UseCases.Match.View.Hud
     public sealed class WinnerView
     {
         private const string Hidden = "hidden";
-        private const string FigurePrefix = "winner__figure--";
 
         private readonly IMatchViewModel _match;
         private int _shownSeconds = -1;
@@ -40,11 +37,7 @@ namespace Bw.UseCases.Match.View.Hud
 
             var winner = sheet.Lines[0];
             layer.Q<Label>("title").text = winner.Mine ? "Ты победил!" : "Победитель матча";
-            var figure = layer.Q("figure");
-            foreach (var shown in figure.GetClasses().Where(name => name.StartsWith(FigurePrefix, StringComparison.Ordinal)).ToArray())
-                figure.RemoveFromClassList(shown);
-
-            figure.AddToClassList(FigurePrefix + winner.Figure);
+            layer.Q("figure").style.backgroundImage = new StyleBackground(winner.Portrait);
             layer.Q<Label>("nickname").text = winner.Nickname;
             ScoreLabels.Fill(layer, winner.Stats);
             _shownSeconds = -1;

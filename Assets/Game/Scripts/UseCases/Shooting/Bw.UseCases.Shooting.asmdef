@@ -4,7 +4,6 @@
     "references": [
         "Bw.Entities.Network",
         "Bw.Entities",
-        "Bw.Setup",
         "Bw.UseCases",
         "Unity.Netcode.Runtime",
         "Unity.Collections",

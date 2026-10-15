@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 872a9ce1021b4582a9166763b0e068e8, type: 3}
+  m_Name: WeaponIconsConfig
+  m_EditorClassIdentifier: Bw.UseCases.Match.View.Adapters::Bw.UseCases.Match.View.Adapters.WeaponIconsConfig
+  Icons:
+  - Weapon: {fileID: 11400000, guid: 7e4679416c174f5a984103270b97739d, type: 2}
+    Icon: {fileID: 21300000, guid: 7c40235f06d4e944cba5b16e121184a1, type: 3}
+  - Weapon: {fileID: 11400000, guid: 7a2e66abefd64418bd2523decce9c27f, type: 2}
+    Icon: {fileID: 21300000, guid: f2bd463abce565c4589ecbd9a1312032, type: 3}
+  - Weapon: {fileID: 11400000, guid: 516c0f670600422da9a9a3b6fd959a8e, type: 2}
+    Icon: {fileID: 21300000, guid: 53a851f0e0bc34e4cbe1d727265d3f16, type: 3}
+  - Weapon: {fileID: 11400000, guid: 78b5bbe41f014835bd138a176d78989a, type: 2}
+    Icon: {fileID: 21300000, guid: c065fca9228433e42ab4e225c1fc5b16, type: 3}
+  - Weapon: {fileID: 11400000, guid: eca40bdd9433480588c3eed31d59302a, type: 2}
+    Icon: {fileID: 21300000, guid: 4894426de8fc6fe4e88f11e90e7a9443, type: 3}

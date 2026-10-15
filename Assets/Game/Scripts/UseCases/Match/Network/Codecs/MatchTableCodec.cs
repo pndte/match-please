@@ -33,13 +33,13 @@ namespace Bw.UseCases.Match.Network.Codecs
                     var entry = Value.Entries[index];
                     var clientId = entry.ClientId;
                     var nickname = entry.Nickname;
-                    var figure = entry.Figure;
+                    var characterKey = entry.CharacterKey;
                     var kills = entry.Score.Kills;
                     var deaths = entry.Score.Deaths;
                     var damage = entry.Score.Damage;
                     serializer.SerializePacked(ref clientId);
                     serializer.SerializeValue(ref nickname);
-                    serializer.SerializeValue(ref figure);
+                    serializer.SerializePacked(ref characterKey);
                     serializer.SerializePacked(ref kills);
                     serializer.SerializePacked(ref deaths);
                     serializer.SerializePacked(ref damage);
@@ -56,17 +56,17 @@ namespace Bw.UseCases.Match.Network.Codecs
             {
                 var clientId = 0UL;
                 var nickname = string.Empty;
-                var figure = string.Empty;
+                var characterKey = 0;
                 var kills = 0;
                 var deaths = 0;
                 var damage = 0;
                 serializer.SerializePacked(ref clientId);
                 serializer.SerializeValue(ref nickname);
-                serializer.SerializeValue(ref figure);
+                serializer.SerializePacked(ref characterKey);
                 serializer.SerializePacked(ref kills);
                 serializer.SerializePacked(ref deaths);
                 serializer.SerializePacked(ref damage);
-                entries[index] = new MatchEntry(clientId, nickname, figure, new Score(kills, deaths, damage));
+                entries[index] = new MatchEntry(clientId, nickname, characterKey, new Score(kills, deaths, damage));
             }
 
             Value = new MatchTable(new MatchPeriod((MatchPhase)phase, endTick), entries);

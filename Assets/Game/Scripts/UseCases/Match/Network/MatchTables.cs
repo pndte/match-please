@@ -26,7 +26,7 @@ namespace Bw.UseCases.Match.Network
                 if (!_clientPlayers.ByClient.TryGetLeft(player, out var client)) //TODO: боты — у игрока без клиента нет id для строки «ты»
                     throw new InvalidOperationException("The match table lists only network players, and this player has no client.");
 
-                entries[index++] = new MatchEntry(client.Id, player.Nickname, player.CharacterKey, score);
+                entries[index++] = new MatchEntry(client.Id, player.Nickname, client.Request.CharacterKey, score);
             }
 
             return new MatchTable(_match.Period.Value, entries);

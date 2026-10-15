@@ -6,12 +6,12 @@ namespace Setup.Launch
     public sealed class PlayerPrefsProfile : IPlayerProfile
     {
         private const string NicknamePref = "Launch.PlayerName";
-        private const string CharacterPref = "Launch.Character";
+        private const string CharacterPref = "Launch.CharacterKey";
         private const string RoomPortPref = "Launch.RoomPort";
         private const string LastServerPref = "Launch.ServerAddress";
 
         public string Nickname => PlayerPrefs.GetString(NicknamePref, string.Empty);
-        public string CharacterKey => PlayerPrefs.GetString(CharacterPref, string.Empty);
+        public int CharacterKey => PlayerPrefs.GetInt(CharacterPref, 0);
 
         public ushort RoomPort
         {
@@ -35,8 +35,11 @@ namespace Setup.Launch
         public void SaveNickname(string nickname) =>
             Save(NicknamePref, nickname);
 
-        public void SaveCharacterKey(string characterKey) =>
-            Save(CharacterPref, characterKey);
+        public void SaveCharacterKey(int characterKey)
+        {
+            PlayerPrefs.SetInt(CharacterPref, characterKey);
+            PlayerPrefs.Save();
+        }
 
         public void SaveRoomPort(ushort port)
         {

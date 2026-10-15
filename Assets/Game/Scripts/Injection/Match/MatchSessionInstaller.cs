@@ -19,7 +19,7 @@ namespace Bw.Injection.Match
             Container.Bind(typeof(IReadonlyScoreboard), typeof(IScoreboard)).To<Scoreboard>().AsSingle()
                 .WriterOnlyInto<IScoreboard>(typeof(MatchReferee), typeof(ScoreKeeper));
             Container.BindInterfacesTo<MatchReferee>().AsSingle().NonLazy();
-            Container.Bind<ScoreKeeper>().AsSingle();
+            Container.Bind(typeof(ScoreKeeper), typeof(IKills)).To<ScoreKeeper>().AsSingle();
             Container.Bind<Combatants>().AsSingle();
             Container.Bind<HitScoring>().AsSingle().NonLazy();
             Container.Bind<DeathScoring>().AsSingle().NonLazy();

@@ -62,32 +62,8 @@
 
 .weapon-icon {
     height: 30px;
+    max-width: 120px;
     -unity-background-scale-mode: scale-to-fit;
-}
-
-.weapon-icon--ak {
-    width: 96px;
-    background-image: url("project://database/Assets/Game/Art/UI/Hud/weapon_ak.png?fileID=21300000&guid=f2bd463abce565c4589ecbd9a1312032&type=3#weapon_ak");
-}
-
-.weapon-icon--shotgun {
-    width: 120px;
-    background-image: url("project://database/Assets/Game/Art/UI/Hud/weapon_shotgun.png?fileID=21300000&guid=c065fca9228433e42ab4e225c1fc5b16&type=3#weapon_shotgun");
-}
-
-.weapon-icon--pistol {
-    width: 40px;
-    background-image: url("project://database/Assets/Game/Art/UI/Hud/weapon_pistol.png?fileID=21300000&guid=53a851f0e0bc34e4cbe1d727265d3f16&type=3#weapon_pistol");
-}
-
-.weapon-icon--sniper {
-    width: 120px;
-    background-image: url("project://database/Assets/Game/Art/UI/Hud/weapon_sniper.png?fileID=21300000&guid=4894426de8fc6fe4e88f11e90e7a9443&type=3#weapon_sniper");
-}
-
-.weapon-icon--fists {
-    width: 30px;
-    background-image: url("project://database/Assets/Game/Art/UI/Hud/weapon_fists.png?fileID=21300000&guid=7c40235f06d4e944cba5b16e121184a1&type=3#weapon_fists");
 }
 
 .scoreboard-dock {
@@ -256,22 +232,6 @@
     width: 220px;
     height: 220px;
     -unity-background-scale-mode: scale-to-fit;
-}
-
-.winner__figure--sanya {
-    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=-31160892&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#sanya_idle_0");
-}
-
-.winner__figure--seva {
-    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=2060785540&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#seva_idle_0");
-}
-
-.winner__figure--matvey {
-    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=-1530501530&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#matvey_idle_0");
-}
-
-.winner__figure--goshak {
-    background-image: url("project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=-483441462&guid=d31afdac7321b334a9dde2198a0dfb1c&type=3#GOSHAK_idle_0");
 }
 
 .winner__crown {

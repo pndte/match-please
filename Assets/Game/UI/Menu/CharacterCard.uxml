@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="../Kit.uss" />
+    <Style src="Menu.uss" />
+    <ui:Button class="character">
+        <ui:VisualElement class="character__check" picking-mode="Ignore" />
+        <ui:VisualElement class="character__portrait" picking-mode="Ignore">
+            <ui:VisualElement name="figure" class="character__figure" picking-mode="Ignore" style="background-image: url(&apos;project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=2060785540&amp;guid=d31afdac7321b334a9dde2198a0dfb1c&amp;type=3#seva_idle_0&apos;);" />
+        </ui:VisualElement>
+        <ui:Label name="name" text="Сева" class="character__name" picking-mode="Ignore" />
+    </ui:Button>
+</ui:UXML>

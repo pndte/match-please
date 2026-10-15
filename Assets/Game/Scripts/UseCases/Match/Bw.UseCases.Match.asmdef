@@ -2,7 +2,9 @@
     "name": "Bw.UseCases.Match",
     "rootNamespace": "Bw",
     "references": [
-        "Bw.Entities"
+        "Bw.Entities",
+        "Bw.UseCases.Shooting",
+        "Bw.UseCases.Character"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

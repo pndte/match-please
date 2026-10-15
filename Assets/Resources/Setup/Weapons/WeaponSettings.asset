@@ -15,3 +15,4 @@ MonoBehaviour:
   _pickup: {fileID: 11400000, guid: 3a126147689d4e25823f5bd20676cebf, type: 2}
   _highlight: {fileID: 11400000, guid: e35951f8da9d497dbdcd6094ebb31c21, type: 2}
   _inventory: {fileID: 11400000, guid: a39b8726ccbd4ea9a38868ff75adea1a, type: 2}
+  _catalog: {fileID: 11400000, guid: b431b9e0945c41df8869d024eeb0b71a, type: 2}

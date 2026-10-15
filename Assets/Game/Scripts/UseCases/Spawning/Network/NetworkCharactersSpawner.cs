@@ -1,8 +1,8 @@
 using System;
+using Bw.CoreAdapters.Characters;
 using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
-using Bw.Entities.Network.Characters;
 using Bw.Entities.Players;
 using Bw.UseCases.Character;
 using Bw.UseCases.Mortality;
@@ -70,7 +70,7 @@ namespace Bw.UseCases.Spawning.Network
             var spawnPosition = GetSpawnPosition();
             var spawnRotation = Quaternion.identity;
 
-            var characterPrefab = _data.Characters.PrefabOf(player.CharacterKey);
+            var characterPrefab = _data.Characters.PrefabOf(client.Request.CharacterKey);
             var characterObject = NetworkPrefabInstantiationHelper.Instantiate(
                 _container, characterPrefab, spawnPosition, spawnRotation);
 

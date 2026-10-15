@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Template name="CharacterCard" src="CharacterCard.uxml" />
     <Style src="../Kit.uss" />
     <Style src="Menu.uss" />
     <ui:VisualElement name="character-select" class="select" picking-mode="Ignore">
@@ -8,34 +9,7 @@
         </ui:VisualElement>
         <ui:Label text="Выбери персонажа" class="title" />
         <ui:VisualElement class="cast">
-            <ui:Button name="sanya" class="character">
-                <ui:VisualElement class="character__check" picking-mode="Ignore" />
-                <ui:VisualElement class="character__portrait" picking-mode="Ignore">
-                    <ui:VisualElement class="character__figure character__figure--sanya" picking-mode="Ignore" />
-                </ui:VisualElement>
-                <ui:Label text="Саня" class="character__name" picking-mode="Ignore" />
-            </ui:Button>
-            <ui:Button name="seva" class="character character--selected">
-                <ui:VisualElement class="character__check" picking-mode="Ignore" />
-                <ui:VisualElement class="character__portrait" picking-mode="Ignore">
-                    <ui:VisualElement class="character__figure character__figure--seva" picking-mode="Ignore" />
-                </ui:VisualElement>
-                <ui:Label text="Сева" class="character__name" picking-mode="Ignore" />
-            </ui:Button>
-            <ui:Button name="matvey" class="character">
-                <ui:VisualElement class="character__check" picking-mode="Ignore" />
-                <ui:VisualElement class="character__portrait" picking-mode="Ignore">
-                    <ui:VisualElement class="character__figure character__figure--matvey" picking-mode="Ignore" />
-                </ui:VisualElement>
-                <ui:Label text="Матвей" class="character__name" picking-mode="Ignore" />
-            </ui:Button>
-            <ui:Button name="goshak" class="character">
-                <ui:VisualElement class="character__check" picking-mode="Ignore" />
-                <ui:VisualElement class="character__portrait" picking-mode="Ignore">
-                    <ui:VisualElement class="character__figure character__figure--goshak" picking-mode="Ignore" />
-                </ui:VisualElement>
-                <ui:Label text="Гошак" class="character__name" picking-mode="Ignore" />
-            </ui:Button>
+            <ui:Instance template="CharacterCard" name="character-sample" />
         </ui:VisualElement>
         <ui:VisualElement class="select__actions" picking-mode="Ignore">
             <ui:Button name="disconnect" text="Отключиться" class="button button--paper button--small" />

@@ -1,12 +1,13 @@
 using System;
+using Bw.UseCases.Character;
 using Unity.Netcode;
 
-namespace Bw.Entities.Network.Characters
+namespace Bw.CoreAdapters.Characters
 {
     [Serializable]
     public struct CharacterEntry
     {
-        public string Key;
+        public CharacterDescription Character;
         public NetworkObject Prefab;
     }
 }

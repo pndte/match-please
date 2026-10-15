@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using Bw.Entities.Network.Characters;
 using JetBrains.Lifetimes;
 using Setup.Launch;
 using Setup.Launch.Menu;
@@ -16,14 +14,10 @@ namespace Bw.Injection.Launch
         [SerializeField] private PanelSettings _menuPanel;
         [SerializeField] private VisualTreeAsset _menuScreen;
 
-        [Header("Characters")]
-        [SerializeField] private CharacterCatalog _characters;
-
         public override void InstallBindings()
         {
             RequireMenu();
-            CharacterCatalogValidation.Require(_characters);
-            RequireCharacterButtons();
+            RequireCharacterCard();
 
             BindMenu();
             BindScreens();
@@ -35,7 +29,6 @@ namespace Bw.Injection.Launch
             Container.Bind<MenuDocument>().FromMethod(_ => MenuDocument.Create(_menuPanel, _menuScreen)).AsSingle();
             Container.Bind<Lifetime>().FromMethod(context => context.Container.Resolve<MenuDocument>().Lifetime).AsSingle();
             Container.Bind<IPlayerProfile>().To<PlayerPrefsProfile>().AsSingle();
-            Container.BindInstance(_characters).AsSingle();
         }
 
         private void BindScreens()
@@ -63,13 +56,17 @@ namespace Bw.Injection.Launch
                 throw new InvalidOperationException("The start menu needs its panel settings and screen: set them on LaunchInstaller in GameSetupScene.");
         }
 
-        private void RequireCharacterButtons()
+        private void RequireCharacterCard()
         {
-            var buttons = _menuScreen.CloneTree().Query<Button>(className: CharacterSelectScreen.CharacterClass).ToList().Select(button => button.name).ToHashSet();
-            var keys = _characters.Characters.Select(character => character.Key).ToHashSet();
-            if (!buttons.SetEquals(keys))
+            var sample = _menuScreen.CloneTree().Q<TemplateContainer>(CharacterSelectScreen.SampleName);
+            if (sample == null || sample.templateSource == null)
                 throw new InvalidOperationException(
-                    $"The character buttons of '{_menuScreen.name}' ({string.Join(", ", buttons)}) differ from the keys of '{_characters.name}' ({string.Join(", ", keys)}): a key without a button can't be picked, a button without a key picks nothing.");
+                    $"The character select of '{_menuScreen.name}' has no card sample '{CharacterSelectScreen.SampleName}': the screen builds a card for every catalog character from the sample's template.");
+
+            var card = sample.templateSource.Instantiate().Q<Button>(className: CharacterSelectScreen.CardClass);
+            if (card == null || card.Q(CharacterSelectScreen.FigureName) == null || card.Q<Label>(CharacterSelectScreen.NameLabel) == null)
+                throw new InvalidOperationException(
+                    $"The character card '{sample.templateSource.name}' needs a button of class '{CharacterSelectScreen.CardClass}' with the '{CharacterSelectScreen.FigureName}' element and the '{CharacterSelectScreen.NameLabel}' label.");
         }
     }
 }

@@ -4,13 +4,14 @@
     "references": [
         "Bw.Entities",
         "Bw.Entities.Network",
-        "Bw.Setup",
         "Unity.Netcode.Runtime",
         "Unity.Collections",
         "Zenject",
         "UniTask.DOTween",
         "UniTask",
-        "R3.Unity"
+        "R3.Unity",
+        "Bw.CoreAdapters",
+        "Bw.UseCases.Character"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

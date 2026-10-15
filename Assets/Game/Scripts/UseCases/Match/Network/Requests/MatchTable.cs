@@ -21,18 +21,18 @@ namespace Bw.UseCases.Match.Network.Requests
     {
         public readonly ulong ClientId;
         public readonly string Nickname;
-        public readonly string Figure;
+        public readonly int CharacterKey;
         public readonly Score Score;
 
         public MatchEntry(
             ulong clientId,
             string nickname,
-            string figure,
+            int characterKey,
             Score score)
         {
             ClientId = clientId;
             Nickname = nickname;
-            Figure = figure;
+            CharacterKey = characterKey;
             Score = score;
         }
     }

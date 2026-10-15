@@ -29,7 +29,7 @@ namespace Bw.UseCases.Match.Network
 
             foreach (var affected in outcome.Affected)
                 if (_combatants.TryFindPlayer(affected.Target, out var victim) && victim != attacker)
-                    _keeper.CountHit(attacker, affected.Target, affected.Effect.Damage);
+                    _keeper.CountHit(attacker, outcome.Initiator, affected.Target, affected.Effect.Damage);
         }
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Bw.Entities.Network.Characters
+namespace Bw.CoreAdapters.Characters
 {
     [CreateAssetMenu(fileName = "CharacterCatalog", menuName = "Configs/CharacterCatalog")]
     public sealed class CharacterCatalog : ScriptableObject

@@ -8,7 +8,7 @@
             <ui:Label name="title" text="Победитель матча" class="winner__title" picking-mode="Ignore" />
             <ui:VisualElement class="winner__stage" picking-mode="Ignore">
                 <ui:VisualElement class="winner__burst" picking-mode="Ignore" />
-                <ui:VisualElement name="figure" class="winner__figure winner__figure--matvey" picking-mode="Ignore" />
+                <ui:VisualElement name="figure" class="winner__figure" picking-mode="Ignore" style="background-image: url(&apos;project://database/Assets/Game/Art/Characters/PencilPals.png?fileID=-1530501530&amp;guid=d31afdac7321b334a9dde2198a0dfb1c&amp;type=3#matvey_idle_0&apos;);" />
                 <ui:VisualElement class="winner__crown" picking-mode="Ignore" />
             </ui:VisualElement>
             <ui:Label name="nickname" text="Лёха" class="winner__name" picking-mode="Ignore" />

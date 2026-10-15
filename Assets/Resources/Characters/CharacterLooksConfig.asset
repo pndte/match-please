@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fad84c71703b409aa603796f2810120b, type: 3}
+  m_Name: CharacterLooksConfig
+  m_EditorClassIdentifier: Bw.CoreAdapters::Bw.CoreAdapters.Characters.CharacterLooksConfig
+  Looks:
+  - Character: {fileID: 11400000, guid: 2b10217f579c40c79917feb1030e7736, type: 2}
+    DisplayName: "\u0421\u0430\u043D\u044F"
+    Portrait: {fileID: -31160892, guid: d31afdac7321b334a9dde2198a0dfb1c, type: 3}
+  - Character: {fileID: 11400000, guid: 2be3ce0dc60547b4b2eee00319b34bc2, type: 2}
+    DisplayName: "\u0421\u0435\u0432\u0430"
+    Portrait: {fileID: 2060785540, guid: d31afdac7321b334a9dde2198a0dfb1c, type: 3}
+  - Character: {fileID: 11400000, guid: 77e253963a2c4153be7b7ae65a9ea74f, type: 2}
+    DisplayName: "\u041C\u0430\u0442\u0432\u0435\u0439"
+    Portrait: {fileID: -1530501530, guid: d31afdac7321b334a9dde2198a0dfb1c, type: 3}
+  - Character: {fileID: 11400000, guid: 380149d7526343b58675c1bd9c71c1c7, type: 2}
+    DisplayName: "\u0413\u043E\u0448\u0430\u043A"
+    Portrait: {fileID: -483441462, guid: d31afdac7321b334a9dde2198a0dfb1c, type: 3}

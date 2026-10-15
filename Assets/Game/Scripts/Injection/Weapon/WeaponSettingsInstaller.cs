@@ -16,15 +16,18 @@ namespace Bw.Injection.Weapon
         [SerializeField] private WeaponPickupConfig _pickup;
         [SerializeField] private WeaponHighlightConfig _highlight;
         [SerializeField] private WeaponInventoryConfig _inventory;
+        [SerializeField] private WeaponCatalog _catalog;
 
         public override void InstallBindings()
         {
             RequireOneRowOfRulesPerKind();
             RequireSlotForEveryKind();
             RequireDistinctSwitchKeys();
+            WeaponCatalogValidation.Require(_catalog);
             Container.BindInstance(_pickup).AsSingle();
             Container.BindInstance(_highlight).AsSingle();
             Container.BindInstance(_inventory).AsSingle();
+            Container.BindInstance(_catalog).AsSingle();
         }
 
         private void RequireOneRowOfRulesPerKind()

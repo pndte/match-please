@@ -128,7 +128,7 @@ namespace Bw.Injection.Props
         {
             Container.BindInterfacesTo<WeaponInputPolicy>().AsSingle();
             Container.Bind<WeaponHoldServerHandler>().AsSingle().NonLazy();
-            Container.Bind<WeaponKindRegistration>().AsSingle().WithArguments(WeaponKind.Prop).NonLazy();
+            Container.Bind<WeaponKindRegistration>().AsSingle().WithArguments(WeaponKind.Prop).NonLazy(); //TODO: ящик не регистрирует описание оружия (WeaponDescriptionRegistration, как у пушек): когда матч начнёт засчитывать броски (HitScoring), убийство ящиком бросит исключение в ленте убийств, пока у ящика нет своего описания в каталоге оружия и иконки в WeaponIconsConfig
             Container.BindInterfacesAndSelfTo<ThrownPropHits>().AsSingle().WithArguments(_parts.Prop);
             Container.Bind<PropRelease>().AsSingle().WithArguments(_parts.Prop).NonLazy();
             Container.Bind<DestroyedPropDrop>().AsSingle().NonLazy();

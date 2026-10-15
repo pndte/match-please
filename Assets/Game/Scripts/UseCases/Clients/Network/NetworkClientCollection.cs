@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Bw.CoreAdapters.Characters;
 using Bw.Entities;
 using Bw.Entities.Infrastructure;
 using Bw.Entities.Network;
-using Bw.Entities.Network.Characters;
 using Bw.Entities.Players;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
@@ -73,7 +73,7 @@ namespace Bw.UseCases.Clients.Network
 
         private ConnectionRequest Accepted(byte[] payload) =>
             ConnectionRequestPayload.TryRead(payload, out var requested)
-                ? new ConnectionRequest(NicknameRules.Accepted(requested.Nickname), _characters.Accepted(requested.CharacterKey))
-                : new ConnectionRequest(NicknameRules.Fallback, _characters.DefaultKey());
+                ? new ConnectionRequest(NicknameRules.Accepted(requested.Nickname), _characters.Accepted(requested.CharacterKey).Key)
+                : new ConnectionRequest(NicknameRules.Fallback, _characters.DefaultCharacter().Key);
     }
 }

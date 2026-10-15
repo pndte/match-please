@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using Bw.Entities.Network.Characters;
+using Bw.CoreAdapters.Characters;
+using Bw.UseCases.Character;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using UnityEngine.UIElements;
@@ -9,7 +10,10 @@ namespace Setup.Launch.Menu
 {
     public sealed class CharacterSelectScreen : IMenuScreen
     {
-        public const string CharacterClass = "character";
+        public const string SampleName = "character-sample";
+        public const string CardClass = "character";
+        public const string FigureName = "figure";
+        public const string NameLabel = "name";
         private const string Selected = "character--selected";
         private static readonly string[] ShownLayers = { "backdrop-layer", "character-select-layer" };
 
@@ -19,32 +23,42 @@ namespace Setup.Launch.Menu
 
         private readonly Signal<Unit> _backChosen = new();
         private readonly Signal<Unit> _characterChosen = new();
+        private readonly Dictionary<CharacterDescription, Button> _cards = new();
         private readonly MenuDocument _document;
         private readonly IPlayerProfile _profile;
-        private readonly VisualElement _layer;
+        private readonly CharacterCatalog _characters;
+        private readonly CharacterLooksConfig _looks;
         private readonly Label _server;
-        private string _picked;
+        private readonly VisualElement _cast;
+        private readonly VisualTreeAsset _card;
+        private CharacterDescription _picked;
 
         public CharacterSelectScreen(
             Lifetime lifetime,
             MenuDocument document,
             IPlayerProfile profile,
-            CharacterCatalog characters)
+            CharacterCatalog characters,
+            CharacterLooksConfig looks)
         {
-            _layer = document.Layer("character-select-layer");
+            var layer = document.Layer("character-select-layer");
+            var sample = layer.Q<TemplateContainer>(SampleName);
             _document = document;
             _profile = profile;
-            _server = _layer.Q<Label>("server");
+            _characters = characters;
+            _looks = looks;
+            _server = layer.Q<Label>("server");
+            _cast = sample.parent;
+            _card = sample.templateSource;
             _picked = characters.Accepted(profile.CharacterKey);
 
-            _layer.Query<Button>(className: CharacterClass).ForEach(button => button.AdviseClicked(lifetime, () => Pick(button.name)));
-            _layer.Q<Button>("disconnect").AdviseClicked(lifetime, Back);
-            _layer.Q<Button>("fight").AdviseClicked(lifetime, Confirm);
+            layer.Q<Button>("disconnect").AdviseClicked(lifetime, Back);
+            layer.Q<Button>("fight").AdviseClicked(lifetime, Confirm);
         }
 
         public void Show(LaunchChoice.Client server)
         {
             _server.text = server.Endpoint();
+            FillCast();
             Pick(_picked);
             _document.Show(this);
         }
@@ -54,14 +68,38 @@ namespace Setup.Launch.Menu
 
         public void Confirm()
         {
-            _profile.SaveCharacterKey(_picked);
+            _profile.SaveCharacterKey(_picked.Key);
             _characterChosen.Fire(Unit.Instance);
         }
 
-        private void Pick(string key)
+        private void FillCast()
         {
-            _picked = key;
-            _layer.Query<Button>(className: CharacterClass).ForEach(button => button.EnableInClassList(Selected, button.name == key));
+            _cast.Clear();
+            _cards.Clear();
+            foreach (var entry in _characters.Characters)
+            {
+                var card = CardOf(entry.Character);
+                _cards.Add(entry.Character, card);
+                _cast.Add(card);
+            }
+        }
+
+        private Button CardOf(CharacterDescription character)
+        {
+            var look = _looks.LookOf(character);
+            var card = _card.Instantiate().Q<Button>(className: CardClass);
+            card.name = character.name;
+            card.Q(FigureName).style.backgroundImage = new StyleBackground(look.Portrait);
+            card.Q<Label>(NameLabel).text = look.DisplayName;
+            card.clicked += () => Pick(character);
+            return card;
+        }
+
+        private void Pick(CharacterDescription character)
+        {
+            _picked = character;
+            foreach (var (shown, card) in _cards)
+                card.EnableInClassList(Selected, shown == character);
         }
     }
 }
