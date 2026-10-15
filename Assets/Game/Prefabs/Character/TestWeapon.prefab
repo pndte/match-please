@@ -287,6 +287,7 @@ MonoBehaviour:
   _vfxConfig: {fileID: 11400000, guid: 702bc1ea939f2784495afb093193db74, type: 2}
   _cameraKickConfig: {fileID: 11400000, guid: 2c144b103a9c41fa987990bd2ceb2c8b, type: 2}
   _recoilConfig: {fileID: 11400000, guid: c30aad5053a384c40b3570ce85cb2c7b, type: 2}
+  _flashlightConfig: {fileID: 11400000, guid: ef3e7dbdb9d609d43bf7b7381697f1ef, type: 2}
   _networkObject: {fileID: 8409776997951654046}
   _weaponHold: {fileID: 6095048442294211056}
   _networkTransform: {fileID: 5480233075956149962}

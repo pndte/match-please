@@ -52,6 +52,7 @@ namespace Bw.Injection.Weapon
         [SerializeField] private ShotVfxConfig _vfxConfig;
         [SerializeField] private WeaponCameraKickConfig _cameraKickConfig;
         [SerializeField] private WeaponRecoilConfig _recoilConfig;
+        [SerializeField] private FlashlightConfig _flashlightConfig;
 
         [Header("Network")]
         [SerializeField] private NetworkObject _networkObject;
@@ -64,12 +65,14 @@ namespace Bw.Injection.Weapon
         public override void InstallBindings()
         {
             RequireTurnSpeed();
+            RequireFlashlightBeam();
             BindConfigs();
             BindGun();
 
             var netSchema = new NetEntriesSchemaBuilder();
             HeldWeaponInstaller<GunState>.Install(Container, _runtimeSettings, netSchema, Parts());
             BindDropRequest(netSchema);
+            FlashlightInstaller.Install(Container, _runtimeSettings, netSchema);
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
             switch (_runtimeSettings.CurrentPeerType)
@@ -90,6 +93,12 @@ namespace Bw.Injection.Weapon
             if (_shootingWeaponConfig.TurnSpeed <= 0f)
                 throw new InvalidOperationException(
                     $"Weapon config '{_shootingWeaponConfig.name}' has no turn speed: the gun would never turn to the cursor.");
+        }
+
+        private void RequireFlashlightBeam()
+        {
+            if (_flashlightConfig == null || _flashlightConfig.Beam == null)
+                throw new InvalidOperationException($"Weapon '{name}' has no flashlight beam: its WeaponInstaller needs a FlashlightConfig with a beam prefab.");
         }
 
         private HeldWeaponParts<GunState> Parts() =>
@@ -163,6 +172,9 @@ namespace Bw.Injection.Weapon
             Container.Bind<WeaponShotEffectsView>().AsSingle().NonLazy();
             Container.Bind<IMuzzleFlash>().FromComponentInNewPrefab(_vfxConfig.MuzzleFlash).UnderTransform(_flashPoint).AsSingle();
             Container.Bind<MuzzleEffectsView>().AsSingle().WithArguments(_ejector).NonLazy();
+            Container.BindInterfacesTo<FlashlightViewModel>().AsSingle();
+            Container.Bind<IFlashlightBeam>().FromComponentInNewPrefab(_flashlightConfig.Beam).UnderTransform(_flashPoint).AsSingle();
+            Container.Bind<FlashlightView>().AsSingle().NonLazy();
             Container.BindInterfacesTo<FloorWeaponHighlightViewModel>().AsSingle();
             Container.Bind<WeaponHighlightView>().AsSingle().WithArguments(_visual, _visual.GetComponentsInChildren<SpriteRenderer>(true)).NonLazy();
         }
