@@ -3,9 +3,9 @@ using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Ticks;
+using Bw.Entities.Physics.Extensions;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Mortality;
-using Bw.UseCases.Mortality.Extensions;
 using Bw.UseCases.Movement;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
@@ -30,8 +30,8 @@ namespace Bw.UseCases.Props.Network
         private readonly IReadonlySimulation<RigidState> _body;
         private readonly PhysicsBody _physics;
         private readonly INetworkTicks _ticks;
-        private readonly BoxCollider2D _shape;
         private readonly PropThrowConfig _config;
+        private readonly PhysicsMask _targetCategories;
         private readonly ContactFilter2D _targets;
         private readonly SequentialLifetimes _flights;
 
@@ -42,15 +42,14 @@ namespace Bw.UseCases.Props.Network
             PhysicsBody physics,
             INetworkTicks ticks,
             IWeaponHold hold,
-            BoxCollider2D shape,
             PropThrowConfig config)
         {
             _prop = prop;
             _body = body;
             _physics = physics;
             _ticks = ticks;
-            _shape = shape;
             _config = config;
+            _targetCategories = config.Targets.AsPhysicsMask();
             _targets = new ContactFilter2D
             {
                 useLayerMask = true,
@@ -62,12 +61,21 @@ namespace Bw.UseCases.Props.Network
             hold.HeldLifetime.WhenAlive(lifetime, _ => _flights.TerminateCurrent());
         }
 
-        public void Track(IReadonlyMortal thrower) =>
-            _ticks.Ticked(TickPhase.Late).Advise(_flights.Next(), tick => Check(tick, thrower));
+        public void Track(IReadonlyMortal thrower)
+        {
+            var flight = _flights.Next();
+            _physics.SetHitEvents(true);
+            flight.OnTermination(() =>
+            {
+                if (_physics.isValid)
+                    _physics.SetHitEvents(false);
+            });
+            _ticks.Ticked(TickPhase.Late).Advise(flight, tick => Check(tick, thrower));
+        }
 
         private void Check(int tick, IReadonlyMortal thrower)
         {
-            FindTouched(_body.State.Value.Position, thrower, Hit.Along(_body.Previous.Velocity.normalized, _config)); //TODO: урон пока постоянный (PropThrowConfig.Damage) — должен зависеть от скорости сближения предмета и игрока
+            FindStruck(thrower);
             if (_affected.Count > 0)
             {
                 var affected = _affected.ToArray();
@@ -80,29 +88,48 @@ namespace Bw.UseCases.Props.Network
                 _flights.TerminateCurrent();
         }
 
-        private void FindTouched(Vector2 position, IReadonlyMortal thrower, Hit hit)
+        private void FindStruck(IReadonlyMortal thrower) //TODO: кого задело, ищется классическим коллайдером в точке удара — тело Box2D пока не знает, чьё оно; на этапе 4 цели опознаются по телам мира
         {
             _affected.Clear();
-            var scale = (Vector2)_shape.transform.lossyScale;
-            var center = position + Vector2.Scale(_shape.offset, scale);
-            var size = Vector2.Scale(_shape.size, scale) + new Vector2(Reach, Reach) * 2f;
-            Physics2D.OverlapBox(center, size, 0f, _targets, _touched);
-
-            for (var index = 0; index < _touched.Count; index++)
+            var direction = _body.Previous.Velocity.normalized;
+            var hits = _physics.world.contactHitEvents;
+            for (var index = 0; index < hits.Length; index++)
             {
-                var touched = _touched[index];
-                if (!touched.TryGetComponent<IHolder<IReadonlyMortal>>(out var holder))
+                var hit = hits[index];
+                if (!StrikesTarget(hit))
                     continue;
 
-                var target = holder.Value;
-                if (target == thrower || target.State.Value == LifeState.Dead || Contains(target))
-                    continue;
+                Physics2D.OverlapCircle(hit.point, Reach, _targets, _touched);
+                for (var found = 0; found < _touched.Count; found++)
+                {
+                    var touched = _touched[found];
+                    if (!touched.TryGetComponent<IHolder<IReadonlyMortal>>(out var holder))
+                        continue;
 
-                _affected.Add(new AffectedTarget<IReadonlyMortal, Hit>(target, hit.At(touched.transform.InverseTransformPoint(touched.ClosestPoint(center)))));
+                    var target = holder.Value;
+                    if (target == thrower || target.State.Value == LifeState.Dead || Contains(target))
+                        continue;
+
+                    var struck = new Hit(DamageAt(hit.approachSpeed), direction * _config.Knockback, touched.transform.InverseTransformPoint(hit.point));
+                    _affected.Add(new AffectedTarget<IReadonlyMortal, Hit>(target, struck));
+                }
             }
         }
 
-        private bool Landed() //TODO: полёт кончается первой опорой снизу — ящик, отскочивший от стены или потолка, ещё летит и бьёт; попадания по событиям контакта будут на этапе 3
+        private bool StrikesTarget(PhysicsEvents.ContactHitEvent hit)
+        {
+            var own = hit.shapeA.body.Equals(_physics);
+            if (!own && !hit.shapeB.body.Equals(_physics))
+                return false;
+
+            var other = own ? hit.shapeB : hit.shapeA;
+            return (other.contactFilter.categories.bitMask & _targetCategories.bitMask) != 0;
+        }
+
+        private float DamageAt(float approachSpeed) =>
+            Mathf.Clamp(_config.Damage * approachSpeed / _config.Speed, _config.MinDamage, _config.MaxDamage);
+
+        private bool Landed()
         {
             using var contacts = _physics.GetContacts(Allocator.Temp);
             for (var index = 0; index < contacts.Length; index++)

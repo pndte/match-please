@@ -15,6 +15,8 @@ MonoBehaviour:
   Speed: 22
   Spin: 540
   Damage: 5
+  MinDamage: 1
+  MaxDamage: 10
   Knockback: 8
   Targets:
     serializedVersion: 2

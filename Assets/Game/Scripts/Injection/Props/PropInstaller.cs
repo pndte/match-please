@@ -43,6 +43,8 @@ namespace Bw.Injection.Props
 
         public override void InstallBindings()
         {
+            RequireThrowSpeed();
+            RequireDamageBounds();
             Container.BindInstance(_parts.Held).AsSingle();
             Container.BindInstance(_parts.Throw).AsSingle();
 
@@ -63,6 +65,20 @@ namespace Bw.Injection.Props
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private void RequireThrowSpeed()
+        {
+            if (_parts.Throw.Speed <= 0f)
+                throw new InvalidOperationException(
+                    $"Prop throw config '{_parts.Throw.name}' has no throw speed: a thrown prop's damage is scaled by its approach speed over the throw speed.");
+        }
+
+        private void RequireDamageBounds()
+        {
+            if (_parts.Throw.MinDamage > _parts.Throw.MaxDamage)
+                throw new InvalidOperationException(
+                    $"Prop throw config '{_parts.Throw.name}' keeps no damage between its bounds: MinDamage must not exceed MaxDamage.");
         }
 
         private void BindHeldSimulation()
