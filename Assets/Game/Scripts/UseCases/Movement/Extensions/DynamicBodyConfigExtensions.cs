@@ -12,7 +12,7 @@ namespace Bw.UseCases.Movement.Extensions
             this DynamicBodyConfig config,
             IPhysicsSpace space,
             Lifetime lifetime,
-            BoxCollider2D box,
+            BodyBox box,
             PhysicsBody.BodyType type)
         {
             var definition = config.BodyDefinition();

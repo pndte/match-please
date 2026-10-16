@@ -22,7 +22,7 @@ namespace Bw.UseCases.Props.Network
         public ReleaseSpots(
             IPhysicsSpace space,
             PhysicsBody body,
-            BoxCollider2D shape,
+            BodyBox shape,
             DynamicBodyConfig bodyConfig,
             HeldPropConfig config)
         {

@@ -135,8 +135,7 @@ GameObject:
   - component: {fileID: 6095048442294211056}
   - component: {fileID: 63440579415710661}
   - component: {fileID: 4999205492878388941}
-  - component: {fileID: 6422472588081055441}
-  - component: {fileID: 4632970846314451859}
+  - component: {fileID: 6945462061438201136}
   m_Layer: 16
   m_Name: TestWeapon
   m_TagString: Untagged
@@ -225,8 +224,7 @@ MonoBehaviour:
   _flashlightConfig: {fileID: 11400000, guid: ef3e7dbdb9d609d43bf7b7381697f1ef, type: 2}
   _networkObject: {fileID: 8409776997951654046}
   _weaponHold: {fileID: 6095048442294211056}
-  _body: {fileID: 6422472588081055441}
-  _collider: {fileID: 4632970846314451859}
+  _box: {fileID: 6945462061438201136}
   _bodyConfig: {fileID: 11400000, guid: 4ebec94c7a1cc00428dc62c7d75fa66a, type: 2}
 --- !u!114 &4999205492878388941
 MonoBehaviour:
@@ -247,79 +245,20 @@ MonoBehaviour:
   _findSiblingMonoInstallers: 0
   _autoRun: 1
   _kernel: {fileID: 0}
---- !u!50 &6422472588081055441
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2477611210009415474}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 3
-  m_Material: {fileID: 6200000, guid: 49827ed38d2b9f540bef2f5990a8c4af, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!61 &4632970846314451859
-BoxCollider2D:
+--- !u!114 &6945462061438201136
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2477611210009415474}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: 49827ed38d2b9f540bef2f5990a8c4af, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0.295, y: -0.13}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.59583336}
-    oldSize: {x: 1.5, y: 0.6}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1.45, y: 0.46}
-  m_EdgeRadius: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1b2fa04502d79749974d06d00c4aa18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Bw.Entities::Bw.Entities.Physics.BodyBox
+  _size: {x: 1.45, y: 0.46}
+  _offset: {x: 0.295, y: -0.13}
 --- !u!1 &2480837781867210871
 GameObject:
   m_ObjectHideFlags: 0

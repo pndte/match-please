@@ -23,14 +23,14 @@ namespace Bw.UseCases.Movement.Physics
 
         public ShapeCollider(
             PhysicsBody body,
-            BoxCollider2D collider,
+            BodyBox box,
             LayerMask ground,
             PlatformRider rider,
             IShovableCollection shovables)
         {
             _body = body;
-            _size = collider.WorldSize();
-            _offset = collider.WorldOffset();
+            _size = box.WorldSize();
+            _offset = box.WorldOffset();
             _filter = new PhysicsQuery.QueryFilter(PhysicsMask.All, ground.AsPhysicsMask());
             _rider = rider;
             _shovables = shovables;

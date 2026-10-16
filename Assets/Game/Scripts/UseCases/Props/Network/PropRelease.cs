@@ -1,5 +1,6 @@
 using System;
 using Bw.Entities.Extensions;
+using Bw.Entities.Physics;
 using Bw.Entities.Physics.Extensions;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Movement;
@@ -59,7 +60,7 @@ namespace Bw.UseCases.Props.Network
             _inventories.InventoryOf(thrower).DropAndDrawNext(_prop);
         }
 
-        private void Release(BoxCollider2D holder)
+        private void Release(BodyBox holder)
         {
             var launch = _launch;
             _launch = PropLaunch.Dropped;
@@ -74,13 +75,13 @@ namespace Bw.UseCases.Props.Network
                 });
         }
 
-        private BoxCollider2D Holder()
+        private BodyBox Holder()
         {
             var holder = _transform.parent;
-            if (holder == null || !holder.TryGetComponent<BoxCollider2D>(out var shape))
-                throw new InvalidOperationException($"Prop '{_transform.name}' is held only by a holder with a box collider.");
+            if (holder == null || !holder.TryGetComponent<BodyBox>(out var box))
+                throw new InvalidOperationException($"Prop '{_transform.name}' is held only by a holder with a body box.");
 
-            return shape;
+            return box;
         }
     }
 }

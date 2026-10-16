@@ -1,4 +1,5 @@
 using System;
+using Bw.Entities.Physics;
 using Bw.Entities.Physics.Extensions;
 using JetBrains.Lifetimes;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace Bw.UseCases.Props
 
         private PhysicsShape _shape;
 
-        public HeldPropGrip(BoxCollider2D shape, int layer)
+        public HeldPropGrip(BodyBox shape, int layer)
         {
             _size = shape.WorldSize();
             _owner = shape.gameObject;

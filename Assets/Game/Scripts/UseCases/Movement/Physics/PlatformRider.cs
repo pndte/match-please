@@ -1,3 +1,4 @@
+using Bw.Entities.Physics;
 using Bw.Entities.Physics.Extensions;
 using Bw.UseCases.Movement.Physics.Abstractions;
 using UnityEngine;
@@ -12,10 +13,10 @@ namespace Bw.UseCases.Movement.Physics
         private readonly Vector2 _offset;
         private readonly IMovingPlatformCollection _platforms;
 
-        public PlatformRider(BoxCollider2D collider, IMovingPlatformCollection platforms)
+        public PlatformRider(BodyBox box, IMovingPlatformCollection platforms)
         {
-            _size = collider.WorldSize();
-            _offset = collider.WorldOffset();
+            _size = box.WorldSize();
+            _offset = box.WorldOffset();
             _platforms = platforms;
         }
 

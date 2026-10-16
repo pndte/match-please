@@ -1,3 +1,4 @@
+using Bw.Entities.Physics;
 using Bw.UseCases.Props;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace Bw.Injection.Props
     {
         public Transform Prop { get; }
         public Transform Visual { get; }
-        public BoxCollider2D Shape { get; }
+        public BodyBox Shape { get; }
         public HeldPropConfig Held { get; }
         public PropThrowConfig Throw { get; }
         public int HeldSortingOrder { get; }
@@ -15,7 +16,7 @@ namespace Bw.Injection.Props
         public PropParts(
             Transform prop,
             Transform visual,
-            BoxCollider2D shape,
+            BodyBox shape,
             HeldPropConfig held,
             PropThrowConfig @throw,
             int heldSortingOrder)

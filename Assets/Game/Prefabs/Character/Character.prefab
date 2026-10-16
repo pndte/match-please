@@ -172,7 +172,7 @@ MonoBehaviour:
     m_TrimEdge: 0.1
     m_FlipX: 0
     m_FlipY: 0
-    m_InitialTrim: 0.1
+    m_InitialTrim: 0
   m_CastingOption: 1
   m_PreviousTrimEdge: 0
   m_PreviousEdgeProcessing: -1
@@ -196,8 +196,7 @@ GameObject:
   - component: {fileID: 7318710291484346262}
   - component: {fileID: 1705369709605621449}
   - component: {fileID: 666931174670692420}
-  - component: {fileID: 7303288911383704076}
-  - component: {fileID: 8557818833694399266}
+  - component: {fileID: 2012787940855291857}
   m_Layer: 15
   m_Name: Character
   m_TagString: Untagged
@@ -274,8 +273,7 @@ MonoBehaviour:
   _healthConfig: {fileID: 11400000, guid: 20665ca7550f0604d82f61652021be97, type: 2}
   _networkObject: {fileID: 3773905357652456202}
   _networkLifetimedBehaviour: {fileID: 7318710291484346262}
-  _physics: {fileID: 7303288911383704076}
-  _collider: {fileID: 8557818833694399266}
+  _box: {fileID: 2012787940855291857}
   _movementConfig: {fileID: 11400000, guid: 69583fc462e9fe145a5a5101d5d42728, type: 2}
   _animator: {fileID: 6533880697772444689}
   _sprite: {fileID: 8303433349971610731}
@@ -301,76 +299,17 @@ MonoBehaviour:
   _findSiblingMonoInstallers: 0
   _autoRun: 1
   _kernel: {fileID: 0}
---- !u!50 &7303288911383704076
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7714897418022992417}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 3
-  m_Material: {fileID: 6200000, guid: dae2f8025b0ca964f894bf43b21433f5, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 0
-  m_CollisionDetection: 0
-  m_Constraints: 4
---- !u!61 &8557818833694399266
-BoxCollider2D:
+--- !u!114 &2012787940855291857
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7714897418022992417}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: dae2f8025b0ca964f894bf43b21433f5, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 2}
-    newSize: {x: 1, y: 2}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 2}
-  m_EdgeRadius: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1b2fa04502d79749974d06d00c4aa18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Bw.Entities::Bw.Entities.Physics.BodyBox
+  _size: {x: 1, y: 2}
+  _offset: {x: 0, y: 0}

@@ -13,7 +13,6 @@ using Bw.UseCases.Movement.Network.Prediction;
 using Bw.UseCases.Movement.Physics;
 using Bw.UseCases.Movement.Physics.Abstractions;
 using JetBrains.Lifetimes;
-using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 using Zenject;
 
@@ -82,7 +81,7 @@ namespace Bw.Injection.Movement
             _config.CreateBody(
                 context.Container.Resolve<IPhysicsSpace>(),
                 context.Container.Resolve<Lifetime>(),
-                context.Container.Resolve<BoxCollider2D>(),
+                context.Container.Resolve<BodyBox>(),
                 PhysicsBody.BodyType.Kinematic);
     }
 }

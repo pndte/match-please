@@ -1,3 +1,4 @@
+using Bw.Entities.Physics;
 using Bw.Entities.Physics.Extensions;
 using Bw.UseCases.Shooting.Weapon.Pickup.Abstractions;
 using JetBrains.Lifetimes;
@@ -9,10 +10,10 @@ namespace Bw.UseCases.Shooting.Weapon.Pickup
     {
         public Vector2 Position => _box.WorldGeometry().centroid;
 
-        private readonly BoxCollider2D _box;
+        private readonly BodyBox _box;
         private readonly IWeaponHighlight _highlight;
 
-        public FloorWeapon(BoxCollider2D box, IWeaponHighlight highlight)
+        public FloorWeapon(BodyBox box, IWeaponHighlight highlight)
         {
             _box = box;
             _highlight = highlight;

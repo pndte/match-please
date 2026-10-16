@@ -3,6 +3,7 @@ using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
 using Bw.Entities.Network.Variables;
+using Bw.Entities.Physics;
 using Bw.Injection.ControlledBy;
 using Bw.Injection.Mortality;
 using Bw.Injection.Network.Prediction;
@@ -42,8 +43,7 @@ namespace Bw.Injection
 
         [SerializeField] private NetworkObject _networkObject;
         [SerializeField] private NetworkLifetimedBehaviour _networkLifetimedBehaviour;
-        [SerializeField] private Rigidbody2D _physics;
-        [SerializeField] private BoxCollider2D _collider;
+        [SerializeField] private BodyBox _box;
         [SerializeField] private MovementConfig _movementConfig;
         [SerializeField] private Animator _animator;
         [SerializeField] private SpriteRenderer _sprite;
@@ -64,8 +64,7 @@ namespace Bw.Injection
             Container.BindInstance(gameObjectLifetime).AsSingle();
 
             Container.Bind<HealthConfig>().FromInstance(_healthConfig).AsSingle();
-            Container.Bind<Rigidbody2D>().FromInstance(_physics).AsSingle();
-            Container.Bind<BoxCollider2D>().FromInstance(_collider).AsSingle();
+            Container.Bind<BodyBox>().FromInstance(_box).AsSingle();
             Container.Bind<Animator>().FromInstance(_animator).AsSingle();
             Container.Bind<SpriteRenderer>().FromInstance(_sprite).AsSingle();
 

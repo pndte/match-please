@@ -9,12 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6850924046620240546}
-  - component: {fileID: 3191359710659571118}
-  - component: {fileID: 840330045488863506}
   - component: {fileID: 4376437016523511395}
   - component: {fileID: 3978252531188708196}
   - component: {fileID: 3025945785242171642}
   - component: {fileID: 5576007068661983289}
+  - component: {fileID: 3290858060559404831}
   m_Layer: 14
   m_Name: Crate
   m_TagString: Untagged
@@ -38,79 +37,6 @@ Transform:
   - {fileID: 6182788802789932197}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &3191359710659571118
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3007509398820720421}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
---- !u!61 &840330045488863506
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3007509398820720421}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.5}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
 --- !u!114 &4376437016523511395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,9 +88,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Crates.CrateInstaller
   _networkObject: {fileID: 4376437016523511395}
-  _networkLifetimedBehaviour: {fileID: 3978252531188708196}
-  _physics: {fileID: 3191359710659571118}
-  _collider: {fileID: 840330045488863506}
+  _hold: {fileID: 3978252531188708196}
+  _box: {fileID: 3290858060559404831}
   _bodyConfig: {fileID: 11400000, guid: 4e38d5578a519c4469bd3f5128ff40e3, type: 2}
   _hitImpulse: {fileID: 11400000, guid: 26d357a479301944f8c8b65c08b87317, type: 2}
   _healthConfig: {fileID: 11400000, guid: e54fac7e40b4cbd4c8db7bad139c9827, type: 2}
@@ -173,6 +98,7 @@ MonoBehaviour:
   _sprite: {fileID: 1994059796618544761}
   _hitFlashConfig: {fileID: 11400000, guid: 6c6b6de2063cf0343810ca4e569be06e, type: 2}
   _damage: {fileID: 11400000, guid: b8729bd82a2c4259810d8da265661a80, type: 2}
+  _heldSortingOrder: 4
   _held: {fileID: 11400000, guid: ce598c293cdf4aebb0a09b1908588668, type: 2}
   _throw: {fileID: 11400000, guid: f94689a4498d4eceb590543e642d2ad9, type: 2}
 --- !u!114 &5576007068661983289
@@ -194,6 +120,20 @@ MonoBehaviour:
   _findSiblingMonoInstallers: 0
   _autoRun: 1
   _kernel: {fileID: 0}
+--- !u!114 &3290858060559404831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3007509398820720421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1b2fa04502d79749974d06d00c4aa18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Bw.Entities::Bw.Entities.Physics.BodyBox
+  _size: {x: 1, y: 1}
+  _offset: {x: 0, y: 0.5}
 --- !u!1 &5582819240019189781
 GameObject:
   m_ObjectHideFlags: 0

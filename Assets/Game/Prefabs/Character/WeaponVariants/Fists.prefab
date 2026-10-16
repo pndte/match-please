@@ -104,8 +104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteResolver
-  m_CategoryHash: 0
-  m_labelHash: 0
+  m_CategoryHash: 3.8463874e-32
+  m_labelHash: 9.605966e-11
   m_SpriteKey: 0
   m_SpriteHash: 792673234
 --- !u!1 &5367670816022386646
@@ -212,8 +212,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed8b1ae4e4e52b34ea557c1c11e076fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteResolver
-  m_CategoryHash: 0
-  m_labelHash: 0
+  m_CategoryHash: 3.8463874e-32
+  m_labelHash: 9.605966e-11
   m_SpriteKey: 0
   m_SpriteHash: 792673234
 --- !u!1001 &7003105378530502005
@@ -300,22 +300,6 @@ PrefabInstance:
       propertyPath: m_SpriteHash
       value: 128868132
       objectReference: {fileID: 0}
-    - target: {fileID: 4632970846314451859, guid: 89e7304b27ad8224bbe0532a7c2496c1, type: 3}
-      propertyPath: m_Size.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4632970846314451859, guid: 89e7304b27ad8224bbe0532a7c2496c1, type: 3}
-      propertyPath: m_Size.y
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4632970846314451859, guid: 89e7304b27ad8224bbe0532a7c2496c1, type: 3}
-      propertyPath: m_Offset.x
-      value: 0.16
-      objectReference: {fileID: 0}
-    - target: {fileID: 4632970846314451859, guid: 89e7304b27ad8224bbe0532a7c2496c1, type: 3}
-      propertyPath: m_Offset.y
-      value: -0.04
-      objectReference: {fileID: 0}
     - target: {fileID: 4881410626281666025, guid: 89e7304b27ad8224bbe0532a7c2496c1, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -343,6 +327,22 @@ PrefabInstance:
     - target: {fileID: 6252075096326985070, guid: 89e7304b27ad8224bbe0532a7c2496c1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6945462061438201136, guid: 89e7304b27ad8224bbe0532a7c2496c1, type: 3}
+      propertyPath: _size.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6945462061438201136, guid: 89e7304b27ad8224bbe0532a7c2496c1, type: 3}
+      propertyPath: _size.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6945462061438201136, guid: 89e7304b27ad8224bbe0532a7c2496c1, type: 3}
+      propertyPath: _offset.x
+      value: 0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 6945462061438201136, guid: 89e7304b27ad8224bbe0532a7c2496c1, type: 3}
+      propertyPath: _offset.y
+      value: -0.04
       objectReference: {fileID: 0}
     - target: {fileID: 8409776997951654046, guid: 89e7304b27ad8224bbe0532a7c2496c1, type: 3}
       propertyPath: GlobalObjectIdHash

@@ -2,6 +2,7 @@ using System;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Prediction.Stream;
 using Bw.Entities.Network.Variables;
+using Bw.Entities.Physics;
 using Bw.Entities.Simulation;
 using Bw.Injection.Movement;
 using Bw.Injection.Network;
@@ -59,8 +60,7 @@ namespace Bw.Injection.Weapon
         [SerializeField] private NetworkObject _networkObject;
         [SerializeField] private NetworkWeaponHold _weaponHold;
 
-        [Header("Physics")] [SerializeField] private Rigidbody2D _body;
-        [SerializeField] private BoxCollider2D _collider;
+        [Header("Physics")] [SerializeField] private BodyBox _box;
         [SerializeField] private DynamicBodyConfig _bodyConfig;
 
         public override void InstallBindings()
@@ -122,8 +122,7 @@ namespace Bw.Injection.Weapon
 
         private void BindBody(INetEntriesSchemaBuilder netSchema)
         {
-            Container.Bind<Rigidbody2D>().FromInstance(_body).AsSingle();
-            Container.Bind<BoxCollider2D>().FromInstance(_collider).AsSingle();
+            Container.Bind<BodyBox>().FromInstance(_box).AsSingle();
             DynamicBodyInstaller.Install(Container, _runtimeSettings, netSchema, _bodyConfig);
             Container.Decorate<IStateView<RigidState>>().With<UnheldStateView<RigidState>>();
         }
@@ -161,7 +160,7 @@ namespace Bw.Injection.Weapon
             Container.BindInterfacesTo<AimDeflection>().AsSingle();
             Container.Decorate<IInputSampler<WeaponInput>>().With<SpreadAimSampler>();
             Container.Bind<SpreadKick>().AsSingle().NonLazy();
-            Container.BindInterfacesTo<FloorWeapon>().AsSingle().WithArguments(_collider);
+            Container.BindInterfacesTo<FloorWeapon>().AsSingle().WithArguments(_box);
             Container.Bind<FloorWeaponRegistration>().AsSingle().NonLazy();
             BindClientVisuals();
             BindClientSounds();

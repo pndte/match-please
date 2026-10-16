@@ -11,7 +11,6 @@ using Bw.UseCases.Movement.Network.Platforms;
 using Bw.UseCases.Movement.Network.Prediction;
 using Bw.UseCases.Movement.Physics;
 using JetBrains.Lifetimes;
-using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 using Zenject;
 
@@ -58,7 +57,7 @@ namespace Bw.Injection.Movement
         private static PhysicsBody CreatePhysicsBody(InjectContext context) =>
             context.Container.Resolve<IPhysicsSpace>().CreateBody(
                 context.Container.Resolve<Lifetime>(),
-                context.Container.Resolve<BoxCollider2D>(),
+                context.Container.Resolve<BodyBox>(),
                 PhysicsBody.BodyType.Kinematic);
 
         private void RequirePushDeceleration()

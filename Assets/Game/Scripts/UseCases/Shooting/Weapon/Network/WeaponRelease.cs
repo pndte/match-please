@@ -1,5 +1,6 @@
 using System;
 using Bw.Entities.Extensions;
+using Bw.Entities.Physics;
 using Bw.Entities.Physics.Extensions;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Movement;
@@ -17,7 +18,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
 
         private readonly IRestartable<RigidState> _body;
         private readonly PhysicsBody _physics;
-        private readonly BoxCollider2D _shape;
+        private readonly BodyBox _shape;
         private readonly PhysicsQuery.QueryFilter _filter;
 
         public WeaponRelease(
@@ -25,7 +26,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             IWeaponHold hold,
             IRestartable<RigidState> body,
             PhysicsBody physics,
-            BoxCollider2D shape,
+            BodyBox shape,
             DynamicBodyConfig config)
         {
             _body = body;
@@ -40,7 +41,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             });
         }
 
-        private void Release(BoxCollider2D holder) //TODO: оружие длиннее держателя — отпущенное в центре держателя у стены, оно может торчать в стену, и физика выталкивает его как получится
+        private void Release(BodyBox holder) //TODO: оружие длиннее держателя — отпущенное в центре держателя у стены, оно может торчать в стену, и физика выталкивает его как получится
         {
             var weapon = _shape.transform;
             var angle = weapon.eulerAngles.z;
@@ -59,11 +60,11 @@ namespace Bw.UseCases.Shooting.Weapon.Network
         private Vector2 OffsetAt(float angle) =>
             Quaternion.Euler(0f, 0f, angle) * _shape.WorldOffset();
 
-        private BoxCollider2D Holder()
+        private BodyBox Holder()
         {
             var holder = _shape.transform.parent;
-            if (holder == null || !holder.TryGetComponent<BoxCollider2D>(out var box))
-                throw new InvalidOperationException($"Weapon '{_shape.name}' is held only by a holder with a box collider.");
+            if (holder == null || !holder.TryGetComponent<BodyBox>(out var box))
+                throw new InvalidOperationException($"Weapon '{_shape.name}' is held only by a holder with a body box.");
 
             return box;
         }

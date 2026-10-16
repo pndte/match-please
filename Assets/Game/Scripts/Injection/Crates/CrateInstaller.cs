@@ -5,6 +5,7 @@ using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
 using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Variables;
+using Bw.Entities.Physics;
 using Bw.Entities.Simulation;
 using Bw.Injection.ControlledBy;
 using Bw.Injection.Mortality;
@@ -45,8 +46,7 @@ namespace Bw.Injection.Crates
         [FormerlySerializedAs("_networkLifetimedBehaviour")] [SerializeField] private NetworkWeaponHold _hold;
 
         [Header("Body")]
-        [SerializeField] private Rigidbody2D _physics;
-        [SerializeField] private BoxCollider2D _collider;
+        [SerializeField] private BodyBox _box;
         [SerializeField] private DynamicBodyConfig _bodyConfig;
         [SerializeField] private HitImpulseConfig _hitImpulse;
 
@@ -75,15 +75,14 @@ namespace Bw.Injection.Crates
             Container.BindInstance(gameObject.Lifetime()).AsSingle();
 
             Container.Bind<HealthConfig>().FromInstance(_healthConfig).AsSingle();
-            Container.Bind<Rigidbody2D>().FromInstance(_physics).AsSingle();
-            Container.Bind<BoxCollider2D>().FromInstance(_collider).AsSingle();
+            Container.Bind<BodyBox>().FromInstance(_box).AsSingle();
 
             var netSchema = new NetEntriesSchemaBuilder();
             OwnershipServicesInstaller.Install(Container, _runtimeSettings, netSchema);
             ControlledByServicesInstaller.Install(Container, _runtimeSettings, netSchema);
             BindBody(netSchema);
             MortalInstaller.Install(Container, _runtimeSettings, netSchema, _death, gameObject);
-            PropInstaller.Install(Container, _runtimeSettings, netSchema, new PropParts(transform, _visual, _collider, _held, _throw, _heldSortingOrder));
+            PropInstaller.Install(Container, _runtimeSettings, netSchema, new PropParts(transform, _visual, _box, _held, _throw, _heldSortingOrder));
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
             BindKnockback();

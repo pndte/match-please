@@ -25,12 +25,6 @@ namespace Bw.Entities.Physics.Extensions
         public static Vector2 WorldOffset(this BoxCollider2D box) =>
             Vector2.Scale(box.offset, box.transform.lossyScale);
 
-        public static Rect WorldRect(this BoxCollider2D box)
-        {
-            var size = box.WorldSize();
-            return new Rect((Vector2)box.transform.position + box.WorldOffset() - size / 2f, size);
-        }
-
         public static PhysicsMask Categories(this BoxCollider2D box)
         {
             var categories = PhysicsMask.None;

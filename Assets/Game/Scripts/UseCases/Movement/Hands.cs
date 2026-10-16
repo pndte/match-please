@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Bw.Entities.Physics;
 using Bw.UseCases.Movement.Abstractions;
 using JetBrains.Lifetimes;
 using UnityEngine;
@@ -12,10 +13,10 @@ namespace Bw.UseCases.Movement
         public PhysicsBody Body { get; }
 
         private readonly Transform _holder;
-        private readonly BoxCollider2D _shape;
+        private readonly BodyBox _shape;
         private readonly List<IHeldItem> _items = new();
 
-        public Hands(Transform holder, BoxCollider2D shape, PhysicsBody body)
+        public Hands(Transform holder, BodyBox shape, PhysicsBody body)
         {
             Body = body;
             _holder = holder;
@@ -43,8 +44,8 @@ namespace Bw.UseCases.Movement
         private Rect Box()
         {
             var scale = (Vector2)_holder.lossyScale;
-            var size = Vector2.Scale(_shape.size, scale);
-            var center = (Vector2)_holder.position + Vector2.Scale(_shape.offset, scale);
+            var size = Vector2.Scale(_shape.Size, scale);
+            var center = (Vector2)_holder.position + Vector2.Scale(_shape.Offset, scale);
             return new Rect(center - size / 2f, size);
         }
     }
