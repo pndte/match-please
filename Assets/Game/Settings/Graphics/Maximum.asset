@@ -15,4 +15,5 @@ MonoBehaviour:
   Title: "\u041C\u0430\u043A\u0441\u0438\u043C\u0443\u043C"
   Pipeline: {fileID: 11400000, guid: 681886c5eb7344803b6206f758bf0b1c, type: 2}
   PostOverrides: {fileID: 11400000, guid: 4a10e1b75457ce24c891ec31de7a106a, type: 2}
+  LiveLampLight: 1
   LiveLampHaze: 1

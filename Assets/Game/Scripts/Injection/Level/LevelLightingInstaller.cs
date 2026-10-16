@@ -13,11 +13,12 @@ namespace Bw.Injection.Level
         [Inject] private IRuntimeSettings _runtimeSettings;
 
         [Header("Lighting")]
+        [SerializeField] private LampLight _light;
         [SerializeField] private LampHaze _haze;
 
         public override void InstallBindings()
         {
-            RequireHaze();
+            RequireLamps();
 
             switch (_runtimeSettings.CurrentPeerType)
             {
@@ -33,16 +34,20 @@ namespace Bw.Injection.Level
 
         private void BindLightingVisuals()
         {
+            var lightLifetime = _light.gameObject.Lifetime();
+            Container.BindInterfacesTo<LampLightViewModel>().AsSingle().WithArguments(lightLifetime);
+            Container.Bind<LampLightView>().AsSingle().WithArguments(lightLifetime, _light).NonLazy();
+
             var hazeLifetime = _haze.gameObject.Lifetime();
             Container.BindInterfacesTo<LampHazeViewModel>().AsSingle().WithArguments(hazeLifetime);
             Container.Bind<LampHazeView>().AsSingle().WithArguments(hazeLifetime, _haze).NonLazy();
         }
 
-        private void RequireHaze()
+        private void RequireLamps()
         {
-            if (_haze == null)
+            if (_light == null || _haze == null)
                 throw new InvalidOperationException(
-                    $"Level lighting of '{gameObject.scene.name}' has no lamp haze: set its LampHaze, which swaps the lamps' live volumetric haze for the baked one.");
+                    $"Level lighting of '{gameObject.scene.name}' needs its LampLight and LampHaze: they swap the lamps' live light and volumetric haze for the baked ones.");
         }
     }
 }

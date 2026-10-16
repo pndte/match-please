@@ -10,6 +10,7 @@ namespace Bw.UseCases.Graphics
         public string Title;
         public UniversalRenderPipelineAsset Pipeline;
         public VolumeProfile PostOverrides;
+        public bool LiveLampLight;
         public bool LiveLampHaze;
     }
 }

@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Bw.UseCases.Graphics::Bw.UseCases.Graphics.GraphicsPresetsConfig
   Presets:
   - {fileID: 11400000, guid: f17a98644e8d653499d778894a33cd7c, type: 2}
+  - {fileID: 11400000, guid: e5e0dc9dd600fc24b8eb1db2a45184ac, type: 2}
   - {fileID: 11400000, guid: c3851366d136c3243a44fb252aa9268c, type: 2}
   Default: {fileID: 11400000, guid: f17a98644e8d653499d778894a33cd7c, type: 2}

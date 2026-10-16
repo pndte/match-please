@@ -65,6 +65,10 @@ namespace Bw.Injection.Graphics
 
                 if (!names.Add(preset.name))
                     throw new InvalidOperationException($"Graphics presets '{_presets.name}' list '{preset.name}' twice: the saved choice is found by the preset's name.");
+
+                if (preset.LiveLampHaze && !preset.LiveLampLight)
+                    throw new InvalidOperationException(
+                        $"Graphics preset '{preset.name}' has live lamp haze over baked lamp light: the live haze is the lamps' own volumetric light, so it needs the lamps live.");
             }
         }
     }
