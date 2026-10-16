@@ -56,7 +56,7 @@ namespace Bw.Injection.Weapon
 
             BindWeapon();
             BindDrawn();
-            EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyMortal, Hit>.Install(Container, _runtimeSettings, _netSchema);
+            EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyMortal, Impacts>.Install(Container, _runtimeSettings, _netSchema);
 
             BindVisualFlip();
 

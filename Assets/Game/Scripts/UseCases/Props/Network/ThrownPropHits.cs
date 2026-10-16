@@ -16,14 +16,14 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Props.Network
 {
-    public sealed class ThrownPropHits : IOutcomes<IReadonlyWeapon, IReadonlyMortal, Hit>
+    public sealed class ThrownPropHits : IOutcomes<IReadonlyWeapon, IReadonlyMortal, Impacts>
     {
         private const float Upward = 0.7f;
 
-        public ISource<ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Hit>> Reported => _reported;
+        public ISource<ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Impacts>> Reported => _reported;
 
-        private readonly Signal<ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Hit>> _reported = new();
-        private readonly List<AffectedTarget<IReadonlyMortal, Hit>> _affected = new(4);
+        private readonly Signal<ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Impacts>> _reported = new();
+        private readonly List<AffectedTarget<IReadonlyMortal, Impacts>> _affected = new(4);
         private readonly IReadonlyWeapon _prop;
         private readonly IReadonlySimulation<RigidState> _body;
         private readonly PhysicsBody _physics;
@@ -71,7 +71,7 @@ namespace Bw.UseCases.Props.Network
             {
                 var affected = _affected.ToArray();
                 _flights.TerminateCurrent();
-                _reported.Fire(new ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Hit>(_prop, tick, affected));
+                _reported.Fire(new ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Impacts>(_prop, tick, affected));
                 return;
             }
 
@@ -93,8 +93,8 @@ namespace Bw.UseCases.Props.Network
                 if (target == thrower || target.State.Value == LifeState.Dead || Contains(target))
                     continue;
 
-                var blow = new Hit(DamageAt(hit.approachSpeed), direction * _config.Knockback, struck.body.transform.InverseTransformPoint(hit.point));
-                _affected.Add(new AffectedTarget<IReadonlyMortal, Hit>(target, blow));
+                var blow = new Impact(new Hit(DamageAt(hit.approachSpeed), direction * _config.Knockback), struck.ContactAt(hit.point));
+                _affected.Add(new AffectedTarget<IReadonlyMortal, Impacts>(target, new Impacts(blow)));
             }
         }
 

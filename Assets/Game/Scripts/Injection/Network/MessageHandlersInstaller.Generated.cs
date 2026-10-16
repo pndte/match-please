@@ -17,7 +17,7 @@ namespace Bw.Injection.Network
             RegisterCodec<Bw.UseCases.Match.Network.Requests.KillNotice, Bw.UseCases.Match.Network.Codecs.KillNoticeCodec>(receivers, senders);
             RegisterCodec<Bw.UseCases.Match.Network.Requests.MatchTable, Bw.UseCases.Match.Network.Codecs.MatchTableCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Events.Requests.CausedState<Bw.UseCases.Mortality.Vitals>, Bw.UseCases.Mortality.Network.Codecs.CausedVitalsCodec>(receivers, senders);
-            RegisterCodec<Bw.Entities.Network.Prediction.Events.Requests.OutcomeReport<Bw.UseCases.Mortality.Hit>, Bw.UseCases.Mortality.Network.Codecs.HitOutcomeReportCodec>(receivers, senders);
+            RegisterCodec<Bw.Entities.Network.Prediction.Events.Requests.OutcomeReport<Bw.UseCases.Mortality.Impacts>, Bw.UseCases.Mortality.Network.Codecs.ImpactsOutcomeReportCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedInput<Bw.UseCases.Movement.MovementInput>, Bw.UseCases.Movement.Network.Codecs.TickedMovementInputCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Movement.MovementState>, Bw.UseCases.Movement.Network.Codecs.TickedMovementStateCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Movement.RigidState>, Bw.UseCases.Movement.Network.Codecs.TickedRigidStateCodec>(receivers, senders);

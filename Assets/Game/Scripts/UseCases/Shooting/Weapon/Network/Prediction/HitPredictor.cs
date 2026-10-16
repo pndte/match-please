@@ -18,10 +18,11 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Prediction
         private readonly INetworkTicks _ticks;
         private readonly IScheduledCollection _scheduled;
         private readonly IShotPower<TState> _power;
-        private readonly IOutcomePrediction<IReadonlyMortal, Hit> _outcomePrediction;
-        private readonly List<AffectedTarget<IReadonlyMortal, Hit>> _affected = new();
+        private readonly IOutcomePrediction<IReadonlyMortal, Impacts> _outcomePrediction;
+        private readonly List<AffectedTarget<IReadonlyMortal, Impact>> _struck = new();
+        private readonly List<AffectedTarget<IReadonlyMortal, Impacts>> _affected = new();
 
-        public HitPredictor(
+        public HitPredictor( //TODO: чрезвычайное к-во параметров
             Lifetime lifetime,
             IControlledBy controlledBy,
             IReadonlyWeapon weapon,
@@ -30,7 +31,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Prediction
             INetworkTicks ticks,
             IScheduledCollection scheduled,
             IShotPower<TState> power,
-            IOutcomePrediction<IReadonlyMortal, Hit> outcomePrediction)
+            IOutcomePrediction<IReadonlyMortal, Impacts> outcomePrediction)
         {
             _simulation = simulation;
             _tracer = tracer;
@@ -46,16 +47,19 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Prediction
         private void Predict(WeaponShot shot)
         {
             var ray = _tracer.Aim(shot.Aim);
+            _struck.Clear();
             _affected.Clear();
             _scheduled.PoseAt(_ticks.Current - (double)shot.PredictedDelay);
             try
             {
-                _tracer.CastPellets(ray, _power.Along(ray.Direction, _simulation.State.Value), _affected);
+                _tracer.CastPellets(ray, _power.Along(ray.Direction, _simulation.State.Value), _struck);
             }
             finally
             {
                 _scheduled.PoseAt(_ticks.Current);
             }
+
+            _struck.GroupByTarget(_affected);
 
             for (var index = 0; index < _affected.Count; index++)
                 _outcomePrediction.Predict(_ticks.Current, _affected[index].Target, _affected[index].Effect); //TODO: удар показывается в тик выстрела, а кровь — когда долетит трассер (ShotVfxConfig.BulletSpeed): издалека цель мигает раньше, чем в неё попадает пуля; отложить можно только показ, записать удар в предсказание итогов нужно сразу — итог может прийти раньше пули

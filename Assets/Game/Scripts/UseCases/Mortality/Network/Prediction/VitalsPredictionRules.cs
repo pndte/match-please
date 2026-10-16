@@ -1,3 +1,4 @@
+using Bw.UseCases.Mortality.Extensions;
 using System;
 using Bw.Entities;
 using Bw.Entities.Extensions;
@@ -5,12 +6,12 @@ using Bw.Entities.Network.Prediction.Events;
 
 namespace Bw.UseCases.Mortality.Network.Prediction
 {
-    public sealed class VitalsPredictionRules : IPredictionRules<Vitals, Hit>
+    public sealed class VitalsPredictionRules : IPredictionRules<Vitals, Impacts>
     {
-        public Vitals Predict(Vitals vitals, Hit hit) =>
-            new(vitals.Health.AfterHit(hit.Damage), vitals.State);
+        public Vitals Predict(Vitals vitals, Impacts impacts) =>
+            new(vitals.Health.AfterHit(impacts.Damage()), vitals.State);
 
-        public Vitals Present(Vitals shown, Vitals next, ChangeCause<Vitals, Hit> cause)
+        public Vitals Present(Vitals shown, Vitals next, ChangeCause<Vitals, Impacts> cause)
         {
             var shift = next.Health.Current - shown.Health.Current;
 

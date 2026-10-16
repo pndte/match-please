@@ -51,7 +51,7 @@ namespace Bw.Injection.Props
             BindHeldSimulation();
             BindDrawn();
             BindDropRequest();
-            EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyMortal, Hit>.Install(Container, _runtimeSettings, _netSchema);
+            EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyMortal, Impacts>.Install(Container, _runtimeSettings, _netSchema);
             BindHold();
 
             switch (_runtimeSettings.CurrentPeerType)

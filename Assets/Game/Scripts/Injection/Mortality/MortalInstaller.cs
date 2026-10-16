@@ -38,7 +38,7 @@ namespace Bw.Injection.Mortality
         {
             BindMortal();
             var vitals = _netSchema.DeclareResult<CausedState<Vitals>>(NetworkDelivery.Reliable);
-            EventPredictionTargetInstaller<IReadonlyMortal, Vitals, Hit>.Install(Container, _runtimeSettings, vitals);
+            EventPredictionTargetInstaller<IReadonlyMortal, Vitals, Impacts>.Install(Container, _runtimeSettings, vitals);
 
             switch (_runtimeSettings.CurrentPeerType)
             {
@@ -63,7 +63,7 @@ namespace Bw.Injection.Mortality
             Container.Bind(typeof(IReadonlyMortal), typeof(IReadonlyAppliedState<Vitals>), typeof(IAppliedState<Vitals>))
                 .To<Mortal>().AsSingle()
                 .WriterOnlyInto<IAppliedState<Vitals>>(
-                    typeof(AuthoritativeState<Vitals, Hit>), typeof(AuthoritativeState<Vitals, Heal>), typeof(PredictedState<Vitals, Hit>));
+                    typeof(AuthoritativeState<Vitals, Impacts>), typeof(AuthoritativeState<Vitals, Heal>), typeof(PredictedState<Vitals, Impacts>));
             Container.Bind<CorpseHitbox>().AsSingle().WithArguments(_death.CorpseLayer.SingleLayer("corpse")).NonLazy();
             Container.InstantiateComponent<ReadonlyMortalHolder>(_body);
         }

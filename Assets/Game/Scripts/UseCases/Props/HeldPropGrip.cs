@@ -7,7 +7,7 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Props
 {
-    public sealed class HeldPropGrip //TODO: удар по ящику в руках считает точку удара в системе держателя (форма живёт на его теле), а отбрасывание ящика ждёт её в системе ящика: пока ящик в руках не отбрасывается, разница не видна
+    public sealed class HeldPropGrip
     {
         private readonly Vector2 _size;
         private readonly GameObject _owner;
