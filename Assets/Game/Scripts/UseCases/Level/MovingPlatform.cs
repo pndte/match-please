@@ -1,3 +1,4 @@
+using Bw.Entities.Physics;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Level.Extensions;
 using Bw.UseCases.Movement.Physics.Abstractions;
@@ -10,7 +11,8 @@ namespace Bw.UseCases.Level
         public Rect Area { get; private set; }
         public Vector2 Shift { get; private set; }
 
-        private readonly Rigidbody2D _body;
+        private readonly Rigidbody2D _rigidbody;
+        private readonly SweptBody _body;
         private readonly Transform _transform;
         private readonly Vector2 _start;
         private readonly Rect _shape;
@@ -18,13 +20,15 @@ namespace Bw.UseCases.Level
         private readonly ISimulationStep _step;
 
         public MovingPlatform(
-            Rigidbody2D body,
+            Rigidbody2D rigidbody,
+            SweptBody body,
             BoxCollider2D collider,
             MovingPlatformPath path,
             ISimulationStep step)
         {
+            _rigidbody = rigidbody;
             _body = body;
-            _transform = body.transform;
+            _transform = rigidbody.transform;
             _start = _transform.position;
             _shape = ShapeOf(collider, _transform.lossyScale);
             _path = path;
@@ -54,8 +58,9 @@ namespace Bw.UseCases.Level
 
         private void Place(Vector2 position) //TODO: брошенное оружие (динамическое тело) платформа не везёт: она переставляется раз в тик без скорости, трение паллеты пушку не тянет, а лифт выталкивает её рывками — двигать тело для физики через MovePosition со скоростью
         {
-            _body.position = position;
+            _rigidbody.position = position;
             _transform.position = new Vector3(position.x, position.y, _transform.position.z);
+            _body.Place(position);
         }
 
         private static Rect ShapeOf(BoxCollider2D collider, Vector3 scale)

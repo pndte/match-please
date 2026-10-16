@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Bw.Entities.Physics;
+using Bw.Entities.Physics.Extensions;
 using JetBrains.Lifetimes;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
@@ -26,7 +27,17 @@ namespace Bw.UseCases.Level
 
             var body = space.World.CreateBody(new PhysicsBodyDefinition { type = PhysicsBody.BodyType.Static });
             foreach (var box in boxes)
-                body.CreateShape(GeometryOf(box), DefinitionOf(box));
+            {
+                var shape = body.CreateShape(box.WorldGeometry(), DefinitionOf(box));
+                if (box.IsOneWay())
+                    space.MakeOneWay(lifetime, shape);
+
+                if (box.TryGetComponent(out Springboard springboard))
+                {
+                    shape.userData = new PhysicsUserData { objectValue = springboard };
+                    shape.contactEvents = true;
+                }
+            }
 
             lifetime.OnTermination(() => body.Destroy(0));
             return new LevelGeometry(body);
@@ -50,30 +61,11 @@ namespace Bw.UseCases.Level
             return boxes;
         }
 
-        private static PolygonGeometry GeometryOf(BoxCollider2D box)
-        {
-            var transform = box.transform;
-            var center = (Vector2)transform.TransformPoint(box.offset);
-            var rotation = new PhysicsRotate(transform.eulerAngles.z * Mathf.Deg2Rad);
-            return PolygonGeometry.CreateBox(SizeOf(box), box.edgeRadius, new PhysicsTransform(center, rotation), false);
-        }
-
         private static PhysicsShapeDefinition DefinitionOf(BoxCollider2D box)
         {
             var definition = PhysicsShapeDefinition.defaultDefinition;
-            definition.contactFilter = new PhysicsShape.ContactFilter(new PhysicsMask(new[] { CategoryOf(box) }), PhysicsMask.All, 0);
+            definition.contactFilter = new PhysicsShape.ContactFilter(box.Categories(), PhysicsMask.All, 0);
             return definition;
-        }
-
-        private static int CategoryOf(BoxCollider2D box) =>
-            box.usedByEffector && box.TryGetComponent(out PlatformEffector2D effector) && effector.enabled && effector.useOneWay
-                ? PhysicsCategories.OneWay
-                : box.gameObject.layer;
-
-        private static Vector2 SizeOf(BoxCollider2D box)
-        {
-            var scale = box.transform.lossyScale;
-            return new Vector2(box.size.x * Mathf.Abs(scale.x), box.size.y * Mathf.Abs(scale.y));
         }
 
         private static int ByPlace(BoxCollider2D first, BoxCollider2D second)
@@ -86,8 +78,8 @@ namespace Bw.UseCases.Level
             if (a.y != b.y)
                 return a.y.CompareTo(b.y);
 
-            var sizeA = SizeOf(first);
-            var sizeB = SizeOf(second);
+            var sizeA = first.WorldSize();
+            var sizeB = second.WorldSize();
             return sizeA.x != sizeB.x ? sizeA.x.CompareTo(sizeB.x) : sizeA.y.CompareTo(sizeB.y);
         }
     }

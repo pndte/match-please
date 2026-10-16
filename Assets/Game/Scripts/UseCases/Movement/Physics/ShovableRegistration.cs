@@ -1,7 +1,7 @@
 using Bw.Entities.Extensions;
 using Bw.UseCases.Movement.Physics.Abstractions;
 using JetBrains.Lifetimes;
-using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Movement.Physics
 {
@@ -9,11 +9,11 @@ namespace Bw.UseCases.Movement.Physics
     {
         public ShovableRegistration(
             Lifetime lifetime,
-            BoxCollider2D collider,
+            PhysicsBody body,
             IShovable shovable,
             IShovableCollection shovables)
         {
-            shovables.AddLifetimed(lifetime, collider, shovable);
+            shovables.AddLifetimed(lifetime, body, shovable);
         }
     }
 }

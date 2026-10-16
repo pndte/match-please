@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25dc9f48254c47af803627de7dc4d99e, type: 3}
   m_Name: PhysicsConfig
   m_EditorClassIdentifier: Bw.Entities::Bw.Entities.Physics.PhysicsConfig
-  SubSteps: 4
+  SubSteps: 8
   Workers: 0
+  ContactFrequency: 60
+  ContactDamping: 3
+  ContactSpeed: 10
+  Drawing: 0

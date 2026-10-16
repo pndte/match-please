@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Ticks;
-using Bw.UseCases.Movement.Abstractions;
 using Bw.UseCases.Movement.Extensions;
 using JetBrains.Lifetimes;
 using UnityEngine;
@@ -10,14 +10,14 @@ namespace Bw.UseCases.Movement.Network.Prediction
 {
     public sealed class PredictedPush<TEffect> : IPredictionTarget<TEffect>, IPredictedPush where TEffect : struct
     {
-        public Vector2 Offset => new(OffsetAt(ShownTick(), _interpolation.InterpolationTick), 0f);
+        public Vector2 Offset => OffsetAt(ShownTick(), _interpolation.InterpolationTick);
 
         private readonly List<Push> _pushes = new();
         private readonly List<Fade> _fades = new();
         private readonly IPushRules<TEffect> _rules;
         private readonly INetworkTicks _ticks;
         private readonly IInterpolationTicks _interpolation;
-        private readonly IBodyConfig _body;
+        private readonly MovementConfig _movement;
         private readonly PushPredictionConfig _config;
 
         public PredictedPush(
@@ -25,20 +25,20 @@ namespace Bw.UseCases.Movement.Network.Prediction
             IPushRules<TEffect> rules,
             INetworkTicks ticks,
             IInterpolationTicks interpolation,
-            IBodyConfig body,
+            MovementConfig movement,
             PushPredictionConfig config)
         {
             _rules = rules;
             _ticks = ticks;
             _interpolation = interpolation;
-            _body = body;
+            _movement = movement;
             _config = config;
 
             ticks.Ticked(TickPhase.Default).Advise(lifetime, _ => DropFinished());
         }
 
         public void Show(PredictedEffect<TEffect> effect) =>
-            _pushes.Add(new Push(effect.Action, HorizontalImpulse(effect.Value)));
+            _pushes.Add(new Push(effect.Action, Impulse(effect.Value)));
 
         public void Confirm(ActionId action, TEffect actual)
         {
@@ -46,7 +46,7 @@ namespace Bw.UseCases.Movement.Network.Prediction
                 return;
 
             Withdraw(action);
-            _pushes.Add(new Push(action, HorizontalImpulse(actual)));
+            _pushes.Add(new Push(action, Impulse(actual)));
         }
 
         public void Reject(ActionId action)
@@ -56,7 +56,7 @@ namespace Bw.UseCases.Movement.Network.Prediction
 
             var shown = ShownTick();
             var interpolated = _interpolation.InterpolationTick;
-            var offset = 0f;
+            var offset = Vector2.zero;
             foreach (var push in _pushes)
                 if (push.Action.Equals(action))
                     offset += OffsetOf(push, shown, interpolated);
@@ -65,12 +65,12 @@ namespace Bw.UseCases.Movement.Network.Prediction
             _fades.Add(new Fade(offset, shown));
         }
 
-        private float HorizontalImpulse(TEffect effect) => //TODO: вертикальная часть толчка уходит в скорость по Y и зависит от земли под ногами — стрелок видит её только по снимкам, без предсказания
-            _rules.Impulse(effect).x;
+        private Vector2 Impulse(TEffect effect) =>
+            _movement.Lifted(_rules.Impulse(effect));
 
-        private float OffsetAt(double shown, double interpolated)
+        private Vector2 OffsetAt(double shown, double interpolated)
         {
-            var offset = 0f;
+            var offset = Vector2.zero;
             foreach (var push in _pushes)
                 offset += OffsetOf(push, shown, interpolated);
 
@@ -80,9 +80,9 @@ namespace Bw.UseCases.Movement.Network.Prediction
             return offset;
         }
 
-        private float OffsetOf(Push push, double shown, double interpolated) => //TODO: наложенные толчки сервер гасит как одну скорость, а здесь каждый гаснет отдельно — пока снимки не догнали, сдвиг от двух толчков подряд показывается короче настоящего; толчок, упёршийся в стену, сервер гасит сразу, а здесь его остаток ещё прижимает тело к стене (вид лишь обрезается стеной), даже если тело уже отходит от неё
-            _body.PushDistance(push.Impulse, shown - push.Action.Tick, _ticks)
-            - _body.PushDistance(push.Impulse, interpolated - push.Action.Tick, _ticks);
+        private Vector2 OffsetOf(Push push, double shown, double interpolated) => //TODO: наложенные толчки сервер гасит как одну скорость, а здесь каждый гаснет отдельно — пока снимки не догнали, сдвиг от двух толчков подряд показывается короче настоящего; толчок, упёршийся в стену, сервер гасит сразу, а здесь его остаток ещё прижимает тело к стене (вид лишь обрезается стеной), даже если тело уже отходит от неё
+            new(_movement.PushDistance(push.Impulse.x, shown - push.Action.Tick, _ticks) - _movement.PushDistance(push.Impulse.x, interpolated - push.Action.Tick, _ticks),
+                _movement.PushRise(push.Impulse.y, shown - push.Action.Tick, _ticks) - _movement.PushRise(push.Impulse.y, interpolated - push.Action.Tick, _ticks));
 
         private float Remaining(Fade fade, double shown) =>
             Mathf.Clamp01(1f - (float)((shown - fade.Since) * _ticks.Duration / _config.RejectedFadeSeconds));
@@ -91,7 +91,7 @@ namespace Bw.UseCases.Movement.Network.Prediction
         {
             var interpolated = _interpolation.InterpolationTick;
             for (var index = _pushes.Count - 1; index >= 0; index--)
-                if (interpolated - _pushes[index].Action.Tick >= _body.PushTicks(_pushes[index].Impulse, _ticks))
+                if (interpolated - _pushes[index].Action.Tick >= Lasting(_pushes[index].Impulse))
                     _pushes.RemoveAt(index);
 
             var shown = ShownTick();
@@ -99,6 +99,9 @@ namespace Bw.UseCases.Movement.Network.Prediction
                 if (Remaining(_fades[index], shown) <= 0f)
                     _fades.RemoveAt(index);
         }
+
+        private int Lasting(Vector2 impulse) =>
+            Math.Max(_movement.PushTicks(impulse.x, _ticks), _movement.PushRiseTicks(impulse.y, _ticks));
 
         private double ShownTick() =>
             _ticks.Current - 1 + (double)_interpolation.Progress;
@@ -122,9 +125,9 @@ namespace Bw.UseCases.Movement.Network.Prediction
         private readonly struct Push
         {
             public readonly ActionId Action;
-            public readonly float Impulse;
+            public readonly Vector2 Impulse;
 
-            public Push(ActionId action, float impulse)
+            public Push(ActionId action, Vector2 impulse)
             {
                 Action = action;
                 Impulse = impulse;
@@ -133,10 +136,10 @@ namespace Bw.UseCases.Movement.Network.Prediction
 
         private readonly struct Fade
         {
-            public readonly float Offset;
+            public readonly Vector2 Offset;
             public readonly double Since;
 
-            public Fade(float offset, double since)
+            public Fade(Vector2 offset, double since)
             {
                 Offset = offset;
                 Since = since;

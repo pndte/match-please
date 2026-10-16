@@ -24,4 +24,4 @@ MonoBehaviour:
   FallGravity: 1.21
   PushDeceleration: 40
   PushLift: 0.9062
-  ShoveSpeed: 6
+  ShoveForce: 80

@@ -40,10 +40,11 @@ namespace Bw.UseCases.Props
             _turned.Fire(Unit.Instance);
         }
 
-        public void PlaceIn(Rect holder) //TODO: поза в руках не знает стен и пола — у стены и прицелом вниз на земле ящик рисуется в них (при отпускании PropRelease вытягивает его к держателю); рук у держателя нет, ящик висит перед ним, как парящее оружие
+        public void PlaceIn(Rect holder) //TODO: поза в руках не знает стен и пола — у стены и прицелом вниз на земле ящик рисуется в них (отпущенный, он встаёт на ближайшее свободное место вокруг держателя); рук у держателя нет, ящик висит перед ним, как парящее оружие
         {
             var scale = (Vector2)_prop.lossyScale;
             var center = holder.center + _config.HeldOffset(_aim, holder.size / 2f, Vector2.Scale(_shape.size, scale) / 2f);
+            _prop.rotation = Quaternion.identity;
             _body.Place(center - Vector2.Scale(_shape.offset, scale));
         }
     }

@@ -32,7 +32,6 @@ namespace Bw.Injection.Network
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.Bind<PassiveStepper>().AsSingle().NonLazy();
                     Container.BindResultSender(state).WhenInjectedInto(typeof(StateChangeBroadcaster<TState>), typeof(LateJoinTickedStateSender<TState>));
                     Container.Bind<StateChangeBroadcaster<TState>>().AsSingle().NonLazy();
                     Container.Bind<LateJoinTickedStateSender<TState>>().AsSingle().NonLazy();

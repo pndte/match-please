@@ -121,7 +121,8 @@ namespace Bw.Injection.Props
             Container.Bind<HeldPropLayer>().AsSingle()
                 .WithArguments(_parts.Prop.gameObject, _parts.Held.Layer.SingleLayer("held prop"))
                 .NonLazy();
-            Container.Decorate<IStateView<BodyState>>().With<UnheldStateView<BodyState>>();
+            Container.Bind<HeldPropBody>().AsSingle().NonLazy();
+            Container.Decorate<IStateView<RigidState>>().With<UnheldStateView<RigidState>>();
         }
 
         private void BindServer()
@@ -129,10 +130,10 @@ namespace Bw.Injection.Props
             Container.BindInterfacesTo<WeaponInputPolicy>().AsSingle();
             Container.Bind<WeaponHoldServerHandler>().AsSingle().NonLazy();
             Container.Bind<WeaponKindRegistration>().AsSingle().WithArguments(WeaponKind.Prop).NonLazy(); //TODO: ящик создаёт спавнер ящиков, а не Armory, и в каталоге оружия его нет, поэтому описания у ящика нет: когда матч начнёт засчитывать броски (HitScoring), убийство ящиком бросит исключение в ленте убийств, пока ящику не дадут описание, строку в каталоге, иконку в WeaponIconsConfig и создание через Armory
-            Container.BindInterfacesAndSelfTo<ThrownPropHits>().AsSingle().WithArguments(_parts.Prop);
+            Container.BindInterfacesAndSelfTo<ThrownPropHits>().AsSingle();
+            Container.Bind<ReleaseSpots>().AsSingle();
             Container.Bind<PropRelease>().AsSingle().WithArguments(_parts.Prop).NonLazy();
             Container.Bind<DestroyedPropDrop>().AsSingle().NonLazy();
-            Container.Decorate<ISteppable>().With<UnheldSteppable>();
             Container.Bind<SimulationRewinder<PropState>>().AsSingle();
             Container.Decorate<IRewindable>().With<PropRewindable>();
             Container.Bind<WeaponHolder>().FromNewComponentOn(_parts.Prop.gameObject).AsSingle().NonLazy();
@@ -141,7 +142,6 @@ namespace Bw.Injection.Props
         private void BindClient()
         {
             Container.BindInterfacesTo<WeaponInputSampler>().AsSingle().WithArguments(_parts.Prop);
-            Container.Bind<HeldPropShoveReset>().AsSingle().NonLazy();
             Container.BindInterfacesTo<FloorWeapon>().AsSingle().WithArguments(_parts.Shape);
             Container.Bind<FloorWeaponRegistration>().AsSingle().NonLazy();
             BindClientVisuals();

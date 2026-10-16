@@ -11,6 +11,7 @@ using Bw.Injection.Match;
 using Bw.UseCases.Character;
 using Bw.UseCases.Level;
 using Bw.UseCases.Match;
+using Bw.UseCases.Movement.Network.Prediction;
 using Bw.UseCases.Movement.Physics;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
@@ -46,6 +47,7 @@ namespace Bw.Injection
         private void BindServer()
         {
             BindPhysics();
+            Container.Bind<IPhysicsSteps>().To<PhysicsSpace>().FromResolve();
             Container.Bind<PassiveStepper>()
                 .FromMethod(context => new PassiveStepper(gameObject.Lifetime(), context.Container.Resolve<INetworkTicks>(), context.Container.Resolve<PhysicsSpace>()))
                 .AsSingle()
@@ -66,6 +68,8 @@ namespace Bw.Injection
         private void BindClient()
         {
             BindPhysics();
+            Container.BindInterfacesTo<PredictableCollection>().AsSingle();
+            Container.BindInterfacesTo<PhysicsRollback>().AsSingle().WithArguments(gameObject.Lifetime()).NonLazy();
             Container.BindInterfacesTo<MovingPlatformCollection>().AsSingle();
             Container.BindInterfacesTo<ShovableCollection>().AsSingle();
             Container.BindInterfacesTo<ScheduledCollection>().AsSingle();
@@ -76,8 +80,13 @@ namespace Bw.Injection
 
         private void BindPhysics()
         {
+            Container.BindInterfacesTo<SweptBodyCollection>().AsSingle();
             Container.Bind(typeof(IPhysicsSpace), typeof(PhysicsSpace)).To<PhysicsSpace>()
-                .FromMethod(context => PhysicsSpace.Create(gameObject.Lifetime(), context.Container.Resolve<PhysicsConfig>(), context.Container.Resolve<ISimulationStep>()))
+                .FromMethod(context => PhysicsSpace.Create(
+                    gameObject.Lifetime(),
+                    context.Container.Resolve<PhysicsConfig>(),
+                    context.Container.Resolve<ISimulationStep>(),
+                    context.Container.Resolve<ISweptBodyCollection>()))
                 .AsSingle();
             Container.Bind<LevelGeometry>()
                 .FromMethod(context => LevelGeometry.Create(gameObject.Lifetime(), context.Container.Resolve<IPhysicsSpace>(), LevelColliders()))

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: PropThrowConfig
   m_EditorClassIdentifier: Bw.UseCases.Props::Bw.UseCases.Props.PropThrowConfig
   Speed: 22
+  Spin: 540
   Damage: 5
   Knockback: 8
   Targets:

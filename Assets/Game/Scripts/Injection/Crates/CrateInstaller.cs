@@ -1,3 +1,4 @@
+using System;
 using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
@@ -23,6 +24,7 @@ using Bw.UseCases.Mortality.View.Death;
 using Bw.UseCases.Mortality.View.Health;
 using Bw.UseCases.Mortality.View.Hit;
 using Bw.UseCases.Movement;
+using Bw.UseCases.Movement.Network.Prediction;
 using Bw.UseCases.Movement.Physics.Abstractions;
 using Bw.UseCases.Props;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
@@ -45,7 +47,7 @@ namespace Bw.Injection.Crates
         [Header("Body")]
         [SerializeField] private Rigidbody2D _physics;
         [SerializeField] private BoxCollider2D _collider;
-        [SerializeField] private BodyConfig _bodyConfig;
+        [SerializeField] private DynamicBodyConfig _bodyConfig;
 
         [Header("Mortality")]
         [SerializeField] private HealthConfig _healthConfig;
@@ -80,11 +82,10 @@ namespace Bw.Injection.Crates
             ControlledByServicesInstaller.Install(Container, _runtimeSettings, netSchema);
             BindBody(netSchema);
             MortalInstaller.Install(Container, _runtimeSettings, netSchema, _death, gameObject);
-            PushTargetInstaller<IReadonlyMortal, BodyState, Hit>.Install(Container, _runtimeSettings);
             PropInstaller.Install(Container, _runtimeSettings, netSchema, new PropParts(transform, _visual, _collider, _held, _throw, _heldSortingOrder));
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
-            Container.BindInterfacesTo<KnockbackRules>().AsSingle();
+            BindKnockback();
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
@@ -93,18 +94,30 @@ namespace Bw.Injection.Crates
             }
         }
 
-        private void BindBody(INetEntriesSchemaBuilder netSchema)
-        {
-            Container.Bind<IStateView<BodyState>>().To<BodyStateView<BodyState>>().AsSingle();
-            ShovableInstaller<BodyState>.Install(Container, _runtimeSettings);
-            BodyInstaller<BodyState>.Install(Container, _runtimeSettings, _bodyConfig);
-            ReplicationInstaller<BodyState>.Install(Container, _runtimeSettings, netSchema);
+        private void BindBody(INetEntriesSchemaBuilder netSchema) =>
+            DynamicBodyInstaller.Install(Container, _runtimeSettings, netSchema, _bodyConfig);
 
-            if (_runtimeSettings.CurrentPeerType == PeerType.Server)
-                Container.Bind(typeof(IReadonlySimulation<BodyState>), typeof(ISimulation<BodyState>), typeof(ISteppable), typeof(IRestartable<BodyState>), typeof(IShovable))
-                    .To<FreeBody>().AsSingle()
-                    .WriterOnlyInto<ISimulation<BodyState>>(typeof(SimulationAffectable<,>))
-                    .NonLazy();
+        private void BindKnockback()
+        {
+            Container.Bind<IEffectRules<RigidState, Hit>>().To<HitImpulseRules>().AsSingle();
+
+            switch (_runtimeSettings.CurrentPeerType)
+            {
+                case PeerType.Server:
+                    Container.Bind<SimulationAffectable<RigidState, Hit>>().AsSingle();
+                    Container.Bind<IAffectable<Hit>>().To<SimulationAffectable<RigidState, Hit>>().FromResolve()
+                        .WhenInjectedInto<AffectableRegistration<IReadonlyMortal, SimulationAffectable<RigidState, Hit>, Hit>>();
+                    Container.Bind<AffectableRegistration<IReadonlyMortal, SimulationAffectable<RigidState, Hit>, Hit>>().AsSingle().NonLazy();
+                    break;
+                case PeerType.Client:
+                    Container.Bind(typeof(PredictedRigidEffects<Hit>), typeof(IRigidStateEffects)).To<PredictedRigidEffects<Hit>>().AsSingle();
+                    Container.Bind<IPredictionTarget<Hit>>().To<PredictedRigidEffects<Hit>>().FromResolve()
+                        .WhenInjectedInto<PredictionTargetRegistration<IReadonlyMortal, PredictedRigidEffects<Hit>, Hit>>();
+                    Container.Bind<PredictionTargetRegistration<IReadonlyMortal, PredictedRigidEffects<Hit>, Hit>>().AsSingle().NonLazy();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private void BindClientVisuals()

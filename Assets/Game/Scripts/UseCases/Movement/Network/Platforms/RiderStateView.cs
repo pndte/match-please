@@ -1,4 +1,6 @@
+using System;
 using Bw.Entities;
+using Bw.Entities.Network.Replication;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Movement.Abstractions;
@@ -8,26 +10,29 @@ using UnityEngine;
 
 namespace Bw.UseCases.Movement.Network.Platforms
 {
-    public sealed class RiderStateView<TState> : IStateView<TState> where TState : struct, IBodyState<TState>
+    public sealed class RiderStateView<TState> : IStateView<TState> where TState : struct, IPlacedState<TState>
     {
         private readonly IStateView<TState> _view;
         private readonly IControlledBy _controlledBy;
+        private readonly IReplicatedStates<TState> _replicated;
         private readonly INetworkTicks _ticks;
         private readonly IInterpolationTicks _interpolation;
-        private readonly IMovementCollider _collider;
+        private readonly IPlatformRider _rider;
 
         public RiderStateView(
             IStateView<TState> view,
             IControlledBy controlledBy,
+            IReplicatedStates<TState> replicated,
             INetworkTicks ticks,
             IInterpolationTicks interpolation,
-            IMovementCollider collider)
+            IPlatformRider rider)
         {
             _view = view;
             _controlledBy = controlledBy;
+            _replicated = replicated;
             _ticks = ticks;
             _interpolation = interpolation;
-            _collider = collider;
+            _rider = rider;
         }
 
         public void Show(TState from, TState to, float progress) //TODO: чужой, который сходит с едущей платформы или встаёт на неё, перескакивает на её путь за задержку (до скорость × ~0.1 с): правило одно с откатом на сервере, поэтому без сглаживания — сгладить только картинку, не трогая коллайдер
@@ -39,9 +44,17 @@ namespace Bw.UseCases.Movement.Network.Platforms
             }
 
             var duration = (double)_ticks.Duration;
-            var shown = Vector2.Lerp(from.Body.Position, to.Body.Position, progress);
-            var shift = _collider.RideShift(shown, _interpolation.InterpolationTick * duration, _ticks.PredictedViewTick(_interpolation) * duration);
+            var shown = Vector2.Lerp(from.Position, to.Position, progress);
+            var shift = _rider.RideShift(shown, ShownTick() * duration, _ticks.PredictedViewTick(_interpolation) * duration);
             _view.Show(from.Shifted(shift), to.Shifted(shift), progress);
+        }
+
+        private double ShownTick()
+        {
+            if (!_replicated.TryGetAt(int.MaxValue, out var newest))
+                throw new InvalidOperationException("A remote rider is shown only from the states the server sent, and none has arrived.");
+
+            return Math.Min(_interpolation.InterpolationTick, newest.Tick);
         }
     }
 }

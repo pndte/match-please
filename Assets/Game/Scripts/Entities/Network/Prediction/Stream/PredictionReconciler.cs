@@ -77,6 +77,7 @@ namespace Bw.Entities.Network.Prediction.Stream
             }
 
             _scheduled.PoseAt(_ticks.Current);
+            _predictedBodies.PoseFor(_ticks.Current);
             var before = _simulation.State.Value;
             _simulation.Apply(state); //TODO: показ сглаживает поправку только у тел (SmoothedStateView) — прицел оружия и предмета в руках при поправке перескакивает
             if (!before.Equals(state))

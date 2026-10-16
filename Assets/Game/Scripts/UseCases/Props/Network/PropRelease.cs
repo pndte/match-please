@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 using Bw.Entities.Extensions;
+using Bw.Entities.Physics.Extensions;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Movement;
-using Bw.UseCases.Movement.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Extensions;
 using JetBrains.Collections.Viewable;
@@ -14,17 +13,13 @@ namespace Bw.UseCases.Props.Network
 {
     public sealed class PropRelease
     {
-        private const float Skin = 0.015f;
-
         private readonly IWeapon _prop;
         private readonly IWeaponInventories _inventories;
-        private readonly IRestartable<BodyState> _body;
+        private readonly IRestartable<RigidState> _body;
         private readonly ThrownPropHits _hits;
         private readonly Transform _transform;
-        private readonly BoxCollider2D _shape;
+        private readonly ReleaseSpots _spots;
         private readonly PropThrowConfig _config;
-        private readonly ContactFilter2D _blockers;
-        private readonly List<RaycastHit2D> _found = new(8);
 
         private PropLaunch _launch = PropLaunch.Dropped;
 
@@ -33,11 +28,10 @@ namespace Bw.UseCases.Props.Network
             IWeapon prop,
             IWeaponHold hold,
             IWeaponInventories inventories,
-            IRestartable<BodyState> body,
+            IRestartable<RigidState> body,
             ThrownPropHits hits,
             Transform transform,
-            BoxCollider2D shape,
-            IBodyConfig bodyConfig,
+            ReleaseSpots spots,
             PropThrowConfig config)
         {
             _prop = prop;
@@ -45,14 +39,8 @@ namespace Bw.UseCases.Props.Network
             _body = body;
             _hits = hits;
             _transform = transform;
-            _shape = shape;
+            _spots = spots;
             _config = config;
-            _blockers = new ContactFilter2D
-            {
-                useLayerMask = true,
-                layerMask = bodyConfig.GroundLayer,
-                useTriggers = false
-            };
 
             prop.Fired.Advise(lifetime, shot => Throw(shot.Aim));
             hold.HeldLifetime.WhenAlive(lifetime, heldLifetime =>
@@ -71,52 +59,34 @@ namespace Bw.UseCases.Props.Network
             _inventories.InventoryOf(thrower).DropAndDrawNext(_prop);
         }
 
-        private void Release(Collider2D holder)
+        private void Release(BoxCollider2D holder)
         {
             var launch = _launch;
             _launch = PropLaunch.Dropped;
-            var position = ReleasePosition(holder);
+            var position = _spots.Nearest(BoxOf(holder), _transform.position);
 
             launch.Switch(
-                () => _body.Restart(new BodyState(position, Vector2.zero, 0f, false)),
+                () => _body.Restart(new RigidState(position, 0f, Vector2.zero, 0f)),
                 (thrower, velocity) =>
                 {
-                    _body.Restart(new BodyState(position, new Vector2(0f, velocity.y), velocity.x, false));
+                    _body.Restart(new RigidState(position, 0f, velocity, -Mathf.Sign(velocity.x) * _config.Spin));
                     _hits.Track(thrower);
                 });
         }
 
-        private Vector2 ReleasePosition(Collider2D holder) //TODO: ящик, отпущенный прицелом вниз на земле, тянется к центру держателя и встаёт ему в ноги, перекрывая его; отпускать его надо в сторону от держателя
-        {
-            var scale = (Vector2)_transform.lossyScale;
-            var offset = Vector2.Scale(_shape.offset, scale);
-            var from = (Vector2)holder.bounds.center;
-            var path = (Vector2)_transform.position + offset - from;
-            var distance = path.magnitude;
-            if (distance == 0f)
-                return from - offset;
-
-            var direction = path / distance;
-            var count = Physics2D.BoxCast(from, Vector2.Scale(_shape.size, scale), 0f, direction, _blockers, _found, distance);
-            for (var index = 0; index < count; index++)
-            {
-                var hit = _found[index];
-                if (hit.collider == _shape || hit.transform.root == holder.transform.root)
-                    continue;
-
-                return from + direction * Mathf.Max(0f, hit.distance - Skin) - offset;
-            }
-
-            return from + path - offset;
-        }
-
-        private Collider2D Holder()
+        private BoxCollider2D Holder()
         {
             var holder = _transform.parent;
-            if (holder == null || !holder.TryGetComponent<Collider2D>(out var shape))
-                throw new InvalidOperationException($"Prop '{_transform.name}' is held only by a holder with a collider.");
+            if (holder == null || !holder.TryGetComponent<BoxCollider2D>(out var shape))
+                throw new InvalidOperationException($"Prop '{_transform.name}' is held only by a holder with a box collider.");
 
             return shape;
+        }
+
+        private static Rect BoxOf(BoxCollider2D holder)
+        {
+            var size = holder.WorldSize();
+            return new Rect((Vector2)holder.transform.position + holder.WorldOffset() - size / 2f, size);
         }
     }
 }

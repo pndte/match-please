@@ -9,6 +9,6 @@ namespace Bw.UseCases.Movement.Abstractions
         public float PushDeceleration { get; }
         public float AirPushDeceleration { get; }
         public float PushLift { get; }
-        public float ShoveSpeed { get; }
+        public float ShoveForce { get; }
     }
 }

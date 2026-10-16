@@ -7,6 +7,7 @@ namespace Bw.UseCases.Props
     public sealed class PropThrowConfig : ScriptableObject, IHitConfig
     {
         [Min(0f)] public float Speed = 22f;
+        [Min(0f)] public float Spin = 540f;
         [Min(0f)] public float Damage = 5f;
         [Min(0f)] public float Knockback = 8f;
         public LayerMask Targets = 1 << 15;

@@ -13,6 +13,8 @@ namespace Bw.UseCases.Movement
 
         BodyState IBodyState<BodyState>.Body => this;
         BodyState IBodyState<BodyState>.WithBody(BodyState body) => body;
+        Vector2 IPlacedState<BodyState>.Position => Position;
+        BodyState IPlacedState<BodyState>.Shifted(Vector2 offset) => new(Position + offset, Velocity, HorizontalPush, Grounded);
 
         public BodyState(
             Vector2 position,

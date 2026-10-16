@@ -19,7 +19,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Extensions
             {
                 var struck = tracer.Cast(tracer.Pellet(ray, pellet)).Hit;
                 if (struck && struck.collider.TryGetComponent<IHolder<IReadonlyMortal>>(out var mortal))
-                    Add(affected, mortal.Value, hit);
+                    Add(affected, mortal.Value, hit.At(struck.collider.transform.InverseTransformPoint(struck.point)));
             }
         }
 

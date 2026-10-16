@@ -12,6 +12,7 @@ namespace Bw.UseCases.Mortality.Network.Codecs
     {
         private static readonly Quantization Damage = new(5);
         private static readonly Quantization Knockback = new(6);
+        private static readonly Quantization Point = new(6);
 
         public OutcomeReport<Hit> Value
         {
@@ -36,9 +37,11 @@ namespace Bw.UseCases.Mortality.Network.Codecs
                     var target = Value.Affected[index].Target;
                     var damage = Value.Affected[index].Effect.Damage;
                     var knockback = Value.Affected[index].Effect.Knockback;
+                    var point = Value.Affected[index].Effect.LocalPoint;
                     serializer.SerializePacked(ref target);
                     serializer.SerializeQuantized(ref damage, Damage);
                     serializer.SerializeQuantized(ref knockback, Knockback);
+                    serializer.SerializeQuantized(ref point, Point);
                 }
 
                 return;
@@ -50,10 +53,12 @@ namespace Bw.UseCases.Mortality.Network.Codecs
                 var target = 0UL;
                 var damage = 0f;
                 var knockback = Vector2.zero;
+                var point = Vector2.zero;
                 serializer.SerializePacked(ref target);
                 serializer.SerializeQuantized(ref damage, Damage);
                 serializer.SerializeQuantized(ref knockback, Knockback);
-                affected[index] = new AffectedTarget<ulong, Hit>(target, new Hit(damage, knockback));
+                serializer.SerializeQuantized(ref point, Point);
+                affected[index] = new AffectedTarget<ulong, Hit>(target, new Hit(damage, knockback, point));
             }
 
             Value = new OutcomeReport<Hit>(tick, affected);

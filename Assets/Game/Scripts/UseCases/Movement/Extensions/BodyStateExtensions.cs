@@ -17,8 +17,5 @@ namespace Bw.UseCases.Movement.Extensions
 
         public static TState Pushed<TState>(this TState state, Vector2 impulse) where TState : struct, IBodyState<TState> =>
             state.WithBody(state.Body.Pushed(impulse));
-
-        public static TState Shifted<TState>(this TState state, Vector2 offset) where TState : struct, IBodyState<TState> =>
-            state.WithBody(state.Body.Shifted(offset));
     }
 }

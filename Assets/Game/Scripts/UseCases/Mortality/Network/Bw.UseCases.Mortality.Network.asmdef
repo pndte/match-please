@@ -5,6 +5,7 @@
         "Bw.Entities",
         "Bw.Entities.Network",
         "Bw.UseCases.Mortality",
+        "Bw.UseCases.Movement",
         "Bw.UseCases.Movement.Network",
         "Unity.Netcode.Runtime",
         "Zenject"

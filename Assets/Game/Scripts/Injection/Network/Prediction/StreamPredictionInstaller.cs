@@ -2,6 +2,7 @@ using System;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Prediction.Stream;
 using Bw.Entities.Network.Prediction.Stream.Requests;
+using Bw.Entities.Network.Replication;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using JetBrains.Collections.Viewable;
@@ -51,7 +52,7 @@ namespace Bw.Injection.Network.Prediction
             NetResultDeclaration<int> inputMargin)
         {
             Container.BindRequestSender(input).WhenInjectedInto(typeof(PredictionInputSender<TInput>), typeof(PredictionReconciler<TInput, TState>));
-            Container.BindResultReceiver(state).WhenInjectedInto(typeof(PredictionReconciler<TInput, TState>), typeof(SnapshotInterpolation<TState>));
+            Container.BindResultReceiver(state).WhenInjectedInto(typeof(PredictionReconciler<TInput, TState>), typeof(SnapshotInterpolation<TState>), typeof(ReplicatedStates<TState>));
             Container.BindResultReceiver(inputMargin).WhenInjectedInto<InputMarginClientHandler>();
 
             Container.Bind<PredictionInputSender<TInput>>().AsSingle().NonLazy();
@@ -63,6 +64,7 @@ namespace Bw.Injection.Network.Prediction
             Container.Bind<InputMarginClientHandler>().AsSingle().NonLazy();
             Container.Bind<PredictionInterpolation<TState>>().AsSingle().NonLazy();
             Container.Bind<SnapshotInterpolation<TState>>().AsSingle().NonLazy();
+            Container.Bind<IReplicatedStates<TState>>().To<ReplicatedStates<TState>>().AsSingle();
         }
 
         private void BindServer(

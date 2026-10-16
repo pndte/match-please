@@ -9,18 +9,18 @@ namespace Bw.UseCases.Movement.Network.Platforms
     {
         private readonly IRewindable _rewinder;
         private readonly IMovementBody _body;
-        private readonly IMovementCollider _collider;
+        private readonly IPlatformRider _rider;
         private readonly ISimulationStep _step;
 
         public RiderRewinder(
             IRewindable rewinder,
             IMovementBody body,
-            IMovementCollider collider,
+            IPlatformRider rider,
             ISimulationStep step)
         {
             _rewinder = rewinder;
             _body = body;
-            _collider = collider;
+            _rider = rider;
             _step = step;
         }
 
@@ -29,7 +29,7 @@ namespace Bw.UseCases.Movement.Network.Platforms
             _rewinder.Rewind(lifetime, seen);
             var duration = (double)_step.Duration;
             var position = _body.Position;
-            _body.Place(position + _collider.RideShift(position, seen.Interpolated * duration, seen.Predicted * duration));
+            _body.Place(position + _rider.RideShift(position, seen.Interpolated * duration, seen.Predicted * duration));
         }
     }
 }
