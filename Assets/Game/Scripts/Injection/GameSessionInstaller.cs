@@ -80,6 +80,7 @@ namespace Bw.Injection
 
         private void BindPhysics()
         {
+            RequireNoClassicColliders();
             Container.BindInterfacesTo<SweptBodyCollection>().AsSingle();
             Container.Bind(typeof(IPhysicsSpace), typeof(PhysicsSpace)).To<PhysicsSpace>()
                 .FromMethod(context => PhysicsSpace.Create(
@@ -89,12 +90,22 @@ namespace Bw.Injection
                     context.Container.Resolve<ISweptBodyCollection>()))
                 .AsSingle();
             Container.Bind<LevelGeometry>()
-                .FromMethod(context => LevelGeometry.Create(gameObject.Lifetime(), context.Container.Resolve<IPhysicsSpace>(), LevelColliders()))
+                .FromMethod(context => LevelGeometry.Create(gameObject.Lifetime(), context.Container.Resolve<IPhysicsSpace>(), LevelBoxes()))
                 .AsSingle()
                 .NonLazy();
         }
 
-        private Collider2D[] LevelColliders() =>
-            Array.FindAll(FindObjectsByType<Collider2D>(FindObjectsInactive.Exclude, FindObjectsSortMode.None), collider => collider.gameObject.scene == gameObject.scene);
+        private void RequireNoClassicColliders()
+        {
+            foreach (var collider in FindObjectsByType<Collider2D>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+                if (collider.enabled && collider.gameObject.scene == gameObject.scene)
+                    throw new InvalidOperationException($"'{collider.name}' has an enabled {collider.GetType().Name}, which collides with nothing: classic 2D physics is off, the level is made of BodyBoxes.");
+        }
+
+        private BodyBox[] LevelBoxes() =>
+            Array.FindAll(FindObjectsByType<BodyBox>(FindObjectsInactive.Exclude, FindObjectsSortMode.None), IsLevelBox);
+
+        private bool IsLevelBox(BodyBox box) =>
+            box.gameObject.scene == gameObject.scene && box.GetComponentInParent<GameObjectContext>(true) == null;
     }
 }

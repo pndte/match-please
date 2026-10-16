@@ -158,7 +158,7 @@ namespace Bw.UseCases.Movement.Physics
         private static PhysicsAABB BoundsOf(PhysicsShape shape) =>
             shape.polygonGeometry.CalculateAABB(shape.body.transform);
 
-        private static bool IsPlatform(PhysicsShape shape) => //TODO: мотор понимает только доски, которые ловят сверху: поворот и дуга эффектора (rotationalOffset, surfaceArc) не учитываются
+        private static bool IsPlatform(PhysicsShape shape) =>
             shape.contactFilter.categories.IsBitSet(PhysicsCategories.OneWay);
     }
 }

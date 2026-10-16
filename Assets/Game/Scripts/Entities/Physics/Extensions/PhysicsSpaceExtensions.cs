@@ -9,21 +9,6 @@ namespace Bw.Entities.Physics.Extensions
         public static PhysicsBody CreateBody(
             this IPhysicsSpace space,
             Lifetime lifetime,
-            BoxCollider2D box,
-            PhysicsBody.BodyType type)
-        {
-            var created = space.CreateBody(lifetime, box.transform, Definition(type));
-            var shape = Filtered(PhysicsShapeDefinition.defaultDefinition, box.Categories());
-            var createdShape = created.CreateShape(box.LocalGeometry(), shape, box.gameObject);
-            if (box.IsOneWay())
-                space.MakeOneWay(lifetime, createdShape);
-
-            return created;
-        }
-
-        public static PhysicsBody CreateBody(
-            this IPhysicsSpace space,
-            Lifetime lifetime,
             BodyBox box,
             PhysicsBody.BodyType type) =>
             space.CreateBody(lifetime, box, Definition(type), PhysicsShapeDefinition.defaultDefinition);
@@ -36,7 +21,10 @@ namespace Bw.Entities.Physics.Extensions
             PhysicsShapeDefinition shape)
         {
             var created = space.CreateBody(lifetime, box.transform, body);
-            created.CreateShape(box.LocalGeometry(), Filtered(shape, box.Categories()), box.gameObject);
+            var createdShape = created.CreateShape(box.LocalGeometry(), Filtered(shape, box.Categories()), box.gameObject);
+            if (box.IsOneWay)
+                space.MakeOneWay(lifetime, createdShape);
+
             return created;
         }
 

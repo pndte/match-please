@@ -682,7 +682,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f9a9d68361e48008ce590b621fd3e07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.SpawnerInstaller
-  _characters: {fileID: 11400000, guid: ac04d9c8673f4d839415f2e3cdcd8d39, type: 2}
   _fists: {fileID: 11400000, guid: 7e4679416c174f5a984103270b97739d, type: 2}
   _weapons:
   - {fileID: 11400000, guid: 7a2e66abefd64418bd2523decce9c27f, type: 2}
@@ -694,6 +693,8 @@ MonoBehaviour:
   - {fileID: 1614011709}
   _spawnRandomOffset: 2
   _match: {fileID: 8603386797099639887, guid: 4344c00d96aa676449521002d9111650, type: 3}
+  _crates: {fileID: 0}
+  _crateSpots: []
 --- !u!114 &1377258036
 MonoBehaviour:
   m_ObjectHideFlags: 0

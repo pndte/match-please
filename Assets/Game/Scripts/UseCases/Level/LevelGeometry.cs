@@ -19,17 +19,16 @@ namespace Bw.UseCases.Level
             _body = body;
         }
 
-        public static LevelGeometry Create(Lifetime lifetime, IPhysicsSpace space, IReadOnlyList<Collider2D> colliders)
+        public static LevelGeometry Create(Lifetime lifetime, IPhysicsSpace space, IReadOnlyList<BodyBox> boxes)
         {
-            var boxes = StaticBoxes(colliders);
             if (boxes.Count == 0)
-                throw new InvalidOperationException("The level has no static colliders: its physics is built from the scene's enabled, non-trigger BoxCollider2D without a Rigidbody2D.");
+                throw new InvalidOperationException("The level has no boxes: its physics is built from the scene's BodyBoxes that no object context claims.");
 
             var body = space.World.CreateBody(new PhysicsBodyDefinition { type = PhysicsBody.BodyType.Static });
-            foreach (var box in boxes)
+            foreach (var box in Sorted(boxes))
             {
                 var shape = body.CreateShape(box.WorldGeometry(), DefinitionOf(box), box.gameObject);
-                if (box.IsOneWay())
+                if (box.IsOneWay)
                     space.MakeOneWay(lifetime, shape);
             }
 
@@ -37,25 +36,14 @@ namespace Bw.UseCases.Level
             return new LevelGeometry(body);
         }
 
-        private static List<BoxCollider2D> StaticBoxes(IReadOnlyList<Collider2D> colliders)
+        private static List<BodyBox> Sorted(IReadOnlyList<BodyBox> boxes)
         {
-            var boxes = new List<BoxCollider2D>();
-            foreach (var collider in colliders)
-            {
-                if (!collider.enabled || collider.isTrigger || collider.attachedRigidbody != null)
-                    continue;
-
-                if (collider is not BoxCollider2D box)
-                    throw new InvalidOperationException($"Level collider '{collider.name}' is a {collider.GetType().Name}: the level's physics is built from BoxCollider2D only.");
-
-                boxes.Add(box);
-            }
-
-            boxes.Sort(ByPlace);
-            return boxes;
+            var sorted = new List<BodyBox>(boxes);
+            sorted.Sort(ByPlace);
+            return sorted;
         }
 
-        private static PhysicsShapeDefinition DefinitionOf(BoxCollider2D box)
+        private static PhysicsShapeDefinition DefinitionOf(BodyBox box)
         {
             var definition = PhysicsShapeDefinition.defaultDefinition;
             definition.contactFilter = new PhysicsShape.ContactFilter(box.Categories(), PhysicsMask.All, 0);
@@ -63,10 +51,10 @@ namespace Bw.UseCases.Level
             return definition;
         }
 
-        private static int ByPlace(BoxCollider2D first, BoxCollider2D second)
+        private static int ByPlace(BodyBox first, BodyBox second)
         {
-            var a = (Vector2)first.transform.TransformPoint(first.offset);
-            var b = (Vector2)second.transform.TransformPoint(second.offset);
+            var a = (Vector2)first.transform.TransformPoint(first.Offset);
+            var b = (Vector2)second.transform.TransformPoint(second.Offset);
             if (a.x != b.x)
                 return a.x.CompareTo(b.x);
 

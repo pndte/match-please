@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6495814041425593498}
-  - component: {fileID: 8271536615560369838}
   - component: {fileID: 4750930497866346670}
+  - component: {fileID: 1363289909139830858}
   m_Layer: 14
   m_Name: Platform
   m_TagString: Untagged
@@ -34,52 +34,6 @@ Transform:
   - {fileID: 219216500405006641}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &8271536615560369838
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 307512020707454962}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
 --- !u!114 &4750930497866346670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,9 +46,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 612e3d21acbc3bc49a5b1e164a505aa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Bw.UseCases::Bw.UseCases.Level.PlatformSkin
-  _body: {fileID: 8271536615560369838}
+  _box: {fileID: 1363289909139830858}
   _skin: {fileID: 5803677912291801653}
   _config: {fileID: 11400000, guid: 0942f4b40f199fd429d7b4264165aaa8, type: 2}
+--- !u!114 &1363289909139830858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 307512020707454962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1b2fa04502d79749974d06d00c4aa18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Bw.Entities::Bw.Entities.Physics.BodyBox
+  _size: {x: 1, y: 1}
+  _offset: {x: 0, y: 0}
+  _oneWay: 0
 --- !u!1 &7258361271509115521
 GameObject:
   m_ObjectHideFlags: 0

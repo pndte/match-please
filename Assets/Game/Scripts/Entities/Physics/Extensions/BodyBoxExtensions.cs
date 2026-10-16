@@ -35,6 +35,9 @@ namespace Bw.Entities.Physics.Extensions
         {
             var categories = PhysicsMask.None;
             categories.SetBit(box.gameObject.layer);
+            if (box.IsOneWay)
+                categories.SetBit(PhysicsCategories.OneWay);
+
             return categories;
         }
     }

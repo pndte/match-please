@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Plank
       objectReference: {fileID: 0}
+    - target: {fileID: 1363289909139830858, guid: a58d7c5426427e54a8ed49995a9910e6, type: 3}
+      propertyPath: _oneWay
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4750930497866346670, guid: a58d7c5426427e54a8ed49995a9910e6, type: 3}
       propertyPath: _config
       value: 
@@ -76,39 +80,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8271536615560369838, guid: a58d7c5426427e54a8ed49995a9910e6, type: 3}
-      propertyPath: m_UsedByEffector
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 307512020707454962, guid: a58d7c5426427e54a8ed49995a9910e6, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3348919386694204412}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a58d7c5426427e54a8ed49995a9910e6, type: 3}
---- !u!1 &4167906373642548484 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 307512020707454962, guid: a58d7c5426427e54a8ed49995a9910e6, type: 3}
-  m_PrefabInstance: {fileID: 4437136683978382070}
-  m_PrefabAsset: {fileID: 0}
---- !u!251 &3348919386694204412
-PlatformEffector2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4167906373642548484}
-  m_Enabled: 1
-  m_UseColliderMask: 1
-  m_ColliderMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RotationalOffset: 0
-  m_UseOneWay: 1
-  m_UseOneWayGrouping: 0
-  m_SurfaceArc: 180
-  m_UseSideFriction: 0
-  m_UseSideBounce: 0
-  m_SideArc: 1

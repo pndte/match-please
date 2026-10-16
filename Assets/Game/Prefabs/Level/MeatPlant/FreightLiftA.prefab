@@ -10,10 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 264544782490722300}
   - component: {fileID: 5347967797599484877}
-  - component: {fileID: 6017674800042562539}
-  - component: {fileID: 755431061032758621}
   - component: {fileID: 7382985775770853724}
   - component: {fileID: 1593713749091797037}
+  - component: {fileID: 940050261994297083}
   m_Layer: 14
   m_Name: FreightLiftA
   m_TagString: Untagged
@@ -95,79 +94,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &6017674800042562539
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5679013213834059859}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.15}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.096385546}
-    oldSize: {x: 4.2, y: 4.1555557}
-    newSize: {x: 2.3, y: 1.8}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 4, y: 0.3}
-  m_EdgeRadius: 0
---- !u!50 &755431061032758621
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5679013213834059859}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!114 &7382985775770853724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,8 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59007e08255a68b4bac405fa5fc19d6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Level.MovingPlatformInstaller
-  _body: {fileID: 755431061032758621}
-  _collider: {fileID: 6017674800042562539}
+  _box: {fileID: 940050261994297083}
   _path:
     Travel: {x: 0, y: 22.5}
     TravelSeconds: 9
@@ -205,3 +130,18 @@ MonoBehaviour:
   _findSiblingMonoInstallers: 0
   _autoRun: 1
   _kernel: {fileID: 0}
+--- !u!114 &940050261994297083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5679013213834059859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1b2fa04502d79749974d06d00c4aa18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Bw.Entities::Bw.Entities.Physics.BodyBox
+  _size: {x: 4, y: 0.3}
+  _offset: {x: 0, y: -0.15}
+  _oneWay: 0
