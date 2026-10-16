@@ -3678,7 +3678,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     type: 1
     collisionMode: 1
@@ -4922,6 +4922,8 @@ GameObject:
   - component: {fileID: 2164053249946448612}
   - component: {fileID: 9023913617249363644}
   - component: {fileID: 1996954249439894415}
+  - component: {fileID: 5392175260194574689}
+  - component: {fileID: 2119807984881807886}
   m_Layer: 0
   m_Name: CrateBreak
   m_TagString: Untagged
@@ -9833,6 +9835,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Bw.UseCases.Vfx.View::Bw.UseCases.Vfx.View.Effects.ParticleEffect
   _particles: {fileID: 2164053249946448612}
+--- !u!114 &5392175260194574689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829313885574634999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08eca9f7688a0a24685b89133b020c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Zenject::Zenject.GameObjectContext
+  _scriptableObjectInstallers: []
+  _monoInstallers:
+  - {fileID: 2119807984881807886}
+  _installerPrefabs: []
+  _findSiblingMonoInstallers: 0
+  _autoRun: 1
+  _kernel: {fileID: 0}
+--- !u!114 &2119807984881807886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829313885574634999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c65051f6c18841809f503076fbd5711d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Vfx.ParticleCollisionInstaller
+  _systems:
+  - Particles: {fileID: 7956546897580528053}
+    Config: {fileID: 11400000, guid: 33da2d01df3a46940a4f72793e7babee, type: 2}
+  - Particles: {fileID: 6003705983406624571}
+    Config: {fileID: 11400000, guid: 94f441bc4a571c2429527d2d49963246, type: 2}
+  - Particles: {fileID: 8223118768043827723}
+    Config: {fileID: 11400000, guid: 11b0c5cf0a0f6e34084151ebe9cf7cc9, type: 2}
 --- !u!1 &1766521953464596337
 GameObject:
   m_ObjectHideFlags: 0
@@ -18404,7 +18444,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     type: 1
     collisionMode: 1
@@ -23301,7 +23341,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     type: 1
     collisionMode: 1

@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 2943833436701882096}
   - component: {fileID: 2308714078812724568}
   - component: {fileID: 536648620144740091}
+  - component: {fileID: 5674353341682201308}
+  - component: {fileID: 8926438842611164508}
   m_Layer: 0
   m_Name: Casing
   m_TagString: Untagged
@@ -3678,7 +3680,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     type: 1
     collisionMode: 1
@@ -4908,3 +4910,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Bw.UseCases.Vfx.View::Bw.UseCases.Vfx.View.Effects.ParticleEffect
   _particles: {fileID: 2943833436701882096}
+--- !u!114 &5674353341682201308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7810228158729415027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08eca9f7688a0a24685b89133b020c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Zenject::Zenject.GameObjectContext
+  _scriptableObjectInstallers: []
+  _monoInstallers:
+  - {fileID: 8926438842611164508}
+  _installerPrefabs: []
+  _findSiblingMonoInstallers: 0
+  _autoRun: 1
+  _kernel: {fileID: 0}
+--- !u!114 &8926438842611164508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7810228158729415027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c65051f6c18841809f503076fbd5711d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Bw.Injection::Bw.Injection.Vfx.ParticleCollisionInstaller
+  _systems:
+  - Particles: {fileID: 2943833436701882096}
+    Config: {fileID: 11400000, guid: 1142591e815bc134ab20663a14a975aa, type: 2}
