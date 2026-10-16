@@ -106,7 +106,7 @@ namespace Bw.UseCases.Movement.Physics
             for (var index = 0; index < hits.Length; index++)
             {
                 var hit = hits[index];
-                if (!Own(hit) && NormalOf(hit, box, translation).y > 0f && hit.shape.userData.objectValue is ISpringboard springboard)
+                if (!Own(hit) && NormalOf(hit, box, translation).y > 0f && hit.shape.TryGetComponent<ISpringboard>(out var springboard))
                 {
                     height = springboard.LaunchHeight;
                     return true;

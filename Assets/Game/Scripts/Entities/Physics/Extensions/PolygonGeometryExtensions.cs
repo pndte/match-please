@@ -14,6 +14,9 @@ namespace Bw.Entities.Physics.Extensions
             return opposite > own + FaceTolerance ? oppositeNormal : -ownNormal;
         }
 
+        public static float DistanceTo(this PolygonGeometry polygon, Vector2 point) =>
+            polygon.OverlapPoint(point) ? 0f : Vector2.Distance(point, polygon.ClosestPoint(point));
+
         private static float MaxSeparation(PolygonGeometry polygon, PolygonGeometry other, out Vector2 normal)
         {
             var separation = float.NegativeInfinity;

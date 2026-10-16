@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using Bw.Entities;
 using Bw.Entities.Network.Variables;
+using Bw.Entities.Physics.Extensions;
 using Bw.UseCases.Mortality;
 using Bw.UseCases.Mortality.Extensions;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
@@ -8,7 +8,9 @@ using Bw.UseCases.Shooting.Weapon.Extensions;
 using Bw.UseCases.Shooting.Weapon.Pickup;
 using Bw.UseCases.Shooting.Weapon.Pickup.Extensions;
 using JetBrains.Lifetimes;
+using Unity.Collections;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Shooting.Weapon.Network.Requests
 {
@@ -18,9 +20,8 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
         private readonly IWeaponInventories _inventories;
         private readonly WeaponPickupConfig _config;
         private readonly WeaponPickupNetworkConfig _networkConfig;
-        private readonly Transform _body;
-        private readonly ContactFilter2D _filter;
-        private readonly List<Collider2D> _found = new(8);
+        private readonly PhysicsBody _body;
+        private readonly PhysicsQuery.QueryFilter _filter;
 
         public WeaponPickupServerHandler(
             Lifetime lifetime,
@@ -29,19 +30,14 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
             IWeaponInventories inventories,
             WeaponPickupConfig config,
             WeaponPickupNetworkConfig networkConfig,
-            Transform body)
+            PhysicsBody body)
         {
             _character = character;
             _inventories = inventories;
             _config = config;
             _networkConfig = networkConfig;
             _body = body;
-            _filter = new ContactFilter2D
-            {
-                useLayerMask = true,
-                layerMask = config.WeaponMask,
-                useTriggers = false
-            };
+            _filter = new PhysicsQuery.QueryFilter(PhysicsMask.All, config.WeaponMask.AsPhysicsMask());
 
             character.State.WhenAlive(lifetime, aliveLifetime =>
                 pickup.Received.Advise(aliveLifetime, request => PickUp(request.Point)));
@@ -60,20 +56,21 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Requests
             var closest = float.MaxValue;
             pickable = default;
 
-            Physics2D.OverlapCircle(point, _config.HoverRadius, _filter, _found); //TODO: точку клиент берёт со своей картинки, а летящее оружие он видит с отставанием интерполяции — подбор на лету может промахнуться; надёжнее, если запрос назовёт само оружие (id ↔ оружие на сетевой границе)
-            for (var index = 0; index < _found.Count; index++)
+            var hover = new CircleGeometry { center = point, radius = _config.HoverRadius };
+            using var near = _body.world.OverlapGeometry(hover, _filter, Allocator.Temp); //TODO: точку клиент берёт со своей картинки, а летящее оружие он видит с отставанием интерполяции — подбор на лету может промахнуться; надёжнее, если запрос назовёт само оружие (id ↔ оружие на сетевой границе)
+            for (var index = 0; index < near.Length; index++)
             {
-                var shape = _found[index];
-                if (!shape.TryGetComponent<IHolder<IWeapon>>(out var holder) || _inventories.Carriers.ContainsKey(holder.Value))
+                var shape = near[index].shape;
+                if (!shape.TryGetComponent<IHolder<IWeapon>>(out var weapon) || _inventories.Carriers.ContainsKey(weapon.Value))
                     continue;
 
-                var distance = Vector2.Distance(point, shape.ClosestPoint(point));
-                if (distance >= closest || !_config.IsPickable(_body.position, shape.bounds.center, distance, _networkConfig.ReachSlack))
+                var distance = shape.DistanceTo(point);
+                if (distance >= closest || !_config.IsPickable(_body.position, shape.aabb.center, distance, _networkConfig.ReachSlack))
                     continue;
 
                 found = true;
                 closest = distance;
-                pickable = holder.Value;
+                pickable = weapon.Value;
             }
 
             return found;

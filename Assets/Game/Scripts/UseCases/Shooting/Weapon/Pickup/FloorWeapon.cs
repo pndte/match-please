@@ -1,3 +1,4 @@
+using Bw.Entities.Physics.Extensions;
 using Bw.UseCases.Shooting.Weapon.Pickup.Abstractions;
 using JetBrains.Lifetimes;
 using UnityEngine;
@@ -6,19 +7,19 @@ namespace Bw.UseCases.Shooting.Weapon.Pickup
 {
     public sealed class FloorWeapon : IFloorWeapon
     {
-        public Vector2 Position => _shape.bounds.center;
+        public Vector2 Position => _box.WorldGeometry().centroid;
 
-        private readonly Collider2D _shape;
+        private readonly BoxCollider2D _box;
         private readonly IWeaponHighlight _highlight;
 
-        public FloorWeapon(Collider2D shape, IWeaponHighlight highlight)
+        public FloorWeapon(BoxCollider2D box, IWeaponHighlight highlight)
         {
-            _shape = shape;
+            _box = box;
             _highlight = highlight;
         }
 
         public float DistanceTo(Vector2 point) =>
-            Vector2.Distance(point, _shape.ClosestPoint(point));
+            _box.WorldGeometry().DistanceTo(point);
 
         public void Highlight(Lifetime highlightLifetime) =>
             _highlight.Show(highlightLifetime);

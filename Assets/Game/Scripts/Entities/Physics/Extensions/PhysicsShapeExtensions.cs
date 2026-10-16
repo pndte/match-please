@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.Entities.Physics.Extensions
@@ -27,5 +28,17 @@ namespace Bw.Entities.Physics.Extensions
 
             return found;
         }
+
+        public static bool TryGetComponent<T>(this PhysicsShape shape, out T component)
+        {
+            if (shape.userData.objectValue is GameObject owner)
+                return owner.TryGetComponent(out component);
+
+            component = default;
+            return false;
+        }
+
+        public static float DistanceTo(this PhysicsShape shape, Vector2 point) =>
+            shape.OverlapPoint(point) ? 0f : Vector2.Distance(point, shape.ClosestPoint(point));
     }
 }

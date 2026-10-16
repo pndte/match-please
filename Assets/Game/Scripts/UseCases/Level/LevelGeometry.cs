@@ -28,15 +28,9 @@ namespace Bw.UseCases.Level
             var body = space.World.CreateBody(new PhysicsBodyDefinition { type = PhysicsBody.BodyType.Static });
             foreach (var box in boxes)
             {
-                var shape = body.CreateShape(box.WorldGeometry(), DefinitionOf(box));
+                var shape = body.CreateShape(box.WorldGeometry(), DefinitionOf(box), box.gameObject);
                 if (box.IsOneWay())
                     space.MakeOneWay(lifetime, shape);
-
-                if (box.TryGetComponent(out Springboard springboard))
-                {
-                    shape.userData = new PhysicsUserData { objectValue = springboard };
-                    shape.contactEvents = true;
-                }
             }
 
             lifetime.OnTermination(() => body.Destroy(0));
@@ -65,6 +59,7 @@ namespace Bw.UseCases.Level
         {
             var definition = PhysicsShapeDefinition.defaultDefinition;
             definition.contactFilter = new PhysicsShape.ContactFilter(box.Categories(), PhysicsMask.All, 0);
+            definition.contactEvents = box.TryGetComponent<Springboard>(out _);
             return definition;
         }
 

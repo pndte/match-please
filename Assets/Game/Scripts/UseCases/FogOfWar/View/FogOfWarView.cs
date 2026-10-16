@@ -39,10 +39,10 @@ namespace Bw.UseCases.FogOfWar.View
             Lifetime lifetime,
             UnityEngine.Camera camera,
             ICameraTargets targets,
-            FogOfWarConfig config)
+            FogOfWarConfig config,
+            LineOfSight sight)
         {
             var area = ViewArea(camera, config);
-            var sight = new LineOfSight(camera.gameObject.scene.GetPhysicsScene2D(), config);
             var mask = SightMask.Create(lifetime, MaskSize(area, config), config); //TODO: размер маски берётся от экрана один раз: после смены разрешения или пропорций окна её тексели растягиваются и край тумана становится мягче
             var fog = FogCover.Create(lifetime, camera, mask, config);
             fog.Cover(area);

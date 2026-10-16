@@ -30,7 +30,7 @@ namespace Bw.Entities.Physics.Extensions
             var created = space.World.CreateBody(body);
 
             shape.contactFilter = new PhysicsShape.ContactFilter(box.Categories(), shape.contactFilter.contacts, 0);
-            var createdShape = created.CreateShape(box.LocalGeometry(), shape);
+            var createdShape = created.CreateShape(box.LocalGeometry(), shape, box.gameObject);
             if (box.IsOneWay())
                 space.MakeOneWay(lifetime, createdShape);
 

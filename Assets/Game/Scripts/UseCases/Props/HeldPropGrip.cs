@@ -1,8 +1,5 @@
 using System;
-using Bw.Entities;
 using Bw.Entities.Physics.Extensions;
-using Bw.UseCases.Mortality;
-using Bw.UseCases.Mortality.Extensions;
 using JetBrains.Lifetimes;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
@@ -12,15 +9,15 @@ namespace Bw.UseCases.Props
     public sealed class HeldPropGrip //TODO: удар по ящику в руках считает точку удара в системе держателя (форма живёт на его теле), а отбрасывание ящика ждёт её в системе ящика: пока ящик в руках не отбрасывается, разница не видна
     {
         private readonly Vector2 _size;
-        private readonly IHolder<IReadonlyMortal> _mortal;
+        private readonly GameObject _owner;
         private readonly PhysicsShapeDefinition _definition;
 
         private PhysicsShape _shape;
 
-        public HeldPropGrip(BoxCollider2D shape, IHolder<IReadonlyMortal> mortal, int layer)
+        public HeldPropGrip(BoxCollider2D shape, int layer)
         {
             _size = shape.WorldSize();
-            _mortal = mortal;
+            _owner = shape.gameObject;
             _definition = Definition(layer);
         }
 
@@ -29,8 +26,7 @@ namespace Bw.UseCases.Props
             if (_shape.isValid)
                 throw new InvalidOperationException("A held prop grips one holder at a time: its grip is already on a holder's body.");
 
-            var shape = holder.CreateShape(BoxAt(Vector2.zero), _definition);
-            shape.SetMortal(_mortal);
+            var shape = holder.CreateShape(BoxAt(Vector2.zero), _definition, _owner);
             _shape = shape;
             lifetime.OnTermination(() =>
             {

@@ -1,8 +1,12 @@
 using Bw.Entities.Extensions;
+using Bw.Entities.Physics;
+using Bw.Entities.Physics.Extensions;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Lifetimes;
+using Unity.Collections;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Shooting.Weapon
 {
@@ -10,6 +14,8 @@ namespace Bw.UseCases.Shooting.Weapon
     {
         private readonly Transform _weapon;
         private readonly WeaponRotationConfig _config;
+        private readonly PhysicsWorld _world;
+        private readonly PhysicsQuery.QueryFilter _obstacles;
 
         private bool _drawn;
         private float _radius;
@@ -18,10 +24,13 @@ namespace Bw.UseCases.Shooting.Weapon
             Lifetime lifetime,
             Transform weapon,
             IReadonlyWeaponDraw draw,
-            WeaponRotationConfig config)
+            WeaponRotationConfig config,
+            IPhysicsSpace space)
         {
             _weapon = weapon;
             _config = config;
+            _world = space.World;
+            _obstacles = new PhysicsQuery.QueryFilter(PhysicsMask.All, config.ObstacleLayerMask.AsPhysicsMask());
             _radius = config.MaxOrbitRadius;
 
             draw.DrawnLifetime.WhenAlive(lifetime, drawnLifetime =>
@@ -47,13 +56,9 @@ namespace Bw.UseCases.Shooting.Weapon
         private float TargetRadius(Vector2 direction)
         {
             var holder = _weapon.parent;
-            var hit = Physics2D.Raycast(
-                holder.position,
-                holder.TransformDirection(direction),
-                _config.ObstacleDetectionDistance,
-                _config.ObstacleLayerMask);
-
-            return hit.collider != null ? _config.MinOrbitRadius : _config.MaxOrbitRadius;
+            var reach = (Vector2)holder.TransformDirection(direction) * _config.ObstacleDetectionDistance;
+            using var obstacles = _world.CastRay(new PhysicsQuery.CastRayInput(holder.position, reach), _obstacles, PhysicsQuery.WorldCastMode.Closest, Allocator.Temp);
+            return obstacles.Length > 0 ? _config.MinOrbitRadius : _config.MaxOrbitRadius;
         }
     }
 }

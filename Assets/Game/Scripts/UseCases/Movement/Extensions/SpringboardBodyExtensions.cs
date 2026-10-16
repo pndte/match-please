@@ -1,3 +1,4 @@
+using Bw.Entities.Physics.Extensions;
 using Bw.UseCases.Movement.Physics.Abstractions;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
@@ -19,7 +20,7 @@ namespace Bw.UseCases.Movement.Extensions
                     continue;
 
                 var other = mine ? begin.shapeB : begin.shapeA;
-                if (other.userData.objectValue is not ISpringboard springboard || !begin.contactId.isValid)
+                if (!other.TryGetComponent<ISpringboard>(out var springboard) || !begin.contactId.isValid)
                     continue;
 
                 var normal = begin.contactId.contact.manifold.normal;

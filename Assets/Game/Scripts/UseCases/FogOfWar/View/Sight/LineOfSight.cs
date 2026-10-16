@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.FogOfWar.View.Sight
 {
@@ -12,26 +14,20 @@ namespace Bw.UseCases.FogOfWar.View.Sight
 
         private static readonly IComparer<SightRay> ByAngle = new AngleOrder();
 
-        private readonly PhysicsScene2D _physics;
-        private readonly ContactFilter2D _blockers;
+        private readonly PhysicsWorld _world;
+        private readonly PhysicsQuery.QueryFilter _blockers;
+        private readonly PhysicsMask _seeThrough;
         private readonly FogOfWarConfig _config;
-        private readonly List<Collider2D> _inArea = new(64);
-        private readonly PhysicsShapeGroup2D _shapes = new(8, 64);
-        private readonly RaycastHit2D[] _hits = new RaycastHit2D[32];
 
         private SightRay[] _rays = new SightRay[1024];
         private int _count;
 
-        public LineOfSight(PhysicsScene2D physics, FogOfWarConfig config)
+        public LineOfSight(PhysicsWorld world, PhysicsMask seeThrough, FogOfWarConfig config)
         {
-            _physics = physics;
+            _world = world;
+            _blockers = new PhysicsQuery.QueryFilter(PhysicsMask.All, new PhysicsMask(config.Blockers));
+            _seeThrough = seeThrough;
             _config = config;
-            _blockers = new ContactFilter2D
-            {
-                useLayerMask = true,
-                layerMask = config.Blockers,
-                useTriggers = false
-            };
         }
 
         public SightRay Ray(int index) =>
@@ -40,11 +36,7 @@ namespace Bw.UseCases.FogOfWar.View.Sight
         public void Trace(Vector2 eye, Rect area)
         {
             _count = 0;
-            _physics.OverlapArea(area.min, area.max, _blockers, _inArea);
-            foreach (var collider in _inArea)
-                if (!IsSeeThrough(collider))
-                    AimPastCorners(eye, area, collider);
-
+            AimPastBlockers(eye, area);
             AimAt(eye, area, area.min);
             AimAt(eye, area, new Vector2(area.xMax, area.yMin));
             AimAt(eye, area, area.max);
@@ -56,16 +48,25 @@ namespace Bw.UseCases.FogOfWar.View.Sight
             Array.Sort(_rays, 0, _count, ByAngle);
         }
 
-        private void AimPastCorners(Vector2 eye, Rect area, Collider2D collider)
+        private void AimPastBlockers(Vector2 eye, Rect area)
         {
-            collider.GetShapes(_shapes); //TODO: у круга и капсулы нет углов: их край ловят только лучи веера, тень от них ступенчатая
-            var toWorld = _shapes.localToWorldMatrix;
-            for (var shape = 0; shape < _shapes.shapeCount; shape++)
+            using var inArea = _world.OverlapAABB(new PhysicsAABB(area.min, area.max), _blockers, Allocator.Temp);
+            for (var index = 0; index < inArea.Length; index++)
             {
-                var corners = _shapes.GetShape(shape).vertexCount;
-                for (var corner = 0; corner < corners; corner++)
-                    AimPast(eye, area, toWorld.MultiplyPoint3x4(_shapes.GetShapeVertex(shape, corner)));
+                var shape = inArea[index].shape;
+                if (!IsSeeThrough(shape))
+                    AimPastCorners(eye, area, shape);
             }
+        }
+
+        private void AimPastCorners(Vector2 eye, Rect area, PhysicsShape shape)
+        {
+            if (shape.shapeType != PhysicsShape.ShapeType.Polygon) //TODO: у круга и капсулы нет углов: их край ловят только лучи веера, тень от них ступенчатая
+                return;
+
+            var corners = shape.polygonGeometry.Transform(shape.transform).AsReadOnlySpan();
+            for (var corner = 0; corner < corners.Length; corner++)
+                AimPast(eye, area, corners[corner]);
         }
 
         private void AimPast(Vector2 eye, Rect area, Vector2 corner)
@@ -87,31 +88,25 @@ namespace Bw.UseCases.FogOfWar.View.Sight
         {
             var direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
             var reach = Reach(eye, direction, area);
-            Add(TryFindBlocker(eye, direction, reach, out var blocker)
+            Add(TryFindBlocker(eye, direction * reach, out var blocker)
                 ? SightRay.Hit(Wrapped(angle), blocker.point, blocker.normal)
                 : SightRay.Miss(Wrapped(angle), eye + direction * reach));
         }
 
-        private bool TryFindBlocker(
-            Vector2 eye,
-            Vector2 direction,
-            float reach,
-            out RaycastHit2D nearest)
+        private bool TryFindBlocker(Vector2 eye, Vector2 reach, out PhysicsQuery.WorldCastResult nearest)
         {
-            nearest = default;
-            var found = false;
-            var count = _physics.Raycast(eye, direction, reach, _blockers, _hits);
-            for (var index = 0; index < count; index++)
+            using var hits = _world.CastRay(new PhysicsQuery.CastRayInput(eye, reach), _blockers, PhysicsQuery.WorldCastMode.AllSorted, Allocator.Temp);
+            for (var index = 0; index < hits.Length; index++)
             {
-                var hit = _hits[index];
-                if (IsSeeThrough(hit.collider) || found && hit.distance >= nearest.distance)
+                if (IsSeeThrough(hits[index].shape))
                     continue;
 
-                nearest = hit;
-                found = true;
+                nearest = hits[index];
+                return true;
             }
 
-            return found;
+            nearest = default;
+            return false;
         }
 
         private void Add(SightRay ray)
@@ -122,8 +117,8 @@ namespace Bw.UseCases.FogOfWar.View.Sight
             _rays[_count++] = ray;
         }
 
-        private static bool IsSeeThrough(Collider2D collider) => //TODO: та же проверка доски, что BoxCollider2DExtensions.IsOneWay, по которой доски получают свою категорию в мире Box2D: свести в одно место, когда у досок появится свой компонент
-            collider.usedByEffector && collider.TryGetComponent(out PlatformEffector2D effector) && effector.enabled && effector.useOneWay;
+        private bool IsSeeThrough(PhysicsShape shape) =>
+            (shape.contactFilter.categories.bitMask & _seeThrough.bitMask) != 0;
 
         private static float Reach(Vector2 eye, Vector2 direction, Rect area) =>
             Mathf.Max(0f, Mathf.Min(Exit(eye.x, direction.x, area.xMin, area.xMax), Exit(eye.y, direction.y, area.yMin, area.yMax)));

@@ -9,6 +9,17 @@ namespace Bw.Entities.Physics.Extensions
         private const ulong LayerBits = 0xFFFFFFFFul;
         private const float ProbeRadius = 0.01f;
 
+        public static PhysicsShape CreateShape(
+            this PhysicsBody body,
+            PolygonGeometry geometry,
+            PhysicsShapeDefinition definition,
+            GameObject owner)
+        {
+            var shape = body.CreateShape(geometry, definition);
+            shape.userData = new PhysicsUserData { objectValue = owner };
+            return shape;
+        }
+
         public static void MoveToLayer(this PhysicsBody body, int layer)
         {
             using var shapes = body.GetShapes(Allocator.Temp);

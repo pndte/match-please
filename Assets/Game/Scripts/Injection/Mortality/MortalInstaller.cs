@@ -65,9 +65,7 @@ namespace Bw.Injection.Mortality
                 .WriterOnlyInto<IAppliedState<Vitals>>(
                     typeof(AuthoritativeState<Vitals, Hit>), typeof(AuthoritativeState<Vitals, Heal>), typeof(PredictedState<Vitals, Hit>));
             Container.Bind<CorpseHitbox>().AsSingle().WithArguments(_death.CorpseLayer.SingleLayer("corpse")).NonLazy();
-            var holder = Container.InstantiateComponent<ReadonlyMortalHolder>(_body);
-            Container.Bind<IHolder<IReadonlyMortal>>().FromInstance(holder).AsSingle();
-            Container.Bind<MortalHitbox>().AsSingle().NonLazy();
+            Container.InstantiateComponent<ReadonlyMortalHolder>(_body);
         }
 
         private void BindHeals(NetResultDeclaration<CausedState<Vitals>> vitals)

@@ -2,16 +2,19 @@
 using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
+using Bw.Entities.Physics;
 using Bw.UseCases.Audio.View.Playback;
 using Bw.UseCases.Camera.View.Follow;
 using Bw.UseCases.Camera.View.Shake;
 using Bw.UseCases.Character.View.Abstractions;
 using Bw.UseCases.Character.View.HealthBar;
 using Bw.UseCases.FogOfWar.View;
+using Bw.UseCases.FogOfWar.View.Sight;
 using Bw.UseCases.Shooting.View.Crosshair;
 using Bw.UseCases.Shooting.View.Crosshair.Abstractions;
 using Bw.UseCases.Vfx.View.Effects;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 using Zenject;
 
 namespace Bw.Injection.Entities.Camera
@@ -52,9 +55,16 @@ namespace Bw.Injection.Entities.Camera
         {
             RequireFogOfWarConfig();
             Container.Bind<FogOfWarView>()
-                .FromMethod(_ => FogOfWarView.Create(_camera.gameObject.Lifetime(), _camera, Container.Resolve<ICameraTargets>(), _fogOfWarConfig))
+                .FromMethod(_ => FogOfWarView.Create(_camera.gameObject.Lifetime(), _camera, Container.Resolve<ICameraTargets>(), _fogOfWarConfig, CreateSight()))
                 .AsSingle()
                 .NonLazy();
+        }
+
+        private LineOfSight CreateSight()
+        {
+            var seeThrough = PhysicsMask.None;
+            seeThrough.SetBit(PhysicsCategories.OneWay);
+            return new LineOfSight(Container.Resolve<IPhysicsSpace>().World, seeThrough, _fogOfWarConfig);
         }
 
         private void RequireFogOfWarConfig()

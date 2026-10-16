@@ -32,7 +32,7 @@ namespace Bw.Injection.Weapon
             {
                 case PeerType.Server:
                     Container.BindRequestReceiver(pickup).WhenInjectedInto<WeaponPickupServerHandler>();
-                    Container.Bind<WeaponPickupServerHandler>().AsSingle().WithArguments(_body).NonLazy();
+                    Container.Bind<WeaponPickupServerHandler>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:
                     Container.BindRequestSender(pickup).WhenInjectedInto<WeaponPickupClientHandler>();
