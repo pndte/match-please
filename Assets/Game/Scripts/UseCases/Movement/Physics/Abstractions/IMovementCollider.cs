@@ -4,7 +4,7 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Movement.Physics.Abstractions
 {
-    public interface IMovementCollider : IPlatformRider
+    public interface IMovementCollider
     {
         public float Cast(Vector2 position, Vector2 direction, float distance);
         public IReadOnlyList<ShovableContact> ShovablesAhead(Vector2 position, Vector2 direction, float distance);

@@ -45,7 +45,8 @@ namespace Bw.UseCases.Movement.Network.Platforms
 
             var duration = (double)_ticks.Duration;
             var shown = Vector2.Lerp(from.Position, to.Position, progress);
-            var shift = _rider.RideShift(shown, ShownTick() * duration, _ticks.PredictedViewTick(_interpolation) * duration);
+            var angle = Mathf.LerpAngle(from.Angle, to.Angle, progress);
+            var shift = _rider.RideShift(shown, angle, ShownTick() * duration, _ticks.PredictedViewTick(_interpolation) * duration);
             _view.Show(from.Shifted(shift), to.Shifted(shift), progress);
         }
 

@@ -56,7 +56,7 @@ namespace Bw.UseCases.Level
         private Rect AreaAround(Vector2 position) =>
             new(position + _shape.position, _shape.size);
 
-        private void Place(Vector2 position) //TODO: брошенное оружие (динамическое тело) платформа не везёт: она переставляется раз в тик без скорости, трение паллеты пушку не тянет, а лифт выталкивает её рывками — двигать тело для физики через MovePosition со скоростью
+        private void Place(Vector2 position)
         {
             _rigidbody.position = position;
             _transform.position = new Vector3(position.x, position.y, _transform.position.z);

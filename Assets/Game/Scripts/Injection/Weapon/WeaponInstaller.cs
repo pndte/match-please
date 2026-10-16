@@ -3,9 +3,11 @@ using Bw.Entities.Network;
 using Bw.Entities.Network.Prediction.Stream;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
+using Bw.Injection.Movement;
 using Bw.Injection.Network;
 using Bw.Injection.Network.Variables;
 using Bw.UseCases.Mortality;
+using Bw.UseCases.Movement;
 using Bw.UseCases.Shooting;
 using Bw.UseCases.Shooting.View;
 using Bw.UseCases.Shooting.View.Abstractions;
@@ -23,7 +25,6 @@ using Bw.UseCases.Shooting.Weapon.Network.Requests;
 using Bw.UseCases.Shooting.Weapon.Pickup;
 using JetBrains.Core;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 using Zenject;
 
@@ -57,10 +58,10 @@ namespace Bw.Injection.Weapon
         [Header("Network")]
         [SerializeField] private NetworkObject _networkObject;
         [SerializeField] private NetworkWeaponHold _weaponHold;
-        [SerializeField] private NetworkTransform _networkTransform;
 
         [Header("Physics")] [SerializeField] private Rigidbody2D _body;
-        [SerializeField] private Collider2D _collider;
+        [SerializeField] private BoxCollider2D _collider;
+        [SerializeField] private DynamicBodyConfig _bodyConfig;
 
         public override void InstallBindings()
         {
@@ -73,6 +74,7 @@ namespace Bw.Injection.Weapon
             HeldWeaponInstaller<GunState>.Install(Container, _runtimeSettings, netSchema, Parts());
             BindDropRequest(netSchema);
             FlashlightInstaller.Install(Container, _runtimeSettings, netSchema);
+            BindBody(netSchema);
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
             switch (_runtimeSettings.CurrentPeerType)
@@ -107,8 +109,6 @@ namespace Bw.Injection.Weapon
                 _visual,
                 _networkObject,
                 _weaponHold,
-                _networkTransform,
-                _body,
                 new GunState(0f, _shootingWeaponConfig.AmmoSettings.OnSpawnValue, 0, 0, 0),
                 WeaponKind.Gun);
 
@@ -118,6 +118,14 @@ namespace Bw.Injection.Weapon
             Container.BindInterfacesTo<WeaponMuzzle>().AsSingle().WithArguments(_muzzleTransform);
             Container.BindInterfacesTo<ShotTracer>().AsSingle().WithArguments(transform);
             Container.BindInterfacesTo<FixedShotPower>().AsSingle();
+        }
+
+        private void BindBody(INetEntriesSchemaBuilder netSchema)
+        {
+            Container.Bind<Rigidbody2D>().FromInstance(_body).AsSingle();
+            Container.Bind<BoxCollider2D>().FromInstance(_collider).AsSingle();
+            DynamicBodyInstaller.Install(Container, _runtimeSettings, netSchema, _bodyConfig);
+            Container.Decorate<IStateView<RigidState>>().With<UnheldStateView<RigidState>>();
         }
 
         private void BindDropRequest(INetEntriesSchemaBuilder netSchema)
@@ -140,6 +148,8 @@ namespace Bw.Injection.Weapon
         private void BindServer()
         {
             Container.Bind<WeaponDropServerHandler>().AsSingle().NonLazy();
+            Container.Bind<HeldWeaponBody>().AsSingle().NonLazy();
+            Container.Bind<WeaponRelease>().AsSingle().NonLazy();
             Container.Bind<UnheldWeaponDespawner>().AsSingle().NonLazy();
             Container.InstantiateComponent<WeaponHolder>(gameObject);
         }

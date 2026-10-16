@@ -11,14 +11,13 @@ namespace Bw.UseCases.Movement.Physics
     public sealed class ShapeCollider : IMovementCollider
     {
         private const float Skin = 0.015f;
-        private const float RideTolerance = 0.05f;
         private const float LaunchProbe = Skin * 2f;
 
         private readonly PhysicsBody _body;
         private readonly Vector2 _size;
         private readonly Vector2 _offset;
         private readonly PhysicsQuery.QueryFilter _filter;
-        private readonly IMovingPlatformCollection _platforms;
+        private readonly PlatformRider _rider;
         private readonly IShovableCollection _shovables;
         private readonly List<ShovableContact> _ahead = new();
 
@@ -26,14 +25,14 @@ namespace Bw.UseCases.Movement.Physics
             PhysicsBody body,
             BoxCollider2D collider,
             LayerMask ground,
-            IMovingPlatformCollection platforms,
+            PlatformRider rider,
             IShovableCollection shovables)
         {
             _body = body;
             _size = collider.WorldSize();
             _offset = collider.WorldOffset();
             _filter = new PhysicsQuery.QueryFilter(PhysicsMask.All, ground.AsPhysicsMask());
-            _platforms = platforms;
+            _rider = rider;
             _shovables = shovables;
         }
 
@@ -92,10 +91,10 @@ namespace Bw.UseCases.Movement.Physics
 
         public Vector2 Carry(Vector2 position, bool grounded)
         {
-            if (grounded && TryGetRidden(position, out var shift))
+            if (grounded && _rider.TryGetRidden(position, out var shift))
                 position = Shifted(position, shift);
 
-            return Scooped(position);
+            return _rider.Scooped(position, Skin);
         }
 
         public bool TryGetLaunch(Vector2 position, out float height)
@@ -118,48 +117,8 @@ namespace Bw.UseCases.Movement.Physics
             return false;
         }
 
-        public Vector2 RideShift(Vector2 position, double fromSeconds, double toSeconds)
-        {
-            var top = float.NegativeInfinity;
-            var shift = Vector2.zero;
-
-            for (var index = 0; index < _platforms.Count; index++)
-            {
-                var platform = _platforms[index];
-                var then = platform.AreaAt(fromSeconds);
-                if (!Riding(then, position) || then.yMax <= top)
-                    continue;
-
-                top = then.yMax;
-                shift = platform.AreaAt(toSeconds).position - then.position;
-            }
-
-            return shift;
-        }
-
         public bool Is(PhysicsBody body) =>
             body.Equals(_body);
-
-        private bool TryGetRidden(Vector2 position, out Vector2 shift)
-        {
-            var top = float.NegativeInfinity;
-            var found = false;
-            shift = Vector2.zero;
-
-            for (var index = 0; index < _platforms.Count; index++)
-            {
-                var platform = _platforms[index];
-                var previous = new Rect(platform.Area.position - platform.Shift, platform.Area.size);
-                if (!Riding(previous, position) || previous.yMax <= top)
-                    continue;
-
-                top = previous.yMax;
-                shift = platform.Shift;
-                found = true;
-            }
-
-            return found;
-        }
 
         private Vector2 Shifted(Vector2 position, Vector2 shift)
         {
@@ -178,23 +137,6 @@ namespace Bw.UseCases.Movement.Physics
             return position;
         }
 
-        private Vector2 Scooped(Vector2 position) //TODO: подхват поднимающейся платформой не знает про S — со сквозной доски, которая едет вверх, на медленном ходу не спрыгнуть: она подхватывает снова; потолок над платформой подхват не проверяет, поэтому лифт может вдавить ящик в стоящего над ним персонажа, а влезших друг в друга мотор не расталкивает: оба упираются друг в друга, пока ящик не разобьют
-        {
-            var feet = Feet(position);
-            var lift = 0f;
-
-            for (var index = 0; index < _platforms.Count; index++)
-            {
-                var platform = _platforms[index];
-                var area = platform.Area;
-                var previousTop = area.yMax - platform.Shift.y;
-                if (platform.Shift.y > 0f && Overlapping(area, position) && feet >= previousTop - RideTolerance && feet < area.yMax + Skin)
-                    lift = Mathf.Max(lift, area.yMax + Skin - feet);
-            }
-
-            return position + Vector2.up * lift;
-        }
-
         private PolygonGeometry BoxAt(Vector2 position) =>
             PolygonGeometry.CreateBox(_size, 0f, new PhysicsTransform(position + _offset), false);
 
@@ -203,15 +145,6 @@ namespace Bw.UseCases.Movement.Physics
 
         private float Feet(Vector2 position) =>
             position.y + _offset.y - _size.y / 2f;
-
-        private bool Riding(Rect area, Vector2 position) =>
-            Overlapping(area, position) && Mathf.Abs(Feet(position) - area.yMax) <= RideTolerance;
-
-        private bool Overlapping(Rect area, Vector2 position)
-        {
-            var left = position.x + _offset.x - _size.x / 2f;
-            return left < area.xMax && left + _size.x > area.xMin;
-        }
 
         private bool Opposing(PhysicsQuery.WorldCastResult hit, PolygonGeometry box, Vector2 translation) =>
             !Own(hit) && Vector2.Dot(NormalOf(hit, box, translation), translation) < 0f && !IsPlatform(hit.shape);

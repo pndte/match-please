@@ -11,6 +11,7 @@
         "R3.Unity",
         "Bw.UseCases.Character",
         "Bw.UseCases.Mortality",
+        "Bw.UseCases.Movement",
         "Bw.UseCases.Movement.Network"
     ],
     "includePlatforms": [],

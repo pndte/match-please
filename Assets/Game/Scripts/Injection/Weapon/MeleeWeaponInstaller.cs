@@ -19,7 +19,6 @@ using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 using Zenject;
 
@@ -46,9 +45,6 @@ namespace Bw.Injection.Weapon
         [Header("Network")]
         [SerializeField] private NetworkObject _networkObject;
         [SerializeField] private NetworkWeaponHold _weaponHold;
-        [SerializeField] private NetworkTransform _networkTransform;
-
-        [Header("Physics")] [SerializeField] private Rigidbody2D _body;
 
         public override void InstallBindings()
         {
@@ -111,8 +107,6 @@ namespace Bw.Injection.Weapon
                 _visual,
                 _networkObject,
                 _weaponHold,
-                _networkTransform,
-                _body,
                 default,
                 WeaponKind.Fists);
 

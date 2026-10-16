@@ -2,7 +2,6 @@ using Bw.Entities.Physics;
 using Bw.Entities.Physics.Extensions;
 using Bw.UseCases.Movement;
 using Bw.UseCases.Props.Extensions;
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
@@ -55,15 +54,7 @@ namespace Bw.UseCases.Props.Network
             return IsFree(center);
         }
 
-        private bool IsFree(Vector2 center)
-        {
-            var box = PolygonGeometry.CreateBox(_size - Vector2.one * (Tolerance * 2f), 0f, new PhysicsTransform(center), false);
-            using var found = _world.OverlapGeometry(box, _filter, Allocator.Temp);
-            for (var index = 0; index < found.Length; index++)
-                if (!found[index].shape.body.Equals(_body))
-                    return false;
-
-            return true;
-        }
+        private bool IsFree(Vector2 center) =>
+            _world.IsFree(PolygonGeometry.CreateBox(_size - Vector2.one * (Tolerance * 2f), 0f, new PhysicsTransform(center), false), _filter, _body);
     }
 }

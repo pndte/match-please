@@ -63,7 +63,7 @@ namespace Bw.UseCases.Props.Network
         {
             var launch = _launch;
             _launch = PropLaunch.Dropped;
-            var position = _spots.Nearest(BoxOf(holder), _transform.position);
+            var position = _spots.Nearest(holder.WorldRect(), _transform.position);
 
             launch.Switch(
                 () => _body.Restart(new RigidState(position, 0f, Vector2.zero, 0f)),
@@ -81,12 +81,6 @@ namespace Bw.UseCases.Props.Network
                 throw new InvalidOperationException($"Prop '{_transform.name}' is held only by a holder with a box collider.");
 
             return shape;
-        }
-
-        private static Rect BoxOf(BoxCollider2D holder)
-        {
-            var size = holder.WorldSize();
-            return new Rect((Vector2)holder.transform.position + holder.WorldOffset() - size / 2f, size);
         }
     }
 }

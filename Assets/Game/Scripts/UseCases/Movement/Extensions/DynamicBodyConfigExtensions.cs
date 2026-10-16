@@ -1,10 +1,27 @@
+using Bw.Entities.Physics;
 using Bw.Entities.Physics.Extensions;
+using JetBrains.Lifetimes;
+using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Movement.Extensions
 {
     public static class DynamicBodyConfigExtensions
     {
+        public static PhysicsBody CreateBody(
+            this DynamicBodyConfig config,
+            IPhysicsSpace space,
+            Lifetime lifetime,
+            BoxCollider2D box,
+            PhysicsBody.BodyType type)
+        {
+            var definition = config.BodyDefinition();
+            definition.type = type;
+            var body = space.CreateBody(lifetime, box, definition, config.ShapeDefinition());
+            body.SweepContinuously(box.WorldOffset());
+            return body;
+        }
+
         public static PhysicsBodyDefinition BodyDefinition(this DynamicBodyConfig config)
         {
             var definition = PhysicsBodyDefinition.defaultDefinition;

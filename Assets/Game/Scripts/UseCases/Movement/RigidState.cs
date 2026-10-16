@@ -12,6 +12,7 @@ namespace Bw.UseCases.Movement
         public readonly float AngularVelocity;
 
         Vector2 IPlacedState<RigidState>.Position => Position;
+        float IPlacedState<RigidState>.Angle => Angle;
 
         public RigidState(
             Vector2 position,

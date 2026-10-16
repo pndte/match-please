@@ -1,7 +1,7 @@
 using Bw.Entities.Simulation;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 
-namespace Bw.UseCases.Props
+namespace Bw.UseCases.Shooting.Weapon
 {
     public sealed class UnheldStateView<TState> : IStateView<TState> where TState : struct
     {

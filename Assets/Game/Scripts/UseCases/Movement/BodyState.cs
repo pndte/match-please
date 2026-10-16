@@ -14,6 +14,7 @@ namespace Bw.UseCases.Movement
         BodyState IBodyState<BodyState>.Body => this;
         BodyState IBodyState<BodyState>.WithBody(BodyState body) => body;
         Vector2 IPlacedState<BodyState>.Position => Position;
+        float IPlacedState<BodyState>.Angle => 0f;
         BodyState IPlacedState<BodyState>.Shifted(Vector2 offset) => new(Position + offset, Velocity, HorizontalPush, Grounded);
 
         public BodyState(

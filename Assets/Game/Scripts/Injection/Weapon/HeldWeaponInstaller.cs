@@ -108,15 +108,12 @@ namespace Bw.Injection.Weapon
             Container.Bind<IStateView<TState>>().To<WeaponStateView<TState>>().AsSingle().WithArguments(_parts.Weapon);
             Container.Bind<RaycastShooter<TState>>().AsSingle().NonLazy();
             Container.Bind<WeaponHoldServerHandler>().AsSingle().NonLazy();
-            Container.Bind<HeldWeaponTransformPause>().AsSingle().WithArguments(_parts.NetworkTransform).NonLazy();
-            Container.Bind<HeldWeaponBody>().AsSingle().WithArguments(_parts.Body).NonLazy();
             Container.Bind<WeaponKindRegistration>().AsSingle().WithArguments(_parts.Kind).NonLazy();
         }
 
         private void BindClient()
         {
             Container.BindInterfacesTo<WeaponInputSampler>().AsSingle().WithArguments(_parts.Weapon);
-            Container.Bind<HeldWeaponNetworkTransform>().AsSingle().WithArguments(_parts.NetworkTransform).NonLazy();
             Container.Bind<HitPredictor<TState>>().AsSingle().NonLazy();
             BindClientVisuals();
         }

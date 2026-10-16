@@ -1,23 +1,21 @@
 using Bw.Entities.Extensions;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Lifetimes;
-using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Shooting.Weapon
 {
     public sealed class HeldWeaponBody
     {
-        private const float DropImpulse = 2f;
-
-        public HeldWeaponBody(Lifetime lifetime, IWeaponHold hold, Rigidbody2D body)
+        public HeldWeaponBody(Lifetime lifetime, IWeaponHold hold, PhysicsBody body)
         {
             hold.HeldLifetime.WhenAlive(lifetime, heldLifetime =>
             {
-                body.simulated = false;
+                body.enabled = false;
                 heldLifetime.OnTermination(() =>
                 {
-                    body.simulated = true;
-                    body.AddForce(Vector2.up * DropImpulse, ForceMode2D.Impulse);
+                    if (body.isValid)
+                        body.enabled = true;
                 });
             });
         }

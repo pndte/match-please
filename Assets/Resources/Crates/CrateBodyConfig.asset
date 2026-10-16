@@ -15,11 +15,9 @@ MonoBehaviour:
   GravityScale: 6
   Contacts:
     serializedVersion: 2
-    m_Bits: 49152
+    m_Bits: 114688
   Density: 1
   Friction: 0.6
   Bounciness: 0
   LinearDamping: 0
   AngularDamping: 0
-  KnockbackMass: 1
-  Spin: 0.25

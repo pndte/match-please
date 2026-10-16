@@ -48,6 +48,7 @@ namespace Bw.Injection.Crates
         [SerializeField] private Rigidbody2D _physics;
         [SerializeField] private BoxCollider2D _collider;
         [SerializeField] private DynamicBodyConfig _bodyConfig;
+        [SerializeField] private HitImpulseConfig _hitImpulse;
 
         [Header("Mortality")]
         [SerializeField] private HealthConfig _healthConfig;
@@ -95,10 +96,11 @@ namespace Bw.Injection.Crates
         }
 
         private void BindBody(INetEntriesSchemaBuilder netSchema) =>
-            DynamicBodyInstaller.Install(Container, _runtimeSettings, netSchema, _bodyConfig);
+            PredictedBodyInstaller.Install(Container, _runtimeSettings, netSchema, _bodyConfig);
 
         private void BindKnockback()
         {
+            Container.BindInstance(_hitImpulse).AsSingle();
             Container.Bind<IEffectRules<RigidState, Hit>>().To<HitImpulseRules>().AsSingle();
 
             switch (_runtimeSettings.CurrentPeerType)

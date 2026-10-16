@@ -8,9 +8,9 @@ namespace Bw.UseCases.Mortality.Network.Prediction
     public sealed class HitImpulseRules : IEffectRules<RigidState, Hit>
     {
         private readonly PhysicsBody _body;
-        private readonly DynamicBodyConfig _config;
+        private readonly HitImpulseConfig _config;
 
-        public HitImpulseRules(PhysicsBody body, DynamicBodyConfig config)
+        public HitImpulseRules(PhysicsBody body, HitImpulseConfig config)
         {
             _body = body;
             _config = config;

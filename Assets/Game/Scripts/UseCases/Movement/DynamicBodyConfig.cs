@@ -14,9 +14,5 @@ namespace Bw.UseCases.Movement
         [Range(0f, 1f)] public float Bounciness;
         [Min(0f)] public float LinearDamping;
         [Min(0f)] public float AngularDamping;
-
-        [Header("Knockback")]
-        [Min(0.01f)] public float KnockbackMass = 1f;
-        [Range(0f, 1f)] public float Spin = 0.25f;
     }
 }

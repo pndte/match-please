@@ -36,6 +36,7 @@ namespace Bw.Injection.Movement
             Container.Bind<IBodyConfig>().FromInstance(_config).AsSingle();
             Container.Bind<PhysicsBody>().FromMethod(CreatePhysicsBody).AsSingle();
             Container.BindInterfacesTo<KinematicBody>().AsSingle();
+            Container.BindInterfacesAndSelfTo<PlatformRider>().AsSingle();
             Container.BindInterfacesTo<ShapeCollider>().AsSingle().WithArguments(_config.GroundLayer);
             Container.BindInterfacesTo<BodyMotor>().AsSingle();
             LagCompensationInstaller<TState, BodyStateView<TState>>.Install(Container, _runtimeSettings);

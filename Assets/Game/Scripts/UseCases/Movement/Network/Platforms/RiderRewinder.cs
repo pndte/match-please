@@ -24,12 +24,12 @@ namespace Bw.UseCases.Movement.Network.Platforms
             _step = step;
         }
 
-        public void Rewind(Lifetime lifetime, SeenTicks seen)
+        public void Rewind(Lifetime lifetime, SeenTicks seen) //TODO: откат сдвигает тело за платформой как неповёрнутое — у повёрнутого ящика или пушки на едущей платформе низ ищется не там, платформа под ним не находится, и выстрел проверяется по месту без сдвига
         {
             _rewinder.Rewind(lifetime, seen);
             var duration = (double)_step.Duration;
             var position = _body.Position;
-            _body.Place(position + _rider.RideShift(position, seen.Interpolated * duration, seen.Predicted * duration));
+            _body.Place(position + _rider.RideShift(position, 0f, seen.Interpolated * duration, seen.Predicted * duration));
         }
     }
 }

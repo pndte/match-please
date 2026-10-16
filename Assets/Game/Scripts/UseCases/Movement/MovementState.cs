@@ -13,6 +13,7 @@ namespace Bw.UseCases.Movement
         BodyState IBodyState<MovementState>.Body => Body;
         MovementState IBodyState<MovementState>.WithBody(BodyState body) => new(body, Jump);
         Vector2 IPlacedState<MovementState>.Position => Body.Position;
+        float IPlacedState<MovementState>.Angle => 0f;
         MovementState IPlacedState<MovementState>.Shifted(Vector2 offset) => new(Body.Shifted(offset), Jump);
 
         public MovementState(BodyState body, JumpState jump)

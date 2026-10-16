@@ -166,6 +166,7 @@ MonoBehaviour:
   _physics: {fileID: 3191359710659571118}
   _collider: {fileID: 840330045488863506}
   _bodyConfig: {fileID: 11400000, guid: 4e38d5578a519c4469bd3f5128ff40e3, type: 2}
+  _hitImpulse: {fileID: 11400000, guid: 26d357a479301944f8c8b65c08b87317, type: 2}
   _healthConfig: {fileID: 11400000, guid: e54fac7e40b4cbd4c8db7bad139c9827, type: 2}
   _death: {fileID: 11400000, guid: e22f64863d2340bbba7a3b217d70da68, type: 2}
   _visual: {fileID: 6182788802789932197}
