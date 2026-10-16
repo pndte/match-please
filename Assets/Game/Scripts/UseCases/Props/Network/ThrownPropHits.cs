@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Physics.Extensions;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Mortality;
+using Bw.UseCases.Mortality.Extensions;
 using Bw.UseCases.Movement;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
@@ -18,21 +18,18 @@ namespace Bw.UseCases.Props.Network
 {
     public sealed class ThrownPropHits : IOutcomes<IReadonlyWeapon, IReadonlyMortal, Hit>
     {
-        private const float Reach = 0.05f;
         private const float Upward = 0.7f;
 
         public ISource<ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Hit>> Reported => _reported;
 
         private readonly Signal<ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Hit>> _reported = new();
-        private readonly List<Collider2D> _touched = new(8);
         private readonly List<AffectedTarget<IReadonlyMortal, Hit>> _affected = new(4);
         private readonly IReadonlyWeapon _prop;
         private readonly IReadonlySimulation<RigidState> _body;
         private readonly PhysicsBody _physics;
         private readonly INetworkTicks _ticks;
         private readonly PropThrowConfig _config;
-        private readonly PhysicsMask _targetCategories;
-        private readonly ContactFilter2D _targets;
+        private readonly PhysicsMask _targets;
         private readonly SequentialLifetimes _flights;
 
         public ThrownPropHits(
@@ -49,13 +46,7 @@ namespace Bw.UseCases.Props.Network
             _physics = physics;
             _ticks = ticks;
             _config = config;
-            _targetCategories = config.Targets.AsPhysicsMask();
-            _targets = new ContactFilter2D
-            {
-                useLayerMask = true,
-                layerMask = config.Targets,
-                useTriggers = false
-            };
+            _targets = config.Targets.AsPhysicsMask();
             _flights = new SequentialLifetimes(lifetime);
 
             hold.HeldLifetime.WhenAlive(lifetime, _ => _flights.TerminateCurrent());
@@ -88,7 +79,7 @@ namespace Bw.UseCases.Props.Network
                 _flights.TerminateCurrent();
         }
 
-        private void FindStruck(IReadonlyMortal thrower) //TODO: кого задело, ищется классическим коллайдером в точке удара — тело Box2D пока не знает, чьё оно; на этапе 4 цели опознаются по телам мира
+        private void FindStruck(IReadonlyMortal thrower)
         {
             _affected.Clear();
             var direction = _body.Previous.Velocity.normalized;
@@ -96,34 +87,22 @@ namespace Bw.UseCases.Props.Network
             for (var index = 0; index < hits.Length; index++)
             {
                 var hit = hits[index];
-                if (!StrikesTarget(hit))
+                if (!TryGetStruck(hit, out var struck) || !struck.TryGetMortal(out var target))
                     continue;
 
-                Physics2D.OverlapCircle(hit.point, Reach, _targets, _touched);
-                for (var found = 0; found < _touched.Count; found++)
-                {
-                    var touched = _touched[found];
-                    if (!touched.TryGetComponent<IHolder<IReadonlyMortal>>(out var holder))
-                        continue;
+                if (target == thrower || target.State.Value == LifeState.Dead || Contains(target))
+                    continue;
 
-                    var target = holder.Value;
-                    if (target == thrower || target.State.Value == LifeState.Dead || Contains(target))
-                        continue;
-
-                    var struck = new Hit(DamageAt(hit.approachSpeed), direction * _config.Knockback, touched.transform.InverseTransformPoint(hit.point));
-                    _affected.Add(new AffectedTarget<IReadonlyMortal, Hit>(target, struck));
-                }
+                var blow = new Hit(DamageAt(hit.approachSpeed), direction * _config.Knockback, struck.body.transform.InverseTransformPoint(hit.point));
+                _affected.Add(new AffectedTarget<IReadonlyMortal, Hit>(target, blow));
             }
         }
 
-        private bool StrikesTarget(PhysicsEvents.ContactHitEvent hit)
+        private bool TryGetStruck(PhysicsEvents.ContactHitEvent hit, out PhysicsShape struck)
         {
             var own = hit.shapeA.body.Equals(_physics);
-            if (!own && !hit.shapeB.body.Equals(_physics))
-                return false;
-
-            var other = own ? hit.shapeB : hit.shapeA;
-            return (other.contactFilter.categories.bitMask & _targetCategories.bitMask) != 0;
+            struck = own ? hit.shapeB : hit.shapeA;
+            return (own || hit.shapeB.body.Equals(_physics)) && (struck.contactFilter.categories.bitMask & _targets.bitMask) != 0;
         }
 
         private float DamageAt(float approachSpeed) =>

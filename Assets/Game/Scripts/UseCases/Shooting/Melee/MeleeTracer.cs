@@ -1,9 +1,14 @@
 using System;
-using System.Collections.Generic;
+using Bw.Entities;
+using Bw.Entities.Physics;
+using Bw.Entities.Physics.Extensions;
+using Bw.UseCases.Mortality;
 using Bw.UseCases.Shooting.Weapon;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Extensions;
+using Unity.Collections;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Shooting.Melee
 {
@@ -13,19 +18,15 @@ namespace Bw.UseCases.Shooting.Melee
 
         private readonly Transform _weapon;
         private readonly MeleeWeaponConfig _config;
-        private readonly ContactFilter2D _filter;
-        private readonly List<RaycastHit2D> _hits = new(8);
+        private readonly PhysicsWorld _world;
+        private readonly PhysicsQuery.QueryFilter _filter;
 
-        public MeleeTracer(Transform weapon, MeleeWeaponConfig config)
+        public MeleeTracer(Transform weapon, MeleeWeaponConfig config, IPhysicsSpace space)
         {
             _weapon = weapon;
             _config = config;
-            _filter = new ContactFilter2D
-            {
-                useLayerMask = true,
-                layerMask = config.HitMask,
-                useTriggers = false
-            };
+            _world = space.World;
+            _filter = new PhysicsQuery.QueryFilter(PhysicsMask.All, config.HitMask.AsPhysicsMask());
         }
 
         public ShotRay Aim(float aim)
@@ -47,10 +48,20 @@ namespace Bw.UseCases.Shooting.Melee
 
         public ShotTrace Cast(ShotRay ray)
         {
-            Physics2D.CircleCast(ray.Pivot, _config.Radius, ray.Direction, _filter, _hits, _config.Reach);
-            return _hits.TryFindForeign(Holder().root, out var hit)
-                ? new ShotTrace(ray.Pivot, hit.point, hit)
-                : new ShotTrace(ray.Pivot, ray.Pivot + ray.Direction * _config.Reach, hit);
+            var reach = ray.Direction * _config.Reach;
+            var fist = new CircleGeometry { center = ray.Pivot, radius = _config.Radius };
+            using var hits = _world.CastGeometry(fist, reach, _filter, PhysicsQuery.WorldCastMode.AllSorted, Allocator.Temp);
+            return hits.TryFindForeign(Striker(), out var hit)
+                ? ShotTrace.Struck(ray.Pivot, hit, ray.Direction)
+                : ShotTrace.Missed(ray.Pivot, ray.Pivot + reach);
+        }
+
+        private IReadonlyMortal Striker()
+        {
+            if (!Holder().root.TryGetComponent<IHolder<IReadonlyMortal>>(out var striker))
+                throw new InvalidOperationException($"Melee weapon '{_weapon.name}' traces a strike only for a mortal holder: the holder's root holds no mortal.");
+
+            return striker.Value;
         }
 
         private Transform Holder()

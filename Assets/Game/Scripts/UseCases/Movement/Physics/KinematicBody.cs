@@ -7,6 +7,7 @@ namespace Bw.UseCases.Movement.Physics
     public sealed class KinematicBody : IMovementBody
     {
         public Vector2 Position => _transform.position;
+        public float Angle => _body.rotation.angle * Mathf.Rad2Deg;
 
         private readonly Rigidbody2D _rigidbody;
         private readonly Transform _transform;

@@ -1,6 +1,5 @@
 using Bw.Entities.Simulation;
 using Bw.UseCases.Movement.Abstractions;
-using Bw.UseCases.Movement.Physics.Abstractions;
 using Bw.UseCases.Props.Extensions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Core;
@@ -14,23 +13,25 @@ namespace Bw.UseCases.Props
 
         private readonly Transform _prop;
         private readonly BoxCollider2D _shape;
-        private readonly IMovementBody _body;
+        private readonly Rigidbody2D _rigidbody;
         private readonly HeldPropConfig _config;
+        private readonly HeldPropGrip _grip;
         private readonly Signal<Unit> _turned = new();
 
         private float _aim;
 
         public PropStateView(
-            Transform prop,
             BoxCollider2D shape,
-            IMovementBody body,
+            Rigidbody2D rigidbody,
             IReadonlySimulation<PropState> simulation,
-            HeldPropConfig config)
+            HeldPropConfig config,
+            HeldPropGrip grip)
         {
-            _prop = prop;
+            _prop = shape.transform;
             _shape = shape;
-            _body = body;
+            _rigidbody = rigidbody;
             _config = config;
+            _grip = grip;
             _aim = simulation.State.Value.Aim;
         }
 
@@ -44,8 +45,10 @@ namespace Bw.UseCases.Props
         {
             var scale = (Vector2)_prop.lossyScale;
             var center = holder.center + _config.HeldOffset(_aim, holder.size / 2f, Vector2.Scale(_shape.size, scale) / 2f);
-            _prop.rotation = Quaternion.identity;
-            _body.Place(center - Vector2.Scale(_shape.offset, scale));
+            var position = center - Vector2.Scale(_shape.offset, scale);
+            _prop.SetPositionAndRotation(new Vector3(position.x, position.y, _prop.position.z), Quaternion.identity);
+            _rigidbody.position = position;
+            _grip.Place(center);
         }
     }
 }

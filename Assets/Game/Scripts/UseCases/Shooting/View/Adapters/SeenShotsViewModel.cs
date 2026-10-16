@@ -1,5 +1,6 @@
 using Bw.Entities;
 using Bw.Entities.Extensions;
+using Bw.Entities.Physics.Extensions;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Shooting.View.Abstractions;
 using Bw.UseCases.Shooting.Weapon;
@@ -72,8 +73,8 @@ namespace Bw.UseCases.Shooting.View.Adapters
         private PelletTrace TraceOf(ShotRay ray)
         {
             var trace = _tracer.Cast(ray);
-            return trace.Hit
-                ? new PelletTrace(trace.From, trace.To, ray.Direction, true, trace.Hit.normal, trace.Hit.collider.gameObject.layer)
+            return trace.IsStruck
+                ? new PelletTrace(trace.From, trace.To, ray.Direction, true, trace.Normal, trace.Shape.Layer())
                 : new PelletTrace(trace.From, trace.To, ray.Direction, false, Vector2.zero, 0);
         }
     }

@@ -10,6 +10,7 @@ namespace Bw.UseCases.Movement
         private readonly IHeldItems _held;
 
         public Vector2 Position => _body.Position;
+        public float Angle => _body.Angle;
 
         public HoldingBody(IMovementBody body, IHeldItems held)
         {

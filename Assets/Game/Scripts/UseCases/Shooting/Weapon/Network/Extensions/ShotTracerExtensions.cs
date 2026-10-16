@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Bw.Entities;
 using Bw.Entities.Network.Prediction.Events;
 using Bw.UseCases.Mortality;
 using Bw.UseCases.Mortality.Extensions;
@@ -17,9 +16,9 @@ namespace Bw.UseCases.Shooting.Weapon.Network.Extensions
         {
             for (var pellet = 0; pellet < tracer.Pellets; pellet++)
             {
-                var struck = tracer.Cast(tracer.Pellet(ray, pellet)).Hit;
-                if (struck && struck.collider.TryGetComponent<IHolder<IReadonlyMortal>>(out var mortal))
-                    Add(affected, mortal.Value, hit.At(struck.collider.transform.InverseTransformPoint(struck.point)));
+                var trace = tracer.Cast(tracer.Pellet(ray, pellet));
+                if (trace.IsStruck && trace.Shape.TryGetMortal(out var mortal))
+                    Add(affected, mortal, hit.At(trace.Shape.body.transform.InverseTransformPoint(trace.To)));
             }
         }
 

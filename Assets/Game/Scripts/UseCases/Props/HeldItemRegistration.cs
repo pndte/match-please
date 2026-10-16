@@ -11,16 +11,26 @@ namespace Bw.UseCases.Props
     public sealed class HeldItemRegistration
     {
         private readonly Transform _item;
+        private readonly HeldPropGrip _grip;
 
         public HeldItemRegistration(
             Lifetime lifetime,
             IWeaponHold hold,
             Transform item,
-            IHeldItem held)
+            IHeldItem held,
+            HeldPropGrip grip)
         {
             _item = item;
+            _grip = grip;
 
-            hold.HeldLifetime.WhenAlive(lifetime, heldLifetime => HoldersHands().Take(heldLifetime, held));
+            hold.HeldLifetime.WhenAlive(lifetime, heldLifetime => Take(heldLifetime, held));
+        }
+
+        private void Take(Lifetime heldLifetime, IHeldItem held)
+        {
+            var hands = HoldersHands();
+            _grip.Attach(heldLifetime, hands.Body);
+            hands.Take(heldLifetime, held);
         }
 
         private IHands HoldersHands()

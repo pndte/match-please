@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using Bw.UseCases.Movement.Abstractions;
 using JetBrains.Lifetimes;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Movement
 {
     public sealed class Hands : IHands, IHeldItems
     {
+        public PhysicsBody Body { get; }
+
         private readonly Transform _holder;
         private readonly BoxCollider2D _shape;
         private readonly List<IHeldItem> _items = new();
 
-        public Hands(Transform holder, BoxCollider2D shape)
+        public Hands(Transform holder, BoxCollider2D shape, PhysicsBody body)
         {
+            Body = body;
             _holder = holder;
             _shape = shape;
         }

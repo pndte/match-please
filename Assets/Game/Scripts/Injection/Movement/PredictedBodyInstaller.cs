@@ -37,7 +37,6 @@ namespace Bw.Injection.Movement
 
         public override void InstallBindings()
         {
-            Container.Bind<IMovementBody>().To<TransformBody>().AsSingle();
             Container.Bind<ShovableRegistration>().AsSingle().NonLazy();
 
             switch (_runtimeSettings.CurrentPeerType)
@@ -57,7 +56,8 @@ namespace Bw.Injection.Movement
 
         private void BindServer()
         {
-            LagCompensationInstaller<RigidState, RigidStateView>.Install(Container, _runtimeSettings);
+            Container.Bind<IMovementBody>().To<KinematicBody>().AsSingle();
+            LagCompensationInstaller<RigidState, RigidPoseView>.Install(Container, _runtimeSettings);
             Container.Decorate<IRewindable>().With<RiderRewinder>();
         }
 

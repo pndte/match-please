@@ -1,8 +1,13 @@
 using System;
-using System.Collections.Generic;
+using Bw.Entities;
+using Bw.Entities.Physics;
+using Bw.Entities.Physics.Extensions;
+using Bw.UseCases.Mortality;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Extensions;
+using Unity.Collections;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Shooting.Weapon
 {
@@ -14,25 +19,22 @@ namespace Bw.UseCases.Shooting.Weapon
         private readonly IWeaponMuzzle _muzzle;
         private readonly RaycastShootConfig _config;
         private readonly PelletsConfig _pellets;
-        private readonly ContactFilter2D _filter;
-        private readonly List<RaycastHit2D> _hits = new(8);
+        private readonly PhysicsWorld _world;
+        private readonly PhysicsQuery.QueryFilter _filter;
 
         public ShotTracer(
             Transform weapon,
             IWeaponMuzzle muzzle,
             RaycastShootConfig config,
-            PelletsConfig pellets)
+            PelletsConfig pellets,
+            IPhysicsSpace space)
         {
             _weapon = weapon;
             _muzzle = muzzle;
             _config = config;
             _pellets = pellets;
-            _filter = new ContactFilter2D
-            {
-                useLayerMask = true,
-                layerMask = config.HitMask,
-                useTriggers = false
-            };
+            _world = space.World;
+            _filter = new PhysicsQuery.QueryFilter(PhysicsMask.All, config.HitMask.AsPhysicsMask());
         }
 
         public ShotRay Aim(float aim)
@@ -58,16 +60,27 @@ namespace Bw.UseCases.Shooting.Weapon
 
         public ShotTrace Cast(ShotRay ray)
         {
-            var shooter = Holder().root;
+            var shooter = Shooter();
+            using var blocking = Hits(ray.Pivot, ray.Muzzle - ray.Pivot);
+            if (blocking.TryFindForeign(shooter, out var wall))
+                return ShotTrace.Struck(wall.point, wall, ray.Direction);
 
-            Physics2D.Linecast(ray.Pivot, ray.Muzzle, _filter, _hits);
-            if (_hits.TryFindForeign(shooter, out var blocking))
-                return new ShotTrace(blocking.point, blocking.point, blocking);
+            var reach = ray.Direction * _config.MaxDistance;
+            using var hits = Hits(ray.Muzzle, reach);
+            return hits.TryFindForeign(shooter, out var hit)
+                ? ShotTrace.Struck(ray.Muzzle, hit, ray.Direction)
+                : ShotTrace.Missed(ray.Muzzle, ray.Muzzle + reach);
+        }
 
-            Physics2D.Raycast(ray.Muzzle, ray.Direction, _filter, _hits, _config.MaxDistance);
-            return _hits.TryFindForeign(shooter, out var hit)
-                ? new ShotTrace(ray.Muzzle, hit.point, hit)
-                : new ShotTrace(ray.Muzzle, ray.Muzzle + ray.Direction * _config.MaxDistance, hit);
+        private NativeArray<PhysicsQuery.WorldCastResult> Hits(Vector2 from, Vector2 translation) =>
+            _world.CastRay(new PhysicsQuery.CastRayInput(from, translation), _filter, PhysicsQuery.WorldCastMode.AllSorted, Allocator.Temp);
+
+        private IReadonlyMortal Shooter()
+        {
+            if (!Holder().root.TryGetComponent<IHolder<IReadonlyMortal>>(out var shooter))
+                throw new InvalidOperationException($"Weapon '{_weapon.name}' traces a shot only for a mortal holder: the holder's root holds no mortal.");
+
+            return shooter.Value;
         }
 
         private Transform Holder()
