@@ -10,7 +10,7 @@ namespace Bw.UseCases.Mortality.View.Hit
         private static readonly int FlashColor = Shader.PropertyToID("_FlashColor");
         private static readonly int FlashAmount = Shader.PropertyToID("_FlashAmount");
 
-        private readonly SpriteRenderer _sprite;
+        private readonly SpriteRenderer[] _sprites;
         private readonly IHitFlashConfig _config;
         private readonly SequentialLifetimes _flashes;
         private readonly MaterialPropertyBlock _properties = new();
@@ -20,10 +20,10 @@ namespace Bw.UseCases.Mortality.View.Hit
         public HitFlash(
             Lifetime lifetime,
             IDamageViewModel damage,
-            SpriteRenderer sprite,
+            SpriteRenderer[] sprites,
             IHitFlashConfig config)
         {
-            _sprite = sprite;
+            _sprites = sprites;
             _config = config;
             _flashes = new SequentialLifetimes(lifetime);
 
@@ -48,10 +48,13 @@ namespace Bw.UseCases.Mortality.View.Hit
 
         private void Show(float amount)
         {
-            _sprite.GetPropertyBlock(_properties);
-            _properties.SetColor(FlashColor, _config.FlashColor);
-            _properties.SetFloat(FlashAmount, amount);
-            _sprite.SetPropertyBlock(_properties);
+            foreach (var sprite in _sprites)
+            {
+                sprite.GetPropertyBlock(_properties);
+                _properties.SetColor(FlashColor, _config.FlashColor);
+                _properties.SetFloat(FlashAmount, amount);
+                sprite.SetPropertyBlock(_properties);
+            }
         }
     }
 }

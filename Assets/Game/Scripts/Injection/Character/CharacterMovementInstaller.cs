@@ -75,7 +75,6 @@ namespace Bw.Injection
 
         private void BindVisuals()
         {
-            Container.BindInterfacesTo<SpriteMovementAnimator>().AsSingle();
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:

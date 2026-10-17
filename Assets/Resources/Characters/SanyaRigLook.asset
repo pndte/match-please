@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f1abc4d98b4a0144937edc52ec9c31d, type: 3}
+  m_Name: SanyaRigLook
+  m_EditorClassIdentifier: Bw.UseCases.Character.View::Bw.UseCases.Character.View.Rig.CharacterRigLook
+  Turns:
+  - Faces:
+    - {fileID: 1394060696, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: -742276763, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: 467307475, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    Hairs:
+    - {fileID: -105960358, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: -1856988518, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: -1358150041, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - Faces:
+    - {fileID: 996295914, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: 593281247, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: 1053664560, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    Hairs:
+    - {fileID: 1910994528, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: -789954913, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: -332613239, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - Faces:
+    - {fileID: 483652374, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: 588103065, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: -1992163141, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    Hairs:
+    - {fileID: 675988422, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: -1131566826, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: 1753959129, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - Faces:
+    - {fileID: 778918668, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: 226859333, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: 725225619, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    Hairs:
+    - {fileID: -1938263868, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: 1724261207, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: -6622369, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  Eggs:
+  - {fileID: -1915046221, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - {fileID: 106460727, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - {fileID: -1600892465, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  FarShoes:
+  - {fileID: -2142335927, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - {fileID: 1253434795, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - {fileID: -513598048, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  NearShoes:
+  - {fileID: 2035510143, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - {fileID: -2038929863, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - {fileID: -2038794843, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  Legs:
+  - {fileID: 1188734379, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - {fileID: 156966885, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - {fileID: 1722761139, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  Ticks:
+  - {fileID: -436462128, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - {fileID: 803942825, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - {fileID: 379917013, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  Shadows:
+  - {fileID: 756222205, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - {fileID: -1727938729, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - {fileID: 1816264887, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  LegLength: 0.235
+  LegInset: 0.005
+  TickDrop: 0.045
+  HairBend:
+    Top: 0.91
+    Span: 0.95
+    Power: 1.6
+    DxGain: 1.2

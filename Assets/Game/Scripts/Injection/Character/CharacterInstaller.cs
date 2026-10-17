@@ -45,8 +45,6 @@ namespace Bw.Injection
         [SerializeField] private NetworkLifetimedBehaviour _networkLifetimedBehaviour;
         [SerializeField] private BodyBox _box;
         [SerializeField] private MovementConfig _movementConfig;
-        [SerializeField] private Animator _animator;
-        [SerializeField] private SpriteRenderer _sprite;
         [SerializeField] private HitFeedbackConfig _hitFeedbackConfig;
         [SerializeField] private DeathConfig _death;
         [SerializeField] private RegenerationConfig _regeneration;
@@ -65,8 +63,6 @@ namespace Bw.Injection
 
             Container.Bind<HealthConfig>().FromInstance(_healthConfig).AsSingle();
             Container.Bind<BodyBox>().FromInstance(_box).AsSingle();
-            Container.Bind<Animator>().FromInstance(_animator).AsSingle();
-            Container.Bind<SpriteRenderer>().FromInstance(_sprite).AsSingle();
 
             var netSchema = new NetEntriesSchemaBuilder();
             OwnershipServicesInstaller.Install(Container, _runtimeSettings, netSchema);

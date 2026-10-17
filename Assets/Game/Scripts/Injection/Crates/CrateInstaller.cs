@@ -126,7 +126,7 @@ namespace Bw.Injection.Crates
             Container.Bind<SpriteRenderer>().FromInstance(_sprite).AsSingle();
             Container.Bind(typeof(IHealthViewModel), typeof(IDamageViewModel), typeof(IDeathViewModel)).To<MortalViewModel>().AsSingle();
             Container.Bind<IHitFlashConfig>().FromInstance(_hitFlashConfig).AsSingle();
-            Container.Bind<HitFlash>().AsSingle().NonLazy();
+            Container.Bind<HitFlash>().AsSingle().WithArguments(new[] { _sprite }).NonLazy();
             Container.BindInstance(_damage).AsSingle();
             Container.Bind<CrateCracks>().AsSingle().NonLazy();
             Container.Bind<CrateHitJolt>().AsSingle().WithArguments(_visual).NonLazy();
