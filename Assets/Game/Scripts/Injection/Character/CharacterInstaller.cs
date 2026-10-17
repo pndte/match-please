@@ -75,7 +75,7 @@ namespace Bw.Injection
             Container.Bind(typeof(IHands), typeof(IHeldItems)).To<Hands>().AsSingle().WithArguments(transform);
             Container.Decorate<IMovementBody>().With<HoldingBody>();
             MortalInstaller.Install(Container, _runtimeSettings, netSchema, _death, gameObject);
-            PushTargetInstaller<IReadonlyMortal, MovementState, Impacts>.Install(Container, _runtimeSettings);
+            PushTargetInstaller<IReadonlyMortal, Impacts>.Install(Container, _runtimeSettings);
             WeaponPickupInstaller.Install(Container, _runtimeSettings, netSchema, transform);
             WeaponSwitchInstaller.Install(Container, _runtimeSettings, netSchema);
             NicknameInstaller.Install(Container, _runtimeSettings, netSchema);
