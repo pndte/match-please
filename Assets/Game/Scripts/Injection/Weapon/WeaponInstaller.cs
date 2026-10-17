@@ -62,11 +62,13 @@ namespace Bw.Injection.Weapon
 
         [Header("Physics")] [SerializeField] private BodyBox _box;
         [SerializeField] private DynamicBodyConfig _bodyConfig;
+        [SerializeField] private WeaponReleaseConfig _releaseConfig;
 
         public override void InstallBindings()
         {
             RequireTurnSpeed();
             RequireFlashlightBeam();
+            RequireReleaseConfig();
             BindConfigs();
             BindGun();
 
@@ -101,6 +103,12 @@ namespace Bw.Injection.Weapon
         {
             if (_flashlightConfig == null || _flashlightConfig.Beam == null)
                 throw new InvalidOperationException($"Weapon '{name}' has no flashlight beam: its WeaponInstaller needs a FlashlightConfig with a beam prefab.");
+        }
+
+        private void RequireReleaseConfig()
+        {
+            if (_releaseConfig == null)
+                throw new InvalidOperationException($"Weapon '{name}' has no release config: its WeaponInstaller needs a WeaponReleaseConfig to let the gun go.");
         }
 
         private HeldWeaponParts<GunState> Parts() =>
@@ -148,7 +156,7 @@ namespace Bw.Injection.Weapon
         {
             Container.Bind<WeaponDropServerHandler>().AsSingle().NonLazy();
             Container.Bind<HeldWeaponBody>().AsSingle().NonLazy();
-            Container.Bind<WeaponRelease>().AsSingle().NonLazy();
+            Container.Bind<WeaponRelease>().AsSingle().WithArguments(_releaseConfig).NonLazy();
             Container.Bind<UnheldWeaponDespawner>().AsSingle().NonLazy();
             Container.InstantiateComponent<WeaponHolder>(gameObject);
         }

@@ -17,7 +17,6 @@ namespace Bw.UseCases.Movement.Network.Prediction
     //TODO: чудовищный класс, нуждающийся в декомпозиции
     public sealed class PredictedRigidBody : IShovable, IPredictable, IPredictedBody, IRollbackBody, IPredictedRigidBody, IStateCorrections<RigidState>
     {
-        private const int Capacity = 64;
         private const int QuietTicks = 30;
         private const float Resting = 0.05f;
         private const float Distance = 0.01f;
@@ -25,13 +24,11 @@ namespace Bw.UseCases.Movement.Network.Prediction
         private const float Speed = 0.1f;
 
         public PhysicsBody Body => _body;
-        public ISource<StateCorrection<RigidState>> Corrected => _corrected;
+        public ISource<StateCorrection<RigidState>> Corrected => _corrections.Corrected;
 
-        private readonly Signal<StateCorrection<RigidState>> _corrected = new();
-        private readonly int[] _stateTicks = Unrecorded();
-        private readonly RigidState[] _states = new RigidState[Capacity];
-        private readonly int[] _shoveTicks = Unrecorded();
-        private readonly Vector2[] _shoves = new Vector2[Capacity];
+        private readonly RigidStateHistory _states = new();
+        private readonly ShoveHistory _shoves = new();
+        private readonly RigidCorrections _corrections;
         private readonly SequentialLifetimes _predictions;
         private readonly PhysicsBody _body;
         private readonly IPhysicsRollback _rollback;
@@ -40,17 +37,12 @@ namespace Bw.UseCases.Movement.Network.Prediction
         private readonly INetworkTicks _ticks;
 
         private bool _predicted;
-        private bool _correcting;
         private bool _reposed;
-        private int _newest = int.MinValue;
         private int _posedTick;
         private int _activeTick = int.MinValue;
         private int _launchedTick = int.MinValue;
         private int _checkedTick = int.MinValue;
-        private int _beforeTick;
-        private double _beforeShownTick;
         private double _followedTick;
-        private RigidState _before;
         private RigidState _followed;
 
         public PredictedRigidBody(
@@ -61,6 +53,7 @@ namespace Bw.UseCases.Movement.Network.Prediction
             IRigidStateEffects effects,
             INetworkTicks ticks)
         {
+            _corrections = new RigidCorrections(_states);
             _predictions = new SequentialLifetimes(lifetime);
             _body = body;
             _rollback = rollback;
@@ -86,18 +79,14 @@ namespace Bw.UseCases.Movement.Network.Prediction
             if (!_predicted)
                 StartPredicting();
 
-            var slot = Slot(_posedTick);
-            var recorded = _shoveTicks[slot] == _posedTick ? _shoves[slot] : Vector2.zero;
-            if (_reposed || _shoveTicks[slot] != _posedTick)
-            {
-                _shoveTicks[slot] = _posedTick;
-                _shoves[slot] = Vector2.zero;
-            }
+            var recorded = _shoves.At(_posedTick);
+            if (_reposed)
+                _shoves.Forget(_posedTick);
 
-            _shoves[slot] += force;
+            _shoves.Add(_posedTick, force);
             _reposed = false;
             _activeTick = Math.Max(_activeTick, _posedTick);
-            if (_posedTick < _ticks.Current && _shoves[slot] != recorded)
+            if (_posedTick < _ticks.Current && _shoves.At(_posedTick) != recorded)
                 _rollback.Request(_posedTick);
         }
 
@@ -113,25 +102,19 @@ namespace Bw.UseCases.Movement.Network.Prediction
         {
             _posedTick = tick;
             _reposed = true;
-            if (_predicted && TryGetRecorded(tick, out var state))
+            if (_predicted && _states.TryGetAt(tick, out var state))
                 _body.ApplyRigidState(state);
         }
 
         public void Restore(int tick)
         {
-            if (!_correcting)
-            {
-                _correcting = true;
-                _beforeTick = _newest;
-                _beforeShownTick = _newest;
-                _before = Recorded(_newest);
-            }
+            if (!_corrections.IsPending)
+                _corrections.Remember(_states.NewestTick, _states.NewestTick, _states.Newest);
 
-            var state = TryGetRecorded(tick, out var recorded) ? recorded : Oldest();
+            var state = _states.TryGetAt(tick, out var recorded) ? recorded : _states.Oldest;
             _body.ApplyRigidState(state);
-            Remember(tick, state);
-            if (tick == _beforeTick)
-                FinishCorrection();
+            _states.Record(tick, state);
+            _corrections.Reach(tick);
         }
 
         public void Prepare(int tick)
@@ -140,9 +123,8 @@ namespace Bw.UseCases.Movement.Network.Prediction
             if (_effects.TryGetAffected(previous, _body.State(), out var affected))
                 _body.ApplyRigidState(affected);
 
-            var slot = Slot(previous);
-            if (_shoveTicks[slot] == previous)
-                _body.ApplyForce(_shoves[slot], _body.worldCenterOfMass, true);
+            if (_shoves.TryGetAt(previous, out var shove))
+                _body.ApplyForce(shove, _body.worldCenterOfMass, true);
         }
 
         public void Finish(int tick)
@@ -150,10 +132,8 @@ namespace Bw.UseCases.Movement.Network.Prediction
             if (_body.TryGetLaunchSpeed(out var speed))
                 _body.linearVelocity = _body.linearVelocity.WithY(speed);
 
-            var state = _body.State();
-            Remember(tick, state);
-            if (_correcting && tick == _beforeTick)
-                FinishCorrection();
+            _states.Record(tick, _body.State());
+            _corrections.Reach(tick);
         }
 
         public void PredictTouched(int tick, IPredictableCollection predictables)
@@ -182,9 +162,9 @@ namespace Bw.UseCases.Movement.Network.Prediction
             if (_replicated.TryGetAt(int.MaxValue, out var latest) && latest.Tick > _checkedTick)
             {
                 _checkedTick = latest.Tick;
-                if (TryGetRecorded(latest.Tick, out var predicted) && Differs(predicted, latest.State))
+                if (_states.TryGetAt(latest.Tick, out var predicted) && Differs(predicted, latest.State))
                 {
-                    Remember(latest.Tick, latest.State);
+                    _states.Record(latest.Tick, latest.State);
                     _rollback.Request(latest.Tick);
                 }
             }
@@ -197,17 +177,17 @@ namespace Bw.UseCases.Movement.Network.Prediction
         {
             if (_predicted && tick < _launchedTick)
             {
-                shown = Recorded(_launchedTick);
+                shown = _states.At(_launchedTick);
                 return true;
             }
 
-            if (!_predicted || !TryGetRecorded((int)Math.Floor(tick), out _))
+            if (!_predicted || !_states.TryGetAt((int)Math.Floor(tick), out _))
             {
                 shown = default;
                 return false;
             }
 
-            shown = RecordedAt(tick);
+            shown = _states.Interpolated(tick);
             return true;
         }
 
@@ -223,13 +203,12 @@ namespace Bw.UseCases.Movement.Network.Prediction
         {
             var tick = _ticks.Current;
             _predicted = true;
-            Array.Fill(_stateTicks, int.MinValue);
-            Array.Fill(_shoveTicks, int.MinValue);
-            _newest = int.MinValue;
-            Remember(tick, state);
+            _states.Clear();
+            _shoves.Clear();
+            _states.Record(tick, state);
             _body.type = PhysicsBody.BodyType.Dynamic;
             _body.ApplyRigidState(state);
-            _correcting = false;
+            _corrections.Forget();
             _activeTick = tick;
             _launchedTick = tick;
             _rollback.Track(_predictions.Next(), this);
@@ -246,16 +225,16 @@ namespace Bw.UseCases.Movement.Network.Prediction
             var basis = Basis();
             _predicted = true;
             _launchedTick = int.MinValue;
-            Array.Fill(_stateTicks, int.MinValue);
-            Array.Fill(_shoveTicks, int.MinValue);
-            _newest = int.MinValue;
-            Remember(basis.Tick, basis.State);
+            _states.Clear();
+            _shoves.Clear();
+            _states.Record(basis.Tick, basis.State);
             _body.type = PhysicsBody.BodyType.Dynamic;
             _body.ApplyRigidState(basis.State);
-            _correcting = _followedTick >= basis.Tick;
-            _beforeTick = (int)Math.Ceiling(_followedTick);
-            _beforeShownTick = _followedTick;
-            _before = _followed;
+            if (_followedTick >= basis.Tick)
+                _corrections.Remember((int)Math.Ceiling(_followedTick), _followedTick, _followed);
+            else
+                _corrections.Forget();
+
             _rollback.Track(_predictions.Next(), this);
             _rollback.Request(basis.Tick);
         }
@@ -263,9 +242,9 @@ namespace Bw.UseCases.Movement.Network.Prediction
         private void StopPredicting()
         {
             _followed = _body.State();
-            _followedTick = _newest;
+            _followedTick = _states.NewestTick;
             _predicted = false;
-            _correcting = false;
+            _corrections.Forget();
             _predictions.TerminateCurrent();
             _body.type = PhysicsBody.BodyType.Kinematic;
             _body.linearVelocity = Vector2.zero;
@@ -274,7 +253,7 @@ namespace Bw.UseCases.Movement.Network.Prediction
 
         private TickedState<RigidState> Basis()
         {
-            var earliest = _ticks.Current - Capacity / 2;
+            var earliest = _ticks.Current - RigidStateHistory.Capacity / 2;
             if (!_replicated.TryGetAt(int.MaxValue, out var latest))
                 return new TickedState<RigidState>(_ticks.Current, _followed);
 
@@ -283,20 +262,12 @@ namespace Bw.UseCases.Movement.Network.Prediction
 
         private bool Quiet(int tick)
         {
-            var newest = Recorded(_newest);
+            var newest = _states.Newest;
             return tick - _activeTick > QuietTicks
                    && newest.Velocity.magnitude < Resting
                    && Mathf.Abs(newest.AngularVelocity) < Turn
                    && _replicated.TryGetAt(int.MaxValue, out var latest)
                    && !Differs(newest, latest.State);
-        }
-
-        private void FinishCorrection()
-        {
-            _correcting = false;
-            var after = RecordedAt(_beforeShownTick);
-            if (!_before.Equals(after))
-                _corrected.Fire(new StateCorrection<RigidState>(_before, after));
         }
 
         private void Place(RigidState state)
@@ -307,63 +278,9 @@ namespace Bw.UseCases.Movement.Network.Prediction
                 _body.transform = pose;
         }
 
-        private void Remember(int tick, RigidState state)
-        {
-            var slot = Slot(tick);
-            _stateTicks[slot] = tick;
-            _states[slot] = state;
-            _newest = Math.Max(_newest, tick);
-        }
-
-        private bool TryGetRecorded(int tick, out RigidState state)
-        {
-            var slot = Slot(tick);
-            state = _states[slot];
-            return _stateTicks[slot] == tick;
-        }
-
-        private RigidState Recorded(int tick) =>
-            _states[Slot(tick)];
-
-        private RigidState RecordedOrNewest(int tick) =>
-            TryGetRecorded(tick, out var state) ? state : Recorded(_newest);
-
-        private RigidState RecordedAt(double tick)
-        {
-            var from = (int)Math.Floor(tick);
-            var before = Recorded(from);
-            var after = RecordedOrNewest(from + 1);
-            var progress = (float)(tick - from);
-            return new RigidState(
-                Vector2.Lerp(before.Position, after.Position, progress),
-                Mathf.LerpAngle(before.Angle, after.Angle, progress),
-                Vector2.Lerp(before.Velocity, after.Velocity, progress),
-                Mathf.Lerp(before.AngularVelocity, after.AngularVelocity, progress));
-        }
-
-        private RigidState Oldest()
-        {
-            var oldest = int.MaxValue;
-            for (var slot = 0; slot < Capacity; slot++)
-                if (_stateTicks[slot] != int.MinValue)
-                    oldest = Math.Min(oldest, _stateTicks[slot]);
-
-            return Recorded(oldest);
-        }
-
         private static bool Differs(RigidState predicted, RigidState actual) =>
             Vector2.Distance(predicted.Position, actual.Position) > Distance
             || Mathf.Abs(Mathf.DeltaAngle(predicted.Angle, actual.Angle)) > Turn
             || Vector2.Distance(predicted.Velocity, actual.Velocity) > Speed;
-
-        private static int Slot(int tick) =>
-            (tick % Capacity + Capacity) % Capacity;
-
-        private static int[] Unrecorded()
-        {
-            var ticks = new int[Capacity];
-            Array.Fill(ticks, int.MinValue);
-            return ticks;
-        }
     }
 }

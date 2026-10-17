@@ -17,6 +17,19 @@ namespace Bw.Entities.Physics.Extensions
         public static float DistanceTo(this PolygonGeometry polygon, Vector2 point) =>
             polygon.OverlapPoint(point) ? 0f : Vector2.Distance(point, polygon.ClosestPoint(point));
 
+        public static float SeparationAlong(this PolygonGeometry polygon, PolygonGeometry other, Vector2 direction)
+        {
+            var farthest = float.NegativeInfinity;
+            for (var vertex = 0; vertex < other.count; vertex++)
+                farthest = Mathf.Max(farthest, Vector2.Dot(direction, other.vertices[vertex]));
+
+            var nearest = float.PositiveInfinity;
+            for (var vertex = 0; vertex < polygon.count; vertex++)
+                nearest = Mathf.Min(nearest, Vector2.Dot(direction, polygon.vertices[vertex]));
+
+            return Mathf.Max(0f, farthest - nearest);
+        }
+
         private static float MaxSeparation(PolygonGeometry polygon, PolygonGeometry other, out Vector2 normal)
         {
             var separation = float.NegativeInfinity;

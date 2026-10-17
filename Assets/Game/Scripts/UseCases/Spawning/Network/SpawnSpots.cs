@@ -9,7 +9,6 @@ namespace Bw.UseCases.Spawning.Network
     {
         //TODO: мб конфиг, хз
         private const int ShiftsPerPoint = 8;
-        private const float Tolerance = 0.005f;
 
         private readonly Transform[] _points;
         private readonly float _shift;
@@ -49,6 +48,6 @@ namespace Bw.UseCases.Spawning.Network
             _points[(turn % _points.Length + _points.Length) % _points.Length].position;
 
         private bool IsFree(BodyBox box, Vector2 spot) =>
-            _world.IsFree(PolygonGeometry.CreateBox(box.WorldSize() - Vector2.one * (Tolerance * 2f), 0f, new PhysicsTransform(spot + box.WorldOffset()), false), _blockers);
+            _world.IsFree(PolygonGeometry.CreateBox(box.WorldSize() - Vector2.one * (PhysicsSlop.Linear * 2f), 0f, new PhysicsTransform(spot + box.WorldOffset()), false), _blockers);
     }
 }

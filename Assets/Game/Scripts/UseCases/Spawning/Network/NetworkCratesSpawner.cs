@@ -16,8 +16,6 @@ namespace Bw.UseCases.Spawning.Network
 {
     public sealed class NetworkCratesSpawner
     {
-        private const float Tolerance = 0.005f;
-
         private readonly Lifetime _lifetime;
         private readonly DiContainer _container;
         private readonly CrateSpawnConfig _config;
@@ -78,7 +76,7 @@ namespace Bw.UseCases.Spawning.Network
             var rotation = spot.rotation;
             var center = (Vector2)spot.position + (Vector2)(rotation * box.WorldOffset());
             var pose = new PhysicsTransform(center, new PhysicsRotate(rotation.eulerAngles.z * Mathf.Deg2Rad));
-            var shape = PolygonGeometry.CreateBox(box.WorldSize() - Vector2.one * (Tolerance * 2f), 0f, pose, false);
+            var shape = PolygonGeometry.CreateBox(box.WorldSize() - Vector2.one * (PhysicsSlop.Linear * 2f), 0f, pose, false);
             return _world.IsFree(shape, new PhysicsQuery.QueryFilter(PhysicsMask.All, _config.Blockers.AsPhysicsMask()));
         }
     }

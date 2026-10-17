@@ -20,3 +20,9 @@ MonoBehaviour:
   Walls:
     serializedVersion: 2
     m_Bits: 16384
+  Pushes: 4
+  Stickiness: 0.3
+  Slack: 0.3
+  Nudge: 0.15
+  ReleaseRings: 3
+  ReleaseAngleStep: 5

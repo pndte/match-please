@@ -12,11 +12,6 @@ namespace Bw.UseCases.Props.Network
 {
     public sealed class ReleaseSpots
     {
-        //TODO: константам место в конфиге
-        private const float AngleStep = 5f;
-        private const int Rings = 3;
-        private const float Tolerance = 0.005f;
-
         private readonly PhysicsWorld _world;
         private readonly PhysicsBody _body;
         private readonly Transform _item;
@@ -49,12 +44,12 @@ namespace Bw.UseCases.Props.Network
                 return held;
 
             var oval = holder.WorldRect();
-            for (var ring = 0; ring < Rings; ring++)
+            for (var ring = 0; ring < _config.ReleaseRings; ring++)
             {
                 if (ring > 0 && TryGetFree(oval, holder.gameObject, held.Angle, ring, out var straight))
                     return straight;
 
-                for (var turn = AngleStep; turn <= 180f; turn += AngleStep)
+                for (var turn = _config.ReleaseAngleStep; turn <= 180f; turn += _config.ReleaseAngleStep)
                     if (TryGetFree(oval, holder.gameObject, held.Angle + turn, ring, out var spot) || TryGetFree(oval, holder.gameObject, held.Angle - turn, ring, out spot))
                         return spot;
             }
@@ -86,7 +81,7 @@ namespace Bw.UseCases.Props.Network
         private bool IsFree(RigidState pose, GameObject holder)
         {
             var placed = new PhysicsTransform(pose.Position + Turned(_offset, pose.Angle), new PhysicsRotate(pose.Angle * Mathf.Deg2Rad));
-            using var found = _world.OverlapGeometry(PolygonGeometry.CreateBox(_size - Vector2.one * (Tolerance * 2f), 0f, placed, false), _filter, Allocator.Temp);
+            using var found = _world.OverlapGeometry(PolygonGeometry.CreateBox(_size - Vector2.one * (PhysicsSlop.Linear * 2f), 0f, placed, false), _filter, Allocator.Temp);
             foreach (var overlap in found)
                 if (!overlap.shape.body.Equals(_body) && !overlap.shape.IsOneWay() && !IsOwnedBy(overlap.shape, holder))
                     return false;

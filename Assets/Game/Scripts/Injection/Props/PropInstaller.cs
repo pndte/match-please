@@ -135,6 +135,7 @@ namespace Bw.Injection.Props
         {
             Container.Bind<ReleaseSpots>().AsSingle();
             Container.Bind<HeldPropGrip>().AsSingle().WithArguments(_parts.Held.Layer.SingleLayer("held prop"));
+            Container.Bind<HeldPropPlacement>().AsSingle();
             Container.Bind(typeof(IStateView<PropState>), typeof(IHeldItem)).To<PropStateView>().AsSingle();
             Container.Bind<HeldItemRegistration>().AsSingle().WithArguments(_parts.Prop).NonLazy();
             Container.Bind<HeldWeaponBody>().AsSingle().NonLazy();

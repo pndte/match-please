@@ -226,6 +226,7 @@ MonoBehaviour:
   _weaponHold: {fileID: 6095048442294211056}
   _box: {fileID: 6945462061438201136}
   _bodyConfig: {fileID: 11400000, guid: 4ebec94c7a1cc00428dc62c7d75fa66a, type: 2}
+  _releaseConfig: {fileID: 11400000, guid: 4e5a9f52c7dec7747b8942e283be4aa1, type: 2}
 --- !u!114 &4999205492878388941
 MonoBehaviour:
   m_ObjectHideFlags: 0
