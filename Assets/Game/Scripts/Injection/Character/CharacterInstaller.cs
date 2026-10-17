@@ -1,3 +1,4 @@
+using System;
 using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
@@ -44,6 +45,7 @@ namespace Bw.Injection
         [SerializeField] private NetworkObject _networkObject;
         [SerializeField] private NetworkLifetimedBehaviour _networkLifetimedBehaviour;
         [SerializeField] private BodyBox _box;
+        [SerializeField] private HoldOval _holdOval;
         [SerializeField] private MovementConfig _movementConfig;
         [SerializeField] private HitFeedbackConfig _hitFeedbackConfig;
         [SerializeField] private DeathConfig _death;
@@ -68,7 +70,8 @@ namespace Bw.Injection
             OwnershipServicesInstaller.Install(Container, _runtimeSettings, netSchema);
             ControlledByServicesInstaller.Install(Container, _runtimeSettings, netSchema);
             CharacterMovementInstaller.Install(Container, _runtimeSettings, netSchema, _movementConfig);
-            Container.Bind(typeof(IHands), typeof(IHeldItems)).To<Hands>().AsSingle().WithArguments(transform);
+            RequireHoldOval();
+            Container.Bind(typeof(IHands), typeof(IHeldItems)).To<Hands>().AsSingle().WithArguments(_holdOval);
             Container.Decorate<IMovementBody>().With<HoldingBody>();
             MortalInstaller.Install(Container, _runtimeSettings, netSchema, _death, gameObject);
             PushTargetInstaller<IReadonlyMortal, Impacts>.Install(Container, _runtimeSettings);
@@ -89,6 +92,15 @@ namespace Bw.Injection
                 BindClientVisuals();
                 BindClientSounds();
             }
+        }
+
+        private void RequireHoldOval()
+        {
+            if (_holdOval == null)
+                throw new InvalidOperationException("The character has no hold oval: add a HoldOval to its root and assign it to the installer.");
+
+            if (_holdOval.Radii.x <= 0f || _holdOval.Radii.y <= 0f)
+                throw new InvalidOperationException($"The character's hold oval needs positive radii, and they are {_holdOval.Radii}.");
         }
 
         private void BindClientSounds()

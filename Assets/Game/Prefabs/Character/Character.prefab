@@ -212,6 +212,7 @@ GameObject:
   - component: {fileID: 1705369709605621449}
   - component: {fileID: 666931174670692420}
   - component: {fileID: 2012787940855291857}
+  - component: {fileID: 1521307918905604654}
   m_Layer: 15
   m_Name: Character
   m_TagString: Untagged
@@ -289,6 +290,7 @@ MonoBehaviour:
   _networkObject: {fileID: 3773905357652456202}
   _networkLifetimedBehaviour: {fileID: 7318710291484346262}
   _box: {fileID: 2012787940855291857}
+  _holdOval: {fileID: 1521307918905604654}
   _movementConfig: {fileID: 11400000, guid: 69583fc462e9fe145a5a5101d5d42728, type: 2}
   _hitFeedbackConfig: {fileID: 11400000, guid: 4359f2675494472b93a9f1010f583111, type: 2}
   _death: {fileID: 11400000, guid: f1c86814d9bc456fa8246411f630c030, type: 2}
@@ -327,3 +329,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Bw.Entities::Bw.Entities.Physics.BodyBox
   _size: {x: 1, y: 2}
   _offset: {x: 0, y: 0}
+  _oneWay: 0
+--- !u!114 &1521307918905604654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7714897418022992417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ef10aefd18547819eb40bd973b9e9dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Bw.UseCases.Movement::Bw.UseCases.Movement.HoldOval
+  _center: {x: 0, y: 0.13}
+  _radii: {x: 0.76, y: 0.9}

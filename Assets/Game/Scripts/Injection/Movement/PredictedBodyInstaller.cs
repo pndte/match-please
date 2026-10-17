@@ -75,6 +75,7 @@ namespace Bw.Injection.Movement
         {
             Container.Decorate<IStateView<RigidState>>().With<SmoothedRigidStateView>();
             Container.Decorate<IStateView<RigidState>>().With<PredictedRigidStateView>();
+            Container.Bind<PredictedRigidInterpolation>().AsSingle().NonLazy();
         }
 
         private PhysicsBody CreateProxy(InjectContext context) =>

@@ -27,6 +27,7 @@ namespace Bw.Injection
         [SerializeField] private WeaponDescription[] _weapons;
         [SerializeField] private Transform[] _spawnPoints;
         [SerializeField] private float _spawnRandomOffset = 2f;
+        [SerializeField] private LayerMask _spawnBlockers = 1 << 14;
 
         [Header("Match")]
         [SerializeField] private NetworkObject _match;
@@ -47,13 +48,13 @@ namespace Bw.Injection
             RequireCharacterPrefabs(NetworkManager.Singleton.NetworkConfig.Prefabs, _characters);
             RequireWeaponPrefabs(NetworkManager.Singleton.NetworkConfig.Prefabs, _weaponCatalog);
             RequireLoadout();
+            RequireSpawnPoints();
             Container.Bind(typeof(IArmory), typeof(IReadonlyWeaponDescriptionRegistry)).To<Armory>().AsSingle();
             Container.Bind<StartingLoadout>().AsSingle().WithArguments(_fists, _weapons);
+            Container.Bind<SpawnSpots>().AsSingle().WithArguments(_spawnPoints, _spawnRandomOffset, _spawnBlockers);
             Container.BindInterfacesTo<NetworkCharactersSpawner>().AsSingle().WithArguments(
                 new NetworkCharactersSpawner.Data
                 {
-                    SpawnPoints = _spawnPoints,
-                    SpawnRandomOffset = _spawnRandomOffset,
                     Characters = _characters,
                 });
             Container.Bind<CharacterRespawner>().AsSingle().NonLazy();
@@ -81,6 +82,16 @@ namespace Bw.Injection
 
             foreach (var weapon in _weapons)
                 RequireListedWeapon(weapon);
+        }
+
+        private void RequireSpawnPoints()
+        {
+            if (_spawnPoints.Length == 0)
+                throw new InvalidOperationException("The spawner has no spawn points: add at least one transform where characters appear.");
+
+            foreach (var point in _spawnPoints)
+                if (point == null)
+                    throw new InvalidOperationException("The spawner has an empty spawn point slot: assign a transform or remove the slot.");
         }
 
         private void RequireListedWeapon(WeaponDescription weapon)

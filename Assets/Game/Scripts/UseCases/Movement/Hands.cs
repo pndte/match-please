@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Bw.Entities.Physics;
 using Bw.UseCases.Movement.Abstractions;
+using Bw.UseCases.Movement.Extensions;
 using JetBrains.Lifetimes;
-using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Movement
@@ -12,15 +11,13 @@ namespace Bw.UseCases.Movement
     {
         public PhysicsBody Body { get; }
 
-        private readonly Transform _holder;
-        private readonly BodyBox _shape;
+        private readonly HoldOval _oval;
         private readonly List<IHeldItem> _items = new();
 
-        public Hands(Transform holder, BodyBox shape, PhysicsBody body)
+        public Hands(HoldOval oval, PhysicsBody body)
         {
             Body = body;
-            _holder = holder;
-            _shape = shape;
+            _oval = oval;
         }
 
         public void Take(Lifetime lifetime, IHeldItem item)
@@ -30,23 +27,15 @@ namespace Bw.UseCases.Movement
 
             _items.Add(item);
             lifetime.OnTermination(() => _items.Remove(item));
-            item.Turned.Advise(lifetime, _ => item.PlaceIn(Box()));
-            item.PlaceIn(Box());
+            item.Turned.Advise(lifetime, _ => item.PlaceIn(_oval.WorldRect()));
+            item.PlaceIn(_oval.WorldRect());
         }
 
         public void Carry()
         {
-            var box = Box();
+            var oval = _oval.WorldRect();
             for (var index = 0; index < _items.Count; index++)
-                _items[index].PlaceIn(box);
-        }
-
-        private Rect Box()
-        {
-            var scale = (Vector2)_holder.lossyScale;
-            var size = Vector2.Scale(_shape.Size, scale);
-            var center = (Vector2)_holder.position + Vector2.Scale(_shape.Offset, scale);
-            return new Rect(center - size / 2f, size);
+                _items[index].PlaceIn(oval);
         }
     }
 }

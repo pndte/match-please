@@ -38,6 +38,9 @@ namespace Bw.Entities.Physics.Extensions
             return false;
         }
 
+        public static bool IsOneWay(this PhysicsShape shape) =>
+            shape.contactFilter.categories.IsBitSet(PhysicsCategories.OneWay);
+
         public static float DistanceTo(this PhysicsShape shape, Vector2 point) =>
             shape.OverlapPoint(point) ? 0f : Vector2.Distance(point, shape.ClosestPoint(point));
     }

@@ -3,6 +3,7 @@ using Bw.CoreAdapters.Characters;
 using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
+using Bw.Entities.Physics;
 using Bw.Entities.Players;
 using Bw.UseCases.Character;
 using Bw.UseCases.Mortality;
@@ -13,7 +14,6 @@ using JetBrains.Lifetimes;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
-using Random = UnityEngine.Random;
 
 namespace Bw.UseCases.Spawning.Network
 {
@@ -21,8 +21,6 @@ namespace Bw.UseCases.Spawning.Network
     {
         public struct Data
         {
-            public Transform[] SpawnPoints;
-            public float SpawnRandomOffset;
             public CharacterCatalog Characters;
         }
 
@@ -32,6 +30,7 @@ namespace Bw.UseCases.Spawning.Network
         private readonly IClientPlayerCollection _clientPlayerCollection;
         private readonly StartingLoadout _loadout;
         private readonly DiContainer _container;
+        private readonly SpawnSpots _spots;
         private int _nextSpawnPointIndex;
 
         private NetworkCharactersSpawner(
@@ -42,6 +41,7 @@ namespace Bw.UseCases.Spawning.Network
             IClientPlayerCollection clientPlayerCollection,
             StartingLoadout loadout,
             DiContainer container,
+            SpawnSpots spots,
             Data data)
         {
             _characterRegistry = characterRegistry;
@@ -49,6 +49,7 @@ namespace Bw.UseCases.Spawning.Network
             _clientPlayerCollection = clientPlayerCollection;
             _loadout = loadout;
             _container = container;
+            _spots = spots;
             _data = data;
 
             players.View(lifetime, (playerLifetime, player) =>
@@ -61,10 +62,9 @@ namespace Bw.UseCases.Spawning.Network
                 throw new InvalidOperationException(
                     "The player has no client: the network spawner spawns characters only for network players.");
 
-            var spawnPosition = GetSpawnPosition();
-            var spawnRotation = Quaternion.identity;
-
             var characterPrefab = _data.Characters.PrefabOf(client.Request.CharacterKey);
+            var spawnPosition = _spots.SpotFor(RequireComponent<BodyBox>(characterPrefab.gameObject), _nextSpawnPointIndex++);
+            var spawnRotation = Quaternion.identity;
             var characterObject = NetworkPrefabInstantiationHelper.Instantiate(
                 _container, characterPrefab, spawnPosition, spawnRotation);
 
@@ -88,22 +88,6 @@ namespace Bw.UseCases.Spawning.Network
 
             Debug.Log($"[PlayerSpawner] Character '{characterPrefab.name}' spawned for client {client.Id} at {spawnPosition}");
             return character;
-        }
-
-        private Vector3 GetSpawnPosition()
-        {
-            var basePosition = _data.SpawnPoints is { Length: > 0 }
-                ? _data.SpawnPoints[_nextSpawnPointIndex++ % _data.SpawnPoints.Length].position
-                : Vector3.zero;
-
-            if (_data.SpawnRandomOffset <= 0f)
-                return basePosition;
-
-            //TODO: the shift doesn't look at what stands there: spawn points are laid out with SpawnRandomOffset + 0.5 of free room, but a crate pushed next to one can take a new body inside it, and a body never pushes out of an overlap
-            return basePosition + new Vector3(
-                Random.Range(-_data.SpawnRandomOffset, _data.SpawnRandomOffset),
-                0f,
-                Random.Range(-_data.SpawnRandomOffset, _data.SpawnRandomOffset));
         }
 
         private static T RequireComponent<T>(GameObject gameObject) where T : Component

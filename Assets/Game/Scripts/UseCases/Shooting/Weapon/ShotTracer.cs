@@ -62,12 +62,12 @@ namespace Bw.UseCases.Shooting.Weapon
         {
             var shooter = Shooter();
             using var blocking = Hits(ray.Pivot, ray.Muzzle - ray.Pivot);
-            if (blocking.TryFindForeign(shooter, out var wall))
+            if (blocking.TryFindStruck(shooter, out var wall))
                 return ShotTrace.Struck(wall.point, wall, ray.Direction);
 
             var reach = ray.Direction * _config.MaxDistance;
             using var hits = Hits(ray.Muzzle, reach);
-            return hits.TryFindForeign(shooter, out var hit)
+            return hits.TryFindStruck(shooter, out var hit)
                 ? ShotTrace.Struck(ray.Muzzle, hit, ray.Direction)
                 : ShotTrace.Missed(ray.Muzzle, ray.Muzzle + reach);
         }

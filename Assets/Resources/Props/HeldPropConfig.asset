@@ -17,3 +17,6 @@ MonoBehaviour:
   Layer:
     serializedVersion: 2
     m_Bits: 131072
+  Walls:
+    serializedVersion: 2
+    m_Bits: 16384

@@ -13,7 +13,9 @@ namespace Bw.UseCases.Shooting.Weapon.Network
 {
     public sealed class WeaponRelease
     {
+        //TODO: конфиг
         private const float DropSpeed = 2f;
+        private const float PullStep = 0.05f;
         private const float Tolerance = 0.005f;
 
         private readonly IRestartable<RigidState> _body;
@@ -41,20 +43,32 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             });
         }
 
-        private void Release(BodyBox holder) //TODO: оружие длиннее держателя — отпущенное в центре держателя у стены, оно может торчать в стену, и физика выталкивает его как получится
+        private void Release(BodyBox holder) //TODO: в узком месте, где оружию нет места, сколько его ни оттягивай назад вдоль ствола, оно отпускается в центре держателя, и физика выталкивает его как получится
         {
             var weapon = _shape.transform;
-            var angle = weapon.eulerAngles.z;
-            var held = (Vector2)weapon.position;
-            var position = IsFree(held, angle) ? held : holder.WorldRect().center - OffsetAt(angle);
-            _body.Restart(new RigidState(position, angle, Vector2.up * DropSpeed, 0f));
+            var pose = ReleasePose(holder.WorldRect().center, new RigidState((Vector2)weapon.position, weapon.eulerAngles.z, Vector2.zero, 0f));
+            _body.Restart(new RigidState(pose.Position, pose.Angle, Vector2.up * DropSpeed, 0f));
         }
 
-        private bool IsFree(Vector2 position, float angle)
+        private RigidState ReleasePose(Vector2 center, RigidState held)
         {
-            var pose = new PhysicsTransform(position + OffsetAt(angle), new PhysicsRotate(angle * Mathf.Deg2Rad));
-            var box = PolygonGeometry.CreateBox(_shape.WorldSize() - Vector2.one * (Tolerance * 2f), 0f, pose, false);
-            return _physics.world.IsFree(box, _filter, _physics);
+            var back = (Vector2)(Quaternion.Euler(0f, 0f, held.Angle) * Vector2.left);
+            var reach = Vector2.Distance(center, held.Position) + _shape.WorldSize().x;
+            for (var pulled = 0f; pulled <= reach; pulled += PullStep)
+            {
+                var pose = new RigidState(held.Position + back * pulled, held.Angle, Vector2.zero, 0f);
+                if (IsFree(pose))
+                    return pose;
+            }
+
+            return new RigidState(center - OffsetAt(held.Angle), held.Angle, Vector2.zero, 0f);
+        }
+
+        private bool IsFree(RigidState pose)
+        {
+            var placed = new PhysicsTransform(pose.Position + OffsetAt(pose.Angle), new PhysicsRotate(pose.Angle * Mathf.Deg2Rad));
+            var box = PolygonGeometry.CreateBox(_shape.WorldSize() - Vector2.one * (Tolerance * 2f), 0f, placed, false);
+            return _physics.world.IsFreeOfSolids(box, _filter, _physics);
         }
 
         private Vector2 OffsetAt(float angle) =>

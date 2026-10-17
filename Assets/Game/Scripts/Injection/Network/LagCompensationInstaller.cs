@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Bw.Injection.Network
 {
-    public class LagCompensationInstaller<TState, TView> : Installer<IRuntimeSettings, LagCompensationInstaller<TState, TView>> //TODO: движущиеся объекты без ввода игрока (ящики, которые пинают или которые едут сами) — без симуляции модуля предикции: нужен его вариант без ввода (сервер надёжно шлёт изменения состояния с номером тика, клиент показывает их на InterpolationTick, как чужих персонажей) — тогда откат подключается здесь же, одной строкой. Неподвижным разрушаемым (стенам) откат не нужен, пока они только исчезают: без него сервер ошибается лишь в пользу стрелка
+    public class LagCompensationInstaller<TState, TView> : Installer<IRuntimeSettings, LagCompensationInstaller<TState, TView>>
         where TState : struct
         where TView : class, IStateView<TState>
     {

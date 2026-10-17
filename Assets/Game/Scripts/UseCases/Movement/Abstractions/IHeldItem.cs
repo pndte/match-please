@@ -7,6 +7,6 @@ namespace Bw.UseCases.Movement.Abstractions
     public interface IHeldItem
     {
         public ISource<Unit> Turned { get; }
-        public void PlaceIn(Rect holder);
+        public void PlaceIn(Rect oval);
     }
 }

@@ -1,9 +1,8 @@
 using System;
 using Bw.Entities.Extensions;
-using Bw.Entities.Physics;
-using Bw.Entities.Physics.Extensions;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Movement;
+using Bw.UseCases.Props.Extensions;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Extensions;
 using JetBrains.Collections.Viewable;
@@ -51,37 +50,35 @@ namespace Bw.UseCases.Props.Network
             });
         }
 
-        private void Throw(float aim) //TODO: бросок решает сервер — бросивший видит, как ящик уходит из рук, только через полный пинг, а полёт потом смотрит в интерполяции; предсказать бросок — показывать полёт свободного тела от рук сразу и сводить его со снимками
+        private void Throw(float aim)
         {
-            var radians = aim * Mathf.Deg2Rad;
-            var velocity = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)) * _config.Speed;
             var thrower = _inventories.Carriers[_prop];
-            _launch = PropLaunch.Thrown(thrower, velocity);
+            _launch = PropLaunch.Thrown(thrower, aim);
             _inventories.InventoryOf(thrower).DropAndDrawNext(_prop);
         }
 
-        private void Release(BodyBox holder)
+        private void Release(HoldOval holder)
         {
             var launch = _launch;
             _launch = PropLaunch.Dropped;
-            var position = _spots.Nearest(holder.WorldRect(), _transform.position);
+            var released = _spots.Nearest(holder, new RigidState(_transform.position, _transform.eulerAngles.z, Vector2.zero, 0f));
 
             launch.Switch(
-                () => _body.Restart(new RigidState(position, 0f, Vector2.zero, 0f)),
-                (thrower, velocity) =>
+                () => _body.Restart(released),
+                (thrower, aim) =>
                 {
-                    _body.Restart(new RigidState(position, 0f, velocity, -Mathf.Sign(velocity.x) * _config.Spin));
+                    _body.Restart(_config.Thrown(released, aim));
                     _hits.Track(thrower);
                 });
         }
 
-        private BodyBox Holder()
+        private HoldOval Holder()
         {
             var holder = _transform.parent;
-            if (holder == null || !holder.TryGetComponent<BodyBox>(out var box))
-                throw new InvalidOperationException($"Prop '{_transform.name}' is held only by a holder with a body box.");
+            if (holder == null || !holder.TryGetComponent<HoldOval>(out var oval))
+                throw new InvalidOperationException($"Prop '{_transform.name}' is held only by a holder with a hold oval.");
 
-            return box;
+            return oval;
         }
     }
 }

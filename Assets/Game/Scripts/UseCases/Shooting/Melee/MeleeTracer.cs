@@ -51,7 +51,7 @@ namespace Bw.UseCases.Shooting.Melee
             var reach = ray.Direction * _config.Reach;
             var fist = new CircleGeometry { center = ray.Pivot, radius = _config.Radius };
             using var hits = _world.CastGeometry(fist, reach, _filter, PhysicsQuery.WorldCastMode.AllSorted, Allocator.Temp);
-            return hits.TryFindForeign(Striker(), out var hit)
+            return hits.TryFindStruck(Striker(), out var hit)
                 ? ShotTrace.Struck(ray.Pivot, hit, ray.Direction)
                 : ShotTrace.Missed(ray.Pivot, ray.Pivot + reach);
         }

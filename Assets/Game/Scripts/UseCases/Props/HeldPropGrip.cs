@@ -27,7 +27,7 @@ namespace Bw.UseCases.Props
             if (_shape.isValid)
                 throw new InvalidOperationException("A held prop grips one holder at a time: its grip is already on a holder's body.");
 
-            var shape = holder.CreateShape(BoxAt(Vector2.zero), _definition, _owner);
+            var shape = holder.CreateShape(BoxAt(new PhysicsTransform(Vector2.zero)), _definition, _owner);
             _shape = shape;
             lifetime.OnTermination(() =>
             {
@@ -38,16 +38,17 @@ namespace Bw.UseCases.Props
             });
         }
 
-        public void Place(Vector2 center)
+        public void Place(Vector2 center, float angle)
         {
             if (!_shape.isValid)
                 throw new InvalidOperationException("A held prop's grip is placed only while it is on a holder's body.");
 
-            _shape.polygonGeometry = BoxAt(_shape.body.transform.InverseTransformPoint(center));
+            var holder = _shape.body.transform;
+            _shape.polygonGeometry = BoxAt(new PhysicsTransform(holder.InverseTransformPoint(center), new PhysicsRotate(angle * Mathf.Deg2Rad - holder.rotation.angle)));
         }
 
-        private PolygonGeometry BoxAt(Vector2 local) =>
-            PolygonGeometry.CreateBox(_size, 0f, new PhysicsTransform(local), false);
+        private PolygonGeometry BoxAt(PhysicsTransform local) =>
+            PolygonGeometry.CreateBox(_size, 0f, local, false);
 
         private static PhysicsShapeDefinition Definition(int layer)
         {

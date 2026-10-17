@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Bw.UseCases.Spawning::Bw.UseCases.Spawning.Network.CrateSpawnConfig
   Prefab: {fileID: 4376437016523511395, guid: 9034a6c368ff5b84cb82b57fcaafc5a8, type: 3}
   RespawnDelay: 15
+  RetryDelay: 1
+  Blockers:
+    serializedVersion: 2
+    m_Bits: 180224

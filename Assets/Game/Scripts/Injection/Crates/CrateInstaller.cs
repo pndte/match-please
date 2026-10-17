@@ -28,6 +28,7 @@ using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.Network.Prediction;
 using Bw.UseCases.Movement.Physics.Abstractions;
 using Bw.UseCases.Props;
+using Bw.UseCases.Props.Network.Prediction;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Network;
 using Unity.Netcode;
@@ -71,7 +72,8 @@ namespace Bw.Injection.Crates
             ControlledByInstaller.Install(Container, _runtimeSettings);
 
             Container.Bind<NetworkObject>().FromInstance(_networkObject).AsSingle();
-            Container.Bind(typeof(INetworkLifetimedObject), typeof(IWeaponHold)).FromInstance(_hold).AsSingle().NonLazy();
+            Container.Bind<INetworkLifetimedObject>().FromInstance(_hold).AsSingle().NonLazy();
+            BindHold();
             Container.BindInstance(gameObject.Lifetime()).AsSingle();
 
             Container.Bind<HealthConfig>().FromInstance(_healthConfig).AsSingle();
@@ -91,6 +93,21 @@ namespace Bw.Injection.Crates
             {
                 BindClientVisuals();
                 BindClientSounds();
+            }
+        }
+
+        private void BindHold()
+        {
+            switch (_runtimeSettings.CurrentPeerType)
+            {
+                case PeerType.Server:
+                    Container.Bind<IWeaponHold>().FromInstance(_hold).AsSingle();
+                    break;
+                case PeerType.Client:
+                    Container.Bind(typeof(IWeaponHold), typeof(PredictedHold)).To<PredictedHold>().AsSingle().WithArguments(_hold);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 

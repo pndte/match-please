@@ -14,6 +14,7 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Movement.Network.Prediction
 {
+    //TODO: чудовищный класс, нуждающийся в декомпозиции
     public sealed class PredictedRigidBody : IShovable, IPredictable, IPredictedBody, IRollbackBody, IPredictedRigidBody, IStateCorrections<RigidState>
     {
         private const int Capacity = 64;
@@ -44,6 +45,7 @@ namespace Bw.UseCases.Movement.Network.Prediction
         private int _newest = int.MinValue;
         private int _posedTick;
         private int _activeTick = int.MinValue;
+        private int _launchedTick = int.MinValue;
         private int _checkedTick = int.MinValue;
         private int _beforeTick;
         private double _beforeShownTick;
@@ -171,6 +173,12 @@ namespace Bw.UseCases.Movement.Network.Prediction
 
         public void Verify(int tick)
         {
+            if (!_body.enabled)
+            {
+                StopPredicting();
+                return;
+            }
+
             if (_replicated.TryGetAt(int.MaxValue, out var latest) && latest.Tick > _checkedTick)
             {
                 _checkedTick = latest.Tick;
@@ -187,6 +195,12 @@ namespace Bw.UseCases.Movement.Network.Prediction
 
         public bool TryGetShown(double tick, out RigidState shown)
         {
+            if (_predicted && tick < _launchedTick)
+            {
+                shown = Recorded(_launchedTick);
+                return true;
+            }
+
             if (!_predicted || !TryGetRecorded((int)Math.Floor(tick), out _))
             {
                 shown = default;
@@ -205,6 +219,22 @@ namespace Bw.UseCases.Movement.Network.Prediction
                 Place(shown);
         }
 
+        public void Launch(RigidState state)
+        {
+            var tick = _ticks.Current;
+            _predicted = true;
+            Array.Fill(_stateTicks, int.MinValue);
+            Array.Fill(_shoveTicks, int.MinValue);
+            _newest = int.MinValue;
+            Remember(tick, state);
+            _body.type = PhysicsBody.BodyType.Dynamic;
+            _body.ApplyRigidState(state);
+            _correcting = false;
+            _activeTick = tick;
+            _launchedTick = tick;
+            _rollback.Track(_predictions.Next(), this);
+        }
+
         private void Affect(int tick)
         {
             Predict(tick);
@@ -215,6 +245,7 @@ namespace Bw.UseCases.Movement.Network.Prediction
         {
             var basis = Basis();
             _predicted = true;
+            _launchedTick = int.MinValue;
             Array.Fill(_stateTicks, int.MinValue);
             Array.Fill(_shoveTicks, int.MinValue);
             _newest = int.MinValue;

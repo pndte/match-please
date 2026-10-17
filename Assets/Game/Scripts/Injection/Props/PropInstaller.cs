@@ -10,6 +10,7 @@ using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.Abstractions;
 using Bw.UseCases.Props;
 using Bw.UseCases.Props.Network;
+using Bw.UseCases.Props.Network.Prediction;
 using Bw.UseCases.Props.View.Held;
 using Bw.UseCases.Shooting.View.Adapters;
 using Bw.UseCases.Shooting.View.Highlight;
@@ -132,6 +133,7 @@ namespace Bw.Injection.Props
 
         private void BindHold()
         {
+            Container.Bind<ReleaseSpots>().AsSingle();
             Container.Bind<HeldPropGrip>().AsSingle().WithArguments(_parts.Held.Layer.SingleLayer("held prop"));
             Container.Bind(typeof(IStateView<PropState>), typeof(IHeldItem)).To<PropStateView>().AsSingle();
             Container.Bind<HeldItemRegistration>().AsSingle().WithArguments(_parts.Prop).NonLazy();
@@ -145,7 +147,6 @@ namespace Bw.Injection.Props
             Container.Bind<WeaponHoldServerHandler>().AsSingle().NonLazy();
             Container.Bind<WeaponKindRegistration>().AsSingle().WithArguments(WeaponKind.Prop).NonLazy(); //TODO: ящик создаёт спавнер ящиков, а не Armory, и в каталоге оружия его нет, поэтому описания у ящика нет: когда матч начнёт засчитывать броски (HitScoring), убийство ящиком бросит исключение в ленте убийств, пока ящику не дадут описание, строку в каталоге, иконку в WeaponIconsConfig и создание через Armory
             Container.BindInterfacesAndSelfTo<ThrownPropHits>().AsSingle();
-            Container.Bind<ReleaseSpots>().AsSingle();
             Container.Bind<PropRelease>().AsSingle().WithArguments(_parts.Prop).NonLazy();
             Container.Bind<DestroyedPropDrop>().AsSingle().NonLazy();
             Container.Bind<SimulationRewinder<PropState>>().AsSingle();
@@ -155,6 +156,7 @@ namespace Bw.Injection.Props
 
         private void BindClient()
         {
+            Container.Bind<ThrowPrediction>().AsSingle().NonLazy();
             Container.BindInterfacesTo<WeaponInputSampler>().AsSingle().WithArguments(_parts.Prop);
             Container.BindInterfacesTo<FloorWeapon>().AsSingle().WithArguments(_parts.Shape);
             Container.Bind<FloorWeaponRegistration>().AsSingle().NonLazy();

@@ -57,8 +57,12 @@ namespace Bw.UseCases.Shooting.Weapon
         {
             var holder = _weapon.parent;
             var reach = (Vector2)holder.TransformDirection(direction) * _config.ObstacleDetectionDistance;
-            using var obstacles = _world.CastRay(new PhysicsQuery.CastRayInput(holder.position, reach), _obstacles, PhysicsQuery.WorldCastMode.Closest, Allocator.Temp);
-            return obstacles.Length > 0 ? _config.MinOrbitRadius : _config.MaxOrbitRadius;
+            using var obstacles = _world.CastRay(new PhysicsQuery.CastRayInput(holder.position, reach), _obstacles, PhysicsQuery.WorldCastMode.AllSorted, Allocator.Temp);
+            foreach (var obstacle in obstacles)
+                if (!obstacle.shape.IsOneWay())
+                    return _config.MinOrbitRadius;
+
+            return _config.MaxOrbitRadius;
         }
     }
 }

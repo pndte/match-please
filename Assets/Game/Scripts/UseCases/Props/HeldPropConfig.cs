@@ -8,5 +8,6 @@ namespace Bw.UseCases.Props
         [Min(1f)] public float TurnSpeed = 480f;
         [Min(0f)] public float Gap = 0.05f;
         public LayerMask Layer = 1 << 17;
+        public LayerMask Walls = 1 << 14;
     }
 }
