@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3457799819207994297}
   - component: {fileID: 3452592300407640013}
   - component: {fileID: 5450762006392300101}
+  - component: {fileID: 1119174773847568677}
   m_Layer: 0
   m_Name: SanyaRig
   m_TagString: Untagged
@@ -144,6 +145,19 @@ MonoBehaviour:
   - {fileID: 6097602486560433643}
   - {fileID: 4754358853333222082}
   - {fileID: 2712793635532548008}
+  _footsteps: {fileID: 1119174773847568677}
+--- !u!114 &1119174773847568677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158228975880190953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca10d67b6ae32964aada3c4a4ddb1ff5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Bw.UseCases.Movement.View::Bw.UseCases.Movement.View.Animation.AnimationFootsteps
 --- !u!1 &226603926783097326
 GameObject:
   m_ObjectHideFlags: 0

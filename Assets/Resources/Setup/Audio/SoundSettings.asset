@@ -15,8 +15,7 @@ MonoBehaviour:
   _player:
     Voice: {fileID: 1000, guid: 5bd6aa44685b41de92c8585ee6274c58, type: 3}
   _weapons:
-  - Weapon: {fileID: 11400000, guid: c7210083ab45bac4eb075b9602232847, type: 2}
-    Shot:
+  - Shot:
       Clips:
       - {fileID: 8300000, guid: c1694969b85b6164fbe466a9b185a29e, type: 3}
       - {fileID: 8300000, guid: 14ec802b8df0ffa48a7f920d8d9b9927, type: 3}
@@ -45,8 +44,8 @@ MonoBehaviour:
         PitchVariation: 0.02
       At: 0.618
       OnlyEmpty: 1
-  - Weapon: {fileID: 11400000, guid: ffaa7d60a8aa3e8478a21abd827a5f60, type: 2}
-    Shot:
+    Weapon: {fileID: 11400000, guid: c7210083ab45bac4eb075b9602232847, type: 2}
+  - Shot:
       Clips:
       - {fileID: 8300000, guid: c01bf4c97847080459a0d1910735b67b, type: 3}
       Volume: 0.8
@@ -80,8 +79,8 @@ MonoBehaviour:
         PitchVariation: 0.02
       At: 0.7009375
       OnlyEmpty: 1
-  - Weapon: {fileID: 11400000, guid: afc0231ee46e3b4429d8947bdf114a38, type: 2}
-    Shot:
+    Weapon: {fileID: 11400000, guid: ffaa7d60a8aa3e8478a21abd827a5f60, type: 2}
+  - Shot:
       Clips:
       - {fileID: 8300000, guid: 50bd76907abd45142a6c624c60fb2616, type: 3}
       - {fileID: 8300000, guid: 718c4ed0582ee354d8e5c7c9125fbf62, type: 3}
@@ -109,8 +108,8 @@ MonoBehaviour:
         PitchVariation: 0.02
       At: 0.705
       OnlyEmpty: 1
-  - Weapon: {fileID: 11400000, guid: b9d527b2ed6a4f34d9e4ba72455ef8f2, type: 2}
-    Shot:
+    Weapon: {fileID: 11400000, guid: afc0231ee46e3b4429d8947bdf114a38, type: 2}
+  - Shot:
       Clips:
       - {fileID: 8300000, guid: 99b5c0a1e2fda99409c1cc7ac53df75d, type: 3}
       Volume: 0.6
@@ -137,6 +136,7 @@ MonoBehaviour:
         PitchVariation: 0.02
       At: 0.59666663
       OnlyEmpty: 1
+    Weapon: {fileID: 11400000, guid: b9d527b2ed6a4f34d9e4ba72455ef8f2, type: 2}
   _shotImpact:
     GroundHit:
       Clips:
@@ -151,8 +151,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 16384
   _melee:
-  - Weapon: {fileID: 11400000, guid: c1df4db9df884a340b5571179d76add6, type: 2}
-    Swing:
+  - Swing:
       Clips:
       - {fileID: 8300000, guid: 8ca55a79aa499024baf49cc44a5598d2, type: 3}
       - {fileID: 8300000, guid: 1ebf8f10f73503e4db3da16a3a3afc1d, type: 3}
@@ -173,6 +172,7 @@ MonoBehaviour:
       - {fileID: 8300000, guid: e44ffcf2f6e28f447b9e3795cd33f989, type: 3}
       Volume: 0.5
       PitchVariation: 0.08
+    Weapon: {fileID: 11400000, guid: c1df4db9df884a340b5571179d76add6, type: 2}
   _movement:
     Step:
       Clips:
@@ -204,8 +204,6 @@ MonoBehaviour:
       - {fileID: 8300000, guid: ddedd5d8f5ec6214fae1b0471df27eab, type: 3}
       Volume: 0.45
       PitchVariation: 0.06
-    StepInterval: 0.4
-    MinStepSpeed: 0.05
   _character:
     BodyHit:
       Clips:

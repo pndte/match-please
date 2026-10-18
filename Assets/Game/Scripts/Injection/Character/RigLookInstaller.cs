@@ -1,5 +1,6 @@
 using System;
 using Bw.UseCases.Movement.View.Animation;
+using Bw.UseCases.Movement.View.Animation.Abstractions;
 using UnityEngine;
 using Zenject;
 
@@ -10,6 +11,7 @@ namespace Bw.Injection
         [SerializeField] private Animator _animator;
         [SerializeField] private Transform _rig;
         [SerializeField] private SpriteRenderer[] _sprites;
+        [SerializeField] private AnimationFootsteps _footsteps;
 
         public override void InstallBindings()
         {
@@ -18,6 +20,7 @@ namespace Bw.Injection
 
             Container.Bind<Animator>().FromInstance(_animator).AsSingle();
             Container.Bind<SpriteRenderer[]>().FromInstance(_sprites).AsSingle();
+            Container.Bind<IFootsteps>().FromInstance(_footsteps).AsSingle();
             Container.BindInterfacesTo<RigMovementAnimator>().AsSingle().WithArguments(_animator, _rig);
         }
     }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6533880697772444689}
   - component: {fileID: 7317359669695352209}
   - component: {fileID: 3111166951282093231}
+  - component: {fileID: 665209149908752986}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -198,6 +199,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Bw.Injection::Bw.Injection.SpriteLookInstaller
   _animator: {fileID: 6533880697772444689}
   _sprite: {fileID: 8303433349971610731}
+  _footsteps: {fileID: 665209149908752986}
+--- !u!114 &665209149908752986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5582775669249346436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca10d67b6ae32964aada3c4a4ddb1ff5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Bw.UseCases.Movement.View::Bw.UseCases.Movement.View.Animation.AnimationFootsteps
 --- !u!1 &7714897418022992417
 GameObject:
   m_ObjectHideFlags: 0
