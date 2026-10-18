@@ -30,3 +30,20 @@ MonoBehaviour:
   _crateBreak:
     Debris: {fileID: 829313885574634999, guid: 13d1464b4bf8a694286ec46e58a03d0e, type: 3}
     DebrisOffset: {x: 0, y: 0.5}
+  _prop:
+    FlightFx: {fileID: 162386779827849959, guid: 40bbf3c784b54bb4882f4c9cc223b3f7, type: 3}
+    ArcDots: {fileID: 5125496745204640993, guid: c66dbd850fc3080418a073dc5fda6d96, type: 3}
+    Dust: {fileID: 4927165261140904852, guid: c4de9cb9eec4ad74aaa6a44924c915ee, type: 3}
+    TrailSpeed: 16
+    TrailHold: 0.7
+    GhostInterval: 0.035
+    ImpactSpeed: 8
+    ImpactCooldown: 0.15
+    LandPunch: {x: 0.22, y: -0.18, z: 0}
+    LandPunchTime: 0.22
+    ThrowKick: 0.12
+    ArcTime: 0.2
+    ArcDotCount: 7
+    ArcDotSize: 0.16
+    ArcDotTaper: 0.7
+    ArcDotFade: 0.15

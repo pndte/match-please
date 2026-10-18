@@ -1,5 +1,5 @@
 using System;
-using Bw.Entities;
+using Bw.Entities.Extensions;
 using Bw.Entities.Physics;
 using Bw.Entities.Physics.Extensions;
 using Bw.UseCases.Mortality;
@@ -39,7 +39,7 @@ namespace Bw.UseCases.Shooting.Weapon
 
         public ShotRay Aim(float aim)
         {
-            var holder = Holder();
+            var holder = _weapon.Holder();
             var rotation = Quaternion.Euler(0f, 0f, aim);
             var muzzleOffset = _muzzle.Transform.localPosition;
             var radius = ((Vector2)_weapon.localPosition).magnitude;
@@ -60,7 +60,7 @@ namespace Bw.UseCases.Shooting.Weapon
 
         public ShotTrace Cast(ShotRay ray)
         {
-            var shooter = Shooter();
+            var shooter = _weapon.HolderService<IReadonlyMortal>();
             using var blocking = Hits(ray.Pivot, ray.Muzzle - ray.Pivot);
             if (blocking.TryFindStruck(shooter, out var wall))
                 return ShotTrace.Struck(wall.point, wall, ray.Direction);
@@ -74,22 +74,5 @@ namespace Bw.UseCases.Shooting.Weapon
 
         private NativeArray<PhysicsQuery.WorldCastResult> Hits(Vector2 from, Vector2 translation) =>
             _world.CastRay(new PhysicsQuery.CastRayInput(from, translation), _filter, PhysicsQuery.WorldCastMode.AllSorted, Allocator.Temp);
-
-        private IReadonlyMortal Shooter()
-        {
-            if (!Holder().root.TryGetComponent<IHolder<IReadonlyMortal>>(out var shooter))
-                throw new InvalidOperationException($"Weapon '{_weapon.name}' traces a shot only for a mortal holder: the holder's root holds no mortal.");
-
-            return shooter.Value;
-        }
-
-        private Transform Holder()
-        {
-            var holder = _weapon.parent;
-            if (holder == null)
-                throw new InvalidOperationException($"Weapon '{_weapon.name}' traces a shot only while it is held.");
-
-            return holder;
-        }
     }
 }

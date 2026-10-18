@@ -2,14 +2,22 @@
     "name": "Bw.UseCases.Props.View",
     "rootNamespace": "Bw",
     "references": [
-        "Bw.UseCases.Shooting.View"
+        "Bw.Entities",
+        "Bw.UseCases.Shooting.View",
+        "Bw.UseCases.Character.View",
+        "Bw.UseCases.Audio.View",
+        "Bw.UseCases.Vfx.View",
+        "Bw.UseCases.Camera.View",
+        "R3.Unity"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "JetBrains.Lifetimes.dll"
+        "JetBrains.Lifetimes.dll",
+        "R3.dll",
+        "DOTween.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

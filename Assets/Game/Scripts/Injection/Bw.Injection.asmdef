@@ -29,6 +29,7 @@
         "Bw.UseCases.Level.Network",
         "Bw.UseCases.Props",
         "Bw.UseCases.Props.View",
+        "Bw.UseCases.Props.View.Adapters",
         "Bw.UseCases.Match",
         "Bw.UseCases.Match.Network",
         "Bw.UseCases.Match.View",

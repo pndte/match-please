@@ -1,4 +1,4 @@
-using System;
+using Bw.Entities.Extensions;
 using Bw.Entities.Physics;
 using Bw.Entities.Physics.Extensions;
 using Bw.UseCases.Movement;
@@ -59,11 +59,7 @@ namespace Bw.UseCases.Props.Network
 
         public RigidState NearestToHolder()
         {
-            var holder = _item.parent;
-            if (holder == null || !holder.TryGetComponent<HoldOval>(out var oval))
-                throw new InvalidOperationException($"'{_item.name}' is released near its holder only while a holder with a hold oval holds it.");
-
-            return Nearest(oval, new RigidState(_item.position, _item.eulerAngles.z, Vector2.zero, 0f));
+            return Nearest(_item.HolderComponent<HoldOval>(), new RigidState(_item.position, _item.eulerAngles.z, Vector2.zero, 0f));
         }
 
         private bool TryGetFree(

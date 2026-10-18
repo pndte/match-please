@@ -1,7 +1,7 @@
-using System;
 using Bw.Entities.Extensions;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Movement;
+using Bw.UseCases.Movement.Abstractions;
 using Bw.UseCases.Props.Extensions;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Extensions;
@@ -45,8 +45,9 @@ namespace Bw.UseCases.Props.Network
             prop.Fired.Advise(lifetime, shot => Throw(shot.Aim));
             hold.HeldLifetime.WhenAlive(lifetime, heldLifetime =>
             {
-                var holder = Holder();
-                heldLifetime.OnTermination(() => Release(holder));
+                var holder = _transform.HolderComponent<HoldOval>();
+                var movement = _transform.HolderService<IReadonlyMovement>();
+                heldLifetime.OnTermination(() => Release(holder, movement));
             });
         }
 
@@ -57,7 +58,7 @@ namespace Bw.UseCases.Props.Network
             _inventories.InventoryOf(thrower).DropAndDrawNext(_prop);
         }
 
-        private void Release(HoldOval holder)
+        private void Release(HoldOval holder, IReadonlyMovement movement)
         {
             var launch = _launch;
             _launch = PropLaunch.Dropped;
@@ -67,18 +68,9 @@ namespace Bw.UseCases.Props.Network
                 () => _body.Restart(released),
                 (thrower, aim) =>
                 {
-                    _body.Restart(_config.Thrown(released, aim));
+                    _body.Restart(_config.Thrown(released, aim, movement.State.Value.Body.Velocity));
                     _hits.Track(thrower);
                 });
-        }
-
-        private HoldOval Holder()
-        {
-            var holder = _transform.parent;
-            if (holder == null || !holder.TryGetComponent<HoldOval>(out var oval))
-                throw new InvalidOperationException($"Prop '{_transform.name}' is held only by a holder with a hold oval.");
-
-            return oval;
         }
     }
 }

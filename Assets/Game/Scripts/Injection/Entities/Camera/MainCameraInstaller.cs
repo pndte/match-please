@@ -10,6 +10,9 @@ using Bw.UseCases.Character.View.Abstractions;
 using Bw.UseCases.Character.View.HealthBar;
 using Bw.UseCases.FogOfWar.View;
 using Bw.UseCases.FogOfWar.View.Sight;
+using Bw.UseCases.Props.View;
+using Bw.UseCases.Props.View.Abstractions;
+using Bw.UseCases.Props.View.Aim;
 using Bw.UseCases.Shooting.View.Crosshair;
 using Bw.UseCases.Shooting.View.Crosshair.Abstractions;
 using Bw.UseCases.Vfx.View.Effects;
@@ -43,6 +46,7 @@ namespace Bw.Injection.Entities.Camera
             Container.BindInterfacesTo<SoundPlayer>().AsSingle().WithArguments(_camera.gameObject.Lifetime());
             Container.BindInterfacesTo<EffectPlayer>().AsSingle().WithArguments(_camera.gameObject.Lifetime());
             BindHealthBars();
+            BindThrowArc();
 
             if (_fogOfWar)
                 BindFogOfWar();
@@ -50,6 +54,14 @@ namespace Bw.Injection.Entities.Camera
 
         private void BindHealthBars() =>
             Container.Bind<IHealthBars>().To<HealthBars>().FromComponentOn(_camera.gameObject).AsSingle();
+
+        private void BindThrowArc() =>
+            Container.Bind<IThrowArcPreview>()
+                .FromMethod(_ => CreateThrowArcPreview(Container.Resolve<PropVfxConfig>()))
+                .AsSingle();
+
+        private ThrowArcPreview CreateThrowArcPreview(PropVfxConfig config) =>
+            new(_camera.gameObject.Lifetime(), Container.InstantiatePrefabForComponent<ParticleSystem>(config.ArcDots), config);
 
         private void BindFogOfWar()
         {

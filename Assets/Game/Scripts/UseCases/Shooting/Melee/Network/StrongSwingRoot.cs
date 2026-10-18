@@ -1,5 +1,4 @@
-using System;
-using Bw.Entities;
+using Bw.Entities.Extensions;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Movement.Network.Root;
@@ -35,19 +34,7 @@ namespace Bw.UseCases.Shooting.Melee.Network
                 return;
 
             var tick = _ticks.Current;
-            Holder().Root(tick + 1, tick + _config.StrongSwingTicks(_ticks) + _config.RecoveryTicks(_ticks)); //TODO: корень ставится по тику, в котором удар сорвался в предсказании; если сверка с сервером сдвинет этот тик (потерялся ввод с отпусканием кнопки), корень клиента останется на старых тиках — сервер держит свой корень и поправит позицию рывком
-        }
-
-        private IMovementRoot Holder()
-        {
-            var holder = _weapon.parent;
-            if (holder == null)
-                throw new InvalidOperationException($"Melee weapon '{_weapon.name}' swings only in hands, yet nobody holds it.");
-
-            if (!holder.TryGetComponent<IHolder<IMovementRoot>>(out var root))
-                throw new InvalidOperationException($"'{holder.name}' holds melee weapon '{_weapon.name}' but has no movement to root.");
-
-            return root.Value;
+            _weapon.HolderService<IMovementRoot>().Root(tick + 1, tick + _config.StrongSwingTicks(_ticks) + _config.RecoveryTicks(_ticks)); //TODO: корень ставится по тику, в котором удар сорвался в предсказании; если сверка с сервером сдвинет этот тик (потерялся ввод с отпусканием кнопки), корень клиента останется на старых тиках — сервер держит свой корень и поправит позицию рывком
         }
     }
 }

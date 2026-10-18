@@ -1,3 +1,4 @@
+using Bw.Entities.Simulation;
 using UnityEngine;
 
 namespace Bw.UseCases.Props.Extensions
@@ -14,5 +15,8 @@ namespace Bw.UseCases.Props.Extensions
             var direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
             return direction * (Vector2.Scale(ovalRadii, direction).magnitude + propHalfSize.x + config.Gap);
         }
+
+        public static int WindUpTicks(this HeldPropConfig config, ISimulationStep step) =>
+            Mathf.Max(1, Mathf.CeilToInt(config.WindUpTime / step.Duration));
     }
 }

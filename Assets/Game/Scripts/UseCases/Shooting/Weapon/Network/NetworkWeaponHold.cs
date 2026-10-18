@@ -1,3 +1,4 @@
+using Bw.Entities.Extensions;
 using Bw.Entities.Network.Objects;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
@@ -31,7 +32,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
 
         private void FollowParent()
         {
-            if (transform.parent == null)
+            if (!transform.IsHeld())
             {
                 _holds.TerminateCurrent();
                 _heldLifetime.Value = Lifetime.Terminated;

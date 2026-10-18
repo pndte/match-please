@@ -5,13 +5,22 @@ using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using Bw.Injection.Network;
 using Bw.Injection.Network.Prediction;
+using Bw.UseCases.Character.View.Grips;
 using Bw.UseCases.Mortality;
 using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.Abstractions;
 using Bw.UseCases.Props;
 using Bw.UseCases.Props.Network;
 using Bw.UseCases.Props.Network.Prediction;
+using Bw.UseCases.Props.View;
+using Bw.UseCases.Props.View.Abstractions;
+using Bw.UseCases.Props.View.Adapters;
+using Bw.UseCases.Props.View.Aim;
+using Bw.UseCases.Props.View.Audio;
+using Bw.UseCases.Props.View.Flight;
 using Bw.UseCases.Props.View.Held;
+using Bw.UseCases.Props.View.Impact;
+using Bw.UseCases.Props.View.Throw;
 using Bw.UseCases.Shooting.View.Adapters;
 using Bw.UseCases.Shooting.View.Highlight;
 using Bw.UseCases.Shooting.Weapon;
@@ -46,6 +55,7 @@ namespace Bw.Injection.Props
         {
             RequireThrowSpeed();
             RequireDamageBounds();
+            RequireWindUpSwing();
             Container.BindInstance(_parts.Held).AsSingle();
             Container.BindInstance(_parts.Throw).AsSingle();
 
@@ -82,12 +92,24 @@ namespace Bw.Injection.Props
                     $"Prop throw config '{_parts.Throw.name}' keeps no damage between its bounds: MinDamage must not exceed MaxDamage.");
         }
 
+        private void RequireWindUpSwing()
+        {
+            var swing = _parts.Held.WindUpSwing;
+            if (swing == null || swing.length < 2)
+                throw new InvalidOperationException(
+                    $"Held prop config '{_parts.Held.name}' has no wind-up swing: the curve needs keys from the press to the release.");
+
+            if (Mathf.Abs(swing.Evaluate(0f)) > 0.01f)
+                throw new InvalidOperationException(
+                    $"Held prop config '{_parts.Held.name}' starts its wind-up swing at {swing.Evaluate(0f)}: the swing starts at 0, or the prop jumps at the press.");
+        }
+
         private void BindHeldSimulation()
         {
             Container.Bind(typeof(IReadonlyWeaponDraw), typeof(IWeaponDraw)).To<WeaponDraw>().AsSingle()
                 .WriterOnlyInto<IWeaponDraw>(typeof(WeaponHoldServerHandler), typeof(WeaponDrawReceiver));
             Container.BindInterfacesTo<PropSimulator>().AsSingle();
-            Container.BindInterfacesTo<ShootingWeapon<PropState>>().AsSingle().WithArguments(new PropState(0f, 0, true)).NonLazy();
+            Container.BindInterfacesTo<ShootingWeapon<PropState>>().AsSingle().WithArguments(new PropState(0f, PropPhase.Holding, 0, 0, true)).NonLazy();
 
             StreamPredictionInstaller<WeaponInput, PropState>.Install(Container, _runtimeSettings, _netSchema);
         }
@@ -136,7 +158,7 @@ namespace Bw.Injection.Props
             Container.Bind<ReleaseSpots>().AsSingle();
             Container.Bind<HeldPropGrip>().AsSingle().WithArguments(_parts.Held.Layer.SingleLayer("held prop"));
             Container.Bind<HeldPropPlacement>().AsSingle();
-            Container.Bind(typeof(IStateView<PropState>), typeof(IHeldItem)).To<PropStateView>().AsSingle();
+            Container.Bind(typeof(IHeldItem), typeof(PropStateView)).To<PropStateView>().AsSingle();
             Container.Bind<HeldItemRegistration>().AsSingle().WithArguments(_parts.Prop).NonLazy();
             Container.Bind<HeldWeaponBody>().AsSingle().NonLazy();
             Container.Decorate<IStateView<RigidState>>().With<UnheldStateView<RigidState>>();
@@ -145,6 +167,7 @@ namespace Bw.Injection.Props
         private void BindServer()
         {
             Container.BindInterfacesTo<WeaponInputPolicy>().AsSingle();
+            Container.Bind<IStateView<PropState>>().To<PropStateView>().FromResolve();
             Container.Bind<WeaponHoldServerHandler>().AsSingle().NonLazy();
             Container.Bind<WeaponKindRegistration>().AsSingle().WithArguments(WeaponKind.Prop).NonLazy(); //TODO: ящик создаёт спавнер ящиков, а не Armory, и в каталоге оружия его нет, поэтому описания у ящика нет: когда матч начнёт засчитывать броски (HitScoring), убийство ящиком бросит исключение в ленте убийств, пока ящику не дадут описание, строку в каталоге, иконку в WeaponIconsConfig и создание через Armory
             Container.BindInterfacesAndSelfTo<ThrownPropHits>().AsSingle();
@@ -157,6 +180,7 @@ namespace Bw.Injection.Props
 
         private void BindClient()
         {
+            Container.Bind<ThrowLaunch>().AsSingle();
             Container.Bind<ThrowPrediction>().AsSingle().NonLazy();
             Container.BindInterfacesTo<WeaponInputSampler>().AsSingle().WithArguments(_parts.Prop);
             Container.BindInterfacesTo<FloorWeapon>().AsSingle().WithArguments(_parts.Shape);
@@ -171,6 +195,46 @@ namespace Bw.Injection.Props
                 .WithArguments(_parts.Visual, _parts.Visual.GetComponentsInChildren<SpriteRenderer>(true)).NonLazy();
             Container.BindInterfacesTo<WeaponCarryViewModel>().AsSingle();
             Container.Bind<HeldPropSorting>().AsSingle().WithArguments(_parts.HeldSortingOrder).NonLazy();
+            Container.Bind<HeldGripsRegistration>().AsSingle()
+                .WithArguments(_parts.Prop, _parts.Prop.GetComponentsInChildren<HandGrip>(true)).NonLazy();
+            BindThrowVisuals();
+            BindFlightVisuals();
+            Container.Bind<PropSoundsView>().AsSingle().WithArguments(_parts.Prop).NonLazy();
+        }
+
+        private void BindThrowVisuals()
+        {
+            Container.Bind(typeof(IPropThrowsViewModel), typeof(PropThrowsViewModel)).To<PropThrowsViewModel>().AsSingle();
+            Container.Bind(typeof(IThrowArcViewModel), typeof(ThrowArcViewModel)).To<ThrowArcViewModel>().AsSingle();
+            Container.Bind<IStateView<PropState>>()
+                .FromMethod(context => new CompositeStateView<PropState>(
+                    context.Container.Resolve<PropStateView>(),
+                    context.Container.Resolve<PropThrowsViewModel>(),
+                    context.Container.Resolve<ThrowArcViewModel>()))
+                .AsSingle();
+            Container.Bind<ThrowBodyPose>().AsSingle().WithArguments(_parts.Prop).NonLazy();
+            Container.Bind<ThrowCameraKick>().AsSingle().NonLazy();
+            Container.Bind<ThrowTrajectory>().AsSingle();
+            Container.Bind<ThrowArcRegistration>().AsSingle().NonLazy();
+        }
+
+        private void BindFlightVisuals()
+        {
+            Container.Bind<PropMotion>().AsSingle();
+            Container.Bind<PropFlightFx>().FromMethod(context => FlightFx(context.Container)).AsSingle();
+            Container.Bind<PropFlightView>().AsSingle().WithArguments(_parts.Visual.GetComponentInChildren<SpriteRenderer>(true)).NonLazy();
+            Container.Bind<PropImpactView>().AsSingle().WithArguments(_parts.Visual).NonLazy();
+        }
+
+        private PropFlightFx FlightFx(DiContainer container)
+        {
+            var fx = container.InstantiatePrefabForComponent<PropFlightFx>(container.Resolve<PropVfxConfig>().FlightFx, _parts.Prop);
+            var size = _parts.Shape.Size;
+            fx.transform.localPosition = _parts.Shape.Offset;
+            fx.Trail.widthMultiplier *= Mathf.Max(size.x, size.y);
+            var lines = fx.Lines.shape;
+            lines.scale = Vector3.Scale(lines.scale, new Vector3(size.x, size.y, 1f));
+            return fx;
         }
     }
 }

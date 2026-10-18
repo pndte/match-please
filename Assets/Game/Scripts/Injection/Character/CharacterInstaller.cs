@@ -16,6 +16,7 @@ using Bw.UseCases.Character.View.Adapters;
 using Bw.UseCases.Character.View.Audio;
 using Bw.UseCases.Character.View.Death;
 using Bw.UseCases.Character.View.Follow;
+using Bw.UseCases.Character.View.Grips;
 using Bw.UseCases.Character.View.HealthBar;
 using Bw.UseCases.Character.View.Hit;
 using Bw.UseCases.Character.View.Player;
@@ -50,6 +51,7 @@ namespace Bw.Injection
         [SerializeField] private HitFeedbackConfig _hitFeedbackConfig;
         [SerializeField] private DeathConfig _death;
         [SerializeField] private RegenerationConfig _regeneration;
+        [SerializeField] private SpriteRenderer[] _gripHands;
 
         public override void InstallBindings()
         {
@@ -82,6 +84,7 @@ namespace Bw.Injection
 
             Container.BindInterfacesTo<KnockbackRules>().AsSingle();
             Container.InstantiateComponent<MovementRootHolder>(gameObject);
+            Container.InstantiateComponent<MovementHolder>(gameObject);
             Container.InstantiateComponent<HandsHolder>(gameObject);
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Server)
@@ -122,6 +125,8 @@ namespace Bw.Injection
             Container.Bind<CharacterHealthBar>().AsSingle().WithArguments(transform).NonLazy();
             Container.Bind<ICharacterPoses>().To<CharacterPoses>().AsSingle();
             Container.InstantiateComponent<CharacterPosesHolder>(gameObject);
+            Container.Bind<IGripView>().To<GripView>().AsSingle().WithArguments(_gripHands);
+            Container.InstantiateComponent<GripViewHolder>(gameObject);
         }
     }
 }

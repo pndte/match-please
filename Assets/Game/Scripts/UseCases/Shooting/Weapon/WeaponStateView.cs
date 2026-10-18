@@ -55,7 +55,7 @@ namespace Bw.UseCases.Shooting.Weapon
 
         private float TargetRadius(Vector2 direction)
         {
-            var holder = _weapon.parent;
+            var holder = _weapon.Holder();
             var reach = (Vector2)holder.TransformDirection(direction) * _config.ObstacleDetectionDistance;
             using var obstacles = _world.CastRay(new PhysicsQuery.CastRayInput(holder.position, reach), _obstacles, PhysicsQuery.WorldCastMode.AllSorted, Allocator.Temp);
             foreach (var obstacle in obstacles)

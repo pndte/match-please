@@ -1,4 +1,3 @@
-using System;
 using Bw.Entities.Extensions;
 using Bw.Entities.Physics;
 using Bw.Entities.Physics.Extensions;
@@ -35,7 +34,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
 
             hold.HeldLifetime.WhenAlive(lifetime, heldLifetime =>
             {
-                var holder = Holder();
+                var holder = _shape.transform.HolderComponent<BodyBox>();
                 heldLifetime.OnTermination(() => Release(holder));
             });
         }
@@ -70,14 +69,5 @@ namespace Bw.UseCases.Shooting.Weapon.Network
 
         private Vector2 OffsetAt(float angle) =>
             Quaternion.Euler(0f, 0f, angle) * _shape.WorldOffset();
-
-        private BodyBox Holder()
-        {
-            var holder = _shape.transform.parent;
-            if (holder == null || !holder.TryGetComponent<BodyBox>(out var box))
-                throw new InvalidOperationException($"Weapon '{_shape.name}' is held only by a holder with a body box.");
-
-            return box;
-        }
     }
 }

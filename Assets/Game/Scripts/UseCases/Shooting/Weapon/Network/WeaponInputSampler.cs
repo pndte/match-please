@@ -114,7 +114,7 @@ namespace Bw.UseCases.Shooting.Weapon.Network
             var mouse = Input.mousePosition; //TODO: new input system
             mouse.z = camera.nearClipPlane;
 
-            var target = (Vector2)_weapon.parent.InverseTransformPoint(camera.ScreenToWorldPoint(mouse));
+            var target = (Vector2)_weapon.Holder().InverseTransformPoint(camera.ScreenToWorldPoint(mouse));
             if (target.sqrMagnitude > MinAimDistance * MinAimDistance)
                 _aim = Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg;
 

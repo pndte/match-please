@@ -1,5 +1,3 @@
-using System;
-using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.UseCases.Movement.Abstractions;
 using Bw.UseCases.Shooting.Weapon.Abstractions;
@@ -28,18 +26,9 @@ namespace Bw.UseCases.Props
 
         private void Take(Lifetime heldLifetime, IHeldItem held)
         {
-            var hands = HoldersHands();
+            var hands = _item.HolderService<IHands>();
             _grip.Attach(heldLifetime, hands.Body);
             hands.Take(heldLifetime, held);
-        }
-
-        private IHands HoldersHands()
-        {
-            var holder = _item.parent;
-            if (holder == null || !holder.TryGetComponent<IHolder<IHands>>(out var hands))
-                throw new InvalidOperationException($"'{_item.name}' can be held only by a holder with hands: its root needs a hands holder.");
-
-            return hands.Value;
         }
     }
 }

@@ -234,3 +234,24 @@ MonoBehaviour:
       - {fileID: 8300000, guid: 74e79068f7182524abb5b62b2204ca1f, type: 3}
       Volume: 0.75
       PitchVariation: 0.06
+  _prop:
+    Throw:
+      Clips:
+      - {fileID: 8300000, guid: 5107845087cc83d4fb390036fb7a512b, type: 3}
+      - {fileID: 8300000, guid: 832fdcd246066944db8da5546f505a36, type: 3}
+      - {fileID: 8300000, guid: fbe1bccac56db0b4483288774463003c, type: 3}
+      Volume: 0.55
+      PitchVariation: 0.08
+    Flight:
+      Clips:
+      - {fileID: 8300000, guid: 94a75e3e5ebc6fe4bb639c5c029f4d52, type: 3}
+      - {fileID: 8300000, guid: 8e4158b7aec053844b9cf8335fb3c15b, type: 3}
+      Volume: 0.3
+      PitchVariation: 0.06
+    Land:
+      Clips:
+      - {fileID: 8300000, guid: acd675c95b562dc45bf48d48c34f2cdc, type: 3}
+      - {fileID: 8300000, guid: cb42ce57cd2f73148bf07f5f69611d6c, type: 3}
+      - {fileID: 8300000, guid: bdecee9c57d164a49ae8f8d1c8c57e2e, type: 3}
+      Volume: 0.6
+      PitchVariation: 0.08

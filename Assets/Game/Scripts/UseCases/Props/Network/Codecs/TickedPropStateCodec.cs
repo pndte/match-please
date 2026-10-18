@@ -19,15 +19,19 @@ namespace Bw.UseCases.Props.Network.Codecs
         {
             var tick = Value.Tick;
             var aim = Value.State.Aim;
+            var phase = (byte)Value.State.Phase;
+            var phaseTicks = Value.State.PhaseTicks;
             var throws = Value.State.Throws;
             var triggerHeld = Value.State.TriggerHeld;
 
             serializer.SerializePacked(ref tick);
             serializer.SerializeAngle(ref aim);
+            serializer.SerializeValue(ref phase);
+            serializer.SerializePacked(ref phaseTicks);
             serializer.SerializePacked(ref throws);
             serializer.SerializeValue(ref triggerHeld);
 
-            Value = new TickedState<PropState>(tick, new PropState(aim, throws, triggerHeld));
+            Value = new TickedState<PropState>(tick, new PropState(aim, (PropPhase)phase, phaseTicks, throws, triggerHeld));
         }
     }
 }

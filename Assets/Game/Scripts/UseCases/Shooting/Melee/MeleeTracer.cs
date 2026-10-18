@@ -1,5 +1,5 @@
 using System;
-using Bw.Entities;
+using Bw.Entities.Extensions;
 using Bw.Entities.Physics;
 using Bw.Entities.Physics.Extensions;
 using Bw.UseCases.Mortality;
@@ -31,7 +31,7 @@ namespace Bw.UseCases.Shooting.Melee
 
         public ShotRay Aim(float aim)
         {
-            var holder = Holder();
+            var holder = _weapon.Holder();
             return new ShotRay(
                 holder.position,
                 holder.position,
@@ -51,26 +51,9 @@ namespace Bw.UseCases.Shooting.Melee
             var reach = ray.Direction * _config.Reach;
             var fist = new CircleGeometry { center = ray.Pivot, radius = _config.Radius };
             using var hits = _world.CastGeometry(fist, reach, _filter, PhysicsQuery.WorldCastMode.AllSorted, Allocator.Temp);
-            return hits.TryFindStruck(Striker(), out var hit)
+            return hits.TryFindStruck(_weapon.HolderService<IReadonlyMortal>(), out var hit)
                 ? ShotTrace.Struck(ray.Pivot, hit, ray.Direction)
                 : ShotTrace.Missed(ray.Pivot, ray.Pivot + reach);
-        }
-
-        private IReadonlyMortal Striker()
-        {
-            if (!Holder().root.TryGetComponent<IHolder<IReadonlyMortal>>(out var striker))
-                throw new InvalidOperationException($"Melee weapon '{_weapon.name}' traces a strike only for a mortal holder: the holder's root holds no mortal.");
-
-            return striker.Value;
-        }
-
-        private Transform Holder()
-        {
-            var holder = _weapon.parent;
-            if (holder == null)
-                throw new InvalidOperationException($"Melee weapon '{_weapon.name}' traces a strike only while it is held.");
-
-            return holder;
         }
     }
 }

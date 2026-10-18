@@ -1,0 +1,22 @@
+{
+    "name": "Bw.UseCases.Props.View.Adapters",
+    "rootNamespace": "Bw",
+    "references": [
+        "Bw.Entities",
+        "Bw.UseCases.Movement",
+        "Bw.UseCases.Shooting",
+        "Bw.UseCases.Props",
+        "Bw.UseCases.Props.View"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JetBrains.Lifetimes.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

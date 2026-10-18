@@ -7,6 +7,7 @@ namespace Bw.UseCases.Props
     {
         [Min(0.01f)] public float Speed = 22f;
         [Min(0f)] public float Spin = 540f;
+        [Range(0f, 1f)] public float RunCarry = 0.5f;
 
         [Header("Hit")]
         [Min(0f)] public float Damage = 5f;
