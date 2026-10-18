@@ -693,7 +693,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -751,7 +751,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 1792
+        y: 2816
         width: 256
         height: 256
       alignment: 9
@@ -773,7 +773,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 256
-        y: 1792
+        y: 2816
         width: 256
         height: 256
       alignment: 9
@@ -794,8 +794,8 @@ TextureImporter:
       name: SanyaRig_hair0_0
       rect:
         serializedVersion: 2
-        x: 512
-        y: 1792
+        x: 768
+        y: 2816
         width: 256
         height: 256
       alignment: 9
@@ -816,8 +816,8 @@ TextureImporter:
       name: SanyaRig_face10_0
       rect:
         serializedVersion: 2
-        x: 768
-        y: 1792
+        x: 1024
+        y: 2816
         width: 256
         height: 256
       alignment: 9
@@ -838,8 +838,8 @@ TextureImporter:
       name: SanyaRig_hair10_0
       rect:
         serializedVersion: 2
-        x: 1024
-        y: 1792
+        x: 1536
+        y: 2816
         width: 256
         height: 256
       alignment: 9
@@ -860,8 +860,8 @@ TextureImporter:
       name: SanyaRig_face15_0
       rect:
         serializedVersion: 2
-        x: 1280
-        y: 1792
+        x: 1792
+        y: 2816
         width: 256
         height: 256
       alignment: 9
@@ -882,8 +882,8 @@ TextureImporter:
       name: SanyaRig_hair15_0
       rect:
         serializedVersion: 2
-        x: 1536
-        y: 1792
+        x: 256
+        y: 2560
         width: 256
         height: 256
       alignment: 9
@@ -904,8 +904,8 @@ TextureImporter:
       name: SanyaRig_face18_0
       rect:
         serializedVersion: 2
-        x: 1792
-        y: 1792
+        x: 512
+        y: 2560
         width: 256
         height: 256
       alignment: 9
@@ -926,8 +926,8 @@ TextureImporter:
       name: SanyaRig_hair18_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1536
+        x: 1024
+        y: 2560
         width: 256
         height: 256
       alignment: 9
@@ -948,8 +948,8 @@ TextureImporter:
       name: SanyaRig_shoeFar_0
       rect:
         serializedVersion: 2
-        x: 256
-        y: 1536
+        x: 768
+        y: 2304
         width: 256
         height: 256
       alignment: 9
@@ -970,8 +970,8 @@ TextureImporter:
       name: SanyaRig_shoeNear_0
       rect:
         serializedVersion: 2
-        x: 512
-        y: 1536
+        x: 1024
+        y: 2304
         width: 256
         height: 256
       alignment: 9
@@ -992,8 +992,8 @@ TextureImporter:
       name: SanyaRig_leg_0
       rect:
         serializedVersion: 2
-        x: 768
-        y: 1536
+        x: 1280
+        y: 2304
         width: 256
         height: 256
       alignment: 9
@@ -1014,8 +1014,8 @@ TextureImporter:
       name: SanyaRig_tick_0
       rect:
         serializedVersion: 2
-        x: 1024
-        y: 1536
+        x: 1536
+        y: 2304
         width: 256
         height: 256
       alignment: 9
@@ -1036,8 +1036,8 @@ TextureImporter:
       name: SanyaRig_shadow_0
       rect:
         serializedVersion: 2
-        x: 1280
-        y: 1536
+        x: 1792
+        y: 2304
         width: 256
         height: 256
       alignment: 9
@@ -1058,8 +1058,8 @@ TextureImporter:
       name: SanyaRig_egg_1
       rect:
         serializedVersion: 2
-        x: 1536
-        y: 1536
+        x: 0
+        y: 2048
         width: 256
         height: 256
       alignment: 9
@@ -1080,8 +1080,8 @@ TextureImporter:
       name: SanyaRig_face0_1
       rect:
         serializedVersion: 2
-        x: 1792
-        y: 1536
+        x: 256
+        y: 2048
         width: 256
         height: 256
       alignment: 9
@@ -1102,8 +1102,8 @@ TextureImporter:
       name: SanyaRig_hair0_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1280
+        x: 768
+        y: 2048
         width: 256
         height: 256
       alignment: 9
@@ -1124,8 +1124,8 @@ TextureImporter:
       name: SanyaRig_face10_1
       rect:
         serializedVersion: 2
-        x: 256
-        y: 1280
+        x: 1024
+        y: 2048
         width: 256
         height: 256
       alignment: 9
@@ -1146,8 +1146,8 @@ TextureImporter:
       name: SanyaRig_hair10_1
       rect:
         serializedVersion: 2
-        x: 512
-        y: 1280
+        x: 1536
+        y: 2048
         width: 256
         height: 256
       alignment: 9
@@ -1168,8 +1168,8 @@ TextureImporter:
       name: SanyaRig_face15_1
       rect:
         serializedVersion: 2
-        x: 768
-        y: 1280
+        x: 1792
+        y: 2048
         width: 256
         height: 256
       alignment: 9
@@ -1190,8 +1190,8 @@ TextureImporter:
       name: SanyaRig_hair15_1
       rect:
         serializedVersion: 2
-        x: 1024
-        y: 1280
+        x: 256
+        y: 1792
         width: 256
         height: 256
       alignment: 9
@@ -1212,8 +1212,8 @@ TextureImporter:
       name: SanyaRig_face18_1
       rect:
         serializedVersion: 2
-        x: 1280
-        y: 1280
+        x: 512
+        y: 1792
         width: 256
         height: 256
       alignment: 9
@@ -1234,8 +1234,8 @@ TextureImporter:
       name: SanyaRig_hair18_1
       rect:
         serializedVersion: 2
-        x: 1536
-        y: 1280
+        x: 1024
+        y: 1792
         width: 256
         height: 256
       alignment: 9
@@ -1256,8 +1256,8 @@ TextureImporter:
       name: SanyaRig_shoeFar_1
       rect:
         serializedVersion: 2
-        x: 1792
-        y: 1280
+        x: 768
+        y: 1536
         width: 256
         height: 256
       alignment: 9
@@ -1278,8 +1278,8 @@ TextureImporter:
       name: SanyaRig_shoeNear_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1024
+        x: 1024
+        y: 1536
         width: 256
         height: 256
       alignment: 9
@@ -1300,8 +1300,8 @@ TextureImporter:
       name: SanyaRig_leg_1
       rect:
         serializedVersion: 2
-        x: 256
-        y: 1024
+        x: 1280
+        y: 1536
         width: 256
         height: 256
       alignment: 9
@@ -1322,8 +1322,8 @@ TextureImporter:
       name: SanyaRig_tick_1
       rect:
         serializedVersion: 2
-        x: 512
-        y: 1024
+        x: 1536
+        y: 1536
         width: 256
         height: 256
       alignment: 9
@@ -1344,8 +1344,8 @@ TextureImporter:
       name: SanyaRig_shadow_1
       rect:
         serializedVersion: 2
-        x: 768
-        y: 1024
+        x: 1792
+        y: 1536
         width: 256
         height: 256
       alignment: 9
@@ -1366,8 +1366,8 @@ TextureImporter:
       name: SanyaRig_egg_2
       rect:
         serializedVersion: 2
-        x: 1024
-        y: 1024
+        x: 0
+        y: 1280
         width: 256
         height: 256
       alignment: 9
@@ -1388,8 +1388,8 @@ TextureImporter:
       name: SanyaRig_face0_2
       rect:
         serializedVersion: 2
-        x: 1280
-        y: 1024
+        x: 256
+        y: 1280
         width: 256
         height: 256
       alignment: 9
@@ -1410,8 +1410,8 @@ TextureImporter:
       name: SanyaRig_hair0_2
       rect:
         serializedVersion: 2
-        x: 1536
-        y: 1024
+        x: 768
+        y: 1280
         width: 256
         height: 256
       alignment: 9
@@ -1432,8 +1432,8 @@ TextureImporter:
       name: SanyaRig_face10_2
       rect:
         serializedVersion: 2
-        x: 1792
-        y: 1024
+        x: 1024
+        y: 1280
         width: 256
         height: 256
       alignment: 9
@@ -1454,8 +1454,8 @@ TextureImporter:
       name: SanyaRig_hair10_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 768
+        x: 1536
+        y: 1280
         width: 256
         height: 256
       alignment: 9
@@ -1476,8 +1476,8 @@ TextureImporter:
       name: SanyaRig_face15_2
       rect:
         serializedVersion: 2
-        x: 256
-        y: 768
+        x: 1792
+        y: 1280
         width: 256
         height: 256
       alignment: 9
@@ -1498,8 +1498,8 @@ TextureImporter:
       name: SanyaRig_hair15_2
       rect:
         serializedVersion: 2
-        x: 512
-        y: 768
+        x: 256
+        y: 1024
         width: 256
         height: 256
       alignment: 9
@@ -1520,8 +1520,8 @@ TextureImporter:
       name: SanyaRig_face18_2
       rect:
         serializedVersion: 2
-        x: 768
-        y: 768
+        x: 512
+        y: 1024
         width: 256
         height: 256
       alignment: 9
@@ -1543,7 +1543,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1024
-        y: 768
+        y: 1024
         width: 256
         height: 256
       alignment: 9
@@ -1564,7 +1564,7 @@ TextureImporter:
       name: SanyaRig_shoeFar_2
       rect:
         serializedVersion: 2
-        x: 1280
+        x: 768
         y: 768
         width: 256
         height: 256
@@ -1586,7 +1586,7 @@ TextureImporter:
       name: SanyaRig_shoeNear_2
       rect:
         serializedVersion: 2
-        x: 1536
+        x: 1024
         y: 768
         width: 256
         height: 256
@@ -1608,7 +1608,7 @@ TextureImporter:
       name: SanyaRig_leg_2
       rect:
         serializedVersion: 2
-        x: 1792
+        x: 1280
         y: 768
         width: 256
         height: 256
@@ -1630,8 +1630,8 @@ TextureImporter:
       name: SanyaRig_tick_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 512
+        x: 1536
+        y: 768
         width: 256
         height: 256
       alignment: 9
@@ -1652,8 +1652,8 @@ TextureImporter:
       name: SanyaRig_shadow_2
       rect:
         serializedVersion: 2
-        x: 256
-        y: 512
+        x: 1792
+        y: 768
         width: 256
         height: 256
       alignment: 9
@@ -2000,6 +2000,710 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: SanyaRig_faceHurt0_0
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 434eaee18188c324f9023625f750d206
+      internalID: -588425976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_faceHurt10_0
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b5983205d1b87c408c06319cad7c126
+      internalID: -1841242047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_faceHurt15_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55fa5192bc3894547ae64011e58c0d6f
+      internalID: -282739025
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_faceHurt18_0
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39e056b1bc98a5a4e9019d0b73b5c8b3
+      internalID: -795729827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_skin0_0
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9d7157a5d24f9a4a93c3033f36c13a4
+      internalID: -533892020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_over0_0
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06d196e027432374da08e7612b1c22a9
+      internalID: -1961980375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_skin1_0
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f9a93a0133def1449f589f620a2cbec
+      internalID: -219488016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_over1_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c131126232545445b63f9f355d1a8a7
+      internalID: 948908142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_skin2_0
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 926dd2bf4cfa2cb43982b5882ed08bbf
+      internalID: -1873054380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_over2_0
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c7bcb764247e5f4c9a8132486b2d82a
+      internalID: 458551502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_faceHurt0_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 166cd7e175d37a748b79cd3cfdcafb3c
+      internalID: 326224669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_faceHurt10_1
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8c55ddbda94e30429c5df92a139ed90
+      internalID: 1176655662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_faceHurt15_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8aa7e8376f33d4459ef135725b4049e
+      internalID: -1535848714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_faceHurt18_1
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1054eb9ea497aa44aa6703476b4a95d9
+      internalID: -1906497461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_skin0_1
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78d86e7442830fe40b2dfc3d5224b966
+      internalID: 2050523586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_over0_1
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab827547b9b8cbb4891cc03a1cdf5e0b
+      internalID: -1306327256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_skin1_1
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 372493a270d04674781de21848830e80
+      internalID: 1665391279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_over1_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28174fdd431b63844917a00511293d16
+      internalID: 316795211
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_skin2_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adfc1fa2e48d00a43b0556677006d08a
+      internalID: 725846804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_over2_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8c68aec92b26934b8bfa5875767195c
+      internalID: 673688404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_faceHurt0_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c68441aac71d5348814078a2d7032f3
+      internalID: 1642917802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_faceHurt10_2
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c542ec714c213e74e986285037006333
+      internalID: -396578643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_faceHurt15_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c82e64c2a3b62d4a90296b6863aded3
+      internalID: -213825658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_faceHurt18_2
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80891bb3631aad74e95a6f750433f479
+      internalID: -1614249928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_skin0_2
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e540cd5b6f617c4d86a7cee154e7a68
+      internalID: -1032762477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_over0_2
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8378b07a910d2c499fe5d9ae25210ce
+      internalID: -543878974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_skin1_2
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dcc8b9f2b77f7044ab14295d8c81bc90
+      internalID: 523927384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_over1_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c69417c792e64804f9ff4dd59c6e6e24
+      internalID: -1983011777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_skin2_2
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d60838aa1e420594bacba7bba523872e
+      internalID: 451536861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_over2_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.28515625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1470b1c9f4c22564e9d61618cde37812
+      internalID: -713559576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_fx_punch_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a04d0f1f595e76547890719585bbab6c
+      internalID: -333465756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SanyaRig_fx_death_3
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5687a0ef9da45aa42b1ee589a6c61e94
+      internalID: 312719560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -2029,6 +2733,19 @@ TextureImporter:
       SanyaRig_face18_0: 778918668
       SanyaRig_face18_1: 226859333
       SanyaRig_face18_2: 725225619
+      SanyaRig_faceHurt0_0: -588425976
+      SanyaRig_faceHurt0_1: 326224669
+      SanyaRig_faceHurt0_2: 1642917802
+      SanyaRig_faceHurt10_0: -1841242047
+      SanyaRig_faceHurt10_1: 1176655662
+      SanyaRig_faceHurt10_2: -396578643
+      SanyaRig_faceHurt15_0: -282739025
+      SanyaRig_faceHurt15_1: -1535848714
+      SanyaRig_faceHurt15_2: -213825658
+      SanyaRig_faceHurt18_0: -795729827
+      SanyaRig_faceHurt18_1: -1906497461
+      SanyaRig_faceHurt18_2: -1614249928
+      SanyaRig_fx_death_3: 312719560
       SanyaRig_fx_fall_0: 1544391507
       SanyaRig_fx_fall_1: 1064174376
       SanyaRig_fx_jump_0: -352605603
@@ -2036,6 +2753,7 @@ TextureImporter:
       SanyaRig_fx_jump_2: -901609811
       SanyaRig_fx_jump_3: -1717231953
       SanyaRig_fx_land_0: -1478970090
+      SanyaRig_fx_punch_1: -333465756
       SanyaRig_fx_run_0: 1769928359
       SanyaRig_fx_run_1: -789307118
       SanyaRig_fx_run_2: -1687790804
@@ -2059,6 +2777,15 @@ TextureImporter:
       SanyaRig_leg_0: 1188734379
       SanyaRig_leg_1: 156966885
       SanyaRig_leg_2: 1722761139
+      SanyaRig_over0_0: -1961980375
+      SanyaRig_over0_1: -1306327256
+      SanyaRig_over0_2: -543878974
+      SanyaRig_over1_0: 948908142
+      SanyaRig_over1_1: 316795211
+      SanyaRig_over1_2: -1983011777
+      SanyaRig_over2_0: 458551502
+      SanyaRig_over2_1: 673688404
+      SanyaRig_over2_2: -713559576
       SanyaRig_shadow_0: 756222205
       SanyaRig_shadow_1: -1727938729
       SanyaRig_shadow_2: 1816264887
@@ -2068,6 +2795,15 @@ TextureImporter:
       SanyaRig_shoeNear_0: 2035510143
       SanyaRig_shoeNear_1: -2038929863
       SanyaRig_shoeNear_2: -2038794843
+      SanyaRig_skin0_0: -533892020
+      SanyaRig_skin0_1: 2050523586
+      SanyaRig_skin0_2: -1032762477
+      SanyaRig_skin1_0: -219488016
+      SanyaRig_skin1_1: 1665391279
+      SanyaRig_skin1_2: 523927384
+      SanyaRig_skin2_0: -1873054380
+      SanyaRig_skin2_1: 725846804
+      SanyaRig_skin2_2: 451536861
       SanyaRig_tick_0: -436462128
       SanyaRig_tick_1: 803942825
       SanyaRig_tick_2: 379917013

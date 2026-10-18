@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f1abc4d98b4a0144937edc52ec9c31d, type: 3}
+  m_Name: SevaRigLook
+  m_EditorClassIdentifier: Bw.UseCases.Character.View::Bw.UseCases.Character.View.Rig.CharacterRigLook
+  Turns:
+  - Faces:
+    - Lines:
+      - {fileID: 1712644453, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+      - {fileID: -1296853997, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+      - {fileID: 829593105, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - Lines:
+      - {fileID: -1789963772, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+      - {fileID: 1208698284, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+      - {fileID: -171621199, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    Hairs:
+    - {fileID: -187432030, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: 1824646600, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: 861464329, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    Backs:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - Faces:
+    - Lines:
+      - {fileID: -730982767, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+      - {fileID: 971038945, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+      - {fileID: -1922606797, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - Lines:
+      - {fileID: 1615055304, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+      - {fileID: -1739719140, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+      - {fileID: -948129642, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    Hairs:
+    - {fileID: -584719145, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: 1066167050, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: -976861154, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    Backs:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - Faces:
+    - Lines:
+      - {fileID: -2058102581, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+      - {fileID: -268425139, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+      - {fileID: 1123726532, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - Lines:
+      - {fileID: 754416056, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+      - {fileID: -177429698, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+      - {fileID: 1609350939, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    Hairs:
+    - {fileID: -2126595974, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: 453384360, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: -257386738, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    Backs:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - Faces:
+    - Lines:
+      - {fileID: 2095806807, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+      - {fileID: 1065006704, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+      - {fileID: -474327578, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - Lines:
+      - {fileID: -836717162, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+      - {fileID: 1821130506, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+      - {fileID: 751877382, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    Hairs:
+    - {fileID: 1985091446, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: 1514607641, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: 1877168917, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    Backs:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  Eggs:
+  - {fileID: 852818808, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  - {fileID: -1191031717, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  - {fileID: 1985636002, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  FarShoes:
+  - {fileID: -1996026670, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  - {fileID: 1225627149, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  - {fileID: 2128120933, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  NearShoes:
+  - {fileID: -468040305, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  - {fileID: -1303058355, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  - {fileID: 662024068, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  Legs:
+  - {fileID: -1540644579, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  - {fileID: 1601561795, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  - {fileID: 1231779908, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  Ticks:
+  - {fileID: -1090276515, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  - {fileID: 1133771406, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  - {fileID: -1243909396, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  Shadows:
+  - {fileID: -1441893121, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  - {fileID: 1827009512, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  - {fileID: 2086428219, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  LegLength: 0.235
+  LegInset: 0.005
+  TickDrop: 0.045
+  HairBend:
+    Top: 1.22
+    Span: -0.34
+    Power: 1
+    DxGain: 0.9
+    DyGain: 1.1
+  Decals:
+  - Skins:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    Overs:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - Skins:
+    - {fileID: -1970158027, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: 842147112, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: 401964983, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    Overs:
+    - {fileID: -1538922233, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: -97584292, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: -2118578381, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  - Skins:
+    - {fileID: 1504169567, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: -44864439, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: 977987139, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    Overs:
+    - {fileID: -1468597110, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: -372089137, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: -1606720958, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  - Skins:
+    - {fileID: 495751743, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: 157311879, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: -1497958427, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    Overs:
+    - {fileID: 1913979574, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: -1868343958, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+    - {fileID: -532636654, guid: 04af75ee820742c4ab8bfc5d390ec956, type: 3}
+  Flaps: []
+  FlapReach: 40
+  FlapHairGain: 0
+  FlapBobGain: 0

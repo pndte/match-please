@@ -14,37 +14,73 @@ MonoBehaviour:
   m_EditorClassIdentifier: Bw.UseCases.Character.View::Bw.UseCases.Character.View.Rig.CharacterRigLook
   Turns:
   - Faces:
-    - {fileID: 1394060696, guid: f4fa17411441006448596d544d7911b7, type: 3}
-    - {fileID: -742276763, guid: f4fa17411441006448596d544d7911b7, type: 3}
-    - {fileID: 467307475, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - Lines:
+      - {fileID: 1394060696, guid: f4fa17411441006448596d544d7911b7, type: 3}
+      - {fileID: -742276763, guid: f4fa17411441006448596d544d7911b7, type: 3}
+      - {fileID: 467307475, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - Lines:
+      - {fileID: -588425976, guid: f4fa17411441006448596d544d7911b7, type: 3}
+      - {fileID: 326224669, guid: f4fa17411441006448596d544d7911b7, type: 3}
+      - {fileID: 1642917802, guid: f4fa17411441006448596d544d7911b7, type: 3}
     Hairs:
     - {fileID: -105960358, guid: f4fa17411441006448596d544d7911b7, type: 3}
     - {fileID: -1856988518, guid: f4fa17411441006448596d544d7911b7, type: 3}
     - {fileID: -1358150041, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    Backs:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   - Faces:
-    - {fileID: 996295914, guid: f4fa17411441006448596d544d7911b7, type: 3}
-    - {fileID: 593281247, guid: f4fa17411441006448596d544d7911b7, type: 3}
-    - {fileID: 1053664560, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - Lines:
+      - {fileID: 996295914, guid: f4fa17411441006448596d544d7911b7, type: 3}
+      - {fileID: 593281247, guid: f4fa17411441006448596d544d7911b7, type: 3}
+      - {fileID: 1053664560, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - Lines:
+      - {fileID: -1841242047, guid: f4fa17411441006448596d544d7911b7, type: 3}
+      - {fileID: 1176655662, guid: f4fa17411441006448596d544d7911b7, type: 3}
+      - {fileID: -396578643, guid: f4fa17411441006448596d544d7911b7, type: 3}
     Hairs:
     - {fileID: 1910994528, guid: f4fa17411441006448596d544d7911b7, type: 3}
     - {fileID: -789954913, guid: f4fa17411441006448596d544d7911b7, type: 3}
     - {fileID: -332613239, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    Backs:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   - Faces:
-    - {fileID: 483652374, guid: f4fa17411441006448596d544d7911b7, type: 3}
-    - {fileID: 588103065, guid: f4fa17411441006448596d544d7911b7, type: 3}
-    - {fileID: -1992163141, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - Lines:
+      - {fileID: 483652374, guid: f4fa17411441006448596d544d7911b7, type: 3}
+      - {fileID: 588103065, guid: f4fa17411441006448596d544d7911b7, type: 3}
+      - {fileID: -1992163141, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - Lines:
+      - {fileID: -282739025, guid: f4fa17411441006448596d544d7911b7, type: 3}
+      - {fileID: -1535848714, guid: f4fa17411441006448596d544d7911b7, type: 3}
+      - {fileID: -213825658, guid: f4fa17411441006448596d544d7911b7, type: 3}
     Hairs:
     - {fileID: 675988422, guid: f4fa17411441006448596d544d7911b7, type: 3}
     - {fileID: -1131566826, guid: f4fa17411441006448596d544d7911b7, type: 3}
     - {fileID: 1753959129, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    Backs:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   - Faces:
-    - {fileID: 778918668, guid: f4fa17411441006448596d544d7911b7, type: 3}
-    - {fileID: 226859333, guid: f4fa17411441006448596d544d7911b7, type: 3}
-    - {fileID: 725225619, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - Lines:
+      - {fileID: 778918668, guid: f4fa17411441006448596d544d7911b7, type: 3}
+      - {fileID: 226859333, guid: f4fa17411441006448596d544d7911b7, type: 3}
+      - {fileID: 725225619, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - Lines:
+      - {fileID: -795729827, guid: f4fa17411441006448596d544d7911b7, type: 3}
+      - {fileID: -1906497461, guid: f4fa17411441006448596d544d7911b7, type: 3}
+      - {fileID: -1614249928, guid: f4fa17411441006448596d544d7911b7, type: 3}
     Hairs:
     - {fileID: -1938263868, guid: f4fa17411441006448596d544d7911b7, type: 3}
     - {fileID: 1724261207, guid: f4fa17411441006448596d544d7911b7, type: 3}
     - {fileID: -6622369, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    Backs:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   Eggs:
   - {fileID: -1915046221, guid: f4fa17411441006448596d544d7911b7, type: 3}
   - {fileID: 106460727, guid: f4fa17411441006448596d544d7911b7, type: 3}
@@ -77,3 +113,41 @@ MonoBehaviour:
     Span: 0.95
     Power: 1.6
     DxGain: 1.2
+    DyGain: 1
+  Decals:
+  - Skins:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    Overs:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  - Skins:
+    - {fileID: -533892020, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: 2050523586, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: -1032762477, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    Overs:
+    - {fileID: -1961980375, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: -1306327256, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: -543878974, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - Skins:
+    - {fileID: -219488016, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: 1665391279, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: 523927384, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    Overs:
+    - {fileID: 948908142, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: 316795211, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: -1983011777, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  - Skins:
+    - {fileID: -1873054380, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: 725846804, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: 451536861, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    Overs:
+    - {fileID: 458551502, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: 673688404, guid: f4fa17411441006448596d544d7911b7, type: 3}
+    - {fileID: -713559576, guid: f4fa17411441006448596d544d7911b7, type: 3}
+  Flaps: []
+  FlapReach: 40
+  FlapHairGain: 0
+  FlapBobGain: 0

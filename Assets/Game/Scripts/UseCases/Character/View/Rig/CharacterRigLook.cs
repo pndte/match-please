@@ -16,6 +16,11 @@ namespace Bw.UseCases.Character.View.Rig
         public float LegInset = 0.005f;
         public float TickDrop = 0.045f;
         public RigHairBend HairBend;
+        public RigDecalSprites[] Decals;
+        public RigFlapSprites[] Flaps;
+        public float FlapReach = 40f;
+        public float FlapHairGain;
+        public float FlapBobGain;
 
         public float PixelsPerUnit => Eggs[0].pixelsPerUnit;
     }

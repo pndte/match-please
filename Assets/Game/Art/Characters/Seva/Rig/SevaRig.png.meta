@@ -1,0 +1,2730 @@
+fileFormatVersion: 2
+guid: 04af75ee820742c4ab8bfc5d390ec956
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4252570818735719017
+    second: SevaRig_0
+  - first:
+      213: 74386296974894475
+    second: SevaRig_1
+  - first:
+      213: 4654034975278408018
+    second: SevaRig_2
+  - first:
+      213: -2717348600617944448
+    second: SevaRig_3
+  - first:
+      213: -159324144564784803
+    second: SevaRig_4
+  - first:
+      213: -3395594934356320389
+    second: SevaRig_5
+  - first:
+      213: -8057869925938804489
+    second: SevaRig_6
+  - first:
+      213: 5653771281653049720
+    second: SevaRig_7
+  - first:
+      213: -5990751532683258349
+    second: SevaRig_8
+  - first:
+      213: 2402459308983355235
+    second: SevaRig_9
+  - first:
+      213: 2044986153000324958
+    second: SevaRig_10
+  - first:
+      213: 1780934931707314385
+    second: SevaRig_11
+  - first:
+      213: 6404008187999067178
+    second: SevaRig_12
+  - first:
+      213: -5605674232611624130
+    second: SevaRig_13
+  - first:
+      213: 1313281360588402231
+    second: SevaRig_14
+  - first:
+      213: -3785760836519682310
+    second: SevaRig_15
+  - first:
+      213: -5085926469355621128
+    second: SevaRig_16
+  - first:
+      213: -8634253612064585837
+    second: SevaRig_17
+  - first:
+      213: 6217302368594896968
+    second: SevaRig_18
+  - first:
+      213: 3656132494716233724
+    second: SevaRig_19
+  - first:
+      213: 2185647352023700605
+    second: SevaRig_20
+  - first:
+      213: 8830317991438867042
+    second: SevaRig_21
+  - first:
+      213: 3655135995593099554
+    second: SevaRig_22
+  - first:
+      213: -2093089348195060843
+    second: SevaRig_23
+  - first:
+      213: 1597957193991707823
+    second: SevaRig_24
+  - first:
+      213: -9136251583623502578
+    second: SevaRig_25
+  - first:
+      213: 7697146232822992332
+    second: SevaRig_26
+  - first:
+      213: -5455010600983163770
+    second: SevaRig_27
+  - first:
+      213: 6039098587201866517
+    second: SevaRig_28
+  - first:
+      213: -6961347319337013401
+    second: SevaRig_29
+  - first:
+      213: 8397986796540737865
+    second: SevaRig_30
+  - first:
+      213: -3100763583179574301
+    second: SevaRig_31
+  - first:
+      213: 6288086212976990611
+    second: SevaRig_32
+  - first:
+      213: 512285170829832277
+    second: SevaRig_33
+  - first:
+      213: 8519835879613082541
+    second: SevaRig_34
+  - first:
+      213: 6158755303085580520
+    second: SevaRig_35
+  - first:
+      213: -4348897947948197335
+    second: SevaRig_36
+  - first:
+      213: -5372005984031309870
+    second: SevaRig_37
+  - first:
+      213: -6851473150269430677
+    second: SevaRig_38
+  - first:
+      213: 1898928434612527715
+    second: SevaRig_39
+  - first:
+      213: -7933127193253135509
+    second: SevaRig_40
+  - first:
+      213: 8270666169717283847
+    second: SevaRig_41
+  - first:
+      213: 7011112808318286906
+    second: SevaRig_42
+  - first:
+      213: 1657901181073005119
+    second: SevaRig_43
+  - first:
+      213: 9051470679094080518
+    second: SevaRig_44
+  - first:
+      213: 350309730981273368
+    second: SevaRig_45
+  - first:
+      213: -5563508350013313353
+    second: SevaRig_46
+  - first:
+      213: -2635711471684421941
+    second: SevaRig_47
+  - first:
+      213: 8234824421460145618
+    second: SevaRig_48
+  - first:
+      213: -1980831019810337388
+    second: SevaRig_49
+  - first:
+      213: 4825258436021730616
+    second: SevaRig_50
+  - first:
+      213: -6179207342493976989
+    second: SevaRig_51
+  - first:
+      213: -7450868371096808818
+    second: SevaRig_52
+  - first:
+      213: 2507297539883542858
+    second: SevaRig_53
+  - first:
+      213: -3423298932270026538
+    second: SevaRig_54
+  - first:
+      213: -4930148538578569282
+    second: SevaRig_55
+  - first:
+      213: -2934628010041163639
+    second: SevaRig_56
+  - first:
+      213: -8408425160564787677
+    second: SevaRig_57
+  - first:
+      213: -5226772849728148480
+    second: SevaRig_58
+  - first:
+      213: -4102310296429108923
+    second: SevaRig_59
+  - first:
+      213: -447709482536544507
+    second: SevaRig_60
+  - first:
+      213: -1439994280510883003
+    second: SevaRig_61
+  - first:
+      213: -8049849105851577191
+    second: SevaRig_62
+  - first:
+      213: -4851779472749881501
+    second: SevaRig_63
+  - first:
+      213: -1777099020711754468
+    second: SevaRig_64
+  - first:
+      213: 4189856428336841253
+    second: SevaRig_65
+  - first:
+      213: -4581425501081706070
+    second: SevaRig_66
+  - first:
+      213: 4361592277514373141
+    second: SevaRig_67
+  - first:
+      213: -6115208969323605126
+    second: SevaRig_68
+  - first:
+      213: -16669593463739575
+    second: SevaRig_69
+  - first:
+      213: 6773459744685789137
+    second: SevaRig_70
+  - first:
+      213: -3942797578147982048
+    second: SevaRig_71
+  - first:
+      213: 8049791635637757401
+    second: SevaRig_72
+  - first:
+      213: -3933554816475156774
+    second: SevaRig_73
+  - first:
+      213: -5902849260442307631
+    second: SevaRig_74
+  - first:
+      213: 6973011763614589707
+    second: SevaRig_75
+  - first:
+      213: 2208613270199491873
+    second: SevaRig_76
+  - first:
+      213: 3227900532633029580
+    second: SevaRig_77
+  - first:
+      213: -1875197097068267875
+    second: SevaRig_78
+  - first:
+      213: 4212382647532308524
+    second: SevaRig_79
+  - first:
+      213: 8288838728321174779
+    second: SevaRig_80
+  - first:
+      213: -7536962983149408165
+    second: SevaRig_81
+  - first:
+      213: 1918604639477078557
+    second: SevaRig_82
+  - first:
+      213: -3684608115697638325
+    second: SevaRig_83
+  - first:
+      213: -3760323315721456164
+    second: SevaRig_84
+  - first:
+      213: -17743981741686253
+    second: SevaRig_85
+  - first:
+      213: -8692826213890776357
+    second: SevaRig_86
+  - first:
+      213: 2749855600933394993
+    second: SevaRig_87
+  - first:
+      213: 8298651002373831611
+    second: SevaRig_88
+  - first:
+      213: 8985630127210994776
+    second: SevaRig_89
+  - first:
+      213: -6125257406791102913
+    second: SevaRig_90
+  - first:
+      213: -6139008183508782508
+    second: SevaRig_91
+  - first:
+      213: 6253671187286781024
+    second: SevaRig_92
+  - first:
+      213: -4068677118646008369
+    second: SevaRig_93
+  - first:
+      213: 4409491427394404242
+    second: SevaRig_94
+  - first:
+      213: -8563437415734428200
+    second: SevaRig_95
+  - first:
+      213: -9141960038024501948
+    second: SevaRig_96
+  - first:
+      213: 995109193383951402
+    second: SevaRig_97
+  - first:
+      213: 5448571967596556398
+    second: SevaRig_98
+  - first:
+      213: 6637737759576175073
+    second: SevaRig_99
+  - first:
+      213: -8603907115785069784
+    second: SevaRig_100
+  - first:
+      213: -6755771448251664145
+    second: SevaRig_101
+  - first:
+      213: -5576078976113391611
+    second: SevaRig_102
+  - first:
+      213: 5142427286929028148
+    second: SevaRig_103
+  - first:
+      213: 6386855447915645672
+    second: SevaRig_104
+  - first:
+      213: 5387196273366592304
+    second: SevaRig_105
+  - first:
+      213: -3967236937710343453
+    second: SevaRig_106
+  - first:
+      213: 3949533793327688093
+    second: SevaRig_107
+  - first:
+      213: -1955924962278703094
+    second: SevaRig_108
+  - first:
+      213: -5934582038761556938
+    second: SevaRig_109
+  - first:
+      213: -5217943427477747058
+    second: SevaRig_110
+  - first:
+      213: 3864543185709483716
+    second: SevaRig_111
+  - first:
+      213: -5004403156850261204
+    second: SevaRig_112
+  - first:
+      213: 3468018924062520310
+    second: SevaRig_113
+  - first:
+      213: -5599277757054571487
+    second: SevaRig_114
+  - first:
+      213: 744020024392907031
+    second: SevaRig_115
+  - first:
+      213: 5662774136274748226
+    second: SevaRig_116
+  - first:
+      213: -6925011008097319387
+    second: SevaRig_117
+  - first:
+      213: -1031130183192118142
+    second: SevaRig_118
+  - first:
+      213: 5502524007869573436
+    second: SevaRig_119
+  - first:
+      213: 9083847845014918003
+    second: SevaRig_120
+  - first:
+      213: -7674758380598591774
+    second: SevaRig_121
+  - first:
+      213: -880133781319201194
+    second: SevaRig_122
+  - first:
+      213: -2461382091472343805
+    second: SevaRig_123
+  - first:
+      213: -3484215246825387180
+    second: SevaRig_124
+  - first:
+      213: -8416914674253776551
+    second: SevaRig_125
+  - first:
+      213: 5577866370944207594
+    second: SevaRig_126
+  - first:
+      213: -2717204513508291695
+    second: SevaRig_127
+  - first:
+      213: -9031435090361479454
+    second: SevaRig_128
+  - first:
+      213: 7437994463410312457
+    second: SevaRig_129
+  - first:
+      213: -2593001426228562813
+    second: SevaRig_130
+  - first:
+      213: 5149024985945343069
+    second: SevaRig_131
+  - first:
+      213: -5286636933138237929
+    second: SevaRig_132
+  - first:
+      213: -2530336962580670743
+    second: SevaRig_133
+  - first:
+      213: 4268768910755319814
+    second: SevaRig_134
+  - first:
+      213: -1970231289049091144
+    second: SevaRig_135
+  - first:
+      213: 3251154594788163690
+    second: SevaRig_136
+  - first:
+      213: 4615505058658898464
+    second: SevaRig_137
+  - first:
+      213: -6629155405554205977
+    second: SevaRig_138
+  - first:
+      213: -1972609574076912086
+    second: SevaRig_139
+  - first:
+      213: -2106403570838346006
+    second: SevaRig_140
+  - first:
+      213: 3674532931380238139
+    second: SevaRig_141
+  - first:
+      213: -3943605309809126195
+    second: SevaRig_142
+  - first:
+      213: -8560910305540539096
+    second: SevaRig_143
+  - first:
+      213: 6575590830860503768
+    second: SevaRig_144
+  - first:
+      213: -4285227649526822221
+    second: SevaRig_145
+  - first:
+      213: -3205937258484135957
+    second: SevaRig_146
+  - first:
+      213: 3688738695618300487
+    second: SevaRig_147
+  - first:
+      213: -691223539966971767
+    second: SevaRig_148
+  - first:
+      213: -3282117984139384077
+    second: SevaRig_149
+  - first:
+      213: -1000615009297609943
+    second: SevaRig_150
+  - first:
+      213: -2902130065189784368
+    second: SevaRig_151
+  - first:
+      213: 5272371705789572040
+    second: SevaRig_152
+  - first:
+      213: -4903790741101529677
+    second: SevaRig_153
+  - first:
+      213: -748850142656576178
+    second: SevaRig_154
+  - first:
+      213: -235198875338094642
+    second: SevaRig_155
+  - first:
+      213: 206936861118258091
+    second: SevaRig_156
+  - first:
+      213: 519141514586694087
+    second: SevaRig_157
+  - first:
+      213: 709377147384885554
+    second: SevaRig_158
+  - first:
+      213: -7413344647455122175
+    second: SevaRig_159
+  - first:
+      213: 8510358995557826358
+    second: SevaRig_160
+  - first:
+      213: -5233145851911512633
+    second: SevaRig_161
+  - first:
+      213: -4213791449933481338
+    second: SevaRig_162
+  - first:
+      213: 7185430763721198916
+    second: SevaRig_163
+  - first:
+      213: 5860594720594756356
+    second: SevaRig_164
+  - first:
+      213: -5300923092844675536
+    second: SevaRig_165
+  - first:
+      213: -8679877770828526096
+    second: SevaRig_166
+  - first:
+      213: -6702529494480457854
+    second: SevaRig_167
+  - first:
+      213: -2044991104323253440
+    second: SevaRig_168
+  - first:
+      213: 3867927039750131907
+    second: SevaRig_169
+  - first:
+      213: 6850319885090602200
+    second: SevaRig_170
+  - first:
+      213: -3448718567407555203
+    second: SevaRig_171
+  - first:
+      213: -3829570230413662932
+    second: SevaRig_172
+  - first:
+      213: 3821984400050773472
+    second: SevaRig_173
+  - first:
+      213: 460209573555567046
+    second: SevaRig_174
+  - first:
+      213: 2884242524892149413
+    second: SevaRig_175
+  - first:
+      213: 2222224314728650674
+    second: SevaRig_176
+  - first:
+      213: 1576582151339570714
+    second: SevaRig_177
+  - first:
+      213: -3733917757376415110
+    second: SevaRig_178
+  - first:
+      213: -5359269200579729069
+    second: SevaRig_179
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: SevaRig_egg_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e4bab3c8d7e494c43bdd3ac0471eeae7
+      internalID: 852818808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_face0_0
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c738bf27c68ce449bb4b69ae27c1258
+      internalID: 1712644453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_faceHurt0_0
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22ab30c8f9ff2a947ac92ec8a0f3ef89
+      internalID: -1789963772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_hair0_0
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac50adfc91cd48e48a8513e7961633bb
+      internalID: -187432030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_face10_0
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3b07e736ad2ac14083a4093569d5a71
+      internalID: -730982767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_faceHurt10_0
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbc987c62dbf43c44bd60b2b11e5dc77
+      internalID: 1615055304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_hair10_0
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d42ef21d34f09d640aed376bd4a0a54d
+      internalID: -584719145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_face15_0
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc919b363a3b7274ca54d9c2d549e4b2
+      internalID: -2058102581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_faceHurt15_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbd445159f320e24eb6eee7988579dfc
+      internalID: 754416056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_hair15_0
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db7a3da36784e7f44b08d83215679ad3
+      internalID: -2126595974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_face18_0
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1da9f1396fdfac443877d04aba0540ad
+      internalID: 2095806807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_faceHurt18_0
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ff1d9d221a5e444690e952cb416ba46
+      internalID: -836717162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_hair18_0
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51384824648867a4fb39499f2b8b4ac9
+      internalID: 1985091446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_skin0_0
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c445b8211759b9448bb49cb088adda5b
+      internalID: -1970158027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_over0_0
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9bafc5dc4b43f4f42b87479c4e4f5983
+      internalID: -1538922233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_skin1_0
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5f30859f9894a342b3c6ff449240ee9
+      internalID: 1504169567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_over1_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b11ec919c22f1494a8acec2a3b262809
+      internalID: -1468597110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_skin2_0
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a61728765c027a34296817b1ae5c3c2b
+      internalID: 495751743
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_over2_0
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efb01b9a9f7bc63419b218a5c23a168e
+      internalID: 1913979574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_shoeFar_0
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 481c137fa0d39cd449254aa5859d7151
+      internalID: -1996026670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_shoeNear_0
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ac3d40adac2a874c9b46ea7a68d955a
+      internalID: -468040305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_leg_0
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 016422aaa60268440ac5ca4b7beeaea0
+      internalID: -1540644579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_tick_0
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 817b9c5a213d9e04aa0794195b9d82c1
+      internalID: -1090276515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_shadow_0
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5078125, y: 0.057812512}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0ba02e6b70e02c4083513d2a28002a6
+      internalID: -1441893121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_egg_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fdab23b3ac6f2348be35246c1702c29
+      internalID: -1191031717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_face0_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7de5b50175310b941a569b81a507da2a
+      internalID: -1296853997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_faceHurt0_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b007c2b6857857b44859120ff8cfbe42
+      internalID: 1208698284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_hair0_1
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5b7f374fb18ca347a4d6961397ecfd9
+      internalID: 1824646600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_face10_1
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05fda4f378e2ecd40af3fcb6e6ff83a7
+      internalID: 971038945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_faceHurt10_1
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90a7982a6d6985648be40258f62bcfa5
+      internalID: -1739719140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_hair10_1
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 352de80d228e5cd4cba19fe1340cf4c8
+      internalID: 1066167050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_face15_1
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c6dbaf46ccff0d4d833f563a25c6ec3
+      internalID: -268425139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_faceHurt15_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 964da7eafd62bdf4faa8dfa07f56bf8c
+      internalID: -177429698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_hair15_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa9b3485605c56341a50deaa9510a0cf
+      internalID: 453384360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_face18_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c092f94d808932347b68d2ba76362c28
+      internalID: 1065006704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_faceHurt18_1
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff41bf1bf4859334ab4a3ff7439ac162
+      internalID: 1821130506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_hair18_1
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96c2b70854850cd4b85f3fa568fda3da
+      internalID: 1514607641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_skin0_1
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad093d5595f78d742850f18f1c06279a
+      internalID: 842147112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_over0_1
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f95b941ac9e75d745a8c317c2f351200
+      internalID: -97584292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_skin1_1
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1d7d8d85b26a6349af3a7a1fe54aa12
+      internalID: -44864439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_over1_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb81d1a05e33d4b4db5b217cd525da91
+      internalID: -372089137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_skin2_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 358cdf609368b124dbfe944e803f8f0b
+      internalID: 157311879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_over2_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8944cb0ab8712b4ba9234bcbea5987b
+      internalID: -1868343958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_shoeFar_1
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfef75c96e801ce4aa2b4a1a84715dae
+      internalID: 1225627149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_shoeNear_1
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc4c249741aa76744ae191431dd898e5
+      internalID: -1303058355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_leg_1
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4c79d172bc77fb4c884e1344b77d77c
+      internalID: 1601561795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_tick_1
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ee3611235ea0fe4493aceac14447900
+      internalID: 1133771406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_shadow_1
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5078125, y: 0.057812512}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d01528f7745d0ff49aa71964b56aea18
+      internalID: 1827009512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_egg_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6cf0adc459bcbff4eae205daf169ee64
+      internalID: 1985636002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_face0_2
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d3ccd76ad187aa4db1bda5eb9d5d993
+      internalID: 829593105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_faceHurt0_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17de01d1924e44340a297d1f5e7c2d4b
+      internalID: -171621199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_hair0_2
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eefce367a11c2794281daa30f8ff48ea
+      internalID: 861464329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_face10_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63e35fb589c0e6242ac60ba0fe94a445
+      internalID: -1922606797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_faceHurt10_2
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8959bc3b94a1367449d21d373054f364
+      internalID: -948129642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_hair10_2
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 425ef2299820f034d86101aea33f8a72
+      internalID: -976861154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_face15_2
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 812a8fa9dc0e3294495d8ca656fe628b
+      internalID: 1123726532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_faceHurt15_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0325bde634b307845a03d99a11134e7e
+      internalID: 1609350939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_hair15_2
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63742b77a6af02d47b955f079545eb10
+      internalID: -257386738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_face18_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e175fb14b4bd3444ba3ac7fccbfd04fa
+      internalID: -474327578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_faceHurt18_2
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c58c7c976f09d134fad40795f9fbc527
+      internalID: 751877382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_hair18_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 272779589026712488bbdc166b873d18
+      internalID: 1877168917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_skin0_2
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d4d042ff4d7ff04899537745a2434a3
+      internalID: 401964983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_over0_2
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd33a9a039cffd74eb032452a9d86983
+      internalID: -2118578381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_skin1_2
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90b0d563f8bb3dc40ad30f31925cd67c
+      internalID: 977987139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_over1_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad71b52c1974a1e45857facc871ced07
+      internalID: -1606720958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_skin2_2
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9b8f5e7a901e184a8639483bc278959
+      internalID: -1497958427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_over2_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60e7703ee54d0c04f8d2c4f51491ee5e
+      internalID: -532636654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_shoeFar_2
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ecc08fb75e874cc4691dda8c809d0b94
+      internalID: 2128120933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_shoeNear_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65cf37fe692392c4e9440bcfab0916cc
+      internalID: 662024068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_leg_2
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5df655750a8be84483c3408a9e73f63
+      internalID: 1231779908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_tick_2
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a07897ffe1eb71042a848820a13a57c0
+      internalID: -1243909396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_shadow_2
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5078125, y: 0.057812512}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cad88fd1135a08b4abd3119ec40c5a82
+      internalID: 2086428219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_punch_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f6a94993a3ebd449841b6cd04321a78
+      internalID: 1931328347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_death_3
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8045018a3e2a3a94cba4ac70955cd600
+      internalID: 1685388110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_run_0
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 649266cc62699314bb2a948ea6e033ee
+      internalID: 1667167869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_run_1
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ca2073f0c7dc5f4f95d5d3bbdb5ed1e
+      internalID: -1471385180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_run_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d7555d8e15e3464fa669fbdb7b29333
+      internalID: 616728339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_run_3
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae7da53c195bb8240bf7aeab2114ad83
+      internalID: -908284375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_run_4
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b22130371d6a6146b444a138f719332
+      internalID: -1525994415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_run_5
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31b15df275625d942aed8c255f19294a
+      internalID: 1683942895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_run_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f443081165594564b88fe4f4e96b83df
+      internalID: -953693812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_run_7
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65bb8f178545fb24791ed66b3920e277
+      internalID: 1165978134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_jump_0
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f7c1ecef450c364b8cbba62cfc47777
+      internalID: 300240107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_jump_1
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d42c822ccc533a448bc36cc30ee8ec8
+      internalID: -1541756346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_jump_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df285b3c2f4aca14298af238db376c0c
+      internalID: 848260004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_jump_3
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: afa17818416f5a745af64670a4713a42
+      internalID: -677469563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_fall_0
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0709f4314053b5b4a85f0cc6ee3d037e
+      internalID: 1591123000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_fall_1
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b811287a1282e1943b5ec7d4a783db53
+      internalID: -2049920805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SevaRig_fx_land_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22b1088314b4b3646b3f0e98f714ffe9
+      internalID: 1092340490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: c8bff0158c6ce374297b96f8c6202f06
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      SevaRig_egg_0: 852818808
+      SevaRig_egg_1: -1191031717
+      SevaRig_egg_2: 1985636002
+      SevaRig_face0_0: 1712644453
+      SevaRig_face0_1: -1296853997
+      SevaRig_face0_2: 829593105
+      SevaRig_face10_0: -730982767
+      SevaRig_face10_1: 971038945
+      SevaRig_face10_2: -1922606797
+      SevaRig_face15_0: -2058102581
+      SevaRig_face15_1: -268425139
+      SevaRig_face15_2: 1123726532
+      SevaRig_face18_0: 2095806807
+      SevaRig_face18_1: 1065006704
+      SevaRig_face18_2: -474327578
+      SevaRig_faceHurt0_0: -1789963772
+      SevaRig_faceHurt0_1: 1208698284
+      SevaRig_faceHurt0_2: -171621199
+      SevaRig_faceHurt10_0: 1615055304
+      SevaRig_faceHurt10_1: -1739719140
+      SevaRig_faceHurt10_2: -948129642
+      SevaRig_faceHurt15_0: 754416056
+      SevaRig_faceHurt15_1: -177429698
+      SevaRig_faceHurt15_2: 1609350939
+      SevaRig_faceHurt18_0: -836717162
+      SevaRig_faceHurt18_1: 1821130506
+      SevaRig_faceHurt18_2: 751877382
+      SevaRig_fx_death_3: 1685388110
+      SevaRig_fx_fall_0: 1591123000
+      SevaRig_fx_fall_1: -2049920805
+      SevaRig_fx_jump_0: 300240107
+      SevaRig_fx_jump_1: -1541756346
+      SevaRig_fx_jump_2: 848260004
+      SevaRig_fx_jump_3: -677469563
+      SevaRig_fx_land_0: 1092340490
+      SevaRig_fx_punch_1: 1931328347
+      SevaRig_fx_run_0: 1667167869
+      SevaRig_fx_run_1: -1471385180
+      SevaRig_fx_run_2: 616728339
+      SevaRig_fx_run_3: -908284375
+      SevaRig_fx_run_4: -1525994415
+      SevaRig_fx_run_5: 1683942895
+      SevaRig_fx_run_6: -953693812
+      SevaRig_fx_run_7: 1165978134
+      SevaRig_hair0_0: -187432030
+      SevaRig_hair0_1: 1824646600
+      SevaRig_hair0_2: 861464329
+      SevaRig_hair10_0: -584719145
+      SevaRig_hair10_1: 1066167050
+      SevaRig_hair10_2: -976861154
+      SevaRig_hair15_0: -2126595974
+      SevaRig_hair15_1: 453384360
+      SevaRig_hair15_2: -257386738
+      SevaRig_hair18_0: 1985091446
+      SevaRig_hair18_1: 1514607641
+      SevaRig_hair18_2: 1877168917
+      SevaRig_leg_0: -1540644579
+      SevaRig_leg_1: 1601561795
+      SevaRig_leg_2: 1231779908
+      SevaRig_over0_0: -1538922233
+      SevaRig_over0_1: -97584292
+      SevaRig_over0_2: -2118578381
+      SevaRig_over1_0: -1468597110
+      SevaRig_over1_1: -372089137
+      SevaRig_over1_2: -1606720958
+      SevaRig_over2_0: 1913979574
+      SevaRig_over2_1: -1868343958
+      SevaRig_over2_2: -532636654
+      SevaRig_shadow_0: -1441893121
+      SevaRig_shadow_1: 1827009512
+      SevaRig_shadow_2: 2086428219
+      SevaRig_shoeFar_0: -1996026670
+      SevaRig_shoeFar_1: 1225627149
+      SevaRig_shoeFar_2: 2128120933
+      SevaRig_shoeNear_0: -468040305
+      SevaRig_shoeNear_1: -1303058355
+      SevaRig_shoeNear_2: 662024068
+      SevaRig_skin0_0: -1970158027
+      SevaRig_skin0_1: 842147112
+      SevaRig_skin0_2: 401964983
+      SevaRig_skin1_0: 1504169567
+      SevaRig_skin1_1: -44864439
+      SevaRig_skin1_2: 977987139
+      SevaRig_skin2_0: 495751743
+      SevaRig_skin2_1: 157311879
+      SevaRig_skin2_2: -1497958427
+      SevaRig_tick_0: -1090276515
+      SevaRig_tick_1: 1133771406
+      SevaRig_tick_2: -1243909396
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

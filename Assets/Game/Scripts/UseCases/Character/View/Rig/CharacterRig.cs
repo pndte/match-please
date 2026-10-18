@@ -20,6 +20,9 @@ namespace Bw.UseCases.Character.View.Rig
         [SerializeField] private float _turn;
         [SerializeField] private float _hairDx;
         [SerializeField] private float _hairDy;
+        [SerializeField] private float _bob;
+        [SerializeField] private float _expression;
+        [SerializeField] private float _decal;
 
         private RigPose _pose;
         private RigSpring _hair;
@@ -102,16 +105,25 @@ namespace Bw.UseCases.Character.View.Rig
             _parts.Body.localScale = new Vector3(body.x * squash, body.y / squash, body.z);
             RigLegPlacement.Place(_parts.Far, transform, _look);
             RigLegPlacement.Place(_parts.Near, transform, _look);
+            var sway = HairSway();
+            Flap(sway.y);
             //TODO: в воздухе тень пропадает вместе с клипом; в прототипе она остаётся на полу и тает с высотой, для этого нужна высота над полом
-            _pose.Capture(HairBend());
+            _pose.Capture(HairBend(sway));
         }
 
         private void Dress(int line)
         {
             var turn = _look.Turns[Mathf.RoundToInt(_turn)];
+            var decal = _look.Decals[Mathf.RoundToInt(_decal)];
             _parts.Egg.sprite = _look.Eggs[line];
-            _parts.Face.sprite = turn.Faces[line];
+            _parts.Skin.sprite = decal.Skins[line];
+            _parts.Face.sprite = turn.Faces[Mathf.RoundToInt(_expression)].Lines[line];
             _parts.Hair.sprite = turn.Hairs[line];
+            _parts.Back.sprite = turn.Backs[line];
+            _parts.Over.sprite = decal.Overs[line];
+            for (var i = 0; i < _look.Flaps.Length; i++)
+                _parts.Flaps[i].sprite = _look.Flaps[i].Lines[line];
+
             _parts.Shadow.sprite = _look.Shadows[line];
             _parts.Far.Shoe.sprite = _look.FarShoes[line];
             _parts.Far.Leg.sprite = _look.Legs[line];
@@ -131,14 +143,25 @@ namespace Bw.UseCases.Character.View.Rig
             return new Vector2(position.x * _feel.HairFollow.x, -position.y * _feel.HairFollow.y);
         }
 
-        private Vector2 HairBend()
+        private Vector2 HairSway()
         {
             var bend = _look.HairBend;
             var offset = _hair.Offset;
             var facing = Mathf.Sign(transform.lossyScale.x);
-            var dx = _hairDx + Mathf.Clamp(offset.x * facing, -_feel.HairLimit, _feel.HairLimit) / bend.DxGain;
-            var dy = _hairDy + Mathf.Clamp(offset.y, -_feel.HairLimit, _feel.HairLimit);
-            return new Vector2(dx * bend.DxGain, -dy) / _look.PixelsPerUnit;
+            return new Vector2(
+                _hairDx + Mathf.Clamp(offset.x * facing, -_feel.HairLimit, _feel.HairLimit) / bend.DxGain,
+                _hairDy + Mathf.Clamp(offset.y, -_feel.HairLimit, _feel.HairLimit) / bend.DyGain);
+        }
+
+        private Vector2 HairBend(Vector2 sway) =>
+            new Vector2(sway.x * _look.HairBend.DxGain, -sway.y * _look.HairBend.DyGain) / _look.PixelsPerUnit;
+
+        private void Flap(float hairDy)
+        {
+            var droop = _look.FlapHairGain * hairDy + _look.FlapBobGain * _bob;
+            var angle = Mathf.Atan2(droop, _look.FlapReach) * Mathf.Rad2Deg;
+            for (var i = 0; i < _look.Flaps.Length; i++)
+                _parts.Flaps[i].transform.localRotation = Quaternion.Euler(0f, 0f, -_look.Flaps[i].Side * angle);
         }
 
         private void ShowBend(Vector2 bend)

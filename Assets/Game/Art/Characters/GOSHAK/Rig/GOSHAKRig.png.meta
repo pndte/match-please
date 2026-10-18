@@ -1,0 +1,2766 @@
+fileFormatVersion: 2
+guid: aa4d75cd9289e314cb00fd62c548cdcb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2828911672497021270
+    second: GOSHAKRig_0
+  - first:
+      213: -2343845687305264136
+    second: GOSHAKRig_1
+  - first:
+      213: 6428542971942493206
+    second: GOSHAKRig_2
+  - first:
+      213: -7831669596247966149
+    second: GOSHAKRig_3
+  - first:
+      213: 9039266271531386223
+    second: GOSHAKRig_4
+  - first:
+      213: 531500864837186982
+    second: GOSHAKRig_5
+  - first:
+      213: -4160110220970913482
+    second: GOSHAKRig_6
+  - first:
+      213: -7217288108295102301
+    second: GOSHAKRig_7
+  - first:
+      213: 75148947920408253
+    second: GOSHAKRig_8
+  - first:
+      213: 6254264604005366105
+    second: GOSHAKRig_9
+  - first:
+      213: -2451294941442146041
+    second: GOSHAKRig_10
+  - first:
+      213: -8714082850566202517
+    second: GOSHAKRig_11
+  - first:
+      213: -1103984258511230776
+    second: GOSHAKRig_12
+  - first:
+      213: 4840235285744263780
+    second: GOSHAKRig_13
+  - first:
+      213: 9205037430974115489
+    second: GOSHAKRig_14
+  - first:
+      213: 191641699222115045
+    second: GOSHAKRig_15
+  - first:
+      213: 131054961577695032
+    second: GOSHAKRig_16
+  - first:
+      213: -324750584992507735
+    second: GOSHAKRig_17
+  - first:
+      213: -8396826549779451271
+    second: GOSHAKRig_18
+  - first:
+      213: 7358444916204321600
+    second: GOSHAKRig_19
+  - first:
+      213: -4097943835362543610
+    second: GOSHAKRig_20
+  - first:
+      213: 5405799880546095704
+    second: GOSHAKRig_21
+  - first:
+      213: -176747260297853118
+    second: GOSHAKRig_22
+  - first:
+      213: -1317214523747396051
+    second: GOSHAKRig_23
+  - first:
+      213: -6017008578669544681
+    second: GOSHAKRig_24
+  - first:
+      213: 2589124176379392996
+    second: GOSHAKRig_25
+  - first:
+      213: -5363800822641197483
+    second: GOSHAKRig_26
+  - first:
+      213: -3138317931962282492
+    second: GOSHAKRig_27
+  - first:
+      213: 137915462134440960
+    second: GOSHAKRig_28
+  - first:
+      213: 5073047908674909916
+    second: GOSHAKRig_29
+  - first:
+      213: 6412326947706415959
+    second: GOSHAKRig_30
+  - first:
+      213: 4023257452938836754
+    second: GOSHAKRig_31
+  - first:
+      213: -5962711910675527222
+    second: GOSHAKRig_32
+  - first:
+      213: 2370542124181334387
+    second: GOSHAKRig_33
+  - first:
+      213: 4571943610471565792
+    second: GOSHAKRig_34
+  - first:
+      213: 3103655748411669062
+    second: GOSHAKRig_35
+  - first:
+      213: 3932597236565058837
+    second: GOSHAKRig_36
+  - first:
+      213: -4228886525710210540
+    second: GOSHAKRig_37
+  - first:
+      213: -8608421579563775347
+    second: GOSHAKRig_38
+  - first:
+      213: -4950310708432486227
+    second: GOSHAKRig_39
+  - first:
+      213: -7264195066513978292
+    second: GOSHAKRig_40
+  - first:
+      213: 6913580389997395618
+    second: GOSHAKRig_41
+  - first:
+      213: 9095347934103674976
+    second: GOSHAKRig_42
+  - first:
+      213: 6494215522325188830
+    second: GOSHAKRig_43
+  - first:
+      213: -8107917360933812332
+    second: GOSHAKRig_44
+  - first:
+      213: -1900607926049562469
+    second: GOSHAKRig_45
+  - first:
+      213: 1947467547649891100
+    second: GOSHAKRig_46
+  - first:
+      213: 1425255895302687385
+    second: GOSHAKRig_47
+  - first:
+      213: 3732316736718768453
+    second: GOSHAKRig_48
+  - first:
+      213: -3206453541157888310
+    second: GOSHAKRig_49
+  - first:
+      213: 7620064070326020102
+    second: GOSHAKRig_50
+  - first:
+      213: 6622858436666491368
+    second: GOSHAKRig_51
+  - first:
+      213: 4583881533077464778
+    second: GOSHAKRig_52
+  - first:
+      213: -4616322392488271551
+    second: GOSHAKRig_53
+  - first:
+      213: 9038965032650527430
+    second: GOSHAKRig_54
+  - first:
+      213: 7953891992698615291
+    second: GOSHAKRig_55
+  - first:
+      213: -9151058520356047081
+    second: GOSHAKRig_56
+  - first:
+      213: 4839168904701068620
+    second: GOSHAKRig_57
+  - first:
+      213: 6612572616096094286
+    second: GOSHAKRig_58
+  - first:
+      213: 3585093751506223871
+    second: GOSHAKRig_59
+  - first:
+      213: -4553060094439197993
+    second: GOSHAKRig_60
+  - first:
+      213: 3016928703836904021
+    second: GOSHAKRig_61
+  - first:
+      213: -566078594732699021
+    second: GOSHAKRig_62
+  - first:
+      213: -8083308167322820800
+    second: GOSHAKRig_63
+  - first:
+      213: -1286968745943509510
+    second: GOSHAKRig_64
+  - first:
+      213: 3096963603144858888
+    second: GOSHAKRig_65
+  - first:
+      213: 1967938451778669114
+    second: GOSHAKRig_66
+  - first:
+      213: 7277486822479035050
+    second: GOSHAKRig_67
+  - first:
+      213: 8965138558792156855
+    second: GOSHAKRig_68
+  - first:
+      213: -4592209412410764531
+    second: GOSHAKRig_69
+  - first:
+      213: -8168502052467427460
+    second: GOSHAKRig_70
+  - first:
+      213: 1258683641205460037
+    second: GOSHAKRig_71
+  - first:
+      213: -4033438935619683306
+    second: GOSHAKRig_72
+  - first:
+      213: -6546361152500002402
+    second: GOSHAKRig_73
+  - first:
+      213: 7878439157685499774
+    second: GOSHAKRig_74
+  - first:
+      213: 6145426326975376644
+    second: GOSHAKRig_75
+  - first:
+      213: -7888133740298435341
+    second: GOSHAKRig_76
+  - first:
+      213: -8608767691443031991
+    second: GOSHAKRig_77
+  - first:
+      213: -7792590438612052870
+    second: GOSHAKRig_78
+  - first:
+      213: -6704764281271242942
+    second: GOSHAKRig_79
+  - first:
+      213: -7341508560092110150
+    second: GOSHAKRig_80
+  - first:
+      213: 3766371426748879438
+    second: GOSHAKRig_81
+  - first:
+      213: -4833000996338487907
+    second: GOSHAKRig_82
+  - first:
+      213: -7307593044933316210
+    second: GOSHAKRig_83
+  - first:
+      213: 436165719740587463
+    second: GOSHAKRig_84
+  - first:
+      213: -2167539449057409831
+    second: GOSHAKRig_85
+  - first:
+      213: 7217894901215054672
+    second: GOSHAKRig_86
+  - first:
+      213: 4719455743203512931
+    second: GOSHAKRig_87
+  - first:
+      213: 6840694367072027881
+    second: GOSHAKRig_88
+  - first:
+      213: -1641013296158509546
+    second: GOSHAKRig_89
+  - first:
+      213: 8182784065967415179
+    second: GOSHAKRig_90
+  - first:
+      213: -7294622177096436910
+    second: GOSHAKRig_91
+  - first:
+      213: 4746841322483111903
+    second: GOSHAKRig_92
+  - first:
+      213: 5321958569259158293
+    second: GOSHAKRig_93
+  - first:
+      213: 190364866791009214
+    second: GOSHAKRig_94
+  - first:
+      213: -3275530931569321075
+    second: GOSHAKRig_95
+  - first:
+      213: 4232619696795317329
+    second: GOSHAKRig_96
+  - first:
+      213: 1823894939825554481
+    second: GOSHAKRig_97
+  - first:
+      213: -3166236495728289026
+    second: GOSHAKRig_98
+  - first:
+      213: -6901219968881218683
+    second: GOSHAKRig_99
+  - first:
+      213: -4446833853468476710
+    second: GOSHAKRig_100
+  - first:
+      213: 4100155029315321782
+    second: GOSHAKRig_101
+  - first:
+      213: 9193909968711915191
+    second: GOSHAKRig_102
+  - first:
+      213: 2295450961126849181
+    second: GOSHAKRig_103
+  - first:
+      213: 4971858020008464743
+    second: GOSHAKRig_104
+  - first:
+      213: 5345838912416292128
+    second: GOSHAKRig_105
+  - first:
+      213: 9076700764693562386
+    second: GOSHAKRig_106
+  - first:
+      213: -7003324559362967324
+    second: GOSHAKRig_107
+  - first:
+      213: -611530312272084069
+    second: GOSHAKRig_108
+  - first:
+      213: 255806406774891754
+    second: GOSHAKRig_109
+  - first:
+      213: -1046953562287264219
+    second: GOSHAKRig_110
+  - first:
+      213: 1562254751231271433
+    second: GOSHAKRig_111
+  - first:
+      213: -9039858684559645122
+    second: GOSHAKRig_112
+  - first:
+      213: 5944829981064422042
+    second: GOSHAKRig_113
+  - first:
+      213: -4542419483697522765
+    second: GOSHAKRig_114
+  - first:
+      213: -8943160832001903671
+    second: GOSHAKRig_115
+  - first:
+      213: -4193473841610474864
+    second: GOSHAKRig_116
+  - first:
+      213: 6232108849926870680
+    second: GOSHAKRig_117
+  - first:
+      213: -5528960882430743929
+    second: GOSHAKRig_118
+  - first:
+      213: 4004565455029372591
+    second: GOSHAKRig_119
+  - first:
+      213: 378957412685845229
+    second: GOSHAKRig_120
+  - first:
+      213: 6429004223246518965
+    second: GOSHAKRig_121
+  - first:
+      213: 746742292039850680
+    second: GOSHAKRig_122
+  - first:
+      213: -7729567978658522446
+    second: GOSHAKRig_123
+  - first:
+      213: 8189635080549932429
+    second: GOSHAKRig_124
+  - first:
+      213: 6434149156278947304
+    second: GOSHAKRig_125
+  - first:
+      213: 1554190972905641212
+    second: GOSHAKRig_126
+  - first:
+      213: 2385794971307625462
+    second: GOSHAKRig_127
+  - first:
+      213: 4168157898842693894
+    second: GOSHAKRig_128
+  - first:
+      213: -1101219033965229089
+    second: GOSHAKRig_129
+  - first:
+      213: -7971621614213765839
+    second: GOSHAKRig_130
+  - first:
+      213: 1198346192030435561
+    second: GOSHAKRig_131
+  - first:
+      213: 4380849494991846491
+    second: GOSHAKRig_132
+  - first:
+      213: 3025131122135758202
+    second: GOSHAKRig_133
+  - first:
+      213: -8890718346472606018
+    second: GOSHAKRig_134
+  - first:
+      213: 6543681438994303157
+    second: GOSHAKRig_135
+  - first:
+      213: 3122139619310906651
+    second: GOSHAKRig_136
+  - first:
+      213: 3001164549847588339
+    second: GOSHAKRig_137
+  - first:
+      213: 6350829822660353928
+    second: GOSHAKRig_138
+  - first:
+      213: 1798122083021999165
+    second: GOSHAKRig_139
+  - first:
+      213: -1050600011604458581
+    second: GOSHAKRig_140
+  - first:
+      213: 8295046503495020641
+    second: GOSHAKRig_141
+  - first:
+      213: -943522236512498793
+    second: GOSHAKRig_142
+  - first:
+      213: 2866192251596909496
+    second: GOSHAKRig_143
+  - first:
+      213: 2486599752764110184
+    second: GOSHAKRig_144
+  - first:
+      213: -4077802555071237933
+    second: GOSHAKRig_145
+  - first:
+      213: -1972268540677687999
+    second: GOSHAKRig_146
+  - first:
+      213: 8407105597700935765
+    second: GOSHAKRig_147
+  - first:
+      213: -4904930107383292383
+    second: GOSHAKRig_148
+  - first:
+      213: -3843253335362422686
+    second: GOSHAKRig_149
+  - first:
+      213: -340659079108646287
+    second: GOSHAKRig_150
+  - first:
+      213: -3367132845109448867
+    second: GOSHAKRig_151
+  - first:
+      213: 4005484011547099561
+    second: GOSHAKRig_152
+  - first:
+      213: -8803495108802916025
+    second: GOSHAKRig_153
+  - first:
+      213: -3188083538068690357
+    second: GOSHAKRig_154
+  - first:
+      213: -3962776908359253359
+    second: GOSHAKRig_155
+  - first:
+      213: -8277853547768982443
+    second: GOSHAKRig_156
+  - first:
+      213: 7778747855201053902
+    second: GOSHAKRig_157
+  - first:
+      213: 433802389489136440
+    second: GOSHAKRig_158
+  - first:
+      213: -633369328599279664
+    second: GOSHAKRig_159
+  - first:
+      213: 3358154305069904758
+    second: GOSHAKRig_160
+  - first:
+      213: 8567014856904809445
+    second: GOSHAKRig_161
+  - first:
+      213: -8555089793812144172
+    second: GOSHAKRig_162
+  - first:
+      213: -8433678661548667460
+    second: GOSHAKRig_163
+  - first:
+      213: -3847289244865814357
+    second: GOSHAKRig_164
+  - first:
+      213: 667251255350974259
+    second: GOSHAKRig_165
+  - first:
+      213: -6754706617253676654
+    second: GOSHAKRig_166
+  - first:
+      213: 8755588349156400531
+    second: GOSHAKRig_167
+  - first:
+      213: 1374142521553887319
+    second: GOSHAKRig_168
+  - first:
+      213: -4420132048667179329
+    second: GOSHAKRig_169
+  - first:
+      213: -8262373506447929675
+    second: GOSHAKRig_170
+  - first:
+      213: -3825995667689882285
+    second: GOSHAKRig_171
+  - first:
+      213: -1205193705850349572
+    second: GOSHAKRig_172
+  - first:
+      213: 2609974730236733084
+    second: GOSHAKRig_173
+  - first:
+      213: 2931206745674601481
+    second: GOSHAKRig_174
+  - first:
+      213: -5575476774937179533
+    second: GOSHAKRig_175
+  - first:
+      213: 8721021910630565316
+    second: GOSHAKRig_176
+  - first:
+      213: -3134609197299491093
+    second: GOSHAKRig_177
+  - first:
+      213: -5220936336959819175
+    second: GOSHAKRig_178
+  - first:
+      213: 1263084318920488855
+    second: GOSHAKRig_179
+  - first:
+      213: 3808112650871146146
+    second: GOSHAKRig_180
+  - first:
+      213: 2407047193295494847
+    second: GOSHAKRig_181
+  - first:
+      213: -1394354206368512801
+    second: GOSHAKRig_182
+  - first:
+      213: 6211529846417899588
+    second: GOSHAKRig_183
+  - first:
+      213: 7833807336322524414
+    second: GOSHAKRig_184
+  - first:
+      213: 8349706713423394984
+    second: GOSHAKRig_185
+  - first:
+      213: 6932109392073202749
+    second: GOSHAKRig_186
+  - first:
+      213: -441086590405373630
+    second: GOSHAKRig_187
+  - first:
+      213: -6319247479080249943
+    second: GOSHAKRig_188
+  - first:
+      213: -3928850985635566234
+    second: GOSHAKRig_189
+  - first:
+      213: 7879003704837342198
+    second: GOSHAKRig_190
+  - first:
+      213: 2238521689001187563
+    second: GOSHAKRig_191
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: GOSHAKRig_egg_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22c603f5d6eb36a4786fb14d7565c7f6
+      internalID: 1285621931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_face0_0
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 064f63dc4a875bb459157d7ff791eb5a
+      internalID: -1194807918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_faceHurt0_0
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a3c6b90efc255e4ea6f5c326b39f46b
+      internalID: 1309931856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_hair0_0
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7644f8782eb5dfc408ac24b18e69251b
+      internalID: 2072637609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_face10_0
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f7a37370efc33345911d732709edb52
+      internalID: -1535198388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_faceHurt10_0
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7aa17ef5690f73f4db6d97391bfe6cdd
+      internalID: 1700342165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_hair10_0
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d257558620684d4bba658b2c3bb388d
+      internalID: -777953679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_face15_0
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b692b22db9e7244d8764d158e511904
+      internalID: 2028948159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_faceHurt15_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72d9c959177b3a44484f7875e60f2831
+      internalID: 1090269728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_hair15_0
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc63d6e3c08141542a09cb2537c27e80
+      internalID: 943804756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_face18_0
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3664a63281b92b14db567b0b913866b5
+      internalID: 1666056527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_faceHurt18_0
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a243f7a9e40210044b8ac0cc0801221f
+      internalID: -1134188888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_hair18_0
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc8ac0ff487e4464aa86c72599432d04
+      internalID: 1055276894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_skin0_0
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ad96bd0830719c419a3ead2f2d8c27a
+      internalID: 1993459887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_over0_0
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aca73a33d6c9b9a468757bd962929d7a
+      internalID: -1530267257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_skin1_0
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2628fc6a42935694fa8198447dcebc23
+      internalID: -1736995454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_over1_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e21b16279401ae0478cf644d96f8fd39
+      internalID: -285228307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_skin2_0
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa2c9a0af02e28f4185b39e3067ca83c
+      internalID: 720037945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_over2_0
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1091b64307152204b966dc8ddd19ff8e
+      internalID: 1853221895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_shoeFar_0
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2931584c162974f469c494c3d136cfd5
+      internalID: 1853278808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_shoeNear_0
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7028da1ede7477c4b9cba846019401b1
+      internalID: 736341617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_leg_0
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa2aee5dd236a7a44828cd64bf3d3f2b
+      internalID: 553990961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_tick_0
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9bb79a86f1c6f8049a9e3aacd1cb426e
+      internalID: -258096446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_shadow_0
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5078125, y: 0.057812512}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64957df708b5a9b459816aa0c31af611
+      internalID: -1152599941
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_egg_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc6302a1cfabaec4b9fefcf94976739a
+      internalID: -1677424292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_face0_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 653f9e4a278063b4aa7c79c57f2f001c
+      internalID: -266036887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_faceHurt0_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7367e9950189871409fcd3e731000a71
+      internalID: 1548866768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_hair0_1
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 067f645bc8d302142bc99b3cb0d0ed99
+      internalID: 1547834749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_face10_1
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2ad92384446f6d45a6de81818041998
+      internalID: -2135360573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_faceHurt10_1
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ee1a332ed1aed044824693de240ca05
+      internalID: -1882197366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_hair10_1
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 571764a3b5523c242be6a941e0e88de9
+      internalID: -912640162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_face15_1
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72bd01fb093e75744859eaed1c8bac7c
+      internalID: 1818571182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_faceHurt15_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e742255986d7c3458ef5de0297e975e
+      internalID: -827184638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_hair15_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 736d628dbbe57a448814af049614088a
+      internalID: 1281583153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_face18_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c34eb3d4e6f6458478a9038521502735
+      internalID: -674063925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_faceHurt18_1
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2de24a0cd5ebca442b572e6cf6a9753c
+      internalID: -1580747382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_hair18_1
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f51f8705063d1e44b0001def3393e04
+      internalID: -1756615249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_skin0_1
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d9e1c26a57b7004e832bd879a3a2000
+      internalID: -1632940555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_over0_1
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b74849636003df4a92292c955a5416d
+      internalID: 1004282303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_skin1_1
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d380aed2046ecb458ce7501459d6ece
+      internalID: 1797210177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_over1_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 660ee83b58c4ae542bb6960ef6cb7d0e
+      internalID: 822327062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_skin2_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 555989df2875dc1478cc7f7aad0b6ff2
+      internalID: -1454159446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_over2_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ac5acae5b3d4664fb7d207920d1e291
+      internalID: 1029960509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_shoeFar_1
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8d09e5afc414894b84fbf0e5f0e3941
+      internalID: 186773263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_shoeNear_1
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02f9c6485b23a3744b3536e6580064c8
+      internalID: 529146596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_leg_1
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f377441abec9f14394adec594e519f9
+      internalID: -10971291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_tick_1
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a8a33c530473624796a1edaaa740399
+      internalID: -1360209441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_shadow_1
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5078125, y: 0.057812512}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86ee0020174ba1145863acddef132c19
+      internalID: -1436802658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_egg_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4da805b7eaf10e43b5aade08d7a846f
+      internalID: 2123908131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_face0_2
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d6b19f57e3acbe418d9df3778d879b1
+      internalID: 1541598938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_faceHurt0_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f83dfaf3a5580794792d8012de9679b8
+      internalID: -711388089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_hair0_2
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4542ae58006bf7b49a3e0010f545890c
+      internalID: -862573338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_face10_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00e1fd46708978441be180d152c284c5
+      internalID: 722007623
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_faceHurt10_2
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 906fcd427bf681e4681cd2d4ac666dcb
+      internalID: 1743106790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_hair10_2
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9e124134f0c3ee4eaf41fb82ef4914f
+      internalID: 556042614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_face15_2
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa4b3ac4cac15c84a978d07708db067a
+      internalID: 213518789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_faceHurt15_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e849c7f021f0254ea5b6a4c8a8c3dcc
+      internalID: 1233019326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_hair15_2
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 048bce09a2172744a9a4d80aa261cdf9
+      internalID: 288434866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_face18_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4848114b208a1744fad527791451d930
+      internalID: -409155940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_faceHurt18_2
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d0e5321eef91634b80e407bb64530c7
+      internalID: -1871857793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_hair18_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 621c363378e4ec54f98b78e723663dd8
+      internalID: -1463192592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_skin0_2
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a3310d291c4e1c4b81c0483eff68800
+      internalID: -84150530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_over0_2
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c77d2ab85940d2541a1592c95f45f251
+      internalID: -258120415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_skin1_2
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b19c605e1fc324b4e9b584864b6eacba
+      internalID: 1202187932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_over1_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: baf618c830534f14f8b6d4d394dfbb51
+      internalID: 571667166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_skin2_2
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb3cbbed7a9f8054b97097cefeb614bb
+      internalID: 2055426536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_over2_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b60f4844a462c244a9535ea8f3dbb45
+      internalID: -1065992541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_shoeFar_2
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 922756bb81807104db49cb0b271f8dec
+      internalID: 1785923446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_shoeNear_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39e61f887857a864eb030b9364e82dca
+      internalID: 1854289136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_leg_2
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70c146b58b80bad4b82fd3c00dfbf2ca
+      internalID: -1167489972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_tick_2
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d80854fffd61d84ea2916e5de283100
+      internalID: -417636607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_shadow_2
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5078125, y: 0.057812512}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5d3c704b65312c468837c9a388cc505
+      internalID: 1052741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_punch_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5deab6c0a1c696645a78adfd8fbe4b59
+      internalID: -1732690406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_death_3
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 519131fe7463b6d4bb8d3b616437e6ab
+      internalID: 143875559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_run_0
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b772b32da2f3a5445865401e49be653c
+      internalID: 2003863312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_run_1
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1add0709bbb0e648833dddde4c3842a
+      internalID: 492002662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_run_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1a8da3351a06d34b894e6a40dc85b8c
+      internalID: -1259724644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_run_3
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ad09febc2e74a146a2a4adc02b608fc
+      internalID: -689916765
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_run_4
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eaa99eb5b3fccb24586cb19c4b067735
+      internalID: -2032117976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_run_5
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 486ab8ee33c6d094faecf8ddebbe2cd4
+      internalID: -1267364646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_run_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e83c870679ca3b2439ce0ab8a7d65636
+      internalID: 727481692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_run_7
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df8795a933a0ee441b95a7303b41d66b
+      internalID: -379040124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_jump_0
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c99a317bc578ea419af645394416f88
+      internalID: 19263703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_jump_1
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ee705948317067488ce86018d2551b1
+      internalID: 1325201020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_jump_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21f57c3199569b74b8e570ce7117d254
+      internalID: 1213962555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_jump_3
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5740a9ae2ebbda645916abd8d0e37e59
+      internalID: 789589495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_fall_0
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f0f5f3ac355aee4fa83353d58129378
+      internalID: -2112968588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_fall_1
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 741f1458a6baed541ac403b574b6fa56
+      internalID: -1159392341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GOSHAKRig_fx_land_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd8764350f4935745980ba0bfca87dbd
+      internalID: 432745967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 16db9935e5755d84ebcff564a47a1aaf
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      GOSHAKRig_egg_0: 1285621931
+      GOSHAKRig_egg_1: -1677424292
+      GOSHAKRig_egg_2: 2123908131
+      GOSHAKRig_face0_0: -1194807918
+      GOSHAKRig_face0_1: -266036887
+      GOSHAKRig_face0_2: 1541598938
+      GOSHAKRig_face10_0: -1535198388
+      GOSHAKRig_face10_1: -2135360573
+      GOSHAKRig_face10_2: 722007623
+      GOSHAKRig_face15_0: 2028948159
+      GOSHAKRig_face15_1: 1818571182
+      GOSHAKRig_face15_2: 213518789
+      GOSHAKRig_face18_0: 1666056527
+      GOSHAKRig_face18_1: -674063925
+      GOSHAKRig_face18_2: -409155940
+      GOSHAKRig_faceHurt0_0: 1309931856
+      GOSHAKRig_faceHurt0_1: 1548866768
+      GOSHAKRig_faceHurt0_2: -711388089
+      GOSHAKRig_faceHurt10_0: 1700342165
+      GOSHAKRig_faceHurt10_1: -1882197366
+      GOSHAKRig_faceHurt10_2: 1743106790
+      GOSHAKRig_faceHurt15_0: 1090269728
+      GOSHAKRig_faceHurt15_1: -827184638
+      GOSHAKRig_faceHurt15_2: 1233019326
+      GOSHAKRig_faceHurt18_0: -1134188888
+      GOSHAKRig_faceHurt18_1: -1580747382
+      GOSHAKRig_faceHurt18_2: -1871857793
+      GOSHAKRig_fx_death_3: 143875559
+      GOSHAKRig_fx_fall_0: -2112968588
+      GOSHAKRig_fx_fall_1: -1159392341
+      GOSHAKRig_fx_jump_0: 19263703
+      GOSHAKRig_fx_jump_1: 1325201020
+      GOSHAKRig_fx_jump_2: 1213962555
+      GOSHAKRig_fx_jump_3: 789589495
+      GOSHAKRig_fx_land_0: 432745967
+      GOSHAKRig_fx_punch_1: -1732690406
+      GOSHAKRig_fx_run_0: 2003863312
+      GOSHAKRig_fx_run_1: 492002662
+      GOSHAKRig_fx_run_2: -1259724644
+      GOSHAKRig_fx_run_3: -689916765
+      GOSHAKRig_fx_run_4: -2032117976
+      GOSHAKRig_fx_run_5: -1267364646
+      GOSHAKRig_fx_run_6: 727481692
+      GOSHAKRig_fx_run_7: -379040124
+      GOSHAKRig_hair0_0: 2072637609
+      GOSHAKRig_hair0_1: 1547834749
+      GOSHAKRig_hair0_2: -862573338
+      GOSHAKRig_hair10_0: -777953679
+      GOSHAKRig_hair10_1: -912640162
+      GOSHAKRig_hair10_2: 556042614
+      GOSHAKRig_hair15_0: 943804756
+      GOSHAKRig_hair15_1: 1281583153
+      GOSHAKRig_hair15_2: 288434866
+      GOSHAKRig_hair18_0: 1055276894
+      GOSHAKRig_hair18_1: -1756615249
+      GOSHAKRig_hair18_2: -1463192592
+      GOSHAKRig_leg_0: 553990961
+      GOSHAKRig_leg_1: -10971291
+      GOSHAKRig_leg_2: -1167489972
+      GOSHAKRig_over0_0: -1530267257
+      GOSHAKRig_over0_1: 1004282303
+      GOSHAKRig_over0_2: -258120415
+      GOSHAKRig_over1_0: -285228307
+      GOSHAKRig_over1_1: 822327062
+      GOSHAKRig_over1_2: 571667166
+      GOSHAKRig_over2_0: 1853221895
+      GOSHAKRig_over2_1: 1029960509
+      GOSHAKRig_over2_2: -1065992541
+      GOSHAKRig_shadow_0: -1152599941
+      GOSHAKRig_shadow_1: -1436802658
+      GOSHAKRig_shadow_2: 1052741
+      GOSHAKRig_shoeFar_0: 1853278808
+      GOSHAKRig_shoeFar_1: 186773263
+      GOSHAKRig_shoeFar_2: 1785923446
+      GOSHAKRig_shoeNear_0: 736341617
+      GOSHAKRig_shoeNear_1: 529146596
+      GOSHAKRig_shoeNear_2: 1854289136
+      GOSHAKRig_skin0_0: 1993459887
+      GOSHAKRig_skin0_1: -1632940555
+      GOSHAKRig_skin0_2: -84150530
+      GOSHAKRig_skin1_0: -1736995454
+      GOSHAKRig_skin1_1: 1797210177
+      GOSHAKRig_skin1_2: 1202187932
+      GOSHAKRig_skin2_0: 720037945
+      GOSHAKRig_skin2_1: -1454159446
+      GOSHAKRig_skin2_2: 2055426536
+      GOSHAKRig_tick_0: -258096446
+      GOSHAKRig_tick_1: -1360209441
+      GOSHAKRig_tick_2: -417636607
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

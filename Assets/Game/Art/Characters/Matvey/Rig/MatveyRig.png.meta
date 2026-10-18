@@ -1,0 +1,3126 @@
+fileFormatVersion: 2
+guid: 78be4820a0debc54fa8039509f7daf7f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5513861429219305445
+    second: MatveyRig_0
+  - first:
+      213: -7599652797431476779
+    second: MatveyRig_1
+  - first:
+      213: 7085890428769625003
+    second: MatveyRig_2
+  - first:
+      213: -3626584670738273668
+    second: MatveyRig_3
+  - first:
+      213: -524026660694379017
+    second: MatveyRig_4
+  - first:
+      213: -7684213238188126379
+    second: MatveyRig_5
+  - first:
+      213: 3571748726623055676
+    second: MatveyRig_6
+  - first:
+      213: 565000500029591187
+    second: MatveyRig_7
+  - first:
+      213: 2165418231797846615
+    second: MatveyRig_8
+  - first:
+      213: 1189938463731845911
+    second: MatveyRig_9
+  - first:
+      213: 3543848492793058054
+    second: MatveyRig_10
+  - first:
+      213: 1445263876103090347
+    second: MatveyRig_11
+  - first:
+      213: 1459505107292358116
+    second: MatveyRig_12
+  - first:
+      213: -5624151655066867592
+    second: MatveyRig_13
+  - first:
+      213: -5923552559247625246
+    second: MatveyRig_14
+  - first:
+      213: 8214794755420426136
+    second: MatveyRig_15
+  - first:
+      213: 1060120755362079601
+    second: MatveyRig_16
+  - first:
+      213: 92351201342025829
+    second: MatveyRig_17
+  - first:
+      213: 7370555188253529787
+    second: MatveyRig_18
+  - first:
+      213: -5257211219232299087
+    second: MatveyRig_19
+  - first:
+      213: 7564940768814195472
+    second: MatveyRig_20
+  - first:
+      213: 7196863428576875814
+    second: MatveyRig_21
+  - first:
+      213: -7311183170403033386
+    second: MatveyRig_22
+  - first:
+      213: 7741075560562642075
+    second: MatveyRig_23
+  - first:
+      213: -7398826794842906772
+    second: MatveyRig_24
+  - first:
+      213: -334817452732108323
+    second: MatveyRig_25
+  - first:
+      213: 8856871153289735644
+    second: MatveyRig_26
+  - first:
+      213: 2648498852247584698
+    second: MatveyRig_27
+  - first:
+      213: 4063843409807961772
+    second: MatveyRig_28
+  - first:
+      213: 213874744419107755
+    second: MatveyRig_29
+  - first:
+      213: -1343826558145392020
+    second: MatveyRig_30
+  - first:
+      213: -6258472721941493847
+    second: MatveyRig_31
+  - first:
+      213: -9126108552124972259
+    second: MatveyRig_32
+  - first:
+      213: 6721559232610554894
+    second: MatveyRig_33
+  - first:
+      213: -4108045420650285792
+    second: MatveyRig_34
+  - first:
+      213: -2168349854314266465
+    second: MatveyRig_35
+  - first:
+      213: 8635949177069859220
+    second: MatveyRig_36
+  - first:
+      213: 5545000906292711191
+    second: MatveyRig_37
+  - first:
+      213: -1191960462860378850
+    second: MatveyRig_38
+  - first:
+      213: 4598357163744718305
+    second: MatveyRig_39
+  - first:
+      213: 5962509090641417939
+    second: MatveyRig_40
+  - first:
+      213: 6044086165935796242
+    second: MatveyRig_41
+  - first:
+      213: 3724217812586858251
+    second: MatveyRig_42
+  - first:
+      213: -1208022489050084879
+    second: MatveyRig_43
+  - first:
+      213: -3798052354714417543
+    second: MatveyRig_44
+  - first:
+      213: 8283624306843984073
+    second: MatveyRig_45
+  - first:
+      213: -4434726158049346791
+    second: MatveyRig_46
+  - first:
+      213: -5570084128988498678
+    second: MatveyRig_47
+  - first:
+      213: 3754962207460265717
+    second: MatveyRig_48
+  - first:
+      213: -2564198989292280602
+    second: MatveyRig_49
+  - first:
+      213: 5345147670462184142
+    second: MatveyRig_50
+  - first:
+      213: 2978873809848708243
+    second: MatveyRig_51
+  - first:
+      213: 4171017122144871591
+    second: MatveyRig_52
+  - first:
+      213: 530138249234757304
+    second: MatveyRig_53
+  - first:
+      213: 6441812143312134086
+    second: MatveyRig_54
+  - first:
+      213: 87781712546931180
+    second: MatveyRig_55
+  - first:
+      213: -2341604122943834753
+    second: MatveyRig_56
+  - first:
+      213: 6220887901789273524
+    second: MatveyRig_57
+  - first:
+      213: -3171570394722470849
+    second: MatveyRig_58
+  - first:
+      213: 6012883002929553454
+    second: MatveyRig_59
+  - first:
+      213: 4042875793280696896
+    second: MatveyRig_60
+  - first:
+      213: 2714404755174621519
+    second: MatveyRig_61
+  - first:
+      213: 4263696636773371529
+    second: MatveyRig_62
+  - first:
+      213: -7744094894399287183
+    second: MatveyRig_63
+  - first:
+      213: 8516881858400109226
+    second: MatveyRig_64
+  - first:
+      213: 8725650259853820929
+    second: MatveyRig_65
+  - first:
+      213: 2005053366691711257
+    second: MatveyRig_66
+  - first:
+      213: -1114011020018703794
+    second: MatveyRig_67
+  - first:
+      213: -2302713445751283270
+    second: MatveyRig_68
+  - first:
+      213: 636536920951053862
+    second: MatveyRig_69
+  - first:
+      213: 4668190790340041037
+    second: MatveyRig_70
+  - first:
+      213: -8830062131050457110
+    second: MatveyRig_71
+  - first:
+      213: 7899633343906856566
+    second: MatveyRig_72
+  - first:
+      213: -421871836222731005
+    second: MatveyRig_73
+  - first:
+      213: 8093358687200038877
+    second: MatveyRig_74
+  - first:
+      213: 9206090978866861770
+    second: MatveyRig_75
+  - first:
+      213: -921953037878931550
+    second: MatveyRig_76
+  - first:
+      213: 1810668215208424554
+    second: MatveyRig_77
+  - first:
+      213: -227091601467732912
+    second: MatveyRig_78
+  - first:
+      213: -178235446623695094
+    second: MatveyRig_79
+  - first:
+      213: 5294360827958313013
+    second: MatveyRig_80
+  - first:
+      213: 9140489452159048748
+    second: MatveyRig_81
+  - first:
+      213: -4304078247915991670
+    second: MatveyRig_82
+  - first:
+      213: -2465404533723100675
+    second: MatveyRig_83
+  - first:
+      213: -8627194771186792388
+    second: MatveyRig_84
+  - first:
+      213: -449017120215781964
+    second: MatveyRig_85
+  - first:
+      213: 3658147805923943348
+    second: MatveyRig_86
+  - first:
+      213: 3223774366310723295
+    second: MatveyRig_87
+  - first:
+      213: 4887958655553019584
+    second: MatveyRig_88
+  - first:
+      213: -6625140778710380656
+    second: MatveyRig_89
+  - first:
+      213: 821583716502515464
+    second: MatveyRig_90
+  - first:
+      213: 1401903894099933133
+    second: MatveyRig_91
+  - first:
+      213: 4003164722218939230
+    second: MatveyRig_92
+  - first:
+      213: 1574742573236279224
+    second: MatveyRig_93
+  - first:
+      213: -1715366565170573471
+    second: MatveyRig_94
+  - first:
+      213: 3956529238691900582
+    second: MatveyRig_95
+  - first:
+      213: 3590050111722993512
+    second: MatveyRig_96
+  - first:
+      213: 2485099748405335793
+    second: MatveyRig_97
+  - first:
+      213: 2056143894331039863
+    second: MatveyRig_98
+  - first:
+      213: -1839756354907560419
+    second: MatveyRig_99
+  - first:
+      213: 7510542540476629561
+    second: MatveyRig_100
+  - first:
+      213: -4151192366005212236
+    second: MatveyRig_101
+  - first:
+      213: 1879410890685313041
+    second: MatveyRig_102
+  - first:
+      213: 9205997374872958486
+    second: MatveyRig_103
+  - first:
+      213: -36574617406312269
+    second: MatveyRig_104
+  - first:
+      213: -318778733562554860
+    second: MatveyRig_105
+  - first:
+      213: -2309764693205530836
+    second: MatveyRig_106
+  - first:
+      213: -6687293344070227164
+    second: MatveyRig_107
+  - first:
+      213: 1428503146114277044
+    second: MatveyRig_108
+  - first:
+      213: -5835440538522426316
+    second: MatveyRig_109
+  - first:
+      213: -3022105493152394444
+    second: MatveyRig_110
+  - first:
+      213: 3373029051035165372
+    second: MatveyRig_111
+  - first:
+      213: 3371869753886880494
+    second: MatveyRig_112
+  - first:
+      213: 6579476311797708418
+    second: MatveyRig_113
+  - first:
+      213: 6789703073327759135
+    second: MatveyRig_114
+  - first:
+      213: -8052059567110799734
+    second: MatveyRig_115
+  - first:
+      213: 5657370671439168446
+    second: MatveyRig_116
+  - first:
+      213: 3765928437387690944
+    second: MatveyRig_117
+  - first:
+      213: -75133668237206494
+    second: MatveyRig_118
+  - first:
+      213: 5801221211952140793
+    second: MatveyRig_119
+  - first:
+      213: 5777631068520132350
+    second: MatveyRig_120
+  - first:
+      213: -6675275141766083823
+    second: MatveyRig_121
+  - first:
+      213: -7332715295646750117
+    second: MatveyRig_122
+  - first:
+      213: 4298157167288488537
+    second: MatveyRig_123
+  - first:
+      213: 5239577794359412593
+    second: MatveyRig_124
+  - first:
+      213: -6695311251505409079
+    second: MatveyRig_125
+  - first:
+      213: -5513907454074522949
+    second: MatveyRig_126
+  - first:
+      213: 6259546965626981527
+    second: MatveyRig_127
+  - first:
+      213: -539082231257700452
+    second: MatveyRig_128
+  - first:
+      213: 4750903936326054352
+    second: MatveyRig_129
+  - first:
+      213: -7681217831890870603
+    second: MatveyRig_130
+  - first:
+      213: 7238943850687926327
+    second: MatveyRig_131
+  - first:
+      213: -2681887209338837588
+    second: MatveyRig_132
+  - first:
+      213: 3584483839600316780
+    second: MatveyRig_133
+  - first:
+      213: -5022537110272882433
+    second: MatveyRig_134
+  - first:
+      213: -2442414637856058233
+    second: MatveyRig_135
+  - first:
+      213: -5091150815791837455
+    second: MatveyRig_136
+  - first:
+      213: -5590560185452674053
+    second: MatveyRig_137
+  - first:
+      213: 2482518412996976885
+    second: MatveyRig_138
+  - first:
+      213: -5926964802916415609
+    second: MatveyRig_139
+  - first:
+      213: 8124497780699826179
+    second: MatveyRig_140
+  - first:
+      213: 6473460090562700102
+    second: MatveyRig_141
+  - first:
+      213: -3900573840414828332
+    second: MatveyRig_142
+  - first:
+      213: -4074688153650285908
+    second: MatveyRig_143
+  - first:
+      213: 4665382298986998346
+    second: MatveyRig_144
+  - first:
+      213: 8192233322164625539
+    second: MatveyRig_145
+  - first:
+      213: -7028346161281319585
+    second: MatveyRig_146
+  - first:
+      213: -8955449021108073943
+    second: MatveyRig_147
+  - first:
+      213: -8146679409571421411
+    second: MatveyRig_148
+  - first:
+      213: 1579702856401913837
+    second: MatveyRig_149
+  - first:
+      213: -1523035529920323943
+    second: MatveyRig_150
+  - first:
+      213: -4916637371313748668
+    second: MatveyRig_151
+  - first:
+      213: 2281563781285182581
+    second: MatveyRig_152
+  - first:
+      213: 5521251127599925034
+    second: MatveyRig_153
+  - first:
+      213: 5194090290273657323
+    second: MatveyRig_154
+  - first:
+      213: 6061316776106658548
+    second: MatveyRig_155
+  - first:
+      213: -8048477798470546798
+    second: MatveyRig_156
+  - first:
+      213: 5848790043751606919
+    second: MatveyRig_157
+  - first:
+      213: -5881789851411999867
+    second: MatveyRig_158
+  - first:
+      213: 4460418768042814517
+    second: MatveyRig_159
+  - first:
+      213: 6385280722018682239
+    second: MatveyRig_160
+  - first:
+      213: 3916001859260932489
+    second: MatveyRig_161
+  - first:
+      213: 4088702890257892571
+    second: MatveyRig_162
+  - first:
+      213: -5981575391008660093
+    second: MatveyRig_163
+  - first:
+      213: 4735752190134378337
+    second: MatveyRig_164
+  - first:
+      213: 5854885824374383769
+    second: MatveyRig_165
+  - first:
+      213: -5310720325015091850
+    second: MatveyRig_166
+  - first:
+      213: -6650354456598992164
+    second: MatveyRig_167
+  - first:
+      213: -4777261200099198436
+    second: MatveyRig_168
+  - first:
+      213: -2990512092991769398
+    second: MatveyRig_169
+  - first:
+      213: -7874204533574961174
+    second: MatveyRig_170
+  - first:
+      213: 6653400298378449312
+    second: MatveyRig_171
+  - first:
+      213: 6193835233265892175
+    second: MatveyRig_172
+  - first:
+      213: 1176019103799619581
+    second: MatveyRig_173
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: MatveyRig_egg_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3072
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3d78f0de80d9fa438aea0f7d9a952b6
+      internalID: 1035022994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_face0_0
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 3072
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cc735bc9e3223049952b67de9d966c2
+      internalID: -1875921240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_faceHurt0_0
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 3072
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45fc49d9b00d3a34db6bbfd84754a10b
+      internalID: 2108161106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_hair0_0
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 3072
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8987c5fcb1173d24f83ab042f8e620a2
+      internalID: 1440841255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_back0_0
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 3072
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8287bacd44247ee459d316b8e81597ea
+      internalID: -990595909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_face10_0
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 3072
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5cd6d50fbf580c4db4f2f7e906f4a6a
+      internalID: 1153664049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_faceHurt10_0
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 3072
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9edb5657bcc9ff24e8037d9e00b1340a
+      internalID: -179946776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_hair10_0
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 3072
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5dd5cbb5ab5c1a149addb8d9d1601bc9
+      internalID: 1303816211
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_back10_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74cba268c6598ad4ba3a80ab44b07617
+      internalID: -1489747228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_face15_0
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c888718d1e6b39645a74907e462266c3
+      internalID: -1474041688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_faceHurt15_0
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 384902103e59b5140bd82dc9abaa97dc
+      internalID: 1593536462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_hair15_0
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 537a6c0f0c95e4d41b76aefd334fb98e
+      internalID: 283667631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_back15_0
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: edca648586b1b4f46bbc8f16adeed7ce
+      internalID: 2076165818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_face18_0
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9b950816ba76d34d9b841dd1d4f8ec0
+      internalID: 1500129700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_faceHurt18_0
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5d924e8daa14b7418ec38b28ddd6981
+      internalID: 882354531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_hair18_0
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 2816
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5bce700bcc0fb16409b7dd9758d0f7e5
+      internalID: -193017168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_back18_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f553117524244384d89293e53d1cb135
+      internalID: 197938755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_skin0_0
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b35ab1fc5dfe1b4419ba804c07ccfb1b
+      internalID: 1903864935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_over0_0
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31c809e2b75e5eb4f8921c75184bd1bd
+      internalID: -1580303114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_skin1_0
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36470ac378a37cc46a14d01d3008378f
+      internalID: -1809378451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_over1_0
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d90174a9e0d6be846a7872aa8aa1f822
+      internalID: 1502814305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_skin2_0
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc99f7a24df74794387b306c24961394
+      internalID: 1340293392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_over2_0
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 2560
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e069be6cea9c364599f9c957835243b
+      internalID: -1460717001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_flapLeft_0
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 2560
+        width: 128
+        height: 256
+      alignment: 9
+      pivot: {x: 0.6875, y: 0.38671875}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0272d6967bde9647967d9ff0a69a693
+      internalID: 1034050257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_flapRight_0
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 2560
+        width: 128
+        height: 256
+      alignment: 9
+      pivot: {x: 0.3125, y: 0.38671875}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b2d16fcded2fd84e8f97cf1eb19773f
+      internalID: 1563461313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_shoeFar_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8a13fa1398c3234799705616bb229b9
+      internalID: -452236051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_shoeNear_0
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54b66ee474f37b145bc2b9bc18791bc3
+      internalID: 978788350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_leg_0
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98d00380eaaa1b74188e791a067ae809
+      internalID: 1378659302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_tick_0
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5cc273dc2e26f03409b6959431e32057
+      internalID: 854642872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_shadow_0
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5078125, y: 0.057812512}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c695089528da2e469f15f84ab58e878
+      internalID: 1443873020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_egg_1
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5f225baa829c2d428e963151f986851
+      internalID: -1596536189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_face0_1
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5fbc937fc97f7e45addeeeaa79801e3
+      internalID: -1781471594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_faceHurt0_1
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 2304
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5bd22fcca2b39c04e93e5c255520554c
+      internalID: 1082268184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_hair0_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb97a7020ada041479e9527022935698
+      internalID: -557753177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_back0_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b662ccee39ea7e94ab4d4ad533e98b1c
+      internalID: 1538504781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_face10_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48b352e4e827e98458221b9a65e7d120
+      internalID: -1034560803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_faceHurt10_1
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23b0539ed0f5c5940b899453e7d443bb
+      internalID: -805142255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_hair10_1
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08e7f5a0a6544e3419ff92f7a1d49364
+      internalID: -143835315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_back10_1
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af134a446f287524599c949589bdd3d4
+      internalID: 396477813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_face15_1
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdd1097372a524b43b54c1bb62eb6e91
+      internalID: -1791136695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_faceHurt15_1
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 2048
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1c892fd8a3de344fb374d2c01e97e8a
+      internalID: -1966718395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_hair15_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63adcf3bfe2cbfd47a4d43a502959004
+      internalID: -1647162158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_back15_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 369e8b5dc44961b43b6991bde4d8b1fb
+      internalID: -806355198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_face18_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 061557000200e754aa1f08ce9c80c35c
+      internalID: -1530132565
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_faceHurt18_1
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f735c779b80323a45a715bf5e5247b38
+      internalID: -924849849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_hair18_1
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa2646cf42683aa4ea1a6a183c5dfc82
+      internalID: 1017494898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_back18_1
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ca3e7a37d41969459e9eba2797942d7
+      internalID: -1913728884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_skin0_1
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9e5b3beac190fa4fb478afe9ec56147
+      internalID: 1166722971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_over0_1
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1792
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4128c2c7c74cd1a439ef0b4af6beb7a8
+      internalID: -653259808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_skin1_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9781fd539d2f74a47b576ab2c1bc7618
+      internalID: -903309789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_over1_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 302cbfaf482899d4d92c551d6feda998
+      internalID: -1237242652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_skin2_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd56ba5ea4e29a84c9fec2e8a7f56347
+      internalID: -1936242177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_over2_1
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2326a1ea2fa93dc488e5b317224d0c42
+      internalID: -1621001102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_flapLeft_1
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1536
+        width: 128
+        height: 256
+      alignment: 9
+      pivot: {x: 0.6875, y: 0.38671875}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e898f852f414aab4780e140da750f642
+      internalID: 1750017728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_flapRight_1
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 1536
+        width: 128
+        height: 256
+      alignment: 9
+      pivot: {x: 0.3125, y: 0.38671875}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 413c2e70cac2ecc47b0c905eea1bdb82
+      internalID: 1391214109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_shoeFar_1
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2e82399352b2fb4bbf6e6a2098f9751
+      internalID: 2025170594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_shoeNear_1
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dff9357c3a12ec34595b3a66ee60f984
+      internalID: 579336853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_leg_1
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1536
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19323b8ac0a80eb488c3a7ee37e1a346
+      internalID: 736262754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_tick_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90be61387e56cac4ebb6334309926bff
+      internalID: -1444595500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_shadow_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5078125, y: 0.057812512}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0fceae7d020368a47b2d91be6f587ff1
+      internalID: 146154573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_egg_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b24f94185c84eb40ba1af5e201018a6
+      internalID: 1151532055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_face0_2
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 396e593dc54592b4caffbaf8e94b367d
+      internalID: -462452551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_faceHurt0_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b68121e9f203d0c4999cee7fb4aef6fb
+      internalID: 465347406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_hair0_2
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 322b25ecc9effac4d818c3bcf8c56369
+      internalID: 2091151205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_back0_2
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: edc288271b690db4baa37cc2a71d12cd
+      internalID: 1844342362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_face10_2
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1280
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 693e5e636696ea240a568081f53a3f37
+      internalID: 1396483719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_faceHurt10_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a31f69538e8cd445a5b228f325928b7
+      internalID: 141678297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_hair10_2
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8f873681b93640448da21ef46759e3d
+      internalID: 1699456914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_back10_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 680f5c8a51f96624e8fd29e1ec904f80
+      internalID: 594878355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_face15_2
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da270dd31c7e52d4ea5278bc7199dafa
+      internalID: 1359730585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_faceHurt15_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 528d26685be6c7840b0556d50177540f
+      internalID: -1323371020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_hair15_2
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1a54c0fca8725c418133530a3ca18a8
+      internalID: -2125306495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_back15_2
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b5408e9e683b0143b1d04c2130977e6
+      internalID: -847599744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_face18_2
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 744710b7d35f77345a2981e2cc15853a
+      internalID: -1294975357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_faceHurt18_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3fd45ea7f0dc0284c8092cb43deee5a0
+      internalID: 1420815159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_hair18_2
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc3012af8af44cc47adf98d02e7fe4eb
+      internalID: -1247016315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_back18_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 037b50a6dbc4bb64393e41a16acb600a
+      internalID: 1833293460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_skin0_2
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ac17b67561e8a04cab364445366a594
+      internalID: 287870849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_over0_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 138645d74fee40f46b9e101862bad81c
+      internalID: -1359543871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_skin1_2
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eed565905fae22a41a5d811c5e17d29c
+      internalID: 1856635787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_over1_2
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d54aa46dd470c8d4da51cd2cdce1816f
+      internalID: 2138557176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_skin2_2
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 768
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77e0ca597827dcf499f0a71d486d5c24
+      internalID: 166105669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_over2_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.24609375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4416eb59b73160498bb7f67eba2f758
+      internalID: 52151553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_flapLeft_2
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 512
+        width: 128
+        height: 256
+      alignment: 9
+      pivot: {x: 0.6875, y: 0.38671875}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc60cd285dffe324f90cca8260601b78
+      internalID: -43471388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_flapRight_2
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 512
+        width: 128
+        height: 256
+      alignment: 9
+      pivot: {x: 0.3125, y: 0.38671875}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1311fcd868f1723478545c1ff81e1507
+      internalID: 962220887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_shoeFar_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78a686fdf5c2a8843a861d8fb7fb6eb9
+      internalID: -1975216048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_shoeNear_2
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.421875, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ac0c699b8f10b2459eda732ee246a36
+      internalID: -1984684854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_leg_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.234375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85dd140c897c50a448b8aa364b0c0a6d
+      internalID: 165698336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_tick_2
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fdec7b20964c540489b04a078eddc97e
+      internalID: 157934346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_shadow_2
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5078125, y: 0.057812512}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e59d5447c1edfd649ba694496b179f6e
+      internalID: -371742567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_punch_1
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 512
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35ba191898912c2489cf96f0a255e1c0
+      internalID: 485127564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_death_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7641aad699ed67144bc580799901d077
+      internalID: 1404281391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_run_0
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38f70baf8b23ce6488dd99fd3d38b24b
+      internalID: -974868724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_run_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ba834b3d3c2dd04081023afe54da04d
+      internalID: 162405521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_run_2
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7829956148c0ceb44b1e6711272db25d
+      internalID: 639398601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_run_3
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb0e8888f3a37374cbc3d55ae98807ca
+      internalID: -2104305615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_run_4
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d52100ba67cc9bc40aa50c61454b85e5
+      internalID: 1736770579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_run_5
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 079517fcfc367364bb1bcb5958c78efd
+      internalID: -850656467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_run_6
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 256
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81a7178dfa7d96c40a416ec60a336883
+      internalID: 79302191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_run_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72233c6d26f4ca84d9757a7f8ecd9ca8
+      internalID: -1717421936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_jump_0
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7640c37cb516c684aadfc8c41423735a
+      internalID: -1295990013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_jump_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ee9d931177c61848b1e32f15c0a7e9b
+      internalID: -18129417
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_jump_2
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cedeb876bc876814d949e8019c1a21ab
+      internalID: -1352204521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_jump_3
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d8eaeb4f26e06e4a91af5dab4cdc18b
+      internalID: -1518298274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_fall_0
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 0
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c80855004fe495488c762c00744ca9a
+      internalID: -167017012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_fall_1
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99632e15056b55544a7386d6e8ccd80a
+      internalID: 5661887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MatveyRig_fx_land_0
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 0
+        width: 256
+        height: 256
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65fb0cf1b4dc45941a0f7fc1cddcd98a
+      internalID: -1236698452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 4fd422029fd637b479dbbd61a06728a3
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      MatveyRig_back0_0: -990595909
+      MatveyRig_back0_1: 1538504781
+      MatveyRig_back0_2: 1844342362
+      MatveyRig_back10_0: -1489747228
+      MatveyRig_back10_1: 396477813
+      MatveyRig_back10_2: 594878355
+      MatveyRig_back15_0: 2076165818
+      MatveyRig_back15_1: -806355198
+      MatveyRig_back15_2: -847599744
+      MatveyRig_back18_0: 197938755
+      MatveyRig_back18_1: -1913728884
+      MatveyRig_back18_2: 1833293460
+      MatveyRig_egg_0: 1035022994
+      MatveyRig_egg_1: -1596536189
+      MatveyRig_egg_2: 1151532055
+      MatveyRig_face0_0: -1875921240
+      MatveyRig_face0_1: -1781471594
+      MatveyRig_face0_2: -462452551
+      MatveyRig_face10_0: 1153664049
+      MatveyRig_face10_1: -1034560803
+      MatveyRig_face10_2: 1396483719
+      MatveyRig_face15_0: -1474041688
+      MatveyRig_face15_1: -1791136695
+      MatveyRig_face15_2: 1359730585
+      MatveyRig_face18_0: 1500129700
+      MatveyRig_face18_1: -1530132565
+      MatveyRig_face18_2: -1294975357
+      MatveyRig_faceHurt0_0: 2108161106
+      MatveyRig_faceHurt0_1: 1082268184
+      MatveyRig_faceHurt0_2: 465347406
+      MatveyRig_faceHurt10_0: -179946776
+      MatveyRig_faceHurt10_1: -805142255
+      MatveyRig_faceHurt10_2: 141678297
+      MatveyRig_faceHurt15_0: 1593536462
+      MatveyRig_faceHurt15_1: -1966718395
+      MatveyRig_faceHurt15_2: -1323371020
+      MatveyRig_faceHurt18_0: 882354531
+      MatveyRig_faceHurt18_1: -924849849
+      MatveyRig_faceHurt18_2: 1420815159
+      MatveyRig_flapLeft_0: 1034050257
+      MatveyRig_flapLeft_1: 1750017728
+      MatveyRig_flapLeft_2: -43471388
+      MatveyRig_flapRight_0: 1563461313
+      MatveyRig_flapRight_1: 1391214109
+      MatveyRig_flapRight_2: 962220887
+      MatveyRig_fx_death_3: 1404281391
+      MatveyRig_fx_fall_0: -167017012
+      MatveyRig_fx_fall_1: 5661887
+      MatveyRig_fx_jump_0: -1295990013
+      MatveyRig_fx_jump_1: -18129417
+      MatveyRig_fx_jump_2: -1352204521
+      MatveyRig_fx_jump_3: -1518298274
+      MatveyRig_fx_land_0: -1236698452
+      MatveyRig_fx_punch_1: 485127564
+      MatveyRig_fx_run_0: -974868724
+      MatveyRig_fx_run_1: 162405521
+      MatveyRig_fx_run_2: 639398601
+      MatveyRig_fx_run_3: -2104305615
+      MatveyRig_fx_run_4: 1736770579
+      MatveyRig_fx_run_5: -850656467
+      MatveyRig_fx_run_6: 79302191
+      MatveyRig_fx_run_7: -1717421936
+      MatveyRig_hair0_0: 1440841255
+      MatveyRig_hair0_1: -557753177
+      MatveyRig_hair0_2: 2091151205
+      MatveyRig_hair10_0: 1303816211
+      MatveyRig_hair10_1: -143835315
+      MatveyRig_hair10_2: 1699456914
+      MatveyRig_hair15_0: 283667631
+      MatveyRig_hair15_1: -1647162158
+      MatveyRig_hair15_2: -2125306495
+      MatveyRig_hair18_0: -193017168
+      MatveyRig_hair18_1: 1017494898
+      MatveyRig_hair18_2: -1247016315
+      MatveyRig_leg_0: 1378659302
+      MatveyRig_leg_1: 736262754
+      MatveyRig_leg_2: 165698336
+      MatveyRig_over0_0: -1580303114
+      MatveyRig_over0_1: -653259808
+      MatveyRig_over0_2: -1359543871
+      MatveyRig_over1_0: 1502814305
+      MatveyRig_over1_1: -1237242652
+      MatveyRig_over1_2: 2138557176
+      MatveyRig_over2_0: -1460717001
+      MatveyRig_over2_1: -1621001102
+      MatveyRig_over2_2: 52151553
+      MatveyRig_shadow_0: 1443873020
+      MatveyRig_shadow_1: 146154573
+      MatveyRig_shadow_2: -371742567
+      MatveyRig_shoeFar_0: -452236051
+      MatveyRig_shoeFar_1: 2025170594
+      MatveyRig_shoeFar_2: -1975216048
+      MatveyRig_shoeNear_0: 978788350
+      MatveyRig_shoeNear_1: 579336853
+      MatveyRig_shoeNear_2: -1984684854
+      MatveyRig_skin0_0: 1903864935
+      MatveyRig_skin0_1: 1166722971
+      MatveyRig_skin0_2: 287870849
+      MatveyRig_skin1_0: -1809378451
+      MatveyRig_skin1_1: -903309789
+      MatveyRig_skin1_2: 1856635787
+      MatveyRig_skin2_0: 1340293392
+      MatveyRig_skin2_1: -1936242177
+      MatveyRig_skin2_2: 166105669
+      MatveyRig_tick_0: 854642872
+      MatveyRig_tick_1: -1444595500
+      MatveyRig_tick_2: 157934346
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

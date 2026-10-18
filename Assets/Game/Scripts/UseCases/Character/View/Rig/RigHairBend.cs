@@ -9,5 +9,6 @@ namespace Bw.UseCases.Character.View.Rig
         public float Span = 0.95f;
         public float Power = 1.6f;
         public float DxGain = 1.2f;
+        public float DyGain = 1f;
     }
 }
