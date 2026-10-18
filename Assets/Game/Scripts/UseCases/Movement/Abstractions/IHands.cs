@@ -1,5 +1,4 @@
 using JetBrains.Lifetimes;
-using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Movement.Abstractions
 {
@@ -9,7 +8,6 @@ namespace Bw.UseCases.Movement.Abstractions
     //TODO: вообще надо подумать над API. API поднятия у пропа должно быть
     // простое и атомарное, типа Inventory.Take, Prop.Take, Hands.TakeProp и тд
     {
-        public PhysicsBody Body { get; }
         public void Take(Lifetime lifetime, IHeldItem item);
     }
 }

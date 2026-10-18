@@ -32,6 +32,7 @@ namespace Bw.Injection.Network
                         .AsSingle()
                         .WithArguments(Lifetime.Eternal)
                         .NonLazy();
+                    Container.Bind<IInterpolatedLifetimes>().To<InterpolatedLifetimes>().AsSingle();
                     break;
             }
         }

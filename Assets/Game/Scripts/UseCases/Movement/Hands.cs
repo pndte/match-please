@@ -3,20 +3,16 @@ using System.Collections.Generic;
 using Bw.UseCases.Movement.Abstractions;
 using Bw.UseCases.Movement.Extensions;
 using JetBrains.Lifetimes;
-using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Movement
 {
     public sealed class Hands : IHands, IHeldItems
     {
-        public PhysicsBody Body { get; }
-
         private readonly HoldOval _oval;
         private readonly List<IHeldItem> _items = new();
 
-        public Hands(HoldOval oval, PhysicsBody body)
+        public Hands(HoldOval oval)
         {
-            Body = body;
             _oval = oval;
         }
 

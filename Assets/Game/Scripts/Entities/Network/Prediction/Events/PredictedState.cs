@@ -24,7 +24,7 @@ namespace Bw.Entities.Network.Prediction.Events
             _rules = rules;
             _authoritative = state.Current;
 
-            authoritative.Received.Advise(lifetime, Receive); //TODO: состояние применяется сразу по приходу, а выстрел, который его вызвал, зрители видят интерполяцией позже — у них вспышка удара опережает трассер стрелка; показывать по тику интерполяции причины
+            authoritative.Received.Advise(lifetime, Receive);
         }
 
         public void Show(PredictedEffect<TEffect> effect)

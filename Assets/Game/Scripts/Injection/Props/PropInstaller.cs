@@ -156,13 +156,15 @@ namespace Bw.Injection.Props
         private void BindHold()
         {
             Container.Bind<ReleaseSpots>().AsSingle();
-            Container.Bind<HeldPropGrip>().AsSingle().WithArguments(_parts.Held.Layer.SingleLayer("held prop"));
+            Container.Bind<HeldPropGrip>().AsSingle().WithArguments(HeldPropLayer);
             Container.Bind<HeldPropPlacement>().AsSingle();
             Container.Bind(typeof(IHeldItem), typeof(PropStateView)).To<PropStateView>().AsSingle();
             Container.Bind<HeldItemRegistration>().AsSingle().WithArguments(_parts.Prop).NonLazy();
             Container.Bind<HeldWeaponBody>().AsSingle().NonLazy();
             Container.Decorate<IStateView<RigidState>>().With<UnheldStateView<RigidState>>();
         }
+
+        private int HeldPropLayer => _parts.Held.Layer.SingleLayer("held prop");
 
         private void BindServer()
         {
@@ -185,6 +187,10 @@ namespace Bw.Injection.Props
             Container.BindInterfacesTo<WeaponInputSampler>().AsSingle().WithArguments(_parts.Prop);
             Container.BindInterfacesTo<FloorWeapon>().AsSingle().WithArguments(_parts.Shape);
             Container.Bind<FloorWeaponRegistration>().AsSingle().NonLazy();
+            Container.Bind<GripEcho>()
+                .FromMethod(context => context.Container.Instantiate<GripEcho>(new object[] { context.Container.Instantiate<HeldPropGrip>(new object[] { HeldPropLayer }) }))
+                .AsSingle()
+                .NonLazy();
             BindClientVisuals();
         }
 

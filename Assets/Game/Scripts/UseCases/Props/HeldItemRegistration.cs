@@ -27,7 +27,7 @@ namespace Bw.UseCases.Props
         private void Take(Lifetime heldLifetime, IHeldItem held)
         {
             var hands = _item.HolderService<IHands>();
-            _grip.Attach(heldLifetime, hands.Body);
+            _grip.Enter(heldLifetime);
             hands.Take(heldLifetime, held);
         }
     }

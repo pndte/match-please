@@ -11,44 +11,45 @@ namespace Bw.UseCases.Props
     {
         private readonly Vector2 _size;
         private readonly GameObject _owner;
+        private readonly PhysicsWorld _world;
         private readonly PhysicsShapeDefinition _definition;
 
-        private PhysicsShape _shape;
+        private PhysicsBody _body;
 
-        public HeldPropGrip(BodyBox shape, int layer)
+        public HeldPropGrip(BodyBox shape, IPhysicsSpace space, int layer)
         {
             _size = shape.WorldSize();
             _owner = shape.gameObject;
+            _world = space.World;
             _definition = Definition(layer);
         }
 
-        public void Attach(Lifetime lifetime, PhysicsBody holder)
+        public void Enter(Lifetime lifetime)
         {
-            if (_shape.isValid)
-                throw new InvalidOperationException("A held prop grips one holder at a time: its grip is already on a holder's body.");
+            if (_body.isValid)
+                throw new InvalidOperationException("A held prop's grip enters the world once at a time: it is already there.");
 
-            var shape = holder.CreateShape(BoxAt(new PhysicsTransform(Vector2.zero)), _definition, _owner);
-            _shape = shape;
+            var definition = PhysicsBodyDefinition.defaultDefinition;
+            definition.type = PhysicsBody.BodyType.Kinematic;
+            var body = _world.CreateBody(definition);
+            body.CreateShape(PolygonGeometry.CreateBox(_size, 0f, new PhysicsTransform(Vector2.zero), false), _definition, _owner);
+            _body = body;
             lifetime.OnTermination(() =>
             {
-                if (shape.isValid)
-                    shape.Destroy();
+                if (body.isValid)
+                    body.Destroy(0);
 
-                _shape = default;
+                _body = default;
             });
         }
 
         public void Place(Vector2 center, float angle)
         {
-            if (!_shape.isValid)
-                throw new InvalidOperationException("A held prop's grip is placed only while it is on a holder's body.");
+            if (!_body.isValid)
+                throw new InvalidOperationException("A held prop's grip is placed only while it is in the world.");
 
-            var holder = _shape.body.transform;
-            _shape.polygonGeometry = BoxAt(new PhysicsTransform(holder.InverseTransformPoint(center), new PhysicsRotate(angle * Mathf.Deg2Rad - holder.rotation.angle)));
+            _body.transform = new PhysicsTransform(center, new PhysicsRotate(angle * Mathf.Deg2Rad));
         }
-
-        private PolygonGeometry BoxAt(PhysicsTransform local) =>
-            PolygonGeometry.CreateBox(_size, 0f, local, false);
 
         private static PhysicsShapeDefinition Definition(int layer)
         {

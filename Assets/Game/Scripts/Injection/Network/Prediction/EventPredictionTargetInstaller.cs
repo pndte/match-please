@@ -35,7 +35,9 @@ namespace Bw.Injection.Network.Prediction
                     Container.Bind<AffectableRegistration<TTarget, AuthoritativeState<TState, TEffect>, TEffect>>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:
-                    Container.BindResultReceiver(_state).WhenInjectedInto<PredictedState<TState, TEffect>>();
+                    Container.BindResultReceiver(_state).WhenInjectedInto<InterpolatedCauses<TState>>();
+                    Container.Bind<INetResultReceiver<CausedState<TState>>>().To<InterpolatedCauses<TState>>().AsSingle()
+                        .WhenInjectedInto<PredictedState<TState, TEffect>>();
                     Container.Bind<PredictedState<TState, TEffect>>().AsSingle().NonLazy();
                     Container.Bind<IPredictionTarget<TEffect>>().To<PredictedState<TState, TEffect>>().FromResolve()
                         .WhenInjectedInto<PredictionTargetRegistration<TTarget, PredictedState<TState, TEffect>, TEffect>>();
