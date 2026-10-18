@@ -17,12 +17,12 @@ MonoBehaviour:
   LinesPerSecond: 12
   LiftStretch: 0.08
   LiftDecay: 0.07
-  LandSquash: 0.17
-  LandDecay: 0.12
-  LandFrequency: 4.2
+  LandSquash: 0.08
+  LandDecay: 0.06
+  LandFrequency: 5.5
   FullImpact: 1.1
-  HairFrequency: 3.2
-  HairDamping: 0.35
+  HairFrequency: 3.6
+  HairDamping: 0.55
   HairFollow: {x: 0.26, y: 0.32}
   HairLimit: 12
   HairSnap: 100
