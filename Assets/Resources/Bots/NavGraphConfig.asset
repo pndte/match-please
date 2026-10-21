@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a57f4ec18a3e5448fa408c5e03638d, type: 3}
+  m_Name: NavGraphConfig
+  m_EditorClassIdentifier: Bw.UseCases.Bots::Bw.UseCases.Bots.Navigation.NavGraphConfig
+  Character: {fileID: 2012787940855291857, guid: 28c1d05763d5c724987f5766ef8d8a60, type: 3}
+  Movement: {fileID: 11400000, guid: 69583fc462e9fe145a5a5101d5d42728, type: 2}
+  Spacing: 1
+  JumpShares:
+  - 0
+  - 0.35
+  - 0.7
+  - 1
+  JumpHolds: 010000000a00000028000000
+  RunDelays: 0000000008000000
+  MaxFlightTicks: 120

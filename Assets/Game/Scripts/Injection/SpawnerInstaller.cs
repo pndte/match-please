@@ -40,7 +40,6 @@ namespace Bw.Injection
         {
             Container.BindInterfacesTo<NetworkClientCollection>().AsSingle().WithArguments(NetworkManager.Singleton).NonLazy();
             Container.Bind<IPlayerCollection>().To<PlayerCollection>().AsSingle();
-            Container.BindInterfacesTo<NetworkPlayerCollection>().AsSingle();
 
             if (_runtimeSettings.CurrentPeerType != PeerType.Server)
                 return;
@@ -49,6 +48,14 @@ namespace Bw.Injection
             RequireWeaponPrefabs(NetworkManager.Singleton.NetworkConfig.Prefabs, _weaponCatalog);
             RequireLoadout();
             RequireSpawnPoints();
+            Container.Bind(typeof(IReadonlyPlayerIds), typeof(IPlayerIds)).To<PlayerIds>().AsSingle()
+                .WriterOnlyInto<IPlayerIds>(typeof(PlayerEntrance));
+            Container.Bind(typeof(IReadonlyPlayerDrivers), typeof(IPlayerDrivers)).To<PlayerDrivers>().AsSingle()
+                .WriterOnlyInto<IPlayerDrivers>(typeof(PlayerEntrance));
+            Container.Bind(typeof(IReadonlyPlayerCharacters), typeof(IPlayerCharacters)).To<PlayerCharacters>().AsSingle()
+                .WriterOnlyInto<IPlayerCharacters>(typeof(PlayerEntrance));
+            Container.Bind<IPlayerEntrance>().To<PlayerEntrance>().AsSingle();
+            Container.Bind<ClientPlayerAdmission>().AsSingle().NonLazy();
             Container.Bind(typeof(IArmory), typeof(IReadonlyWeaponDescriptionRegistry)).To<Armory>().AsSingle();
             Container.Bind<StartingLoadout>().AsSingle().WithArguments(_fists, _weapons);
             Container.Bind<SpawnSpots>().AsSingle().WithArguments(_spawnPoints, _spawnRandomOffset, _spawnBlockers);

@@ -19,19 +19,13 @@ namespace Bw.UseCases.Match.Network.Requests
 
     public readonly struct MatchEntry
     {
-        public readonly ulong ClientId;
-        public readonly string Nickname;
+        public readonly PlayerTag Player;
         public readonly int CharacterKey;
         public readonly Score Score;
 
-        public MatchEntry(
-            ulong clientId,
-            string nickname,
-            int characterKey,
-            Score score)
+        public MatchEntry(PlayerTag player, int characterKey, Score score)
         {
-            ClientId = clientId;
-            Nickname = nickname;
+            Player = player;
             CharacterKey = characterKey;
             Score = score;
         }

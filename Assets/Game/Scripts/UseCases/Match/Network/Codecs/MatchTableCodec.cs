@@ -31,14 +31,12 @@ namespace Bw.UseCases.Match.Network.Codecs
                 for (var index = 0; index < count; index++)
                 {
                     var entry = Value.Entries[index];
-                    var clientId = entry.ClientId;
-                    var nickname = entry.Nickname;
+                    var player = entry.Player;
                     var characterKey = entry.CharacterKey;
                     var kills = entry.Score.Kills;
                     var deaths = entry.Score.Deaths;
                     var damage = entry.Score.Damage;
-                    serializer.SerializePacked(ref clientId);
-                    serializer.SerializeValue(ref nickname);
+                    serializer.SerializeTag(ref player);
                     serializer.SerializePacked(ref characterKey);
                     serializer.SerializePacked(ref kills);
                     serializer.SerializePacked(ref deaths);
@@ -54,19 +52,17 @@ namespace Bw.UseCases.Match.Network.Codecs
             var entries = count == 0 ? Array.Empty<MatchEntry>() : new MatchEntry[count];
             for (var index = 0; index < count; index++)
             {
-                var clientId = 0UL;
-                var nickname = string.Empty;
+                var player = default(PlayerTag);
                 var characterKey = 0;
                 var kills = 0;
                 var deaths = 0;
                 var damage = 0;
-                serializer.SerializePacked(ref clientId);
-                serializer.SerializeValue(ref nickname);
+                serializer.SerializeTag(ref player);
                 serializer.SerializePacked(ref characterKey);
                 serializer.SerializePacked(ref kills);
                 serializer.SerializePacked(ref deaths);
                 serializer.SerializePacked(ref damage);
-                entries[index] = new MatchEntry(clientId, nickname, characterKey, new Score(kills, deaths, damage));
+                entries[index] = new MatchEntry(player, characterKey, new Score(kills, deaths, damage));
             }
 
             Value = new MatchTable(new MatchPeriod((MatchPhase)phase, endTick), entries);

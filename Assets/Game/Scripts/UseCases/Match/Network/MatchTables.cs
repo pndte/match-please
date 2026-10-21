@@ -1,5 +1,6 @@
-using System;
 using Bw.Entities.Network;
+using Bw.Entities.Players;
+using Bw.UseCases.Match.Network.Extensions;
 using Bw.UseCases.Match.Network.Requests;
 
 namespace Bw.UseCases.Match.Network
@@ -8,13 +9,19 @@ namespace Bw.UseCases.Match.Network
     {
         private readonly IReadonlyMatch _match;
         private readonly IReadonlyScoreboard _scoreboard;
-        private readonly IClientPlayerCollection _clientPlayers;
+        private readonly IReadonlyPlayerIds _ids;
+        private readonly IReadonlyPlayerCharacters _characters;
 
-        public MatchTables(IReadonlyMatch match, IReadonlyScoreboard scoreboard, IClientPlayerCollection clientPlayers)
+        public MatchTables(
+            IReadonlyMatch match,
+            IReadonlyScoreboard scoreboard,
+            IReadonlyPlayerIds ids,
+            IReadonlyPlayerCharacters characters)
         {
             _match = match;
             _scoreboard = scoreboard;
-            _clientPlayers = clientPlayers;
+            _ids = ids;
+            _characters = characters;
         }
 
         public MatchTable Create()
@@ -22,12 +29,7 @@ namespace Bw.UseCases.Match.Network
             var entries = new MatchEntry[_scoreboard.Scores.Count];
             var index = 0;
             foreach (var (player, score) in _scoreboard.Scores)
-            {
-                if (!_clientPlayers.ByClient.TryGetLeft(player, out var client)) //TODO: боты — у игрока без клиента нет id для строки «ты»
-                    throw new InvalidOperationException("The match table lists only network players, and this player has no client.");
-
-                entries[index++] = new MatchEntry(client.Id, player.Nickname, client.Request.CharacterKey, score);
-            }
+                entries[index++] = new MatchEntry(_ids.TagOf(player), _characters.KeyOf(player), score);
 
             return new MatchTable(_match.Period.Value, entries);
         }

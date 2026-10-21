@@ -2,7 +2,6 @@ using System;
 using Bw.CoreAdapters.Characters;
 using Bw.Entities;
 using Bw.Entities.Extensions;
-using Bw.Entities.Network;
 using Bw.Entities.Physics;
 using Bw.Entities.Players;
 using Bw.UseCases.Character;
@@ -27,7 +26,7 @@ namespace Bw.UseCases.Spawning.Network
         private readonly Data _data;
         private readonly ICharacterRegistry _characterRegistry;
         private readonly IGameObjectByCharacterCollection _gameObjectByCharacterCollection;
-        private readonly IClientPlayerCollection _clientPlayerCollection;
+        private readonly IReadonlyPlayerCharacters _characters;
         private readonly StartingLoadout _loadout;
         private readonly DiContainer _container;
         private readonly SpawnSpots _spots;
@@ -38,7 +37,7 @@ namespace Bw.UseCases.Spawning.Network
             IPlayerCollection players,
             ICharacterRegistry characterRegistry,
             IGameObjectByCharacterCollection gameObjectByCharacterCollection,
-            IClientPlayerCollection clientPlayerCollection,
+            IReadonlyPlayerCharacters characters,
             StartingLoadout loadout,
             DiContainer container,
             SpawnSpots spots,
@@ -46,7 +45,7 @@ namespace Bw.UseCases.Spawning.Network
         {
             _characterRegistry = characterRegistry;
             _gameObjectByCharacterCollection = gameObjectByCharacterCollection;
-            _clientPlayerCollection = clientPlayerCollection;
+            _characters = characters;
             _loadout = loadout;
             _container = container;
             _spots = spots;
@@ -58,21 +57,22 @@ namespace Bw.UseCases.Spawning.Network
 
         public IReadonlyMortal SpawnCharacterFor(Lifetime lifetime, IPlayer player)
         {
-            if (!_clientPlayerCollection.ByClient.TryGetLeft(player, out var client)) //TODO: боты — спавнить персонажа и без клиента
-                throw new InvalidOperationException(
-                    "The player has no client: the network spawner spawns characters only for network players.");
-
-            var characterPrefab = _data.Characters.PrefabOf(client.Request.CharacterKey);
+            var characterPrefab = _data.Characters.PrefabOf(_characters.KeyOf(player));
             var spawnPosition = _spots.SpotFor(RequireComponent<BodyBox>(characterPrefab.gameObject), _nextSpawnPointIndex++);
             var spawnRotation = Quaternion.identity;
             var characterObject = NetworkPrefabInstantiationHelper.Instantiate(
                 _container, characterPrefab, spawnPosition, spawnRotation);
 
-            characterObject.SpawnAsPlayerObject(client.Id, destroyWithScene: true);
+            characterObject.Spawn(destroyWithScene: true);
 
             var characterHolder = RequireComponent<ReadonlyMortalHolder>(characterObject.gameObject);
             var characterLifetime = characterHolder.gameObject.Lifetime();
             var character = characterHolder.Value;
+            lifetime.Intersect(characterLifetime).OnTermination(() =>
+            {
+                if (characterObject.IsSpawned)
+                    characterObject.Despawn();
+            });
 
             _gameObjectByCharacterCollection.AddLifetimed(
                 characterLifetime, character, characterObject.gameObject);
@@ -86,7 +86,7 @@ namespace Bw.UseCases.Spawning.Network
 
             _loadout.Arm(character, characterLifetime, characterObject.transform.position, spawnRotation);
 
-            Debug.Log($"[PlayerSpawner] Character '{characterPrefab.name}' spawned for client {client.Id} at {spawnPosition}");
+            Debug.Log($"[PlayerSpawner] Character '{characterPrefab.name}' spawned for player '{player.Nickname}' at {spawnPosition}");
             return character;
         }
 

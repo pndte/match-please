@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d70d508d591ab5f4182ff96390945b10, type: 3}
+  m_Name: BotsConfig
+  m_EditorClassIdentifier: Bw.UseCases.Bots::Bw.UseCases.Bots.BotsConfig
+  Bots:
+  - Nickname: "\u0411\u043E\u0442 \u0413\u043E\u0448\u0430\u043A"
+    Character: {fileID: 11400000, guid: 380149d7526343b58675c1bd9c71c1c7, type: 2}
+    Difficulty: {fileID: 11400000, guid: c1234bfcc6899a14f8b28e803096e4b4, type: 2}
+  SightBlockers:
+    serializedVersion: 2
+    m_Bits: 16384
+  Fists: {fileID: 11400000, guid: c1df4db9df884a340b5571179d76add6, type: 2}
+  PropSearchRange: 12
+  ShootCost: 1
+  DrawCost: 1
+  ApproachCost: 2
+  CloseInCost: 2
+  PunchCost: 1
+  ChargedPunchCost: 2.5
+  FetchPropCost: 2
+  ShieldCost: 1.5
+  ThrowCost: 1
+  RoamCost: 1

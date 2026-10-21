@@ -2,6 +2,7 @@ using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.ObjectMeta.Network
@@ -12,16 +13,22 @@ namespace Bw.UseCases.ObjectMeta.Network
             Lifetime lifetime,
             INetResultSender<bool> me,
             IControllerRegistry controllerRegistry,
-            IClientPlayerCollection clientPlayers)
+            IReadonlyPlayerDrivers drivers,
+            IControlledBy controlledBy,
+            IControllingClients controllingClients)
         {
             controllerRegistry.Users.View(lifetime, (userLifetime, user) =>
-            {
-                var client = clientPlayers.ByClient.Inverse[user]; //TODO: у бота клиента нет — когда появятся боты, игроков без клиента здесь пропускать
-                me.SendTo(client, true);
+                drivers.Of(user).View(userLifetime, (drivenLifetime, driver) =>
+                    driver.Switch(
+                        client =>
+                        {
+                            controllingClients.Add(drivenLifetime, client);
+                            me.SendTo(client, true);
 
-                userLifetime.OnTermination(() =>
-                    me.SendTo(client, false));
-            });
+                            drivenLifetime.OnTermination(() =>
+                                me.SendTo(client, false));
+                        },
+                        () => controlledBy.SetMe(drivenLifetime))));
         }
     }
 }

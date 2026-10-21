@@ -16,12 +16,12 @@ namespace Bw.UseCases.Match.Network.Requests
 
     public readonly struct PlayerTag
     {
-        public readonly ulong ClientId;
+        public readonly int Id;
         public readonly string Nickname;
 
-        public PlayerTag(ulong clientId, string nickname)
+        public PlayerTag(int id, string nickname)
         {
-            ClientId = clientId;
+            Id = id;
             Nickname = nickname;
         }
     }

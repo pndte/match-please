@@ -19,29 +19,29 @@ namespace Bw.Entities.Network.Variables
         private readonly IOwnerRegistry _ownerRegistry;
         private readonly StaleWriters _staleWriters;
         private readonly IClientCollection _clients;
-        private readonly IClientPlayerCollection _clientPlayers;
+        private readonly IReadonlyPlayerDrivers _drivers;
         private readonly NetworkObject _networkObject;
 
         public OwnersOnlyReceiveGuard(
             IOwnerRegistry ownerRegistry,
             StaleWriters staleWriters,
             IClientCollection clients,
-            IClientPlayerCollection clientPlayers,
+            IReadonlyPlayerDrivers drivers,
             NetworkObject networkObject)
         {
             _ownerRegistry = ownerRegistry;
             _staleWriters = staleWriters;
             _clients = clients;
-            _clientPlayers = clientPlayers;
+            _drivers = drivers;
             _networkObject = networkObject;
         }
 
         public bool TryAdmit(ulong senderClientId)
         {
-            if (!_clients.ByIds.TryGetValue(senderClientId, out var client)
-                || !_clientPlayers.ByClient.TryGetValue(client, out var player))
+            if (!_clients.ByIds.TryGetValue(senderClientId, out var client))
                 throw NotOwnedBy(senderClientId);
 
+            var player = _drivers.PlayerOf(client);
             if (IsOwner(player))
                 return true;
 

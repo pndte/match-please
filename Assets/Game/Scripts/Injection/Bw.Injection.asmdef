@@ -7,6 +7,8 @@
         "Bw.Setup",
         "Bw.UseCases",
         "Bw.UseCases.Audio.View",
+        "Bw.UseCases.Bots",
+        "Bw.UseCases.Bots.Network",
         "Bw.UseCases.Camera.View",
         "Bw.UseCases.Character.View",
         "Bw.UseCases.FogOfWar.View",

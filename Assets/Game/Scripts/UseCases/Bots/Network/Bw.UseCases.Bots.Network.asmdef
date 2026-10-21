@@ -1,0 +1,25 @@
+{
+    "name": "Bw.UseCases.Bots.Network",
+    "rootNamespace": "Bw",
+    "references": [
+        "Bw.Entities",
+        "Bw.Entities.Network",
+        "Bw.UseCases.Bots",
+        "Bw.UseCases.Character",
+        "Bw.UseCases.Mortality",
+        "Bw.UseCases.Movement",
+        "Bw.UseCases.Shooting",
+        "Unity.Netcode.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JetBrains.Lifetimes.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

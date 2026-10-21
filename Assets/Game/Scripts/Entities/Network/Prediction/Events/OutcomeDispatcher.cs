@@ -11,8 +11,7 @@ namespace Bw.Entities.Network.Prediction.Events
     {
         private readonly TInitiator _initiator;
         private readonly NetworkObject _networkObject;
-        private readonly IControllerRegistry _controllerRegistry;
-        private readonly IClientPlayerCollection _clientPlayers;
+        private readonly IControllingClients _controllingClients;
         private readonly IAffectables<TTarget, TEffect> _affectables;
         private readonly INetResultSender<OutcomeReport<TEffect>> _report;
         private readonly List<IAffectable<TEffect>> _targets = new();
@@ -23,16 +22,14 @@ namespace Bw.Entities.Network.Prediction.Events
             Lifetime lifetime,
             TInitiator initiator,
             NetworkObject networkObject,
-            IControllerRegistry controllerRegistry,
-            IClientPlayerCollection clientPlayers,
+            IControllingClients controllingClients,
             IAffectables<TTarget, TEffect> affectables,
             IOutcomes<TInitiator, TTarget, TEffect> outcomes,
             INetResultSender<OutcomeReport<TEffect>> report)
         {
             _initiator = initiator;
             _networkObject = networkObject;
-            _controllerRegistry = controllerRegistry;
-            _clientPlayers = clientPlayers;
+            _controllingClients = controllingClients;
             _affectables = affectables;
             _report = report;
 
@@ -48,7 +45,9 @@ namespace Bw.Entities.Network.Prediction.Events
                 throw new InvalidOperationException(
                     $"An initiator acts once per tick: its outcome of tick {outcome.Tick.ToString()} came after tick {_lastTick.ToString()}.");
 
-            var reported = TryGetController(out var controller);
+            if (_controllingClients.Count > 1)
+                throw new InvalidOperationException("An outcome is reported to the one client that controls the initiator, and several clients control it.");
+
             var affected = outcome.Affected.Count == 0
                 ? Array.Empty<AffectedTarget<ulong, TEffect>>()
                 : new AffectedTarget<ulong, TEffect>[outcome.Affected.Count];
@@ -63,8 +62,8 @@ namespace Bw.Entities.Network.Prediction.Events
             for (var index = 0; index < _targets.Count; index++)
                 _targets[index].Affect(cause, outcome.Affected[index].Effect);
 
-            if (reported)
-                _report.SendTo(controller, new OutcomeReport<TEffect>(outcome.Tick, affected));
+            for (var index = 0; index < _controllingClients.Count; index++)
+                _report.SendTo(_controllingClients[index], new OutcomeReport<TEffect>(outcome.Tick, affected));
         }
 
         private AffectedTarget<ulong, TEffect> Resolve(IReadOnlyList<AffectedTarget<TTarget, TEffect>> affected, int index)
@@ -79,19 +78,6 @@ namespace Bw.Entities.Network.Prediction.Events
 
             _targets.Add(affectable);
             return new AffectedTarget<ulong, TEffect>(targetId, affected[index].Effect);
-        }
-
-        private bool TryGetController(out IClient controller)
-        {
-            controller = default;
-            if (_controllerRegistry.Users.Count == 0)
-                return false;
-
-            if (_controllerRegistry.Users.Count > 1)
-                throw new InvalidOperationException("An outcome is reported to the one player who controls the initiator, and several players control it.");
-
-            controller = _clientPlayers.ByClient.Inverse[_controllerRegistry.Users[0]]; //TODO: у бота клиента нет — когда появятся боты, их итоги применять без отчёта
-            return true;
         }
     }
 }

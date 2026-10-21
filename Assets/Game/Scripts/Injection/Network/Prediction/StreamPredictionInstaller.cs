@@ -80,8 +80,9 @@ namespace Bw.Injection.Network.Prediction
 #if UNITY_EDITOR
             Container.Bind<InputGapLog<TInput>>().AsSingle().NonLazy(); //TODO: пропуски ввода считаются только в редакторе, поэтому в отладочных сборках сводок [Input] нет
 #endif
+            Container.Bind<ControllerInputs<TInput>>().AsSingle();
             Container.Bind<ISource<TInput>>()
-                .FromResolveGetter<PredictionInputBuffer<TInput>>(buffer => buffer.Simulated)
+                .FromResolveGetter<ControllerInputs<TInput>>(inputs => inputs.Simulated)
                 .AsSingle();
 
             Container.Bind<PredictionStateBroadcaster<TState>>().AsSingle().NonLazy();

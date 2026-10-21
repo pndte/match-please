@@ -49,6 +49,7 @@ namespace Bw.Injection.Match
             ControlledByServicesInstaller.Install(Container, _runtimeSettings, netSchema);
             var table = netSchema.DeclareProperty(MatchTable.Empty, NetworkDelivery.ReliableFragmentedSequenced, NetworkPermissions.Server);
             var kills = netSchema.DeclareResult<KillNotice>(NetworkDelivery.ReliableSequenced);
+            var localPlayer = netSchema.DeclareResult<int>(NetworkDelivery.Reliable);
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
             switch (_runtimeSettings.CurrentPeerType)
@@ -56,8 +57,10 @@ namespace Bw.Injection.Match
                 case PeerType.Server:
                     BindPublishing(table);
                     BindKillPublishing(kills);
+                    BindLocalPlayerPublishing(localPlayer);
                     break;
                 case PeerType.Client:
+                    BindLocalPlayerReceiving(localPlayer);
                     Container.Bind(typeof(IReadonlyMatchBoard), typeof(IMatchBoard)).To<MatchBoard>().AsSingle()
                         .WriterOnlyInto<IMatchBoard>(typeof(MatchReceiver));
                     Container.Bind<MatchReceiver>().AsSingle().WithArguments(table).NonLazy();
@@ -81,6 +84,19 @@ namespace Bw.Injection.Match
             Container.Bind<KillNotices>().AsSingle();
             Container.BindResultSender(kills).WhenInjectedInto<KillPublisher>();
             Container.Bind<KillPublisher>().AsSingle().NonLazy();
+        }
+
+        private void BindLocalPlayerPublishing(NetResultDeclaration<int> localPlayer)
+        {
+            Container.BindResultSender(localPlayer).WhenInjectedInto<LocalPlayerPublisher>();
+            Container.Bind<LocalPlayerPublisher>().AsSingle().NonLazy();
+        }
+
+        private void BindLocalPlayerReceiving(NetResultDeclaration<int> localPlayer)
+        {
+            Container.Bind<ILocalPlayer>().To<LocalPlayer>().AsSingle();
+            Container.BindResultReceiver(localPlayer).WhenInjectedInto<LocalPlayerReceiver>();
+            Container.Bind<LocalPlayerReceiver>().AsSingle().NonLazy();
         }
 
         private void BindKillReceiving(NetResultDeclaration<KillNotice> kills)

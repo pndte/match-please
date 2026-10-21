@@ -18,14 +18,14 @@ namespace Bw.Entities.Network.Variables
             IOwnership ownership,
             IOwnerRegistry ownerRegistry,
             IClientCollection clients,
-            IClientPlayerCollection clientPlayers,
+            IReadonlyPlayerDrivers drivers,
             NetReceiveConfig receiveConfig)
             : base(lifetime, networkObject, schema, new NetSendGuardFactoryServer(ownership, networkObject))
         {
             _messageSenders = messageSenders;
 
             var staleWriters = new StaleWriters(lifetime, ownerRegistry, receiveConfig.StaleWriterSeconds);
-            var receiveGuards = new NetReceiveGuardFactoryServer(ownerRegistry, staleWriters, clients, clientPlayers, networkObject);
+            var receiveGuards = new NetReceiveGuardFactoryServer(ownerRegistry, staleWriters, clients, drivers, networkObject);
             var declarations = schema.Declarations;
             for (var index = 0; index < declarations.Count; index++)
             {

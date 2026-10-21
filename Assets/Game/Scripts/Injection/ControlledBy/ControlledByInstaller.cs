@@ -27,6 +27,7 @@ namespace Bw.Injection.ControlledBy
             {
                 Container.Bind<IControlledBy>().To<UseCases.ControlledBy>().AsSingle();
                 Container.Bind<IControllerRegistry>().To<UseCases.ControllerRegistry>().AsSingle();
+                Container.Bind<IControllingClients>().To<ControllingClients>().AsSingle();
             }
         }
     }

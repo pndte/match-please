@@ -1,0 +1,23 @@
+{
+    "name": "Bw.UseCases.Bots",
+    "rootNamespace": "Bw",
+    "references": [
+        "Bw.Entities",
+        "Bw.UseCases.Character",
+        "Bw.UseCases.Level",
+        "Bw.UseCases.Mortality",
+        "Bw.UseCases.Movement",
+        "Bw.UseCases.Shooting"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JetBrains.Lifetimes.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

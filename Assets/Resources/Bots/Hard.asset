@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 194d88aa0e0c93147b90c447bd8122bf, type: 3}
+  m_Name: Hard
+  m_EditorClassIdentifier: Bw.UseCases.Bots::Bw.UseCases.Bots.BotDifficultyConfig
+  Brain: 1
+  Moving: 1
+  Hostile: 1
+  SightRange: 26
+  ReactionTime: 0.3
+  MemoryTime: 4
+  AimError: 2.5
+  AimWander: 0.9
+  BurstTime: 0.7
+  PauseTime: 0.35
+  Brawling: 1
+  ChargingPunches: 1
+  CloseRange: 3.5
+  ChargeTime: 1.2
+  Shielding: 1
+  HurtShare: 0.6

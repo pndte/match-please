@@ -7,10 +7,12 @@ using Bw.Entities.Network.Replication;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Physics;
 using Bw.Entities.Simulation;
+using Bw.Injection.Level;
 using Bw.Injection.Match;
 using Bw.UseCases.Character;
 using Bw.UseCases.Level;
 using Bw.UseCases.Match;
+using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.Network.Prediction;
 using Bw.UseCases.Movement.Physics;
 using Bw.UseCases.Shooting.Weapon;
@@ -62,6 +64,8 @@ namespace Bw.Injection
             Container.BindInterfacesTo<RewindableCollection>().AsSingle();
             Container.BindInterfacesTo<LagCompensator>().AsSingle();
             Container.BindInterfacesTo<RaycastShotResolver>().AsSingle().NonLazy();
+            Container.Bind<IControllerSamplers<MovementInput>>().To<ControllerSamplers<MovementInput>>().AsSingle();
+            Container.Bind<IControllerSamplers<WeaponInput>>().To<ControllerSamplers<WeaponInput>>().AsSingle();
             MatchSessionInstaller.Install(Container, _match);
         }
 
@@ -90,7 +94,7 @@ namespace Bw.Injection
                     context.Container.Resolve<ISweptBodyCollection>()))
                 .AsSingle();
             Container.Bind<LevelGeometry>()
-                .FromMethod(context => LevelGeometry.Create(gameObject.Lifetime(), context.Container.Resolve<IPhysicsSpace>(), LevelBoxes()))
+                .FromMethod(context => LevelGeometry.Create(gameObject.Lifetime(), context.Container.Resolve<IPhysicsSpace>(), LevelBoxes.In(gameObject.scene)))
                 .AsSingle()
                 .NonLazy();
         }
@@ -101,11 +105,5 @@ namespace Bw.Injection
                 if (collider.enabled && collider.gameObject.scene == gameObject.scene)
                     throw new InvalidOperationException($"'{collider.name}' has an enabled {collider.GetType().Name}, which collides with nothing: classic 2D physics is off, the level is made of BodyBoxes.");
         }
-
-        private BodyBox[] LevelBoxes() =>
-            Array.FindAll(FindObjectsByType<BodyBox>(FindObjectsInactive.Exclude, FindObjectsSortMode.None), IsLevelBox);
-
-        private bool IsLevelBox(BodyBox box) =>
-            box.gameObject.scene == gameObject.scene && box.GetComponentInParent<GameObjectContext>(true) == null;
     }
 }
