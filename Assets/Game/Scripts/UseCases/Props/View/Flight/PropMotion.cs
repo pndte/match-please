@@ -1,6 +1,5 @@
-using Bw.Entities.Extensions;
 using Bw.Entities.Physics;
-using Bw.UseCases.Shooting.View.Abstractions;
+using Bw.UseCases.Combat.View.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using R3;
@@ -49,7 +48,7 @@ namespace Bw.UseCases.Props.View.Flight
         {
             var center = (Vector2)_prop.TransformPoint(_shape.Offset);
             var held = _carry.Held.Value;
-            var holder = held ? (Vector2)_prop.Holder().position : center;
+            var holder = held ? _carry.Holder.Position : center;
             _sinceImpact += deltaTime;
             if (TryGetMotion(center, holder, held, deltaTime, out var velocity, out var swing))
             {

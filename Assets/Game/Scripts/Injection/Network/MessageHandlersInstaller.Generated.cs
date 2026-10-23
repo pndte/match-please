@@ -14,19 +14,20 @@ namespace Bw.Injection.Network
             RegisterCodec<System.Int32, Bw.Entities.Network.Codecs.IntCodec>(receivers, senders);
             RegisterCodec<System.String, Bw.Entities.Network.Codecs.StringCodec>(receivers, senders);
             RegisterCodec<JetBrains.Core.Unit, Bw.Entities.Network.Codecs.UnitCodec>(receivers, senders);
+            RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedInput<Bw.UseCases.Character.Network.Requests.CharacterControls>, Bw.UseCases.Character.Network.Codecs.TickedCharacterControlsCodec>(receivers, senders);
+            RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Combat.Hands.Network.Requests.HandsSlots>, Bw.UseCases.Combat.Hands.Network.Codecs.TickedHandsSlotsCodec>(receivers, senders);
+            RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Combat.Melee.MeleeState>, Bw.UseCases.Combat.Melee.Network.Codecs.TickedMeleeStateCodec>(receivers, senders);
+            RegisterCodec<Bw.UseCases.Combat.Weapon.Network.Requests.CarriedWeapons, Bw.UseCases.Combat.Weapon.Network.Codecs.CarriedWeaponsCodec>(receivers, senders);
+            RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Combat.Weapon.GunState>, Bw.UseCases.Combat.Weapon.Network.Codecs.TickedGunStateCodec>(receivers, senders);
+            RegisterCodec<Bw.UseCases.Combat.Weapon.Network.Requests.WeaponPickup, Bw.UseCases.Combat.Weapon.Network.Codecs.WeaponPickupCodec>(receivers, senders);
             RegisterCodec<Bw.UseCases.Match.Network.Requests.KillNotice, Bw.UseCases.Match.Network.Codecs.KillNoticeCodec>(receivers, senders);
             RegisterCodec<Bw.UseCases.Match.Network.Requests.MatchTable, Bw.UseCases.Match.Network.Codecs.MatchTableCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Events.Requests.CausedState<Bw.UseCases.Mortality.Vitals>, Bw.UseCases.Mortality.Network.Codecs.CausedVitalsCodec>(receivers, senders);
+            RegisterCodec<Bw.UseCases.Mortality.Guarding.GuardState, Bw.UseCases.Mortality.Network.Codecs.GuardStateCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Events.Requests.OutcomeReport<Bw.UseCases.Mortality.Impacts>, Bw.UseCases.Mortality.Network.Codecs.ImpactsOutcomeReportCodec>(receivers, senders);
-            RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedInput<Bw.UseCases.Movement.MovementInput>, Bw.UseCases.Movement.Network.Codecs.TickedMovementInputCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Movement.MovementState>, Bw.UseCases.Movement.Network.Codecs.TickedMovementStateCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Movement.RigidState>, Bw.UseCases.Movement.Network.Codecs.TickedRigidStateCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Props.PropState>, Bw.UseCases.Props.Network.Codecs.TickedPropStateCodec>(receivers, senders);
-            RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Shooting.Melee.MeleeState>, Bw.UseCases.Shooting.Melee.Network.Codecs.TickedMeleeStateCodec>(receivers, senders);
-            RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Shooting.Weapon.GunState>, Bw.UseCases.Shooting.Weapon.Network.Codecs.TickedGunStateCodec>(receivers, senders);
-            RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedInput<Bw.UseCases.Shooting.Weapon.WeaponInput>, Bw.UseCases.Shooting.Weapon.Network.Codecs.TickedWeaponInputCodec>(receivers, senders);
-            RegisterCodec<Bw.UseCases.Shooting.Weapon.Network.Requests.WeaponPickup, Bw.UseCases.Shooting.Weapon.Network.Codecs.WeaponPickupCodec>(receivers, senders);
-            RegisterCodec<Bw.UseCases.Shooting.Weapon.Network.Requests.WeaponSwitch, Bw.UseCases.Shooting.Weapon.Network.Codecs.WeaponSwitchCodec>(receivers, senders);
         }
     }
 }

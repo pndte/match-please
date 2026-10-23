@@ -19662,7 +19662,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e156e3e08a734dd40a6dc2a3967298b2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Bw.UseCases.Shooting.View::Bw.UseCases.Shooting.View.Muzzle.MuzzleFlash
+  m_EditorClassIdentifier: Bw.UseCases.Combat.View::Bw.UseCases.Combat.View.Muzzle.MuzzleFlash
   _particles: {fileID: 6474349318980997159}
   _light: {fileID: 2926685480620271468}
   _intensity: 2

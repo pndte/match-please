@@ -1,0 +1,24 @@
+{
+    "name": "Bw.UseCases.Combat.View.Adapters",
+    "rootNamespace": "Bw",
+    "references": [
+        "Bw.Entities",
+        "Bw.UseCases.Mortality",
+        "Bw.UseCases.Combat",
+        "Bw.UseCases.Combat.View",
+        "Bw.UseCases.Audio.View",
+        "Bw.UseCases.Combat.Abstractions",
+        "Bw.UseCases.Character.View"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JetBrains.Lifetimes.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

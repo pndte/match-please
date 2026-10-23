@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5160e78859a7ecb4fbc4f4292ef4b154, type: 3}
   m_Name: WeaponHighlightConfig
-  m_EditorClassIdentifier: Bw.UseCases.Shooting.View::Bw.UseCases.Shooting.View.Highlight.WeaponHighlightConfig
+  m_EditorClassIdentifier: Bw.UseCases.Combat.View::Bw.UseCases.Combat.View.Highlight.WeaponHighlightConfig
   Material: {fileID: 2100000, guid: 11a173f6ad7e43a44875cdedad088965, type: 2}
   FadeInTime: 0.12
   FadeOutTime: 0.2

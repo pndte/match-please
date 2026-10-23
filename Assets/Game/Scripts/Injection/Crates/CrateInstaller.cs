@@ -7,7 +7,6 @@ using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Physics;
 using Bw.Entities.Simulation;
-using Bw.Injection.ControlledBy;
 using Bw.Injection.Mortality;
 using Bw.Injection.Movement;
 using Bw.Injection.Network;
@@ -15,6 +14,7 @@ using Bw.Injection.Network.Prediction;
 using Bw.Injection.Network.Variables;
 using Bw.Injection.Ownership;
 using Bw.Injection.Props;
+using Bw.Injection.Weapon;
 using Bw.UseCases.Crates.View.Audio;
 using Bw.UseCases.Crates.View.Break;
 using Bw.UseCases.Crates.View.Damage;
@@ -28,9 +28,6 @@ using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.Network.Prediction;
 using Bw.UseCases.Movement.Physics.Abstractions;
 using Bw.UseCases.Props;
-using Bw.UseCases.Props.Network.Prediction;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
-using Bw.UseCases.Shooting.Weapon.Network;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -44,7 +41,7 @@ namespace Bw.Injection.Crates
 
         [Header("Network")]
         [SerializeField] private NetworkObject _networkObject;
-        [FormerlySerializedAs("_networkLifetimedBehaviour")] [SerializeField] private NetworkWeaponHold _hold;
+        [FormerlySerializedAs("_hold")] [SerializeField] private NetworkLifetimedBehaviour _networkLifetimedBehaviour;
 
         [Header("Body")]
         [SerializeField] private BodyBox _box;
@@ -69,11 +66,10 @@ namespace Bw.Injection.Crates
         public override void InstallBindings()
         {
             OwnershipInstaller.Install(Container, _runtimeSettings);
-            ControlledByInstaller.Install(Container, _runtimeSettings);
+            WeaponControlInstaller.Install(Container, _runtimeSettings);
 
             Container.Bind<NetworkObject>().FromInstance(_networkObject).AsSingle();
-            Container.Bind<INetworkLifetimedObject>().FromInstance(_hold).AsSingle().NonLazy();
-            BindHold();
+            Container.Bind<INetworkLifetimedObject>().FromInstance(_networkLifetimedBehaviour).AsSingle().NonLazy();
             Container.BindInstance(gameObject.Lifetime()).AsSingle();
 
             Container.Bind<HealthConfig>().FromInstance(_healthConfig).AsSingle();
@@ -81,7 +77,6 @@ namespace Bw.Injection.Crates
 
             var netSchema = new NetEntriesSchemaBuilder();
             OwnershipServicesInstaller.Install(Container, _runtimeSettings, netSchema);
-            ControlledByServicesInstaller.Install(Container, _runtimeSettings, netSchema);
             BindBody(netSchema);
             MortalInstaller.Install(Container, _runtimeSettings, netSchema, _death, gameObject);
             PropInstaller.Install(Container, _runtimeSettings, netSchema, new PropParts(transform, _visual, _box, _held, _throw, _heldSortingOrder));
@@ -93,21 +88,6 @@ namespace Bw.Injection.Crates
             {
                 BindClientVisuals();
                 BindClientSounds();
-            }
-        }
-
-        private void BindHold()
-        {
-            switch (_runtimeSettings.CurrentPeerType)
-            {
-                case PeerType.Server:
-                    Container.Bind<IWeaponHold>().FromInstance(_hold).AsSingle();
-                    break;
-                case PeerType.Client:
-                    Container.Bind(typeof(IWeaponHold), typeof(PredictedHold)).To<PredictedHold>().AsSingle().WithArguments(_hold);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         }
 

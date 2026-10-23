@@ -1,4 +1,4 @@
-using Bw.UseCases.Shooting.Weapon;
+using Bw.UseCases.Combat.Weapon;
 
 namespace Bw.UseCases.Match
 {

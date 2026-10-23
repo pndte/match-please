@@ -1,3 +1,4 @@
+using Bw.UseCases.Combat.Hands;
 using Bw.UseCases.Movement;
 
 namespace Bw.UseCases.Bots.Abstractions
@@ -8,6 +9,7 @@ namespace Bw.UseCases.Bots.Abstractions
         public float Aim { get; }
         public bool TriggerPulled { get; }
         public bool ReloadPressed { get; }
+        public DrawChoice Choice { get; }
     }
 
     public interface IBotGamepad : IReadonlyBotGamepad
@@ -17,5 +19,6 @@ namespace Bw.UseCases.Bots.Abstractions
         public void AimAt(float angle);
         public void PullTrigger();
         public void PressReload();
+        public void Choose(DrawChoice choice);
     }
 }

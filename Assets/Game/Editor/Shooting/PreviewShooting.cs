@@ -1,8 +1,8 @@
 using System;
 using Bw.Entities.Simulation;
-using Bw.UseCases.Shooting.Melee;
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
+using Bw.UseCases.Combat.Melee;
+using Bw.UseCases.Combat.Weapon;
+using Bw.UseCases.Combat.Weapon.Abstractions;
 
 namespace Bw.EditorTools.Shooting
 {

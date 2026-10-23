@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Bw.Entities.Simulation;
-using Bw.UseCases.Shooting.View.Recoil;
-using Bw.UseCases.Shooting.Weapon;
+using Bw.UseCases.Combat.Abstractions.Weapons;
+using Bw.UseCases.Combat.View.Recoil;
 using UnityEngine;
 using Random = System.Random;
 
@@ -76,7 +76,7 @@ namespace Bw.EditorTools.Shooting
                 var time = (tick - 1) * step.Duration;
                 var trigger = simulation.Accepted < requested && simulation.Accepted * interval <= time + step.Duration * 0.5f;
                 var shots = simulation.Shots;
-                simulation.Step(new WeaponInput(deflection, trigger, false, 0f, 0f, default));
+                simulation.Step(new WeaponInput(deflection, trigger, false, false));
 
                 if (simulation.Shots != shots)
                 {

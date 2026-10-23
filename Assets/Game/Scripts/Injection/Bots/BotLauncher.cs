@@ -1,10 +1,9 @@
 using System;
-using Bw.Entities.Players;
+using Bw.UseCases;
 using Bw.UseCases.Bots;
 using Bw.UseCases.Bots.Network;
 using Bw.UseCases.Character;
-using Bw.UseCases.Mortality;
-using Bw.UseCases.Movement.Abstractions;
+using Bw.UseCases.Combat.Abstractions.Characters;
 using JetBrains.Lifetimes;
 using Zenject;
 
@@ -12,33 +11,27 @@ namespace Bw.Injection.Bots
 {
     public sealed class BotLauncher : IBotLauncher
     {
-        private readonly DiContainer _container;
         private readonly IGameObjectByCharacterCollection _characters;
+        private readonly ICharacterRegistry _registry;
 
-        public BotLauncher(DiContainer container, IGameObjectByCharacterCollection characters)
+        public BotLauncher(IGameObjectByCharacterCollection characters, ICharacterRegistry registry)
         {
-            _container = container;
             _characters = characters;
+            _registry = registry;
         }
 
-        public void Launch(
-            Lifetime lifetime,
-            IPlayer player,
-            IReadonlyMortal character,
-            BotDifficultyConfig difficulty)
+        public void Launch(Lifetime lifetime, IReadonlyCharacter character, BotDifficultyConfig difficulty)
         {
-            var life = _container.CreateSubContainer();
+            var life = ContainerOf(character).CreateSubContainer();
             life.BindInstance(lifetime);
-            life.BindInstance(player);
-            life.Bind<IReadonlyMortal>().FromInstance(character);
-            life.Bind<IReadonlyMovement>().FromInstance(MovementOf(character));
+            life.BindInstance(_registry.PlayerByCharacter[character]);
             BotLifeInstaller.Install(life, difficulty);
             life.ResolveRoots();
         }
 
-        private IReadonlyMovement MovementOf(IReadonlyMortal character) =>
-            _characters[character].TryGetComponent<MovementHolder>(out var movement)
-                ? movement.Value
-                : throw new InvalidOperationException($"'{_characters[character].name}' has no MovementHolder: a bot steers its character through the character's movement.");
+        private DiContainer ContainerOf(IReadonlyCharacter character) =>
+            _characters[character].TryGetComponent<GameObjectContext>(out var context)
+                ? context.Container
+                : throw new InvalidOperationException($"'{_characters[character].name}' has no GameObjectContext: a bot lives in its character's container.");
     }
 }

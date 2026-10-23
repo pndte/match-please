@@ -1,5 +1,5 @@
-using Bw.UseCases.Shooting.Weapon.Abstractions;
-using Bw.UseCases.Shooting.Weapon.Network;
+using Bw.Entities.Network.Objects;
+using Bw.UseCases.Combat.Abstractions.Weapons;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,7 +10,7 @@ namespace Bw.Injection.Weapon
         public Transform Weapon { get; }
         public Transform Visual { get; }
         public NetworkObject NetworkObject { get; }
-        public NetworkWeaponHold Hold { get; }
+        public INetworkLifetimedObject NetworkLifetimed { get; }
         public TState Initial { get; }
         public WeaponKind Kind { get; }
 
@@ -18,14 +18,14 @@ namespace Bw.Injection.Weapon
             Transform weapon,
             Transform visual,
             NetworkObject networkObject,
-            NetworkWeaponHold hold,
+            INetworkLifetimedObject networkLifetimed,
             TState initial,
             WeaponKind kind)
         {
             Weapon = weapon;
             Visual = visual;
             NetworkObject = networkObject;
-            Hold = hold;
+            NetworkLifetimed = networkLifetimed;
             Initial = initial;
             Kind = kind;
         }

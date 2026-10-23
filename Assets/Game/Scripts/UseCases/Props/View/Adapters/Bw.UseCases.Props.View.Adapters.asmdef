@@ -4,9 +4,10 @@
     "references": [
         "Bw.Entities",
         "Bw.UseCases.Movement",
-        "Bw.UseCases.Shooting",
+        "Bw.UseCases.Combat",
         "Bw.UseCases.Props",
-        "Bw.UseCases.Props.View"
+        "Bw.UseCases.Props.View",
+        "Bw.UseCases.Combat.Abstractions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

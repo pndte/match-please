@@ -1,12 +1,12 @@
 using System;
-using Bw.Entities.Network;
 using Bw.CoreAdapters.Characters;
 using Bw.CoreAdapters.Weapons;
+using Bw.Entities.Network;
 using Bw.Entities.Players;
 using Bw.UseCases.Clients.Network;
+using Bw.UseCases.Combat.Weapon;
+using Bw.UseCases.Combat.Weapon.Abstractions;
 using Bw.UseCases.Players.Network;
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
 using Bw.UseCases.Spawning;
 using Bw.UseCases.Spawning.Network;
 using Setup;

@@ -1,5 +1,5 @@
 using System;
-using Bw.UseCases.Shooting.Weapon;
+using Bw.UseCases.Combat.Weapon;
 using Unity.Netcode;
 
 namespace Bw.CoreAdapters.Weapons

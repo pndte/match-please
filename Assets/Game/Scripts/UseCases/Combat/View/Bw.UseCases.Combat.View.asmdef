@@ -1,0 +1,30 @@
+{
+    "name": "Bw.UseCases.Combat.View",
+    "rootNamespace": "Bw",
+    "references": [
+        "Bw.Entities",
+        "Bw.UseCases.Camera.View",
+        "Bw.UseCases.Audio.View",
+        "Bw.UseCases.Vfx.View",
+        "UniTask",
+        "R3.Unity",
+        "UnityEngine.UI",
+        "Unity.InputSystem",
+        "Bw.UseCases.Character.View",
+        "Bw.UseCases.Mortality.View",
+        "Unity.RenderPipelines.Universal.2D.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JetBrains.Lifetimes.dll",
+        "R3.dll",
+        "DOTween.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

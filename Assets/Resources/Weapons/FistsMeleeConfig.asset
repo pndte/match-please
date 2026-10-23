@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d613be264312bee438de522385ff9dc9, type: 3}
   m_Name: FistsMeleeConfig
-  m_EditorClassIdentifier: Bw.UseCases.Shooting::Bw.UseCases.Shooting.Melee.MeleeWeaponConfig
+  m_EditorClassIdentifier: Bw.UseCases.Combat::Bw.UseCases.Combat.Melee.MeleeWeaponConfig
   SwingTime: 0.28
   StrikeTime: 0.1
   TurnSpeed: 2160

@@ -11,5 +11,5 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8884e39a73dfe2e438a05e365a3bdeb3, type: 3}
   m_Name: FlashlightConfig
-  m_EditorClassIdentifier: Bw.UseCases.Shooting.View::Bw.UseCases.Shooting.View.FlashlightConfig
+  m_EditorClassIdentifier: Bw.UseCases.Combat.View::Bw.UseCases.Combat.View.FlashlightConfig
   Beam: {fileID: 269543756530320434, guid: 50fcd73c243542e45a6252431fd25d6f, type: 3}

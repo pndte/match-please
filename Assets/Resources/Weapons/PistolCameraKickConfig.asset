@@ -11,5 +11,5 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca46e9c515d84ebb81aace1bf48ea776, type: 3}
   m_Name: PistolCameraKickConfig
-  m_EditorClassIdentifier: Bw.UseCases.Shooting.View::Bw.UseCases.Shooting.View.Recoil.WeaponCameraKickConfig
+  m_EditorClassIdentifier: Bw.UseCases.Combat.View::Bw.UseCases.Combat.View.Recoil.WeaponCameraKickConfig
   Kick: 0.12

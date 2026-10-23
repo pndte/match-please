@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95eb26afc9d6442478db30ee1138054c, type: 3}
+  m_Name: GuardConfig
+  m_EditorClassIdentifier: Bw.UseCases.Mortality::Bw.UseCases.Mortality.Guarding.GuardConfig
+  MaxHealth: 100
+  Armor: 0
+  CoverAngle: 180
+  SpeedShare: 0.5
+  JumpHeightShare: 0.5
+  RegenDelay: 2
+  BrokenRegenDelay: 4
+  RegenInterval: 0.2
+  RegenAmount: 8

@@ -1,5 +1,5 @@
 using System;
-using Bw.UseCases.Shooting.Weapon;
+using Bw.UseCases.Combat.Weapon;
 using UnityEngine;
 
 namespace Bw.UseCases.Match.View.Adapters

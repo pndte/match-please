@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Bw.UseCases.Shooting.View.Recoil;
-using Bw.UseCases.Shooting.Weapon;
+using Bw.UseCases.Combat.View.Recoil;
+using Bw.UseCases.Combat.Weapon;
 using UnityEditor;
 
 namespace Bw.EditorTools.Shooting

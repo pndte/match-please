@@ -11,6 +11,7 @@ using Bw.Injection.Network.Prediction;
 using Bw.Injection.Network.Variables;
 using Bw.Injection.Ownership;
 using Bw.Injection.Weapon;
+using Bw.UseCases.Character.View;
 using Bw.UseCases.Character.View.Abstractions;
 using Bw.UseCases.Character.View.Adapters;
 using Bw.UseCases.Character.View.Audio;
@@ -21,16 +22,23 @@ using Bw.UseCases.Character.View.HealthBar;
 using Bw.UseCases.Character.View.Hit;
 using Bw.UseCases.Character.View.Player;
 using Bw.UseCases.Character.View.Pose;
+using Bw.UseCases.Combat.Abstractions.Characters;
+using Bw.UseCases.Combat.Characters;
+using Bw.UseCases.Combat.Hands;
+using Bw.UseCases.Combat.Melee.Network;
+using Bw.UseCases.Combat.View.Adapters;
+using Bw.UseCases.Combat.Weapon.Network;
 using Bw.UseCases.Mortality;
+using Bw.UseCases.Mortality.Guarding;
 using Bw.UseCases.Mortality.Network;
 using Bw.UseCases.Mortality.Network.Prediction;
 using Bw.UseCases.Mortality.View.Adapters;
 using Bw.UseCases.Mortality.View.Death;
+using Bw.UseCases.Mortality.View.Guarding;
 using Bw.UseCases.Mortality.View.Health;
 using Bw.UseCases.Mortality.View.Hit;
 using Bw.UseCases.Movement;
-using Bw.UseCases.Movement.Abstractions;
-using Bw.UseCases.Movement.Physics.Abstractions;
+using Bw.UseCases.Spawning;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
@@ -51,6 +59,7 @@ namespace Bw.Injection
         [SerializeField] private HitFeedbackConfig _hitFeedbackConfig;
         [SerializeField] private DeathConfig _death;
         [SerializeField] private RegenerationConfig _regeneration;
+        [SerializeField] private GuardConfig _guard;
         [SerializeField] private SpriteRenderer[] _gripHands;
 
         public override void InstallBindings()
@@ -73,25 +82,28 @@ namespace Bw.Injection
             ControlledByServicesInstaller.Install(Container, _runtimeSettings, netSchema);
             CharacterMovementInstaller.Install(Container, _runtimeSettings, netSchema, _movementConfig);
             RequireHoldOval();
-            Container.Bind(typeof(IHands), typeof(IHeldItems)).To<Hands>().AsSingle().WithArguments(_holdOval);
-            Container.Decorate<IMovementBody>().With<HoldingBody>();
             MortalInstaller.Install(Container, _runtimeSettings, netSchema, _death, gameObject);
             PushTargetInstaller<IReadonlyMortal, Impacts>.Install(Container, _runtimeSettings);
+            GuardInstaller.Install(Container, _runtimeSettings, netSchema, _guard);
             WeaponPickupInstaller.Install(Container, _runtimeSettings, netSchema, transform);
-            WeaponSwitchInstaller.Install(Container, _runtimeSettings, netSchema);
+            HandsInstaller.Install(Container, _runtimeSettings, netSchema, _holdOval);
+            CarriedWeaponsInstaller.Install(Container, _runtimeSettings, netSchema);
+            CharacterControlsInstaller.Install(Container, _runtimeSettings, netSchema);
             NicknameInstaller.Install(Container, _runtimeSettings, netSchema);
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
             Container.BindInterfacesTo<KnockbackRules>().AsSingle();
-            Container.InstantiateComponent<MovementRootHolder>(gameObject);
-            Container.InstantiateComponent<MovementHolder>(gameObject);
-            Container.InstantiateComponent<HandsHolder>(gameObject);
+            BindCharacter();
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Server)
+            {
+                Container.Bind<CharacterArming>().AsSingle().NonLazy();
                 Container.Bind<Regeneration>().AsSingle().WithArguments(_regeneration).NonLazy();
+            }
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
+                Container.Bind<CarriedReplicaRegistration>().AsSingle().NonLazy();
                 BindClientVisuals();
                 BindClientSounds();
             }
@@ -104,6 +116,14 @@ namespace Bw.Injection
 
             if (_holdOval.Radii.x <= 0f || _holdOval.Radii.y <= 0f)
                 throw new InvalidOperationException($"The character's hold oval needs positive radii, and they are {_holdOval.Radii}.");
+        }
+
+        private void BindCharacter()
+        {
+            Container.Bind(typeof(ICharacter), typeof(IReadonlyCharacter)).To<Character>().AsSingle();
+            Container.Bind<CarriersRegistration>().AsSingle().NonLazy();
+            Container.Bind<InHandsRegistration>().AsSingle().NonLazy();
+            Container.Bind<MovementRootRegistration>().AsSingle().NonLazy();
         }
 
         private void BindClientSounds()
@@ -123,10 +143,12 @@ namespace Bw.Injection
             Container.Bind<CharacterDeathAnimation>().AsSingle().NonLazy();
             Container.Bind<CharacterDeathBurst>().AsSingle().WithArguments(transform).NonLazy();
             Container.Bind<CharacterHealthBar>().AsSingle().WithArguments(transform).NonLazy();
+            Container.Bind<IGuardViewModel>().To<GuardViewModel>().AsSingle();
+            Container.Bind<CharacterGuardBar>().AsSingle().WithArguments(transform).NonLazy();
             Container.Bind<ICharacterPoses>().To<CharacterPoses>().AsSingle();
-            Container.InstantiateComponent<CharacterPosesHolder>(gameObject);
             Container.Bind<IGripView>().To<GripView>().AsSingle().WithArguments(_gripHands);
-            Container.InstantiateComponent<GripViewHolder>(gameObject);
+            Container.Bind<ICharacterView>().To<CharacterView>().AsSingle().WithArguments(transform);
+            Container.Bind<CharacterViewRegistration>().AsSingle().NonLazy();
         }
     }
 }

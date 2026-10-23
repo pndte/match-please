@@ -1,7 +1,7 @@
 using Bw.Entities.Network.Prediction.Events;
+using Bw.UseCases.Combat.Abstractions.Weapons;
 using Bw.UseCases.Mortality;
 using Bw.UseCases.Mortality.Extensions;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Match.Network
@@ -29,7 +29,7 @@ namespace Bw.UseCases.Match.Network
                 return;
 
             foreach (var affected in outcome.Affected)
-                if (_combatants.TryFindPlayer(affected.Target, out var victim) && victim != attacker)
+                if (_combatants.TryFindVictim(affected.Target, out var victim) && victim != attacker)
                     _keeper.CountHit(attacker, outcome.Initiator, affected.Target, affected.Effect.Damage());
         }
     }

@@ -1,7 +1,7 @@
 using Bw.Entities.Network;
+using Bw.UseCases.Combat.Weapon.Abstractions;
 using Bw.UseCases.Match.Network.Extensions;
 using Bw.UseCases.Match.Network.Requests;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
 
 namespace Bw.UseCases.Match.Network
 {

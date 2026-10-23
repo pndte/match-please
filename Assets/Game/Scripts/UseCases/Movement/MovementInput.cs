@@ -3,20 +3,23 @@ namespace Bw.UseCases.Movement
     public readonly struct MovementInput
     {
         public readonly float Horizontal;
-        public readonly bool Jump;
+        public readonly bool JumpPressed;
         public readonly bool JumpHeld;
         public readonly bool Down;
+        public readonly Slowdown Slowdown;
 
         public MovementInput(
             float horizontal,
-            bool jump,
+            bool jumpPressed,
             bool jumpHeld,
-            bool down)
+            bool down,
+            Slowdown slowdown)
         {
             Horizontal = horizontal;
-            Jump = jump;
+            JumpPressed = jumpPressed;
             JumpHeld = jumpHeld;
             Down = down;
+            Slowdown = slowdown;
         }
     }
 }

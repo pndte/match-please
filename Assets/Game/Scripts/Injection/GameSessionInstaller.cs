@@ -10,16 +10,22 @@ using Bw.Entities.Simulation;
 using Bw.Injection.Level;
 using Bw.Injection.Match;
 using Bw.UseCases.Character;
+using Bw.UseCases.Character.Network.Requests;
+using Bw.UseCases.Combat.Abstractions.Hands;
+using Bw.UseCases.Combat.Abstractions.Inventory;
+using Bw.UseCases.Combat.Hands;
+using Bw.UseCases.Combat.Hands.Abstractions;
+using Bw.UseCases.Combat.Melee.Network;
+using Bw.UseCases.Combat.View.Adapters;
+using Bw.UseCases.Combat.Weapon;
+using Bw.UseCases.Combat.Weapon.Abstractions;
+using Bw.UseCases.Combat.Weapon.Network;
+using Bw.UseCases.Combat.Weapon.Pickup;
+using Bw.UseCases.Combat.Weapon.Pickup.Abstractions;
 using Bw.UseCases.Level;
 using Bw.UseCases.Match;
-using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.Network.Prediction;
 using Bw.UseCases.Movement.Physics;
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
-using Bw.UseCases.Shooting.Weapon.Network;
-using Bw.UseCases.Shooting.Weapon.Pickup;
-using Bw.UseCases.Shooting.Weapon.Pickup.Abstractions;
 using UnityEngine;
 using Zenject;
 
@@ -58,14 +64,12 @@ namespace Bw.Injection
             Container.BindInterfacesTo<MovingPlatformCollection>().AsSingle();
             Container.BindInterfacesTo<ShovableCollection>().AsSingle();
             Container.BindInterfacesTo<ScheduledCollection>().AsSingle();
-            Container.Bind(typeof(IReadonlyWeaponKindRegistry), typeof(IWeaponKindRegistry)).To<WeaponKindRegistry>().AsSingle()
-                .WriterOnlyInto<IWeaponKindRegistry>(typeof(WeaponKindRegistration));
-            Container.BindInterfacesTo<WeaponInventories>().AsSingle();
+            BindWeapons();
+            Container.Bind<IWeaponControllingClients>().To<WeaponControllingClients>().AsSingle();
             Container.BindInterfacesTo<RewindableCollection>().AsSingle();
             Container.BindInterfacesTo<LagCompensator>().AsSingle();
             Container.BindInterfacesTo<RaycastShotResolver>().AsSingle().NonLazy();
-            Container.Bind<IControllerSamplers<MovementInput>>().To<ControllerSamplers<MovementInput>>().AsSingle();
-            Container.Bind<IControllerSamplers<WeaponInput>>().To<ControllerSamplers<WeaponInput>>().AsSingle();
+            Container.Bind<IControllerSamplers<CharacterControls>>().To<ControllerSamplers<CharacterControls>>().AsSingle();
             MatchSessionInstaller.Install(Container, _match);
         }
 
@@ -78,8 +82,30 @@ namespace Bw.Injection
             Container.BindInterfacesTo<ShovableCollection>().AsSingle();
             Container.BindInterfacesTo<ScheduledCollection>().AsSingle();
             Container.BindInterfacesTo<PredictedBodyCollection>().AsSingle();
+            BindWeapons();
+            Container.Bind<IAimDeflections>().To<AimDeflections>().AsSingle();
+            Container.Bind<ICarriedReplicas>().To<CarriedReplicas>().AsSingle();
             Container.Bind(typeof(IReadonlyFloorWeapons), typeof(IFloorWeapons)).To<FloorWeapons>().AsSingle()
                 .WriterOnlyInto<IFloorWeapons>(typeof(FloorWeaponRegistration));
+            BindClientVisuals();
+        }
+
+        private void BindClientVisuals()
+        {
+            Container.Bind<ICharacterViews>().To<CharacterViews>().AsSingle();
+        }
+
+        private void BindWeapons()
+        {
+            Container.Bind(typeof(IReadonlyWeaponKindRegistry), typeof(IWeaponKindRegistry)).To<WeaponKindRegistry>().AsSingle()
+                .WriterOnlyInto<IWeaponKindRegistry>(typeof(WeaponKindRegistration));
+            Container.Bind<IWeaponCarriers>().To<WeaponCarriers>().AsSingle();
+            Container.Bind<INetworkWeapons>().To<NetworkWeapons>().AsSingle();
+            Container.Bind<ICharacterTriggers>().To<CharacterTriggers>().AsSingle();
+            Container.Bind<IWeaponsInHands>().To<WeaponsInHands>().AsSingle();
+            Container.Bind<IMovementRoots>().To<MovementRoots>().AsSingle();
+            Container.Bind<IHeldBoxes>().To<HeldBoxes>().AsSingle();
+            Container.Bind<IWeaponControlledBy>().To<WeaponControlledBy>().AsSingle();
         }
 
         private void BindPhysics()

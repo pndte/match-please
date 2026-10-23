@@ -98,7 +98,7 @@ namespace Bw.UseCases.Movement.Network.Prediction
 
             _start = start.Tick;
             _simulated = start.Tick;
-            _input = new MovementInput(0f, false, IsHoldingJump(start), false);
+            _input = new MovementInput(0f, false, IsHoldingJump(start), false, Slowdown.None);
             _free = start.State;
             _pushed = start.State;
             _offsets[0] = Vector2.zero;
@@ -128,8 +128,8 @@ namespace Bw.UseCases.Movement.Network.Prediction
             if (!_replicated.TryGetAt(start.Tick - 1, out var before) || before.Tick != start.Tick - 1 || !before.State.Jump.Rising)
                 return true;
 
-            var held = _motor.Step(before.State, new MovementInput(0f, false, true, false));
-            var released = _motor.Step(before.State, new MovementInput(0f, false, false, false));
+            var held = _motor.Step(before.State, new MovementInput(0f, false, true, false, Slowdown.None));
+            var released = _motor.Step(before.State, new MovementInput(0f, false, false, false, Slowdown.None));
             var observed = start.State.Body.Velocity.y;
             return Mathf.Abs(held.Body.Velocity.y - observed) <= Mathf.Abs(released.Body.Velocity.y - observed);
         }

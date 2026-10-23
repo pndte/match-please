@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc0dc2c86f7e3034ca3c01487aeb5200, type: 3}
   m_Name: WeaponPickupConfig
-  m_EditorClassIdentifier: Bw.UseCases.Shooting::Bw.UseCases.Shooting.Weapon.Pickup.WeaponPickupConfig
+  m_EditorClassIdentifier: Bw.UseCases.Combat::Bw.UseCases.Combat.Weapon.Pickup.WeaponPickupConfig
   Reach: 2.5
   HoverRadius: 0.35
   WeaponMask:

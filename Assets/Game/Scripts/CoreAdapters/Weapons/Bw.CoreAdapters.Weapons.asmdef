@@ -3,8 +3,9 @@
     "rootNamespace": "Bw",
     "references": [
         "Bw.Entities",
-        "Bw.UseCases.Shooting",
-        "Unity.Netcode.Runtime"
+        "Bw.UseCases.Combat",
+        "Unity.Netcode.Runtime",
+        "Bw.UseCases.Combat.Abstractions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,5 +1,5 @@
 using System;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
+using Bw.UseCases.Combat.Weapon.Abstractions;
 
 namespace Bw.UseCases.Props
 {

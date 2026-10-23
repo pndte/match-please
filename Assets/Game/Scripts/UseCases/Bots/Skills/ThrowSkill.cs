@@ -1,6 +1,6 @@
 using Bw.UseCases.Bots.Abstractions;
 using Bw.UseCases.Bots.Extensions;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
+using Bw.UseCases.Combat.Abstractions.Weapons;
 using UnityEngine;
 
 namespace Bw.UseCases.Bots.Skills

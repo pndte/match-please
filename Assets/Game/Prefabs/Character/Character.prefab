@@ -381,6 +381,7 @@ MonoBehaviour:
   _hitFeedbackConfig: {fileID: 11400000, guid: 4359f2675494472b93a9f1010f583111, type: 2}
   _death: {fileID: 11400000, guid: f1c86814d9bc456fa8246411f630c030, type: 2}
   _regeneration: {fileID: 11400000, guid: f18a91c7779946b7b6e691c4a94852b8, type: 2}
+  _guard: {fileID: 11400000, guid: cd9ddbeb6bc611943a3c6ef21be0e8e7, type: 2}
   _gripHands:
   - {fileID: 5706684975357725852}
   - {fileID: 1075022932401884019}

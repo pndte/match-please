@@ -2,23 +2,22 @@ using System;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
+using Bw.Entities.Network.Prediction.Stream;
 using Bw.Entities.Network.Variables;
-using Bw.Entities.Simulation;
-using Bw.Injection.ControlledBy;
 using Bw.Injection.Network;
 using Bw.Injection.Network.Prediction;
 using Bw.Injection.Ownership;
+using Bw.UseCases.Combat.Abstractions.Weapons;
+using Bw.UseCases.Combat.View;
+using Bw.UseCases.Combat.View.Abstractions;
+using Bw.UseCases.Combat.View.Adapters;
+using Bw.UseCases.Combat.View.Crosshair;
+using Bw.UseCases.Combat.View.Recoil;
+using Bw.UseCases.Combat.Weapon;
+using Bw.UseCases.Combat.Weapon.Abstractions;
+using Bw.UseCases.Combat.Weapon.Network;
+using Bw.UseCases.Combat.Weapon.Network.Prediction;
 using Bw.UseCases.Mortality;
-using Bw.UseCases.Shooting;
-using Bw.UseCases.Shooting.View;
-using Bw.UseCases.Shooting.View.Abstractions;
-using Bw.UseCases.Shooting.View.Adapters;
-using Bw.UseCases.Shooting.View.Crosshair;
-using Bw.UseCases.Shooting.View.Recoil;
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
-using Bw.UseCases.Shooting.Weapon.Network;
-using Bw.UseCases.Shooting.Weapon.Network.Prediction;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
@@ -45,17 +44,15 @@ namespace Bw.Injection.Weapon
         public override void InstallBindings()
         {
             OwnershipInstaller.Install(Container, _runtimeSettings);
-            ControlledByInstaller.Install(Container, _runtimeSettings);
+            WeaponControlInstaller.Install(Container, _runtimeSettings);
 
             Container.Bind<NetworkObject>().FromInstance(_parts.NetworkObject).AsSingle();
-            Container.Bind(typeof(INetworkLifetimedObject), typeof(IWeaponHold)).FromInstance(_parts.Hold).AsSingle();
+            Container.Bind<INetworkLifetimedObject>().FromInstance(_parts.NetworkLifetimed).AsSingle();
             Container.BindInstance(_parts.Weapon.gameObject.Lifetime()).AsSingle();
 
             OwnershipServicesInstaller.Install(Container, _runtimeSettings, _netSchema);
-            ControlledByServicesInstaller.Install(Container, _runtimeSettings, _netSchema);
 
             BindWeapon();
-            BindDrawn();
             EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyMortal, Impacts>.Install(Container, _runtimeSettings, _netSchema);
 
             BindVisualFlip();
@@ -75,45 +72,26 @@ namespace Bw.Injection.Weapon
 
         private void BindWeapon()
         {
-            Container.Bind(typeof(IReadonlyWeaponDraw), typeof(IWeaponDraw)).To<WeaponDraw>().AsSingle()
-                .WriterOnlyInto<IWeaponDraw>(typeof(WeaponHoldServerHandler), typeof(WeaponDrawReceiver));
             Container.BindInterfacesTo<ShootingWeapon<TState>>().AsSingle().WithArguments(_parts.Initial).NonLazy();
+            Container.Bind<WeaponKindRegistration>().AsSingle().WithArguments(_parts.Kind).NonLazy();
+            Container.Bind<WeaponNetworkRegistration>().AsSingle().NonLazy();
+            Container.Bind<WeaponClock>().AsSingle().NonLazy();
+            Container.Bind<WeaponOrbit>().AsSingle();
+            Container.Bind<ShotTimer>().AsSingle();
 
-            StreamPredictionInstaller<WeaponInput, TState>.Install(Container, _runtimeSettings, _netSchema);
-        }
-
-        private void BindDrawn()
-        {
-            var drawn = _netSchema.DeclareResult<bool>(NetworkDelivery.Reliable);
-
-            switch (_runtimeSettings.CurrentPeerType)
-            {
-                case PeerType.Server:
-                    Container.BindResultSender(drawn).WhenInjectedInto(typeof(WeaponDrawBroadcaster), typeof(LateJoinWeaponDrawSender));
-                    Container.Bind<WeaponDrawBroadcaster>().AsSingle().NonLazy();
-                    Container.Bind<LateJoinWeaponDrawSender>().AsSingle().NonLazy();
-                    break;
-                case PeerType.Client:
-                    Container.BindResultReceiver(drawn).WhenInjectedInto<WeaponDrawReceiver>();
-                    Container.Bind<WeaponDrawReceiver>().AsSingle().NonLazy();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            PredictionStateInstaller<WeaponInput, TState>.Install(Container, _runtimeSettings, _netSchema);
         }
 
         private void BindServer()
         {
-            Container.BindInterfacesTo<WeaponInputPolicy>().AsSingle();
-            Container.Bind<IStateView<TState>>().To<WeaponStateView<TState>>().AsSingle().WithArguments(_parts.Weapon);
             Container.Bind<RaycastShooter<TState>>().AsSingle().NonLazy();
-            Container.Bind<WeaponHoldServerHandler>().AsSingle().NonLazy();
-            Container.Bind<WeaponKindRegistration>().AsSingle().WithArguments(_parts.Kind).NonLazy();
+            Container.Bind<CarrierOwnership>().AsSingle().NonLazy();
         }
 
         private void BindClient()
         {
-            Container.BindInterfacesTo<WeaponInputSampler>().AsSingle().WithArguments(_parts.Weapon);
+            Container.Bind<IFedInputs<WeaponInput>>().To<WeaponFeedLog>().AsSingle();
+            Container.Bind<AimDeflectionRegistration>().AsSingle().NonLazy();
             Container.Bind<HitPredictor<TState>>().AsSingle().NonLazy();
             BindClientVisuals();
         }
@@ -122,6 +100,8 @@ namespace Bw.Injection.Weapon
         {
             Container.BindInterfacesTo<WeaponCarryViewModel>().AsSingle();
             Container.Bind(typeof(IShotsViewModel), typeof(SeenShotsViewModel<TState>)).To<SeenShotsViewModel<TState>>().AsSingle();
+            Container.Bind(typeof(IWeaponPoseViewModel), typeof(WeaponPoseViewModel<TState>)).To<WeaponPoseViewModel<TState>>().AsSingle();
+            Container.Bind<WeaponOrbitView>().AsSingle().WithArguments(_parts.Weapon).NonLazy();
             Container.Bind<StowedWeaponView>().AsSingle().WithArguments(_parts.Visual.GetComponentsInChildren<Renderer>(true)).NonLazy();
             Container.Bind<WeaponRecoilView>().AsSingle().WithArguments(_parts.Visual).NonLazy();
             Container.Bind<WeaponCameraKick>().AsSingle().NonLazy();

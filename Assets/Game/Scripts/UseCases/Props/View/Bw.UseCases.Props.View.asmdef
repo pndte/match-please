@@ -3,7 +3,7 @@
     "rootNamespace": "Bw",
     "references": [
         "Bw.Entities",
-        "Bw.UseCases.Shooting.View",
+        "Bw.UseCases.Combat.View",
         "Bw.UseCases.Character.View",
         "Bw.UseCases.Audio.View",
         "Bw.UseCases.Vfx.View",

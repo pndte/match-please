@@ -1,4 +1,5 @@
 using Bw.UseCases.Bots.Abstractions;
+using Bw.UseCases.Combat.Hands;
 using Bw.UseCases.Movement;
 
 namespace Bw.UseCases.Bots
@@ -9,12 +10,14 @@ namespace Bw.UseCases.Bots
         public float Aim { get; private set; }
         public bool TriggerPulled { get; private set; }
         public bool ReloadPressed { get; private set; }
+        public DrawChoice Choice { get; private set; } = DrawChoice.Keep;
 
         public void Release()
         {
             Movement = default;
             TriggerPulled = false;
             ReloadPressed = false;
+            Choice = DrawChoice.Keep;
         }
 
         public void Steer(MovementInput input) =>
@@ -28,5 +31,8 @@ namespace Bw.UseCases.Bots
 
         public void PressReload() =>
             ReloadPressed = true;
+
+        public void Choose(DrawChoice choice) =>
+            Choice = choice;
     }
 }

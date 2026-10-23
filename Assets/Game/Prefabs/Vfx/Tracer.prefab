@@ -288,7 +288,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e72dd0b06b88d164d85629d656f37767, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Bw.UseCases.Shooting.View::Bw.UseCases.Shooting.View.Tracer.BulletTracer
+  m_EditorClassIdentifier: Bw.UseCases.Combat.View::Bw.UseCases.Combat.View.Tracer.BulletTracer
   _core: {fileID: 7523734795659519516}
   _glow: {fileID: 5548515078856171390}
   _head: {fileID: 7250294612069939307}

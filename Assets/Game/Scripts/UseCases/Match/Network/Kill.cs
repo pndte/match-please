@@ -1,5 +1,5 @@
 using Bw.Entities.Players;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
+using Bw.UseCases.Combat.Abstractions.Weapons;
 
 namespace Bw.UseCases.Match.Network
 {

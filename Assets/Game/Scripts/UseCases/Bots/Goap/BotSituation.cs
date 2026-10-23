@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Bw.UseCases.Bots.Senses;
 using Bw.UseCases.Bots.Senses.Extensions;
+using Bw.UseCases.Combat.Abstractions.Weapons;
 using Bw.UseCases.Mortality;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
 using UnityEngine;
 
 namespace Bw.UseCases.Bots.Goap

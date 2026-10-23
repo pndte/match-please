@@ -1,4 +1,4 @@
-using Bw.Entities.Players;
+using Bw.UseCases.Combat.Abstractions.Characters;
 using Bw.UseCases.Mortality;
 using Bw.UseCases.Mortality.Extensions;
 using JetBrains.Collections.Viewable;
@@ -14,12 +14,12 @@ namespace Bw.UseCases.Match.Network
         {
             _keeper = keeper;
 
-            registry.PlayerByCharacter.View(lifetime, (characterLifetime, character, player) => Watch(characterLifetime, character, player));
+            registry.PlayerByCharacter.View(lifetime, (characterLifetime, character, _) => Watch(characterLifetime, character));
         }
 
-        private void Watch(Lifetime characterLifetime, IReadonlyMortal character, IPlayer player)
+        private void Watch(Lifetime characterLifetime, IReadonlyCharacter character)
         {
-            character.State.WhenDead(characterLifetime, _ => _keeper.CountDeath(character, player));
+            character.Mortal.State.WhenDead(characterLifetime, _ => _keeper.CountDeath(character));
             characterLifetime.OnTermination(() => _keeper.Forget(character));
         }
     }

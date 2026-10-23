@@ -11,6 +11,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dda8041350df41d9a4997d8669d81b81, type: 3}
   m_Name: SniperAmmoConfig
-  m_EditorClassIdentifier: Bw.UseCases.Shooting::Bw.UseCases.Shooting.Weapon.AmmoConfig
+  m_EditorClassIdentifier: Bw.UseCases.Combat::Bw.UseCases.Combat.Weapon.AmmoConfig
   Max: 5
   OnSpawnValue: 5

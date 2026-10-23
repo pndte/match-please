@@ -1,8 +1,9 @@
-using Bw.Entities.Extensions;
 using Bw.Entities.Physics;
 using Bw.Entities.Physics.Extensions;
+using Bw.UseCases.Combat.Abstractions.Characters;
+using Bw.UseCases.Combat.Abstractions.Hands;
+using Bw.UseCases.Mortality.Extensions;
 using Bw.UseCases.Movement;
-using Bw.UseCases.Movement.Extensions;
 using Bw.UseCases.Props.Extensions;
 using Unity.Collections;
 using UnityEngine;
@@ -14,7 +15,6 @@ namespace Bw.UseCases.Props.Network
     {
         private readonly PhysicsWorld _world;
         private readonly PhysicsBody _body;
-        private readonly Transform _item;
         private readonly Vector2 _size;
         private readonly Vector2 _offset;
         private readonly PhysicsQuery.QueryFilter _filter;
@@ -30,7 +30,6 @@ namespace Bw.UseCases.Props.Network
         {
             _world = space.World;
             _body = body;
-            _item = shape.transform;
             _size = shape.WorldSize();
             _offset = shape.WorldOffset();
             _filter = new PhysicsQuery.QueryFilter(PhysicsMask.All, bodyConfig.Contacts.AsPhysicsMask());
@@ -38,33 +37,29 @@ namespace Bw.UseCases.Props.Network
             _config = config;
         }
 
-        public RigidState Nearest(HoldOval holder, RigidState held) //TODO: в замкнутом месте (стены с боков, пол и потолок вплотную) свободного места нет ни на одном кольце — предмет отпускается в руках, и физика выталкивает его как получится
+        public RigidState Nearest(IReadonlyCharacter holder, GripPose held) //TODO: в замкнутом месте (стены с боков, пол и потолок вплотную) свободного места нет ни на одном кольце — предмет отпускается в руках, и физика выталкивает его как получится
         {
-            if (IsFree(held, holder.gameObject))
-                return held;
+            var inHands = new RigidState(held.Center - Turned(_offset, held.Angle), held.Angle, Vector2.zero, 0f);
+            if (IsFree(inHands, holder))
+                return inHands;
 
-            var oval = holder.WorldRect();
+            var oval = holder.Hands.Pose.Hold;
             for (var ring = 0; ring < _config.ReleaseRings; ring++)
             {
-                if (ring > 0 && TryGetFree(oval, holder.gameObject, held.Angle, ring, out var straight))
+                if (ring > 0 && TryGetFree(oval, holder, held.Angle, ring, out var straight))
                     return straight;
 
                 for (var turn = _config.ReleaseAngleStep; turn <= 180f; turn += _config.ReleaseAngleStep)
-                    if (TryGetFree(oval, holder.gameObject, held.Angle + turn, ring, out var spot) || TryGetFree(oval, holder.gameObject, held.Angle - turn, ring, out spot))
+                    if (TryGetFree(oval, holder, held.Angle + turn, ring, out var spot) || TryGetFree(oval, holder, held.Angle - turn, ring, out spot))
                         return spot;
             }
 
-            return held;
-        }
-
-        public RigidState NearestToHolder()
-        {
-            return Nearest(_item.HolderComponent<HoldOval>(), new RigidState(_item.position, _item.eulerAngles.z, Vector2.zero, 0f));
+            return inHands;
         }
 
         private bool TryGetFree(
             Rect oval,
-            GameObject holder,
+            IReadonlyCharacter holder,
             float angle,
             int ring,
             out RigidState spot)
@@ -74,7 +69,7 @@ namespace Bw.UseCases.Props.Network
             return IsReachable(oval.center, center) && IsFree(spot, holder);
         }
 
-        private bool IsFree(RigidState pose, GameObject holder)
+        private bool IsFree(RigidState pose, IReadonlyCharacter holder)
         {
             var placed = new PhysicsTransform(pose.Position + Turned(_offset, pose.Angle), new PhysicsRotate(pose.Angle * Mathf.Deg2Rad));
             using var found = _world.OverlapGeometry(PolygonGeometry.CreateBox(_size - Vector2.one * (PhysicsSlop.Linear * 2f), 0f, placed, false), _filter, Allocator.Temp);
@@ -95,8 +90,8 @@ namespace Bw.UseCases.Props.Network
             return true;
         }
 
-        private static bool IsOwnedBy(PhysicsShape shape, GameObject holder) =>
-            shape.userData.objectValue is GameObject owner && owner == holder;
+        private static bool IsOwnedBy(PhysicsShape shape, IReadonlyCharacter holder) =>
+            shape.TryGetMortal(out var mortal) && mortal == holder.Mortal;
 
         private static Vector2 Turned(Vector2 offset, float angle) =>
             Quaternion.Euler(0f, 0f, angle) * offset;

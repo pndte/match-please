@@ -1,5 +1,4 @@
 using System;
-using Bw.UseCases.Mortality;
 
 namespace Bw.UseCases.Props.Network
 {
@@ -11,30 +10,28 @@ namespace Bw.UseCases.Props.Network
         {
         }
 
-        public static PropLaunch Thrown(IReadonlyMortal thrower, float aim) =>
-            new ThrownLaunch(thrower, aim);
+        public static PropLaunch Thrown(float aim) => //TODO: пуллирование or smth, лишние аллокации на пустом месте
+            new ThrownLaunch(aim);
 
-        public abstract void Switch(Action dropped, Action<IReadonlyMortal, float> thrown);
+        public abstract void Switch(Action dropped, Action<float> thrown);
 
         private sealed class DroppedLaunch : PropLaunch
         {
-            public override void Switch(Action dropped, Action<IReadonlyMortal, float> thrown) =>
+            public override void Switch(Action dropped, Action<float> thrown) =>
                 dropped();
         }
 
         private sealed class ThrownLaunch : PropLaunch
         {
-            private readonly IReadonlyMortal _thrower;
             private readonly float _aim;
 
-            public ThrownLaunch(IReadonlyMortal thrower, float aim)
+            public ThrownLaunch(float aim)
             {
-                _thrower = thrower;
                 _aim = aim;
             }
 
-            public override void Switch(Action dropped, Action<IReadonlyMortal, float> thrown) =>
-                thrown(_thrower, _aim);
+            public override void Switch(Action dropped, Action<float> thrown) =>
+                thrown(_aim);
         }
     }
 }

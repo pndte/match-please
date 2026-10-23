@@ -1,25 +1,28 @@
 using System;
 using Bw.Entities.Network;
+using Bw.Entities.Network.Objects;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using Bw.Injection.Network.Variables;
-using Bw.UseCases.Shooting;
-using Bw.UseCases.Shooting.Melee;
-using Bw.UseCases.Shooting.Melee.Network;
-using Bw.UseCases.Shooting.View;
-using Bw.UseCases.Shooting.View.Abstractions;
-using Bw.UseCases.Shooting.View.Adapters;
-using Bw.UseCases.Shooting.View.Adapters.Audio;
-using Bw.UseCases.Shooting.View.Audio;
-using Bw.UseCases.Shooting.View.Crosshair;
-using Bw.UseCases.Shooting.View.Impact;
-using Bw.UseCases.Shooting.View.Recoil;
-using Bw.UseCases.Shooting.View.Rig;
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
-using Bw.UseCases.Shooting.Weapon.Network;
+using Bw.UseCases.Combat;
+using Bw.UseCases.Combat.Abstractions.Weapons;
+using Bw.UseCases.Combat.Melee;
+using Bw.UseCases.Combat.Melee.Network;
+using Bw.UseCases.Combat.View;
+using Bw.UseCases.Combat.View.Abstractions;
+using Bw.UseCases.Combat.View.Adapters;
+using Bw.UseCases.Combat.View.Adapters.Audio;
+using Bw.UseCases.Combat.View.Audio;
+using Bw.UseCases.Combat.View.Crosshair;
+using Bw.UseCases.Combat.View.Impact;
+using Bw.UseCases.Combat.View.Recoil;
+using Bw.UseCases.Combat.View.Rig;
+using Bw.UseCases.Combat.Weapon;
+using Bw.UseCases.Combat.Weapon.Abstractions;
+using Bw.UseCases.Combat.Weapon.Network;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 
 namespace Bw.Injection.Weapon
@@ -44,7 +47,7 @@ namespace Bw.Injection.Weapon
 
         [Header("Network")]
         [SerializeField] private NetworkObject _networkObject;
-        [SerializeField] private NetworkWeaponHold _weaponHold;
+        [FormerlySerializedAs("_weaponHold")] [SerializeField] private NetworkLifetimedBehaviour _networkLifetimedBehaviour;
 
         public override void InstallBindings()
         {
@@ -65,6 +68,7 @@ namespace Bw.Injection.Weapon
                     Container.InstantiateComponent<WeaponHolder>(gameObject);
                     break;
                 case PeerType.Client:
+                    Container.Bind<IReadonlyAimDeflection>().To<SteadyAim>().AsSingle();
                     BindClientVisuals();
                     BindClientSounds();
                     break;
@@ -106,16 +110,16 @@ namespace Bw.Injection.Weapon
                 transform,
                 _visual,
                 _networkObject,
-                _weaponHold,
+                _networkLifetimedBehaviour,
                 default,
                 WeaponKind.Fists);
 
         private void BindMelee()
         {
-            Container.BindInterfacesTo<MeleeSimulator>().AsSingle();
-            Container.BindInterfacesTo<MeleeTracer>().AsSingle().WithArguments(transform);
+            WeaponSimulatorInstaller<MeleeState, MeleeSimulator>.Install(Container);
+            Container.BindInterfacesTo<MeleeTracer>().AsSingle();
             Container.BindInterfacesTo<ChargedShotPower>().AsSingle();
-            Container.Bind<StrongSwingRoot>().AsSingle().WithArguments(transform).NonLazy();
+            Container.Bind<StrongSwingRoot>().AsSingle().NonLazy();
         }
 
         private void BindClientVisuals()
@@ -123,12 +127,13 @@ namespace Bw.Injection.Weapon
             Container.Bind(typeof(IMeleeSwingsViewModel), typeof(MeleeSwingsViewModel)).To<MeleeSwingsViewModel>().AsSingle();
             Container.Bind<IStateView<MeleeState>>()
                 .FromMethod(ctx => new CompositeStateView<MeleeState>(
-                    ctx.Container.Instantiate<WeaponStateView<MeleeState>>(new object[] { transform }),
+                    ctx.Container.Resolve<WeaponPoseViewModel<MeleeState>>(),
                     ctx.Container.Resolve<SeenShotsViewModel<MeleeState>>(),
                     ctx.Container.Resolve<MeleeSwingsViewModel>()))
                 .AsSingle();
             Container.Bind<MeleeRigView>().AsSingle().WithArguments(_rig).NonLazy();
-            Container.Bind<BodyPunchPose>().AsSingle().WithArguments(transform).NonLazy();
+            Container.Bind<FistsGuardPose>().AsSingle().WithArguments(_rig).NonLazy();
+            Container.Bind<BodyPunchPose>().AsSingle().NonLazy();
             Container.Bind<FistsCursor>().AsSingle().NonLazy();
             BindStrikeVisuals();
         }

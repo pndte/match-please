@@ -2,10 +2,10 @@ using System;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
 using Bw.Injection.Network;
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
-using Bw.UseCases.Shooting.Weapon.Network;
-using Bw.UseCases.Shooting.Weapon.Network.Requests;
+using Bw.UseCases.Combat.Weapon;
+using Bw.UseCases.Combat.Weapon.Abstractions;
+using Bw.UseCases.Combat.Weapon.Network;
+using Bw.UseCases.Combat.Weapon.Network.Requests;
 using Unity.Netcode;
 using Zenject;
 

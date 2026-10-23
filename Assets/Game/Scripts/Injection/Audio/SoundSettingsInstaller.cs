@@ -1,11 +1,11 @@
 using System;
 using Bw.UseCases.Audio.View.Playback;
 using Bw.UseCases.Character.View.Audio;
+using Bw.UseCases.Combat.View.Adapters.Audio;
+using Bw.UseCases.Combat.View.Audio;
 using Bw.UseCases.Crates.View.Audio;
 using Bw.UseCases.Movement.View.Audio;
 using Bw.UseCases.Props.View.Audio;
-using Bw.UseCases.Shooting.View.Adapters.Audio;
-using Bw.UseCases.Shooting.View.Audio;
 using UnityEngine;
 using Zenject;
 

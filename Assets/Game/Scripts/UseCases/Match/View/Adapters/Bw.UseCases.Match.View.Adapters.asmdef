@@ -6,9 +6,10 @@
         "Bw.Entities.Network",
         "Bw.UseCases.Match",
         "Bw.UseCases.Match.View",
-        "Bw.UseCases.Shooting",
+        "Bw.UseCases.Combat",
         "Bw.CoreAdapters",
-        "Bw.UseCases.Character"
+        "Bw.UseCases.Character",
+        "Bw.UseCases.Combat.Abstractions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

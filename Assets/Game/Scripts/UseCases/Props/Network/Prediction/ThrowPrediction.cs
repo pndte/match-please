@@ -1,56 +1,48 @@
-using Bw.Entities.Simulation;
+using Bw.UseCases.Combat.Abstractions.Hands;
+using Bw.UseCases.Combat.Abstractions.Hands.Extensions;
+using Bw.UseCases.Combat.Abstractions.Weapons;
+using Bw.UseCases.Combat.Weapon.Network;
 using Bw.UseCases.Movement.Network.Prediction;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Props.Network.Prediction
 {
-    public sealed class ThrowPrediction //TODO: следующее оружие после броска достаёт сервер — до его ответа руки бросившего пусты
+    public sealed class ThrowPrediction
     {
-        private readonly IReadonlySimulation<PropState> _simulation;
-        private readonly PredictedHold _hold;
+        private readonly IWeapon _prop;
+        private readonly IWeaponsInHands _inHands;
+        private readonly ICarriedReplicas _replicas;
         private readonly IPredictedRigidBody _body;
-        private readonly PropStateView _pose;
         private readonly ThrowLaunch _launch;
+        private readonly ThrowConfirmation _confirmation;
 
-        private int _pending = int.MaxValue;
-
-        public ThrowPrediction(
+        public ThrowPrediction( //TODO: чрезвычайное к-во параметров
             Lifetime lifetime,
-            IReadonlySimulation<PropState> simulation,
-            PredictedHold hold,
+            IWeapon prop,
+            IWeaponsInHands inHands,
+            ICarriedReplicas replicas,
             IPredictedRigidBody body,
-            PropStateView pose,
-            ThrowLaunch launch)
+            ThrowLaunch launch,
+            ThrowConfirmation confirmation)
         {
-            _simulation = simulation;
-            _hold = hold;
+            _prop = prop;
+            _inHands = inHands;
+            _replicas = replicas;
             _body = body;
-            _pose = pose;
             _launch = launch;
+            _confirmation = confirmation;
 
-            simulation.Stepped.Advise(lifetime, Throw);
-            simulation.State.Advise(lifetime, Verify);
+            prop.Fired.Advise(lifetime, shot => Throw(shot.Aim));
         }
 
-        private void Throw(PropState state) //TODO: держателя для точки броска берём нарисованным, а вид отстаёт от симуляции на тик: у бегущего бросившего ящик стартует на тик бега позади серверного (0,43 на полном беге) и сдвигается к нему со сглаживанием, когда приходит первый снимок
+        private void Throw(float aim) //TODO: руки для точки броска берём нарисованными, а вид отстаёт от симуляции на тик: у бегущего бросившего ящик стартует на тик бега позади серверного (0,43 на полном беге) и сдвигается к нему со сглаживанием, когда приходит первый снимок
         {
-            if (state.Throws <= _simulation.Previous.Throws || !_hold.HeldLifetime.Value.IsAlive)
-                return;
-
-            _pose.Show(state, state, 1f);
-            var launched = _launch.FromHands(state.Aim);
-            _pending = state.Throws;
-            _hold.Release();
+            var holder = _inHands.HolderOf(_prop);
+            var launched = _launch.Thrown(holder, aim);
+            var replica = _replicas.ByCharacter[holder];
+            _confirmation.Expect(replica);
+            replica.DropAhead(_prop);
             _body.Launch(launched);
-        }
-
-        private void Verify(PropState state)
-        {
-            if (!_hold.IsReleasedEarly || state.Throws >= _pending)
-                return;
-
-            _pending = int.MaxValue;
-            _hold.Restore();
         }
     }
 }

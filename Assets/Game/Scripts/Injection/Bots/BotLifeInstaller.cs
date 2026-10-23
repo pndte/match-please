@@ -9,9 +9,9 @@ using Bw.UseCases.Bots.Navigation;
 using Bw.UseCases.Bots.Network;
 using Bw.UseCases.Bots.Senses;
 using Bw.UseCases.Bots.Skills;
-using Bw.UseCases.Movement;
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
+using Bw.UseCases.Character.Network.Requests;
+using Bw.UseCases.Combat.Abstractions.Weapons;
+using Bw.UseCases.Combat.Hands.Network;
 using Zenject;
 
 namespace Bw.Injection.Bots
@@ -52,10 +52,9 @@ namespace Bw.Injection.Bots
 
         private void BindSamplers()
         {
-            Container.Bind<IInputSampler<MovementInput>>().To<BotMovementSampler>().AsSingle();
-            Container.Bind<IInputSampler<WeaponInput>>().To<BotWeaponSampler>().AsSingle();
-            Container.Bind<BotSamplerRegistration<MovementInput>>().AsSingle().NonLazy();
-            Container.Bind<BotSamplerRegistration<WeaponInput>>().AsSingle().NonLazy();
+            Container.Bind<HandsControlsForm>().AsSingle();
+            Container.Bind<IInputSampler<CharacterControls>>().To<BotCharacterSampler>().AsSingle();
+            Container.Bind<BotSamplerRegistration<CharacterControls>>().AsSingle().NonLazy();
         }
 
         private void BindGoap()

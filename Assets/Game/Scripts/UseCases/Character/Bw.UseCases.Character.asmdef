@@ -3,7 +3,8 @@
     "rootNamespace": "Bw",
     "references": [
         "Bw.Entities",
-        "Bw.UseCases.Mortality"
+        "Bw.UseCases.Mortality",
+        "Bw.UseCases.Combat.Abstractions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

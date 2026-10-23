@@ -1,9 +1,9 @@
 using System;
 using Bw.Entities.Simulation;
+using Bw.UseCases.Combat.Abstractions.Weapons;
+using Bw.UseCases.Combat.Weapon.Abstractions;
+using Bw.UseCases.Combat.Weapon.Extensions;
 using Bw.UseCases.Props.Extensions;
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
-using Bw.UseCases.Shooting.Weapon.Extensions;
 
 namespace Bw.UseCases.Props
 {
@@ -32,14 +32,17 @@ namespace Bw.UseCases.Props
         public PropState Interrupted(PropState state) =>
             new(state.Aim, PropPhase.Holding, 0, state.Throws, true);
 
+        public PropState Rested(PropState state) =>
+            Interrupted(state);
+
         private static PropState FromHolding(PropState state, WeaponInput input, float aim) =>
-            input.Trigger && !state.TriggerHeld
+            input.Pulled && !state.TriggerHeld
                 ? new PropState(aim, PropPhase.WindingUp, 1, state.Throws, true)
-                : new PropState(aim, PropPhase.Holding, 0, state.Throws, input.Trigger);
+                : new PropState(aim, PropPhase.Holding, 0, state.Throws, input.Pulled);
 
         private PropState FromWindingUp(PropState state, WeaponInput input, float aim) =>
             state.PhaseTicks < _config.WindUpTicks(_step)
-                ? new PropState(aim, PropPhase.WindingUp, state.PhaseTicks + 1, state.Throws, input.Trigger)
-                : new PropState(aim, PropPhase.Holding, 0, state.Throws + 1, input.Trigger);
+                ? new PropState(aim, PropPhase.WindingUp, state.PhaseTicks + 1, state.Throws, input.Pulled)
+                : new PropState(aim, PropPhase.Holding, 0, state.Throws + 1, input.Pulled);
     }
 }

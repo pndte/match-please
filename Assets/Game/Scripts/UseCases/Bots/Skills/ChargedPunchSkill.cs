@@ -50,7 +50,7 @@ namespace Bw.UseCases.Bots.Skills
             _gamepad.AimAt(perception.Eye, target.Position, 0f);
             _gamepad.PullTrigger();
             if (!inReach)
-                _gamepad.Steer(new MovementInput(Mathf.Sign(target.Position.x - perception.Eye.x), false, false, false));
+                _gamepad.Steer(new MovementInput(Mathf.Sign(target.Position.x - perception.Eye.x), false, false, false, Slowdown.None));
         }
 
         private int Ticks(float seconds) =>

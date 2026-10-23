@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a72cbcb2a52a4b98b35d7adfb1c35a8d, type: 3}
   m_Name: SniperShotVfxConfig
-  m_EditorClassIdentifier: Bw.UseCases.Shooting.View::Bw.UseCases.Shooting.View.ShotVfxConfig
+  m_EditorClassIdentifier: Bw.UseCases.Combat.View::Bw.UseCases.Combat.View.ShotVfxConfig
   Tracer: {fileID: 5510151799779146027, guid: 1aa62028084ebec4995dab37a52b0961, type: 3}
   BulletSpeed: 140
   MuzzleFlash: {fileID: 6532407807240913912, guid: eda978f3ca085374fbbc51a34b4e249e, type: 3}

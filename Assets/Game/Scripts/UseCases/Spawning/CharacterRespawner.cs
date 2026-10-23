@@ -1,5 +1,4 @@
 ﻿using System;
-using Bw.Entities;
 using Bw.Entities.Players;
 using Bw.UseCases.Character.Extensions;
 using Bw.UseCases.Mortality.Extensions;
@@ -25,7 +24,7 @@ namespace Bw.UseCases.Spawning
                 characterRegistry.PlayerByCharacter.ForEach(playerLifetime, (characterLifetime, character, owner) =>
                 {
                     if (owner == player)
-                        character.State.WhenDead(characterLifetime, _ => Respawn(playerLifetime, player).Forget());
+                        character.Mortal.State.WhenDead(characterLifetime, _ => Respawn(playerLifetime, player).Forget());
                 }));
         }
 

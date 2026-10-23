@@ -1,14 +1,24 @@
 using System;
 using Bw.Entities.Network;
 using Bw.Entities.Network.LagCompensation;
+using Bw.Entities.Network.Prediction.Stream;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using Bw.Injection.Network;
 using Bw.Injection.Network.Prediction;
+using Bw.Injection.Weapon;
 using Bw.UseCases.Character.View.Grips;
+using Bw.UseCases.Combat.Abstractions.Weapons;
+using Bw.UseCases.Combat.Hands.Abstractions;
+using Bw.UseCases.Combat.View.Adapters;
+using Bw.UseCases.Combat.View.Highlight;
+using Bw.UseCases.Combat.Weapon;
+using Bw.UseCases.Combat.Weapon.Abstractions;
+using Bw.UseCases.Combat.Weapon.Network;
+using Bw.UseCases.Combat.Weapon.Network.Requests;
+using Bw.UseCases.Combat.Weapon.Pickup;
 using Bw.UseCases.Mortality;
 using Bw.UseCases.Movement;
-using Bw.UseCases.Movement.Abstractions;
 using Bw.UseCases.Props;
 using Bw.UseCases.Props.Network;
 using Bw.UseCases.Props.Network.Prediction;
@@ -21,13 +31,6 @@ using Bw.UseCases.Props.View.Flight;
 using Bw.UseCases.Props.View.Held;
 using Bw.UseCases.Props.View.Impact;
 using Bw.UseCases.Props.View.Throw;
-using Bw.UseCases.Shooting.View.Adapters;
-using Bw.UseCases.Shooting.View.Highlight;
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
-using Bw.UseCases.Shooting.Weapon.Network;
-using Bw.UseCases.Shooting.Weapon.Network.Requests;
-using Bw.UseCases.Shooting.Weapon.Pickup;
 using JetBrains.Core;
 using Unity.Netcode;
 using UnityEngine;
@@ -60,7 +63,6 @@ namespace Bw.Injection.Props
             Container.BindInstance(_parts.Throw).AsSingle();
 
             BindHeldSimulation();
-            BindDrawn();
             BindDropRequest();
             EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyMortal, Impacts>.Install(Container, _runtimeSettings, _netSchema);
             BindHold();
@@ -106,32 +108,13 @@ namespace Bw.Injection.Props
 
         private void BindHeldSimulation()
         {
-            Container.Bind(typeof(IReadonlyWeaponDraw), typeof(IWeaponDraw)).To<WeaponDraw>().AsSingle()
-                .WriterOnlyInto<IWeaponDraw>(typeof(WeaponHoldServerHandler), typeof(WeaponDrawReceiver));
-            Container.BindInterfacesTo<PropSimulator>().AsSingle();
+            WeaponSimulatorInstaller<PropState, PropSimulator>.Install(Container);
             Container.BindInterfacesTo<ShootingWeapon<PropState>>().AsSingle().WithArguments(new PropState(0f, PropPhase.Holding, 0, 0, true)).NonLazy();
+            Container.Bind<WeaponKindRegistration>().AsSingle().WithArguments(WeaponKind.Prop).NonLazy(); //TODO: ящик создаёт спавнер ящиков, а не Armory, и в каталоге оружия его нет, поэтому описания у ящика нет: когда матч начнёт засчитывать броски (HitScoring), убийство ящиком бросит исключение в ленте убийств, пока ящику не дадут описание, строку в каталоге, иконку в WeaponIconsConfig и создание через Armory
+            Container.Bind<WeaponNetworkRegistration>().AsSingle().NonLazy();
+            Container.Bind<WeaponClock>().AsSingle().NonLazy();
 
-            StreamPredictionInstaller<WeaponInput, PropState>.Install(Container, _runtimeSettings, _netSchema);
-        }
-
-        private void BindDrawn()
-        {
-            var drawn = _netSchema.DeclareResult<bool>(NetworkDelivery.Reliable);
-
-            switch (_runtimeSettings.CurrentPeerType)
-            {
-                case PeerType.Server:
-                    Container.BindResultSender(drawn).WhenInjectedInto(typeof(WeaponDrawBroadcaster), typeof(LateJoinWeaponDrawSender));
-                    Container.Bind<WeaponDrawBroadcaster>().AsSingle().NonLazy();
-                    Container.Bind<LateJoinWeaponDrawSender>().AsSingle().NonLazy();
-                    break;
-                case PeerType.Client:
-                    Container.BindResultReceiver(drawn).WhenInjectedInto<WeaponDrawReceiver>();
-                    Container.Bind<WeaponDrawReceiver>().AsSingle().NonLazy();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            PredictionStateInstaller<WeaponInput, PropState>.Install(Container, _runtimeSettings, _netSchema);
         }
 
         private void BindDropRequest()
@@ -155,11 +138,12 @@ namespace Bw.Injection.Props
 
         private void BindHold()
         {
-            Container.Bind<ReleaseSpots>().AsSingle();
-            Container.Bind<HeldPropGrip>().AsSingle().WithArguments(HeldPropLayer);
             Container.Bind<HeldPropPlacement>().AsSingle();
-            Container.Bind(typeof(IHeldItem), typeof(PropStateView)).To<PropStateView>().AsSingle();
-            Container.Bind<HeldItemRegistration>().AsSingle().WithArguments(_parts.Prop).NonLazy();
+            Container.Bind<PropSwing>().AsSingle();
+            Container.Bind(typeof(IHeldBox), typeof(HeldPropPose)).To<HeldPropPose>().AsSingle().WithArguments(HeldPropLayer);
+            Container.Bind<HeldBoxRegistration>().AsSingle().NonLazy();
+            Container.Bind<ReleaseSpots>().AsSingle();
+            Container.Bind<ThrowLaunch>().AsSingle();
             Container.Bind<HeldWeaponBody>().AsSingle().NonLazy();
             Container.Decorate<IStateView<RigidState>>().With<UnheldStateView<RigidState>>();
         }
@@ -168,12 +152,12 @@ namespace Bw.Injection.Props
 
         private void BindServer()
         {
-            Container.BindInterfacesTo<WeaponInputPolicy>().AsSingle();
-            Container.Bind<IStateView<PropState>>().To<PropStateView>().FromResolve();
-            Container.Bind<WeaponHoldServerHandler>().AsSingle().NonLazy();
-            Container.Bind<WeaponKindRegistration>().AsSingle().WithArguments(WeaponKind.Prop).NonLazy(); //TODO: ящик создаёт спавнер ящиков, а не Armory, и в каталоге оружия его нет, поэтому описания у ящика нет: когда матч начнёт засчитывать броски (HitScoring), убийство ящиком бросит исключение в ленте убийств, пока ящику не дадут описание, строку в каталоге, иконку в WeaponIconsConfig и создание через Armory
+            Container.Bind<IStateView<PropState>>().To<HeldPropPose>().FromResolve();
+            Container.Bind<SimulationViewSync<PropState>>().AsSingle().NonLazy();
+            Container.Bind<CarrierOwnership>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<ThrownPropHits>().AsSingle();
-            Container.Bind<PropRelease>().AsSingle().WithArguments(_parts.Prop).NonLazy();
+            Container.Bind<PropLauncher>().AsSingle();
+            Container.Bind<PropRelease>().AsSingle().NonLazy();
             Container.Bind<DestroyedPropDrop>().AsSingle().NonLazy();
             Container.Bind<SimulationRewinder<PropState>>().AsSingle();
             Container.Decorate<IRewindable>().With<PropRewindable>();
@@ -182,15 +166,13 @@ namespace Bw.Injection.Props
 
         private void BindClient()
         {
-            Container.Bind<ThrowLaunch>().AsSingle();
+            Container.Bind<ThrowConfirmation>().AsSingle();
             Container.Bind<ThrowPrediction>().AsSingle().NonLazy();
-            Container.BindInterfacesTo<WeaponInputSampler>().AsSingle().WithArguments(_parts.Prop);
+            Container.Bind<IFedInputs<WeaponInput>>().To<WeaponFeedLog>().AsSingle();
+            Container.Bind<IReadonlyAimDeflection>().To<SteadyAim>().AsSingle();
+            Container.Bind<AimDeflectionRegistration>().AsSingle().NonLazy();
             Container.BindInterfacesTo<FloorWeapon>().AsSingle().WithArguments(_parts.Shape);
             Container.Bind<FloorWeaponRegistration>().AsSingle().NonLazy();
-            Container.Bind<GripEcho>()
-                .FromMethod(context => context.Container.Instantiate<GripEcho>(new object[] { context.Container.Instantiate<HeldPropGrip>(new object[] { HeldPropLayer }) }))
-                .AsSingle()
-                .NonLazy();
             BindClientVisuals();
         }
 
@@ -200,9 +182,11 @@ namespace Bw.Injection.Props
             Container.Bind<WeaponHighlightView>().AsSingle()
                 .WithArguments(_parts.Visual, _parts.Visual.GetComponentsInChildren<SpriteRenderer>(true)).NonLazy();
             Container.BindInterfacesTo<WeaponCarryViewModel>().AsSingle();
+            Container.Bind<IHeldPropViewModel>().To<HeldPropViewModel>().AsSingle();
+            Container.Bind<HeldPropView>().AsSingle().WithArguments(_parts.Prop).NonLazy();
             Container.Bind<HeldPropSorting>().AsSingle().WithArguments(_parts.HeldSortingOrder).NonLazy();
             Container.Bind<HeldGripsRegistration>().AsSingle()
-                .WithArguments(_parts.Prop, _parts.Prop.GetComponentsInChildren<HandGrip>(true)).NonLazy();
+                .WithArguments(_parts.Prop.GetComponentsInChildren<HandGrip>(true)).NonLazy();
             BindThrowVisuals();
             BindFlightVisuals();
             Container.Bind<PropSoundsView>().AsSingle().WithArguments(_parts.Prop).NonLazy();
@@ -214,11 +198,11 @@ namespace Bw.Injection.Props
             Container.Bind(typeof(IThrowArcViewModel), typeof(ThrowArcViewModel)).To<ThrowArcViewModel>().AsSingle();
             Container.Bind<IStateView<PropState>>()
                 .FromMethod(context => new CompositeStateView<PropState>(
-                    context.Container.Resolve<PropStateView>(),
+                    context.Container.Resolve<HeldPropPose>(),
                     context.Container.Resolve<PropThrowsViewModel>(),
                     context.Container.Resolve<ThrowArcViewModel>()))
                 .AsSingle();
-            Container.Bind<ThrowBodyPose>().AsSingle().WithArguments(_parts.Prop).NonLazy();
+            Container.Bind<ThrowBodyPose>().AsSingle().NonLazy();
             Container.Bind<ThrowCameraKick>().AsSingle().NonLazy();
             Container.Bind<ThrowTrajectory>().AsSingle();
             Container.Bind<ThrowArcRegistration>().AsSingle().NonLazy();

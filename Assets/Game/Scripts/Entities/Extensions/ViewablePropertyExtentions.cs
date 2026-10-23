@@ -97,6 +97,23 @@ namespace Bw.Entities.Extensions
                 handler(itemLifetime, item));
         }
 
+        public static void View<K, V>(this IReadonlyViewableMap<K, V> map, Lifetime lifetime, Action<Lifetime, K, V> handler)
+        {
+            var lifetimes = new Dictionary<K, LifetimeDefinition>();
+            map.Advise(lifetime, change =>
+            {
+                if (!change.IsAdd && lifetimes.Remove(change.Key, out var ended))
+                    ended.Terminate();
+
+                if (change.IsRemove)
+                    return;
+
+                var definition = lifetime.CreateNested();
+                lifetimes.Add(change.Key, definition);
+                handler(definition.Lifetime, change.Key, change.NewValue);
+            });
+        }
+
         public static void AddLifetimed<K, V>(
             this IViewableMap<K, V> map,
             Lifetime lifetime,

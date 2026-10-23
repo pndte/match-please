@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f182f7537af19c46afecb1788a69d60, type: 3}
   m_Name: AimCursorConfig
-  m_EditorClassIdentifier: Bw.UseCases.Shooting.View::Bw.UseCases.Shooting.View.Crosshair.AimCursorConfig
+  m_EditorClassIdentifier: Bw.UseCases.Combat.View::Bw.UseCases.Combat.View.Crosshair.AimCursorConfig
   TransitionTime: 0.22
   TickRetract: 0.5
   TickTwist: 45

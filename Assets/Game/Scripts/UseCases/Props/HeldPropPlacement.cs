@@ -1,5 +1,6 @@
 using Bw.Entities.Physics;
 using Bw.Entities.Physics.Extensions;
+using Bw.UseCases.Combat.Abstractions.Hands;
 using Bw.UseCases.Props.Extensions;
 using Unity.Collections;
 using UnityEngine;
@@ -11,15 +12,10 @@ namespace Bw.UseCases.Props
     {
         private const float Alike = 0.94f;
 
-        public Vector2 Center => _center;
-
         private readonly BodyBox _shape;
         private readonly HeldPropConfig _config;
         private readonly PhysicsWorld _world;
         private readonly PhysicsQuery.QueryFilter _walls;
-
-        private Vector2 _center;
-        private Vector2 _pushed;
 
         public HeldPropPlacement(BodyBox shape, HeldPropConfig config, IPhysicsSpace space)
         {
@@ -29,24 +25,24 @@ namespace Bw.UseCases.Props
             _walls = new PhysicsQuery.QueryFilter(PhysicsMask.All, config.Walls.AsPhysicsMask());
         }
 
-        public void Place(Rect oval, float aim) //TODO: в тесноте, где ящику некуда отодвинуться от стены, он наезжает на самого держателя
+        public GripPose PoseIn(Rect oval, float aim, Vector2 pushed) //TODO: в тесноте, где ящику некуда отодвинуться от стены, он наезжает на самого держателя
         {
             var size = _shape.WorldSize();
             var rotation = new PhysicsRotate(aim * Mathf.Deg2Rad);
             var target = oval.center + _config.HeldOffset(aim, oval.size / 2f, size / 2f);
-            var placed = PushedOut(oval.center, target, size, rotation);
+            var placed = PushedOut(oval.center, target, size, rotation, pushed);
             if (TryGetCrossing(oval.center, placed.center, out var crossing))
-                placed = PushedOut(oval.center, target - crossing.normal * Vector2.Dot(target - crossing.point, crossing.normal), size, rotation);
+                placed = PushedOut(oval.center, target - crossing.normal * Vector2.Dot(target - crossing.point, crossing.normal), size, rotation, pushed);
 
-            _center = placed.center;
-            _pushed = placed.pushed;
+            return new GripPose(placed.center, aim, placed.pushed);
         }
 
         private (Vector2 center, Vector2 pushed) PushedOut(
             Vector2 from,
             Vector2 target,
             Vector2 size,
-            PhysicsRotate rotation)
+            PhysicsRotate rotation,
+            Vector2 previous)
         {
             var center = target;
             var pushed = Vector2.zero;
@@ -56,7 +52,7 @@ namespace Bw.UseCases.Props
                 if (!TryGetWall(box, out var wall))
                     break;
 
-                var shift = OutOf(box, wall, (from - center).normalized, push == 0 ? _pushed : Vector2.zero);
+                var shift = OutOf(box, wall, (from - center).normalized, push == 0 ? previous : Vector2.zero);
                 if (push == 0)
                     pushed = shift.normalized;
 

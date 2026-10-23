@@ -129,7 +129,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e7646fdb877ec6145ab8b3bfb4235b33, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Bw.UseCases.Shooting.View::Bw.UseCases.Shooting.View.Muzzle.FlashlightBeam
+  m_EditorClassIdentifier: Bw.UseCases.Combat.View::Bw.UseCases.Combat.View.Muzzle.FlashlightBeam
   _cone: {fileID: 2563687184087050981}
   _spill: {fileID: 7007827101662652462}
 --- !u!1 &4513694910534843044

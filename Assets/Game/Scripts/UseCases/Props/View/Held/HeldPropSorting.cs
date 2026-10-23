@@ -1,4 +1,4 @@
-using Bw.UseCases.Shooting.View.Abstractions;
+using Bw.UseCases.Combat.View.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using UnityEngine;

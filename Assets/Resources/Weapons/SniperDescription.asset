@@ -11,5 +11,5 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0c9c28e281ab43a08939ae8889188e62, type: 3}
   m_Name: SniperDescription
-  m_EditorClassIdentifier: Bw.UseCases.Shooting::Bw.UseCases.Shooting.Weapon.WeaponDescription
+  m_EditorClassIdentifier: Bw.UseCases.Combat::Bw.UseCases.Combat.Weapon.WeaponDescription
   _key: 9

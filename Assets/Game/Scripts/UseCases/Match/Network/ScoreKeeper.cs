@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Players;
+using Bw.UseCases.Combat.Abstractions.Characters;
+using Bw.UseCases.Combat.Abstractions.Weapons;
 using Bw.UseCases.Mortality;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
 using UnityEngine;
 
@@ -18,15 +19,21 @@ namespace Bw.UseCases.Match.Network
         private readonly INetworkTicks _ticks;
         private readonly IReadonlyMatch _match;
         private readonly IScoreboard _scoreboard;
+        private readonly Combatants _combatants;
         private readonly Signal<Kill> _scored = new();
         private readonly Dictionary<IReadonlyMortal, Blow> _lastBlows = new();
         private readonly Dictionary<IReadonlyMortal, Death> _unclaimedDeaths = new();
 
-        public ScoreKeeper(INetworkTicks ticks, IReadonlyMatch match, IScoreboard scoreboard)
+        public ScoreKeeper(
+            INetworkTicks ticks,
+            IReadonlyMatch match,
+            IScoreboard scoreboard,
+            Combatants combatants)
         {
             _ticks = ticks;
             _match = match;
             _scoreboard = scoreboard;
+            _combatants = combatants;
         }
 
         public void CountHit(
@@ -44,22 +51,22 @@ namespace Bw.UseCases.Match.Network
                 CreditKill(attacker, death.Victim, weapon);
         }
 
-        public void CountDeath(IReadonlyMortal character, IPlayer victim)
+        public void CountDeath(IReadonlyCharacter character)
         {
-            if (!IsCounted(victim))
+            if (!_combatants.TryFindPlayer(character, out var victim) || !IsCounted(victim))
                 return;
 
             _scoreboard.Credit(victim, DeathScore);
-            if (_lastBlows.TryGetValue(character, out var blow) && blow.Tick == _ticks.Current && IsCounted(blow.Attacker))
+            if (_lastBlows.TryGetValue(character.Mortal, out var blow) && blow.Tick == _ticks.Current && IsCounted(blow.Attacker))
                 CreditKill(blow.Attacker, victim, blow.Weapon);
             else
-                _unclaimedDeaths[character] = new Death(victim, _ticks.Current); //TODO: смерть без выстрела или удара в тот же тик (падение) не засчитывается никому
+                _unclaimedDeaths[character.Mortal] = new Death(victim, _ticks.Current); //TODO: смерть без выстрела или удара в тот же тик (падение) не засчитывается никому
         }
 
-        public void Forget(IReadonlyMortal character)
+        public void Forget(IReadonlyCharacter character)
         {
-            _lastBlows.Remove(character);
-            _unclaimedDeaths.Remove(character);
+            _lastBlows.Remove(character.Mortal);
+            _unclaimedDeaths.Remove(character.Mortal);
         }
 
         private void CreditKill(IPlayer killer, IPlayer victim, IReadonlyWeapon weapon)

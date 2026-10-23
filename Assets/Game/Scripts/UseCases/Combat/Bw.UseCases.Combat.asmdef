@@ -1,0 +1,31 @@
+{
+    "name": "Bw.UseCases.Combat",
+    "rootNamespace": "Bw",
+    "references": [
+        "Bw.Entities.Network",
+        "Bw.Entities",
+        "Bw.UseCases",
+        "Unity.Netcode.Runtime",
+        "Unity.Collections",
+        "Zenject",
+        "R3.Unity",
+        "Bw.UseCases.Character",
+        "Bw.UseCases.Mortality",
+        "Bw.UseCases.Movement",
+        "Bw.UseCases.Movement.Network",
+        "Bw.UseCases.Combat.Abstractions"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JetBrains.Lifetimes.dll",
+        "Zenject-usage.dll",
+        "R3.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

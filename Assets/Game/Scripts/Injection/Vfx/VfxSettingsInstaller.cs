@@ -1,7 +1,7 @@
 using Bw.UseCases.Character.View.Death;
+using Bw.UseCases.Combat.View.Impact;
 using Bw.UseCases.Crates.View.Break;
 using Bw.UseCases.Props.View;
-using Bw.UseCases.Shooting.View.Impact;
 using UnityEngine;
 using Zenject;
 

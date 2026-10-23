@@ -7,7 +7,8 @@
         "Bw.UseCases.Level",
         "Bw.UseCases.Mortality",
         "Bw.UseCases.Movement",
-        "Bw.UseCases.Shooting"
+        "Bw.UseCases.Combat",
+        "Bw.UseCases.Combat.Abstractions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

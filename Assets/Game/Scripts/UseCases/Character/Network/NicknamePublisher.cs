@@ -1,7 +1,7 @@
 using Bw.Entities.Extensions;
 using Bw.Entities.Network.Objects;
 using Bw.Entities.Network.Variables;
-using Bw.UseCases.Mortality;
+using Bw.UseCases.Combat.Abstractions.Characters;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Character.Network
@@ -11,7 +11,7 @@ namespace Bw.UseCases.Character.Network
         public NicknamePublisher(
             Lifetime lifetime,
             INetworkLifetimedObject networkLifetimed,
-            IReadonlyMortal character,
+            IReadonlyCharacter character,
             ICharacterRegistry registry,
             INetEntries entries,
             NetPropertyDeclaration<string> declaration)

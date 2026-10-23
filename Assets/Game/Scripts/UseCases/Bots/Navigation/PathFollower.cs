@@ -100,7 +100,7 @@ namespace Bw.UseCases.Bots.Navigation
                 return;
             }
 
-            _gamepad.Steer(new MovementInput(Toward(target.x, body.Position.x), false, false, false));
+            _gamepad.Steer(new MovementInput(Toward(target.x, body.Position.x), false, false, false, Slowdown.None));
         }
 
         private void Leap(BodyState body)
@@ -113,7 +113,7 @@ namespace Bw.UseCases.Bots.Navigation
                 {
                     _aligning = true;
                     _alignedX = body.Position.x;
-                    _gamepad.Steer(new MovementInput(Toward(start.x, body.Position.x), false, false, false));
+                    _gamepad.Steer(new MovementInput(Toward(start.x, body.Position.x), false, false, false, Slowdown.None));
                     return;
                 }
 

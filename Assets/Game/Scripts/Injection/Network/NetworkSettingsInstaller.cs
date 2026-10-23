@@ -3,8 +3,8 @@ using Bw.Entities.Network.LagCompensation;
 using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Network.Variables;
+using Bw.UseCases.Combat.Weapon.Network;
 using Bw.UseCases.Movement.Network.Prediction;
-using Bw.UseCases.Shooting.Weapon.Network;
 using UnityEngine;
 using Zenject;
 

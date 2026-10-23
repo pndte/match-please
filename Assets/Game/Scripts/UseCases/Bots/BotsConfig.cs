@@ -1,5 +1,5 @@
 using System;
-using Bw.UseCases.Shooting.Melee;
+using Bw.UseCases.Combat.Melee;
 using UnityEngine;
 
 namespace Bw.UseCases.Bots

@@ -1,32 +1,33 @@
 using System;
 using Bw.Entities.Network;
-using Bw.Entities.Network.Prediction.Stream;
+using Bw.Entities.Network.Objects;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Physics;
 using Bw.Entities.Simulation;
 using Bw.Injection.Movement;
 using Bw.Injection.Network;
 using Bw.Injection.Network.Variables;
+using Bw.UseCases.Combat;
+using Bw.UseCases.Combat.Abstractions.Weapons;
+using Bw.UseCases.Combat.View;
+using Bw.UseCases.Combat.View.Abstractions;
+using Bw.UseCases.Combat.View.Adapters;
+using Bw.UseCases.Combat.View.Adapters.Audio;
+using Bw.UseCases.Combat.View.Audio;
+using Bw.UseCases.Combat.View.Crosshair;
+using Bw.UseCases.Combat.View.Highlight;
+using Bw.UseCases.Combat.View.Recoil;
+using Bw.UseCases.Combat.View.Rig;
+using Bw.UseCases.Combat.Weapon;
+using Bw.UseCases.Combat.Weapon.Network;
+using Bw.UseCases.Combat.Weapon.Network.Requests;
+using Bw.UseCases.Combat.Weapon.Pickup;
 using Bw.UseCases.Mortality;
 using Bw.UseCases.Movement;
-using Bw.UseCases.Shooting;
-using Bw.UseCases.Shooting.View;
-using Bw.UseCases.Shooting.View.Abstractions;
-using Bw.UseCases.Shooting.View.Adapters;
-using Bw.UseCases.Shooting.View.Adapters.Audio;
-using Bw.UseCases.Shooting.View.Audio;
-using Bw.UseCases.Shooting.View.Crosshair;
-using Bw.UseCases.Shooting.View.Highlight;
-using Bw.UseCases.Shooting.View.Recoil;
-using Bw.UseCases.Shooting.View.Rig;
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
-using Bw.UseCases.Shooting.Weapon.Network;
-using Bw.UseCases.Shooting.Weapon.Network.Requests;
-using Bw.UseCases.Shooting.Weapon.Pickup;
 using JetBrains.Core;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 
 namespace Bw.Injection.Weapon
@@ -58,7 +59,7 @@ namespace Bw.Injection.Weapon
 
         [Header("Network")]
         [SerializeField] private NetworkObject _networkObject;
-        [SerializeField] private NetworkWeaponHold _weaponHold;
+        [FormerlySerializedAs("_weaponHold")] [SerializeField] private NetworkLifetimedBehaviour _networkLifetimedBehaviour;
 
         [Header("Physics")] [SerializeField] private BodyBox _box;
         [SerializeField] private DynamicBodyConfig _bodyConfig;
@@ -116,15 +117,15 @@ namespace Bw.Injection.Weapon
                 transform,
                 _visual,
                 _networkObject,
-                _weaponHold,
+                _networkLifetimedBehaviour,
                 new GunState(0f, _shootingWeaponConfig.AmmoSettings.OnSpawnValue, 0, 0, 0),
                 WeaponKind.Gun);
 
         private void BindGun()
         {
-            Container.BindInterfacesTo<GunSimulator>().AsSingle();
-            Container.BindInterfacesTo<WeaponMuzzle>().AsSingle().WithArguments(_muzzleTransform);
-            Container.BindInterfacesTo<ShotTracer>().AsSingle().WithArguments(transform);
+            WeaponSimulatorInstaller<GunState, GunSimulator>.Install(Container);
+            Container.Bind<WeaponMuzzle>().AsSingle().WithArguments(_muzzleTransform);
+            Container.BindInterfacesTo<ShotTracer>().AsSingle();
             Container.BindInterfacesTo<FixedShotPower>().AsSingle();
         }
 
@@ -156,7 +157,9 @@ namespace Bw.Injection.Weapon
         {
             Container.Bind<WeaponDropServerHandler>().AsSingle().NonLazy();
             Container.Bind<HeldWeaponBody>().AsSingle().NonLazy();
-            Container.Bind<WeaponRelease>().AsSingle().WithArguments(_releaseConfig).NonLazy();
+            Container.Bind<HeldWeaponPose>().AsSingle();
+            Container.Bind<WeaponReleaseSpots>().AsSingle().WithArguments(_releaseConfig);
+            Container.Bind<WeaponRelease>().AsSingle().NonLazy();
             Container.Bind<UnheldWeaponDespawner>().AsSingle().NonLazy();
             Container.InstantiateComponent<WeaponHolder>(gameObject);
         }
@@ -166,7 +169,6 @@ namespace Bw.Injection.Weapon
             Container.Bind<WeaponDropClientHandler>().AsSingle().NonLazy();
             Container.BindInterfacesTo<Spread>().AsSingle();
             Container.BindInterfacesTo<AimDeflection>().AsSingle();
-            Container.Decorate<IInputSampler<WeaponInput>>().With<SpreadAimSampler>();
             Container.Bind<SpreadKick>().AsSingle().NonLazy();
             Container.BindInterfacesTo<FloorWeapon>().AsSingle().WithArguments(_box);
             Container.Bind<FloorWeaponRegistration>().AsSingle().NonLazy();
@@ -179,7 +181,7 @@ namespace Bw.Injection.Weapon
             Container.Bind(typeof(IGunViewModel), typeof(GunViewModel)).To<GunViewModel>().AsSingle();
             Container.Bind<IStateView<GunState>>()
                 .FromMethod(ctx => new CompositeStateView<GunState>(
-                    ctx.Container.Instantiate<WeaponStateView<GunState>>(new object[] { transform }),
+                    ctx.Container.Resolve<WeaponPoseViewModel<GunState>>(),
                     ctx.Container.Resolve<SeenShotsViewModel<GunState>>(),
                     ctx.Container.Resolve<GunViewModel>()))
                 .AsSingle();

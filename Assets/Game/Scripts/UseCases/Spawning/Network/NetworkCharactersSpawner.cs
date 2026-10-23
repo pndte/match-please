@@ -5,9 +5,9 @@ using Bw.Entities.Extensions;
 using Bw.Entities.Physics;
 using Bw.Entities.Players;
 using Bw.UseCases.Character;
+using Bw.UseCases.Combat.Abstractions.Characters;
 using Bw.UseCases.Mortality;
 using Bw.UseCases.Mortality.Extensions;
-using Bw.UseCases.Mortality.Network;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
@@ -27,7 +27,6 @@ namespace Bw.UseCases.Spawning.Network
         private readonly ICharacterRegistry _characterRegistry;
         private readonly IGameObjectByCharacterCollection _gameObjectByCharacterCollection;
         private readonly IReadonlyPlayerCharacters _characters;
-        private readonly StartingLoadout _loadout;
         private readonly DiContainer _container;
         private readonly SpawnSpots _spots;
         private int _nextSpawnPointIndex;
@@ -38,7 +37,6 @@ namespace Bw.UseCases.Spawning.Network
             ICharacterRegistry characterRegistry,
             IGameObjectByCharacterCollection gameObjectByCharacterCollection,
             IReadonlyPlayerCharacters characters,
-            StartingLoadout loadout,
             DiContainer container,
             SpawnSpots spots,
             Data data)
@@ -46,7 +44,6 @@ namespace Bw.UseCases.Spawning.Network
             _characterRegistry = characterRegistry;
             _gameObjectByCharacterCollection = gameObjectByCharacterCollection;
             _characters = characters;
-            _loadout = loadout;
             _container = container;
             _spots = spots;
             _data = data;
@@ -55,7 +52,7 @@ namespace Bw.UseCases.Spawning.Network
                 SpawnCharacterFor(playerLifetime, player));
         }
 
-        public IReadonlyMortal SpawnCharacterFor(Lifetime lifetime, IPlayer player)
+        public IReadonlyCharacter SpawnCharacterFor(Lifetime lifetime, IPlayer player)
         {
             var characterPrefab = _data.Characters.PrefabOf(_characters.KeyOf(player));
             var spawnPosition = _spots.SpotFor(RequireComponent<BodyBox>(characterPrefab.gameObject), _nextSpawnPointIndex++);
@@ -65,9 +62,9 @@ namespace Bw.UseCases.Spawning.Network
 
             characterObject.Spawn(destroyWithScene: true);
 
-            var characterHolder = RequireComponent<ReadonlyMortalHolder>(characterObject.gameObject);
-            var characterLifetime = characterHolder.gameObject.Lifetime();
-            var character = characterHolder.Value;
+            var characterContext = RequireComponent<GameObjectContext>(characterObject.gameObject);
+            var characterLifetime = characterObject.gameObject.Lifetime();
+            var character = characterContext.Container.Resolve<IReadonlyCharacter>();
             lifetime.Intersect(characterLifetime).OnTermination(() =>
             {
                 if (characterObject.IsSpawned)
@@ -76,15 +73,12 @@ namespace Bw.UseCases.Spawning.Network
 
             _gameObjectByCharacterCollection.AddLifetimed(
                 characterLifetime, character, characterObject.gameObject);
-            _characterRegistry.PlayerByCharacter.AddLifetimed(characterLifetime, character, player);
 
-            var characterContext = RequireComponent<GameObjectContext>(characterObject.gameObject);
             var characterControllers = characterContext.Container.Resolve<IControllerRegistry>();
             var characterOwners = characterContext.Container.Resolve<IOwnerRegistry>();
             characterOwners.AddOwner(characterLifetime, player);
-            character.State.WhenAlive(characterLifetime, aliveLifetime => characterControllers.Set(aliveLifetime, player));
-
-            _loadout.Arm(character, characterLifetime, characterObject.transform.position, spawnRotation);
+            character.Mortal.State.WhenAlive(characterLifetime, aliveLifetime => characterControllers.Set(aliveLifetime, player));
+            _characterRegistry.PlayerByCharacter.AddLifetimed(characterLifetime, character, player);
 
             Debug.Log($"[PlayerSpawner] Character '{characterPrefab.name}' spawned for player '{player.Nickname}' at {spawnPosition}");
             return character;

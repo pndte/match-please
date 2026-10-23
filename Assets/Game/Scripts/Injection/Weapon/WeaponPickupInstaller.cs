@@ -2,9 +2,10 @@ using System;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
 using Bw.Injection.Network;
-using Bw.UseCases.Shooting.View.Adapters;
-using Bw.UseCases.Shooting.Weapon.Network.Requests;
-using Bw.UseCases.Shooting.Weapon.Pickup;
+using Bw.UseCases.Combat.Hands.Network;
+using Bw.UseCases.Combat.View.Adapters;
+using Bw.UseCases.Combat.Weapon.Network.Requests;
+using Bw.UseCases.Combat.Weapon.Pickup;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
@@ -32,6 +33,7 @@ namespace Bw.Injection.Weapon
             {
                 case PeerType.Server:
                     Container.BindRequestReceiver(pickup).WhenInjectedInto<WeaponPickupServerHandler>();
+                    Container.Bind<PickableWeapons>().AsSingle();
                     Container.Bind<WeaponPickupServerHandler>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:

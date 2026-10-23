@@ -3,8 +3,9 @@
     "rootNamespace": "Bw",
     "references": [
         "Bw.Entities",
-        "Bw.UseCases.Shooting",
-        "Bw.UseCases.Character"
+        "Bw.UseCases.Combat",
+        "Bw.UseCases.Character",
+        "Bw.UseCases.Combat.Abstractions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

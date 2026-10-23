@@ -1,4 +1,4 @@
-using Bw.UseCases.Shooting.View.Recoil;
+using Bw.UseCases.Combat.View.Recoil;
 using UnityEditor;
 using UnityEngine;
 

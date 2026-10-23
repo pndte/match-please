@@ -4,10 +4,12 @@ using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Physics.Extensions;
 using Bw.Entities.Simulation;
+using Bw.UseCases.Combat.Abstractions.Characters;
+using Bw.UseCases.Combat.Abstractions.Inventory;
+using Bw.UseCases.Combat.Abstractions.Weapons;
 using Bw.UseCases.Mortality;
 using Bw.UseCases.Mortality.Extensions;
 using Bw.UseCases.Movement;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using Unity.Collections;
@@ -34,11 +36,11 @@ namespace Bw.UseCases.Props.Network
 
         public ThrownPropHits(
             Lifetime lifetime,
-            IReadonlyWeapon prop,
+            IWeapon prop,
+            IWeaponCarriers carriers,
             IReadonlySimulation<RigidState> body,
             PhysicsBody physics,
             INetworkTicks ticks,
-            IWeaponHold hold,
             PropThrowConfig config)
         {
             _prop = prop;
@@ -49,10 +51,10 @@ namespace Bw.UseCases.Props.Network
             _targets = config.Targets.AsPhysicsMask();
             _flights = new SequentialLifetimes(lifetime);
 
-            hold.HeldLifetime.WhenAlive(lifetime, _ => _flights.TerminateCurrent());
+            carriers.ByWeapon.ViewForKey(lifetime, prop, (_, _) => _flights.TerminateCurrent());
         }
 
-        public void Track(IReadonlyMortal thrower)
+        public void Track(IReadonlyCharacter thrower)
         {
             var flight = _flights.Next();
             _physics.SetHitEvents(true);
@@ -64,7 +66,7 @@ namespace Bw.UseCases.Props.Network
             _ticks.Ticked(TickPhase.Late).Advise(flight, tick => Check(tick, thrower));
         }
 
-        private void Check(int tick, IReadonlyMortal thrower)
+        private void Check(int tick, IReadonlyCharacter thrower)
         {
             FindStruck(thrower);
             if (_affected.Count > 0)
@@ -79,7 +81,7 @@ namespace Bw.UseCases.Props.Network
                 _flights.TerminateCurrent();
         }
 
-        private void FindStruck(IReadonlyMortal thrower)
+        private void FindStruck(IReadonlyCharacter thrower)
         {
             _affected.Clear();
             var direction = _body.Previous.Velocity.normalized;
@@ -90,7 +92,7 @@ namespace Bw.UseCases.Props.Network
                 if (!TryGetStruck(hit, out var struck) || !struck.TryGetMortal(out var target))
                     continue;
 
-                if (target == thrower || target.State.Value == LifeState.Dead || Contains(target))
+                if (target == thrower.Mortal || target.State.Value == LifeState.Dead || Contains(target))
                     continue;
 
                 var blow = new Impact(new Hit(DamageAt(hit.approachSpeed), direction * _config.Knockback), struck.ContactAt(hit.point));

@@ -30,7 +30,7 @@ namespace Bw.Entities.Network.Prediction.Stream
         public PredictionReconciler(
             Lifetime lifetime,
             IControlledBy controlledBy,
-            INetRequestSender<TickedInput<TInput>> input,
+            IFedInputs<TInput> inputs,
             INetResultReceiver<TickedState<TState>> state,
             ISimulation<TState> simulation,
             ISimulator<TInput, TState> simulator,
@@ -46,7 +46,7 @@ namespace Bw.Entities.Network.Prediction.Stream
 
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime => //TODO: у чужого объекта локальное состояние не обновлялось (снимки идут только в показ) — получив управление (подбор оружия), клиент до первого состояния сервера предсказывает от устаревшего: патроны, счётчик выстрелов
             {
-                input.Sent.Advise(controlledLifetime, Remember);
+                inputs.Fed.Advise(controlledLifetime, Remember);
                 state.Received.Advise(controlledLifetime, Reconcile);
                 controlledLifetime.OnTermination(_pending.Clear);
             });
@@ -67,6 +67,9 @@ namespace Bw.Entities.Network.Prediction.Stream
             _lastReconciledTick = result.Tick;
             while (_pending.Count > 0 && _pending.Peek().Tick <= result.Tick)
                 _pending.Dequeue();
+
+            if (_pending.Count > 0 && _pending.Peek().Tick > result.Tick + 1)
+                return;
 
             var state = result.State;
             foreach (var request in _pending)

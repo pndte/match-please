@@ -1,7 +1,7 @@
 using Bw.UseCases.Bots.Abstractions;
 using Bw.UseCases.Bots.Navigation;
 using Bw.UseCases.Bots.Senses;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
+using Bw.UseCases.Combat.Abstractions.Weapons;
 
 namespace Bw.UseCases.Bots.Skills
 {

@@ -1,18 +1,20 @@
 using Bw.Entities.Network.Prediction.Stream.Requests;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Network.Variables;
+using Bw.Entities.Simulation;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
 namespace Bw.Entities.Network.Prediction.Stream
 {
-    public sealed class PredictionInputSender<TInput> where TInput : struct
+    public sealed class PredictionInputSender<TInput> : IFedInputs<TInput> where TInput : struct
     {
-        public ISource<TInput> Predicted => _predicted;
+        public ISource<TickedInput<TInput>> Fed => _fed;
 
-        private readonly Signal<TInput> _predicted = new();
+        private readonly Signal<TickedInput<TInput>> _fed = new();
         private readonly IInputSampler<TInput> _sampler;
         private readonly INetRequestSender<TickedInput<TInput>> _input;
+        private readonly ISteppable<TInput> _simulation;
 
         private TInput _previousInput;
 
@@ -21,10 +23,12 @@ namespace Bw.Entities.Network.Prediction.Stream
             IControlledBy controlledBy,
             INetworkTicks ticks,
             IInputSampler<TInput> sampler,
-            INetRequestSender<TickedInput<TInput>> input)
+            INetRequestSender<TickedInput<TInput>> input,
+            ISteppable<TInput> simulation)
         {
             _sampler = sampler;
             _input = input;
+            _simulation = simulation;
 
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
                 ticks.Ticked(TickPhase.Default).Advise(controlledLifetime, Send));
@@ -33,10 +37,12 @@ namespace Bw.Entities.Network.Prediction.Stream
         private void Send(int tick)
         {
             var input = _sampler.Sample();
+            var ticked = new TickedInput<TInput>(tick, input, _previousInput);
 
-            _input.Send(new TickedInput<TInput>(tick, input, _previousInput));
+            _input.Send(ticked);
             _previousInput = input;
-            _predicted.Fire(input);
+            _fed.Fire(ticked);
+            _simulation.Step(input);
         }
     }
 }

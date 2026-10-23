@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Bw.CoreAdapters.Weapons;
-using Bw.UseCases.Shooting.View.Highlight;
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
-using Bw.UseCases.Shooting.Weapon.Extensions;
-using Bw.UseCases.Shooting.Weapon.Pickup;
+using Bw.UseCases.Combat.Abstractions.Weapons;
+using Bw.UseCases.Combat.View.Highlight;
+using Bw.UseCases.Combat.Weapon;
+using Bw.UseCases.Combat.Weapon.Extensions;
+using Bw.UseCases.Combat.Weapon.Pickup;
 using UnityEngine;
 using Zenject;
 

@@ -8,8 +8,11 @@
         "Bw.UseCases.Character",
         "Bw.UseCases.Mortality",
         "Bw.UseCases.Movement",
-        "Bw.UseCases.Shooting",
-        "Unity.Netcode.Runtime"
+        "Bw.UseCases.Combat",
+        "Unity.Netcode.Runtime",
+        "Bw.UseCases.Character.Network",
+        "Bw.UseCases.Movement.Network",
+        "Bw.UseCases.Combat.Abstractions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

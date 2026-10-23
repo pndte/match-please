@@ -16,8 +16,8 @@ namespace Bw.UseCases.Bots.Network
                 registry.PlayerByCharacter.View(botLifetime, (characterLifetime, character, player) =>
                 {
                     if (player == bot)
-                        character.State.WhenAlive(characterLifetime, aliveLifetime =>
-                            launcher.Launch(aliveLifetime, bot, character, entry.Difficulty));
+                        character.Mortal.State.WhenAlive(characterLifetime, aliveLifetime =>
+                            launcher.Launch(aliveLifetime, character, entry.Difficulty));
                 }));
         }
     }

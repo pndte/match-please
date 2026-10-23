@@ -1,11 +1,11 @@
 ﻿using Bw.Entities.Players;
-using Bw.UseCases.Mortality;
+using Bw.UseCases.Combat.Abstractions.Characters;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Spawning
 {
     public interface ICharacterSpawner
     {
-        public IReadonlyMortal SpawnCharacterFor(Lifetime lifetime, IPlayer player);
+        public IReadonlyCharacter SpawnCharacterFor(Lifetime lifetime, IPlayer player);
     }
 }

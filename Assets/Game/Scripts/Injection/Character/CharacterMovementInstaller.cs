@@ -6,17 +6,20 @@ using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using Bw.Injection.Movement;
 using Bw.Injection.Network.Prediction;
+using Bw.UseCases.Character.Network;
+using Bw.UseCases.Character.Network.Requests;
+using Bw.UseCases.Combat.Melee.Network;
 using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.Abstractions;
+using Bw.UseCases.Movement.Network;
+using Bw.UseCases.Movement.Network.Prediction;
+using Bw.UseCases.Movement.Network.Requests;
+using Bw.UseCases.Movement.Network.Root;
+using Bw.UseCases.Movement.Physics;
 using Bw.UseCases.Movement.View;
 using Bw.UseCases.Movement.View.Adapters;
 using Bw.UseCases.Movement.View.Animation;
 using Bw.UseCases.Movement.View.Audio;
-using Bw.UseCases.Movement.Network;
-using Bw.UseCases.Movement.Network.Prediction;
-using Bw.UseCases.Movement.Network.Root;
-using Bw.UseCases.Movement.Physics;
-using JetBrains.Collections.Viewable;
 using Zenject;
 
 namespace Bw.Injection
@@ -43,30 +46,35 @@ namespace Bw.Injection
             Container.Bind<MovementConfig>().FromInstance(_config).AsSingle();
             BodyInstaller<MovementState>.Install(Container, _runtimeSettings, _config);
             Container.BindInterfacesTo<PlatformerMotor>().AsSingle();
-            Container.Bind(typeof(IReadonlyMovement), typeof(IReadonlySimulation<MovementState>), typeof(ISimulation<MovementState>))
+            Container.Bind(typeof(IReadonlyMovement), typeof(IReadonlySimulation<MovementState>), typeof(ISimulation<MovementState>), typeof(ISteppable<MovementInput>))
                 .To<CharacterMovement>().AsSingle()
-                .WriterOnlyInto<ISimulation<MovementState>>(typeof(PredictionReconciler<MovementInput, MovementState>), typeof(SimulationAffectable<,>))
+                .WriterOnlyInto<ISimulation<MovementState>>(typeof(PredictionReconciler<CharacterControls, MovementState>), typeof(SimulationAffectable<,>))
                 .NonLazy();
-            Container.BindInterfacesTo<MovementInputSampler>().AsSingle();
-            Container.BindInterfacesTo<MovementInputPolicy>().AsSingle();
             BindRoot();
+            BindControls();
             BindVisuals();
 
-            StreamPredictionInstaller<MovementInput, MovementState>.Install(Container, _runtimeSettings, _netSchema);
+            PredictionStateInstaller<CharacterControls, MovementState>.Install(Container, _runtimeSettings, _netSchema);
         }
 
         private void BindRoot()
         {
             Container.Bind(typeof(IReadonlyMovementRoot), typeof(IMovementRoot)).To<MovementRoot>().AsSingle()
-                .WriterOnlyInto<IMovementRoot>(typeof(MovementRootHolder));
+                .WriterOnlyInto<IMovementRoot>(typeof(MovementRootRegistration));
+        }
 
+        private void BindControls()
+        {
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.Decorate<ISource<MovementInput>>().With<RootedMovementInputs>();
+                    Container.Bind<IInputPolicy<MovementControls>>().To<MovementControlsPolicy>().AsSingle();
+                    Container.Decorate<ISteppable<MovementInput>>().With<RootedMovementSteps>();
                     break;
                 case PeerType.Client:
-                    Container.Decorate<IInputSampler<MovementInput>>().With<RootedMovementSampler>();
+                    Container.Bind<IInputSampler<MovementControls>>().To<MovementControlsSampler>().AsSingle();
+                    Container.Decorate<IInputSampler<MovementControls>>().With<RootedMovementSampler>();
+                    Container.Bind<ISimulator<CharacterControls, MovementState>>().To<ControlledMovement>().AsSingle();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -83,6 +91,7 @@ namespace Bw.Injection
                             context.Container.Instantiate<BodyStateView<MovementState>>(),
                             MotionOf(context.Container, context.Container.Instantiate<MovementAnimationView>())))
                         .AsSingle();
+                    Container.Bind<SimulationViewSync<MovementState>>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:
                     Container.Bind<IStateView<MovementState>>()

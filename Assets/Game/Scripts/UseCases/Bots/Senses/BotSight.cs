@@ -4,6 +4,7 @@ using Bw.Entities.Physics.Extensions;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Bots.Senses.Extensions;
 using Bw.UseCases.Character;
+using Bw.UseCases.Combat.Abstractions.Characters;
 using Bw.UseCases.Mortality;
 using Unity.Collections;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace Bw.UseCases.Bots.Senses
     {
         public Vector2 Eye => _characters[_self].transform.position;
 
-        private readonly IReadonlyMortal _self;
+        private readonly IReadonlyCharacter _self;
         private readonly IGameObjectByCharacterCollection _characters;
         private readonly PhysicsWorld _world;
         private readonly PhysicsQuery.QueryFilter _blockers;
@@ -25,7 +26,7 @@ namespace Bw.UseCases.Bots.Senses
         private readonly ISimulationStep _step;
 
         public BotSight(
-            IReadonlyMortal self,
+            IReadonlyCharacter self,
             IGameObjectByCharacterCollection characters,
             IPhysicsSpace space,
             BotsConfig bots,
@@ -48,7 +49,7 @@ namespace Bw.UseCases.Bots.Senses
             foreach (var pair in _characters)
             {
                 var character = pair.Key;
-                if (character == _self || character.State.Value != LifeState.Alive)
+                if (character == _self || character.Mortal.State.Value != LifeState.Alive)
                     continue;
 
                 var position = (Vector2)pair.Value.transform.position;
@@ -70,7 +71,7 @@ namespace Bw.UseCases.Bots.Senses
             for (var index = 0; index < remembered.Count; index++)
             {
                 var sighting = remembered[index];
-                if (_characters.ContainsKey(sighting.Character) && sighting.Character.State.Value == LifeState.Alive && sighting.UnseenTicks <= memory)
+                if (_characters.ContainsKey(sighting.Character) && sighting.Character.Mortal.State.Value == LifeState.Alive && sighting.UnseenTicks <= memory)
                     kept.Add(sighting);
             }
 
@@ -90,7 +91,7 @@ namespace Bw.UseCases.Bots.Senses
         private int Ticks(float seconds) =>
             Mathf.CeilToInt(seconds / _step.Duration);
 
-        private static int IndexOf(List<Sighting> sightings, IReadonlyMortal character)
+        private static int IndexOf(List<Sighting> sightings, IReadonlyCharacter character)
         {
             for (var index = 0; index < sightings.Count; index++)
                 if (sightings[index].Character == character)

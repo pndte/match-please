@@ -7,10 +7,11 @@
         "Bw.UseCases.Character",
         "Bw.UseCases.Match",
         "Bw.UseCases.Mortality",
-        "Bw.UseCases.Shooting",
+        "Bw.UseCases.Combat",
         "Unity.Netcode.Runtime",
         "Bw.CoreAdapters",
-        "Bw.CoreAdapters.Weapons"
+        "Bw.CoreAdapters.Weapons",
+        "Bw.UseCases.Combat.Abstractions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,10 +1,11 @@
 using Bw.Entities;
-using Bw.Entities.Extensions;
 using Bw.Entities.Physics;
 using Bw.Entities.Physics.Extensions;
+using Bw.UseCases.Combat.Abstractions.Inventory;
+using Bw.UseCases.Combat.Abstractions.Weapons;
+using Bw.UseCases.Combat.Weapon.Abstractions;
+using Bw.UseCases.Combat.Weapon.Pickup;
 using Bw.UseCases.Movement.Abstractions;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
-using Bw.UseCases.Shooting.Weapon.Pickup;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
@@ -19,6 +20,7 @@ namespace Bw.UseCases.Bots.Senses
         private readonly PhysicsWorld _world;
         private readonly PhysicsQuery.QueryFilter _props;
         private readonly IReadonlyWeaponKindRegistry _kinds;
+        private readonly IWeaponCarriers _carriers;
         private readonly WeaponPickupConfig _pickup;
         private readonly BotsConfig _bots;
 
@@ -26,6 +28,7 @@ namespace Bw.UseCases.Bots.Senses
             IReadonlyMovement movement,
             IPhysicsSpace space,
             IReadonlyWeaponKindRegistry kinds,
+            IWeaponCarriers carriers,
             WeaponPickupConfig pickup,
             BotsConfig bots)
         {
@@ -33,6 +36,7 @@ namespace Bw.UseCases.Bots.Senses
             _world = space.World;
             _props = new PhysicsQuery.QueryFilter(PhysicsMask.All, pickup.WeaponMask.AsPhysicsMask());
             _kinds = kinds;
+            _carriers = carriers;
             _pickup = pickup;
             _bots = bots;
         }
@@ -46,7 +50,7 @@ namespace Bw.UseCases.Bots.Senses
             for (var index = 0; index < found.Length; index++)
             {
                 var shape = found[index].shape;
-                if (!shape.TryGetComponent<IHolder<IWeapon>>(out var holder) || !shape.TryGetComponent<Transform>(out var prop) || prop.IsHeld() || _kinds.KindOf(holder.Value) != WeaponKind.Prop)
+                if (!shape.TryGetComponent<IHolder<IWeapon>>(out var holder) || _carriers.ByWeapon.ContainsKey(holder.Value) || _kinds.KindOf(holder.Value) != WeaponKind.Prop)
                     continue;
 
                 var center = shape.aabb.center;

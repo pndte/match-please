@@ -8,7 +8,11 @@
         "Bw.UseCases.Mortality",
         "Bw.UseCases.Movement.Network",
         "Unity.Netcode.Runtime",
-        "Zenject"
+        "Zenject",
+        "Bw.UseCases.Movement",
+        "Bw.UseCases.Combat",
+        "R3.Unity",
+        "Bw.UseCases.Combat.Abstractions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

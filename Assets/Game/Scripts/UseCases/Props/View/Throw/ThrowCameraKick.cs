@@ -1,6 +1,6 @@
 using Bw.UseCases.Camera.View.Shake;
+using Bw.UseCases.Combat.View.Abstractions;
 using Bw.UseCases.Props.View.Abstractions;
-using Bw.UseCases.Shooting.View.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 

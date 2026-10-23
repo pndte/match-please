@@ -6,7 +6,7 @@
         "Bw.Entities",
         "Bw.Entities.Extensions.Zenject",
         "Bw.UseCases",
-        "Bw.UseCases.Shooting",
+        "Bw.UseCases.Combat",
         "Unity.Netcode.Runtime",
         "Zenject",
         "UniTask.DOTween",
@@ -15,7 +15,9 @@
         "Bw.UseCases.Mortality",
         "Bw.UseCases.Mortality.Network",
         "Bw.CoreAdapters",
-        "Bw.CoreAdapters.Weapons"
+        "Bw.CoreAdapters.Weapons",
+        "Bw.UseCases.Combat.Abstractions",
+        "Bw.UseCases.Movement"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

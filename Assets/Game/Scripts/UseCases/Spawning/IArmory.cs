@@ -1,5 +1,5 @@
-using Bw.UseCases.Shooting.Weapon;
-using Bw.UseCases.Shooting.Weapon.Abstractions;
+using Bw.UseCases.Combat.Abstractions.Weapons;
+using Bw.UseCases.Combat.Weapon;
 using JetBrains.Lifetimes;
 using UnityEngine;
 
