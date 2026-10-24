@@ -8,9 +8,6 @@ namespace Bw.UseCases.Movement.Network
         public bool IsValid(MovementControls controls) =>
             float.IsFinite(controls.Horizontal);
 
-        public MovementControls Substitute(MovementControls lastControls) =>
-            new(lastControls.Horizontal, false, lastControls.JumpHeld, lastControls.Down);
-
         public MovementControls CaughtUp(
             MovementControls controls,
             MovementControls lastControls,

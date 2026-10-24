@@ -15,7 +15,7 @@ namespace Bw.UseCases.Combat.Shooting.Network.Requests
 
         public FlashlightClientHandler(
             Lifetime lifetime,
-            IControlledBy controlledBy,
+            IReadonlyControlledBy controlledBy,
             IReadonlyFlashlight flashlight,
             INetRequestSender<bool> @switch)
         {

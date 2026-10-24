@@ -1,4 +1,5 @@
 using Bw.Entities.Network;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Simulation;
 using JetBrains.Lifetimes;
@@ -15,24 +16,26 @@ namespace Bw.Injection.Network
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.Bind(typeof(INetworkTicks), typeof(ISimulationStep))
+                    Container.Bind(typeof(INetworkTicks), typeof(ISimulationStep), typeof(IWorldClock))
                         .To<ServerNetworkTicks>()
                         .AsSingle()
                         .WithArguments(Lifetime.Eternal)
+                        .WriterOnlyInto<IWorldClock>(typeof(WorldStep))
                         .NonLazy();
                     break;
                 case PeerType.Client:
                     Container.Bind(
                             typeof(INetworkTicks),
                             typeof(ISimulationStep),
+                            typeof(IWorldClock),
                             typeof(IInterpolationTicks),
                             typeof(IServerTime),
                             typeof(IInputMarginFeedback))
                         .To<ClientNetworkTicks>()
                         .AsSingle()
                         .WithArguments(Lifetime.Eternal)
+                        .WriterOnlyInto<IWorldClock>(typeof(WorldRollback))
                         .NonLazy();
-                    Container.Bind<IInterpolatedLifetimes>().To<InterpolatedLifetimes>().AsSingle();
                     break;
             }
         }

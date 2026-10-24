@@ -30,18 +30,18 @@ namespace Bw.Injection.Network.Prediction
                     Container.BindResultSender(_state).WhenInjectedInto(typeof(AuthoritativeState<TState, TEffect>), typeof(LateJoinStateSender<TState>));
                     Container.Bind<AuthoritativeState<TState, TEffect>>().AsSingle();
                     Container.Bind<LateJoinStateSender<TState>>().AsSingle().NonLazy();
-                    Container.Bind<IAffectable<TEffect>>().To<AuthoritativeState<TState, TEffect>>().FromResolve()
-                        .WhenInjectedInto<AffectableRegistration<TTarget, AuthoritativeState<TState, TEffect>, TEffect>>();
-                    Container.Bind<AffectableRegistration<TTarget, AuthoritativeState<TState, TEffect>, TEffect>>().AsSingle().NonLazy();
+                    Container.Bind<AffectableRegistration<TTarget, TEffect>>()
+                        .FromMethod(context => context.Container.Instantiate<AffectableRegistration<TTarget, TEffect>>(new object[] { context.Container.Resolve<AuthoritativeState<TState, TEffect>>() }))
+                        .AsCached()
+                        .NonLazy();
                     break;
                 case PeerType.Client:
-                    Container.BindResultReceiver(_state).WhenInjectedInto<InterpolatedCauses<TState>>();
-                    Container.Bind<INetResultReceiver<CausedState<TState>>>().To<InterpolatedCauses<TState>>().AsSingle()
-                        .WhenInjectedInto<PredictedState<TState, TEffect>>();
+                    Container.BindResultReceiver(_state).WhenInjectedInto<PredictedState<TState, TEffect>>(); //TODO: состояние цели показывается, как только пришло, а чужой выстрел, который его вызвал, клиент рисует на тик интерполяции позже: держатель видит, как разбился ящик и умер он сам, раньше, чем в него прилетела пуля
                     Container.Bind<PredictedState<TState, TEffect>>().AsSingle().NonLazy();
-                    Container.Bind<IPredictionTarget<TEffect>>().To<PredictedState<TState, TEffect>>().FromResolve()
-                        .WhenInjectedInto<PredictionTargetRegistration<TTarget, PredictedState<TState, TEffect>, TEffect>>();
-                    Container.Bind<PredictionTargetRegistration<TTarget, PredictedState<TState, TEffect>, TEffect>>().AsSingle().NonLazy();
+                    Container.Bind<PredictionTargetRegistration<TTarget, TEffect>>()
+                        .FromMethod(context => context.Container.Instantiate<PredictionTargetRegistration<TTarget, TEffect>>(new object[] { context.Container.Resolve<PredictedState<TState, TEffect>>() }))
+                        .AsCached()
+                        .NonLazy();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

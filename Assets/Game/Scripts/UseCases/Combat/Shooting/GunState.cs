@@ -3,7 +3,7 @@ using Bw.UseCases.Combat.Weapon.Abstractions;
 
 namespace Bw.UseCases.Combat.Shooting
 {
-    public readonly struct GunState : IWeaponState, IEquatable<GunState>
+    public readonly struct GunState : IWeaponState, IAimedState<GunState>, IEquatable<GunState>
     {
         public readonly float Aim;
         public readonly int Ammo;
@@ -14,6 +14,8 @@ namespace Bw.UseCases.Combat.Shooting
         float IWeaponState.Aim => Aim;
         int IWeaponState.Shots => Shots;
         bool IWeaponState.Stowable => true;
+        bool IWeaponState.Rooting => false;
+        GunState IAimedState<GunState>.Turned(float degrees) => new(Aim + degrees, Ammo, CooldownTicks, ReloadTicks, Shots);
 
         public GunState(
             float aim,

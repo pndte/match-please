@@ -3,9 +3,13 @@ using JetBrains.Lifetimes;
 
 namespace Bw.Entities
 {
-    public interface IControlledBy
+    public interface IReadonlyControlledBy
     {
         public IReadonlyProperty<bool> Me { get; }
+    }
+
+    public interface IControlledBy : IReadonlyControlledBy
+    {
         public void SetMe(Lifetime lifetime);
     }
 }

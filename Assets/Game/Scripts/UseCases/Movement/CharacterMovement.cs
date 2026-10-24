@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Bw.UseCases.Movement
 {
-    public sealed class CharacterMovement : IMovement, ISteppable<MovementInput>
+    public sealed class CharacterMovement : IReadonlyMovement, IRestorable<MovementState>, ISteppable<MovementInput>
     {
         public IReadonlyProperty<MovementState> State => _state;
         public MovementState Previous { get; private set; }

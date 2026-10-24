@@ -24,9 +24,6 @@ namespace Bw.UseCases.Combat.Hands.Network
         public bool IsValid(HandsControls controls) =>
             float.IsFinite(controls.Aim) && controls.Trigger.IsFinite() && IsValid(controls.Choice);
 
-        public HandsControls Substitute(HandsControls lastControls) => //TODO: в тиках без ввода сервер угадывает курок по последнему известному вводу: зажатый остаётся зажатым (если игрок отпустил кнопку ровно в этих тиках, сервер выстрелит лишний раз, а сильный удар кулаков сорвётся позже, чем у клиента), а свежее нажатие — отпущенным (если игрок держал кнопку, очередь на сервере начнётся позже, а заряд сильного удара сорвётся); выбор оружия живёт один тик: если пропал и его тик, и следующий пакет с копией, сервер его не узнает, и клиент вернётся к прежнему оружию при сверке; нужен счётчик выборов, как у нажатий курка
-            new(lastControls.Aim, lastControls.Trigger.WithoutFreshPress(), false, DrawControl.Keep);
-
         public HandsControls CaughtUp(
             HandsControls controls,
             HandsControls lastControls,

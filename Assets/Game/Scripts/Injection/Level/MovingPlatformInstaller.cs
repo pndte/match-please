@@ -1,6 +1,6 @@
+using System;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
-using Bw.Entities.Network.Ticks;
 using Bw.Entities.Physics;
 using Bw.Entities.Physics.Extensions;
 using Bw.UseCases.Level;
@@ -27,13 +27,19 @@ namespace Bw.Injection.Level
             Container.Bind<SweptBodyRegistration>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<MovingPlatform>().AsSingle().WithArguments(_box, _path);
             Container.Bind<MovingPlatformRegistration>().AsSingle().NonLazy();
-            Container.BindInterfacesAndSelfTo<MovingPlatformSchedule>().AsSingle().NonLazy();
-            Container.Bind<ScheduledRegistration>().AsSingle().NonLazy();
+            Container.Bind<MovingPlatformSchedule>().AsSingle().NonLazy();
 
-            if (_runtimeSettings.CurrentPeerType != PeerType.Client)
-                return;
-
-            BindVisuals();
+            switch (_runtimeSettings.CurrentPeerType)
+            {
+                case PeerType.Server:
+                    Container.Bind<MovingPlatformRewinder>().AsSingle().NonLazy();
+                    break;
+                case PeerType.Client:
+                    BindVisuals();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private void BindVisuals() =>

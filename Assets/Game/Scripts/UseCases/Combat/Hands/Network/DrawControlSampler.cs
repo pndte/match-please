@@ -18,7 +18,7 @@ namespace Bw.UseCases.Combat.Hands.Network
 
         public DrawControlSampler(
             Lifetime lifetime,
-            IControlledBy controlledBy,
+            IReadonlyControlledBy controlledBy,
             IReadonlyHands hands,
             WeaponInventoryConfig config)
         {

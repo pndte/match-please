@@ -21,6 +21,7 @@ namespace Bw.Injection.Network
             if (_runtimeSettings.CurrentPeerType != PeerType.Server)
                 return;
 
+            Container.Bind<SimulationHistory<TState>>().AsSingle().NonLazy();
             Container.Bind<IRewindable>()
                 .FromMethod(context => context.Container.Instantiate<SimulationRewinder<TState>>(
                     new object[] { context.Container.Instantiate(typeof(TView)) }))

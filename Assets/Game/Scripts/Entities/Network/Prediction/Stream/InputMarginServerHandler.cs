@@ -1,5 +1,6 @@
 using System;
 using Bw.Entities.Network.Prediction.Stream.Requests;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Network.Variables;
 using JetBrains.Lifetimes;
@@ -18,6 +19,7 @@ namespace Bw.Entities.Network.Prediction.Stream
         public InputMarginServerHandler(
             Lifetime lifetime,
             INetworkTicks ticks,
+            IWorldStep worldStep,
             INetRequestReceiver<TickedInput<TInput>> input,
             INetResultSender<int> margin,
             NetworkTicksConfig config)
@@ -27,7 +29,7 @@ namespace Bw.Entities.Network.Prediction.Stream
             _config = config;
 
             input.Received.Advise(lifetime, request => Measure(request.Tick - _ticks.Current - 1));
-            ticks.Ticked(TickPhase.Default).Advise(lifetime, ReportWhenDue);
+            worldStep.Stepped(TickPhase.Publish).Advise(lifetime, ReportWhenDue);
         }
 
         private void Measure(int margin)

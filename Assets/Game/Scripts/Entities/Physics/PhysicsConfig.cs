@@ -8,6 +8,8 @@ namespace Bw.Entities.Physics
     {
         [Min(1)] public int SubSteps = 8;
         [Min(0)] public int Workers;
+        public bool WarmStarting;
+        public bool Sleeping;
 
         [Header("Contacts")]
         [Min(1f)] public float ContactFrequency = 60f;

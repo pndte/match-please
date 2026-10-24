@@ -14,7 +14,7 @@ namespace Bw.UseCases.Movement.Network
         private bool _downRequested;
         private bool _upHeld;
 
-        public MovementControlsSampler(Lifetime lifetime, IControlledBy controlledBy)
+        public MovementControlsSampler(Lifetime lifetime, IReadonlyControlledBy controlledBy)
         {
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
                 Observable.EveryUpdate(UnityFrameProvider.Update, controlledLifetime).Subscribe(UpdateButtons));

@@ -66,7 +66,6 @@ namespace Bw.Injection.Crates
         public override void InstallBindings()
         {
             OwnershipInstaller.Install(Container, _runtimeSettings);
-            WeaponControlInstaller.Install(Container, _runtimeSettings);
 
             Container.Bind<NetworkObject>().FromInstance(_networkObject).AsSingle();
             Container.Bind<INetworkLifetimedObject>().FromInstance(_networkLifetimedBehaviour).AsSingle().NonLazy();
@@ -98,20 +97,21 @@ namespace Bw.Injection.Crates
         {
             Container.BindInstance(_hitImpulse).AsSingle();
             Container.Bind<IEffectRules<RigidState, Impacts>>().To<HitImpulseRules>().AsSingle();
+            Container.Bind<SimulationAffectable<RigidState, Impacts>>().AsSingle();
 
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.Bind<SimulationAffectable<RigidState, Impacts>>().AsSingle();
-                    Container.Bind<IAffectable<Impacts>>().To<SimulationAffectable<RigidState, Impacts>>().FromResolve()
-                        .WhenInjectedInto<AffectableRegistration<IReadonlyMortal, SimulationAffectable<RigidState, Impacts>, Impacts>>();
-                    Container.Bind<AffectableRegistration<IReadonlyMortal, SimulationAffectable<RigidState, Impacts>, Impacts>>().AsSingle().NonLazy();
+                    Container.Bind<AffectableRegistration<IReadonlyMortal, Impacts>>()
+                        .FromMethod(context => context.Container.Instantiate<AffectableRegistration<IReadonlyMortal, Impacts>>(new object[] { context.Container.Resolve<SimulationAffectable<RigidState, Impacts>>() }))
+                        .AsCached()
+                        .NonLazy();
                     break;
                 case PeerType.Client:
-                    Container.Bind(typeof(PredictedRigidEffects<Impacts>), typeof(IRigidStateEffects)).To<PredictedRigidEffects<Impacts>>().AsSingle();
-                    Container.Bind<IPredictionTarget<Impacts>>().To<PredictedRigidEffects<Impacts>>().FromResolve()
-                        .WhenInjectedInto<PredictionTargetRegistration<IReadonlyMortal, PredictedRigidEffects<Impacts>, Impacts>>();
-                    Container.Bind<PredictionTargetRegistration<IReadonlyMortal, PredictedRigidEffects<Impacts>, Impacts>>().AsSingle().NonLazy();
+                    Container.Bind<PredictedAffectableRegistration<IReadonlyMortal, Impacts>>()
+                        .FromMethod(context => context.Container.Instantiate<PredictedAffectableRegistration<IReadonlyMortal, Impacts>>(new object[] { context.Container.Resolve<SimulationAffectable<RigidState, Impacts>>() }))
+                        .AsCached()
+                        .NonLazy();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

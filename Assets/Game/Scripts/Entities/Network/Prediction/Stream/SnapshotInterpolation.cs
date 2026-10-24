@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-using Bw.Entities.Network.Prediction.Stream.Requests;
+using System;
+using Bw.Entities.Network.Replication;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
-using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
@@ -11,59 +11,44 @@ namespace Bw.Entities.Network.Prediction.Stream
 {
     public sealed class SnapshotInterpolation<TState> where TState : struct
     {
-        private const int MaxSnapshots = 64;
-
-        private readonly List<TickedState<TState>> _snapshots = new();
         private readonly IInterpolationTicks _ticks;
+        private readonly IReplicatedStates<TState> _server;
         private readonly IStateView<TState> _view;
 
         public SnapshotInterpolation(
             Lifetime lifetime,
-            IControlledBy controlledBy,
+            IPredictedBy predictedBy,
             IInterpolationTicks ticks,
-            INetResultReceiver<TickedState<TState>> state,
+            IReplicatedStates<TState> server,
             IStateView<TState> view)
         {
             _ticks = ticks;
+            _server = server;
             _view = view;
 
-            controlledBy.Me.WhenFalse(lifetime, remoteLifetime =>
-            {
-                state.Received.Advise(remoteLifetime, Remember);
-                Observable.EveryUpdate(UnityFrameProvider.Update, remoteLifetime).Subscribe(UpdateView);
-                remoteLifetime.OnTermination(_snapshots.Clear);
-            });
+            predictedBy.Me.WhenFalse(lifetime, interpolatedLifetime =>
+                Observable.EveryUpdate(UnityFrameProvider.Update, interpolatedLifetime).Subscribe(UpdateView));
         }
 
-        private void Remember(TickedState<TState> snapshot)
+        private void UpdateView(Unit frame)
         {
-            if (_snapshots.Count > 0 && snapshot.Tick <= _snapshots[_snapshots.Count - 1].Tick)
-                return;
-
-            _snapshots.Add(snapshot);
-            if (_snapshots.Count > MaxSnapshots)
-                _snapshots.RemoveAt(0);
-        }
-
-        private void UpdateView(Unit _)
-        {
-            if (_snapshots.Count == 0)
-                return;
-
             var renderTick = _ticks.InterpolationTick;
-            while (_snapshots.Count > 1 && _snapshots[1].Tick <= renderTick)
-                _snapshots.RemoveAt(0);
-
-            var from = _snapshots[0];
-            if (_snapshots.Count == 1 || renderTick <= from.Tick)
+            var shownTick = (int)Math.Floor(renderTick);
+            if (!_server.TryGetLatest(shownTick, out var fromTick, out var from))
             {
-                _view.Show(from.State, from.State, 0f);
+                if (_server.TryGetEarliest(shownTick + 1, out _, out var first))
+                    _view.Show(first, first, 0f);
+
                 return;
             }
 
-            var to = _snapshots[1];
-            var progress = (float)((renderTick - from.Tick) / (to.Tick - from.Tick));
-            _view.Show(from.State, to.State, progress);
+            if (!_server.TryGetEarliest(fromTick + 1, out var toTick, out var to))
+            {
+                _view.Show(from, from, 0f);
+                return;
+            }
+
+            _view.Show(from, to, (float)((renderTick - fromTick) / (toTick - fromTick)));
         }
     }
 }

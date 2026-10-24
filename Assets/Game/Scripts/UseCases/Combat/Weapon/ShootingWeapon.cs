@@ -6,7 +6,7 @@ using JetBrains.Collections.Viewable;
 
 namespace Bw.UseCases.Combat.Weapon
 {
-    public sealed class ShootingWeapon<TState> : IWeapon, IWeaponFeed, ISimulation<TState>, ISteppable
+    public sealed class ShootingWeapon<TState> : IWeapon, IWeaponFeed, IReadonlySimulation<TState>, IRestorable<TState>, ISteppable
         where TState : struct, IWeaponState, IEquatable<TState>
     {
         public IReadonlyProperty<TState> State => _state;
@@ -15,6 +15,7 @@ namespace Bw.UseCases.Combat.Weapon
         public ISource<WeaponShot> Fired => _fired;
         public ISource<WeaponInput> Fed => _fed;
         public bool Stowable => _state.Value.Stowable;
+        public bool Rooting => _state.Value.Rooting;
 
         private readonly ViewableProperty<TState> _state;
         private readonly Signal<TState> _stepped = new();
@@ -46,10 +47,10 @@ namespace Bw.UseCases.Combat.Weapon
         public void Step()
         {
             var rested = _simulator.Rested(_state.Value);
+            Previous = _state.Value;
             if (rested.Equals(_state.Value))
                 return;
 
-            Previous = _state.Value;
             _state.Value = rested;
             _stepped.Fire(rested);
         }

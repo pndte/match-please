@@ -7,7 +7,6 @@ using Bw.Injection.Network.Variables;
 using Bw.UseCases.Combat;
 using Bw.UseCases.Combat.Abstractions.Weapons;
 using Bw.UseCases.Combat.Melee;
-using Bw.UseCases.Combat.Melee.Network;
 using Bw.UseCases.Combat.View;
 using Bw.UseCases.Combat.View.Abstractions;
 using Bw.UseCases.Combat.View.Adapters;
@@ -119,7 +118,6 @@ namespace Bw.Injection.Weapon
             WeaponSimulatorInstaller<MeleeState, MeleeSimulator>.Install(Container);
             Container.BindInterfacesTo<MeleeTracer>().AsSingle();
             Container.BindInterfacesTo<ChargedShotPower>().AsSingle();
-            Container.Bind<StrongSwingRoot>().AsSingle().NonLazy();
         }
 
         private void BindClientVisuals()

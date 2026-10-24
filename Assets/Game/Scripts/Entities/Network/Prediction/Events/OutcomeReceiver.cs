@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Bw.Entities.Network.Prediction.Events.Requests;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Network.Variables;
 using JetBrains.Collections.Viewable;
@@ -18,9 +19,8 @@ namespace Bw.Entities.Network.Prediction.Events
 
         public OutcomeReceiver( //TODO: чрезвычайно много параметров конструктора
             Lifetime lifetime,
-            IControlledBy controlledBy,
             INetResultReceiver<OutcomeReport<TEffect>> report,
-            INetworkTicks ticks,
+            IWorldStep worldStep,
             IServerTime serverTime,
             IPredictionTargets<TTarget, TEffect> targets,
             EventPredictionConfig config,
@@ -31,12 +31,9 @@ namespace Bw.Entities.Network.Prediction.Events
             _config = config;
             _outcomePrediction = outcomePrediction;
 
-            controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
-            {
-                report.Received.Advise(controlledLifetime, Receive);
-                ticks.Ticked(TickPhase.Default).Advise(controlledLifetime, Expire); //TODO: отчёт и состояние цели, задержанные повторными отправками дольше ExpiryTicks, придут после отмены — снятое попадание покажется второй раз, со вспышкой
-                controlledLifetime.OnTermination(outcomePrediction.RejectAll);
-            });
+            report.Received.Advise(lifetime, Receive);
+            outcomePrediction.Pending.WhenTrue(lifetime, pendingLifetime =>
+                worldStep.Stepped(TickPhase.Prepare).Advise(pendingLifetime, Expire)); //TODO: отчёт и состояние цели, задержанные повторными отправками дольше ExpiryTicks, придут после отмены — снятое попадание покажется второй раз, со вспышкой
         }
 
         private void Receive(OutcomeReport<TEffect> report)

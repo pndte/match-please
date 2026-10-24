@@ -1,5 +1,6 @@
 using System;
 using Bw.Entities.Network.Prediction.Stream.Requests;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
@@ -9,9 +10,9 @@ namespace Bw.Entities.Network.Replication
 {
     public sealed class StateChangeBroadcaster<TState> where TState : struct, IEquatable<TState>
     {
-        private readonly INetworkTicks _ticks;
         private readonly IReadonlySimulation<TState> _simulation;
         private readonly INetResultSender<TickedState<TState>> _result;
+        private readonly WorldRollbackConfig _config;
 
         private TState _sent;
         private int _sentTick;
@@ -19,27 +20,39 @@ namespace Bw.Entities.Network.Replication
         public StateChangeBroadcaster(
             Lifetime lifetime,
             INetworkTicks ticks,
+            IWorldStep worldStep,
             IReadonlySimulation<TState> simulation,
-            INetResultSender<TickedState<TState>> result)
+            INetResultSender<TickedState<TState>> result,
+            WorldRollbackConfig config)
         {
-            _ticks = ticks;
             _simulation = simulation;
             _result = result;
+            _config = config;
             _sent = simulation.State.Value;
             _sentTick = ticks.Current;
 
-            simulation.Stepped.Advise(lifetime, Broadcast);
+            worldStep.Stepped(TickPhase.Publish).Advise(lifetime, Publish);
         }
 
-        private void Broadcast(TState state)
+        private void Publish(int tick)
         {
+            var state = _simulation.State.Value;
             if (state.Equals(_sent))
-                return;
+            {
+                if (tick - _sentTick >= _config.UnchangedStateTicks)
+                    Confirm(tick, state);
 
-            var tick = _ticks.Current;
+                return;
+            }
+
             if (_sentTick < tick - 1)
                 _result.Broadcast(new TickedState<TState>(tick - 1, _simulation.Previous));
 
+            Confirm(tick, state);
+        }
+
+        private void Confirm(int tick, TState state)
+        {
             _result.Broadcast(new TickedState<TState>(tick, state));
             _sent = state;
             _sentTick = tick;

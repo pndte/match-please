@@ -19,9 +19,6 @@ namespace Bw.UseCases.Character.Network
         public bool IsValid(CharacterControls controls) =>
             _movement.IsValid(controls.Movement) && _hands.IsValid(controls.Hands) && float.IsFinite(controls.Guard.Aim);
 
-        public CharacterControls Substitute(CharacterControls lastControls) =>
-            new(_movement.Substitute(lastControls.Movement), _hands.Substitute(lastControls.Hands), lastControls.Guard);
-
         public CharacterControls CaughtUp(
             CharacterControls controls,
             CharacterControls lastControls,

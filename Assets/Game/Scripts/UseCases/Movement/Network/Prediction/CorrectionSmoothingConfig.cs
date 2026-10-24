@@ -8,5 +8,6 @@ namespace Bw.UseCases.Movement.Network.Prediction
     {
         [Min(0.01f)] public float DecaySeconds = 0.1f;
         [Min(0.01f)] public float SnapDistance = 3f;
+        [Min(0.01f)] public float SwitchBlendSeconds = 0.15f;
     }
 }

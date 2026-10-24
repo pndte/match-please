@@ -2,19 +2,17 @@ using System;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Prediction.Stream;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using Bw.Injection.Movement;
 using Bw.Injection.Network.Prediction;
 using Bw.UseCases.Character.Network;
-using Bw.UseCases.Character.Network.Requests;
-using Bw.UseCases.Combat.Melee.Network;
 using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.Abstractions;
 using Bw.UseCases.Movement.Network;
 using Bw.UseCases.Movement.Network.Prediction;
 using Bw.UseCases.Movement.Network.Requests;
-using Bw.UseCases.Movement.Network.Root;
 using Bw.UseCases.Movement.Physics;
 using Bw.UseCases.Movement.View;
 using Bw.UseCases.Movement.View.Adapters;
@@ -46,21 +44,14 @@ namespace Bw.Injection
             Container.Bind<MovementConfig>().FromInstance(_config).AsSingle();
             BodyInstaller<MovementState>.Install(Container, _runtimeSettings, _config);
             Container.BindInterfacesTo<PlatformerMotor>().AsSingle();
-            Container.Bind(typeof(IReadonlyMovement), typeof(IReadonlySimulation<MovementState>), typeof(ISimulation<MovementState>), typeof(ISteppable<MovementInput>))
+            Container.Bind(typeof(IReadonlyMovement), typeof(IReadonlySimulation<MovementState>), typeof(IRestorable<MovementState>), typeof(ISteppable<MovementInput>))
                 .To<CharacterMovement>().AsSingle()
-                .WriterOnlyInto<ISimulation<MovementState>>(typeof(PredictionReconciler<CharacterControls, MovementState>), typeof(SimulationAffectable<,>))
+                .WriterOnlyInto<IRestorable<MovementState>>(typeof(RollbackPart<MovementState>), typeof(ServerStateFollower<MovementState>), typeof(SimulationAffectable<,>))
                 .NonLazy();
-            BindRoot();
             BindControls();
             BindVisuals();
 
-            PredictionStateInstaller<CharacterControls, MovementState>.Install(Container, _runtimeSettings, _netSchema);
-        }
-
-        private void BindRoot()
-        {
-            Container.Bind(typeof(IReadonlyMovementRoot), typeof(IMovementRoot)).To<MovementRoot>().AsSingle()
-                .WriterOnlyInto<IMovementRoot>(typeof(MovementRootRegistration));
+            RollbackStateInstaller<MovementState>.Install(Container, _runtimeSettings, _netSchema);
         }
 
         private void BindControls()
@@ -69,12 +60,10 @@ namespace Bw.Injection
             {
                 case PeerType.Server:
                     Container.Bind<IInputPolicy<MovementControls>>().To<MovementControlsPolicy>().AsSingle();
-                    Container.Decorate<ISteppable<MovementInput>>().With<RootedMovementSteps>();
                     break;
                 case PeerType.Client:
                     Container.Bind<IInputSampler<MovementControls>>().To<MovementControlsSampler>().AsSingle();
-                    Container.Decorate<IInputSampler<MovementControls>>().With<RootedMovementSampler>();
-                    Container.Bind<ISimulator<CharacterControls, MovementState>>().To<ControlledMovement>().AsSingle();
+                    Container.Bind<IStateDivergence<MovementState>>().To<MovementDivergence>().AsSingle();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -103,6 +92,7 @@ namespace Bw.Injection
                                 context.Container.Instantiate<MovementSoundsView>())))
                         .AsSingle();
                     Container.Decorate<IStateView<MovementState>>().With<SmoothedStateView<MovementState>>();
+                    Container.Decorate<IStateView<MovementState>>().With<TimelineBlendView<MovementState>>();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

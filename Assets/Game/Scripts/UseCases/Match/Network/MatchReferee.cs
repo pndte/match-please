@@ -1,4 +1,5 @@
 using System;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
@@ -18,6 +19,7 @@ namespace Bw.UseCases.Match.Network
         public MatchReferee(
             Lifetime lifetime,
             INetworkTicks ticks,
+            IWorldStep worldStep,
             MatchConfig config,
             IScoreboard scoreboard)
         {
@@ -25,7 +27,7 @@ namespace Bw.UseCases.Match.Network
             _config = config;
             _scoreboard = scoreboard;
 
-            ticks.Ticked(TickPhase.Late).Advise(lifetime, Tick);
+            worldStep.Stepped(TickPhase.Late).Advise(lifetime, Tick);
         }
 
         private void Tick(int tick)

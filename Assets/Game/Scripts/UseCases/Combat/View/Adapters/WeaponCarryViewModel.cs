@@ -25,7 +25,7 @@ namespace Bw.UseCases.Combat.View.Adapters
         private readonly IWeapon _weapon;
         private readonly IWeaponCarriers _carriers;
         private readonly ICharacterViews _views;
-        private readonly IControlledBy _controlledBy;
+        private readonly IReadonlyControlledBy _controlledBy;
 
         public WeaponCarryViewModel(
             Lifetime lifetime,
@@ -33,7 +33,7 @@ namespace Bw.UseCases.Combat.View.Adapters
             IWeaponCarriers carriers,
             IWeaponsInHands inHands,
             ICharacterViews views,
-            IControlledBy controlledBy)
+            IReadonlyControlledBy controlledBy)
         {
             _weapon = weapon;
             _carriers = carriers;

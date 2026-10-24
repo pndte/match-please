@@ -1,9 +1,8 @@
-using Bw.Entities.Network.Prediction.Stream.Requests;
+using Bw.Entities.Network.Rollback;
 
 namespace Bw.Entities.Network.Replication
 {
-    public interface IReplicatedStates<TState> where TState : struct
+    public interface IReplicatedStates<TState> : IReadonlyTickHistory<TState> where TState : struct
     {
-        public bool TryGetAt(int tick, out TickedState<TState> state);
     }
 }

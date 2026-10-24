@@ -33,12 +33,12 @@ namespace Bw.UseCases.Props.Network
                 carriedLifetime.OnTermination(() => _releaseTick = ticks.Current));
         }
 
-        public void Rewind(Lifetime lifetime, SeenTicks seen)
+        public void Rewind(Lifetime lifetime, ShooterView view)
         {
             if (_carriers.ByWeapon.ContainsKey(_prop)) //TODO: ящик, который стрелок видел ещё на полу, проверяется в руках откаченного держателя: откат держателя ставит в руки тело хвата, а место на полу не откатывается
-                _aim.Rewind(lifetime, seen);
-            else if (seen.Interpolated >= _releaseTick) //TODO: сервер не помнит, где ящик был в руках: если стрелок видел ящик в руках, а держатель уже отпустил его, выстрел проверяется по месту, где ящик сейчас
-                _body.Rewind(lifetime, seen);
+                _aim.Rewind(lifetime, view);
+            else if (view.Interpolated >= _releaseTick) //TODO: сервер не помнит, где ящик был в руках: если стрелок видел ящик в руках, а держатель уже отпустил его, выстрел проверяется по месту, где ящик сейчас
+                _body.Rewind(lifetime, view);
         }
     }
 }

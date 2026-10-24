@@ -1,9 +1,12 @@
 using System;
+using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
-using Bw.Entities.Network.Prediction.Stream;
+using Bw.Entities.Network.Prediction.Bubble;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Variables;
+using Bw.Entities.Simulation;
 using Bw.Injection.Network;
 using Bw.Injection.Network.Prediction;
 using Bw.Injection.Ownership;
@@ -25,7 +28,7 @@ using Zenject;
 namespace Bw.Injection.Weapon
 {
     public class HeldWeaponInstaller<TState> : Installer<IRuntimeSettings, INetEntriesSchemaBuilder, HeldWeaponParts<TState>, HeldWeaponInstaller<TState>>
-        where TState : struct, IWeaponState, IEquatable<TState>
+        where TState : struct, IWeaponState, IAimedState<TState>, IEquatable<TState>
     {
         private readonly IRuntimeSettings _runtimeSettings;
         private readonly INetEntriesSchemaBuilder _netSchema;
@@ -44,7 +47,6 @@ namespace Bw.Injection.Weapon
         public override void InstallBindings()
         {
             OwnershipInstaller.Install(Container, _runtimeSettings);
-            WeaponControlInstaller.Install(Container, _runtimeSettings);
 
             Container.Bind<NetworkObject>().FromInstance(_parts.NetworkObject).AsSingle();
             Container.Bind<INetworkLifetimedObject>().FromInstance(_parts.NetworkLifetimed).AsSingle();
@@ -79,7 +81,7 @@ namespace Bw.Injection.Weapon
             Container.Bind<WeaponOrbit>().AsSingle();
             Container.Bind<ShotTimer>().AsSingle();
 
-            PredictionStateInstaller<WeaponInput, TState>.Install(Container, _runtimeSettings, _netSchema);
+            RollbackStateInstaller<TState>.Install(Container, _runtimeSettings, _netSchema);
         }
 
         private void BindServer()
@@ -90,9 +92,14 @@ namespace Bw.Injection.Weapon
 
         private void BindClient()
         {
-            Container.Bind<IFedInputs<WeaponInput>>().To<WeaponFeedLog>().AsSingle();
+            Container.Bind<IBubbleMembership>().To<BubbleMembership>().AsSingle().WithArguments(_parts.Weapon);
+            Container.Bind<IPredictedBy>().To<WeaponPredictedBy>().AsSingle();
+            Container.Bind<IReadonlyControlledBy>().To<HolderControl>().AsSingle();
+            Container.Bind<IStateDivergence<TState>>().To<ExactDivergence<TState>>().AsSingle();
             Container.Bind<AimDeflectionRegistration>().AsSingle().NonLazy();
-            Container.Bind<HitPredictor<TState>>().AsSingle().NonLazy();
+            Container.Bind<IStrikes>().To<HitPredictor<TState>>().AsSingle().NonLazy();
+            Container.Bind<DecidedImpacts>().AsSingle().NonLazy();
+            Container.Bind<StrikeDamagePrediction>().AsSingle().NonLazy();
             BindClientVisuals();
         }
 
@@ -101,6 +108,7 @@ namespace Bw.Injection.Weapon
             Container.BindInterfacesTo<WeaponCarryViewModel>().AsSingle();
             Container.Bind(typeof(IShotsViewModel), typeof(SeenShotsViewModel<TState>)).To<SeenShotsViewModel<TState>>().AsSingle();
             Container.Bind(typeof(IWeaponPoseViewModel), typeof(WeaponPoseViewModel<TState>)).To<WeaponPoseViewModel<TState>>().AsSingle();
+            Container.Decorate<IStateView<TState>>().With<SmoothedAimView<TState>>();
             Container.Bind<WeaponOrbitView>().AsSingle().WithArguments(_parts.Weapon).NonLazy();
             Container.Bind<StowedWeaponView>().AsSingle().WithArguments(_parts.Visual.GetComponentsInChildren<Renderer>(true)).NonLazy();
             Container.Bind<WeaponRecoilView>().AsSingle().WithArguments(_parts.Visual).NonLazy();

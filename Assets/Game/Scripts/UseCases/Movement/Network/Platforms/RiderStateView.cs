@@ -1,6 +1,6 @@
 using System;
-using Bw.Entities;
 using Bw.Entities.Network.Replication;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Movement.Abstractions;
@@ -13,7 +13,7 @@ namespace Bw.UseCases.Movement.Network.Platforms
     public sealed class RiderStateView<TState> : IStateView<TState> where TState : struct, IPlacedState<TState>
     {
         private readonly IStateView<TState> _view;
-        private readonly IControlledBy _controlledBy;
+        private readonly IPredictedBy _predictedBy;
         private readonly IReplicatedStates<TState> _replicated;
         private readonly INetworkTicks _ticks;
         private readonly IInterpolationTicks _interpolation;
@@ -21,14 +21,14 @@ namespace Bw.UseCases.Movement.Network.Platforms
 
         public RiderStateView(
             IStateView<TState> view,
-            IControlledBy controlledBy,
+            IPredictedBy predictedBy,
             IReplicatedStates<TState> replicated,
             INetworkTicks ticks,
             IInterpolationTicks interpolation,
             IPlatformRider rider)
         {
             _view = view;
-            _controlledBy = controlledBy;
+            _predictedBy = predictedBy;
             _replicated = replicated;
             _ticks = ticks;
             _interpolation = interpolation;
@@ -37,7 +37,7 @@ namespace Bw.UseCases.Movement.Network.Platforms
 
         public void Show(TState from, TState to, float progress) //TODO: чужой, который сходит с едущей платформы или встаёт на неё, перескакивает на её путь за задержку (до скорость × ~0.1 с): правило одно с откатом на сервере, поэтому без сглаживания — сгладить только картинку, не трогая коллайдер
         {
-            if (_controlledBy.Me.Value)
+            if (_predictedBy.Me.Value)
             {
                 _view.Show(from, to, progress);
                 return;
@@ -52,10 +52,10 @@ namespace Bw.UseCases.Movement.Network.Platforms
 
         private double ShownTick()
         {
-            if (!_replicated.TryGetAt(int.MaxValue, out var newest))
+            if (_replicated.NewestTick == int.MinValue)
                 throw new InvalidOperationException("A remote rider is shown only from the states the server sent, and none has arrived.");
 
-            return Math.Min(_interpolation.InterpolationTick, newest.Tick);
+            return Math.Min(_interpolation.InterpolationTick, _replicated.NewestTick);
         }
     }
 }

@@ -4,12 +4,13 @@ using Unity.Netcode;
 
 namespace Bw.Entities.Network.Ticks
 {
-    public sealed class ServerNetworkTicks : INetworkTicks
+    public sealed class ServerNetworkTicks : INetworkTicks, IWorldClock
     {
         public float Duration { get; private set; }
         public int Current { get; private set; }
+        public ISource<int> Ticked => _ticked;
 
-        private readonly TickPhaseSignals _phases = new();
+        private readonly Signal<int> _ticked = new();
         private NetworkManager _network;
 
         public ServerNetworkTicks(Lifetime lifetime, INetworkHolder networkHolder)
@@ -25,13 +26,10 @@ namespace Bw.Entities.Network.Ticks
             });
         }
 
-        public ISource<int> Ticked(TickPhase phase) =>
-            _phases.Of(phase);
-
         private void OnTick()
         {
             Current = _network.ServerTime.Tick;
-            _phases.Fire(Current);
+            _ticked.Fire(Current);
         }
     }
 }

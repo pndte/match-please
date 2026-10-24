@@ -4,6 +4,6 @@ namespace Bw.Entities.Network.LagCompensation
 {
     public interface ILagCompensator
     {
-        public void Rewind(Lifetime lifetime, SeenTicks seen);
+        public void Rewind(Lifetime lifetime, ShooterView view);
     }
 }

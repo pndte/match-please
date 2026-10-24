@@ -5,5 +5,6 @@ namespace Bw.UseCases.Combat.Weapon.Abstractions
         public float Aim { get; }
         public int Shots { get; }
         public bool Stowable { get; }
+        public bool Rooting { get; }
     }
 }

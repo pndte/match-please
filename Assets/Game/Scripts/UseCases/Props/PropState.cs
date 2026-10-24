@@ -14,6 +14,7 @@ namespace Bw.UseCases.Props
         float IWeaponState.Aim => Aim;
         int IWeaponState.Shots => Throws;
         bool IWeaponState.Stowable => Phase == PropPhase.Holding;
+        bool IWeaponState.Rooting => false;
 
         public PropState(
             float aim,

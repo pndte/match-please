@@ -11,7 +11,7 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Movement
 {
-    public sealed class DynamicBody : ISimulation<RigidState>, IRestartable<RigidState>, IShovable
+    public sealed class DynamicBody : IReadonlySimulation<RigidState>, IRestorable<RigidState>, IRestartable<RigidState>, IShovable
     {
         public IReadonlyProperty<RigidState> State => _state;
         public RigidState Previous { get; private set; }

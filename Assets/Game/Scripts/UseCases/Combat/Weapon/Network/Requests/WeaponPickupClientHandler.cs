@@ -17,7 +17,7 @@ namespace Bw.UseCases.Combat.Weapon.Network.Requests
 
         public WeaponPickupClientHandler(
             Lifetime lifetime,
-            IControlledBy controlledBy,
+            IReadonlyControlledBy controlledBy,
             IPickupTargeting targeting,
             INetRequestSender<WeaponPickup> pickup)
         {

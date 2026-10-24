@@ -1,4 +1,3 @@
-using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Physics.Extensions;
 using Bw.Entities.Simulation;
@@ -21,13 +20,11 @@ namespace Bw.UseCases.Combat.View.Adapters
         private readonly IShotTracer _tracer;
 
         private bool _drawn;
-        private bool _remote;
         private bool _synchronized;
         private int _shots;
 
         public SeenShotsViewModel(
             Lifetime lifetime,
-            IControlledBy controlledBy,
             IWeapon weapon,
             IWeaponsInHands inHands,
             IShotTracer tracer)
@@ -39,21 +36,10 @@ namespace Bw.UseCases.Combat.View.Adapters
                 _drawn = true;
                 drawnLifetime.OnTermination(() => _drawn = false);
             });
-            controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
-                weapon.Fired.Advise(controlledLifetime, shot => See(shot.Aim)));
-            controlledBy.Me.WhenFalse(lifetime, remoteLifetime =>
-            {
-                _remote = true;
-                _synchronized = false;
-                remoteLifetime.OnTermination(() => _remote = false);
-            });
         }
 
         public void Show(TState from, TState to, float progress)
         {
-            if (!_remote)
-                return;
-
             var fired = _synchronized && to.Shots > _shots; //TODO: несколько выстрелов между двумя кадрами (низкий FPS) видны как один, с последним стволом: отдача и трассер проиграются один раз
             _shots = to.Shots;
             _synchronized = true;

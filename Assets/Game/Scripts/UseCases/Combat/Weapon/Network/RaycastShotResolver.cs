@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Bw.Entities.Network.LagCompensation;
+using Bw.Entities.Network.Prediction.Bubble;
 using Bw.Entities.Network.Prediction.Events;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
 using Bw.UseCases.Combat.Abstractions.Weapons;
 using Bw.UseCases.Combat.Weapon.Network.Extensions;
@@ -16,19 +18,28 @@ namespace Bw.UseCases.Combat.Weapon.Network
         public ISource<ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Impacts>> Reported => _reported;
 
         private readonly Signal<ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Impacts>> _reported = new();
-        
+
         private readonly List<RaycastShot> _shots = new();
         private readonly List<ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Impacts>> _outcomes = new();
         private readonly List<AffectedTarget<IReadonlyMortal, Impact>> _struck = new();
         private readonly List<AffectedTarget<IReadonlyMortal, Impacts>> _affected = new();
-        
-        private readonly ILagCompensator _lagCompensator;
 
-        public RaycastShotResolver(Lifetime lifetime, INetworkTicks ticks, ILagCompensator lagCompensator)
+        private readonly ILagCompensator _lagCompensator;
+        private readonly ICharacterRegistry _registry;
+        private readonly PredictionBubbleConfig _bubble;
+
+        public RaycastShotResolver(
+            Lifetime lifetime,
+            IWorldStep worldStep,
+            ILagCompensator lagCompensator,
+            ICharacterRegistry registry,
+            PredictionBubbleConfig bubble)
         {
             _lagCompensator = lagCompensator;
+            _registry = registry;
+            _bubble = bubble;
 
-            ticks.Ticked(TickPhase.Late).Advise(lifetime, Resolve);
+            worldStep.Stepped(TickPhase.Late).Advise(lifetime, Resolve);
         }
 
         public void Submit(RaycastShot shot) =>
@@ -54,11 +65,12 @@ namespace Bw.UseCases.Combat.Weapon.Network
         private ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Impacts> Trace(int tick, RaycastShot shot)
         {
             var ray = shot.Tracer.Aim(shot.WeaponShot.Aim);
+            var view = new ShooterView(tick - shot.Timing.ViewDelay, tick - shot.Timing.PredictedDelay, shot.Shooter.Movement.State.Value.Body.Position, _bubble);
             _struck.Clear();
             _affected.Clear();
             Lifetime.Using(rewindLifetime =>
             {
-                _lagCompensator.Rewind(rewindLifetime, new SeenTicks(tick - shot.Timing.ViewDelay, tick - shot.Timing.PredictedDelay)); //TODO: откатываются только позиции персонажей, а жизнь и смерть (слой трупа), потом и целость ящиков, берутся из настоящего: цель, умершая на сервере уже после тика, который видел стрелок, пропускает пулю насквозь, хотя на его экране она ещё стояла
+                _lagCompensator.Rewind(rewindLifetime, view); //TODO: откатываются только позиции персонажей, а жизнь и смерть (слой трупа), потом и целость ящиков, берутся из настоящего: цель, умершая на сервере уже после тика, который видел стрелок, пропускает пулю насквозь, хотя на его экране она ещё стояла
                 shot.Tracer.CastPellets(ray, shot.Hit, _struck);
             });
 
@@ -67,7 +79,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
             var affected = _affected.Count > 0
                 ? _affected.ToArray() //TODO: выделение массива на выстрел - плохо, в идеале пуллировать массивы и переиспользовать их
                 : Array.Empty<AffectedTarget<IReadonlyMortal, Impacts>>();
-            return new ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Impacts>(shot.Weapon, tick - shot.Timing.LateTicks, affected);
+            return new ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Impacts>(shot.Weapon, _registry.PlayerByCharacter[shot.Shooter], tick - shot.Timing.LateTicks, affected);
         }
     }
 }

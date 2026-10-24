@@ -14,6 +14,7 @@ namespace Bw.UseCases.Props
         [Min(0f)] public float MinDamage = 1f;
         [Min(0f)] public float MaxDamage = 10f;
         [Min(0f)] public float Knockback = 8f;
+        [Min(0f)] public float MinHitSpeed = 15f;
         public LayerMask Targets = 1 << 15;
     }
 }

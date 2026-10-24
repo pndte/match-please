@@ -24,10 +24,7 @@ namespace Bw.Entities.Network.Ticks
         public ISource<int> Of(TickPhase phase) =>
             _signals[(int)phase];
 
-        public void Fire(int tick)
-        {
-            for (var index = 0; index < _signals.Length; index++)
-                _signals[index].Fire(tick);
-        }
+        public void Fire(TickPhase phase, int tick) =>
+            _signals[(int)phase].Fire(tick);
     }
 }

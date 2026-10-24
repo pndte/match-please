@@ -3,7 +3,7 @@ using Bw.UseCases.Combat.Weapon.Abstractions;
 
 namespace Bw.UseCases.Combat.Melee
 {
-    public readonly struct MeleeState : IWeaponState, IEquatable<MeleeState>
+    public readonly struct MeleeState : IWeaponState, IAimedState<MeleeState>, IEquatable<MeleeState>
     {
         public readonly float Aim;
         public readonly MeleePhase Phase;
@@ -15,6 +15,8 @@ namespace Bw.UseCases.Combat.Melee
         float IWeaponState.Aim => Aim;
         int IWeaponState.Shots => Shots;
         bool IWeaponState.Stowable => Phase == MeleePhase.Idle || (Phase == MeleePhase.Jab && !Held);
+        bool IWeaponState.Rooting => Phase == MeleePhase.StrongSwing || Phase == MeleePhase.Recovery;
+        MeleeState IAimedState<MeleeState>.Turned(float degrees) => new(Aim + degrees, Phase, PhaseTicks, Held, ChargeTicks, Shots);
 
         public MeleeState(
             float aim,

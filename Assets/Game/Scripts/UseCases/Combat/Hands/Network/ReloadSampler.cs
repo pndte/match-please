@@ -11,7 +11,7 @@ namespace Bw.UseCases.Combat.Hands.Network
     {
         private bool _pressed;
 
-        public ReloadSampler(Lifetime lifetime, IControlledBy controlledBy)
+        public ReloadSampler(Lifetime lifetime, IReadonlyControlledBy controlledBy)
         {
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
             {

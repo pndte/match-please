@@ -49,9 +49,10 @@ namespace Bw.Injection.Mortality
         private void BindBlows()
         {
             Container.Bind<GuardBlows>().AsSingle();
-            Container.Bind<IAffectable<Impacts>>().To<GuardBlows>().FromResolve()
-                .WhenInjectedInto<AffectableRegistration<IReadonlyMortal, GuardBlows, Impacts>>();
-            Container.Bind<AffectableRegistration<IReadonlyMortal, GuardBlows, Impacts>>().AsSingle().NonLazy();
+            Container.Bind<AffectableRegistration<IReadonlyMortal, Impacts>>()
+                .FromMethod(context => context.Container.Instantiate<AffectableRegistration<IReadonlyMortal, Impacts>>(new object[] { context.Container.Resolve<GuardBlows>() }))
+                .AsCached()
+                .NonLazy();
             Container.Decorate<IEffectRules<Vitals, Impacts>>().With<GuardedVitalsRules>();
         }
     }

@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Bw.UseCases.Combat.Hands
 {
-    public sealed class Hands : IHands, ISimulation<HandsState>, ISteppable<HandsInput>
+    public sealed class Hands : IHands, IRestorable<HandsState>, ISteppable<HandsInput>
     {
         public IReadonlyProperty<HandsState> State => _state;
         public HandsState Previous { get; private set; } = HandsState.Empty;

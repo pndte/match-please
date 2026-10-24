@@ -5,6 +5,7 @@ namespace Bw.UseCases.Combat.Melee
         Idle,
         Jab,
         Charging,
-        StrongSwing
+        StrongSwing,
+        Recovery
     }
 }

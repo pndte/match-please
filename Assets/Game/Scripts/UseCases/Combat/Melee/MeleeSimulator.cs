@@ -26,6 +26,7 @@ namespace Bw.UseCases.Combat.Melee
                 MeleePhase.Jab => FromJab(state, input),
                 MeleePhase.Charging => FromCharging(state, input),
                 MeleePhase.StrongSwing => FromStrongSwing(state, input),
+                MeleePhase.Recovery => FromRecovery(state, input),
                 _ => throw new ArgumentOutOfRangeException(nameof(state), state.Phase, "The fists have no such phase.")
             };
             var aim = state.Aim.TurnedTowards(input.Aim, _config.TurnSpeed * _step.Duration);
@@ -33,10 +34,15 @@ namespace Bw.UseCases.Combat.Melee
         }
 
         public MeleeState Interrupted(MeleeState state) =>
-            Idle(state);
+            state.Phase switch
+            {
+                MeleePhase.StrongSwing => AfterStrongSwing(state, 0, default),
+                MeleePhase.Recovery => state,
+                _ => Idle(state)
+            };
 
         public MeleeState Rested(MeleeState state) =>
-            Interrupted(state);
+            state.Phase == MeleePhase.Recovery ? FromRecovery(state, default) : Interrupted(state);
 
         private static MeleeState FromIdle(MeleeState state, WeaponInput input) =>
             input.Pulled ? Jab(state) : state;
@@ -67,6 +73,17 @@ namespace Bw.UseCases.Combat.Melee
             var ticks = state.PhaseTicks + 1;
             if (ticks < _config.StrongSwingTicks(_step))
                 return In(state, MeleePhase.StrongSwing, ticks, false, state.ChargeTicks);
+
+            return AfterStrongSwing(state, 0, input);
+        }
+
+        private MeleeState FromRecovery(MeleeState state, WeaponInput input) =>
+            AfterStrongSwing(state, state.PhaseTicks + 1, input);
+
+        private MeleeState AfterStrongSwing(MeleeState state, int recoveredTicks, WeaponInput input)
+        {
+            if (recoveredTicks < _config.RecoveryTicks(_step))
+                return In(state, MeleePhase.Recovery, recoveredTicks, false, 0);
 
             return input.Pulled ? Jab(state) : Idle(state);
         }

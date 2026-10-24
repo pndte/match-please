@@ -29,7 +29,7 @@ namespace Bw.UseCases.Combat.Hands.Network
 
         public TriggerSampler(
             Lifetime lifetime,
-            IControlledBy controlledBy,
+            IReadonlyControlledBy controlledBy,
             IReadonlyHands hands,
             GuardKey guard,
             INetworkTicks ticks,

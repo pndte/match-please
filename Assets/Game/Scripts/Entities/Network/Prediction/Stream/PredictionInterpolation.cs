@@ -1,3 +1,4 @@
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Simulation;
 using JetBrains.Collections.Viewable;
@@ -14,7 +15,7 @@ namespace Bw.Entities.Network.Prediction.Stream
 
         public PredictionInterpolation(
             Lifetime lifetime,
-            IControlledBy controlledBy,
+            IPredictedBy predictedBy,
             IInterpolationTicks ticks,
             IReadonlySimulation<TState> simulation,
             IStateView<TState> view)
@@ -23,8 +24,8 @@ namespace Bw.Entities.Network.Prediction.Stream
             _simulation = simulation;
             _view = view;
 
-            controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
-                Observable.EveryUpdate(UnityFrameProvider.Update, controlledLifetime).Subscribe(UpdateView));
+            predictedBy.Me.WhenTrue(lifetime, predictedLifetime =>
+                Observable.EveryUpdate(UnityFrameProvider.Update, predictedLifetime).Subscribe(UpdateView));
         }
 
         private void UpdateView(Unit _) =>

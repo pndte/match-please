@@ -1,7 +1,6 @@
 using System;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Prediction.Events;
-using Bw.Entities.Simulation;
 using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.Network.Prediction;
 using Zenject;
@@ -21,31 +20,26 @@ namespace Bw.Injection.Network.Prediction
 
         public override void InstallBindings()
         {
+            Container.Bind<IEffectRules<MovementState, TEffect>>().To<PushEffectRules<MovementState, TEffect>>().AsSingle();
+            Container.Bind<SimulationAffectable<MovementState, TEffect>>().AsSingle();
+
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.Bind<IEffectRules<MovementState, TEffect>>().To<PushEffectRules<MovementState, TEffect>>().AsSingle();
-                    Container.Bind<SimulationAffectable<MovementState, TEffect>>().AsSingle();
-                    Container.Bind<IAffectable<TEffect>>().To<SimulationAffectable<MovementState, TEffect>>().FromResolve()
-                        .WhenInjectedInto<AffectableRegistration<TTarget, SimulationAffectable<MovementState, TEffect>, TEffect>>();
-                    Container.Bind<AffectableRegistration<TTarget, SimulationAffectable<MovementState, TEffect>, TEffect>>().AsSingle().NonLazy();
+                    Container.Bind<AffectableRegistration<TTarget, TEffect>>()
+                        .FromMethod(context => context.Container.Instantiate<AffectableRegistration<TTarget, TEffect>>(new object[] { context.Container.Resolve<SimulationAffectable<MovementState, TEffect>>() }))
+                        .AsCached()
+                        .NonLazy();
                     break;
                 case PeerType.Client:
-                    Container.Bind<IEffectRules<MovementState, TEffect>>().To<PushEffectRules<MovementState, TEffect>>().AsSingle()
-                        .WhenInjectedInto<PushSimulation<TEffect>>();
-                    Container.Bind<PushSimulation<TEffect>>().AsSingle();
-                    Container.Bind(typeof(PredictedPush<TEffect>), typeof(IPredictedPush)).To<PredictedPush<TEffect>>().AsSingle();
-                    Container.Bind<IPredictionTarget<TEffect>>().To<PredictedPush<TEffect>>().FromResolve()
-                        .WhenInjectedInto<PredictionTargetRegistration<TTarget, PredictedPush<TEffect>, TEffect>>();
-                    Container.Bind<PredictionTargetRegistration<TTarget, PredictedPush<TEffect>, TEffect>>().AsSingle().NonLazy();
-                    BindClientVisuals();
+                    Container.Bind<PredictedAffectableRegistration<TTarget, TEffect>>()
+                        .FromMethod(context => context.Container.Instantiate<PredictedAffectableRegistration<TTarget, TEffect>>(new object[] { context.Container.Resolve<SimulationAffectable<MovementState, TEffect>>() }))
+                        .AsCached()
+                        .NonLazy();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
-
-        private void BindClientVisuals() =>
-            Container.Decorate<IStateView<MovementState>>().With<PushedStateView<MovementState>>();
     }
 }

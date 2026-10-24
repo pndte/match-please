@@ -59,7 +59,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
         {
             var lateTicks = Math.Min(_pressLateTicks, _previousShotAge - 1);
             _previousShotAge = lateTicks;
-            _timed.Fire(new TimedShot(shot, new ShotTiming(_viewDelay, _predictedDelay, lateTicks)));
+            _timed.Fire(new TimedShot(shot, new ShotTiming(_viewDelay, _predictedDelay, lateTicks), _carriers.ByWeapon[_weapon]));
         }
     }
 }

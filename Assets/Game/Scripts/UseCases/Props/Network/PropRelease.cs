@@ -2,17 +2,24 @@ using Bw.Entities.Extensions;
 using Bw.UseCases.Combat.Abstractions.Characters;
 using Bw.UseCases.Combat.Abstractions.Inventory;
 using Bw.UseCases.Combat.Abstractions.Weapons;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
+using UnityEngine;
 
 namespace Bw.UseCases.Props.Network
 {
-    public sealed class PropRelease
+    public sealed class PropRelease //TODO: если клиент ошибся в том, несёт ли персонаж ящик, откат ставит носимое заново и ящик выпускается прямо при откате, в позе рук на тике отката, а не на тике, где сервер его выпустил
     {
+        public ISource<IReadonlyCharacter> Released => _released;
+
+        private readonly Signal<IReadonlyCharacter> _released = new();
         private readonly IWeapon _prop;
         private readonly IWeaponCarriers _carriers;
         private readonly PropLauncher _launcher;
 
-        private PropLaunch _launch = PropLaunch.Dropped;
+        private IReadonlyCharacter _releaser;
+        private bool _unheld;
+        private Vector2 _velocity;
 
         public PropRelease(
             Lifetime lifetime,
@@ -26,24 +33,37 @@ namespace Bw.UseCases.Props.Network
 
             prop.Fired.Advise(lifetime, shot => Throw(shot.Aim));
             carriers.ByWeapon.ViewForKey(lifetime, prop, (carriedLifetime, carrier) =>
+            {
+                _unheld = false;
                 carriedLifetime.OnTermination(() =>
                 {
                     if (lifetime.IsAlive)
                         Release(carrier);
-                }));
+                });
+            });
+        }
+
+        public bool TryGetReleaser(out IReadonlyCharacter releaser)
+        {
+            releaser = _unheld ? _releaser : default;
+            return _unheld;
         }
 
         private void Throw(float aim)
         {
-            _launch = PropLaunch.Thrown(aim);
-            _carriers.ByWeapon[_prop].Inventory.Drop(_prop);
+            var carrier = _carriers.ByWeapon[_prop];
+            _velocity = _launcher.ThrowVelocity(carrier, aim);
+            carrier.Inventory.Drop(_prop);
         }
 
         private void Release(IReadonlyCharacter holder)
         {
-            var launch = _launch;
-            _launch = PropLaunch.Dropped;
-            launch.Switch(() => _launcher.Drop(holder), aim => _launcher.Throw(holder, aim));
+            var velocity = _velocity;
+            _velocity = Vector2.zero;
+            _launcher.Launch(holder, velocity);
+            _releaser = holder;
+            _unheld = true;
+            _released.Fire(holder);
         }
     }
 }

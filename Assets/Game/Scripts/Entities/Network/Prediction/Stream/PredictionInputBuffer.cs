@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
-using Bw.Entities.Extensions;
 using Bw.Entities.Network.Prediction.Stream.Requests;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Network.Variables;
 using JetBrains.Collections.Viewable;
@@ -11,57 +10,75 @@ namespace Bw.Entities.Network.Prediction.Stream
 {
     public sealed class PredictionInputBuffer<TInput> where TInput : struct
     {
-        public ISource<TInput> Simulated => _simulated;
         public ISource<InputGap> Gaps => _gaps;
 
-        private readonly Signal<TInput> _simulated = new();
         private readonly Signal<InputGap> _gaps = new();
-        private readonly Dictionary<int, TInput> _buffered = new();
+        private readonly TickHistory<TInput> _buffered;
         private readonly INetworkTicks _ticks;
         private readonly NetworkTicksConfig _config;
         private readonly IInputPolicy<TInput> _policy;
-        private readonly IControllerRegistry _controllerRegistry;
+        private readonly IInputContinuation<TInput> _continuation;
 
         private TInput _lastInput;
         private TInput _lastKnown;
         private bool _heard;
         private int _firstTick;
         private TInput _newest;
-        private int _newestTick;
+        private int _newestTick = int.MinValue;
 
         public PredictionInputBuffer(
             Lifetime lifetime,
             INetworkTicks ticks,
             NetworkTicksConfig config,
             IInputPolicy<TInput> policy,
-            IControllerRegistry controllerRegistry,
+            IInputContinuation<TInput> continuation,
             INetRequestReceiver<TickedInput<TInput>> input)
         {
             _ticks = ticks;
             _config = config;
             _policy = policy;
-            _controllerRegistry = controllerRegistry;
+            _continuation = continuation;
+            _buffered = new TickHistory<TInput>(config.MaxBufferedInputTicks + 1);
 
-            controllerRegistry.Users.View(lifetime, (userLifetime, _) =>
-            {
-                _buffered.Clear();
-                _heard = false;
-                _newestTick = int.MinValue;
-                _lastInput = default;
-                userLifetime.OnTermination(_buffered.Clear);
-            });
             input.Received.Advise(lifetime, Buffer);
-            ticks.Ticked(TickPhase.Default).Advise(lifetime, Simulate);
+        }
+
+        public void Clear()
+        {
+            _buffered.Clear();
+            _heard = false;
+            _newestTick = int.MinValue;
+            _lastInput = default;
+        }
+
+        public bool TryTakeInputAt(int tick, out TInput input)
+        {
+            if (!_heard || tick < _firstTick) //TODO: до первого ввода управляющего объект не шагает: только что появившийся персонаж висит в точке спавна около пинга, пока не придёт его ввод
+            {
+                input = default;
+                return false;
+            }
+
+            if (_buffered.TryGetAt(tick, out var buffered))
+            {
+                _lastKnown = buffered;
+                _lastInput = _policy.CaughtUp(buffered, _lastInput, buffered, 0);
+            }
+            else
+            {
+                _gaps.Fire(InputGap.Substituted);
+                _lastKnown = _newestTick < tick ? _continuation.Continued(_newest, tick - _newestTick) : _continuation.Continued(_lastKnown, 1);
+                _lastInput = _policy.CaughtUp(_lastKnown, _lastInput, _newest, tick - _newestTick);
+            }
+
+            input = _lastInput;
+            return true;
         }
 
         private void Buffer(TickedInput<TInput> request)
         {
-            if (_controllerRegistry.Users.Count > 0)
-            {
-                ReportOutsideWindow(request.Tick);
-                RememberNewest(request);
-            }
-
+            ReportOutsideWindow(request.Tick);
+            RememberNewest(request);
             if (!TryStore(request.Tick, request.Input))
                 return;
 
@@ -88,36 +105,16 @@ namespace Bw.Entities.Network.Prediction.Stream
             _newestTick = request.Tick;
         }
 
-        private bool TryStore(int tick, TInput input) =>
-            _controllerRegistry.Users.Count > 0
-            && tick > _ticks.Current
-            && tick <= _ticks.Current + _config.MaxBufferedInputTicks
-            && _policy.IsValid(input)
-            && _buffered.TryAdd(tick, input);
-
-        private void Simulate(int tick)
+        private bool TryStore(int tick, TInput input)
         {
-            if (_controllerRegistry.Users.Count == 0)
-            {
-                _lastInput = default;
-            }
-            else if (!_heard || tick < _firstTick) //TODO: до первого ввода управляющего объект не шагает: только что появившийся персонаж висит в точке спавна около пинга, пока не придёт его ввод
-            {
-                return;
-            }
-            else if (_buffered.Remove(tick, out var input))
-            {
-                _lastKnown = input;
-                _lastInput = _policy.CaughtUp(input, _lastInput, input, 0);
-            }
-            else
-            {
-                _gaps.Fire(InputGap.Substituted);
-                _lastKnown = _policy.Substitute(_newestTick < tick ? _newest : _lastKnown);
-                _lastInput = _policy.CaughtUp(_lastKnown, _lastInput, _newest, tick - _newestTick);
-            }
+            if (tick <= _ticks.Current
+                || tick > _ticks.Current + _config.MaxBufferedInputTicks
+                || !_policy.IsValid(input)
+                || _buffered.TryGetAt(tick, out _))
+                return false;
 
-            _simulated.Fire(_lastInput);
+            _buffered.Record(tick, input);
+            return true;
         }
     }
 }

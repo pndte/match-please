@@ -18,6 +18,7 @@ namespace Bw.Injection.Network.Prediction
                     break;
                 case PeerType.Client:
                     Container.Bind(typeof(IPredictionTargets<,>)).To(typeof(PredictionTargets<,>)).AsSingle();
+                    Container.Bind(typeof(IAffectables<,>)).To(typeof(Affectables<,>)).AsSingle();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

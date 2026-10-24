@@ -1,6 +1,5 @@
 using Bw.Entities.Extensions;
 using Bw.Entities.Network.Objects;
-using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
 namespace Bw.Entities.Network.LagCompensation
@@ -9,12 +8,12 @@ namespace Bw.Entities.Network.LagCompensation
     {
         public RewindableRegistration(
             Lifetime lifetime,
-            INetworkLifetimedObject networkObject,
+            INetworkLifetimedObject networkLifetimed,
             IRewindable rewindable,
-            IRewindableCollection rewindables)
+            IRewindables rewindables)
         {
-            networkObject.SpawnedLifetime.WhenAlive(lifetime, spawnedLifetime =>
-                rewindables.AddLifetimed(spawnedLifetime, rewindable));
+            networkLifetimed.SpawnedLifetime.WhenAlive(lifetime, spawnedLifetime =>
+                rewindables.Track(spawnedLifetime, rewindable));
         }
     }
 }

@@ -136,6 +136,7 @@ namespace Bw.Injection.Weapon
             Container.Bind<BodyBox>().FromInstance(_box).AsSingle();
             DynamicBodyInstaller.Install(Container, _runtimeSettings, netSchema, _bodyConfig);
             Container.Decorate<IStateView<RigidState>>().With<UnheldStateView<RigidState>>();
+            Container.Bind<HeldWeaponBody>().AsSingle().NonLazy();
         }
 
         private void BindDropRequest(INetEntriesSchemaBuilder netSchema)
@@ -158,7 +159,6 @@ namespace Bw.Injection.Weapon
         private void BindServer()
         {
             Container.Bind<WeaponDropServerHandler>().AsSingle().NonLazy();
-            Container.Bind<HeldWeaponBody>().AsSingle().NonLazy();
             Container.Bind<HeldWeaponPose>().AsSingle();
             Container.Bind<WeaponReleaseSpots>().AsSingle().WithArguments(_releaseConfig);
             Container.Bind<WeaponRelease>().AsSingle().NonLazy();
@@ -171,7 +171,7 @@ namespace Bw.Injection.Weapon
             Container.Bind<WeaponDropClientHandler>().AsSingle().NonLazy();
             Container.BindInterfacesTo<Spread>().AsSingle();
             Container.BindInterfacesTo<AimDeflection>().AsSingle();
-            Container.Bind<SpreadKick>().AsSingle().NonLazy();
+            Container.Bind<SpreadKick>().AsSingle();
             Container.BindInterfacesTo<FloorWeapon>().AsSingle().WithArguments(_box);
             Container.Bind<FloorWeaponRegistration>().AsSingle().NonLazy();
             BindClientVisuals();
@@ -185,7 +185,8 @@ namespace Bw.Injection.Weapon
                 .FromMethod(ctx => new CompositeStateView<GunState>(
                     ctx.Container.Resolve<WeaponPoseViewModel<GunState>>(),
                     ctx.Container.Resolve<SeenShotsViewModel<GunState>>(),
-                    ctx.Container.Resolve<GunViewModel>()))
+                    ctx.Container.Resolve<GunViewModel>(),
+                    ctx.Container.Resolve<SpreadKick>()))
                 .AsSingle();
             Container.Bind<WeaponReloadCursor>().AsSingle().NonLazy();
             Container.Bind<WeaponRoundsCursor>().AsSingle().NonLazy();

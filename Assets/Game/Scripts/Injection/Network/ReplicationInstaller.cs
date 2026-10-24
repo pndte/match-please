@@ -38,9 +38,9 @@ namespace Bw.Injection.Network
                     Container.Bind<SimulationViewSync<TState>>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:
-                    Container.BindResultReceiver(state).WhenInjectedInto(typeof(SnapshotInterpolation<TState>), typeof(ReplicatedStates<TState>));
-                    Container.Bind<SnapshotInterpolation<TState>>().AsSingle().NonLazy();
+                    Container.BindResultReceiver(state).WhenInjectedInto<ReplicatedStates<TState>>();
                     Container.Bind<IReplicatedStates<TState>>().To<ReplicatedStates<TState>>().AsSingle().NonLazy();
+                    Container.Bind<SnapshotInterpolation<TState>>().AsSingle().NonLazy();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

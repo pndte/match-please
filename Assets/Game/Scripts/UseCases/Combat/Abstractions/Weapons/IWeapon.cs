@@ -11,5 +11,6 @@ namespace Bw.UseCases.Combat.Abstractions.Weapons
     public interface IWeapon : IReadonlyWeapon, ISteppable<WeaponInput>
     {
         public bool Stowable { get; }
+        public bool Rooting { get; }
     }
 }

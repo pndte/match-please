@@ -36,6 +36,7 @@ namespace Bw.Entities.Physics
             definition.gravity = Physics2D.gravity;
             definition.simulationSubSteps = config.SubSteps;
             definition.simulationWorkers = config.Workers;
+            definition.sleepingAllowed = config.Sleeping;
             definition.contactFrequency = config.ContactFrequency;
             definition.contactDamping = config.ContactDamping;
             definition.contactSpeed = config.ContactSpeed;
@@ -45,6 +46,8 @@ namespace Bw.Entities.Physics
             var world = PhysicsWorld.Create(definition);
             if (!world.isValid)
                 throw new InvalidOperationException("The low-level 2D physics created no world: Project Settings → Physics 2D must not bypass it.");
+
+            world.warmStartingAllowed = config.WarmStarting;
 
             lifetime.OnTermination(() => world.Destroy(0));
             return new PhysicsSpace(world, step, sweeps);

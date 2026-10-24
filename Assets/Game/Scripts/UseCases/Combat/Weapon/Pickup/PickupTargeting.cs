@@ -20,7 +20,7 @@ namespace Bw.UseCases.Combat.Weapon.Pickup
 
         public PickupTargeting(
             Lifetime lifetime,
-            IControlledBy controlledBy,
+            IReadonlyControlledBy controlledBy,
             IReadonlyFloorWeapons weapons,
             IChangableCamera camera,
             WeaponPickupConfig config,

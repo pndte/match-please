@@ -34,7 +34,7 @@ namespace Bw.UseCases.Props
             _angle = simulation.State.Value.Aim;
         }
 
-        public void Show(PropState from, PropState to, float progress)
+        public void Show(PropState from, PropState to, float progress) //TODO: поправка прицела ящика после отката не сглаживается, как у оружия (SmoothedAimView): угол хвата здесь — и картинка, и тело хвата в мире, сдвиг надо отделить от тела
         {
             _angle = Mathf.LerpAngle(from.Aim, to.Aim, progress) + Mathf.Lerp(_swing.AngleOf(from), _swing.AngleOf(to), progress);
             _turned.Fire(Unit.Instance);

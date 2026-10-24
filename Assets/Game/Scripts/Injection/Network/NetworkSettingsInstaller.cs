@@ -1,6 +1,8 @@
 using Bw.Entities.Network;
 using Bw.Entities.Network.LagCompensation;
+using Bw.Entities.Network.Prediction.Bubble;
 using Bw.Entities.Network.Prediction.Events;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Network.Variables;
 using Bw.UseCases.Combat.Weapon.Network;
@@ -17,7 +19,8 @@ namespace Bw.Injection.Network
         [SerializeField] private NetworkTicksConfig _ticks = new();
         [SerializeField] private LagCompensationConfig _lagCompensation = new();
         [SerializeField] private EventPredictionConfig _eventPrediction = new();
-        [SerializeField] private PushPredictionConfig _pushPrediction = new();
+        [SerializeField] private PredictionBubbleConfig _predictionBubble = new();
+        [SerializeField] private WorldRollbackConfig _worldRollback = new();
         [SerializeField] private CorrectionSmoothingConfig _correctionSmoothing = new();
         [SerializeField] private WeaponPickupNetworkConfig _weaponPickup = new();
         [SerializeField] private NetReceiveConfig _receive = new();
@@ -28,7 +31,8 @@ namespace Bw.Injection.Network
             Container.BindInstance(_ticks).AsSingle();
             Container.BindInstance(_lagCompensation).AsSingle();
             Container.BindInstance(_eventPrediction).AsSingle();
-            Container.BindInstance(_pushPrediction).AsSingle();
+            Container.BindInstance(_predictionBubble).AsSingle();
+            Container.BindInstance(_worldRollback).AsSingle();
             Container.BindInstance(_correctionSmoothing).AsSingle();
             Container.BindInstance(_weaponPickup).AsSingle();
             Container.BindInstance(_receive).AsSingle();

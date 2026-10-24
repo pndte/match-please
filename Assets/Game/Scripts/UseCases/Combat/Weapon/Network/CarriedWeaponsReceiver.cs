@@ -1,122 +1,82 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Bw.Entities.Network.Prediction.Stream.Requests;
+using Bw.Entities.Network.Replication;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Variables;
 using Bw.UseCases.Combat.Abstractions.Characters;
 using Bw.UseCases.Combat.Abstractions.Inventory;
-using Bw.UseCases.Combat.Abstractions.Weapons;
 using Bw.UseCases.Combat.Weapon.Network.Requests;
-using Bw.UseCases.Mortality;
 using Bw.UseCases.Mortality.Extensions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Combat.Weapon.Network
 {
-    public sealed class CarriedWeaponsReceiver : ICarriedReplica
+    public sealed class CarriedWeaponsReceiver : TickHistory<InventoryContent>, IReplicatedStates<InventoryContent>
     {
-        private readonly ICharacter _character;
-        private readonly IWeaponCarriers _carriers;
+        private readonly IReadonlyCharacter _character;
         private readonly INetworkWeapons _weapons;
-        private readonly List<(IWeapon Weapon, WeaponSlot Slot)> _listed = new();
-        private readonly List<IWeapon> _ahead = new();
 
-        private CarriedWeapons _latest = new(Array.Empty<CarriedWeapon>());
+        private TickedState<CarriedWeapons> _waiting;
+        private bool _unresolved;
 
         public CarriedWeaponsReceiver(
             Lifetime lifetime,
-            ICharacter character,
-            IWeaponCarriers carriers,
-            INetResultReceiver<CarriedWeapons> carried,
-            INetworkWeapons weapons)
+            IReadonlyCharacter character,
+            INetResultReceiver<TickedState<CarriedWeapons>> carried,
+            INetworkWeapons weapons,
+            WorldRollbackConfig config)
+            : base(config.HistoryTicks)
         {
             _character = character;
-            _carriers = carriers;
             _weapons = weapons;
 
-            carried.Received.Advise(lifetime, Remember);
             character.Mortal.State.WhenAlive(lifetime, aliveLifetime =>
             {
-                aliveLifetime.OnTermination(_ahead.Clear);
-                weapons.ByIds.Advise(aliveLifetime, _ => Apply());
+                carried.Received.Advise(aliveLifetime, Receive);
+                weapons.ByIds.Advise(aliveLifetime, _ => RecordWaiting());
+                aliveLifetime.OnTermination(Forget);
             });
         }
 
-        public void DropAhead(IWeapon weapon)
+        private void Receive(TickedState<CarriedWeapons> carried)
         {
-            if (!_character.Inventory.Carried.ContainsKey(weapon))
-                throw new InvalidOperationException("Only a weapon the character carries is dropped ahead of the server.");
-
-            _ahead.Add(weapon);
-            _character.Inventory.Drop(weapon);
+            _waiting = carried;
+            _unresolved = true;
+            RecordWaiting();
         }
 
-        public void Restore(IWeapon weapon)
+        private void RecordWaiting()
         {
-            _ahead.Remove(weapon);
-            Apply();
-        }
-
-        private void Remember(CarriedWeapons carried)
-        {
-            _latest = carried;
-            Apply();
-        }
-
-        private void Apply()
-        {
-            if (_character.Mortal.State.Value != LifeState.Alive || !TryResolveLatest())
+            if (!_unresolved || !TryResolve(_waiting.State, out var content))
                 return;
 
-            var inventory = _character.Inventory;
-            _ahead.RemoveAll(weapon => !IsListed(weapon));
-            foreach (var weapon in inventory.Carried.Keys.ToArray())
-                if (inventory.RulesOf(weapon).Droppable && !Listed(weapon, inventory.Carried[weapon]))
-                    inventory.Drop(weapon);
-
-            foreach (var (weapon, slot) in _listed)
-                if (!inventory.Carried.ContainsKey(weapon) && !_ahead.Contains(weapon))
-                    Give(inventory, slot, weapon);
+            _unresolved = false;
+            if (NewestTick == int.MinValue || _waiting.Tick > NewestTick - Capacity)
+                Record(_waiting.Tick, content);
         }
 
-        private bool TryResolveLatest()
+        private bool TryResolve(CarriedWeapons carried, out InventoryContent content)
         {
-            _listed.Clear();
-            foreach (var carried in _latest.Weapons)
+            var items = new InventoryItem[carried.Weapons.Length];
+            for (var index = 0; index < items.Length; index++)
             {
-                if (!_weapons.ByIds.TryGetValue(carried.Weapon, out var weapon))
+                if (!_weapons.ByIds.TryGetValue(carried.Weapons[index].Weapon, out var weapon))
+                {
+                    content = default;
                     return false;
+                }
 
-                _listed.Add((weapon, _character.Inventory.Slots[carried.Slot]));
+                items[index] = new InventoryItem(weapon, _character.Inventory.Slots[carried.Weapons[index].Slot]);
             }
 
+            content = new InventoryContent(items);
             return true;
         }
 
-        private bool Listed(IWeapon weapon, WeaponSlot slot)
+        private void Forget()
         {
-            foreach (var listed in _listed)
-                if (listed.Weapon == weapon && listed.Slot == slot)
-                    return true;
-
-            return false;
-        }
-
-        private bool IsListed(IWeapon weapon)
-        {
-            foreach (var listed in _listed)
-                if (listed.Weapon == weapon)
-                    return true;
-
-            return false;
-        }
-
-        private void Give(IWeaponInventory inventory, WeaponSlot slot, IWeapon weapon)
-        {
-            if (_carriers.ByWeapon.TryGetValue(weapon, out var carrying))
-                carrying.Inventory.Drop(weapon);
-
-            inventory.Give(slot, weapon);
+            Clear();
+            _unresolved = false;
         }
     }
 }

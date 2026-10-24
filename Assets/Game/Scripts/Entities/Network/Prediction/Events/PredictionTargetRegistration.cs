@@ -5,9 +5,8 @@ using Unity.Netcode;
 
 namespace Bw.Entities.Network.Prediction.Events
 {
-    public sealed class PredictionTargetRegistration<TTarget, TPredictionTarget, TEffect>
+    public sealed class PredictionTargetRegistration<TTarget, TEffect>
         where TTarget : class
-        where TPredictionTarget : class, IPredictionTarget<TEffect>
         where TEffect : struct
     {
         public PredictionTargetRegistration(

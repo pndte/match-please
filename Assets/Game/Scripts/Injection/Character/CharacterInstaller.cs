@@ -3,6 +3,8 @@ using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
+using Bw.Entities.Network.Prediction.Bubble;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Physics;
 using Bw.Injection.ControlledBy;
@@ -11,6 +13,7 @@ using Bw.Injection.Network.Prediction;
 using Bw.Injection.Network.Variables;
 using Bw.Injection.Ownership;
 using Bw.Injection.Weapon;
+using Bw.UseCases.Character.Network;
 using Bw.UseCases.Character.View;
 using Bw.UseCases.Character.View.Abstractions;
 using Bw.UseCases.Character.View.Adapters;
@@ -103,7 +106,7 @@ namespace Bw.Injection
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
-                Container.Bind<CarriedReplicaRegistration>().AsSingle().NonLazy();
+                BindPrediction();
                 BindClientVisuals();
                 BindClientSounds();
             }
@@ -123,7 +126,14 @@ namespace Bw.Injection
             Container.Bind(typeof(ICharacter), typeof(IReadonlyCharacter)).To<Character>().AsSingle();
             Container.Bind<CarriersRegistration>().AsSingle().NonLazy();
             Container.Bind<InHandsRegistration>().AsSingle().NonLazy();
-            Container.Bind<MovementRootRegistration>().AsSingle().NonLazy();
+        }
+
+        private void BindPrediction()
+        {
+            Container.Bind<IBubbleMembership>().To<BubbleMembership>().AsSingle().WithArguments(transform);
+            Container.Bind<IPredictedBy>().To<CharacterPredictedBy>().AsSingle();
+            Container.Bind<CharacterPredictionRegistration>().AsSingle().NonLazy();
+            Container.Bind<ControlledCharacterRegistration>().AsSingle().NonLazy();
         }
 
         private void BindClientSounds()

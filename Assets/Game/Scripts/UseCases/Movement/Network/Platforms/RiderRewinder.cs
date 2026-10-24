@@ -24,12 +24,13 @@ namespace Bw.UseCases.Movement.Network.Platforms
             _step = step;
         }
 
-        public void Rewind(Lifetime lifetime, SeenTicks seen)
+        public void Rewind(Lifetime lifetime, ShooterView view)
         {
-            _rewinder.Rewind(lifetime, seen);
+            var seen = view.TickOf(_body.Position);
+            _rewinder.Rewind(lifetime, view);
             var duration = (double)_step.Duration;
             var position = _body.Position;
-            _body.Place(position + _rider.RideShift(position, _body.Angle, seen.Interpolated * duration, seen.Predicted * duration));
+            _body.Place(position + _rider.RideShift(position, _body.Angle, seen * duration, view.Predicted * duration));
         }
     }
 }

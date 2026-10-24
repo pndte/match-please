@@ -1,7 +1,10 @@
 using System;
+using Bw.Entities;
 using Bw.Entities.Network;
 using Bw.Entities.Network.LagCompensation;
-using Bw.Entities.Network.Prediction.Stream;
+using Bw.Entities.Network.Prediction.Bubble;
+using Bw.Entities.Network.Prediction.Events;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using Bw.Injection.Network;
@@ -15,13 +18,13 @@ using Bw.UseCases.Combat.View.Highlight;
 using Bw.UseCases.Combat.Weapon;
 using Bw.UseCases.Combat.Weapon.Abstractions;
 using Bw.UseCases.Combat.Weapon.Network;
+using Bw.UseCases.Combat.Weapon.Network.Prediction;
 using Bw.UseCases.Combat.Weapon.Network.Requests;
 using Bw.UseCases.Combat.Weapon.Pickup;
 using Bw.UseCases.Mortality;
 using Bw.UseCases.Movement;
 using Bw.UseCases.Props;
 using Bw.UseCases.Props.Network;
-using Bw.UseCases.Props.Network.Prediction;
 using Bw.UseCases.Props.View;
 using Bw.UseCases.Props.View.Abstractions;
 using Bw.UseCases.Props.View.Adapters;
@@ -66,6 +69,7 @@ namespace Bw.Injection.Props
             BindDropRequest();
             EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyMortal, Impacts>.Install(Container, _runtimeSettings, _netSchema);
             BindHold();
+            BindFlight();
 
             switch (_runtimeSettings.CurrentPeerType)
             {
@@ -114,7 +118,7 @@ namespace Bw.Injection.Props
             Container.Bind<WeaponNetworkRegistration>().AsSingle().NonLazy();
             Container.Bind<WeaponClock>().AsSingle().NonLazy();
 
-            PredictionStateInstaller<WeaponInput, PropState>.Install(Container, _runtimeSettings, _netSchema);
+            RollbackStateInstaller<PropState>.Install(Container, _runtimeSettings, _netSchema);
         }
 
         private void BindDropRequest()
@@ -143,9 +147,15 @@ namespace Bw.Injection.Props
             Container.Bind(typeof(IHeldBox), typeof(HeldPropPose)).To<HeldPropPose>().AsSingle().WithArguments(HeldPropLayer);
             Container.Bind<HeldBoxRegistration>().AsSingle().NonLazy();
             Container.Bind<ReleaseSpots>().AsSingle();
-            Container.Bind<ThrowLaunch>().AsSingle();
+            Container.Bind<PropRelease>().AsSingle().NonLazy();
             Container.Bind<HeldWeaponBody>().AsSingle().NonLazy();
             Container.Decorate<IStateView<RigidState>>().With<UnheldStateView<RigidState>>();
+        }
+
+        private void BindFlight()
+        {
+            Container.Bind<PropLauncher>().AsSingle();
+            Container.Bind<IStrikes>().To<PropStrikes>().AsSingle().NonLazy();
         }
 
         private int HeldPropLayer => _parts.Held.Layer.SingleLayer("held prop");
@@ -155,10 +165,9 @@ namespace Bw.Injection.Props
             Container.Bind<IStateView<PropState>>().To<HeldPropPose>().FromResolve();
             Container.Bind<SimulationViewSync<PropState>>().AsSingle().NonLazy();
             Container.Bind<CarrierOwnership>().AsSingle().NonLazy();
-            Container.BindInterfacesAndSelfTo<ThrownPropHits>().AsSingle();
-            Container.Bind<PropLauncher>().AsSingle();
-            Container.Bind<PropRelease>().AsSingle().NonLazy();
+            Container.BindInterfacesTo<StrikeOutcomes>().AsSingle();
             Container.Bind<DestroyedPropDrop>().AsSingle().NonLazy();
+            Container.Bind<SimulationHistory<PropState>>().AsSingle().NonLazy();
             Container.Bind<SimulationRewinder<PropState>>().AsSingle();
             Container.Decorate<IRewindable>().With<PropRewindable>();
             Container.Bind<WeaponHolder>().FromNewComponentOn(_parts.Prop.gameObject).AsSingle().NonLazy();
@@ -166,13 +175,16 @@ namespace Bw.Injection.Props
 
         private void BindClient()
         {
-            Container.Bind<ThrowConfirmation>().AsSingle();
-            Container.Bind<ThrowPrediction>().AsSingle().NonLazy();
-            Container.Bind<IFedInputs<WeaponInput>>().To<WeaponFeedLog>().AsSingle();
+            Container.Bind<IBubbleMembership>().To<BubbleMembership>().AsSingle().WithArguments(_parts.Prop);
+            Container.Bind<IPredictedBy>().To<WeaponPredictedBy>().AsSingle();
+            Container.Bind<IReadonlyControlledBy>().To<HolderControl>().AsSingle();
+            Container.Bind<IStateDivergence<PropState>>().To<ExactDivergence<PropState>>().AsSingle();
             Container.Bind<IReadonlyAimDeflection>().To<SteadyAim>().AsSingle();
             Container.Bind<AimDeflectionRegistration>().AsSingle().NonLazy();
             Container.BindInterfacesTo<FloorWeapon>().AsSingle().WithArguments(_parts.Shape);
             Container.Bind<FloorWeaponRegistration>().AsSingle().NonLazy();
+            Container.Bind<DecidedImpacts>().AsSingle().NonLazy();
+            Container.Bind<StrikeDamagePrediction>().AsSingle().NonLazy();
             BindClientVisuals();
         }
 

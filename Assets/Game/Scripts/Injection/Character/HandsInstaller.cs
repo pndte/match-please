@@ -1,11 +1,10 @@
 using System;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Prediction.Stream;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using Bw.Injection.Network.Prediction;
-using Bw.UseCases.Character.Network;
-using Bw.UseCases.Character.Network.Requests;
 using Bw.UseCases.Combat.Abstractions.Hands;
 using Bw.UseCases.Combat.Abstractions.Inventory;
 using Bw.UseCases.Combat.Hands;
@@ -37,16 +36,16 @@ namespace Bw.Injection
         {
             BindRules();
             BindHold();
-            WirePredictionStateInstaller<CharacterControls, HandsState, HandsSlots>.Install(Container, _runtimeSettings, _netSchema);
+            WireRollbackStateInstaller<HandsState, HandsSlots>.Install(Container, _runtimeSettings, _netSchema);
 
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    BindHands(typeof(IHands), typeof(IReadonlyHands), typeof(IReadonlySimulation<HandsState>), typeof(ISimulation<HandsState>), typeof(ISteppable<HandsInput>));
+                    BindHands(typeof(IHands), typeof(IReadonlyHands), typeof(IReadonlySimulation<HandsState>), typeof(IRestorable<HandsState>), typeof(ISteppable<HandsInput>));
                     BindServer();
                     break;
                 case PeerType.Client:
-                    BindHands(typeof(IReadonlyHands), typeof(IReadonlySimulation<HandsState>), typeof(ISimulation<HandsState>), typeof(ISteppable<HandsInput>));
+                    BindHands(typeof(IReadonlyHands), typeof(IReadonlySimulation<HandsState>), typeof(IRestorable<HandsState>), typeof(ISteppable<HandsInput>));
                     BindClient();
                     break;
                 default:
@@ -56,7 +55,8 @@ namespace Bw.Injection
 
         private void BindRules()
         {
-            Container.Bind(typeof(IReadonlyWeaponInventory), typeof(IWeaponInventory)).To<CharacterInventory>().AsSingle();
+            Container.Bind(typeof(IReadonlyWeaponInventory), typeof(IWeaponInventory), typeof(IRestorable<InventoryContent>)).To<CharacterInventory>().AsSingle()
+                .WriterOnlyInto<IRestorable<InventoryContent>>(typeof(RollbackPart<InventoryContent>), typeof(ServerStateFollower<InventoryContent>));
             Container.Bind(typeof(ISimulator<HandsInput, HandsState>), typeof(HandsSimulator)).To<HandsSimulator>().AsSingle();
             Container.Bind<HandsControlsForm>().AsSingle();
             Container.Bind<IWireForm<HandsState, HandsSlots>>().To<HandsSlotsForm>().AsSingle();
@@ -65,9 +65,8 @@ namespace Bw.Injection
         private void BindHands(params Type[] roles)
         {
             Container.Bind(roles).To<Hands>().AsSingle().WithArguments(_oval)
-                .WriterOnlyInto<ISimulation<HandsState>>(typeof(PredictionReconciler<CharacterControls, HandsState>), typeof(HandsStateView));
+                .WriterOnlyInto<IRestorable<HandsState>>(typeof(RollbackPart<HandsState>), typeof(ServerStateFollower<HandsState>));
             Container.Bind<HandsDraw>().AsSingle().NonLazy();
-            Container.Bind<DrawnWeaponControl>().AsSingle().NonLazy();
         }
 
         private void BindHold()
@@ -82,22 +81,16 @@ namespace Bw.Injection
             Container.Decorate<ISimulator<HandsInput, HandsState>>().With<BusyHandsGuard>();
             Container.Bind<IInputPolicy<HandsControls>>().To<HandsControlsPolicy>().AsSingle();
             Container.Bind<HandsOnlyDrop>().AsSingle().NonLazy();
-            Container.Bind<DrawnWeaponClients>().AsSingle().NonLazy();
         }
 
         private void BindClient()
         {
-            Container.Bind<ISimulator<CharacterControls, HandsState>>().To<ControlledHands>().AsSingle();
-            Container.Bind<IStateView<HandsState>>().To<HandsStateView>().AsSingle();
+            Container.Bind<IStateDivergence<HandsState>>().To<ExactDivergence<HandsState>>().AsSingle();
             Container.Bind<CursorAim>().AsSingle().WithArguments(_oval.transform);
             Container.Bind<TriggerSampler>().AsSingle();
             Container.Bind<ReloadSampler>().AsSingle();
             Container.Bind<DrawControlSampler>().AsSingle();
             Container.Bind<IInputSampler<HandsControls>>().To<HandsControlsSampler>().AsSingle();
-            Container.Bind<GripEcho>()
-                .FromMethod(context => context.Container.Instantiate<GripEcho>(new object[] { context.Container.Instantiate<HandsGrip>() }))
-                .AsSingle()
-                .NonLazy();
         }
     }
 }

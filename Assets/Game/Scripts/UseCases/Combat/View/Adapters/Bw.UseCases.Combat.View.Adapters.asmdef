@@ -8,7 +8,9 @@
         "Bw.UseCases.Combat.View",
         "Bw.UseCases.Audio.View",
         "Bw.UseCases.Combat.Abstractions",
-        "Bw.UseCases.Character.View"
+        "Bw.UseCases.Character.View",
+        "Bw.Entities.Network",
+        "Bw.UseCases.Movement.Network"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

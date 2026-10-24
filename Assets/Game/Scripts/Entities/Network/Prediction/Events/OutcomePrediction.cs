@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Collections.Viewable;
 using Unity.Netcode;
 
 namespace Bw.Entities.Network.Prediction.Events
 {
     public sealed class OutcomePrediction<TTarget, TEffect> : IOutcomePrediction<TTarget, TEffect> where TTarget : class where TEffect : struct
     {
+        public IReadonlyProperty<bool> Pending => _pending;
+
+        private readonly ViewableProperty<bool> _pending = new(false);
         private readonly NetworkObject _initiator;
         private readonly IPredictionTargets<TTarget, TEffect> _targets;
         private readonly List<Entry> _entries = new();
@@ -26,6 +30,7 @@ namespace Bw.Entities.Network.Prediction.Events
             if (!Booked(action, predictionTarget))
                 _entries.Add(new Entry(action, predictionTarget));
 
+            _pending.Value = true;
             predictionTarget.Show(new PredictedEffect<TEffect>(action, effect));
         }
 
@@ -40,6 +45,8 @@ namespace Bw.Entities.Network.Prediction.Events
                 _entries.RemoveAt(index);
                 ConfirmOrReject(entry, affected);
             }
+
+            _pending.Value = _entries.Count > 0;
         }
 
         public void ExpireBefore(int tick)
@@ -47,12 +54,8 @@ namespace Bw.Entities.Network.Prediction.Events
             for (var index = _entries.Count - 1; index >= 0; index--)
                 if (_entries[index].Action.Tick < tick)
                     Reject(index);
-        }
 
-        public void RejectAll()
-        {
-            for (var index = _entries.Count - 1; index >= 0; index--)
-                Reject(index);
+            _pending.Value = _entries.Count > 0;
         }
 
         private bool Booked(ActionId action, IPredictionTarget<TEffect> target)

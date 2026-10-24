@@ -47,7 +47,6 @@ namespace Bw.Injection.Movement
                     break;
                 case PeerType.Client:
                     Container.Decorate<IStateView<TState>>().With<RiderStateView<TState>>();
-                    Container.Bind<ControlledBody>().AsSingle().NonLazy();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

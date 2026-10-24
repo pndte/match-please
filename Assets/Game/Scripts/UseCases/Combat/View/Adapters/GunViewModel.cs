@@ -32,6 +32,9 @@ namespace Bw.UseCases.Combat.View.Adapters
 
         private GunReload ReloadOf(GunState from, GunState to, float progress)
         {
+            if (to.ReloadTicks <= 0 && to.Ammo <= from.Ammo)
+                return GunReload.None;
+
             var ticksLeft = from.ReloadTicks > 0 ? Mathf.Lerp(from.ReloadTicks, to.ReloadTicks, progress) : to.ReloadTicks;
             if (ticksLeft <= 0f)
                 return GunReload.None;

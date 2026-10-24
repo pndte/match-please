@@ -1,75 +1,58 @@
 using System;
-using Bw.Entities.Network.Prediction.Stream.Requests;
-using Bw.Entities.Network.Ticks;
 using Bw.Entities.Simulation;
 using JetBrains.Lifetimes;
+using Unity.Netcode;
 
 namespace Bw.Entities.Network.LagCompensation
 {
     public sealed class SimulationRewinder<TState> : IRewindable where TState : struct
     {
-        private readonly TickedState<TState>[] _states;
+        private readonly SimulationHistory<TState> _history;
         private readonly IReadonlySimulation<TState> _simulation;
         private readonly IStateView<TState> _view;
-        private readonly INetworkTicks _ticks;
+        private readonly NetworkObject _networkObject;
         private readonly Action _restore;
 
-        private int _oldest;
-        private int _newest;
-
         public SimulationRewinder(
-            Lifetime lifetime,
+            SimulationHistory<TState> history,
             IReadonlySimulation<TState> simulation,
             IStateView<TState> view,
-            INetworkTicks ticks,
-            LagCompensationConfig config)
+            NetworkObject networkObject)
         {
-            _states = new TickedState<TState>[config.RewindTicks(ticks) + 1];
+            _history = history;
             _simulation = simulation;
             _view = view;
-            _ticks = ticks;
+            _networkObject = networkObject;
             _restore = Restore;
-            _oldest = ticks.Current;
-            _newest = ticks.Current;
-            Store(ticks.Current, simulation.State.Value);
-
-            simulation.Stepped.Advise(lifetime, Record);
         }
 
-        public void Rewind(Lifetime lifetime, SeenTicks seen)
+        public void Rewind(Lifetime lifetime, ShooterView view)
         {
-            var tick = seen.Interpolated;
+            var tick = view.TickOf(_networkObject.transform.position);
             var from = (int)Math.Floor(tick);
             _view.Show(StateAt(from), StateAt(from + 1), (float)(tick - from));
             lifetime.OnTermination(_restore);
         }
 
-        private void Record(TState state)
+        private TState StateAt(int tick)
         {
-            var tick = _ticks.Current;
-            if (tick < _newest)
+            if (tick > _history.NewestTick)
+                return _simulation.State.Value;
+
+            if (tick <= _history.NewestTick - _history.Capacity)
                 throw new InvalidOperationException(
-                    $"The simulation stepped at tick {tick.ToString()} after tick {_newest.ToString()}: its history only goes forward.");
+                    $"No state of tick {tick.ToString()} is kept: the rewind reaches deeper than the history, so the lag compensation depth is too large.");
 
-            var last = StateAt(_newest);
-            for (var gap = Math.Max(_newest + 1, tick - _states.Length + 1); gap < tick; gap++)
-                Store(gap, last);
+            if (_history.TryGetAt(tick, out var state))
+                return state;
 
-            Store(tick, state);
-            _newest = tick;
-            _oldest = Math.Max(_oldest, tick - _states.Length + 1);
+            if (!_history.TryGetEarliest(tick, out _, out var first))
+                throw new InvalidOperationException($"No state of tick {tick.ToString()} or later is kept, though the history holds tick {_history.NewestTick.ToString()}.");
+
+            return first; //TODO: тик раньше первой записи (объект появился позже момента, который видел стрелок) даёт самое раннее состояние — честнее на время отката убирать объект из мира
         }
-
-        private TState StateAt(int tick) => //TODO: тик раньше первой записи (объект появился позже момента, который видел стрелок) даёт самое старое состояние — честнее на время отката убирать объект из мира
-            _states[Slot(Math.Clamp(tick, _oldest, _newest))].State;
-
-        private void Store(int tick, TState state) =>
-            _states[Slot(tick)] = new TickedState<TState>(tick, state);
 
         private void Restore() =>
             _view.Show(_simulation.State.Value, _simulation.State.Value, 0f);
-
-        private int Slot(int tick) =>
-            (tick % _states.Length + _states.Length) % _states.Length;
     }
 }

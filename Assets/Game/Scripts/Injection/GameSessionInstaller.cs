@@ -2,20 +2,22 @@
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
 using Bw.Entities.Network.LagCompensation;
+using Bw.Entities.Network.Prediction.Bubble;
 using Bw.Entities.Network.Prediction.Stream;
-using Bw.Entities.Network.Replication;
-using Bw.Entities.Network.Ticks;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Physics;
 using Bw.Entities.Simulation;
 using Bw.Injection.Level;
 using Bw.Injection.Match;
 using Bw.UseCases.Character;
+using Bw.UseCases.Character.Network;
 using Bw.UseCases.Character.Network.Requests;
+using Bw.UseCases.Combat.Abstractions.Characters;
 using Bw.UseCases.Combat.Abstractions.Hands;
 using Bw.UseCases.Combat.Abstractions.Inventory;
+using Bw.UseCases.Combat.Characters;
 using Bw.UseCases.Combat.Hands;
 using Bw.UseCases.Combat.Hands.Abstractions;
-using Bw.UseCases.Combat.Melee.Network;
 using Bw.UseCases.Combat.View.Adapters;
 using Bw.UseCases.Combat.Weapon;
 using Bw.UseCases.Combat.Weapon.Abstractions;
@@ -55,18 +57,14 @@ namespace Bw.Injection
         private void BindServer()
         {
             BindPhysics();
-            Container.Bind<IPhysicsSteps>().To<PhysicsSpace>().FromResolve();
-            Container.Bind<PassiveStepper>()
-                .FromMethod(context => new PassiveStepper(gameObject.Lifetime(), context.Container.Resolve<INetworkTicks>(), context.Container.Resolve<PhysicsSpace>()))
+            Container.Bind<IWorldStep>().To<WorldStep>()
+                .FromMethod(context => context.Container.Instantiate<WorldStep>(new object[] { gameObject.Lifetime(), context.Container.Resolve<PhysicsSpace>() }))
                 .AsSingle()
                 .NonLazy();
             Container.BindInterfacesTo<GameObjectByCharacterCollection>().AsSingle();
             Container.BindInterfacesTo<MovingPlatformCollection>().AsSingle();
             Container.BindInterfacesTo<ShovableCollection>().AsSingle();
-            Container.BindInterfacesTo<ScheduledCollection>().AsSingle();
             BindWeapons();
-            Container.Bind<IWeaponControllingClients>().To<WeaponControllingClients>().AsSingle();
-            Container.BindInterfacesTo<RewindableCollection>().AsSingle();
             Container.BindInterfacesTo<LagCompensator>().AsSingle();
             Container.BindInterfacesTo<RaycastShotResolver>().AsSingle().NonLazy();
             Container.Bind<IControllerSamplers<CharacterControls>>().To<ControllerSamplers<CharacterControls>>().AsSingle();
@@ -76,15 +74,17 @@ namespace Bw.Injection
         private void BindClient()
         {
             BindPhysics();
-            Container.BindInterfacesTo<PredictableCollection>().AsSingle();
-            Container.BindInterfacesTo<PhysicsRollback>().AsSingle().WithArguments(gameObject.Lifetime()).NonLazy();
+            Container.Bind(typeof(IWorldStep), typeof(IRollbackParts)).To<WorldRollback>()
+                .FromMethod(context => context.Container.Instantiate<WorldRollback>(new object[] { gameObject.Lifetime(), context.Container.Resolve<PhysicsSpace>() }))
+                .AsSingle()
+                .NonLazy();
+            Container.Bind<IControlledCharacters>().To<ControlledCharacters>().AsSingle();
+            Container.Bind<IPredictionBubble>().To<PredictionBubble>().AsSingle();
             Container.BindInterfacesTo<MovingPlatformCollection>().AsSingle();
             Container.BindInterfacesTo<ShovableCollection>().AsSingle();
-            Container.BindInterfacesTo<ScheduledCollection>().AsSingle();
-            Container.BindInterfacesTo<PredictedBodyCollection>().AsSingle();
             BindWeapons();
             Container.Bind<IAimDeflections>().To<AimDeflections>().AsSingle();
-            Container.Bind<ICarriedReplicas>().To<CarriedReplicas>().AsSingle();
+            Container.Bind<ICharacterPredictions>().To<CharacterPredictions>().AsSingle();
             Container.Bind(typeof(IReadonlyFloorWeapons), typeof(IFloorWeapons)).To<FloorWeapons>().AsSingle()
                 .WriterOnlyInto<IFloorWeapons>(typeof(FloorWeaponRegistration));
             BindClientVisuals();
@@ -103,9 +103,7 @@ namespace Bw.Injection
             Container.Bind<INetworkWeapons>().To<NetworkWeapons>().AsSingle();
             Container.Bind<ICharacterTriggers>().To<CharacterTriggers>().AsSingle();
             Container.Bind<IWeaponsInHands>().To<WeaponsInHands>().AsSingle();
-            Container.Bind<IMovementRoots>().To<MovementRoots>().AsSingle();
             Container.Bind<IHeldBoxes>().To<HeldBoxes>().AsSingle();
-            Container.Bind<IWeaponControlledBy>().To<WeaponControlledBy>().AsSingle();
         }
 
         private void BindPhysics()
@@ -119,6 +117,7 @@ namespace Bw.Injection
                     context.Container.Resolve<ISimulationStep>(),
                     context.Container.Resolve<ISweptBodyCollection>()))
                 .AsSingle();
+            Container.Bind<IPhysicsSteps>().To<PhysicsSpace>().FromResolve();
             Container.Bind<LevelGeometry>()
                 .FromMethod(context => LevelGeometry.Create(gameObject.Lifetime(), context.Container.Resolve<IPhysicsSpace>(), LevelBoxes.In(gameObject.scene)))
                 .AsSingle()

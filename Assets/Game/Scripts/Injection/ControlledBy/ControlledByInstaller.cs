@@ -21,11 +21,13 @@ namespace Bw.Injection.ControlledBy
         {
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
             {
-                Container.Bind<IControlledBy>().To<UseCases.ControlledBy>().AsSingle();
+                Container.Bind(typeof(IReadonlyControlledBy), typeof(IControlledBy)).To<UseCases.ControlledBy>().AsSingle()
+                    .WriterOnlyInto<IControlledBy>(typeof(ControlledByClientHandler));
             }
             else if (_runtimeSettings.CurrentPeerType == PeerType.Server)
             {
-                Container.Bind<IControlledBy>().To<UseCases.ControlledBy>().AsSingle();
+                Container.Bind(typeof(IReadonlyControlledBy), typeof(IControlledBy)).To<UseCases.ControlledBy>().AsSingle()
+                    .WriterOnlyInto<IControlledBy>(typeof(ControllerDrivers));
                 Container.Bind<IControllerRegistry>().To<UseCases.ControllerRegistry>().AsSingle();
                 Container.Bind<IControllingClients>().To<ControllingClients>().AsSingle();
                 Container.Bind<ControllerDrivers>().AsSingle().NonLazy();

@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System;
 using System.Globalization;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
@@ -23,7 +24,7 @@ namespace Bw.Entities.Network.Prediction.Stream
 
         public InputGapLog(
             Lifetime lifetime,
-            INetworkTicks ticks,
+            IWorldStep worldStep,
             NetworkTicksConfig config,
             PredictionInputBuffer<TInput> buffer,
             NetworkObject networkObject)
@@ -32,7 +33,7 @@ namespace Bw.Entities.Network.Prediction.Stream
             _networkObject = networkObject;
 
             buffer.Gaps.Advise(lifetime, Count);
-            ticks.Ticked(TickPhase.Default).Advise(lifetime, _ => ReportWhenDue());
+            worldStep.Stepped(TickPhase.Publish).Advise(lifetime, _ => ReportWhenDue());
         }
 
         private void Count(InputGap gap)

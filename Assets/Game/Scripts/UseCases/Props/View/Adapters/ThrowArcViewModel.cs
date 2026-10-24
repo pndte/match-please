@@ -17,22 +17,22 @@ namespace Bw.UseCases.Props.View.Adapters
         private readonly ViewableProperty<bool> _aiming = new(false);
         private readonly ViewableProperty<ThrowArc> _arc = new(default);
 
-        private readonly ThrowLaunch _launch;
+        private readonly PropLauncher _launcher;
         private readonly ThrowTrajectory _trajectory;
-        private readonly IControlledBy _controlledBy;
+        private readonly IReadonlyControlledBy _controlledBy;
         private readonly IWeapon _prop;
         private readonly IWeaponsInHands _inHands;
         private readonly float _horizon;
 
         public ThrowArcViewModel(
-            ThrowLaunch launch,
+            PropLauncher launcher,
             ThrowTrajectory trajectory,
-            IControlledBy controlledBy,
+            IReadonlyControlledBy controlledBy,
             IWeapon prop,
             IWeaponsInHands inHands,
             PropVfxConfig config)
         {
-            _launch = launch;
+            _launcher = launcher;
             _trajectory = trajectory;
             _controlledBy = controlledBy;
             _prop = prop;
@@ -47,7 +47,7 @@ namespace Bw.UseCases.Props.View.Adapters
                 && from.Phase == PropPhase.Holding
                 && to.Phase == PropPhase.Holding)
             {
-                var launched = _launch.Thrown(holder, Mathf.LerpAngle(from.Aim, to.Aim, progress));
+                var launched = _launcher.Launched(holder, _launcher.ThrowVelocity(holder, Mathf.LerpAngle(from.Aim, to.Aim, progress)));
                 _arc.Value = new ThrowArc(_trajectory.CenterOf(launched), launched.Velocity, _trajectory.Gravity, _trajectory.ClearTime(launched, _horizon));
                 _aiming.Value = true;
                 return;

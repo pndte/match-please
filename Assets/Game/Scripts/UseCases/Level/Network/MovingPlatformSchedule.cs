@@ -1,25 +1,28 @@
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
+using Bw.Entities.Simulation;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Level.Network
 {
-    public sealed class MovingPlatformSchedule : IScheduled
+    public sealed class MovingPlatformSchedule
     {
         private readonly MovingPlatform _platform;
-        private readonly INetworkTicks _ticks;
+        private readonly ISimulationStep _step;
 
-        public MovingPlatformSchedule(Lifetime lifetime, MovingPlatform platform, INetworkTicks ticks)
+        public MovingPlatformSchedule(
+            Lifetime lifetime,
+            MovingPlatform platform,
+            ISimulationStep step,
+            IWorldStep world)
         {
             _platform = platform;
-            _ticks = ticks;
+            _step = step;
 
-            ticks.Ticked(TickPhase.Early).Advise(lifetime, Pose);
+            world.Stepped(TickPhase.Early).Advise(lifetime, Pose);
         }
 
-        public void PoseAt(double tick) =>
-            _platform.PoseAt(tick * _ticks.Duration);
-
         private void Pose(int tick) =>
-            PoseAt(tick);
+            _platform.PoseAt(tick * _step.Duration);
     }
 }

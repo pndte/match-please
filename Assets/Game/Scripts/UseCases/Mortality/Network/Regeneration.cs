@@ -1,5 +1,6 @@
 using Bw.Entities.Extensions;
 using Bw.Entities.Network.Prediction.Events;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
 using Bw.UseCases.Mortality.Extensions;
 using JetBrains.Lifetimes;
@@ -21,6 +22,7 @@ namespace Bw.UseCases.Mortality.Network
             IReadonlyMortal mortal,
             IAffectable<Heal> healable,
             INetworkTicks ticks,
+            IWorldStep worldStep,
             RegenerationConfig config)
         {
             _mortal = mortal;
@@ -29,7 +31,7 @@ namespace Bw.UseCases.Mortality.Network
             _config = config;
 
             mortal.Health.AdviseDamage(lifetime, _ => _lastHitTick = ticks.Current);
-            mortal.State.WhenAlive(lifetime, aliveLifetime => ticks.Ticked(TickPhase.Default).Advise(aliveLifetime, Step));
+            mortal.State.WhenAlive(lifetime, aliveLifetime => worldStep.Stepped(TickPhase.Default).Advise(aliveLifetime, Step));
         }
 
         private void Step(int tick)

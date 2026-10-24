@@ -13,7 +13,7 @@ namespace Bw.UseCases.Combat.Hands.Network
 
         private readonly ViewableProperty<bool> _held = new(false);
 
-        public GuardKey(Lifetime lifetime, IControlledBy controlledBy)
+        public GuardKey(Lifetime lifetime, IReadonlyControlledBy controlledBy)
         {
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
             {

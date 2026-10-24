@@ -1,48 +1,43 @@
 using Bw.Entities.Network.Prediction.Stream.Requests;
+using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Network.Variables;
-using Bw.Entities.Simulation;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
 namespace Bw.Entities.Network.Prediction.Stream
 {
-    public sealed class PredictionInputSender<TInput> : IFedInputs<TInput> where TInput : struct
+    public sealed class PredictionInputSender<TInput> where TInput : struct
     {
-        public ISource<TickedInput<TInput>> Fed => _fed;
-
-        private readonly Signal<TickedInput<TInput>> _fed = new();
         private readonly IInputSampler<TInput> _sampler;
         private readonly INetRequestSender<TickedInput<TInput>> _input;
-        private readonly ISteppable<TInput> _simulation;
+        private readonly ITickHistory<TInput> _own;
 
         private TInput _previousInput;
 
         public PredictionInputSender(
             Lifetime lifetime,
-            IControlledBy controlledBy,
-            INetworkTicks ticks,
+            IReadonlyControlledBy controlledBy,
+            IWorldStep worldStep,
             IInputSampler<TInput> sampler,
             INetRequestSender<TickedInput<TInput>> input,
-            ISteppable<TInput> simulation)
+            ITickHistory<TInput> own)
         {
             _sampler = sampler;
             _input = input;
-            _simulation = simulation;
+            _own = own;
 
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
-                ticks.Ticked(TickPhase.Default).Advise(controlledLifetime, Send));
+                worldStep.Stepped(TickPhase.Prepare).Advise(controlledLifetime, Send));
         }
 
         private void Send(int tick)
         {
             var input = _sampler.Sample();
-            var ticked = new TickedInput<TInput>(tick, input, _previousInput);
 
-            _input.Send(ticked);
+            _input.Send(new TickedInput<TInput>(tick, input, _previousInput));
+            _own.Record(tick, input);
             _previousInput = input;
-            _fed.Fire(ticked);
-            _simulation.Step(input);
         }
     }
 }

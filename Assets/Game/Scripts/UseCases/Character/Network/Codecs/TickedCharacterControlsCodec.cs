@@ -152,7 +152,7 @@ namespace Bw.UseCases.Character.Network.Codecs
             serializer.SerializeValue(ref age);
             serializer.SerializeQuantized(ref viewDelay, Delay);
             serializer.SerializeQuantized(ref predictedDelay, Delay);
-            press = new TriggerPress(number, age, viewDelay, predictedDelay, 0);
+            press = new TriggerPress(number, age, viewDelay, predictedDelay, 0); //TODO: опоздание нажатия (Late) не передаётся, а сервер пересылает клиентам уже спасённый ввод: чужой персонаж в пузыре стреляет у клиента без опоздания, которое учёл сервер, и откат поправляет его патроны и паузу
         }
 
         private static TriggerPress OneTickEarlier(TriggerPress press) =>

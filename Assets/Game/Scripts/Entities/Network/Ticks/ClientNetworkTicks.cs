@@ -6,15 +6,16 @@ using UnityEngine;
 
 namespace Bw.Entities.Network.Ticks
 {
-    public sealed class ClientNetworkTicks : INetworkTicks, IInterpolationTicks, IServerTime, IInputMarginFeedback, INetworkUpdateSystem
+    public sealed class ClientNetworkTicks : INetworkTicks, IWorldClock, IInterpolationTicks, IServerTime, IInputMarginFeedback, INetworkUpdateSystem
     {
         public float Duration { get; private set; }
         public int Current { get; private set; }
         public float Progress => Mathf.Clamp01((float)(_time / Duration - Current));
         public double InterpolationTick => _network.ServerTime.Time / Duration - _config.InterpolationDelayTicks;
         int IServerTime.Tick => (int)Math.Floor(_network.ServerTime.Time / Duration);
+        public ISource<int> Ticked => _ticked;
 
-        private readonly TickPhaseSignals _phases = new();
+        private readonly Signal<int> _ticked = new();
         private readonly NetworkTicksConfig _config;
         private NetworkManager _network;
         private double _time;
@@ -39,9 +40,6 @@ namespace Bw.Entities.Network.Ticks
             });
         }
 
-        public ISource<int> Ticked(TickPhase phase) =>
-            _phases.Of(phase);
-
         public void NetworkUpdate(NetworkUpdateStage updateStage)
         {
             if (!_network.IsConnectedClient)
@@ -57,7 +55,7 @@ namespace Bw.Entities.Network.Ticks
                 Current = tick - 1;
 
             while (Current < tick)
-                _phases.Fire(++Current);
+                _ticked.Fire(++Current);
         }
 
         public void Report(int marginTicks)
