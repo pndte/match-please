@@ -9,6 +9,8 @@ using Bw.Injection.Network;
 using Bw.Injection.Network.Variables;
 using Bw.UseCases.Combat;
 using Bw.UseCases.Combat.Abstractions.Weapons;
+using Bw.UseCases.Combat.Shooting;
+using Bw.UseCases.Combat.Shooting.Network;
 using Bw.UseCases.Combat.View;
 using Bw.UseCases.Combat.View.Abstractions;
 using Bw.UseCases.Combat.View.Adapters;

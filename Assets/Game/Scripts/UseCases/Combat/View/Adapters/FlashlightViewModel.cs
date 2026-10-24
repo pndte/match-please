@@ -1,5 +1,5 @@
+using Bw.UseCases.Combat.Shooting.Abstractions;
 using Bw.UseCases.Combat.View.Abstractions;
-using Bw.UseCases.Combat.Weapon.Abstractions;
 using JetBrains.Collections.Viewable;
 
 namespace Bw.UseCases.Combat.View.Adapters

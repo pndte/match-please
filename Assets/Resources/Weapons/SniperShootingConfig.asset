@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d108cbbc28f4310a7ef7d8d851480f5, type: 3}
   m_Name: SniperShootingConfig
-  m_EditorClassIdentifier: Bw.UseCases.Combat::Bw.UseCases.Combat.Weapon.ShootingWeaponConfig
+  m_EditorClassIdentifier: Bw.UseCases.Combat::Bw.UseCases.Combat.Shooting.ShootingWeaponConfig
   AmmoSettings: {fileID: 11400000, guid: f4a2356f9009d2c4780854e46c0f55aa, type: 2}
   ShootCooldown: 1.2
   ReloadTime: 3

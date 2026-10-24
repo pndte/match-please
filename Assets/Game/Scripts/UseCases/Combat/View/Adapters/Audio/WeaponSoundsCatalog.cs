@@ -1,5 +1,5 @@
 using System;
-using Bw.UseCases.Combat.Weapon;
+using Bw.UseCases.Combat.Shooting;
 
 namespace Bw.UseCases.Combat.View.Adapters.Audio
 {

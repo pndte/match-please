@@ -1,6 +1,6 @@
 using Bw.Entities.Simulation;
+using Bw.UseCases.Combat.Shooting;
 using Bw.UseCases.Combat.View.Abstractions;
-using Bw.UseCases.Combat.Weapon;
 using JetBrains.Collections.Viewable;
 using UnityEngine;
 

@@ -1,4 +1,4 @@
-using Bw.UseCases.Combat.Weapon;
+using Bw.UseCases.Combat.Shooting;
 using UnityEditor;
 using UnityEngine;
 
