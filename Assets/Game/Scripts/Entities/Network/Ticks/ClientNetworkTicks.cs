@@ -6,13 +6,15 @@ using UnityEngine;
 
 namespace Bw.Entities.Network.Ticks
 {
-    public sealed class ClientNetworkTicks : INetworkTicks, IWorldClock, IInterpolationTicks, IServerTime, IInputMarginFeedback, INetworkUpdateSystem
+    public sealed class ClientNetworkTicks : INetworkTicks, IWorldClock, IInterpolationTicks, IServerTime, IInputMarginFeedback, IInputLead, INetworkUpdateSystem
     {
         public float Duration { get; private set; }
         public int Current { get; private set; }
         public float Progress => Mathf.Clamp01((float)(_time / Duration - Current));
         public double InterpolationTick => _network.ServerTime.Time / Duration - _config.InterpolationDelayTicks;
         int IServerTime.Tick => (int)Math.Floor(_network.ServerTime.Time / Duration);
+        float IInputLead.Ticks => _leadTicks;
+        float IInputLead.MarginTicks => _reportedMargin;
         public ISource<int> Ticked => _ticked;
 
         private readonly Signal<int> _ticked = new();

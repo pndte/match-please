@@ -21,7 +21,7 @@ namespace Bw.UseCases.Bots.Navigation
             boxes.Sort(string.CompareOrdinal);
             var movement = config.Movement;
             var text = new StringBuilder();
-            Append(text, step, Physics2D.gravity.y, movement.Speed, movement.JumpForce, movement.GravityScale, movement.CoyoteTime, movement.JumpBufferTime, movement.ReleasedJumpGravity, movement.FallGravity);
+            Append(text, step, Physics2D.gravity.y, movement.Speed, movement.JumpForce, movement.GravityScale, movement.CoyoteTime, movement.JumpBufferTime, movement.ReleasedJumpGravity, movement.FallGravity, movement.AccelerationTime, movement.BrakingTime);
             text.Append(movement.GroundLayer.value.ToString(CultureInfo.InvariantCulture)).Append('|');
             Append(text, config.Character.WorldSize().x, config.Character.WorldSize().y, config.Character.WorldOffset().x, config.Character.WorldOffset().y, config.Spacing, config.MaxFlightTicks);
             Append(text, config.JumpShares);

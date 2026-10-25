@@ -23,7 +23,7 @@ namespace Bw.UseCases.Movement.Physics
             var jumps = WantsToJump(state, input) && CanJump(state);
             var rising = jumps || state.Jump.Rising;
             var velocity = new Vector2(
-                Mathf.Clamp(input.Horizontal, -1f, 1f) * Speed(input),
+                RunSpeed(state.Body.Velocity.x, Mathf.Clamp(input.Horizontal, -1f, 1f) * Speed(input)),
                 jumps ? JumpForce(input) : state.Body.Velocity.y);
 
             var body = _body.Step(state.Body, new BodyDrive(velocity, GravityScale(velocity, rising, input), input.Down), out var launched);
@@ -34,6 +34,15 @@ namespace Bw.UseCases.Movement.Physics
 
         private float Speed(MovementInput input) =>
             _config.Speed * (1f - input.Slowdown.Speed);
+
+        private float RunSpeed(float current, float wanted)
+        {
+            var time = Braking(current, wanted) ? _config.BrakingTime : _config.AccelerationTime;
+            return time > 0f ? Mathf.MoveTowards(current, wanted, _config.Speed / time * _step.Duration) : wanted;
+        }
+
+        private static bool Braking(float current, float wanted) =>
+            Mathf.Abs(wanted) < Mathf.Abs(current) || wanted * current < 0f;
 
         private float JumpForce(MovementInput input) =>
             _config.JumpForce * Mathf.Sqrt(1f - input.Slowdown.JumpHeight);

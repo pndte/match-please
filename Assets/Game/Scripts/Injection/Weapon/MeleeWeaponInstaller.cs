@@ -125,7 +125,7 @@ namespace Bw.Injection.Weapon
             Container.Bind(typeof(IMeleeSwingsViewModel), typeof(MeleeSwingsViewModel)).To<MeleeSwingsViewModel>().AsSingle();
             Container.Bind<IStateView<MeleeState>>()
                 .FromMethod(ctx => new CompositeStateView<MeleeState>(
-                    ctx.Container.Resolve<WeaponPoseViewModel<MeleeState>>(),
+                    ctx.Container.Instantiate<SmoothedAimView<MeleeState>>(new object[] { ctx.Container.Resolve<WeaponPoseViewModel<MeleeState>>() }),
                     ctx.Container.Resolve<SeenShotsViewModel<MeleeState>>(),
                     ctx.Container.Resolve<MeleeSwingsViewModel>()))
                 .AsSingle();

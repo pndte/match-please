@@ -17,6 +17,7 @@ namespace Setup
         [SerializeField] private bool enableAutoStart = true;
         [SerializeField] private string serverTag = "server";
         [SerializeField] private string clientTag = "client";
+        [SerializeField] private string pingTagPrefix = "ping";
 
         [Header("Debug")]
         [SerializeField] private bool enableLogging = true;
@@ -66,6 +67,7 @@ namespace Setup
             _network.ShowStarting(choice);
             _runtimeSettings.Initialize(choice.Switch(_ => PeerType.Server, _ => PeerType.Client, _ => PeerType.Client));
             await LoadServicesAndGame();
+            SimulatePlayModePing();
             await _network.Start(choice);
             await SceneManager.UnloadSceneAsync("GameSetupScene").ToUniTask();
         }
@@ -83,7 +85,8 @@ namespace Setup
         {
             choice = null;
 #if UNITY_EDITOR
-            var currentTag = Unity.Multiplayer.PlayMode.CurrentPlayer.Tags.FirstOrDefault();
+            var currentTag = Unity.Multiplayer.PlayMode.CurrentPlayer.Tags.FirstOrDefault(tag =>
+                string.Equals(tag, serverTag, StringComparison.OrdinalIgnoreCase) || string.Equals(tag, clientTag, StringComparison.OrdinalIgnoreCase));
             if (string.Equals(currentTag, serverTag, StringComparison.OrdinalIgnoreCase))
             {
                 Log($"Multiplayer Play Mode tag '{currentTag}': starting as the server.");
@@ -103,6 +106,25 @@ namespace Setup
 
 #endif
             return false;
+        }
+
+        private void SimulatePlayModePing()
+        {
+#if UNITY_EDITOR
+            foreach (var tag in Unity.Multiplayer.PlayMode.CurrentPlayer.Tags)
+            {
+                if (!tag.StartsWith(pingTagPrefix, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                if (!int.TryParse(tag.Substring(pingTagPrefix.Length), out var ping) || ping <= 0)
+                    throw new InvalidOperationException($"Multiplayer Play Mode tag '{tag}' must name a ping in milliseconds, such as '{pingTagPrefix}150'.");
+
+                var simulator = NetworkManager.Singleton.gameObject.AddComponent<Unity.Multiplayer.Tools.NetworkSimulator.Runtime.NetworkSimulator>();
+                simulator.ConnectionPreset = Unity.Multiplayer.Tools.NetworkSimulator.Runtime.NetworkSimulatorPreset.Create($"Ping {ping} ms", packetDelayMs: ping / 2);
+                Log($"Multiplayer Play Mode tag '{tag}': simulating a {ping} ms ping, {ping / 2} ms each way.");
+                return;
+            }
+#endif
         }
 
         private async UniTask LoadServicesAndGame()

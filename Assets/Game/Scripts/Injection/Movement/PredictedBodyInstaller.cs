@@ -1,12 +1,9 @@
 using System;
 using Bw.Entities.Network;
-using Bw.Entities.Network.LagCompensation;
 using Bw.Entities.Network.Variables;
 using Bw.Injection.Network;
 using Bw.UseCases.Movement;
-using Bw.UseCases.Movement.Network.Platforms;
 using Bw.UseCases.Movement.Physics;
-using Bw.UseCases.Movement.Physics.Abstractions;
 using Zenject;
 
 namespace Bw.Injection.Movement
@@ -46,9 +43,7 @@ namespace Bw.Injection.Movement
 
         private void BindServer()
         {
-            Container.Bind<IMovementBody>().To<KinematicBody>().AsSingle();
             LagCompensationInstaller<RigidState, RigidPoseView>.Install(Container, _runtimeSettings);
-            Container.Decorate<IRewindable>().With<RiderRewinder>();
         }
     }
 }

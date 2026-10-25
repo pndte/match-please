@@ -8,6 +8,7 @@ namespace Bw.Entities.Network.Serialization
     {
         private const float FullTurn = 360f;
         private const float TurnSteps = 65536f;
+        private const float ShareSteps = ushort.MaxValue;
 
         public static void SerializeQuantized<T>(this BufferSerializer<T> serializer, ref float value, Quantization quantization)
             where T : IReaderWriter
@@ -42,7 +43,17 @@ namespace Bw.Entities.Network.Serialization
             degrees = Mathf.DeltaAngle(0f, steps * (FullTurn / TurnSteps));
         }
 
+        public static void SerializeShare<T>(this BufferSerializer<T> serializer, ref float share) where T : IReaderWriter
+        {
+            var steps = serializer.IsWriter ? ShareStepsOf(share) : (ushort)0;
+            serializer.SerializeValue(ref steps);
+            share = steps / ShareSteps;
+        }
+
         private static ushort TurnStepsOf(float degrees) =>
             unchecked((ushort)checked((int)Math.Round(Mathf.Repeat(degrees, FullTurn) * (TurnSteps / FullTurn))));
+
+        private static ushort ShareStepsOf(float share) =>
+            checked((ushort)Math.Round(share * ShareSteps));
     }
 }

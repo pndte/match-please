@@ -20,6 +20,7 @@ namespace Bw.Injection.Network
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Combat.Shooting.GunState>, Bw.UseCases.Combat.Shooting.Network.Codecs.TickedGunStateCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Combat.Weapon.Network.Requests.CarriedWeapons>, Bw.UseCases.Combat.Weapon.Network.Codecs.TickedCarriedWeaponsCodec>(receivers, senders);
             RegisterCodec<Bw.UseCases.Combat.Weapon.Network.Requests.WeaponPickup, Bw.UseCases.Combat.Weapon.Network.Codecs.WeaponPickupCodec>(receivers, senders);
+            RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Level.PlatformState>, Bw.UseCases.Level.Network.Codecs.TickedPlatformStateCodec>(receivers, senders);
             RegisterCodec<Bw.UseCases.Match.Network.Requests.KillNotice, Bw.UseCases.Match.Network.Codecs.KillNoticeCodec>(receivers, senders);
             RegisterCodec<Bw.UseCases.Match.Network.Requests.MatchTable, Bw.UseCases.Match.Network.Codecs.MatchTableCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Events.Requests.CausedState<Bw.UseCases.Mortality.Vitals>, Bw.UseCases.Mortality.Network.Codecs.CausedVitalsCodec>(receivers, senders);

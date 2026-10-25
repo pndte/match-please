@@ -56,7 +56,8 @@ namespace Bw.Injection.Network.Prediction
                 .AsSingle()
                 .WriterOnlyInto<ITickHistory<TInput>>(typeof(PredictionInputSender<TInput>));
             Container.Bind<PredictionInputSender<TInput>>().AsSingle().NonLazy();
-            Container.Bind<IRemoteInputs<TInput>>().To<RemoteInputs<TInput>>().AsSingle();
+            Container.Bind(typeof(IRemoteInputs<TInput>), typeof(RemoteInputs<TInput>)).To<RemoteInputs<TInput>>().AsSingle();
+            Container.Bind<RemoteInputsRegistration<TInput>>().AsSingle().NonLazy();
             Container.Bind<IStepInputs<TInput>>().To<PredictedInputs<TInput>>().AsSingle();
             Container.Bind<InputMarginClientHandler>().AsSingle().NonLazy();
         }

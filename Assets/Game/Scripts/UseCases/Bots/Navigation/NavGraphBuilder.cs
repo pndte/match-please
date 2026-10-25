@@ -21,6 +21,7 @@ namespace Bw.UseCases.Bots.Navigation
         private const float SettleReach = 0.2f;
         private const float LandingReach = 0.75f;
         private const float LandingHeight = 0.3f;
+        private const float Resting = 0.01f;
 
         private readonly NavGraphConfig _config;
         private readonly PhysicsConfig _physics;
@@ -38,7 +39,7 @@ namespace Bw.UseCases.Bots.Navigation
             var lifetime = new LifetimeDefinition();
             try
             {
-                var space = PhysicsSpace.Create(lifetime.Lifetime, _physics, _step, new SweptBodyCollection());
+                var space = PhysicsSpace.Create(lifetime.Lifetime, _physics, _step);
                 LevelGeometry.Create(lifetime.Lifetime, space, level);
                 var body = space.CreateBody(lifetime.Lifetime, _config.Character, PhysicsBody.BodyType.Kinematic);
                 var motor = MotorIn(body);
@@ -190,11 +191,34 @@ namespace Bw.UseCases.Bots.Navigation
                 if (!state.Body.Grounded)
                     airborne = true;
                 else if (airborne)
-                    return TryFindNear(nodes, state.Body.Position, out landed);
+                    return TryStop(nodes, motor, state, ref ticks, out landed);
             }
 
             landed = -1;
             return false;
+        }
+
+        private bool TryStop(
+            List<Vector2> nodes,
+            IMovementMotor motor,
+            MovementState state,
+            ref int ticks,
+            out int landed)
+        {
+            var idle = new MovementInput(0f, false, false, false, Slowdown.None);
+            var limit = Mathf.CeilToInt(_config.Movement.BrakingTime / _step.Duration) + 1;
+            for (var braked = 0; braked < limit && Mathf.Abs(state.Body.Velocity.x) > Resting; braked++)
+            {
+                state = motor.Step(state, idle);
+                ticks++;
+                if (!state.Body.Grounded)
+                {
+                    landed = -1;
+                    return false;
+                }
+            }
+
+            return TryFindNear(nodes, state.Body.Position, out landed);
         }
 
         private static bool TryFindNear(List<Vector2> nodes, Vector2 position, out int found)

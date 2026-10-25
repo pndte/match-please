@@ -6,6 +6,7 @@
         "Bw.Entities.Network",
         "Bw.UseCases.Level",
         "Bw.UseCases.Movement",
+        "Bw.UseCases.Movement.Network",
         "Unity.Netcode.Runtime",
         "R3.Unity"
     ],

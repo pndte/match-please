@@ -19,10 +19,7 @@ namespace Bw.UseCases.Movement.Physics
             _body = body;
         }
 
-        public void Place(Vector2 position)
-        {
+        public void Place(Vector2 position) =>
             _transform.position = new Vector3(position.x, position.y, _transform.position.z);
-            _body.position = position;
-        }
     }
 }

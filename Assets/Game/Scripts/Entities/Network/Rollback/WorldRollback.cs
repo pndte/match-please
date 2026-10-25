@@ -15,6 +15,7 @@ namespace Bw.Entities.Network.Rollback
         private readonly ViewableProperty<bool> _replaying = new(false);
         private readonly List<IRollbackPart> _parts = new();
         private readonly List<IRollbackPart> _reconciled = new();
+        private readonly List<IDivergenceSource> _sources = new();
         private readonly ISteppable _physics;
         private readonly WorldRollbackConfig _config;
 
@@ -40,6 +41,15 @@ namespace Bw.Entities.Network.Rollback
 
             _parts.Add(part);
             lifetime.OnTermination(() => _parts.Remove(part));
+        }
+
+        public void Watch(Lifetime lifetime, IDivergenceSource source)
+        {
+            if (_sources.Contains(source))
+                throw new InvalidOperationException("A divergence source is watched once: it is already watched.");
+
+            _sources.Add(source);
+            lifetime.OnTermination(() => _sources.Remove(source));
         }
 
         private void Tick(int tick)
@@ -95,16 +105,21 @@ namespace Bw.Entities.Network.Rollback
 
         private bool TryFindDivergence(int earliest, int latest, out int tick)
         {
-            var found = false;
             tick = int.MaxValue;
             for (var index = 0; index < _reconciled.Count; index++)
-                if (_reconciled[index].TryGetDivergence(out var diverged) && diverged >= earliest && diverged <= latest && diverged < tick)
-                {
-                    tick = diverged;
-                    found = true;
-                }
+                tick = Earliest(_reconciled[index], earliest, latest, tick);
 
-            return found;
+            for (var index = 0; index < _sources.Count; index++)
+                tick = Earliest(_sources[index], earliest, latest, tick);
+
+            return tick != int.MaxValue;
         }
+
+        private static int Earliest(
+            IDivergenceSource source,
+            int earliest,
+            int latest,
+            int found) =>
+            source.TryGetDivergence(out var diverged) && diverged >= earliest && diverged <= latest && diverged < found ? diverged : found;
     }
 }

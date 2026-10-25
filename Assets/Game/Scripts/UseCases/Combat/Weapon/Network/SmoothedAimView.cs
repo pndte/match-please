@@ -12,6 +12,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
     {
         private readonly IStateView<TState> _view;
         private readonly CorrectionDecay _decay;
+        private readonly CorrectionSmoothingConfig _config;
 
         private float _offset;
 
@@ -25,6 +26,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
         {
             _view = view;
             _decay = new CorrectionDecay(ticks, interpolation, config.DecaySeconds);
+            _config = config;
 
             corrections.Corrected.Advise(lifetime, Smooth);
         }
@@ -39,6 +41,8 @@ namespace Bw.UseCases.Combat.Weapon.Network
         {
             _offset = _offset * _decay.Remaining + Mathf.DeltaAngle(correction.After.Aim, correction.Before.Aim);
             _decay.Restart();
+            if (Mathf.Abs(_offset) > _config.SnapAngle)
+                _offset = 0f;
         }
     }
 }

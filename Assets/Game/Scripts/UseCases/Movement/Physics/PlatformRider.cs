@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Bw.UseCases.Movement.Physics
 {
-    public sealed class PlatformRider : IPlatformRider
+    public sealed class PlatformRider
     {
         private const float RideTolerance = 0.05f;
 
@@ -18,30 +18,6 @@ namespace Bw.UseCases.Movement.Physics
             _size = box.WorldSize();
             _offset = box.WorldOffset();
             _platforms = platforms;
-        }
-
-        public Vector2 RideShift(
-            Vector2 position,
-            float angle,
-            double fromSeconds,
-            double toSeconds)
-        {
-            var bounds = BoundsAt(position, angle);
-            var top = float.NegativeInfinity;
-            var shift = Vector2.zero;
-
-            for (var index = 0; index < _platforms.Count; index++)
-            {
-                var platform = _platforms[index];
-                var then = platform.AreaAt(fromSeconds);
-                if (!Riding(then, bounds) || then.yMax <= top)
-                    continue;
-
-                top = then.yMax;
-                shift = platform.AreaAt(toSeconds).position - then.position;
-            }
-
-            return shift;
         }
 
         public bool TryGetRidden(Vector2 position, out Vector2 shift)
@@ -86,15 +62,6 @@ namespace Bw.UseCases.Movement.Physics
 
         private Rect UprightBounds(Vector2 position) =>
             new(position + _offset - _size / 2f, _size);
-
-        private Rect BoundsAt(Vector2 position, float angle)
-        {
-            var radians = angle * Mathf.Deg2Rad;
-            var cos = Mathf.Abs(Mathf.Cos(radians));
-            var sin = Mathf.Abs(Mathf.Sin(radians));
-            var size = new Vector2(cos * _size.x + sin * _size.y, sin * _size.x + cos * _size.y);
-            return new Rect(position + (Vector2)(Quaternion.Euler(0f, 0f, angle) * _offset) - size / 2f, size);
-        }
 
         private static bool Riding(Rect area, Rect bounds) =>
             Overlapping(area, bounds) && Mathf.Abs(bounds.yMin - area.yMax) <= RideTolerance;

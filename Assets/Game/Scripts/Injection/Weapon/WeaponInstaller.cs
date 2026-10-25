@@ -183,7 +183,7 @@ namespace Bw.Injection.Weapon
             Container.Bind(typeof(IGunViewModel), typeof(GunViewModel)).To<GunViewModel>().AsSingle();
             Container.Bind<IStateView<GunState>>()
                 .FromMethod(ctx => new CompositeStateView<GunState>(
-                    ctx.Container.Resolve<WeaponPoseViewModel<GunState>>(),
+                    ctx.Container.Instantiate<SmoothedAimView<GunState>>(new object[] { ctx.Container.Resolve<WeaponPoseViewModel<GunState>>() }),
                     ctx.Container.Resolve<SeenShotsViewModel<GunState>>(),
                     ctx.Container.Resolve<GunViewModel>(),
                     ctx.Container.Resolve<SpreadKick>()))

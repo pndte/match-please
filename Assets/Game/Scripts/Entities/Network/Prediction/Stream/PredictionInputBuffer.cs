@@ -11,8 +11,10 @@ namespace Bw.Entities.Network.Prediction.Stream
     public sealed class PredictionInputBuffer<TInput> where TInput : struct
     {
         public ISource<InputGap> Gaps => _gaps;
+        public ISource<TickedInput<TInput>> Stored => _stored;
 
         private readonly Signal<InputGap> _gaps = new();
+        private readonly Signal<TickedInput<TInput>> _stored = new();
         private readonly TickHistory<TInput> _buffered;
         private readonly INetworkTicks _ticks;
         private readonly NetworkTicksConfig _config;
@@ -86,6 +88,8 @@ namespace Bw.Entities.Network.Prediction.Stream
             _heard = true;
             if (request.Tick - 1 >= _firstTick && TryStore(request.Tick - 1, request.PreviousInput))
                 _gaps.Fire(InputGap.Recovered);
+
+            _stored.Fire(request);
         }
 
         private void ReportOutsideWindow(int tick)

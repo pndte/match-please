@@ -6,9 +6,10 @@ using UnityEngine;
 
 namespace Bw.Entities.Network.Prediction.Bubble
 {
-    public sealed class BubbleMembership : IBubbleMembership
+    public sealed class BubbleMembership : IBubbleMembership, IPredictedBy
     {
         public IReadonlyProperty<bool> Inside => _inside;
+        IReadonlyProperty<bool> IPredictedBy.Me => _inside;
 
         private readonly ViewableProperty<bool> _inside = new(false);
         private readonly Transform _transform;

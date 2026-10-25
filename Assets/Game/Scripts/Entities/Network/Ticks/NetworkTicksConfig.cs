@@ -15,6 +15,13 @@ namespace Bw.Entities.Network.Ticks
         [Min(0f)] public float LeadLowerRate = 0.25f;
         [Min(1)] public int MarginReportIntervalTicks = 15;
 
+        [Header("Input delay")]
+        [Min(0f)] public float FreeRoundTripSeconds = 0.094f;
+        [Min(0)] public int MinInputDelayTicks = 1;
+        [Min(0)] public int MaxInputDelayTicks = 4;
+        [Min(0f)] public float InputDelayHysteresisTicks = 0.25f;
+        [Min(0f)] public float InputDelayHoldSeconds = 3f;
+
         [Header("Input buffer")]
         [Min(1)] public int MaxBufferedInputTicks = 32;
         [Min(1)] public int GapReportIntervalTicks = 300;

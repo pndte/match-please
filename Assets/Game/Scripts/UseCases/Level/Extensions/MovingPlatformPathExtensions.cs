@@ -1,12 +1,11 @@
 using System;
-using UnityEngine;
 
 namespace Bw.UseCases.Level.Extensions
 {
     public static class MovingPlatformPathExtensions
     {
-        public static Vector2 OffsetAt(this MovingPlatformPath path, double seconds) =>
-            path.Travel * (float)Progress(path, Phase(path, seconds));
+        public static float AlongAt(this MovingPlatformPath path, double seconds) =>
+            (float)Progress(path, Phase(path, seconds));
 
         private static double Phase(MovingPlatformPath path, double seconds)
         {

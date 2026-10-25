@@ -1,7 +1,7 @@
 using System;
+using Bw.Entities.Physics;
 using Bw.Entities.Simulation;
 using JetBrains.Lifetimes;
-using Unity.Netcode;
 
 namespace Bw.Entities.Network.LagCompensation
 {
@@ -10,25 +10,25 @@ namespace Bw.Entities.Network.LagCompensation
         private readonly SimulationHistory<TState> _history;
         private readonly IReadonlySimulation<TState> _simulation;
         private readonly IStateView<TState> _view;
-        private readonly NetworkObject _networkObject;
+        private readonly BodyBox _box;
         private readonly Action _restore;
 
         public SimulationRewinder(
             SimulationHistory<TState> history,
             IReadonlySimulation<TState> simulation,
             IStateView<TState> view,
-            NetworkObject networkObject)
+            BodyBox box)
         {
             _history = history;
             _simulation = simulation;
             _view = view;
-            _networkObject = networkObject;
+            _box = box;
             _restore = Restore;
         }
 
         public void Rewind(Lifetime lifetime, ShooterView view)
         {
-            var tick = view.TickOf(_networkObject.transform.position);
+            var tick = view.TickOf(_box.transform.position);
             var from = (int)Math.Floor(tick);
             _view.Show(StateAt(from), StateAt(from + 1), (float)(tick - from));
             lifetime.OnTermination(_restore);

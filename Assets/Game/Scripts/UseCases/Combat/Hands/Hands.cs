@@ -16,7 +16,7 @@ namespace Bw.UseCases.Combat.Hands
         public HandsState Previous { get; private set; } = HandsState.Empty;
         public ISource<HandsState> Stepped => _stepped;
         public bool Busy => TryFindInHands(out var inHands) && !inHands.Stowable;
-        public HoldPose Pose => _oval.PoseAt(_oval.transform.position);
+        public HoldPose Pose => _oval.PoseAt(_oval.transform.position); //TODO: на клиенте поза рук (хват, дуло, места выпуска) считается от нарисованного корня — между тиками и со сдвигом сглаживания, — а на сервере от просчитанного: игровые позы брать из просчитанного, а картинку оружия оставить за нарисованным
         public GripPose Grip => _grip.Pose;
 
         private readonly ViewableProperty<HandsState> _state = new(HandsState.Empty);

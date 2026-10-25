@@ -46,6 +46,7 @@ namespace Bw.Injection
                     Container.Bind<GuardKey>().AsSingle();
                     Container.Bind<GuardStanceSampler>().AsSingle();
                     Container.Bind<IInputSampler<CharacterControls>>().To<CharacterControlsSampler>().AsSingle();
+                    Container.Bind<IInputDivergence<CharacterControls>>().To<CharacterControlsDivergence>().AsSingle();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(_runtimeSettings.CurrentPeerType), _runtimeSettings.CurrentPeerType, null);

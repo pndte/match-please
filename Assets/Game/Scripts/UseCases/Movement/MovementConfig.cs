@@ -11,6 +11,10 @@ namespace Bw.UseCases.Movement
         public float GravityScale = 3f;
         public LayerMask GroundLayer;
 
+        [Header("Inertia")]
+        [Min(0f)] public float AccelerationTime = 0.1f;
+        [Min(0f)] public float BrakingTime = 0.1f;
+
         [Header("Jump assist")]
         [Min(0f)] public float CoyoteTime = 0.1f;
         [Min(0f)] public float JumpBufferTime = 0.1f;

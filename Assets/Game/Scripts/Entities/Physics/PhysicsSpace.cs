@@ -14,22 +14,16 @@ namespace Bw.Entities.Physics
         public ISource<Unit> Stepped => _stepped;
 
         private readonly ISimulationStep _step;
-        private readonly ISweptBodyCollection _sweeps;
         private readonly OneWayContacts _oneWay = new();
         private readonly Signal<Unit> _stepped = new();
 
-        private PhysicsSpace(PhysicsWorld world, ISimulationStep step, ISweptBodyCollection sweeps)
+        private PhysicsSpace(PhysicsWorld world, ISimulationStep step)
         {
             World = world;
             _step = step;
-            _sweeps = sweeps;
         }
 
-        public static PhysicsSpace Create(
-            Lifetime lifetime,
-            PhysicsConfig config,
-            ISimulationStep step,
-            ISweptBodyCollection sweeps)
+        public static PhysicsSpace Create(Lifetime lifetime, PhysicsConfig config, ISimulationStep step)
         {
             var definition = PhysicsWorldDefinition.defaultDefinition;
             definition.simulateType = PhysicsWorld.SimulationType.Script;
@@ -50,7 +44,7 @@ namespace Bw.Entities.Physics
             world.warmStartingAllowed = config.WarmStarting;
 
             lifetime.OnTermination(() => world.Destroy(0));
-            return new PhysicsSpace(world, step, sweeps);
+            return new PhysicsSpace(world, step);
         }
 
         public void MakeOneWay(Lifetime lifetime, PhysicsShape shape)
@@ -62,14 +56,7 @@ namespace Bw.Entities.Physics
 
         public void Step()
         {
-            var duration = _step.Duration;
-            for (var index = 0; index < _sweeps.Count; index++)
-                _sweeps[index].Sweep(duration);
-
-            World.Simulate(duration);
-            for (var index = 0; index < _sweeps.Count; index++)
-                _sweeps[index].Settle();
-
+            World.Simulate(_step.Duration);
             _stepped.Fire(Unit.Instance);
         }
     }

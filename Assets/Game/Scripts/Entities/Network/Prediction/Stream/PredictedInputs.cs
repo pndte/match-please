@@ -29,7 +29,7 @@ namespace Bw.Entities.Network.Prediction.Stream
                 return false;
             }
 
-            return _controlledBy.Me.Value ? _own.TryGetAt(tick, out input) : _remote.TryGetInputAt(tick, out input);
+            return _controlledBy.Me.Value ? _own.TryGetAt(tick, out input) : _remote.TryTakeInputAt(tick, out input);
         }
     }
 }

@@ -10,7 +10,8 @@
         "UniTask",
         "Bw.CoreAdapters",
         "Bw.UseCases.Character",
-        "Bw.UseCases.Graphics"
+        "Bw.UseCases.Graphics",
+        "Unity.Multiplayer.Tools.NetworkSimulator.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

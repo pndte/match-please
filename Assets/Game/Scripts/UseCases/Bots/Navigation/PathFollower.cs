@@ -11,6 +11,7 @@ namespace Bw.UseCases.Bots.Navigation
     public sealed class PathFollower //TODO: лифты, подъёмник и патерностеры граф не знает: бот их не вызывает и не ждёт, а если платформа окажется на пути, ребро сорвётся и путь строится заново
     {
         private const float Aligned = 0.01f;
+        private const float Resting = 0.01f;
         private const float PressedReach = 0.1f;
         private const float Stalled = 0.001f;
         private const float Arrival = 0.1f;
@@ -31,6 +32,7 @@ namespace Bw.UseCases.Bots.Navigation
         private int _index;
         private int _edgeTicks;
         private bool _aligning;
+        private bool _stalled;
         private float _alignedX;
         private bool _leaping;
         private bool _airborne;
@@ -109,11 +111,13 @@ namespace Bw.UseCases.Bots.Navigation
             if (!_leaping)
             {
                 var start = _graph.NodeAt(edge.From);
-                if (!body.Grounded || !IsAlignedWith(start.x, body.Position.x))
+                var distance = Mathf.Abs(start.x - body.Position.x);
+                _stalled |= _aligning && distance <= PressedReach && Mathf.Abs(body.Position.x - _alignedX) < Stalled && Mathf.Abs(body.Velocity.x) > Resting;
+                if (!body.Grounded || distance > Aligned && !_stalled || Mathf.Abs(body.Velocity.x) > Resting)
                 {
                     _aligning = true;
                     _alignedX = body.Position.x;
-                    _gamepad.Steer(new MovementInput(Toward(start.x, body.Position.x), false, false, false, Slowdown.None));
+                    _gamepad.Steer(new MovementInput(_stalled ? 0f : Toward(start.x, body.Position.x), false, false, false, Slowdown.None));
                     return;
                 }
 
@@ -126,7 +130,11 @@ namespace Bw.UseCases.Bots.Navigation
             }
             else if (_airborne)
             {
-                Land(body, _graph.NodeAt(edge.To));
+                if (Mathf.Abs(body.Velocity.x) > Resting)
+                    _gamepad.Steer(new MovementInput(0f, false, false, false, Slowdown.None));
+                else
+                    Land(body, _graph.NodeAt(edge.To));
+
                 return;
             }
 
@@ -139,12 +147,6 @@ namespace Bw.UseCases.Bots.Navigation
                 Advance();
             else
                 Status = NavStatus.Lost;
-        }
-
-        private bool IsAlignedWith(float start, float x)
-        {
-            var distance = Mathf.Abs(start - x);
-            return distance <= Aligned || _aligning && distance <= PressedReach && Mathf.Abs(x - _alignedX) < Stalled;
         }
 
         private int RunEnd()
@@ -169,13 +171,28 @@ namespace Bw.UseCases.Bots.Navigation
         {
             _edgeTicks = 0;
             _aligning = false;
+            _stalled = false;
             _leaping = false;
             _airborne = false;
             _leapTick = 0;
         }
 
-        private float Toward(float x, float from) =>
-            Mathf.Clamp((x - from) / (_config.Speed * _step.Duration), -1f, 1f);
+        private float Toward(float x, float from)
+        {
+            var distance = x - from;
+            var speed = Mathf.Min(Mathf.Abs(distance) / _step.Duration, StoppingSpeed(Mathf.Abs(distance)));
+            return Mathf.Clamp(Mathf.Sign(distance) * speed / _config.Speed, -1f, 1f);
+        }
+
+        private float StoppingSpeed(float distance)
+        {
+            if (_config.BrakingTime <= 0f)
+                return float.PositiveInfinity;
+
+            var braking = _config.Speed / _config.BrakingTime;
+            var half = _step.Duration / 2f;
+            return braking * (Mathf.Sqrt(half * half + 2f * distance / braking) - half);
+        }
 
         private static bool IsPast(float x, float node, float direction) =>
             direction > 0f ? x >= node - Arrival : x <= node + Arrival;

@@ -9,9 +9,9 @@ namespace Bw.Entities.Network.Prediction.Stream
 {
     public sealed class DriverInputs<TInput> : IStepInputs<TInput> where TInput : struct
     {
-        public ISource<TickedInput<TInput>> Taken => _taken;
+        public ISource<TickedInput<TInput>> Heard => _heard;
 
-        private readonly Signal<TickedInput<TInput>> _taken = new();
+        private readonly Signal<TickedInput<TInput>> _heard = new();
         private readonly IControllerRegistry _controllers;
         private readonly IControllerSamplers<TInput> _samplers;
         private readonly PredictionInputBuffer<TInput> _buffer;
@@ -35,7 +35,7 @@ namespace Bw.Entities.Network.Prediction.Stream
             {
                 buffer.Clear();
                 drivers.Of(controller).View(userLifetime, (drivenLifetime, driver) =>
-                    driver.Switch(_ => { }, () => DriveByServer(drivenLifetime, controller)));
+                    driver.Switch(_ => buffer.Stored.Advise(drivenLifetime, _heard.Fire), () => DriveByServer(drivenLifetime, controller)));
             });
         }
 
@@ -45,10 +45,10 @@ namespace Bw.Entities.Network.Prediction.Stream
                 input = default;
             else if (_drivenByServer)
                 input = SamplerOf(_controller).Sample();
-            else if (!_buffer.TryTakeInputAt(tick, out input))
-                return false;
+            else
+                return _buffer.TryTakeInputAt(tick, out input);
 
-            _taken.Fire(new TickedInput<TInput>(tick, input, _previousInput));
+            _heard.Fire(new TickedInput<TInput>(tick, input, _previousInput));
             _previousInput = input;
             return true;
         }

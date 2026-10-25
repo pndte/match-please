@@ -5,7 +5,15 @@ namespace Bw.UseCases.Movement.Network.Prediction
 {
     public sealed class CorrectionDecay
     {
-        public float Remaining => Mathf.SmoothStep(1f, 0f, (float)((ViewTick() - _since) * _ticks.Duration / _seconds));
+        public float Remaining => Mathf.SmoothStep(1f, 0f, Elapsed());
+        public float Rate
+        {
+            get
+            {
+                var elapsed = Elapsed();
+                return elapsed > 0f && elapsed < 1f ? -6f * elapsed * (1f - elapsed) / _seconds : 0f;
+            }
+        }
 
         private readonly INetworkTicks _ticks;
         private readonly IInterpolationTicks _interpolation;
@@ -22,6 +30,9 @@ namespace Bw.UseCases.Movement.Network.Prediction
 
         public void Restart() =>
             _since = ViewTick();
+
+        private float Elapsed() =>
+            (float)((ViewTick() - _since) * _ticks.Duration / _seconds);
 
         private double ViewTick() =>
             _ticks.PredictedViewTick(_interpolation);

@@ -1,13 +1,11 @@
 using System;
 using Bw.Entities.Network;
-using Bw.Entities.Network.LagCompensation;
 using Bw.Entities.Physics;
 using Bw.Entities.Physics.Extensions;
 using Bw.Entities.Simulation;
 using Bw.Injection.Network;
 using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.Abstractions;
-using Bw.UseCases.Movement.Network.Platforms;
 using Bw.UseCases.Movement.Network.Prediction;
 using Bw.UseCases.Movement.Physics;
 using JetBrains.Lifetimes;
@@ -35,22 +33,18 @@ namespace Bw.Injection.Movement
             Container.Bind<IBodyConfig>().FromInstance(_config).AsSingle();
             Container.Bind<PhysicsBody>().FromMethod(CreatePhysicsBody).AsSingle();
             Container.BindInterfacesTo<KinematicBody>().AsSingle();
-            Container.BindInterfacesAndSelfTo<PlatformRider>().AsSingle();
+            Container.Bind<PlatformRider>().AsSingle();
             Container.BindInterfacesTo<ShapeCollider>().AsSingle().WithArguments(_config.GroundLayer);
             Container.BindInterfacesTo<BodyMotor>().AsSingle();
-            LagCompensationInstaller<TState, BodyStateView<TState>>.Install(Container, _runtimeSettings);
+            LagCompensationInstaller<TState, BodyPoseView<TState>>.Install(Container, _runtimeSettings);
+            if (_runtimeSettings.CurrentPeerType == PeerType.Client)
+                BindClient();
+        }
 
-            switch (_runtimeSettings.CurrentPeerType)
-            {
-                case PeerType.Server:
-                    Container.Decorate<IRewindable>().With<RiderRewinder>();
-                    break;
-                case PeerType.Client:
-                    Container.Decorate<IStateView<TState>>().With<RiderStateView<TState>>();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+        private void BindClient()
+        {
+            Container.Bind<PredictedBodyPose<TState>>().AsSingle().NonLazy();
+            Container.Decorate<IStateView<TState>>().With<KinematicFollowView<TState>>();
         }
 
         private static PhysicsBody CreatePhysicsBody(InjectContext context) =>

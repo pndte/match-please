@@ -3,61 +3,60 @@ using Bw.Entities.Physics.Extensions;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Level.Extensions;
 using Bw.UseCases.Movement.Physics.Abstractions;
+using JetBrains.Collections.Viewable;
+using JetBrains.Lifetimes;
 using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Level
 {
-    public sealed class MovingPlatform : IMovingPlatform
+    public sealed class MovingPlatform : IReadonlySimulation<PlatformState>, IRestorable<PlatformState>, IMovingPlatform
     {
-        public Rect Area { get; private set; }
-        public Vector2 Shift { get; private set; }
+        public IReadonlyProperty<PlatformState> State => _state;
+        public PlatformState Previous { get; private set; }
+        public ISource<PlatformState> Stepped => _stepped;
+        public Rect Area => new(_rail.PositionAt(_state.Value.Along) + _shape.position, _shape.size);
+        public Vector2 Shift => _rail.PositionAt(_state.Value.Along) - _rail.PositionAt(Previous.Along);
 
-        private readonly SweptBody _body;
-        private readonly Transform _transform;
-        private readonly Vector2 _start;
+        private readonly ViewableProperty<PlatformState> _state;
+        private readonly Signal<PlatformState> _stepped = new();
+        private readonly PhysicsBody _body;
         private readonly Rect _shape;
-        private readonly MovingPlatformPath _path;
+        private readonly PlatformRail _rail;
         private readonly ISimulationStep _step;
 
         public MovingPlatform(
+            Lifetime lifetime,
+            PhysicsBody body,
             BodyBox box,
-            SweptBody body,
-            MovingPlatformPath path,
-            ISimulationStep step)
+            PlatformRail rail,
+            ISimulationStep step,
+            IPhysicsSteps steps)
         {
             _body = body;
-            _transform = box.transform;
-            _start = _transform.position;
             _shape = ShapeOf(box);
-            _path = path;
+            _rail = rail;
             _step = step;
-            Area = AreaAround(_start);
+            Previous = new PlatformState(rail.AlongAt(body.position));
+            _state = new ViewableProperty<PlatformState>(Previous);
+
+            steps.Stepped.Advise(lifetime, _ => Step());
         }
 
-        public void PoseAt(double seconds)
+        public void DriveTo(float along) =>
+            _body.linearVelocity = (_rail.PositionAt(along) - _body.position) / _step.Duration;
+
+        public void Apply(PlatformState state)
         {
-            var position = PositionAt(seconds);
-            Shift = position - PositionAt(seconds - _step.Duration);
-            Area = AreaAround(position);
-            Place(position);
+            _body.position = _rail.PositionAt(state.Along);
+            _state.Value = state;
         }
 
-        public void ShowAt(double seconds) =>
-            Place(PositionAt(seconds));
-
-        public Rect AreaAt(double seconds) =>
-            AreaAround(PositionAt(seconds));
-
-        private Vector2 PositionAt(double seconds) =>
-            _start + _path.OffsetAt(seconds);
-
-        private Rect AreaAround(Vector2 position) =>
-            new(position + _shape.position, _shape.size);
-
-        private void Place(Vector2 position)
+        private void Step()
         {
-            _transform.position = new Vector3(position.x, position.y, _transform.position.z);
-            _body.Place(position);
+            Previous = _state.Value;
+            _state.Value = new PlatformState(_rail.AlongAt(_body.position));
+            _stepped.Fire(_state.Value);
         }
 
         private static Rect ShapeOf(BodyBox box)

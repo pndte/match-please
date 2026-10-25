@@ -108,7 +108,6 @@ namespace Bw.Injection.Weapon
             Container.BindInterfacesTo<WeaponCarryViewModel>().AsSingle();
             Container.Bind(typeof(IShotsViewModel), typeof(SeenShotsViewModel<TState>)).To<SeenShotsViewModel<TState>>().AsSingle();
             Container.Bind(typeof(IWeaponPoseViewModel), typeof(WeaponPoseViewModel<TState>)).To<WeaponPoseViewModel<TState>>().AsSingle();
-            Container.Decorate<IStateView<TState>>().With<SmoothedAimView<TState>>();
             Container.Bind<WeaponOrbitView>().AsSingle().WithArguments(_parts.Weapon).NonLazy();
             Container.Bind<StowedWeaponView>().AsSingle().WithArguments(_parts.Visual.GetComponentsInChildren<Renderer>(true)).NonLazy();
             Container.Bind<WeaponRecoilView>().AsSingle().WithArguments(_parts.Visual).NonLazy();

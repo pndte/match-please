@@ -77,7 +77,7 @@ namespace Bw.Injection
                 case PeerType.Server:
                     Container.Bind<IStateView<MovementState>>()
                         .FromMethod(context => new CompositeStateView<MovementState>(
-                            context.Container.Instantiate<BodyStateView<MovementState>>(),
+                            context.Container.Instantiate<BodyPoseView<MovementState>>(),
                             MotionOf(context.Container, context.Container.Instantiate<MovementAnimationView>())))
                         .AsSingle();
                     Container.Bind<SimulationViewSync<MovementState>>().AsSingle().NonLazy();

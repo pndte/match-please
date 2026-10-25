@@ -5,6 +5,7 @@ using Bw.Entities.Network.LagCompensation;
 using Bw.Entities.Network.Prediction.Bubble;
 using Bw.Entities.Network.Prediction.Stream;
 using Bw.Entities.Network.Rollback;
+using Bw.Entities.Network.Ticks;
 using Bw.Entities.Physics;
 using Bw.Entities.Simulation;
 using Bw.Injection.Level;
@@ -78,6 +79,10 @@ namespace Bw.Injection
                 .FromMethod(context => context.Container.Instantiate<WorldRollback>(new object[] { gameObject.Lifetime(), context.Container.Resolve<PhysicsSpace>() }))
                 .AsSingle()
                 .NonLazy();
+            Container.Bind<IInputDelay>().To<AdaptiveInputDelay>().AsSingle().WithArguments(gameObject.Lifetime()).NonLazy();
+#if UNITY_EDITOR
+            Container.Bind<InputDelayLog>().AsSingle().WithArguments(gameObject.Lifetime()).NonLazy();
+#endif
             Container.Bind<IControlledCharacters>().To<ControlledCharacters>().AsSingle();
             Container.Bind<IPredictionBubble>().To<PredictionBubble>().AsSingle();
             Container.BindInterfacesTo<MovingPlatformCollection>().AsSingle();
@@ -109,13 +114,11 @@ namespace Bw.Injection
         private void BindPhysics()
         {
             RequireNoClassicColliders();
-            Container.BindInterfacesTo<SweptBodyCollection>().AsSingle();
             Container.Bind(typeof(IPhysicsSpace), typeof(PhysicsSpace)).To<PhysicsSpace>()
                 .FromMethod(context => PhysicsSpace.Create(
                     gameObject.Lifetime(),
                     context.Container.Resolve<PhysicsConfig>(),
-                    context.Container.Resolve<ISimulationStep>(),
-                    context.Container.Resolve<ISweptBodyCollection>()))
+                    context.Container.Resolve<ISimulationStep>()))
                 .AsSingle();
             Container.Bind<IPhysicsSteps>().To<PhysicsSpace>().FromResolve();
             Container.Bind<LevelGeometry>()

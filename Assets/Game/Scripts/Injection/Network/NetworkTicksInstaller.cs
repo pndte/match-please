@@ -30,7 +30,8 @@ namespace Bw.Injection.Network
                             typeof(IWorldClock),
                             typeof(IInterpolationTicks),
                             typeof(IServerTime),
-                            typeof(IInputMarginFeedback))
+                            typeof(IInputMarginFeedback),
+                            typeof(IInputLead))
                         .To<ClientNetworkTicks>()
                         .AsSingle()
                         .WithArguments(Lifetime.Eternal)

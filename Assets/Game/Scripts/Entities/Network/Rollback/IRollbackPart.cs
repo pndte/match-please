@@ -1,8 +1,7 @@
 namespace Bw.Entities.Network.Rollback
 {
-    public interface IRollbackPart
+    public interface IRollbackPart : IDivergenceSource
     {
-        public bool TryGetDivergence(out int tick);
         public void Save(int tick);
         public void Restore(int tick);
     }

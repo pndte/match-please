@@ -36,6 +36,9 @@ namespace Bw.Injection
         [SerializeField] private CrateSpawnConfig _crates;
         [SerializeField] private Transform[] _crateSpots = Array.Empty<Transform>();
 
+        [Header("Platforms")]
+        [SerializeField] private MovingPlatformSpot[] _platforms = Array.Empty<MovingPlatformSpot>();
+
         public override void InstallBindings()
         {
             Container.BindInterfacesTo<NetworkClientCollection>().AsSingle().WithArguments(NetworkManager.Singleton).NonLazy();
@@ -70,6 +73,9 @@ namespace Bw.Injection
 
             if (_crateSpots.Length > 0)
                 BindCrates(NetworkManager.Singleton.NetworkConfig.Prefabs);
+
+            if (_platforms.Length > 0)
+                BindPlatforms(NetworkManager.Singleton.NetworkConfig.Prefabs);
         }
 
         private void BindCrates(NetworkPrefabs registered)
@@ -79,6 +85,19 @@ namespace Bw.Injection
 
             RequireNetworkPrefab(registered, _crates.Prefab);
             Container.Bind<NetworkCratesSpawner>().AsSingle().WithArguments(_crates, _crateSpots).NonLazy();
+        }
+
+        private void BindPlatforms(NetworkPrefabs registered)
+        {
+            foreach (var spot in _platforms)
+            {
+                if (spot == null)
+                    throw new InvalidOperationException("The spawner has an empty platform spot slot: assign a MovingPlatformSpot or remove the slot.");
+
+                RequireNetworkPrefab(registered, spot.Platform);
+            }
+
+            Container.Bind<NetworkPlatformsSpawner>().AsSingle().WithArguments(_platforms).NonLazy();
         }
 
         private void RequireLoadout()
