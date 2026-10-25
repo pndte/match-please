@@ -1,0 +1,79 @@
+name: Repository
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unity-assets:
+    name: Unity meta files
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Every asset has its meta file, every meta file has its asset, and GUIDs are unique
+        shell: python
+        run: |
+          import collections
+          import os
+          import re
+          import subprocess
+          import sys
+
+          def hidden(path):
+              return any(part.startswith(".") or part.endswith("~") or part.lower() == "cvs" or part.endswith(".tmp") for part in path.split("/"))
+
+          tracked = set(subprocess.run(["git", "ls-files", "Assets"], capture_output=True, text=True, check=True).stdout.splitlines())
+          folders = set()
+          for path in tracked:
+              parent = os.path.dirname(path)
+              while parent and parent != "Assets":
+                  folders.add(parent)
+                  parent = os.path.dirname(parent)
+
+          problems = []
+          for path in sorted(tracked):
+              if not path.endswith(".meta") and not hidden(path) and path + ".meta" not in tracked:
+                  problems.append(f"{path}: no meta file, so Unity gives it a new GUID on every clone")
+          for folder in sorted(folders):
+              if not hidden(folder) and folder + ".meta" not in tracked:
+                  problems.append(f"{folder}/: the folder has no meta file")
+          for path in sorted(tracked):
+              if path.endswith(".meta") and path[:-5] not in tracked and path[:-5] not in folders:
+                  problems.append(f"{path}: the meta file has no asset, Unity deletes it on import")
+
+          owners = collections.defaultdict(list)
+          for path in sorted(tracked):
+              if path.endswith(".meta"):
+                  with open(path, encoding="utf-8", errors="replace") as handle:
+                      found = re.search(r"^guid: ([0-9a-f]{32})\s*$", handle.read(), re.MULTILINE)
+                  if found is None:
+                      problems.append(f"{path}: the meta file has no guid")
+                  else:
+                      owners[found.group(1)].append(path)
+          for guid, paths in sorted(owners.items()):
+              if len(paths) > 1:
+                  problems.append(f"guid {guid} is shared by {', '.join(paths)}")
+
+          for problem in problems:
+              print(f"::error::{problem}")
+          print(f"{len(tracked)} tracked files under Assets, {len(problems)} problems")
+          sys.exit(1 if problems else 0)
+
+      - name: No Unity cache or local folder is tracked
+        shell: bash
+        run: |
+          tracked=$(git ls-files -- Library Temp Logs obj UserSettings Builds MemoryCaptures ProfilerCaptures LocalTools Docs | head -20)
+          if [ -n "$tracked" ]; then
+            echo "::error::folders that belong to one machine are tracked:"
+            echo "$tracked"
+            exit 1
+          fi

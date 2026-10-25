@@ -101,6 +101,7 @@ InitTestScene*.unity*
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
 ForAgents.txt
+ForAgents.txt.meta
 /Docs/
 /graphicsHtml/
 /LocalTools/

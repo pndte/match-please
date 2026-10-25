@@ -1,0 +1,105 @@
+name: Unity tests
+
+# Runs on the project's own Windows machine (a self-hosted runner labelled "unity"), never on pull requests:
+# a public repository must not let a fork's code run on that machine.
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unity-tests
+  cancel-in-progress: false
+
+env:
+  UNITY_EDITORS: ${{ vars.UNITY_EDITORS || 'C:\Program Files\Unity\Hub\Editor' }}
+
+jobs:
+  editmode:
+    name: EditMode tests
+    if: github.repository == 'pndte/match-please'
+    runs-on: [self-hosted, windows, unity]
+    timeout-minutes: 90
+    steps:
+      - name: Check out, keeping the imported Library
+        uses: actions/checkout@v4
+        with:
+          clean: false
+
+      - name: Find the project's Unity editor
+        id: unity
+        shell: pwsh
+        run: |
+          $version = (Select-String -Path ProjectSettings/ProjectVersion.txt -Pattern '^m_EditorVersion: (.+)$').Matches[0].Groups[1].Value.Trim()
+          $editor = Join-Path $env:UNITY_EDITORS "$version\Editor\Unity.exe"
+          if (-not (Test-Path -LiteralPath $editor)) {
+            throw "Unity $version is not installed on this runner: expected $editor"
+          }
+          "editor=$editor" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          Write-Host "Unity $version at $editor"
+
+      - name: Run the EditMode tests
+        shell: pwsh
+        env:
+          UNITY_EDITOR: ${{ steps.unity.outputs.editor }}
+        run: |
+          $results = Join-Path $env:RUNNER_TEMP 'editmode.xml'
+          $log = Join-Path $env:RUNNER_TEMP 'editmode.log'
+          Remove-Item -LiteralPath $results, $log -ErrorAction SilentlyContinue
+          $arguments = @(
+            '-batchmode', '-nographics',
+            '-projectPath', "`"$env:GITHUB_WORKSPACE`"",
+            '-runTests', '-testPlatform', 'EditMode',
+            '-testResults', "`"$results`"",
+            '-logFile', "`"$log`""
+          )
+          $unity = Start-Process -FilePath $env:UNITY_EDITOR -ArgumentList $arguments -Wait -PassThru -NoNewWindow
+          Write-Host "Unity exited with $($unity.ExitCode)"
+
+          if (-not (Test-Path -LiteralPath $results)) {
+            Get-Content -LiteralPath $log -Tail 200 -ErrorAction SilentlyContinue
+            $errors = Select-String -LiteralPath $log -Pattern 'error CS\d+|Scripts have compiler errors|No valid Unity Editor license' -ErrorAction SilentlyContinue
+            $errors | ForEach-Object { Write-Host "::error::$($_.Line.Trim())" }
+            throw "Unity wrote no test results (exit code $($unity.ExitCode)); see the log above"
+          }
+
+          [xml]$xml = Get-Content -LiteralPath $results -Raw
+          $run = $xml.'test-run'
+          $duration = [double]::Parse(($run.duration -replace ',', '.'), [Globalization.CultureInfo]::InvariantCulture)
+          $summary = @(
+            '### EditMode tests',
+            '',
+            "| Total | Passed | Failed | Skipped | Seconds |",
+            "|---|---|---|---|---|",
+            "| $($run.total) | $($run.passed) | $($run.failed) | $($run.skipped) | $([math]::Round($duration, 1)) |"
+          )
+          $failed = $xml.SelectNodes("//test-case[@result='Failed']")
+          if ($failed.Count -gt 0) {
+            $summary += ''
+            $summary += '#### Failed'
+            foreach ($case in $failed) {
+              $node = $case.SelectSingleNode('failure/message')
+              $message = if ($node) { $node.InnerText.Trim() -replace '\s+', ' ' } else { 'no message' }
+              $summary += "- ``$($case.GetAttribute('fullname'))``: $message"
+              Write-Host "::error title=$($case.GetAttribute('name'))::$message"
+            }
+          }
+          $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+
+          if ($unity.ExitCode -ne 0 -or [int]$run.failed -gt 0) {
+            throw "$($run.failed) of $($run.total) tests failed (Unity exit code $($unity.ExitCode))"
+          }
+
+      - name: Keep the results and the log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: editmode-results
+          path: |
+            ${{ runner.temp }}/editmode.xml
+            ${{ runner.temp }}/editmode.log
+          if-no-files-found: warn
+          retention-days: 14

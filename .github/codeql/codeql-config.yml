@@ -1,0 +1,10 @@
+name: Match Please CodeQL
+
+queries:
+  - uses: security-and-quality
+
+paths:
+  - Assets/Game/Scripts
+
+paths-ignore:
+  - Assets/Game/Scripts/Tests
