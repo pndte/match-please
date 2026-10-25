@@ -16,10 +16,10 @@ namespace Bw.UseCases.Movement
         private readonly Signal<MovementState> _stepped = new();
         private readonly IMovementMotor _motor;
 
-        public CharacterMovement(IMovementMotor motor, IMovementBody body)
+        public CharacterMovement(IMovementMotor motor, IBodyPicture picture)
         {
             _motor = motor;
-            Previous = new MovementState(new BodyState(body.Position, Vector2.zero, 0f, false),
+            Previous = new MovementState(new BodyState(picture.Position, Vector2.zero, 0f, false),
                 new JumpState(false, 0, 0));
             _state = new ViewableProperty<MovementState>(Previous);
         }

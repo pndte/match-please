@@ -6,7 +6,7 @@ using Bw.UseCases.Combat.Abstractions.Weapons;
 using Bw.UseCases.Combat.Hands.Extensions;
 using Bw.UseCases.Combat.Weapon.Extensions;
 using JetBrains.Collections.Viewable;
-using UnityEngine;
+using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Combat.Hands
 {
@@ -16,7 +16,7 @@ namespace Bw.UseCases.Combat.Hands
         public HandsState Previous { get; private set; } = HandsState.Empty;
         public ISource<HandsState> Stepped => _stepped;
         public bool Busy => TryFindInHands(out var inHands) && !inHands.Stowable;
-        public HoldPose Pose => _oval.PoseAt(_oval.transform.position); //TODO: на клиенте поза рук (хват, дуло, места выпуска) считается от нарисованного корня — между тиками и со сдвигом сглаживания, — а на сервере от просчитанного: игровые позы брать из просчитанного, а картинку оружия оставить за нарисованным
+        public HoldPose Pose => _oval.PoseAt(_body.position);
         public GripPose Grip => _grip.Pose;
 
         private readonly ViewableProperty<HandsState> _state = new(HandsState.Empty);
@@ -26,19 +26,22 @@ namespace Bw.UseCases.Combat.Hands
         private readonly IWeaponInventory _inventory;
         private readonly HoldOval _oval;
         private readonly HandsGrip _grip;
+        private readonly PhysicsBody _body;
 
         public Hands(
             ISimulator<HandsInput, HandsState> simulator,
             HandsSimulator rules,
             IWeaponInventory inventory,
             HoldOval oval,
-            HandsGrip grip)
+            HandsGrip grip,
+            PhysicsBody body)
         {
             _simulator = simulator;
             _rules = rules;
             _inventory = inventory;
             _oval = oval;
             _grip = grip;
+            _body = body;
         }
 
         public bool TryFindInHands(out IWeapon weapon) =>

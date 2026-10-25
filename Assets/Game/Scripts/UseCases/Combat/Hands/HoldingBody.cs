@@ -3,23 +3,20 @@ using UnityEngine;
 
 namespace Bw.UseCases.Combat.Hands
 {
-    public sealed class HoldingBody : IMovementBody
+    public sealed class HoldingBody : IBodyPose
     {
-        private readonly IMovementBody _body;
+        private readonly IBodyPose _body;
         private readonly HandsHold _hold;
 
-        public Vector2 Position => _body.Position;
-        public float Angle => _body.Angle;
-
-        public HoldingBody(IMovementBody body, HandsHold hold)
+        public HoldingBody(IBodyPose body, HandsHold hold)
         {
             _body = body;
             _hold = hold;
         }
 
-        public void Place(Vector2 position)
+        public void Place(Vector2 position, float angle)
         {
-            _body.Place(position);
+            _body.Place(position, angle);
             _hold.Carry();
         }
     }

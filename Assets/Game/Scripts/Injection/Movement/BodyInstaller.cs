@@ -8,6 +8,7 @@ using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.Abstractions;
 using Bw.UseCases.Movement.Network.Prediction;
 using Bw.UseCases.Movement.Physics;
+using Bw.UseCases.Movement.Physics.Abstractions;
 using JetBrains.Lifetimes;
 using UnityEngine.LowLevelPhysics2D;
 using Zenject;
@@ -32,7 +33,8 @@ namespace Bw.Injection.Movement
 
             Container.Bind<IBodyConfig>().FromInstance(_config).AsSingle();
             Container.Bind<PhysicsBody>().FromMethod(CreatePhysicsBody).AsSingle();
-            Container.BindInterfacesTo<KinematicBody>().AsSingle();
+            Container.Bind<IBodyPose>().To<PhysicsBodyPose>().AsSingle();
+            Container.Bind<IBodyPicture>().To<BodyPicture>().AsSingle();
             Container.Bind<PlatformRider>().AsSingle();
             Container.BindInterfacesTo<ShapeCollider>().AsSingle().WithArguments(_config.GroundLayer);
             Container.BindInterfacesTo<BodyMotor>().AsSingle();
@@ -47,11 +49,14 @@ namespace Bw.Injection.Movement
             Container.Decorate<IStateView<TState>>().With<KinematicFollowView<TState>>();
         }
 
-        private static PhysicsBody CreatePhysicsBody(InjectContext context) =>
-            context.Container.Resolve<IPhysicsSpace>().CreateBody(
-                context.Container.Resolve<Lifetime>(),
-                context.Container.Resolve<BodyBox>(),
-                PhysicsBody.BodyType.Kinematic);
+        private static PhysicsBody CreatePhysicsBody(InjectContext context)
+        {
+            var space = context.Container.Resolve<IPhysicsSpace>();
+            var lifetime = context.Container.Resolve<Lifetime>();
+            var body = space.CreateBody(lifetime, context.Container.Resolve<BodyBox>(), PhysicsBody.BodyType.Kinematic);
+            space.MakeRider(lifetime, body);
+            return body;
+        }
 
         private void RequirePushDeceleration()
         {

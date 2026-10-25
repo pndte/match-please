@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using JetBrains.Lifetimes;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
@@ -21,9 +23,25 @@ namespace Bw.Entities.Physics.Extensions
             PhysicsShapeDefinition shape)
         {
             var created = space.CreateBody(lifetime, box.transform, body);
-            var createdShape = created.CreateShape(box.LocalGeometry(), Filtered(shape, box.Categories()), box.gameObject);
-            if (box.IsOneWay)
-                space.MakeOneWay(lifetime, createdShape);
+            space.CreateShape(lifetime, created, box, shape);
+            return created;
+        }
+
+        public static PhysicsBody CreateBody(
+            this IPhysicsSpace space,
+            Lifetime lifetime,
+            IReadOnlyList<BodyBox> boxes,
+            PhysicsBody.BodyType type)
+        {
+            var transform = boxes[0].transform;
+            var created = space.CreateBody(lifetime, transform, Definition(type));
+            for (var index = 0; index < boxes.Count; index++)
+            {
+                if (boxes[index].transform != transform)
+                    throw new InvalidOperationException($"Box '{boxes[index].name}' is not on '{transform.name}': the boxes of one body share its transform.");
+
+                space.CreateShape(lifetime, created, boxes[index], PhysicsShapeDefinition.defaultDefinition);
+            }
 
             return created;
         }
@@ -43,6 +61,18 @@ namespace Bw.Entities.Physics.Extensions
                     created.Destroy(0);
             });
             return created;
+        }
+
+        private static void CreateShape(
+            this IPhysicsSpace space,
+            Lifetime lifetime,
+            PhysicsBody body,
+            BodyBox box,
+            PhysicsShapeDefinition shape)
+        {
+            var created = body.CreateShape(box.LocalGeometry(), Filtered(shape, box.Categories()), box.gameObject);
+            if (box.IsOneWay)
+                space.MakeOneWay(lifetime, created);
         }
 
         private static PhysicsBodyDefinition Definition(PhysicsBody.BodyType type)

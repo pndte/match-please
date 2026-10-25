@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Bw.Entities.Network;
 using Bw.Entities.Network.LagCompensation;
-using Bw.Entities.Network.Prediction.Bubble;
 using Bw.Entities.Network.Prediction.Events;
 using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
@@ -26,18 +26,18 @@ namespace Bw.UseCases.Combat.Weapon.Network
 
         private readonly ILagCompensator _lagCompensator;
         private readonly ICharacterRegistry _registry;
-        private readonly PredictionBubbleConfig _bubble;
+        private readonly IReadonlyPlayerDrivers _drivers;
 
         public RaycastShotResolver(
             Lifetime lifetime,
             IWorldStep worldStep,
             ILagCompensator lagCompensator,
             ICharacterRegistry registry,
-            PredictionBubbleConfig bubble)
+            IReadonlyPlayerDrivers drivers)
         {
             _lagCompensator = lagCompensator;
             _registry = registry;
-            _bubble = bubble;
+            _drivers = drivers;
 
             worldStep.Stepped(TickPhase.Late).Advise(lifetime, Resolve);
         }
@@ -65,7 +65,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
         private ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Impacts> Trace(int tick, RaycastShot shot)
         {
             var ray = shot.Tracer.Aim(shot.WeaponShot.Aim);
-            var view = new ShooterView(tick - shot.Timing.ViewDelay, tick - shot.Timing.PredictedDelay, shot.Shooter.Movement.State.Value.Body.Position, _bubble);
+            var view = new ShooterView(tick - shot.Timing.ViewDelay, tick - shot.Timing.PredictedDelay, _drivers.Of(_registry.PlayerByCharacter[shot.Shooter]).Value);
             _struck.Clear();
             _affected.Clear();
             Lifetime.Using(rewindLifetime =>

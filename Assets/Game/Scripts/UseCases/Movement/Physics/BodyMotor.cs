@@ -27,7 +27,7 @@ namespace Bw.UseCases.Movement.Physics
         public BodyState Step(BodyState state, BodyDrive drive, out bool launched)
         {
             var deltaTime = _step.Duration;
-            var position = _collider.Carry(state.Position, state.Grounded);
+            var position = _collider.Carry(state.Position, state.Grounded, drive.Dropping);
             var launchHeight = 0f;
             launched = state.Grounded && _collider.TryGetLaunch(position, out launchHeight);
 
@@ -84,7 +84,7 @@ namespace Bw.UseCases.Movement.Physics
             for (var index = 0; index < contacts.Count; index++)
             {
                 var contact = contacts[index];
-                var effort = 1f - contact.Shovable.RetreatSpeed(direction) / speed;
+                var effort = 1f - contact.Shovable.SpeedAway(direction) / speed;
                 if (contact.Gap <= reach && effort > 0f)
                     contact.Shovable.Shove(direction * (_config.ShoveForce * effort / reached));
             }

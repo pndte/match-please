@@ -3,6 +3,7 @@ using Bw.Entities.Simulation;
 using JetBrains.Collections.Viewable;
 using JetBrains.Core;
 using JetBrains.Lifetimes;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
@@ -15,6 +16,7 @@ namespace Bw.Entities.Physics
 
         private readonly ISimulationStep _step;
         private readonly OneWayContacts _oneWay = new();
+        private readonly RiderContacts _riders = new();
         private readonly Signal<Unit> _stepped = new();
 
         private PhysicsSpace(PhysicsWorld world, ISimulationStep step)
@@ -52,6 +54,18 @@ namespace Bw.Entities.Physics
             shape.preSolveCallbacks = true;
             shape.callbackTarget = _oneWay;
             _oneWay.Add(lifetime, shape);
+        }
+
+        public void MakeRider(Lifetime lifetime, PhysicsBody body)
+        {
+            using var shapes = body.GetShapes(Allocator.Temp);
+            for (var index = 0; index < shapes.Length; index++)
+            {
+                var shape = shapes[index];
+                shape.preSolveCallbacks = true;
+                shape.callbackTarget = _riders;
+                _riders.Add(lifetime, shape);
+            }
         }
 
         public void Step()

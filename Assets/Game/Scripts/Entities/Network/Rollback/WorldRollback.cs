@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Bw.Entities.Network.Ticks;
-using Bw.Entities.Simulation;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
@@ -16,16 +15,10 @@ namespace Bw.Entities.Network.Rollback
         private readonly List<IRollbackPart> _parts = new();
         private readonly List<IRollbackPart> _reconciled = new();
         private readonly List<IDivergenceSource> _sources = new();
-        private readonly ISteppable _physics;
         private readonly WorldRollbackConfig _config;
 
-        public WorldRollback(
-            Lifetime lifetime,
-            IWorldClock clock,
-            ISteppable physics,
-            WorldRollbackConfig config)
+        public WorldRollback(Lifetime lifetime, IWorldClock clock, WorldRollbackConfig config)
         {
-            _physics = physics;
             _config = config;
 
             clock.Ticked.Advise(lifetime, Tick);
@@ -98,7 +91,7 @@ namespace Bw.Entities.Network.Rollback
         private void Step(int tick)
         {
             _phases.Fire(TickPhase.Early, tick);
-            _physics.Step();
+            _phases.Fire(TickPhase.Physics, tick);
             _phases.Fire(TickPhase.Default, tick);
             _phases.Fire(TickPhase.Late, tick);
         }

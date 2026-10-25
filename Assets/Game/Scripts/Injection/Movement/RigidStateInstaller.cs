@@ -6,6 +6,8 @@ using Bw.Entities.Simulation;
 using Bw.Injection.Network;
 using Bw.UseCases.Movement;
 using Bw.UseCases.Movement.Network.Prediction;
+using Bw.UseCases.Movement.Physics;
+using Bw.UseCases.Movement.Physics.Abstractions;
 using Zenject;
 
 namespace Bw.Injection.Movement
@@ -37,6 +39,7 @@ namespace Bw.Injection.Movement
 
         private void BindClientVisuals()
         {
+            Container.Bind<IBodyPose>().To<PhysicsBodyPose>().AsSingle();
             Container.Decorate<IStateView<RigidState>>().With<SmoothedRigidStateView>();
             Container.Decorate<IStateView<RigidState>>().With<KinematicFollowView<RigidState>>();
         }

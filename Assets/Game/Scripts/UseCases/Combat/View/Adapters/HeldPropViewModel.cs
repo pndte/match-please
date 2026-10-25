@@ -3,10 +3,11 @@ using Bw.Entities.Physics.Extensions;
 using Bw.UseCases.Combat.Abstractions.Hands;
 using Bw.UseCases.Combat.Abstractions.Hands.Extensions;
 using Bw.UseCases.Combat.Abstractions.Weapons;
+using Bw.UseCases.Combat.View.Adapters.Extensions;
 using Bw.UseCases.Props.View.Abstractions;
 using UnityEngine;
 
-namespace Bw.UseCases.Props.View.Adapters
+namespace Bw.UseCases.Combat.View.Adapters
 {
     public sealed class HeldPropViewModel : IHeldPropViewModel
     {
@@ -14,8 +15,9 @@ namespace Bw.UseCases.Props.View.Adapters
         {
             get
             {
-                var grip = _inHands.HolderOf(_prop).Hands.Grip;
-                return grip.Center - (Vector2)(Quaternion.Euler(0f, 0f, grip.Angle) * _shape.WorldOffset());
+                var holder = _inHands.HolderOf(_prop);
+                var grip = holder.Hands.Grip;
+                return grip.Center + _views.ShownOffset(holder) - (Vector2)(Quaternion.Euler(0f, 0f, grip.Angle) * _shape.WorldOffset());
             }
         }
 
@@ -24,12 +26,18 @@ namespace Bw.UseCases.Props.View.Adapters
         private readonly IWeapon _prop;
         private readonly IWeaponsInHands _inHands;
         private readonly BodyBox _shape;
+        private readonly ICharacterViews _views;
 
-        public HeldPropViewModel(IWeapon prop, IWeaponsInHands inHands, BodyBox shape)
+        public HeldPropViewModel(
+            IWeapon prop,
+            IWeaponsInHands inHands,
+            BodyBox shape,
+            ICharacterViews views)
         {
             _prop = prop;
             _inHands = inHands;
             _shape = shape;
+            _views = views;
         }
     }
 }

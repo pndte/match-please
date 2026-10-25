@@ -1,6 +1,7 @@
 using Bw.Entities.Network.Rollback;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Movement.Abstractions;
+using Bw.UseCases.Movement.Physics.Abstractions;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
 
@@ -10,12 +11,18 @@ namespace Bw.UseCases.Movement.Network.Prediction
     {
         private readonly IStateView<TState> _view;
         private readonly IPredictedBy _predictedBy;
+        private readonly IBodyPose _pose;
         private readonly PhysicsBody _body;
 
-        public KinematicFollowView(IStateView<TState> view, IPredictedBy predictedBy, PhysicsBody body)
+        public KinematicFollowView(
+            IStateView<TState> view,
+            IPredictedBy predictedBy,
+            IBodyPose pose,
+            PhysicsBody body)
         {
             _view = view;
             _predictedBy = predictedBy;
+            _pose = pose;
             _body = body;
         }
 
@@ -29,11 +36,7 @@ namespace Bw.UseCases.Movement.Network.Prediction
 
         private void Place(Vector2 position, float angle)
         {
-            var pose = new PhysicsTransform(position, new PhysicsRotate(angle * Mathf.Deg2Rad));
-            var current = _body.transform;
-            if (current.position != pose.position || current.rotation.angle != pose.rotation.angle)
-                _body.transform = pose;
-
+            _pose.Place(position, angle);
             _body.linearVelocity = Vector2.zero;
             _body.angularVelocity = 0f;
         }

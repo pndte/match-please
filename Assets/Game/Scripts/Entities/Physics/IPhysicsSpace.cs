@@ -7,5 +7,6 @@ namespace Bw.Entities.Physics
     {
         public PhysicsWorld World { get; }
         public void MakeOneWay(Lifetime lifetime, PhysicsShape shape);
+        public void MakeRider(Lifetime lifetime, PhysicsBody body);
     }
 }

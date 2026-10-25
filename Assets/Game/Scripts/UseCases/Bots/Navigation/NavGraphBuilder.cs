@@ -62,7 +62,8 @@ namespace Bw.UseCases.Bots.Navigation
         {
             var character = _config.Character;
             var movement = _config.Movement;
-            var collider = new ShapeCollider(body, character, movement.GroundLayer, new PlatformRider(character, new MovingPlatformCollection()), new ShovableCollection());
+            var shovables = new ShovableCollection();
+            var collider = new ShapeCollider(body, character, movement.GroundLayer, new PlatformRider(character, new MovingPlatformCollection(), shovables, _step), shovables);
             return new PlatformerMotor(new BodyMotor(collider, _step, movement), _step, movement);
         }
 

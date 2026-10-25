@@ -58,15 +58,13 @@ namespace Bw.Injection
         private void BindServer()
         {
             BindPhysics();
-            Container.Bind<IWorldStep>().To<WorldStep>()
-                .FromMethod(context => context.Container.Instantiate<WorldStep>(new object[] { gameObject.Lifetime(), context.Container.Resolve<PhysicsSpace>() }))
-                .AsSingle()
-                .NonLazy();
+            Container.Bind<IWorldStep>().To<WorldStep>().AsSingle().WithArguments(gameObject.Lifetime()).NonLazy();
             Container.BindInterfacesTo<GameObjectByCharacterCollection>().AsSingle();
             Container.BindInterfacesTo<MovingPlatformCollection>().AsSingle();
             Container.BindInterfacesTo<ShovableCollection>().AsSingle();
             BindWeapons();
             Container.BindInterfacesTo<LagCompensator>().AsSingle();
+            Container.Bind<IClientBubbles>().To<ClientBubbles>().AsSingle().WithArguments(gameObject.Lifetime());
             Container.BindInterfacesTo<RaycastShotResolver>().AsSingle().NonLazy();
             Container.Bind<IControllerSamplers<CharacterControls>>().To<ControllerSamplers<CharacterControls>>().AsSingle();
             MatchSessionInstaller.Install(Container, _match);
@@ -75,10 +73,7 @@ namespace Bw.Injection
         private void BindClient()
         {
             BindPhysics();
-            Container.Bind(typeof(IWorldStep), typeof(IRollbackParts)).To<WorldRollback>()
-                .FromMethod(context => context.Container.Instantiate<WorldRollback>(new object[] { gameObject.Lifetime(), context.Container.Resolve<PhysicsSpace>() }))
-                .AsSingle()
-                .NonLazy();
+            Container.Bind(typeof(IWorldStep), typeof(IRollbackParts)).To<WorldRollback>().AsSingle().WithArguments(gameObject.Lifetime()).NonLazy();
             Container.Bind<IInputDelay>().To<AdaptiveInputDelay>().AsSingle().WithArguments(gameObject.Lifetime()).NonLazy();
 #if UNITY_EDITOR
             Container.Bind<InputDelayLog>().AsSingle().WithArguments(gameObject.Lifetime()).NonLazy();
@@ -121,6 +116,10 @@ namespace Bw.Injection
                     context.Container.Resolve<ISimulationStep>()))
                 .AsSingle();
             Container.Bind<IPhysicsSteps>().To<PhysicsSpace>().FromResolve();
+            Container.Bind<PhysicsSchedule>()
+                .FromMethod(context => context.Container.Instantiate<PhysicsSchedule>(new object[] { gameObject.Lifetime(), context.Container.Resolve<PhysicsSpace>() }))
+                .AsSingle()
+                .NonLazy();
             Container.Bind<LevelGeometry>()
                 .FromMethod(context => LevelGeometry.Create(gameObject.Lifetime(), context.Container.Resolve<IPhysicsSpace>(), LevelBoxes.In(gameObject.scene)))
                 .AsSingle()

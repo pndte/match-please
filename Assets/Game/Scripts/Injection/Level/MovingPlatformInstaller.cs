@@ -70,7 +70,7 @@ namespace Bw.Injection.Level
             Container.BindInstance(new PlatformRail(_box.transform.position, _path.Travel)).AsSingle();
             Container.BindInstance(_path).AsSingle();
             Container.Bind(typeof(MovingPlatform), typeof(IMovingPlatform), typeof(IReadonlySimulation<PlatformState>), typeof(IRestorable<PlatformState>))
-                .To<MovingPlatform>().AsSingle()
+                .To<MovingPlatform>().AsSingle().WithArguments(Boxes)
                 .WriterOnlyInto<IRestorable<PlatformState>>(typeof(RollbackPart<PlatformState>));
             Container.Bind<MovingPlatformRegistration>().AsSingle().NonLazy();
             Container.Bind<IStateView<PlatformState>>().To<PlatformStateView>().AsSingle();
@@ -99,8 +99,10 @@ namespace Bw.Injection.Level
             Container.Decorate<IStateView<PlatformState>>().With<PlatformTimelineBlendView>();
         }
 
+        private BodyBox[] Boxes => _box.GetComponents<BodyBox>();
+
         private PhysicsBody CreatePhysicsBody(InjectContext context) =>
-            context.Container.Resolve<IPhysicsSpace>().CreateBody(gameObject.Lifetime(), _box, PhysicsBody.BodyType.Kinematic);
+            context.Container.Resolve<IPhysicsSpace>().CreateBody(gameObject.Lifetime(), Boxes, PhysicsBody.BodyType.Kinematic);
 
         private void RequireTravel()
         {
@@ -113,6 +115,10 @@ namespace Bw.Injection.Level
             if (_box.transform == transform)
                 throw new InvalidOperationException(
                     $"Moving platform '{name}' carries its box on the root: NGO spawns a late-joining client's copy where the root is, so the root must stay at the rail's start and a child must move.");
+
+            if (GetComponentsInChildren<BodyBox>(true).Length != Boxes.Length)
+                throw new InvalidOperationException(
+                    $"Moving platform '{name}' has a box off its carriage '{_box.name}': a floor, its walls and its roof are all boxes on the carriage, which is the one body that moves.");
         }
     }
 }

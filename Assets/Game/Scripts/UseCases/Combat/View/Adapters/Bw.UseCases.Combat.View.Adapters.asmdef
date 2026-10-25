@@ -10,7 +10,8 @@
         "Bw.UseCases.Combat.Abstractions",
         "Bw.UseCases.Character.View",
         "Bw.Entities.Network",
-        "Bw.UseCases.Movement.Network"
+        "Bw.UseCases.Movement.Network",
+        "Bw.UseCases.Props.View"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

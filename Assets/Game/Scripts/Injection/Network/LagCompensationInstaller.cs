@@ -22,6 +22,7 @@ namespace Bw.Injection.Network
                 return;
 
             Container.Bind<SimulationHistory<TState>>().AsSingle().NonLazy();
+            Container.Bind<IBubbleHistory>().To<BubbleHistory>().AsSingle().NonLazy();
             Container.Bind<IRewindable>()
                 .FromMethod(context => context.Container.Instantiate<SimulationRewinder<TState>>(
                     new object[] { context.Container.Instantiate(typeof(TView)) }))

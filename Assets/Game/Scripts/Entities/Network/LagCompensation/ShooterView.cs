@@ -1,6 +1,4 @@
 using System;
-using Bw.Entities.Network.Prediction.Bubble;
-using UnityEngine;
 
 namespace Bw.Entities.Network.LagCompensation
 {
@@ -9,25 +7,22 @@ namespace Bw.Entities.Network.LagCompensation
         public readonly double Interpolated;
         public readonly double Predicted;
 
-        private readonly Vector2 _center;
-        private readonly PredictionBubbleConfig _bubble;
+        private readonly PlayerDriver _shooter;
 
-        public ShooterView(
-            double interpolated,
-            double predicted,
-            Vector2 center,
-            PredictionBubbleConfig bubble)
+        public ShooterView(double interpolated, double predicted, PlayerDriver shooter)
         {
             Interpolated = interpolated;
             Predicted = predicted;
-            _center = center;
-            _bubble = bubble;
+            _shooter = shooter;
         }
 
-        public double TickOf(Vector2 position) =>
-            _bubble.Covers(_center, position) ? Predicted : Interpolated;
+        public double TickOf(IBubbleHistory bubble) => //TODO: первые SwitchBlendSeconds после переключения времени объекта стрелок видит его смесью двух времён (TimelineBlendView), а откат ставит его целиком в одно
+            _shooter.Switch(
+                (Bubble: bubble, View: this),
+                static (state, client) => state.Bubble.Inside(client, state.View.Predicted) ? state.View.Predicted : state.View.Interpolated,
+                static state => state.View.Interpolated);
 
         public ShooterView Clamped(double earliest, double latest) =>
-            new(Math.Clamp(Interpolated, earliest, latest), Math.Clamp(Predicted, earliest, latest), _center, _bubble);
+            new(Math.Clamp(Interpolated, earliest, latest), Math.Clamp(Predicted, earliest, latest), _shooter);
     }
 }

@@ -1,22 +1,21 @@
 using Bw.Entities.Network.Rollback;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Movement.Abstractions;
+using Bw.UseCases.Movement.Physics.Abstractions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
-using UnityEngine;
-using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Movement.Network.Prediction
 {
     public sealed class PredictedBodyPose<TState> where TState : struct, IPlacedState<TState>
     {
-        private readonly PhysicsBody _body;
+        private readonly IBodyPose _body;
 
         public PredictedBodyPose(
             Lifetime lifetime,
             IPredictedBy predictedBy,
             IReadonlySimulation<TState> simulation,
-            PhysicsBody body)
+            IBodyPose body)
         {
             _body = body;
 
@@ -24,6 +23,6 @@ namespace Bw.UseCases.Movement.Network.Prediction
         }
 
         private void Place(TState state) =>
-            _body.transform = new PhysicsTransform(state.Position, new PhysicsRotate(state.Angle * Mathf.Deg2Rad));
+            _body.Place(state.Position, state.Angle);
     }
 }

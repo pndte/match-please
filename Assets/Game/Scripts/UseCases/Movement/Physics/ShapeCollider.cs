@@ -42,11 +42,12 @@ namespace Bw.UseCases.Movement.Physics
             var length = distance + Skin;
             var translation = direction * length;
             using var hits = Hits(box, translation);
+            using var inside = Inside(position);
 
             for (var index = 0; index < hits.Length; index++)
             {
                 var hit = hits[index];
-                if (!Own(hit) && Vector2.Dot(NormalOf(hit, box, translation), direction) < 0f && !IsPlatform(hit.shape))
+                if (!Own(hit) && Vector2.Dot(NormalOf(hit, box, translation), direction) < 0f && !IsPlatform(hit.shape) && !Passable(hit, inside))
                     distance = Mathf.Min(distance, hit.fraction * length - Skin);
             }
 
@@ -78,23 +79,25 @@ namespace Bw.UseCases.Movement.Physics
             var length = distance + Skin;
             var translation = Vector2.down * length;
             using var hits = Hits(box, translation);
+            using var inside = Inside(position);
 
             for (var index = 0; index < hits.Length; index++)
             {
                 var hit = hits[index];
-                if (!Own(hit) && NormalOf(hit, box, translation).y > 0f && (!IsPlatform(hit.shape) || BoundsOf(hit.shape).upperBound.y <= feet + Skin))
+                if (!Own(hit) && NormalOf(hit, box, translation).y > 0f && (!IsPlatform(hit.shape) || BoundsOf(hit.shape).upperBound.y <= feet + Skin) && !Passable(hit, inside))
                     distance = Mathf.Min(distance, hit.fraction * length - Skin);
             }
 
             return Mathf.Max(0f, distance);
         }
 
-        public Vector2 Carry(Vector2 position, bool grounded)
+        public Vector2 Carry(Vector2 position, bool grounded, bool dropping)
         {
             if (grounded && _rider.TryGetRidden(position, out var shift))
                 position = Shifted(position, shift);
 
-            return _rider.Scooped(position, Skin);
+            var lift = _rider.Scooped(position, Skin, dropping).y - position.y;
+            return lift > 0f ? position + Vector2.up * Cast(position, Vector2.up, lift) : position;
         }
 
         public bool TryGetLaunch(Vector2 position, out float height)
@@ -143,6 +146,9 @@ namespace Bw.UseCases.Movement.Physics
         private NativeArray<PhysicsQuery.WorldCastResult> Hits(PolygonGeometry box, Vector2 translation) =>
             _body.world.CastGeometry(box, translation, _filter, PhysicsQuery.WorldCastMode.All, Allocator.Temp);
 
+        private NativeArray<PhysicsQuery.WorldOverlapResult> Inside(Vector2 position) =>
+            _body.world.OverlapGeometry(PolygonGeometry.CreateBox(_size - Vector2.one * (2f * Skin), 0f, new PhysicsTransform(position + _offset), false), _filter, Allocator.Temp);
+
         private float Feet(Vector2 position) =>
             position.y + _offset.y - _size.y / 2f;
 
@@ -151,6 +157,18 @@ namespace Bw.UseCases.Movement.Physics
 
         private bool Own(PhysicsQuery.WorldCastResult hit) =>
             hit.shape.body.Equals(_body);
+
+        private static bool Passable(PhysicsQuery.WorldCastResult hit, NativeArray<PhysicsQuery.WorldOverlapResult> inside)
+        {
+            if (hit.shape.body.type == PhysicsBody.BodyType.Static)
+                return false;
+
+            for (var index = 0; index < inside.Length; index++)
+                if (inside[index].shape.Equals(hit.shape))
+                    return true;
+
+            return false;
+        }
 
         private static Vector2 NormalOf(PhysicsQuery.WorldCastResult hit, PolygonGeometry box, Vector2 translation) =>
             box.Transform(new PhysicsTransform(translation * hit.fraction)).NormalFrom(hit.shape.polygonGeometry.Transform(hit.shape.body.transform));

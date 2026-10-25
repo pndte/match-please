@@ -1,20 +1,19 @@
 using Bw.Entities.Simulation;
 using Bw.UseCases.Movement.Abstractions;
-using Bw.UseCases.Movement.Physics.Abstractions;
 using UnityEngine;
 
 namespace Bw.UseCases.Movement
 {
     public sealed class BodyStateView<TState> : IStateView<TState> where TState : struct, IBodyState<TState>
     {
-        private readonly IMovementBody _body;
+        private readonly IBodyPicture _picture;
 
-        public BodyStateView(IMovementBody body)
+        public BodyStateView(IBodyPicture picture)
         {
-            _body = body;
+            _picture = picture;
         }
 
         public void Show(TState from, TState to, float progress) =>
-            _body.Place(Vector2.Lerp(from.Body.Position, to.Body.Position, progress));
+            _picture.Place(Vector2.Lerp(from.Body.Position, to.Body.Position, progress));
     }
 }

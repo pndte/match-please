@@ -17,6 +17,7 @@ using Bw.UseCases.Movement.Physics;
 using Bw.UseCases.Movement.View;
 using Bw.UseCases.Movement.View.Adapters;
 using Bw.UseCases.Movement.View.Animation;
+using Bw.UseCases.Movement.View.Animation.Abstractions;
 using Bw.UseCases.Movement.View.Audio;
 using Zenject;
 
@@ -80,6 +81,7 @@ namespace Bw.Injection
                             context.Container.Instantiate<BodyPoseView<MovementState>>(),
                             MotionOf(context.Container, context.Container.Instantiate<MovementAnimationView>())))
                         .AsSingle();
+                    BindFacing();
                     Container.Bind<SimulationViewSync<MovementState>>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:
@@ -93,10 +95,17 @@ namespace Bw.Injection
                         .AsSingle();
                     Container.Decorate<IStateView<MovementState>>().With<SmoothedStateView<MovementState>>();
                     Container.Decorate<IStateView<MovementState>>().With<TimelineBlendView<MovementState>>();
+                    BindFacing();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private void BindFacing()
+        {
+            Container.Bind(typeof(IFacingViewModel), typeof(RunFacing)).To<RunFacing>().AsSingle();
+            Container.Decorate<IStateView<MovementState>>().With<RunFacingView>();
         }
 
         private static IStateView<MovementState> MotionOf(DiContainer container, params IStateView<MovementMotion>[] views) =>

@@ -7,7 +7,7 @@ using JetBrains.Lifetimes;
 
 namespace Bw.Entities.Network.Prediction.Stream
 {
-    public sealed class PredictionInputSender<TInput> where TInput : struct //TODO: при задержке ввода выстрел и удар уходят на её тики позже нажатия, и клиент, и сервер судят их на тике применения: по бегущей цели нужно упреждение; полная компенсация — перематывать цели к тику нажатия на обоих пирах
+    public sealed class PredictionInputSender<TInput> where TInput : struct
     {
         private readonly IInputSampler<TInput> _sampler;
         private readonly INetRequestSender<TickedInput<TInput>> _input;

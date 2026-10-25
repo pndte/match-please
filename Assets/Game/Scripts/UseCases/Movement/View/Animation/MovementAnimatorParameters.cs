@@ -5,5 +5,6 @@ namespace Bw.UseCases.Movement.View.Animation
         public const string Speed = "Speed";
         public const string VerticalSpeed = "VerticalSpeed";
         public const string Grounded = "Grounded";
+        public const string Backward = "Backward";
     }
 }

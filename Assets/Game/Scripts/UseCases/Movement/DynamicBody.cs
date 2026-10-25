@@ -45,7 +45,7 @@ namespace Bw.UseCases.Movement
             _stepped.Fire(state);
         }
 
-        public float RetreatSpeed(Vector2 direction) =>
+        public float SpeedAway(Vector2 direction) =>
             Mathf.Max(0f, Vector2.Dot(_body.linearVelocity, direction));
 
         public void Shove(Vector2 force)

@@ -73,7 +73,7 @@ namespace Bw.Injection
         {
             Container.Bind<HandsGrip>().AsSingle();
             Container.Bind<HandsHold>().AsSingle().NonLazy();
-            Container.Decorate<IMovementBody>().With<HoldingBody>();
+            Container.Decorate<IBodyPose>().With<HoldingBody>();
         }
 
         private void BindServer()
