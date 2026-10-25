@@ -25,7 +25,7 @@ jobs:
     timeout-minutes: 90
     steps:
       - name: Check out, keeping the imported Library
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           clean: false
 
@@ -95,7 +95,7 @@ jobs:
 
       - name: Keep the results and the log
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: editmode-results
           path: |

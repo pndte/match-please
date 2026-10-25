@@ -17,7 +17,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Check out
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Every asset has its meta file, every meta file has its asset, and GUIDs are unique
         shell: python
