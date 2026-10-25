@@ -132,6 +132,29 @@ namespace Bw.Tests.Entities.Network
             Assert.Throws<InvalidOperationException>(() => _drivers.Of(second));
         }
 
+        [Test]
+        public void RefusedAdmissionSpendsNoId()
+        {
+            var client = new Client(7, new ConnectionRequest("Саня", 3));
+            _entrance.Admit(_lifetime.Lifetime, new Player("Саня"), 3, PlayerDriver.Client(client));
+            Assert.Catch(() => _entrance.Admit(_lifetime.Lifetime, new Player("Сева"), 4, PlayerDriver.Client(client)));
+
+            _entrance.Admit(_lifetime.Lifetime, new Player("Матвей"), 2, PlayerDriver.Server);
+
+            Assert.That(_announced[^1], Is.EqualTo("Матвей: server, character 2, id 2"));
+        }
+
+        [Test]
+        public void PlayerHasItsIdWhenItsClientIsListed()
+        {
+            var listedIds = new List<int>();
+            _drivers.ByClient.View(_lifetime.Lifetime, (_, _, player) => listedIds.Add(_ids.IdOf(player)));
+
+            _entrance.Admit(_lifetime.Lifetime, new Player("Саня"), 3, PlayerDriver.Client(new Client(7, new ConnectionRequest("Саня", 3))));
+
+            Assert.That(listedIds, Is.EqualTo(new[] { 1 }));
+        }
+
         private string DriverOf(IPlayer player)
         {
             var named = "";

@@ -33,10 +33,13 @@ namespace Bw.Entities.Network
             if (_players.Contains(player))
                 throw new InvalidOperationException($"Player '{player.Nickname}' is admitted once: it is already in the session.");
 
+            if (driver.Switch(_drivers, static (drivers, client) => drivers.ByClient.ContainsKey(client), static _ => false))
+                throw new InvalidOperationException($"Player '{player.Nickname}' cannot be driven by a client that already drives another player.");
+
+            _ids.AddLifetimed(lifetime, player);
             driver.Switch(
                 client => _drivers.AddClientDriven(lifetime, player, client),
                 () => _drivers.AddServerDriven(lifetime, player));
-            _ids.AddLifetimed(lifetime, player);
             _characters.AddLifetimed(lifetime, player, characterKey);
             _players.AddLifetimed(lifetime, player);
         }
