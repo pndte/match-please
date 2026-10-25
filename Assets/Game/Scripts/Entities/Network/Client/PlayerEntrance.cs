@@ -1,3 +1,4 @@
+using System;
 using Bw.Entities.Players;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
@@ -29,10 +30,13 @@ namespace Bw.Entities.Network
             int characterKey,
             PlayerDriver driver)
         {
-            _ids.AddLifetimed(lifetime, player);
+            if (_players.Contains(player))
+                throw new InvalidOperationException($"Player '{player.Nickname}' is admitted once: it is already in the session.");
+
             driver.Switch(
                 client => _drivers.AddClientDriven(lifetime, player, client),
                 () => _drivers.AddServerDriven(lifetime, player));
+            _ids.AddLifetimed(lifetime, player);
             _characters.AddLifetimed(lifetime, player, characterKey);
             _players.AddLifetimed(lifetime, player);
         }

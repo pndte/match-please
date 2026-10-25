@@ -16,6 +16,9 @@ namespace Bw.UseCases
             if (_mine.Value)
                 throw new InvalidOperationException("The object is already mine: SetMine gives ownership for one lifetime, and the previous one has not ended yet.");
 
+            if (!lifetime.IsAlive)
+                throw new InvalidOperationException("SetMine gives ownership for a lifetime that has not ended: this one is already over.");
+
             _mine.Value = true;
             lifetime.OnTermination(() => _mine.Value = false);
         }

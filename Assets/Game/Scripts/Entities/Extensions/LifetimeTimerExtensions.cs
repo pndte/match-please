@@ -10,7 +10,11 @@ namespace Bw.Entities.Extensions
         public static Lifetime CreateNestedFor(this Lifetime lifetime, float seconds)
         {
             var timed = lifetime.CreateNested();
-            timed.Lifetime.WhenElapsed(seconds, () => timed.Terminate());
+            if (seconds <= 0f)
+                timed.Terminate();
+            else
+                timed.Lifetime.WhenElapsed(seconds, () => timed.Terminate());
+
             return timed.Lifetime;
         }
 

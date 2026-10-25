@@ -18,9 +18,10 @@ namespace Bw.UseCases.Combat.Hands
 
         public HandsState Step(HandsState state, HandsInput input)
         {
-            var guarding = input.Weapon.Guarded;
-            var chosen = Chosen(Settled(state), input.Choice, guarding);
-            return guarding ? Guarded(chosen) : Released(chosen);
+            var settled = Settled(state);
+            return input.Weapon.Guarded
+                ? Chosen(Guarded(settled), input.Choice, true)
+                : Released(Chosen(settled, input.Choice, false));
         }
 
         public HandsState Taken(HandsState state, WeaponSlot slot)

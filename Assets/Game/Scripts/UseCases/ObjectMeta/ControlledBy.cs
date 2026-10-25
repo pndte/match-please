@@ -16,6 +16,9 @@ namespace Bw.UseCases
             if (_me.Value)
                 throw new InvalidOperationException("The object is already controlled by me: SetMe gives control for one lifetime, and the previous one has not ended yet.");
 
+            if (!lifetime.IsAlive)
+                throw new InvalidOperationException("SetMe gives control for a lifetime that has not ended: this one is already over.");
+
             _me.Value = true;
             lifetime.OnTermination(() => _me.Value = false);
         }

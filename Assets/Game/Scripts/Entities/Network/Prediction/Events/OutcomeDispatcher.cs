@@ -45,6 +45,7 @@ namespace Bw.Entities.Network.Prediction.Events
                 throw new InvalidOperationException(
                     $"An initiator acts once per tick: its outcome of tick {outcome.Tick.ToString()} came after tick {_lastTick.ToString()}.");
 
+            var driver = _drivers.Of(outcome.Actor).Value;
             var affected = outcome.Affected.Count == 0
                 ? Array.Empty<AffectedTarget<ulong, TEffect>>()
                 : new AffectedTarget<ulong, TEffect>[outcome.Affected.Count];
@@ -60,7 +61,7 @@ namespace Bw.Entities.Network.Prediction.Events
                 _targets[index].Affect(cause, outcome.Affected[index].Effect);
 
             var report = new OutcomeReport<TEffect>(outcome.Tick, affected);
-            _drivers.Of(outcome.Actor).Value.Switch(client => _report.SendTo(client, report), () => { });
+            driver.Switch(client => _report.SendTo(client, report), () => { });
         }
 
         private AffectedTarget<ulong, TEffect> Resolve(IReadOnlyList<AffectedTarget<TTarget, TEffect>> affected, int index)

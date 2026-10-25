@@ -32,6 +32,9 @@ namespace Bw.Entities.Network
 
         public void AddClientDriven(Lifetime lifetime, IPlayer player, IClient client)
         {
+            if (_byClient.TryGetValue(client, out var driven))
+                throw new InvalidOperationException($"Client {client.Id.ToString()} drives one player at a time: it already drives '{driven.Nickname}'.");
+
             Add(lifetime, player, PlayerDriver.Client(client));
             _byClient.AddLifetimed(lifetime, client, player);
         }
