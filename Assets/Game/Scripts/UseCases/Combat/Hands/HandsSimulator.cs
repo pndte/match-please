@@ -32,10 +32,10 @@ namespace Bw.UseCases.Combat.Hands
 
         private HandsState Settled(HandsState state)
         {
-            if (Holds(state.InHands))
+            if (Held(state.InHands))
                 return state;
 
-            var next = Holds(state.Previous) ? state.Previous : FirstHeld();
+            var next = Held(state.Previous) ? state.Previous : FirstHeld();
             return new HandsState(next, next == state.Previous ? HandsSlot.Empty : state.Previous, state.TakenByGuard);
         }
 
@@ -60,16 +60,16 @@ namespace Bw.UseCases.Combat.Hands
             if (!state.TakenByGuard)
                 return state;
 
-            return Holds(state.Previous) ? new HandsState(state.Previous, state.InHands, false) : new HandsState(state.InHands, HandsSlot.Empty, false);
+            return Held(state.Previous) ? new HandsState(state.Previous, state.InHands, false) : new HandsState(state.InHands, HandsSlot.Empty, false);
         }
 
         private HandsSlot Remembered(HandsState state, HandsSlot next)
         {
-            var remembered = Remembers(state.InHands) ? state.InHands : state.Previous;
+            var remembered = Remembered(state.InHands) ? state.InHands : state.Previous;
             return remembered == next ? HandsSlot.Empty : remembered;
         }
 
-        private bool Remembers(HandsSlot slot) =>
+        private bool Remembered(HandsSlot slot) =>
             !(_inventory.TryFindTop(slot, out var top) && _inventory.RulesOf(top).HandsOnly);
 
         private bool TryFindTarget(HandsState state, DrawChoice choice, out HandsSlot target)
@@ -80,7 +80,7 @@ namespace Bw.UseCases.Combat.Hands
                 static (_, slot) => HandsSlot.Of(slot),
                 static context => context.State.Previous,
                 static (context, direction) => context.Simulator.Scrolled(context.State.InHands, direction));
-            return target != state.InHands && Holds(target);
+            return target != state.InHands && Held(target);
         }
 
         private HandsSlot Scrolled(HandsSlot from, int direction)
@@ -93,7 +93,7 @@ namespace Bw.UseCases.Combat.Hands
             for (var step = 1; step <= slots.Count; step++)
             {
                 var slot = HandsSlot.Of(slots[((start + direction * step) % slots.Count + slots.Count) % slots.Count]);
-                if (slot != from && Holds(slot))
+                if (slot != from && Held(slot))
                     return slot;
             }
 
@@ -123,7 +123,7 @@ namespace Bw.UseCases.Combat.Hands
             return false;
         }
 
-        private bool Holds(HandsSlot slot) =>
+        private bool Held(HandsSlot slot) =>
             _inventory.TryFindTop(slot, out _);
     }
 }

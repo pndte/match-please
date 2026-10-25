@@ -14,7 +14,7 @@ namespace Bw.Tests.UseCases.Character.Network
         [Test]
         public void SameStateDoesNotDiverge()
         {
-            Assert.That(_divergence.Differs(Predicted, Predicted), Is.False);
+            Assert.That(_divergence.Diverged(Predicted, Predicted), Is.False);
         }
 
         [TestCase(0.009f, 0f)]
@@ -24,7 +24,7 @@ namespace Bw.Tests.UseCases.Character.Network
         {
             var actual = State(new Vector2(10f + x, 2f + y), new Vector2(6f, -3f), 0.5f, true, new JumpState(false, 2, 0));
 
-            Assert.That(_divergence.Differs(Predicted, actual), Is.False);
+            Assert.That(_divergence.Diverged(Predicted, actual), Is.False);
         }
 
         [TestCase(0.011f, 0f)]
@@ -34,7 +34,7 @@ namespace Bw.Tests.UseCases.Character.Network
         {
             var actual = State(new Vector2(10f + x, 2f + y), new Vector2(6f, -3f), 0.5f, true, new JumpState(false, 2, 0));
 
-            Assert.That(_divergence.Differs(Predicted, actual), Is.True);
+            Assert.That(_divergence.Diverged(Predicted, actual), Is.True);
         }
 
         [TestCase(0.09f, 0f, false)]
@@ -45,7 +45,7 @@ namespace Bw.Tests.UseCases.Character.Network
         {
             var actual = State(new Vector2(10f, 2f), new Vector2(6f + x, -3f + y), 0.5f, true, new JumpState(false, 2, 0));
 
-            Assert.That(_divergence.Differs(Predicted, actual), Is.EqualTo(diverges));
+            Assert.That(_divergence.Diverged(Predicted, actual), Is.EqualTo(diverges));
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace Bw.Tests.UseCases.Character.Network
         {
             var actual = State(new Vector2(10f, 2f), new Vector2(6f, -3f), 0.5001f, true, new JumpState(false, 2, 0));
 
-            Assert.That(_divergence.Differs(Predicted, actual), Is.True);
+            Assert.That(_divergence.Diverged(Predicted, actual), Is.True);
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace Bw.Tests.UseCases.Character.Network
         {
             var actual = State(new Vector2(10f, 2f), new Vector2(6f, -3f), 0.5f, false, new JumpState(false, 2, 0));
 
-            Assert.That(_divergence.Differs(Predicted, actual), Is.True);
+            Assert.That(_divergence.Diverged(Predicted, actual), Is.True);
         }
 
         [TestCase(true, 2, 0)]
@@ -71,7 +71,7 @@ namespace Bw.Tests.UseCases.Character.Network
         {
             var actual = State(new Vector2(10f, 2f), new Vector2(6f, -3f), 0.5f, true, new JumpState(rising, coyoteTicks, bufferedTicks));
 
-            Assert.That(_divergence.Differs(Predicted, actual), Is.True);
+            Assert.That(_divergence.Diverged(Predicted, actual), Is.True);
         }
 
         private static MovementState State(

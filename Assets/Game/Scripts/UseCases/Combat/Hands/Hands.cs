@@ -15,7 +15,7 @@ namespace Bw.UseCases.Combat.Hands
         public IReadonlyProperty<HandsState> State => _state;
         public HandsState Previous { get; private set; } = HandsState.Empty;
         public ISource<HandsState> Stepped => _stepped;
-        public bool Busy => TryFindInHands(out var inHands) && !inHands.Stowable;
+        public bool Busy => _state.Value.Busy(_inventory);
         public HoldPose Pose => _oval.PoseAt(_body.position);
         public GripPose Grip => _grip.Pose;
 

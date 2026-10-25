@@ -44,7 +44,7 @@ namespace Bw.UseCases.Mortality.Guarding
             _state.Value = recovered;
         }
 
-        public bool Covers(Contact contact) => //TODO: прикрытие считается по нынешней стойке и прицелу блока, а не по тику, который видел стрелок: откат выстрела (лагкомпенсация) блок не откатывает
+        public bool InCover(Contact contact) =>
             _state.Value.Up && Vector2.Angle(contact.Point - _box.Offset, Facing()) <= _config.CoverAngle * 0.5f;
 
         public void Absorb(Impacts impacts)

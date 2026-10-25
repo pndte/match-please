@@ -26,7 +26,7 @@ namespace Bw.Injection.Mortality
 
         public override void InstallBindings()
         {
-            var shown = _netSchema.DeclareProperty(new GuardState(_config.MaxHealth, false, false), NetworkDelivery.Reliable, NetworkPermissions.Server); //TODO: блок раздаётся через NetProperty, а новым системам положены сигналы: результат с рассылкой и отправка опоздавшим
+            var shown = _netSchema.DeclareProperty(new GuardState(_config.MaxHealth, false, false), NetworkDelivery.Reliable, NetworkPermissions.Server);
             Container.BindInstance(_config).AsSingle();
 
             switch (_runtimeSettings.CurrentPeerType)

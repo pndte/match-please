@@ -29,9 +29,13 @@ MonoBehaviour:
     HardResetSeconds: 0.25
     MaxTimeScaleCorrection: 0.05
   _lagCompensation:
-    MaxRewindSeconds: 0.4
+    MaxRewindSeconds: 0.15
   _eventPrediction:
     ExpiryTicks: 15
+  _predictionBubble:
+    EnterRadius: 20
+    LeaveRadius: 24
+    InputRelayMargin: 6
   _pushPrediction:
     RejectedFadeSeconds: 0.15
   _weaponPickup:

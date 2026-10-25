@@ -113,7 +113,7 @@ namespace Bw.EditorTools.Network
                 var name = assembly.GetName().Name;
                 if (string.IsNullOrEmpty(name) || !seen.Add(name))
                     return;
-                if (ShouldSkipAssembly(name))
+                if (Skipped(name))
                     return;
                 list.Add(assembly);
             }
@@ -127,7 +127,7 @@ namespace Bw.EditorTools.Network
             return list;
         }
 
-        private static bool ShouldSkipAssembly(string name) =>
+        private static bool Skipped(string name) =>
             name.StartsWith("Unity.", StringComparison.Ordinal) ||
             name.StartsWith("UnityEngine.", StringComparison.Ordinal) ||
             name.StartsWith("System.", StringComparison.Ordinal) ||
@@ -154,7 +154,7 @@ namespace Bw.EditorTools.Network
             return null;
         }
 
-        private static bool ImplementsInterfaceByFullName(Type type, string interfaceFullName)
+        private static bool Implementing(Type type, string interfaceFullName)
         {
             if (type.FullName == interfaceFullName)
                 return true;
@@ -180,7 +180,7 @@ namespace Bw.EditorTools.Network
                     if (!type.IsValueType || type.IsEnum || type.IsAbstract || type.ContainsGenericParameters)
                         continue;
 
-                    if (!ImplementsInterfaceByFullName(type, NetworkSerializableFullName))
+                    if (!Implementing(type, NetworkSerializableFullName))
                         continue;
 
                     Type? valueType = null;

@@ -225,7 +225,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Stream
         {
             public int Allowed { get; set; }
 
-            public bool Differs(int guessed, int relayed) =>
+            public bool Diverged(int guessed, int relayed) =>
                 Math.Abs(guessed - relayed) > Allowed;
         }
 

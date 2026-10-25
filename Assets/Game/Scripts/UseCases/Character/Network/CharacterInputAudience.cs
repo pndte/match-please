@@ -29,7 +29,7 @@ namespace Bw.UseCases.Character.Network
         {
             var position = _character.Movement.State.Value.Body.Position;
             foreach (var (watcher, player) in _registry.PlayerByCharacter)
-                if (watcher != _character && _bubble.NeedsInputs(watcher.Movement.State.Value.Body.Position, position))
+                if (watcher != _character && _bubble.InputsNeeded(watcher.Movement.State.Value.Body.Position, position))
                     _drivers.Of(player).Value.Switch(clients, (watching, client) => AddOnce(watching, client), _ => { });
         }
 

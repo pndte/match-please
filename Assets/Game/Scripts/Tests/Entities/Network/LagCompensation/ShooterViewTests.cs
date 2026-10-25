@@ -23,7 +23,7 @@ namespace Bw.Tests.Entities.Network.LagCompensation
         {
             var view = new ShooterView(96.5, 104.25, PlayerDriver.Client(Shooter));
 
-            Assert.That(view.TickOf(new ScriptedBubble { Holds = true }), Is.EqualTo(104.25));
+            Assert.That(view.TickOf(new ScriptedBubble { Holding = true }), Is.EqualTo(104.25));
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace Bw.Tests.Entities.Network.LagCompensation
         {
             var view = new ShooterView(96.5, 104.25, PlayerDriver.Client(Shooter));
 
-            Assert.That(view.TickOf(new ScriptedBubble { Holds = false }), Is.EqualTo(96.5));
+            Assert.That(view.TickOf(new ScriptedBubble { Holding = false }), Is.EqualTo(96.5));
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace Bw.Tests.Entities.Network.LagCompensation
         [Test]
         public void ServerDrivenShooterSeesEverythingInterpolated()
         {
-            var bubble = new ScriptedBubble { Holds = true };
+            var bubble = new ScriptedBubble { Holding = true };
 
             var tick = new ShooterView(96.5, 104.25, PlayerDriver.Server).TickOf(bubble);
 
@@ -78,8 +78,8 @@ namespace Bw.Tests.Entities.Network.LagCompensation
         {
             var clamped = new ShooterView(90.0, 110.0, PlayerDriver.Client(Shooter)).Clamped(95.0, 105.0);
 
-            Assert.That(clamped.TickOf(new ScriptedBubble { Holds = true }), Is.EqualTo(105.0));
-            Assert.That(clamped.TickOf(new ScriptedBubble { Holds = false }), Is.EqualTo(95.0));
+            Assert.That(clamped.TickOf(new ScriptedBubble { Holding = true }), Is.EqualTo(105.0));
+            Assert.That(clamped.TickOf(new ScriptedBubble { Holding = false }), Is.EqualTo(95.0));
         }
     }
 }

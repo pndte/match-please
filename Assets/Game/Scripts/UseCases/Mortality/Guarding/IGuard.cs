@@ -15,7 +15,7 @@ namespace Bw.UseCases.Mortality.Guarding
 
     public interface IGuardCover
     {
-        public bool Covers(Contact contact);
+        public bool InCover(Contact contact);
     }
 
     public interface IGuardBlows

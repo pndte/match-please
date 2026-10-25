@@ -6,7 +6,7 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Level.Network
 {
-    public sealed class PlatformFollowView : IStateView<PlatformState> //TODO: при пересчёте платформа вне пузыря стоит там, где её показал последний кадр, а не на пересчитываемом тике: столкновение предсказанного с ней в пересчёте приблизительное
+    public sealed class PlatformFollowView : IStateView<PlatformState>
     {
         private readonly IStateView<PlatformState> _view;
         private readonly IPredictedBy _predictedBy;

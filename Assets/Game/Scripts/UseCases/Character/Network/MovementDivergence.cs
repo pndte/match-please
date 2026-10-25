@@ -8,7 +8,7 @@ namespace Bw.UseCases.Character.Network
         private const float PositionTolerance = 0.01f;
         private const float VelocityTolerance = 0.1f;
 
-        public bool Differs(MovementState predicted, MovementState actual) =>
+        public bool Diverged(MovementState predicted, MovementState actual) =>
             (predicted.Body.Position - actual.Body.Position).sqrMagnitude > PositionTolerance * PositionTolerance
             || (predicted.Body.Velocity - actual.Body.Velocity).sqrMagnitude > VelocityTolerance * VelocityTolerance
             || !predicted.Body.HorizontalPush.Equals(actual.Body.HorizontalPush)

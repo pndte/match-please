@@ -16,7 +16,7 @@ namespace Bw.Entities.Network.LagCompensation
             _shooter = shooter;
         }
 
-        public double TickOf(IBubbleHistory bubble) => //TODO: первые SwitchBlendSeconds после переключения времени объекта стрелок видит его смесью двух времён (TimelineBlendView), а откат ставит его целиком в одно
+        public double TickOf(IBubbleHistory bubble) =>
             _shooter.Switch(
                 (Bubble: bubble, View: this),
                 static (state, client) => state.Bubble.Inside(client, state.View.Predicted) ? state.View.Predicted : state.View.Interpolated,

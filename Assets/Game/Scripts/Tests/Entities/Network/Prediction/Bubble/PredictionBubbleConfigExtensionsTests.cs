@@ -13,8 +13,8 @@ namespace Bw.Tests.Entities.Network.Prediction.Bubble
         {
             var config = new PredictionBubbleConfig();
 
-            Assert.That(config.EnterRadius, Is.EqualTo(14f));
-            Assert.That(config.LeaveRadius, Is.EqualTo(18f));
+            Assert.That(config.EnterRadius, Is.EqualTo(20f));
+            Assert.That(config.LeaveRadius, Is.EqualTo(24f));
             Assert.That(config.InputRelayMargin, Is.EqualTo(6f));
         }
 
@@ -26,7 +26,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Bubble
         [TestCase(30f, false)]
         public void InputsReachTheLeaveRadiusAndTheRelayMargin(float distance, bool needed)
         {
-            Assert.That(Bubble.NeedsInputs(Vector2.zero, new Vector2(0f, distance)), Is.EqualTo(needed));
+            Assert.That(Bubble.InputsNeeded(Vector2.zero, new Vector2(0f, distance)), Is.EqualTo(needed));
         }
 
         [Test]
@@ -34,8 +34,8 @@ namespace Bw.Tests.Entities.Network.Prediction.Bubble
         {
             var center = new Vector2(100f, -50f);
 
-            Assert.That(Bubble.NeedsInputs(center, center + new Vector2(0f, 9.9f)), Is.True);
-            Assert.That(Bubble.NeedsInputs(center, new Vector2(0f, 9.9f)), Is.False);
+            Assert.That(Bubble.InputsNeeded(center, center + new Vector2(0f, 9.9f)), Is.True);
+            Assert.That(Bubble.InputsNeeded(center, new Vector2(0f, 9.9f)), Is.False);
         }
 
         [Test]
@@ -43,8 +43,8 @@ namespace Bw.Tests.Entities.Network.Prediction.Bubble
         {
             var config = new PredictionBubbleConfig { EnterRadius = 4f, LeaveRadius = 8f, InputRelayMargin = 0f };
 
-            Assert.That(config.NeedsInputs(Vector2.zero, new Vector2(8f, 0f)), Is.True);
-            Assert.That(config.NeedsInputs(Vector2.zero, new Vector2(8.01f, 0f)), Is.False);
+            Assert.That(config.InputsNeeded(Vector2.zero, new Vector2(8f, 0f)), Is.True);
+            Assert.That(config.InputsNeeded(Vector2.zero, new Vector2(8.01f, 0f)), Is.False);
         }
 
         [Test]
@@ -52,8 +52,8 @@ namespace Bw.Tests.Entities.Network.Prediction.Bubble
         {
             var point = new PredictionBubbleConfig { EnterRadius = 0f, LeaveRadius = 0f, InputRelayMargin = 0f };
 
-            Assert.That(point.NeedsInputs(Vector2.one, Vector2.one), Is.True);
-            Assert.That(point.NeedsInputs(Vector2.one, Vector2.one + new Vector2(0.001f, 0f)), Is.False);
+            Assert.That(point.InputsNeeded(Vector2.one, Vector2.one), Is.True);
+            Assert.That(point.InputsNeeded(Vector2.one, Vector2.one + new Vector2(0.001f, 0f)), Is.False);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Bw.Tests.Entities.Network.LagCompensation
         [Test]
         public void ShippedDepthIsTwelveTicksAtThirtyHertz()
         {
-            Assert.That(new LagCompensationConfig().RewindTicks(new ManualClock(1f / 30f)), Is.EqualTo(12));
+            Assert.That(new LagCompensationConfig().RewindTicks(new ManualClock(1f / 30f)), Is.EqualTo(5));
         }
 
         [TestCase(0.4f, 1f / 60f, 24)]

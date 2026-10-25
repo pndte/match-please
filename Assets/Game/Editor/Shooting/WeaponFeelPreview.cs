@@ -81,7 +81,7 @@ namespace Bw.EditorTools.Shooting
             DrawPlot(track, track.Kick, "Kick", "u", KickColor);
             DrawPlot(track, track.Tilt, "Tilt", "°", TiltColor);
 
-            if (Shoots())
+            if (IsGun())
                 DrawBarrelPlot(track);
         }
 
@@ -137,7 +137,7 @@ namespace Bw.EditorTools.Shooting
                 melee => new[] { melee.TurnSpeed, melee.SwingTime, melee.StrikeTime })).ToArray();
         }
 
-        private bool Shoots() =>
+        private bool IsGun() =>
             Weapon.Shooting.Switch(gun => true, melee => false);
 
         private void Play(int shots)
@@ -188,13 +188,13 @@ namespace Bw.EditorTools.Shooting
             DrawTarget(worldToGui);
             DrawAim(worldToGui);
 
-            if (Shoots())
+            if (IsGun())
                 DrawTraces(track, worldToGui);
 
             DrawBarrel(worldToGui, barrel);
             DrawGun(track, frame, worldToGui, barrel);
 
-            if (Shoots())
+            if (IsGun())
                 DrawFlash(track, frame, worldToGui, barrel);
 
             DrawCursor(worldToGui);

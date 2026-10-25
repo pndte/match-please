@@ -6,8 +6,8 @@ namespace Bw.Entities.Network.Prediction.Bubble
     [Serializable]
     public sealed class PredictionBubbleConfig
     {
-        [Min(0f)] public float EnterRadius = 14f;
-        [Min(0f)] public float LeaveRadius = 18f;
+        [Min(0f)] public float EnterRadius = 20f;
+        [Min(0f)] public float LeaveRadius = 24f;
         [Min(0f)] public float InputRelayMargin = 6f;
     }
 }

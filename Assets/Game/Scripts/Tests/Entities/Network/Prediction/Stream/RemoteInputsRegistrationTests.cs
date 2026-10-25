@@ -86,7 +86,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Stream
 
         private sealed class Unequal : IInputDivergence<int>
         {
-            public bool Differs(int guessed, int relayed) =>
+            public bool Diverged(int guessed, int relayed) =>
                 guessed != relayed;
         }
     }

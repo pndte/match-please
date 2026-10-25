@@ -34,11 +34,11 @@ namespace Bw.UseCases.Combat.View.Audio
 
         public void PlayImpact(PelletTrace trace, float arrival)
         {
-            if (trace.Struck && HitsGround(trace.Layer))
+            if (trace.Struck && IsGround(trace.Layer))
                 _lifetime.WhenElapsed(arrival, () => _player.Play(_impacts.GroundHit, trace.To));
         }
 
-        private bool HitsGround(int layer) =>
+        private bool IsGround(int layer) =>
             (_impacts.GroundLayers.value & (1 << layer)) != 0; //TODO: вся земля звучит как трава — для других поверхностей нужен звук попадания у самой поверхности; ящик на слое Ground, поэтому пуля по нему звучит и травой, и своим деревянным стуком
     }
 }

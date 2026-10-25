@@ -42,7 +42,7 @@ namespace Bw.UseCases.Combat.Hands.Network
             if (press.Number == lastTrigger.Press.Number || lateTicks < 0)
                 return trigger.WithPress(lastTrigger.Press.WithAge(lastTrigger.Press.Age + 1));
 
-            return lateTicks <= _lagCompensation.RewindTicks(_step) //TODO: нажатие старше предела отката (MaxRewindSeconds, 0,4 с) не спасается: сервер уже не может поставить цели туда, где их видел стрелок, и клик пропадает, как раньше
+            return lateTicks <= _lagCompensation.RewindTicks(_step) //TODO: нажатие старше предела отката (MaxRewindSeconds, 0,15 с) не спасается: сервер уже не может поставить цели туда, где их видел стрелок, и клик пропадает, как раньше
                 ? trigger.Pressed(press, lateTicks)
                 : trigger.WithPress(press.WithAge(lateTicks));
         }

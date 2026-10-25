@@ -51,7 +51,7 @@ namespace Bw.Entities.Network.LagCompensation
 
         private void Settle(int tick)
         {
-            Vector2 position = _transform.position; //TODO: сервер решает по своим текущим позициям, а клиент — по показанным, и объект вне пузыря он видит в прошлом (опережение и задержка интерполяции, на бегу до 13 тиков): у границы пузыря откат на эти тики ставит объект не в то время, в котором его видел стрелок
+            Vector2 position = _transform.position;
             foreach (var (client, switches) in _switches)
             {
                 var inside = switches.Count > 0 && switches[^1].Inside;

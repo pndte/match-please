@@ -56,7 +56,7 @@ namespace Bw.Tests.Entities.Network.LagCompensation
         [Test]
         public void ObjectTheShooterPredictedIsRewoundToThePredictedTick()
         {
-            _bubble.Holds = true;
+            _bubble.Holding = true;
 
             _rewinder.Rewind(_lifetime.Lifetime, Seen(12.25, 14.0));
 

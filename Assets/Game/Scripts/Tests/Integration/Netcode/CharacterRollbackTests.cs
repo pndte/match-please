@@ -128,7 +128,7 @@ namespace Bw.Tests.Integration.Netcode
 
             Play();
 
-            Assert.That(new MovementDivergence().Differs(_clientStates[Ticks], _serverStates[Ticks]), Is.False);
+            Assert.That(new MovementDivergence().Diverged(_clientStates[Ticks], _serverStates[Ticks]), Is.False);
             Assert.That(_clientStates[Ticks].Body.Grounded, Is.True);
         }
 

@@ -6,7 +6,7 @@ namespace Bw.UseCases.Mortality.Guarding.Extensions
         {
             var uncovered = 0;
             foreach (var impact in impacts)
-                if (!cover.Covers(impact.Contact))
+                if (!cover.InCover(impact.Contact))
                     uncovered++;
 
             if (uncovered == impacts.Count)
@@ -15,7 +15,7 @@ namespace Bw.UseCases.Mortality.Guarding.Extensions
             var kept = new Impact[uncovered];
             var index = 0;
             foreach (var impact in impacts)
-                if (!cover.Covers(impact.Contact))
+                if (!cover.InCover(impact.Contact))
                     kept[index++] = impact;
 
             return new Impacts(kept);
@@ -25,7 +25,7 @@ namespace Bw.UseCases.Mortality.Guarding.Extensions
         {
             var damage = 0f;
             foreach (var impact in impacts)
-                if (cover.Covers(impact.Contact))
+                if (cover.InCover(impact.Contact))
                     damage += impact.Hit.Damage;
 
             return damage;

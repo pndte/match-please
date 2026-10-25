@@ -7,7 +7,7 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Movement.Network.Prediction
 {
-    public sealed class KinematicFollowView<TState> : IStateView<TState> where TState : struct, IPlacedState<TState> //TODO: при пересчёте тела вне пузыря стоят там, где их показывал последний кадр, а не на пересчитываемом тике: столкновение предсказанного с непредсказанным в пересчёте приблизительное
+    public sealed class KinematicFollowView<TState> : IStateView<TState> where TState : struct, IPlacedState<TState>
     {
         private readonly IStateView<TState> _view;
         private readonly IPredictedBy _predictedBy;

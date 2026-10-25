@@ -56,10 +56,10 @@ namespace Bw.Tests.UseCases.Combat.Hands
 
             _grip.Place(new GripPose(new Vector2(3f, 4f), 0f, Vector2.zero));
 
-            Assert.That(Covers(new Vector2(3.95f, 4f)), Is.True);
-            Assert.That(Covers(new Vector2(4.05f, 4f)), Is.False);
-            Assert.That(Covers(new Vector2(3f, 4.45f)), Is.True);
-            Assert.That(Covers(new Vector2(3f, 4.55f)), Is.False);
+            Assert.That(Covered(new Vector2(3.95f, 4f)), Is.True);
+            Assert.That(Covered(new Vector2(4.05f, 4f)), Is.False);
+            Assert.That(Covered(new Vector2(3f, 4.45f)), Is.True);
+            Assert.That(Covered(new Vector2(3f, 4.55f)), Is.False);
         }
 
         [Test]
@@ -69,10 +69,10 @@ namespace Bw.Tests.UseCases.Combat.Hands
 
             _grip.Place(new GripPose(new Vector2(3f, 4f), 90f, Vector2.zero));
 
-            Assert.That(Covers(new Vector2(3.45f, 4f)), Is.True);
-            Assert.That(Covers(new Vector2(3.55f, 4f)), Is.False);
-            Assert.That(Covers(new Vector2(3f, 4.95f)), Is.True);
-            Assert.That(Covers(new Vector2(3f, 5.05f)), Is.False);
+            Assert.That(Covered(new Vector2(3.45f, 4f)), Is.True);
+            Assert.That(Covered(new Vector2(3.55f, 4f)), Is.False);
+            Assert.That(Covered(new Vector2(3f, 4.95f)), Is.True);
+            Assert.That(Covered(new Vector2(3f, 5.05f)), Is.False);
         }
 
         [Test]
@@ -130,7 +130,7 @@ namespace Bw.Tests.UseCases.Combat.Hands
             Assert.DoesNotThrow(() => _grip.Place(new GripPose(Vector2.zero, 0f, Vector2.zero)));
         }
 
-        private bool Covers(Vector2 point) =>
+        private bool Covered(Vector2 point) =>
             _physics.ShapesAt(point, CombatPhysics.HeldProp).Length == 1;
     }
 }

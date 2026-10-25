@@ -16,5 +16,8 @@ namespace Bw.UseCases.Combat.Hands.Extensions
             top = weapon;
             return found;
         }
+
+        public static bool Busy(this HandsState hands, IReadonlyWeaponInventory inventory) =>
+            inventory.TryFindTop(hands.InHands, out var top) && !top.Stowable;
     }
 }

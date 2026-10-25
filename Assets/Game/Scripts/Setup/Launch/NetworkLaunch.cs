@@ -53,7 +53,7 @@ namespace Setup.Launch
             Application.targetFrameRate = ServerFrameRate;
             Screen.SetResolution(ServerWindowWidth, ServerWindowHeight, FullScreenMode.Windowed);
             var port = server.Port;
-            while (!Listen(manager, port))
+            while (!TryListen(manager, port))
             {
                 if (Application.isBatchMode)
                 {
@@ -91,7 +91,7 @@ namespace Setup.Launch
             return await _room.RetryPort(retrying.Lifetime, busyPort);
         }
 
-        private static bool Listen(NetworkManager manager, ushort port)
+        private static bool TryListen(NetworkManager manager, ushort port)
         {
             Debug.Log($"[NetworkLaunch] Starting as the server on {ListenAddress}:{port}");
             TransportOf(manager).SetConnectionData(true, ListenAddress, port, ListenAddress);

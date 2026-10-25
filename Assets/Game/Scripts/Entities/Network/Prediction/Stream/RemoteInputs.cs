@@ -57,7 +57,7 @@ namespace Bw.Entities.Network.Prediction.Stream
         }
 
         private bool Diverged(int tick) =>
-            _taken.TryGetAt(tick, out var guessed) && _relayed.TryGetAt(tick, out var relayed) && _divergence.Differs(guessed, relayed);
+            _taken.TryGetAt(tick, out var guessed) && _relayed.TryGetAt(tick, out var relayed) && _divergence.Diverged(guessed, relayed);
 
         private void Remember(TickedInput<TInput> relayed)
         {

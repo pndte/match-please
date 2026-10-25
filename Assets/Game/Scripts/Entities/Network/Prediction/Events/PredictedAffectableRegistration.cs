@@ -5,7 +5,7 @@ using Unity.Netcode;
 
 namespace Bw.Entities.Network.Prediction.Events
 {
-    public sealed class PredictedAffectableRegistration<TTarget, TEffect> //TODO: отбрасывание от своих ударов предсказывается только у тел в пузыре; цель дальше LeaveRadius отлетает лишь по ответу сервера, через круг связи, хотя здоровье у неё падает сразу. Задетую моим ударом цель стоит на время, до вердикта сервера, включать в предсказание
+    public sealed class PredictedAffectableRegistration<TTarget, TEffect>
         where TTarget : class
         where TEffect : struct
     {

@@ -12,14 +12,14 @@ namespace Bw.Tests.UseCases.Level.Network
         [Test]
         public void SameShareDoesNotDiffer()
         {
-            Assert.That(TenMetres.Differs(new PlatformState(0.4f), new PlatformState(0.4f)), Is.False);
+            Assert.That(TenMetres.Diverged(new PlatformState(0.4f), new PlatformState(0.4f)), Is.False);
         }
 
         [TestCase(0.4f, 0.4009f)]
         [TestCase(0.4f, 0.3991f)]
         public void GapUnderACentimetreOfTravelDoesNotDiffer(float predicted, float actual)
         {
-            Assert.That(TenMetres.Differs(new PlatformState(predicted), new PlatformState(actual)), Is.False);
+            Assert.That(TenMetres.Diverged(new PlatformState(predicted), new PlatformState(actual)), Is.False);
         }
 
         [TestCase(0.4f, 0.4011f)]
@@ -27,7 +27,7 @@ namespace Bw.Tests.UseCases.Level.Network
         [TestCase(0f, 1f)]
         public void GapOverACentimetreOfTravelDiffers(float predicted, float actual)
         {
-            Assert.That(TenMetres.Differs(new PlatformState(predicted), new PlatformState(actual)), Is.True);
+            Assert.That(TenMetres.Diverged(new PlatformState(predicted), new PlatformState(actual)), Is.True);
         }
 
         [Test]
@@ -35,8 +35,8 @@ namespace Bw.Tests.UseCases.Level.Network
         {
             var oneMetre = new PlatformDivergence(new PlatformRail(Vector2.zero, new Vector2(1f, 0f)));
 
-            Assert.That(oneMetre.Differs(new PlatformState(0.4f), new PlatformState(0.405f)), Is.False);
-            Assert.That(TenMetres.Differs(new PlatformState(0.4f), new PlatformState(0.405f)), Is.True);
+            Assert.That(oneMetre.Diverged(new PlatformState(0.4f), new PlatformState(0.405f)), Is.False);
+            Assert.That(TenMetres.Diverged(new PlatformState(0.4f), new PlatformState(0.405f)), Is.True);
         }
     }
 }

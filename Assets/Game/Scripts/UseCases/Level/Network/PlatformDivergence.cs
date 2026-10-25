@@ -14,7 +14,7 @@ namespace Bw.UseCases.Level.Network
             _rail = rail;
         }
 
-        public bool Differs(PlatformState predicted, PlatformState actual) =>
+        public bool Diverged(PlatformState predicted, PlatformState actual) =>
             Mathf.Abs(predicted.Along - actual.Along) * _rail.Travel.magnitude > Distance;
     }
 }

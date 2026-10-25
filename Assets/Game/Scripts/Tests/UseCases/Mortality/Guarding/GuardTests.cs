@@ -86,8 +86,8 @@ namespace Bw.Tests.UseCases.Mortality.Guarding
         {
             Hold(false, 0f);
 
-            Assert.That(_guard.Covers(Front[0].Contact), Is.False);
-            Assert.That(_guard.Covers(Back[0].Contact), Is.False);
+            Assert.That(_guard.InCover(Front[0].Contact), Is.False);
+            Assert.That(_guard.InCover(Back[0].Contact), Is.False);
         }
 
         [TestCase(0f, 0.5f, 0.3f, true)]
@@ -109,7 +109,7 @@ namespace Bw.Tests.UseCases.Mortality.Guarding
         {
             Hold(true, aim);
 
-            Assert.That(_guard.Covers(new Contact(new Vector2(x, y))), Is.EqualTo(covered));
+            Assert.That(_guard.InCover(new Contact(new Vector2(x, y))), Is.EqualTo(covered));
         }
 
         [Test]
@@ -122,8 +122,8 @@ namespace Bw.Tests.UseCases.Mortality.Guarding
             Hold(true, 0f);
             offsetGuard.Step(new GuardStance(true, 0f));
 
-            Assert.That(offsetGuard.Covers(contact), Is.True);
-            Assert.That(_guard.Covers(contact), Is.False);
+            Assert.That(offsetGuard.InCover(contact), Is.True);
+            Assert.That(_guard.InCover(contact), Is.False);
         }
 
         [Test]
@@ -133,8 +133,8 @@ namespace Bw.Tests.UseCases.Mortality.Guarding
 
             Hold(true, 0f);
 
-            Assert.That(_guard.Covers(Back[0].Contact), Is.True);
-            Assert.That(_guard.Covers(new Contact(new Vector2(-1f, 0f))), Is.True);
+            Assert.That(_guard.InCover(Back[0].Contact), Is.True);
+            Assert.That(_guard.InCover(new Contact(new Vector2(-1f, 0f))), Is.True);
         }
 
         [Test]
@@ -292,7 +292,7 @@ namespace Bw.Tests.UseCases.Mortality.Guarding
             _guard.Absorb(Blows.Of(Blows.At(1f, 0f, 250f)));
 
             Assert.That(_guard.State.Value.Broken, Is.False);
-            Assert.That(_guard.Covers(Front[0].Contact), Is.True);
+            Assert.That(_guard.InCover(Front[0].Contact), Is.True);
         }
 
         [Test]
@@ -312,7 +312,7 @@ namespace Bw.Tests.UseCases.Mortality.Guarding
         {
             Break();
 
-            Assert.That(_guard.Covers(Front[0].Contact), Is.False);
+            Assert.That(_guard.InCover(Front[0].Contact), Is.False);
         }
 
         [Test]

@@ -17,9 +17,6 @@ namespace Bw.UseCases.Combat.Hands.Network
         }
 
         public HandsState Step(HandsState state, HandsInput input) =>
-            _simulator.Step(state, Busy(state) ? new HandsInput(input.Weapon, DrawChoice.Keep) : input);
-
-        private bool Busy(HandsState state) =>
-            _inventory.TryFindTop(state.InHands, out var inHands) && !inHands.Stowable;
+            _simulator.Step(state, state.Busy(_inventory) ? new HandsInput(input.Weapon, DrawChoice.Keep) : input);
     }
 }

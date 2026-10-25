@@ -55,19 +55,19 @@ namespace Bw.Tests.UseCases.Character.Network
         [Test]
         public void SameControlsDoNotDiverge()
         {
-            Assert.That(_divergence.Differs(Guessed, Guessed), Is.False);
+            Assert.That(_divergence.Diverged(Guessed, Guessed), Is.False);
         }
 
         [TestCaseSource(nameof(PlayedDifferently))]
         public void ControlThePlayerPlayedDifferentlyDiverges(CharacterControls relayed)
         {
-            Assert.That(_divergence.Differs(Guessed, relayed), Is.True);
+            Assert.That(_divergence.Diverged(Guessed, relayed), Is.True);
         }
 
         [TestCaseSource(nameof(PlayedTheSame))]
         public void TriggerViewDelaysNeverDiverge(CharacterControls relayed)
         {
-            Assert.That(_divergence.Differs(Guessed, relayed), Is.False);
+            Assert.That(_divergence.Diverged(Guessed, relayed), Is.False);
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace Bw.Tests.UseCases.Character.Network
             var guessed = new CharacterControls(Controls.Running, Controls.Firing, new GuardStance(false, 10f));
             var relayed = new CharacterControls(Controls.Running, Controls.Firing, new GuardStance(false, 170f));
 
-            Assert.That(_divergence.Differs(guessed, relayed), Is.False);
+            Assert.That(_divergence.Diverged(guessed, relayed), Is.False);
         }
 
         private static TestCaseData Case(

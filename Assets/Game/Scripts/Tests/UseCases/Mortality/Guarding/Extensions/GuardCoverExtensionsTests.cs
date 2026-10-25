@@ -69,7 +69,7 @@ namespace Bw.Tests.UseCases.Mortality.Guarding.Extensions
 
         private sealed class RightSideCover : IGuardCover
         {
-            public bool Covers(Contact contact) =>
+            public bool InCover(Contact contact) =>
                 contact.Point.x > 0f;
         }
     }

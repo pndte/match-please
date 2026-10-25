@@ -48,7 +48,7 @@ namespace Bw.Entities.Network.Rollback
         private bool Diverged(int tick, TState server)
         {
             if (_saved.TryGetAt(tick, out var predicted))
-                return _divergence.Differs(predicted, server);
+                return _divergence.Diverged(predicted, server);
 
             return _saved.NewestTick > tick;
         }

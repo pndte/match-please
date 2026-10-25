@@ -31,7 +31,7 @@ namespace Bw.Entities.Network.LagCompensation
             if (!double.IsFinite(view.Interpolated) || !double.IsFinite(view.Predicted))
                 throw new ArgumentOutOfRangeException(nameof(view), "Lag compensation rewinds only to finite ticks.");
 
-            var clamped = view.Clamped(_ticks.Current - _config.RewindTicks(_ticks), _ticks.Current); //TODO: моменты, которые видел стрелок, сообщает сам клиент — читер может выбирать удобные в пределах глубины отката (backtrack); сверять с его измеренной задержкой
+            var clamped = view.Clamped(_ticks.Current - _config.RewindTicks(_ticks), _ticks.Current);
             for (var index = 0; index < _rewindables.Count; index++)
                 _rewindables[index].Rewind(lifetime, clamped);
         }

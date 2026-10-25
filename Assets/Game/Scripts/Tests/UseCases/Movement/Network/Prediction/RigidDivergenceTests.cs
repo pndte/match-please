@@ -13,7 +13,7 @@ namespace Bw.Tests.UseCases.Movement.Network.Prediction
         [Test]
         public void SameStateDoesNotDiffer()
         {
-            Assert.That(Divergence.Differs(Crate, Crate), Is.False);
+            Assert.That(Divergence.Diverged(Crate, Crate), Is.False);
         }
 
         [Test]
@@ -21,7 +21,7 @@ namespace Bw.Tests.UseCases.Movement.Network.Prediction
         {
             var spun = new RigidState(Crate.Position, Crate.Angle, Crate.Velocity, -500f);
 
-            Assert.That(Divergence.Differs(Crate, spun), Is.False);
+            Assert.That(Divergence.Diverged(Crate, spun), Is.False);
         }
 
         [TestCase(0.009f, false)]
@@ -30,7 +30,7 @@ namespace Bw.Tests.UseCases.Movement.Network.Prediction
         {
             var moved = new RigidState(Crate.Position + new Vector2(0f, shift), Crate.Angle, Crate.Velocity, Crate.AngularVelocity);
 
-            Assert.That(Divergence.Differs(Crate, moved), Is.EqualTo(differs));
+            Assert.That(Divergence.Diverged(Crate, moved), Is.EqualTo(differs));
         }
 
         [TestCase(0.9f, false)]
@@ -40,7 +40,7 @@ namespace Bw.Tests.UseCases.Movement.Network.Prediction
         {
             var turned = new RigidState(Crate.Position, Crate.Angle + turn, Crate.Velocity, Crate.AngularVelocity);
 
-            Assert.That(Divergence.Differs(Crate, turned), Is.EqualTo(differs));
+            Assert.That(Divergence.Diverged(Crate, turned), Is.EqualTo(differs));
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace Bw.Tests.UseCases.Movement.Network.Prediction
             var nearlyFull = new RigidState(Crate.Position, 359.6f, Crate.Velocity, Crate.AngularVelocity);
             var justPast = new RigidState(Crate.Position, 0.3f, Crate.Velocity, Crate.AngularVelocity);
 
-            Assert.That(Divergence.Differs(nearlyFull, justPast), Is.False);
+            Assert.That(Divergence.Diverged(nearlyFull, justPast), Is.False);
         }
 
         [TestCase(0.09f, false)]
@@ -58,7 +58,7 @@ namespace Bw.Tests.UseCases.Movement.Network.Prediction
         {
             var faster = new RigidState(Crate.Position, Crate.Angle, Crate.Velocity + new Vector2(change, 0f), Crate.AngularVelocity);
 
-            Assert.That(Divergence.Differs(Crate, faster), Is.EqualTo(differs));
+            Assert.That(Divergence.Diverged(Crate, faster), Is.EqualTo(differs));
         }
     }
 }

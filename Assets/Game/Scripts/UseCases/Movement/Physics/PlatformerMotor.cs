@@ -20,7 +20,7 @@ namespace Bw.UseCases.Movement.Physics
 
         public MovementState Step(MovementState state, MovementInput input)
         {
-            var jumps = WantsToJump(state, input) && CanJump(state);
+            var jumps = JumpWanted(state, input) && JumpAllowed(state);
             var rising = jumps || state.Jump.Rising;
             var velocity = new Vector2(
                 RunSpeed(state.Body.Velocity.x, Mathf.Clamp(input.Horizontal, -1f, 1f) * Speed(input)),
@@ -47,10 +47,10 @@ namespace Bw.UseCases.Movement.Physics
         private float JumpForce(MovementInput input) =>
             _config.JumpForce * Mathf.Sqrt(1f - input.Slowdown.JumpHeight);
 
-        private static bool WantsToJump(MovementState state, MovementInput input) =>
+        private static bool JumpWanted(MovementState state, MovementInput input) =>
             input.JumpPressed || state.Jump.BufferedTicks > 0;
 
-        private static bool CanJump(MovementState state) =>
+        private static bool JumpAllowed(MovementState state) =>
             state.Body.Grounded || state.Jump.CoyoteTicks > 0;
 
         private int NextCoyoteTicks(MovementState state) =>
