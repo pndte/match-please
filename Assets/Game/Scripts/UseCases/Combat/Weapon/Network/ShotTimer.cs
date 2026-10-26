@@ -49,7 +49,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
             }
 
             if (trigger.Press.Age == 0)
-                _pressLateTicks = trigger.Press.Late; //TODO: если нажатие пришло поздно и сервер его спас, оружие на сервере до следующего нажатия идёт с этим опозданием: очередь короче на опоздание (последние выстрелы клиента в ней не подтвердятся), у клиента при сверке на миг откатываются патроны и пауза, а сильный удар кулаков копит меньше заряда и засчитывается сдвинутым тиком, хотя отпускание пришло вовремя
+                _pressLateTicks = trigger.Press.Late;
 
             if (_previousShotAge < int.MaxValue)
                 _previousShotAge++;

@@ -32,7 +32,7 @@ namespace Bw.UseCases.Combat.Shooting.Network
                 Kick(to.Aim);
         }
 
-        private void Kick(float aim) => //TODO: ствол подбрасывает только клиент стрелка, сервер этого не проверяет: чит может стрелять без подброса
+        private void Kick(float aim) =>
             _deflection.Kick(_spread.ThrowOf(aim, Random.Range(-1f, 1f)));
     }
 }

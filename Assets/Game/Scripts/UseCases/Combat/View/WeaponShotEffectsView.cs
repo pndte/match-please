@@ -21,7 +21,7 @@ namespace Bw.UseCases.Combat.View
 
         public WeaponShotEffectsView(
             Lifetime lifetime,
-            IShotsViewModel shots, //TODO: чрезвычайное к-во аргументов в конструкторе
+            IShotsViewModel shots,
             IShotSfxPlayer sfxPlayer,
             IPrefabPools pools,
             ShotVfxConfig vfx,

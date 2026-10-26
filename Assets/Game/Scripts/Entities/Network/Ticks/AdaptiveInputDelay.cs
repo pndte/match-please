@@ -4,7 +4,7 @@ using JetBrains.Lifetimes;
 
 namespace Bw.Entities.Network.Ticks
 {
-    public sealed class AdaptiveInputDelay : IInputDelay //TODO: задержку выбирает сам клиент по своему опережению: изменённый клиент может держать её нулевой, и остальные дольше угадывают его ввод; в Brawlhalla её назначает сервер по среднему пингу игрока
+    public sealed class AdaptiveInputDelay : IInputDelay
     {
         private const float WholeTickRounding = 0.5f;
 

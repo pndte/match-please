@@ -70,7 +70,7 @@ namespace Bw.Entities.Network.Ticks
         {
             var error = _config.TargetMarginTicks - _reportedMargin;
             _reported = false;
-            if (!_leadMeasured) //TODO: следующий отчёт ещё мерит ввод, отправленный со старым опережением, и добавляет ту же поправку второй раз (×0.5 или ×0.25) — после старта на высоком пинге опережение перелетает и несколько секунд возвращается
+            if (!_leadMeasured)
             {
                 _leadMeasured = true;
                 _synchronized = false;

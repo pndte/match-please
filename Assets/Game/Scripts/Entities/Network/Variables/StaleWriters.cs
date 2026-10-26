@@ -19,7 +19,7 @@ namespace Bw.Entities.Network.Variables
 
         public bool Listed(IPlayer player) => _players.Contains(player);
 
-        private void KeepFor(Lifetime lifetime, IPlayer formerOwner) => //TODO: окно по времени — эвристика: честная запись, задержанная дольше окна (повторные отправки при потерях), всё ещё бросает как нарушение — точнее помечать записи эпохой владения
+        private void KeepFor(Lifetime lifetime, IPlayer formerOwner) =>
             lifetime.CreateNestedFor(_seconds).TryBracket(() => _players.Add(formerOwner), () => _players.Remove(formerOwner));
     }
 }

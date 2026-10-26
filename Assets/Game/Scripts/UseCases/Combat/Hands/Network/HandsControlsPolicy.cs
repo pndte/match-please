@@ -37,12 +37,12 @@ namespace Bw.UseCases.Combat.Hands.Network
             TriggerControls heard,
             int heardTicksAgo)
         {
-            var press = heard.Press; //TODO: ввод несёт только последнее нажатие курка: если в одну дыру (пакеты опоздали или пропали) попали два клика, сервер узнает время только второго, и первый выстрел пропадёт
+            var press = heard.Press;
             var lateTicks = heardTicksAgo + press.Age;
             if (press.Number == lastTrigger.Press.Number || lateTicks < 0)
                 return trigger.WithPress(lastTrigger.Press.WithAge(lastTrigger.Press.Age + 1));
 
-            return lateTicks <= _lagCompensation.RewindTicks(_step) //TODO: нажатие старше предела отката (MaxRewindSeconds, 0,15 с) не спасается: сервер уже не может поставить цели туда, где их видел стрелок, и клик пропадает, как раньше
+            return lateTicks <= _lagCompensation.RewindTicks(_step)
                 ? trigger.Pressed(press, lateTicks)
                 : trigger.WithPress(press.WithAge(lateTicks));
         }

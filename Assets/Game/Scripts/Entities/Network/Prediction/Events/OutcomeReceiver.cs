@@ -33,7 +33,7 @@ namespace Bw.Entities.Network.Prediction.Events
 
             report.Received.Advise(lifetime, Receive);
             outcomePrediction.Pending.WhenTrue(lifetime, pendingLifetime =>
-                worldStep.Stepped(TickPhase.Prepare).Advise(pendingLifetime, Expire)); //TODO: отчёт и состояние цели, задержанные повторными отправками дольше ExpiryTicks, придут после отмены — снятое попадание покажется второй раз, со вспышкой
+                worldStep.Stepped(TickPhase.Prepare).Advise(pendingLifetime, Expire));
         }
 
         private void Receive(OutcomeReport<TEffect> report)

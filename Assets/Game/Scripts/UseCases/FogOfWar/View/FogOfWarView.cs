@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Bw.UseCases.FogOfWar.View
 {
-    public sealed class FogOfWarView //TODO: туман только рисуется: сервер шлёт клиенту всех, и клиент со снятым туманом видит сквозь стены; честная видимость — отсев на сервере (NGO CheckObjectVisibility)
+    public sealed class FogOfWarView
     {
         private readonly ICameraTargets _targets;
         private readonly UnityEngine.Camera _camera;
