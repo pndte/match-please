@@ -67,5 +67,4 @@ jobs:
         run: |
           butler -V
           butler push "$RUNNER_TEMP/release/MatchPlease-Windows-$VERSION" "$ITCH_GAME:windows" --userversion "$VERSION"
-          butler status "$ITCH_GAME"
           printf '### itch.io\n\n%s %s → https://pndte.itch.io/match-please (channel windows)\n' "$ITCH_GAME" "$VERSION" >> "$GITHUB_STEP_SUMMARY"
