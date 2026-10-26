@@ -3,41 +3,28 @@ using Bw.UseCases.Combat.Weapon.Network.Requests;
 using NUnit.Framework;
 using Unity.Collections;
 using Unity.Netcode;
-using UnityEngine;
 
 namespace Bw.Tests.UseCases.Combat.Weapon.Network.Codecs
 {
     public sealed class WeaponPickupCodecTests
     {
-        private const float HalfStep = 1f / 32f;
-
-        [TestCase(0f, 0f)]
-        [TestCase(1.5f, -2.25f)]
-        [TestCase(-37.1f, 12.03f)]
-        [TestCase(250.97f, -88.4f)]
-        public void PointSurvivesTheWireWithinHalfASixteenth(float x, float y)
+        [TestCase(0ul)]
+        [TestCase(7ul)]
+        [TestCase(123456789ul)]
+        [TestCase(ulong.MaxValue)]
+        public void WeaponIdSurvivesTheWire(ulong weapon)
         {
-            var decoded = RoundTrip(new WeaponPickup(new Vector2(x, y)), out _);
+            var decoded = RoundTrip(new WeaponPickup(weapon), out _);
 
-            Assert.That(decoded.Point.x, Is.EqualTo(x).Within(HalfStep + 1e-5f));
-            Assert.That(decoded.Point.y, Is.EqualTo(y).Within(HalfStep + 1e-5f));
+            Assert.That(decoded.Weapon, Is.EqualTo(weapon));
         }
 
         [Test]
-        public void PointOnTheGridComesBackExactly()
+        public void SmallIdTakesOneByte()
         {
-            var decoded = RoundTrip(new WeaponPickup(new Vector2(1.5f, -2.25f)), out _);
+            RoundTrip(new WeaponPickup(7), out var length);
 
-            Assert.That(decoded.Point, Is.EqualTo(new Vector2(1.5f, -2.25f)));
-        }
-
-        [TestCase(0f, 0f, 2)]
-        [TestCase(1.5f, -2.25f, 4)]
-        public void PointTakesAPackedNumberPerAxis(float x, float y, int bytes)
-        {
-            RoundTrip(new WeaponPickup(new Vector2(x, y)), out var length);
-
-            Assert.That(length, Is.EqualTo(bytes));
+            Assert.That(length, Is.EqualTo(1));
         }
 
         private static WeaponPickup RoundTrip(WeaponPickup sent, out int length)

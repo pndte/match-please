@@ -15,7 +15,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         private WeaponSlot _fists;
         private WeaponSlot _gun;
         private RecordingInventory _inventory;
-        private NetworkWeapons _weapons;
+        private WeaponCollections _weapons;
         private CarriedWeaponsReport _report;
 
         [SetUp]
@@ -25,7 +25,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
             _fists = new WeaponSlot();
             _gun = new WeaponSlot();
             _inventory = new RecordingInventory(_fists, _gun);
-            _weapons = new NetworkWeapons(_lifetime.Lifetime);
+            _weapons = new WeaponCollections(_lifetime.Lifetime);
             _report = new CarriedWeaponsReport(_inventory, _weapons);
         }
 

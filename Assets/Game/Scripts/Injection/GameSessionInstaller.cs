@@ -100,7 +100,7 @@ namespace Bw.Injection
             Container.Bind(typeof(IReadonlyWeaponKindRegistry), typeof(IWeaponKindRegistry)).To<WeaponKindRegistry>().AsSingle()
                 .WriterOnlyInto<IWeaponKindRegistry>(typeof(WeaponKindRegistration));
             Container.Bind<IWeaponCarriers>().To<WeaponCarriers>().AsSingle();
-            Container.Bind<INetworkWeapons>().To<NetworkWeapons>().AsSingle();
+            Container.Bind<IWeaponCollections>().To<WeaponCollections>().AsSingle();
             Container.Bind<ICharacterTriggers>().To<CharacterTriggers>().AsSingle();
             Container.Bind<IWeaponsInHands>().To<WeaponsInHands>().AsSingle();
             Container.Bind<IHeldBoxes>().To<HeldBoxes>().AsSingle();

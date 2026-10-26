@@ -20,7 +20,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         private WeaponSlot _gun;
         private FakeCharacter _character;
         private ManualResults<TickedState<CarriedWeapons>> _received;
-        private NetworkWeapons _weapons;
+        private WeaponCollections _weapons;
         private CarriedWeaponsReceiver _receiver;
 
         [SetUp]
@@ -31,7 +31,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
             _gun = new WeaponSlot();
             _character = new FakeCharacter(new FakeMortal(), new RecordingInventory(_fists, _gun));
             _received = new ManualResults<TickedState<CarriedWeapons>>();
-            _weapons = new NetworkWeapons(_lifetime.Lifetime);
+            _weapons = new WeaponCollections(_lifetime.Lifetime);
             var config = new WorldRollbackConfig { MaxReplayTicks = MaxReplayTicks };
             _receiver = new CarriedWeaponsReceiver(_lifetime.Lifetime, _character, _received, _weapons, config);
         }

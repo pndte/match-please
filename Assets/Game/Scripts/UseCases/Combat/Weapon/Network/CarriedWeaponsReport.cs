@@ -24,9 +24,9 @@ namespace Bw.UseCases.Combat.Weapon.Network
         }
 
         private readonly IReadonlyWeaponInventory _inventory;
-        private readonly INetworkWeapons _weapons;
+        private readonly IWeaponCollections _weapons;
 
-        public CarriedWeaponsReport(IReadonlyWeaponInventory inventory, INetworkWeapons weapons)
+        public CarriedWeaponsReport(IReadonlyWeaponInventory inventory, IWeaponCollections weapons)
         {
             _inventory = inventory;
             _weapons = weapons;

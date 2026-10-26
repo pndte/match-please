@@ -67,7 +67,7 @@ namespace Bw.UseCases.FogOfWar.View.Fog
             root.transform.localPosition = new Vector3(0f, 0f, camera.nearClipPlane + NearGap);
             var coverLifetime = lifetime.Intersect(root.Lifetime());
             var quad = CreateQuad();
-            var hidingMaterial = new Material(config.HidingShader) { name = "FogOfWarHiding" }; //TODO: прятанье держится на буфере глубины 2D-рендерера (Renderer2D → Depth/Stencil Buffer): если его выключить, всё за стенами станет видно, а проверки на это нет
+            var hidingMaterial = new Material(config.HidingShader) { name = "FogOfWarHiding" };
             var fogMaterial = new Material(config.FogShader) { name = "FogOfWar" };
             hidingMaterial.SetTexture(SightMaskTexture, mask.Texture);
             fogMaterial.SetTexture(SightMaskTexture, mask.Texture);
@@ -79,7 +79,7 @@ namespace Bw.UseCases.FogOfWar.View.Fog
                 Object.Destroy(fogMaterial);
             });
 
-            var hiding = CreateLayer(root.transform, "Hiding", quad, hidingMaterial, config.HidingOrder); //TODO: прячет только то, что сортируется не ниже HidingOrder и проверяет глубину (ZTest LEqual, как у спрайтов): пятна крови (порядок -9) и следы пуль на стенах (-7) бледно видны под туманом, объект с порядком ниже или с ZTest Always будет виден сквозь стены
+            var hiding = CreateLayer(root.transform, "Hiding", quad, hidingMaterial, config.HidingOrder);
             var fog = CreateLayer(root.transform, "Fog", quad, fogMaterial, config.FogOrder);
             return new FogCover(coverLifetime, camera, root.transform, hiding, fog, hidingMaterial, fogMaterial, config);
         }

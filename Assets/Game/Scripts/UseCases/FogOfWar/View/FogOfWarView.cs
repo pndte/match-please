@@ -43,7 +43,7 @@ namespace Bw.UseCases.FogOfWar.View
             LineOfSight sight)
         {
             var area = ViewArea(camera, config);
-            var mask = SightMask.Create(lifetime, MaskSize(area, config), config); //TODO: размер маски берётся от экрана один раз: после смены разрешения или пропорций окна её тексели растягиваются и край тумана становится мягче
+            var mask = SightMask.Create(lifetime, MaskSize(area, config), config);
             var fog = FogCover.Create(lifetime, camera, mask, config);
             fog.Cover(area);
             return new FogOfWarView(lifetime, targets, camera, config, sight, mask, fog);
@@ -51,7 +51,7 @@ namespace Bw.UseCases.FogOfWar.View
 
         private void Draw(Unit _)
         {
-            if (_targets.Count == 0) //TODO: пока своего тела нет (труп убран, ждём респауна), туман застывает на последнем кадре: тени движущихся платформ не обновляются, а маска, потерянная при сбросе видеокарты, до респауна покажет мусор
+            if (_targets.Count == 0)
                 return;
 
             var area = ViewArea(_camera, _config);

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Bw.UseCases.Combat.Shooting.Network.Requests
 {
-    public sealed class FlashlightClientHandler //TODO: фонарик ждёт ответа сервера (полный пинг): мгновенным он станет, когда владелец начнёт предсказывать переключение
+    public sealed class FlashlightClientHandler
     {
         private readonly IReadonlyFlashlight _flashlight;
         private readonly INetRequestSender<bool> _switch;

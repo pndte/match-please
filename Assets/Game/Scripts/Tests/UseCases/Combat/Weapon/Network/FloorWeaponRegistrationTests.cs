@@ -93,6 +93,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
 
         private sealed class LyingWeapon : IFloorWeapon
         {
+            public Bw.UseCases.Combat.Abstractions.Weapons.IWeapon Weapon { get; } = new FakeWeapon();
             public Vector2 Position => Vector2.zero;
 
             public float DistanceTo(Vector2 point) =>

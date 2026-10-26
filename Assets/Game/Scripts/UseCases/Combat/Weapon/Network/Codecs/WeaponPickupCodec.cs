@@ -7,8 +7,6 @@ namespace Bw.UseCases.Combat.Weapon.Network.Codecs
 {
     public struct WeaponPickupCodec : ICodec<WeaponPickup>
     {
-        private static readonly Quantization Point = new(4);
-
         public WeaponPickup Value
         {
             get => _value;
@@ -19,9 +17,9 @@ namespace Bw.UseCases.Combat.Weapon.Network.Codecs
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            var point = Value.Point;
-            serializer.SerializeQuantized(ref point, Point);
-            Value = new WeaponPickup(point);
+            var weapon = Value.Weapon;
+            serializer.SerializePacked(ref weapon);
+            Value = new WeaponPickup(weapon);
         }
     }
 }

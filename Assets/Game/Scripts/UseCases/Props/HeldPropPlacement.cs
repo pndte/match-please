@@ -25,7 +25,7 @@ namespace Bw.UseCases.Props
             _walls = new PhysicsQuery.QueryFilter(PhysicsMask.All, config.Walls.AsPhysicsMask());
         }
 
-        public GripPose PoseIn(Rect oval, float aim, Vector2 pushed) //TODO: в тесноте, где ящику некуда отодвинуться от стены, он наезжает на самого держателя
+        public GripPose PoseIn(Rect oval, float aim, Vector2 pushed)
         {
             var size = _shape.WorldSize();
             var rotation = new PhysicsRotate(aim * Mathf.Deg2Rad);

@@ -13,7 +13,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
             INetworkLifetimedObject networkLifetimed,
             NetworkObject networkObject,
             IWeapon weapon,
-            INetworkWeapons weapons)
+            IWeaponCollections weapons)
         {
             networkLifetimed.SpawnedLifetime.WhenAlive(lifetime, spawnedLifetime =>
                 weapons.ByIds.AddLifetimed(spawnedLifetime, networkObject.NetworkObjectId, weapon));

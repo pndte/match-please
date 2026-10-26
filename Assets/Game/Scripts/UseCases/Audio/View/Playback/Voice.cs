@@ -1,4 +1,5 @@
 using Bw.Entities.Pool;
+using DG.Tweening;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using R3;
@@ -13,13 +14,15 @@ namespace Bw.UseCases.Audio.View.Playback
         public ISource<Unit> Finished => _finished;
 
         [SerializeField] private AudioSource _source;
+        [SerializeField] private AudioSource _tail;
+        [SerializeField, Min(0f)] private float _fadeSeconds = 0.06f;
         private readonly Signal<Unit> _finished = new();
         private Lifetime _lifetime;
 
         public Voice Facade(Lifetime lifetime)
         {
             _lifetime = lifetime;
-            lifetime.OnTermination(_source.Stop); //TODO: когда заняты все голоса, самый старый звук обрывается без затухания
+            lifetime.OnTermination(Release);
             return this;
         }
 
@@ -39,5 +42,27 @@ namespace Bw.UseCases.Audio.View.Playback
         public void Follow(Lifetime lifetime, Transform anchor) =>
             Observable.EveryUpdate(UnityFrameProvider.PostLateUpdate, _lifetime.Intersect(lifetime))
                 .Subscribe(_ => transform.position = anchor.position);
+
+        private void Release()
+        {
+            if (_source.isPlaying)
+                FadeOut();
+
+            _source.Stop();
+        }
+
+        private void FadeOut()
+        {
+            _tail.DOKill();
+            _tail.clip = _source.clip;
+            _tail.pitch = _source.pitch;
+            _tail.volume = _source.volume;
+            _tail.Play();
+            _tail.timeSamples = _source.timeSamples;
+            DOTween.To(() => _tail.volume, volume => _tail.volume = volume, 0f, _fadeSeconds)
+                .SetTarget(_tail)
+                .OnComplete(_tail.Stop)
+                .SetLink(gameObject);
+        }
     }
 }

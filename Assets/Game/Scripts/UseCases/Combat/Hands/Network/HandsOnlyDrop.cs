@@ -8,7 +8,7 @@ using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Combat.Hands.Network
 {
-    public sealed class HandsOnlyDrop //TODO: клиент предсказывает уход ящика из рук, а сброс приходит с сервера: на круг связи ящик висит в воздухе там, где руки его оставили, и только потом падает
+    public sealed class HandsOnlyDrop
     {
         private readonly ICharacter _character;
 

@@ -28,7 +28,7 @@ namespace Bw.UseCases.Combat.Shooting.Network
             _filter = new PhysicsQuery.QueryFilter(PhysicsMask.All, config.Blockers.AsPhysicsMask());
         }
 
-        public RigidState ReleasedFrom(HoldPose hands) //TODO: в узком месте, где оружию нет места, сколько его ни оттягивай назад вдоль ствола, оно отпускается в центре рук, и физика выталкивает его как получится
+        public RigidState ReleasedFrom(HoldPose hands)
         {
             var held = _pose.PoseIn(hands);
             var spot = FreeSpot(hands.Hold.center, held);

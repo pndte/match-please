@@ -13,15 +13,18 @@ namespace Bw.UseCases.Combat.Weapon.Network.Requests
         private const KeyCode PickupKey = KeyCode.E;
 
         private readonly IPickupTargeting _targeting;
+        private readonly IWeaponCollections _weapons;
         private readonly INetRequestSender<WeaponPickup> _pickup;
 
         public WeaponPickupClientHandler(
             Lifetime lifetime,
             IReadonlyControlledBy controlledBy,
             IPickupTargeting targeting,
+            IWeaponCollections weapons,
             INetRequestSender<WeaponPickup> pickup)
         {
             _targeting = targeting;
+            _weapons = weapons;
             _pickup = pickup;
 
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
@@ -31,7 +34,13 @@ namespace Bw.UseCases.Combat.Weapon.Network.Requests
         private void UpdatePickup()
         {
             if (Input.GetKeyDown(PickupKey)) //TODO: new input system
-                _targeting.Target.Value.Switch(() => { }, weapon => _pickup.Send(new WeaponPickup(weapon.Position)));
+                _targeting.Target.Value.Switch(() => { }, Request);
+        }
+
+        private void Request(IFloorWeapon weapon)
+        {
+            if (_weapons.ByIds.TryGetLeft(weapon.Weapon, out var id))
+                _pickup.Send(new WeaponPickup(id));
         }
     }
 }

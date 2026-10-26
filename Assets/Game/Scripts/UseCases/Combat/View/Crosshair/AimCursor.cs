@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Bw.UseCases.Combat.View.Crosshair
 {
-    public sealed class AimCursor : MonoBehaviour, IAimCursor //TODO: maybe refactor
+    public sealed class AimCursor : MonoBehaviour, IAimCursor //TODO: maybe decompose
     {
         [SerializeField] private AimCursorConfig _config;
         [SerializeField] private RectTransform _pointer;

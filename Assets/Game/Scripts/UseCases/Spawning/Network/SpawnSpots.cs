@@ -5,7 +5,7 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Spawning.Network
 {
-    public sealed class SpawnSpots //TODO: свободного места нет ни у одной точки — персонаж встаёт на свою точку, даже если там стоит ящик, а тело из такого наложения не выталкивается
+    public sealed class SpawnSpots
     {
         //TODO: мб конфиг, хз
         private const int ShiftsPerPoint = 8;

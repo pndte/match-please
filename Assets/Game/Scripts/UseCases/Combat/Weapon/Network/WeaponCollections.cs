@@ -4,11 +4,11 @@ using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Combat.Weapon.Network
 {
-    public sealed class NetworkWeapons : INetworkWeapons
+    public sealed class WeaponCollections : IWeaponCollections
     {
         public IViewableBiMap<ulong, IWeapon> ByIds { get; }
 
-        public NetworkWeapons(Lifetime lifetime)
+        public WeaponCollections(Lifetime lifetime)
         {
             ByIds = new ViewableBiMap<ulong, IWeapon>(lifetime);
         }

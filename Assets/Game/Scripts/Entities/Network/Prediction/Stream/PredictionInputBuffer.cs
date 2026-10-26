@@ -55,7 +55,7 @@ namespace Bw.Entities.Network.Prediction.Stream
 
         public bool TryTakeInputAt(int tick, out TInput input)
         {
-            if (!_heard || tick < _firstTick) //TODO: до первого ввода управляющего объект не шагает: только что появившийся персонаж висит в точке спавна около пинга, пока не придёт его ввод
+            if (!_heard || tick < _firstTick)
             {
                 input = default;
                 return false;

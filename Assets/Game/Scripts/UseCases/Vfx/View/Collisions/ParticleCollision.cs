@@ -38,7 +38,7 @@ namespace Bw.UseCases.Vfx.View.Collisions
             Observable.EveryUpdate(UnityFrameProvider.PostLateUpdate, lifetime).Subscribe(_ => Collide(DeltaTime()));
         }
 
-        public void Collide(float deltaTime) //TODO: кадр длиннее Time.maximumParticleDeltaTime Unity делит на подшаги и сталкивал бы частицы в каждом, а мы сталкиваем раз за кадр: при FPS ниже 33 частицы в стене выталкиваются и гаснут медленнее, чем у встроенной коллизии
+        public void Collide(float deltaTime)
         {
             if (_particles.particleCount == 0)
                 return;

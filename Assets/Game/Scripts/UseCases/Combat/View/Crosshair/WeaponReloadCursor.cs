@@ -8,10 +8,13 @@ namespace Bw.UseCases.Combat.View.Crosshair
 {
     public sealed class WeaponReloadCursor : IReloadTimer
     {
-        public float Seconds => _gun.Reload.Value.Seconds; //TODO: когда перезарядка кончается, курсор ещё анимирует шкалу, а здесь уже пустая перезарядка (GunReload.None, 0 из 0 с): AimCursor делит 0 на 0, и каждый кадр в консоль летит «localRotation … NaN»; по той же причине щелчок «перезарядка закончена» звучит и после прерванной — нужно помнить последнюю активную перезарядку и чем она кончилась
-        public float SecondsLeft => _gun.Reload.Value.SecondsLeft;
+        public float Seconds => _shown.Seconds;
+        public float SecondsLeft => _refilled ? 0f : _shown.SecondsLeft;
 
         private readonly IGunViewModel _gun;
+        private readonly IAimCursor _cursor;
+        private GunReload _shown;
+        private bool _refilled;
 
         public WeaponReloadCursor(
             Lifetime lifetime,
@@ -20,11 +23,32 @@ namespace Bw.UseCases.Combat.View.Crosshair
             IAimCursor cursor)
         {
             _gun = gun;
+            _cursor = cursor;
 
             carry.Mine.WhenTrue(lifetime, mineLifetime =>
                 carry.Drawn.WhenTrue(mineLifetime, drawnLifetime =>
-                    gun.Reload.Select(drawnLifetime, reload => reload.Active).WhenTrue(drawnLifetime, reloadLifetime =>
-                        cursor.ShowReload(reloadLifetime, this))));
+                    gun.Reload.Select(drawnLifetime, reload => reload.Active).WhenTrue(drawnLifetime, Show)));
+        }
+
+        private void Show(Lifetime reloadLifetime)
+        {
+            var rounds = _gun.Rounds.Value;
+            _refilled = false;
+            _gun.Reload.Advise(reloadLifetime, Remember);
+            _gun.Rounds.Advise(reloadLifetime, now => Refill(rounds, now));
+            _cursor.ShowReload(reloadLifetime, this);
+        }
+
+        private void Remember(GunReload reload)
+        {
+            if (reload.Active)
+                _shown = reload;
+        }
+
+        private void Refill(int before, int now)
+        {
+            if (now > before)
+                _refilled = true;
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Bw.UseCases.Props.Network
             _config = config;
         }
 
-        public RigidState Nearest(IReadonlyCharacter holder, GripPose held) //TODO: в замкнутом месте (стены с боков, пол и потолок вплотную) свободного места нет ни на одном кольце — предмет отпускается в руках, и физика выталкивает его как получится
+        public RigidState Nearest(IReadonlyCharacter holder, GripPose held)
         {
             var inHands = new RigidState(held.Center - Turned(_offset, held.Angle), held.Angle, Vector2.zero, 0f);
             if (IsFree(inHands, holder))

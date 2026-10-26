@@ -53,7 +53,7 @@ Shader "Bw/Fog-Of-War-Hiding"
             float4 Fragment(Varyings input) : SV_Target
             {
                 float shown = SAMPLE_TEXTURE2D(_SightMask, sampler_SightMask, (input.positionWS - _SightArea.xy) * _SightArea.zw).r;
-                clip(0.5 - shown); //TODO: персонаж на краю тени срезается резкой линией посреди мягкого края тумана — срез можно рассыпать штриховкой (порог по шуму)
+                clip(0.5 - shown);
                 return 0;
             }
             ENDHLSL

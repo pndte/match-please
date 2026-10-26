@@ -14,7 +14,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
     public sealed class CarriedWeaponsReceiver : TickHistory<InventoryContent>, IReplicatedStates<InventoryContent>
     {
         private readonly IReadonlyCharacter _character;
-        private readonly INetworkWeapons _weapons;
+        private readonly IWeaponCollections _weapons;
 
         private TickedState<CarriedWeapons> _waiting;
         private bool _unresolved;
@@ -23,7 +23,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
             Lifetime lifetime,
             IReadonlyCharacter character,
             INetResultReceiver<TickedState<CarriedWeapons>> carried,
-            INetworkWeapons weapons,
+            IWeaponCollections weapons,
             WorldRollbackConfig config)
             : base(config.HistoryTicks)
         {

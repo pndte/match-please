@@ -49,7 +49,7 @@ namespace Bw.UseCases.Combat.View.Adapters
 
         public void Show(TState from, TState to, float progress)
         {
-            var fired = _synchronized && to.Shots > _shots; //TODO: несколько выстрелов между двумя кадрами (низкий FPS) видны как один, с последним стволом: отдача и трассер проиграются один раз
+            var fired = _synchronized && to.Shots > _shots;
             _shots = to.Shots;
             _synchronized = true;
 

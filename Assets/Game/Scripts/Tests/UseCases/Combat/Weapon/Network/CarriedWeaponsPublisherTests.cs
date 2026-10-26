@@ -19,7 +19,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         private LifetimeDefinition _lifetime;
         private WeaponSlot _gun;
         private RecordingInventory _inventory;
-        private NetworkWeapons _weapons;
+        private WeaponCollections _weapons;
         private RecordingResults<TickedState<CarriedWeapons>> _sent;
         private ScriptedWorldStep _world;
 
@@ -29,7 +29,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
             _lifetime = new LifetimeDefinition();
             _gun = new WeaponSlot();
             _inventory = new RecordingInventory(_gun);
-            _weapons = new NetworkWeapons(_lifetime.Lifetime);
+            _weapons = new WeaponCollections(_lifetime.Lifetime);
             _sent = new RecordingResults<TickedState<CarriedWeapons>>();
             _world = new ScriptedWorldStep();
             var config = new WorldRollbackConfig { UnchangedStateTicks = Heartbeat };

@@ -20,7 +20,7 @@ namespace Bw.UseCases.Movement.View.Animation
         public void Show(MovementMotion from, MovementMotion to, float progress)
         {
             var run = Mathf.Lerp(from.Run, to.Run, progress);
-            var speed = Mathf.Abs(run); //TODO: скорость бега берётся из управления, а не из пройденного: персонаж, который толкает ящик или упёрся в стену, бежит на месте полным шагом
+            var speed = Mathf.Abs(run);
             var facing = _facing.Facing;
             var backward = speed > MovingSpeed && Mathf.Sign(run) != facing;
             var grounded = progress < 0.5f ? from.Grounded : to.Grounded;

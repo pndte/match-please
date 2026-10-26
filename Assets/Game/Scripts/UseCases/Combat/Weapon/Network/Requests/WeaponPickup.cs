@@ -1,14 +1,12 @@
-using UnityEngine;
-
 namespace Bw.UseCases.Combat.Weapon.Network.Requests
 {
     public readonly struct WeaponPickup
     {
-        public readonly Vector2 Point;
+        public readonly ulong Weapon;
 
-        public WeaponPickup(Vector2 point)
+        public WeaponPickup(ulong weapon)
         {
-            Point = point;
+            Weapon = weapon;
         }
     }
 }

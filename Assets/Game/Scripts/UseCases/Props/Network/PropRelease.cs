@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Bw.UseCases.Props.Network
 {
-    public sealed class PropRelease //TODO: если клиент ошибся в том, несёт ли персонаж ящик, откат ставит носимое заново и ящик выпускается прямо при откате, в позе рук на тике отката, а не на тике, где сервер его выпустил
+    public sealed class PropRelease
     {
         public ISource<IReadonlyCharacter> Released => _released;
 

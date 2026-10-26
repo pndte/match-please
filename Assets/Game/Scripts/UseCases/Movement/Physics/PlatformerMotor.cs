@@ -62,7 +62,7 @@ namespace Bw.UseCases.Movement.Physics
         private static int Countdown(int ticks) =>
             Mathf.Max(0, ticks - 1);
 
-        private float GravityScale(Vector2 velocity, bool rising, MovementInput input) //TODO: толчок вверх посреди собственного прыжка срезается вместе с прыжком, если отпустить кнопку: фаза прыжка не знает, какая часть скорости от толчка
+        private float GravityScale(Vector2 velocity, bool rising, MovementInput input)
         {
             if (velocity.y < 0f)
                 return _config.FallGravity;

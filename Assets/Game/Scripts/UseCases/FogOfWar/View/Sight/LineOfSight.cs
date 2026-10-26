@@ -61,7 +61,7 @@ namespace Bw.UseCases.FogOfWar.View.Sight
 
         private void AimPastCorners(Vector2 eye, Rect area, PhysicsShape shape)
         {
-            if (shape.shapeType != PhysicsShape.ShapeType.Polygon) //TODO: у круга и капсулы нет углов: их край ловят только лучи веера, тень от них ступенчатая
+            if (shape.shapeType != PhysicsShape.ShapeType.Polygon)
                 return;
 
             var corners = shape.polygonGeometry.Transform(shape.transform).AsReadOnlySpan();

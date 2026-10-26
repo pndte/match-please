@@ -49,7 +49,7 @@ namespace Bw.UseCases.Movement.Physics
             return !float.IsNegativeInfinity(top);
         }
 
-        public Vector2 Scooped(Vector2 position, float skin, bool dropping) //TODO: персонажа, которого поднимающаяся платформа или ящик упёрли в потолок, подхват не давит и не выталкивает вбок: тело проходит сквозь него, и он проваливается под платформу
+        public Vector2 Scooped(Vector2 position, float skin, bool dropping)
         {
             var bounds = UprightBounds(position);
             var lift = 0f;

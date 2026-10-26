@@ -20,7 +20,8 @@ namespace Bw.Tests.UseCases.Combat.Hands.Network
     {
         private const int WeaponLayer = 16;
 
-        private static readonly Vector2 OnTheGun = new(1.5f, 0f);
+        private const ulong GunId = 7;
+        private const ulong FarGunId = 8;
 
         private CombatPhysics _physics;
         private WeaponPickupConfig _config;
@@ -28,6 +29,7 @@ namespace Bw.Tests.UseCases.Combat.Hands.Network
         private FakeMortal _mortal;
         private FakeHands _hands;
         private FakeWeapon _gun;
+        private FakeWeapon _farGun;
         private ManualResults<WeaponPickup> _requests;
 
         [SetUp]
@@ -40,15 +42,16 @@ namespace Bw.Tests.UseCases.Combat.Hands.Network
             _mortal = new FakeMortal();
             _hands = new FakeHands();
             _gun = new FakeWeapon();
+            _farGun = new FakeWeapon();
             _requests = new ManualResults<WeaponPickup>();
-            var gunBox = _physics.Box("Gun", OnTheGun, new Vector2(1f, 0.3f), WeaponLayer);
-            var container = new DiContainer();
-            container.Bind<IWeapon>().FromInstance(_gun);
-            container.Inject(gunBox.gameObject.AddComponent<WeaponHolder>());
-            _physics.Space.CreateBody(_physics.Lifetime, gunBox, PhysicsBody.BodyType.Kinematic);
+            var weapons = new WeaponCollections(_physics.Lifetime);
+            weapons.ByIds.Add(GunId, _gun);
+            weapons.ByIds.Add(FarGunId, _farGun);
+            Lie(_gun, new Vector2(1.5f, 0f));
+            Lie(_farGun, new Vector2(12f, 0f));
             var character = _physics.Space.CreateBody(_physics.Lifetime, _physics.Box("Character", Vector2.zero, new Vector2(1f, 2f), CombatPhysics.Character), PhysicsBody.BodyType.Kinematic);
             var pickables = new PickableWeapons(_carriers, _config, new WeaponPickupNetworkConfig(), character);
-            new WeaponPickupServerHandler(_physics.Lifetime, _mortal, _requests, pickables, _hands);
+            new WeaponPickupServerHandler(_physics.Lifetime, _mortal, _requests, weapons, pickables, _hands);
         }
 
         [TearDown]
@@ -59,9 +62,9 @@ namespace Bw.Tests.UseCases.Combat.Hands.Network
         }
 
         [Test]
-        public void RequestAtAFreeWeaponWithinReachTakesIt()
+        public void RequestForAFreeWeaponWithinReachTakesIt()
         {
-            _requests.Deliver(new WeaponPickup(OnTheGun));
+            _requests.Deliver(new WeaponPickup(GunId));
 
             Assert.That(_hands.Taken, Is.EqualTo(new[] { _gun }));
         }
@@ -71,15 +74,23 @@ namespace Bw.Tests.UseCases.Combat.Hands.Network
         {
             _hands.Free = false;
 
-            _requests.Deliver(new WeaponPickup(OnTheGun));
+            _requests.Deliver(new WeaponPickup(GunId));
 
             Assert.That(_hands.Taken, Is.Empty);
         }
 
         [Test]
-        public void RequestAwayFromEveryWeaponTakesNothing()
+        public void RequestForAWeaponOutOfReachTakesNothing()
         {
-            _requests.Deliver(new WeaponPickup(new Vector2(1.5f, 3f)));
+            _requests.Deliver(new WeaponPickup(FarGunId));
+
+            Assert.That(_hands.Taken, Is.Empty);
+        }
+
+        [Test]
+        public void RequestForAnUnknownWeaponTakesNothing()
+        {
+            _requests.Deliver(new WeaponPickup(99));
 
             Assert.That(_hands.Taken, Is.Empty);
         }
@@ -89,7 +100,7 @@ namespace Bw.Tests.UseCases.Combat.Hands.Network
         {
             _carriers.ByWeapon.Add(_gun, new Bw.UseCases.Combat.Characters.Character(new FakeMortal(), null, null, null));
 
-            _requests.Deliver(new WeaponPickup(OnTheGun));
+            _requests.Deliver(new WeaponPickup(GunId));
 
             Assert.That(_hands.Taken, Is.Empty);
         }
@@ -99,7 +110,7 @@ namespace Bw.Tests.UseCases.Combat.Hands.Network
         {
             _mortal.Die();
 
-            _requests.Deliver(new WeaponPickup(OnTheGun));
+            _requests.Deliver(new WeaponPickup(GunId));
 
             Assert.That(_hands.Taken, Is.Empty);
         }
@@ -110,9 +121,18 @@ namespace Bw.Tests.UseCases.Combat.Hands.Network
             _mortal.Die();
             _mortal.Revive();
 
-            _requests.Deliver(new WeaponPickup(OnTheGun));
+            _requests.Deliver(new WeaponPickup(GunId));
 
             Assert.That(_hands.Taken, Is.EqualTo(new[] { _gun }));
+        }
+
+        private void Lie(IWeapon weapon, Vector2 at)
+        {
+            var box = _physics.Box("Gun", at, new Vector2(1f, 0.3f), WeaponLayer);
+            var container = new DiContainer();
+            container.Bind<IWeapon>().FromInstance(weapon);
+            container.Inject(box.gameObject.AddComponent<WeaponHolder>());
+            _physics.Space.CreateBody(_physics.Lifetime, box, PhysicsBody.BodyType.Kinematic);
         }
     }
 }

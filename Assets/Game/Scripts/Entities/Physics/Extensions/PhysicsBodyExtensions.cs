@@ -37,7 +37,7 @@ namespace Bw.Entities.Physics.Extensions
             }
         }
 
-        public static void SweepContinuously(this PhysicsBody body, Vector2 center) //TODO: два таких тела друг против друга Box2D не проверяет непрерывно («пуля» против «пули»): быстрый ящик может на шаг войти в другой и вытолкнуться
+        public static void SweepContinuously(this PhysicsBody body, Vector2 center)
         {
             var probe = PhysicsShapeDefinition.defaultDefinition;
             probe.density = 0f;
