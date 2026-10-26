@@ -37,7 +37,7 @@ namespace Bw.Injection.Network.Prediction
                     break;
                 case PeerType.Client:
                     Container.BindResultReceiver(report).WhenInjectedInto<OutcomeReceiver<TTarget, TEffect>>();
-                    Container.BindInterfacesAndSelfTo<OutcomePrediction<TTarget, TEffect>>().AsSingle();
+                    Container.BindInterfacesAndSelfTo<OutcomePredictor<TTarget, TEffect>>().AsSingle();
                     Container.Bind<OutcomeReceiver<TTarget, TEffect>>().AsSingle().NonLazy();
                     break;
                 default:

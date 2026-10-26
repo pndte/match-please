@@ -19,7 +19,7 @@ namespace Bw.UseCases.Props.View.Audio
         public PropSoundsView(
             Lifetime lifetime,
             IPropThrowsViewModel throws,
-            PropMotion motion,
+            PropMotionTracker motionTracker,
             ISoundPlayer player,
             PropSoundsConfig sounds,
             Transform prop)
@@ -30,8 +30,8 @@ namespace Bw.UseCases.Props.View.Audio
             _flights = new SequentialLifetimes(lifetime);
 
             throws.Thrown.Advise(lifetime, _ => _player.Play(_sounds.Throw, _prop.position));
-            motion.Moved.Advise(lifetime, ShowFlight);
-            motion.Impacted.Advise(lifetime, impact => _player.Play(_sounds.Land, impact.Point));
+            motionTracker.Moved.Advise(lifetime, ShowFlight);
+            motionTracker.Impacted.Advise(lifetime, impact => _player.Play(_sounds.Land, impact.Point));
         }
 
         private void ShowFlight(PropMotionFrame frame)

@@ -24,7 +24,7 @@ namespace Bw.UseCases.Match.Network
             _board = board;
             _characters = characters;
 
-            var table = entries.Get(declaration);
+            var table = entries.Property(declaration);
             localPlayer.Id.View(lifetime, (idLifetime, id) =>
                 table.Advise(idLifetime, received => Apply(received, id)));
         }

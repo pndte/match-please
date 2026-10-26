@@ -6,6 +6,7 @@ using Bw.Entities.Network.Variables;
 using Bw.Entities.Simulation;
 using Bw.Injection.Network.Prediction;
 using Bw.UseCases.Character.Network;
+using Bw.UseCases.Character.Network.Codecs;
 using Bw.UseCases.Character.Network.Requests;
 using Bw.UseCases.Combat.Hands.Network;
 using Bw.UseCases.Combat.Weapon.Network;
@@ -28,11 +29,11 @@ namespace Bw.Injection
         {
             Container.Bind<MovementControlsForm>().AsSingle();
             Container.Bind(typeof(CharacterTrigger), typeof(IReadonlyCharacterTrigger)).To<CharacterTrigger>().AsSingle();
-            Container.Bind<CharacterTriggerRegistration>().AsSingle().NonLazy();
-            Container.Bind<ISteppable<CharacterControls>>().To<CharacterSteps>().AsSingle();
-            Container.Decorate<ISteppable<CharacterControls>>().With<RootedCharacterSteps>();
-            Container.Decorate<ISteppable<CharacterControls>>().With<GuardedCharacterSteps>();
-            Container.Bind<IInputContinuation<CharacterControls>>().To<CharacterControlsContinuation>().AsSingle();
+            Container.Bind<CharacterTriggerRegistrar>().AsSingle().NonLazy();
+            Container.Bind<ISteppable<CharacterControls>>().To<CharacterStepper>().AsSingle();
+            Container.Decorate<ISteppable<CharacterControls>>().With<RootedCharacterStepper>();
+            Container.Decorate<ISteppable<CharacterControls>>().With<GuardedCharacterStepper>();
+            Container.Bind<IInputExtrapolator<CharacterControls>>().To<CharacterControlsExtrapolator>().AsSingle();
             PredictionInputInstaller<CharacterControls>.Install(Container, _runtimeSettings, _netSchema);
 
             switch (_runtimeSettings.CurrentPeerType)
@@ -46,6 +47,7 @@ namespace Bw.Injection
                     Container.Bind<GuardKey>().AsSingle();
                     Container.Bind<GuardStanceSampler>().AsSingle();
                     Container.Bind<IInputSampler<CharacterControls>>().To<CharacterControlsSampler>().AsSingle();
+                    Container.Decorate<IInputSampler<CharacterControls>>().With<WireRoundedSampler<CharacterControls, TickedCharacterControlsCodec>>();
                     Container.Bind<IInputDivergence<CharacterControls>>().To<CharacterControlsDivergence>().AsSingle();
                     break;
                 default:

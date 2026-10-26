@@ -17,7 +17,7 @@ namespace Bw.Tests.Integration.Architecture
         {
             using var module = ReadNetFramework();
 
-            Assert.That(module.GetTypes().Select(type => type.FullName), Has.Member("Bw.Entities.Network.Rollback.WorldRollback"));
+            Assert.That(module.GetTypes().Select(type => type.FullName), Has.Member("Bw.Entities.Network.Rollback.RollbackStepper"));
         }
 
         [Test]

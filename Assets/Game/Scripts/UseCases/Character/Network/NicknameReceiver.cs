@@ -10,6 +10,6 @@ namespace Bw.UseCases.Character.Network
             INetEntries entries,
             NetPropertyDeclaration<string> declaration,
             INickname nickname) =>
-            entries.Get(declaration).Advise(lifetime, nickname.Apply);
+            entries.Property(declaration).Advise(lifetime, nickname.Apply);
     }
 }

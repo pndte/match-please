@@ -29,11 +29,11 @@ namespace Bw.UseCases.Character.View.HealthBar
             Transform anchor)
         {
             var widget = Create(lifetime, health.Max, _config, out var barLifetime, out var material);
-            new HealthBarMotion(barLifetime, widget, anchor, _camera, _config);
-            new HealthBarLook(barLifetime, widget, material, health, _config);
+            new HealthBarFollower(barLifetime, widget, anchor, _camera, _config);
+            new HealthBarMaterialView(barLifetime, widget, material, health, _config);
             new HealthBarColors(barLifetime, material, player, _config);
             new HealthBarNickname(barLifetime, widget, player);
-            new HealthBarPresence(barLifetime, widget, health, _config);
+            new HealthBarPresenceView(barLifetime, widget, health, _config);
         }
 
         public void ShowGuard(Lifetime lifetime, IGuardViewModel guard, Transform anchor) //TODO: значок щита у полоски блока: нужен рисунок
@@ -43,9 +43,9 @@ namespace Bw.UseCases.Character.View.HealthBar
             material.SetColor(FillShadeId, _guardConfig.OwnShade);
             widget.Nickname.gameObject.SetActive(false);
             widget.Group.alpha = 0f;
-            new HealthBarMotion(barLifetime, widget, anchor, _camera, _guardConfig);
-            new HealthBarLook(barLifetime, widget, material, guard, _guardConfig);
-            new GuardBarPresence(barLifetime, widget, guard, _guardConfig);
+            new HealthBarFollower(barLifetime, widget, anchor, _camera, _guardConfig);
+            new HealthBarMaterialView(barLifetime, widget, material, guard, _guardConfig);
+            new GuardBarPresenceView(barLifetime, widget, guard, _guardConfig);
         }
 
         private HealthBarWidget Create(

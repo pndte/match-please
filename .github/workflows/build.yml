@@ -91,7 +91,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: ${{ matrix.platform }}
-          buildMethod: Bw.EditorTools.Build.GameBuild.${{ matrix.method }}
+          buildMethod: Bw.EditorTools.Build.GameBuilder.${{ matrix.method }}
           buildsPath: Builds
           customParameters: -buildOutput Builds/${{ matrix.method }} ${{ matrix.parameters }}
           versioning: Custom

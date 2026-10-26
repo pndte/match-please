@@ -13,7 +13,7 @@ namespace Bw.UseCases.Props.View.Flight
 
         public PropFlightView(
             Lifetime lifetime,
-            PropMotion motion,
+            PropMotionTracker motionTracker,
             PropFlightFx fx,
             SpriteRenderer visual,
             PropVfxConfig config)
@@ -22,7 +22,7 @@ namespace Bw.UseCases.Props.View.Flight
             _visual = visual;
             _config = config;
 
-            motion.Moved.Advise(lifetime, Show);
+            motionTracker.Moved.Advise(lifetime, Show);
         }
 
         private void Show(PropMotionFrame frame)

@@ -72,24 +72,24 @@ namespace Bw.Injection.Level
             Container.Bind(typeof(MovingPlatform), typeof(IMovingPlatform), typeof(IReadonlySimulation<PlatformState>), typeof(IRestorable<PlatformState>))
                 .To<MovingPlatform>().AsSingle().WithArguments(Boxes)
                 .WriterOnlyInto<IRestorable<PlatformState>>(typeof(RollbackPart<PlatformState>));
-            Container.Bind<MovingPlatformRegistration>().AsSingle().NonLazy();
+            Container.Bind<MovingPlatformRegistrar>().AsSingle().NonLazy();
             Container.Bind<IStateView<PlatformState>>().To<PlatformStateView>().AsSingle();
         }
 
         private void BindServer()
         {
-            Container.Bind<MovingPlatformSchedule>().AsSingle().NonLazy();
+            Container.Bind<MovingPlatformStepper>().AsSingle().NonLazy();
             LagCompensationInstaller<PlatformState, PlatformPoseView>.Install(Container, _runtimeSettings);
         }
 
         private void BindClient()
         {
             Container.Bind(typeof(IBubbleMembership), typeof(IPredictedBy)).To<BubbleMembership>().AsSingle().WithArguments(_box.transform);
-            Container.Bind<PredictedPlatformSchedule>().AsSingle().NonLazy();
+            Container.Bind<PredictedPlatformStepper>().AsSingle().NonLazy();
             Container.Bind<IStateDivergence<PlatformState>>().To<PlatformDivergence>().AsSingle();
             Container.Bind<RollbackPart<PlatformState>>().AsSingle();
-            Container.Bind<RollbackPartRegistration<PlatformState>>().AsSingle().NonLazy();
-            Container.Bind<PredictionInterpolation<PlatformState>>().AsSingle().NonLazy();
+            Container.Bind<RollbackPartRegistrar<PlatformState>>().AsSingle().NonLazy();
+            Container.Bind<PredictionInterpolator<PlatformState>>().AsSingle().NonLazy();
             BindClientVisuals();
         }
 

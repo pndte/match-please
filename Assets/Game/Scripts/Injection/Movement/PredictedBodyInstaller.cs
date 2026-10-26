@@ -26,7 +26,7 @@ namespace Bw.Injection.Movement
 
         public override void InstallBindings()
         {
-            Container.Bind<ShovableRegistration>().AsSingle().NonLazy();
+            Container.Bind<ShovableRegistrar>().AsSingle().NonLazy();
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:

@@ -141,9 +141,9 @@ namespace Bw.Injection.Weapon
             Container.BindInstance(_strikeFeelConfig).AsSingle();
             Container.BindInterfacesTo<StrikeImpacts>().AsSingle();
             Container.Bind<StrikeImpactEffectsView>().AsSingle().NonLazy();
-            Container.Bind<StrikeHitStop>().AsSingle().WithArguments(_rig).NonLazy();
-            Container.Bind<StrikeCameraKick>().AsSingle().NonLazy();
-            Container.Bind<FullChargeGlow>().AsSingle().WithArguments(_visual, _visual.GetComponentsInChildren<SpriteRenderer>(true)).NonLazy();
+            Container.Bind<StrikeHitStopView>().AsSingle().WithArguments(_rig).NonLazy();
+            Container.Bind<StrikeCameraKickView>().AsSingle().NonLazy();
+            Container.Bind<FullChargeGlowView>().AsSingle().WithArguments(_visual, _visual.GetComponentsInChildren<SpriteRenderer>(true)).NonLazy();
         }
 
         private void BindClientSounds()

@@ -27,7 +27,7 @@ namespace Bw.Injection.Network
                 .FromMethod(context => context.Container.Instantiate<SimulationRewinder<TState>>(
                     new object[] { context.Container.Instantiate(typeof(TView)) }))
                 .AsSingle();
-            Container.Bind<RewindableRegistration>().AsSingle().NonLazy();
+            Container.Bind<RewindableRegistrar>().AsSingle().NonLazy();
         }
     }
 }

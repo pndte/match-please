@@ -42,10 +42,10 @@ namespace Bw.Tests.UseCases.Match.Network
             _players.AddLifetimed(_lifetime.Lifetime, _player);
             var schema = new NetEntriesSchemaBuilder();
             var declaration = schema.DeclareProperty(MatchTable.Empty, NetworkDelivery.ReliableFragmentedSequenced, NetworkPermissions.Everyone);
-            var entries = UnspawnedNetEntries.Create(_lifetime.Lifetime, _objects.Create("Match"), schema.Build());
+            var entries = UnspawnedNetEntries.Create(_objects.Create("Match"), schema.Build());
             _writer = new MatchTableWriter(new MatchTables(_match, _scoreboard, _ids, new SameCharacter()), entries, declaration);
             _written = new List<MatchTable>();
-            entries.Get(declaration).Change.Advise(_lifetime.Lifetime, table => _written.Add(table));
+            entries.Property(declaration).Change.Advise(_lifetime.Lifetime, table => _written.Add(table));
         }
 
         [TearDown]

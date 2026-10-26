@@ -25,8 +25,8 @@ namespace Setup.Launch
             _failed = failed;
             _spinning = new SequentialLifetimes(lifetime);
 
-            connecting.CancelChosen.Advise(lifetime, _ => GameRestart.ReturnToMenu());
-            failed.BackChosen.Advise(lifetime, _ => GameRestart.ReturnToMenu());
+            connecting.CancelChosen.Advise(lifetime, _ => GameRestarter.ReturnToMenu());
+            failed.BackChosen.Advise(lifetime, _ => GameRestarter.ReturnToMenu());
         }
 
         public void ShowConnecting(LaunchChoice.Client server) =>
@@ -35,7 +35,7 @@ namespace Setup.Launch
         public void Watch(NetworkManager manager, LaunchChoice.Client server, LaunchChoice chosen)
         {
             var connected = false;
-            _failed.RetryChosen.Advise(_lifetime, _ => GameRestart.Relaunch(chosen));
+            _failed.RetryChosen.Advise(_lifetime, _ => GameRestarter.Relaunch(chosen));
             manager.AdviseConnectionEvents(_lifetime, connection =>
             {
                 if (connection.EventType != ConnectionEvent.ClientConnected || connection.ClientId != manager.LocalClientId)

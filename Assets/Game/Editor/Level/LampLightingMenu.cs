@@ -20,7 +20,7 @@ namespace Bw.EditorTools.Level
                 if (scene.isDirty && !EditorSceneManager.SaveScene(scene))
                     throw new InvalidOperationException($"Saving '{scene.path}' failed: the lamp bake renders the saved scene.");
 
-                if (!new LampLightingBake(scene).TryRun())
+                if (!new LampLightingBaker(scene).TryRun())
                     return;
 
                 EditorSceneManager.MarkSceneDirty(scene);

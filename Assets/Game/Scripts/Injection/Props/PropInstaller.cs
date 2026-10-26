@@ -114,8 +114,8 @@ namespace Bw.Injection.Props
         {
             WeaponSimulatorInstaller<PropState, PropSimulator>.Install(Container);
             Container.BindInterfacesTo<ShootingWeapon<PropState>>().AsSingle().WithArguments(new PropState(0f, PropPhase.Holding, 0, 0, true)).NonLazy();
-            Container.Bind<WeaponKindRegistration>().AsSingle().WithArguments(WeaponKind.Prop).NonLazy(); //TODO: ящик создаёт спавнер ящиков, а не Armory, и в каталоге оружия его нет, поэтому описания у ящика нет: когда матч начнёт засчитывать броски (HitScoring), убийство ящиком бросит исключение в ленте убийств, пока ящику не дадут описание, строку в каталоге, иконку в WeaponIconsConfig и создание через Armory
-            Container.Bind<WeaponNetworkRegistration>().AsSingle().NonLazy();
+            Container.Bind<WeaponKindRegistrar>().AsSingle().WithArguments(WeaponKind.Prop).NonLazy(); //TODO: ящик создаёт спавнер ящиков, а не Armory, и в каталоге оружия его нет, поэтому описания у ящика нет: когда матч начнёт засчитывать броски (HitScorer), убийство ящиком бросит исключение в ленте убийств, пока ящику не дадут описание, строку в каталоге, иконку в WeaponIconsConfig и создание через Armory
+            Container.Bind<WeaponNetworkRegistrar>().AsSingle().NonLazy();
             Container.Bind<WeaponClock>().AsSingle().NonLazy();
 
             RollbackStateInstaller<PropState>.Install(Container, _runtimeSettings, _netSchema);
@@ -142,12 +142,12 @@ namespace Bw.Injection.Props
 
         private void BindHold()
         {
-            Container.Bind<HeldPropPlacement>().AsSingle();
+            Container.Bind<HeldPropPlacer>().AsSingle();
             Container.Bind<PropSwing>().AsSingle();
             Container.Bind(typeof(IHeldBox), typeof(HeldPropPose)).To<HeldPropPose>().AsSingle().WithArguments(HeldPropLayer);
-            Container.Bind<HeldBoxRegistration>().AsSingle().NonLazy();
+            Container.Bind<HeldBoxRegistrar>().AsSingle().NonLazy();
             Container.Bind<ReleaseSpots>().AsSingle();
-            Container.Bind<PropRelease>().AsSingle().NonLazy();
+            Container.Bind<PropReleaser>().AsSingle().NonLazy();
             Container.Bind<HeldWeaponBody>().AsSingle().NonLazy();
             Container.Decorate<IStateView<RigidState>>().With<UnheldStateView<RigidState>>();
         }
@@ -163,10 +163,10 @@ namespace Bw.Injection.Props
         private void BindServer()
         {
             Container.Bind<IStateView<PropState>>().To<HeldPropPose>().FromResolve();
-            Container.Bind<SimulationViewSync<PropState>>().AsSingle().NonLazy();
-            Container.Bind<CarrierOwnership>().AsSingle().NonLazy();
+            Container.Bind<SimulationViewSynchronizer<PropState>>().AsSingle().NonLazy();
+            Container.Bind<CarrierOwnerAssigner>().AsSingle().NonLazy();
             Container.BindInterfacesTo<StrikeOutcomes>().AsSingle();
-            Container.Bind<DestroyedPropDrop>().AsSingle().NonLazy();
+            Container.Bind<DestroyedPropDropper>().AsSingle().NonLazy();
             Container.Bind<SimulationHistory<PropState>>().AsSingle().NonLazy();
             Container.Bind<SimulationRewinder<PropState>>().AsSingle();
             Container.Decorate<IRewindable>().With<PropRewindable>();
@@ -180,11 +180,11 @@ namespace Bw.Injection.Props
             Container.Bind<IReadonlyControlledBy>().To<HolderControl>().AsSingle();
             Container.Bind<IStateDivergence<PropState>>().To<ExactDivergence<PropState>>().AsSingle();
             Container.Bind<IReadonlyAimDeflection>().To<SteadyAim>().AsSingle();
-            Container.Bind<AimDeflectionRegistration>().AsSingle().NonLazy();
+            Container.Bind<AimDeflectionRegistrar>().AsSingle().NonLazy();
             Container.BindInterfacesTo<FloorWeapon>().AsSingle().WithArguments(_parts.Shape);
-            Container.Bind<FloorWeaponRegistration>().AsSingle().NonLazy();
+            Container.Bind<FloorWeaponRegistrar>().AsSingle().NonLazy();
             Container.Bind<DecidedImpacts>().AsSingle().NonLazy();
-            Container.Bind<StrikeDamagePrediction>().AsSingle().NonLazy();
+            Container.Bind<StrikeDamagePredictor>().AsSingle().NonLazy();
             BindClientVisuals();
         }
 
@@ -196,8 +196,8 @@ namespace Bw.Injection.Props
             Container.BindInterfacesTo<WeaponCarryViewModel>().AsSingle();
             Container.Bind<IHeldPropViewModel>().To<HeldPropViewModel>().AsSingle();
             Container.Bind<HeldPropView>().AsSingle().WithArguments(_parts.Prop).NonLazy();
-            Container.Bind<HeldPropSorting>().AsSingle().WithArguments(_parts.HeldSortingOrder).NonLazy();
-            Container.Bind<HeldGripsRegistration>().AsSingle()
+            Container.Bind<HeldPropSorter>().AsSingle().WithArguments(_parts.HeldSortingOrder).NonLazy();
+            Container.Bind<HeldGripsRegistrar>().AsSingle()
                 .WithArguments(_parts.Prop.GetComponentsInChildren<HandGrip>(true)).NonLazy();
             BindThrowVisuals();
             BindFlightVisuals();
@@ -215,14 +215,14 @@ namespace Bw.Injection.Props
                     context.Container.Resolve<ThrowArcViewModel>()))
                 .AsSingle();
             Container.Bind<ThrowBodyPose>().AsSingle().NonLazy();
-            Container.Bind<ThrowCameraKick>().AsSingle().NonLazy();
+            Container.Bind<ThrowCameraKickView>().AsSingle().NonLazy();
             Container.Bind<ThrowTrajectory>().AsSingle();
-            Container.Bind<ThrowArcRegistration>().AsSingle().NonLazy();
+            Container.Bind<ThrowArcRegistrar>().AsSingle().NonLazy();
         }
 
         private void BindFlightVisuals()
         {
-            Container.Bind<PropMotion>().AsSingle();
+            Container.Bind<PropMotionTracker>().AsSingle();
             Container.Bind<PropFlightFx>().FromMethod(context => FlightFx(context.Container)).AsSingle();
             Container.Bind<PropFlightView>().AsSingle().WithArguments(_parts.Visual.GetComponentInChildren<SpriteRenderer>(true)).NonLazy();
             Container.Bind<PropImpactView>().AsSingle().WithArguments(_parts.Visual).NonLazy();

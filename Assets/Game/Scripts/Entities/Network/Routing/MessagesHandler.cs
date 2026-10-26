@@ -14,6 +14,7 @@ namespace Bw.Entities.Network.Routing
         private readonly IMessageReceivers _messageReceivers;
 
         private FastBufferReader _currentReader;
+        private ulong _currentSender;
 
         public MessagesHandler(
             Lifetime lifetime,
@@ -48,38 +49,25 @@ namespace Bw.Entities.Network.Routing
                     $"[MessagesHandler] Network object '{header.NetworkObjectId.ToString()}:{netObj.name}' has no {nameof(INetworkLifetimedObject)}. Message ignored.");
             }
 
-            var netEntries = targetObject.NetEntries
+            var inbox = targetObject.Inbox
                 ?? throw new InvalidOperationException(
-                    $"[MessagesHandler] Network object '{header.NetworkObjectId.ToString()}:{netObj.name}' has no net entries, it was instantiated without its DI context.");
-
-            if (header.VarId == NetVariablesTableBase.SchemaHashVarId)
-            {
-                reader.ReadNetworkSerializable(out NetSchemaHash schemaHash);
-                netEntries.CheckSchemaOf(senderClientId, schemaHash.Value);
-                return;
-            }
-
-            if (!netEntries.TryGetEntryWritableBy(senderClientId, header.VarId, out var targetEntry))
-                return;
+                    $"[MessagesHandler] Network object '{header.NetworkObjectId.ToString()}:{netObj.name}' has no net inbox, it was instantiated without its DI context.");
 
             _currentReader = reader;
-            targetEntry.Accept(this); // it goes directly to VisitProperty or VisitSignal down below
+            _currentSender = senderClientId;
+            inbox.Receive(senderClientId, header, this); // the entry calls VisitProperty or VisitSignal down below
         }
 
-        void INetSyncVisitor.VisitProperty<T>(INetProperty<T> property)
-        {
-            if (!_messageReceivers.ByType.TryGetValue(typeof(T), out var receiver)) //TODO: нет получателя для типа — тихий выход, кандидат на исключение
-                return;
+        void INetSyncVisitor.VisitProperty<T>(INetProperty<T> property) =>
+            ReceiverOf<T>().ReceiveProperty(ref _currentReader, property);
 
-            ((IMessageReceiver<T>)receiver).ReceiveProperty(ref _currentReader, property);
-        }
+        void INetSyncVisitor.VisitSignal<T>(INetSignal<T> entry) =>
+            ReceiverOf<T>().ReceiveSignal(ref _currentReader, entry, _currentSender);
 
-        void INetSyncVisitor.VisitSignal<T>(INetSignal<T> entry)
-        {
-            if (!_messageReceivers.ByType.TryGetValue(typeof(T), out var receiver)) //TODO: нет получателя для типа — тихий выход, кандидат на исключение
-                return;
-
-            ((IMessageReceiver<T>)receiver).ReceiveSignal(ref _currentReader, entry);
-        }
+        private IMessageReceiver<T> ReceiverOf<T>() =>
+            _messageReceivers.ByType.TryGetValue(typeof(T), out var receiver)
+                ? (IMessageReceiver<T>)receiver
+                : throw new InvalidOperationException(
+                    $"[MessagesHandler] No codec receives {typeof(T).Name}: its codec is not registered (Tools → Network → Regenerate message codec registrations).");
     }
 }

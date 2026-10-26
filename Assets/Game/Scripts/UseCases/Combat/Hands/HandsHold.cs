@@ -19,7 +19,7 @@ namespace Bw.UseCases.Combat.Hands
 
         public HandsHold(
             Lifetime lifetime,
-            HandsDraw draw,
+            DrawnWeapons drawnWeapons,
             IHeldBoxes boxes,
             IReadonlyHands hands,
             HandsGrip grip)
@@ -27,7 +27,7 @@ namespace Bw.UseCases.Combat.Hands
             _hands = hands;
             _grip = grip;
 
-            draw.Drawn.View(lifetime, (drawnLifetime, weapon) =>
+            drawnWeapons.Drawn.View(lifetime, (drawnLifetime, weapon) =>
                 boxes.ByWeapon.ViewForKey(drawnLifetime, weapon, (grippedLifetime, box) => Hold(grippedLifetime, weapon, box)));
         }
 

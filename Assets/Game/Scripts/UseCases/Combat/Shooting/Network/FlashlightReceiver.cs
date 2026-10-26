@@ -11,6 +11,6 @@ namespace Bw.UseCases.Combat.Shooting.Network
             INetEntries entries,
             NetPropertyDeclaration<bool> declaration,
             IFlashlight flashlight) =>
-            entries.Get(declaration).Advise(lifetime, flashlight.Apply);
+            entries.Property(declaration).Advise(lifetime, flashlight.Apply);
     }
 }

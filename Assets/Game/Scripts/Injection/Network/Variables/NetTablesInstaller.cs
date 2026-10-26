@@ -18,13 +18,21 @@ namespace Bw.Injection.Network.Variables
 
         public override void InstallBindings()
         {
+            Container.Bind(typeof(INetEntries), typeof(NetEntries)).To<NetEntries>().AsSingle().WithArguments(_schema);
+
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.Bind<INetEntries>().To<NetVariablesTableServer>().AsSingle().WithArguments(_schema).NonLazy();
+                    Container.Bind<INetSendGuardFactory>().To<NetSendGuardFactoryServer>().AsSingle();
+                    Container.Bind<NetReceiveGuardFactoryServer>().AsSingle();
+                    Container.Bind<INetInbox>().To<NetInboxServer>().AsSingle();
+                    Container.Bind<NetReplicationServer>().AsSingle().NonLazy();
+                    Container.Bind<NetSchemaHashChecker>().AsSingle().WithArguments(_schema).NonLazy();
                     break;
                 case PeerType.Client:
-                    Container.Bind<INetEntries>().To<NetVariablesTableClient>().AsSingle().WithArguments(_schema).NonLazy();
+                    Container.Bind<INetSendGuardFactory>().To<NetSendGuardFactoryClient>().AsSingle();
+                    Container.Bind<INetInbox>().To<NetInboxClient>().AsSingle();
+                    Container.Bind<NetReplicationClient>().AsSingle().NonLazy();
                     Container.Bind<NetSchemaHashSender>().AsSingle().WithArguments(_schema).NonLazy();
                     break;
                 default:

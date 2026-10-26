@@ -39,10 +39,10 @@ namespace Bw.Injection.Entities.Camera
                 return;
 
             Container.BindInterfacesTo<PlayerCamera>().AsSingle().WithArguments(_camera).NonLazy();
-            Container.Bind<ICameraShake>().To<CameraShake>().FromComponentOn(_camera.gameObject).AsSingle();
+            Container.Bind<ICameraShaker>().To<CameraShaker>().FromComponentOn(_camera.gameObject).AsSingle();
             Container.Bind<IAimCursor>().To<AimCursor>().FromComponentOn(_camera.gameObject).AsSingle();
             Container.BindInterfacesTo<CameraTargets>().AsSingle();
-            Container.Bind<CameraFollow>().AsSingle().WithArguments(_camera.gameObject.Lifetime(), _camera, _followConfig).NonLazy();
+            Container.Bind<CameraFollower>().AsSingle().WithArguments(_camera.gameObject.Lifetime(), _camera, _followConfig).NonLazy();
             Container.BindInterfacesTo<SoundPlayer>().AsSingle().WithArguments(_camera.gameObject.Lifetime());
             Container.BindInterfacesTo<EffectPlayer>().AsSingle().WithArguments(_camera.gameObject.Lifetime());
             BindHealthBars();

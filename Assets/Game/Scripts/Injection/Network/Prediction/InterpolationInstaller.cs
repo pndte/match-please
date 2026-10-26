@@ -8,8 +8,8 @@ namespace Bw.Injection.Network.Prediction
     {
         public override void InstallBindings()
         {
-            Container.Bind<PredictionInterpolation<TState>>().AsSingle().NonLazy();
-            Container.Bind<SnapshotInterpolation<TState>>().AsSingle().NonLazy();
+            Container.Bind<PredictionInterpolator<TState>>().AsSingle().NonLazy();
+            Container.Bind<SnapshotInterpolator<TState>>().AsSingle().NonLazy();
         }
     }
 }

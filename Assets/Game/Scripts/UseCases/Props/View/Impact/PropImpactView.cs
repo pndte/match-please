@@ -10,12 +10,12 @@ namespace Bw.UseCases.Props.View.Impact
     {
         public PropImpactView(
             Lifetime lifetime,
-            PropMotion motion,
+            PropMotionTracker motionTracker,
             IEffectPlayer effects,
             Transform visual,
             PropVfxConfig config)
         {
-            motion.Impacted.Advise(lifetime, impact =>
+            motionTracker.Impacted.Advise(lifetime, impact =>
             {
                 effects.Play(config.Dust, impact.Point, impact.Normal);
                 visual.DOComplete();

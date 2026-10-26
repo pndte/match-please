@@ -35,7 +35,7 @@ namespace Bw.Injection.Network
                         .To<ClientNetworkTicks>()
                         .AsSingle()
                         .WithArguments(Lifetime.Eternal)
-                        .WriterOnlyInto<IWorldClock>(typeof(WorldRollback))
+                        .WriterOnlyInto<IWorldClock>(typeof(RollbackStepper))
                         .NonLazy();
                     break;
             }

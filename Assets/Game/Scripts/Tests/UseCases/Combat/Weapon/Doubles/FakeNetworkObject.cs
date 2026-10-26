@@ -9,7 +9,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Doubles
     public sealed class FakeNetworkObject : INetworkLifetimedObject
     {
         public ulong Id => throw new NotSupportedException("The fake network object has no id.");
-        public INetEntries NetEntries => throw new NotSupportedException("The fake network object has no net entries.");
+        public INetInbox Inbox => throw new NotSupportedException("The fake network object has no net inbox.");
         public IReadonlyProperty<Lifetime> SpawnedLifetime => _spawnedLifetime;
 
         private readonly ViewableProperty<Lifetime> _spawnedLifetime = new(Lifetime.Terminated);

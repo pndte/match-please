@@ -9,6 +9,7 @@ using Bw.UseCases.Bots.Navigation;
 using Bw.UseCases.Bots.Network;
 using Bw.UseCases.Bots.Senses;
 using Bw.UseCases.Bots.Skills;
+using Bw.UseCases.Character.Network.Codecs;
 using Bw.UseCases.Character.Network.Requests;
 using Bw.UseCases.Combat.Abstractions.Weapons;
 using Bw.UseCases.Combat.Hands.Network;
@@ -47,14 +48,15 @@ namespace Bw.Injection.Bots
                     throw new ArgumentOutOfRangeException(nameof(_difficulty.Brain), _difficulty.Brain, $"Difficulty '{_difficulty.name}' asks for a brain the bots lack.");
             }
 
-            Container.Bind<BotThinking>().AsSingle().NonLazy();
+            Container.Bind<BotBrainStepper>().AsSingle().NonLazy();
         }
 
         private void BindSamplers()
         {
             Container.Bind<HandsControlsForm>().AsSingle();
             Container.Bind<IInputSampler<CharacterControls>>().To<BotCharacterSampler>().AsSingle();
-            Container.Bind<BotSamplerRegistration<CharacterControls>>().AsSingle().NonLazy();
+            Container.Decorate<IInputSampler<CharacterControls>>().With<WireRoundedSampler<CharacterControls, TickedCharacterControlsCodec>>();
+            Container.Bind<BotSamplerRegistrar<CharacterControls>>().AsSingle().NonLazy();
         }
 
         private void BindGoap()

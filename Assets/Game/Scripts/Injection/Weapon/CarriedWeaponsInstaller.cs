@@ -33,7 +33,7 @@ namespace Bw.Injection.Weapon
             {
                 case PeerType.Server:
                     Container.BindResultSender(carried).WhenInjectedInto<CarriedWeaponsPublisher>();
-                    Container.Bind<CarriedWeaponsReport>().AsSingle();
+                    Container.Bind<CarriedWeaponsReporter>().AsSingle();
                     Container.Bind<CarriedWeaponsPublisher>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:
@@ -41,7 +41,7 @@ namespace Bw.Injection.Weapon
                     Container.Bind<IReplicatedStates<InventoryContent>>().To<CarriedWeaponsReceiver>().AsSingle().NonLazy();
                     Container.Bind<IStateDivergence<InventoryContent>>().To<ExactDivergence<InventoryContent>>().AsSingle();
                     Container.Bind<RollbackPart<InventoryContent>>().AsSingle();
-                    Container.Bind<RollbackPartRegistration<InventoryContent>>().AsSingle().NonLazy();
+                    Container.Bind<RollbackPartRegistrar<InventoryContent>>().AsSingle().NonLazy();
                     Container.Bind<ServerStateFollower<InventoryContent>>().AsSingle().NonLazy();
                     break;
                 default:

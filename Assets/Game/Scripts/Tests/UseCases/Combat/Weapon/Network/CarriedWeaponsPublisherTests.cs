@@ -33,7 +33,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
             _sent = new RecordingResults<TickedState<CarriedWeapons>>();
             _world = new ScriptedWorldStep();
             var config = new WorldRollbackConfig { UnchangedStateTicks = Heartbeat };
-            new CarriedWeaponsPublisher(_lifetime.Lifetime, _inventory, new CarriedWeaponsReport(_inventory, _weapons), _sent, _world, config);
+            new CarriedWeaponsPublisher(_lifetime.Lifetime, _inventory, new CarriedWeaponsReporter(_inventory, _weapons), _sent, _world, config);
         }
 
         [TearDown]

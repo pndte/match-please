@@ -14,7 +14,7 @@ namespace Bw.UseCases.Props
         public int Layer { get; }
         public ISource<Unit> Turned => _turned;
 
-        private readonly HeldPropPlacement _placement;
+        private readonly HeldPropPlacer _placer;
         private readonly PropSwing _swing;
         private readonly Signal<Unit> _turned = new();
 
@@ -24,12 +24,12 @@ namespace Bw.UseCases.Props
             BodyBox shape,
             int layer,
             IReadonlySimulation<PropState> simulation,
-            HeldPropPlacement placement,
+            HeldPropPlacer placer,
             PropSwing swing)
         {
             Box = shape;
             Layer = layer;
-            _placement = placement;
+            _placer = placer;
             _swing = swing;
             _angle = simulation.State.Value.Aim;
         }
@@ -41,9 +41,9 @@ namespace Bw.UseCases.Props
         }
 
         public GripPose PoseIn(HoldPose hands, GripPose previous) =>
-            _placement.PoseIn(hands.Hold, _angle, previous.Pushed);
+            _placer.PoseIn(hands.Hold, _angle, previous.Pushed);
 
         public GripPose PoseAt(HoldPose hands, float angle) =>
-            _placement.PoseIn(hands.Hold, angle, Vector2.zero);
+            _placer.PoseIn(hands.Hold, angle, Vector2.zero);
     }
 }

@@ -15,7 +15,7 @@ namespace Bw.UseCases.Combat.Shooting.Network
             INetEntries entries,
             NetPropertyDeclaration<bool> declaration)
         {
-            var published = entries.Get(declaration);
+            var published = entries.Property(declaration);
             networkLifetimed.SpawnedLifetime.WhenAlive(lifetime, spawnedLifetime =>
                 flashlight.Lit.Advise(spawnedLifetime, lit => published.Value = lit));
         }

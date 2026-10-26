@@ -26,14 +26,14 @@ namespace Bw.Injection.Network.Prediction
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.Bind<AffectableRegistration<TTarget, TEffect>>()
-                        .FromMethod(context => context.Container.Instantiate<AffectableRegistration<TTarget, TEffect>>(new object[] { context.Container.Resolve<SimulationAffectable<MovementState, TEffect>>() }))
+                    Container.Bind<AffectableRegistrar<TTarget, TEffect>>()
+                        .FromMethod(context => context.Container.Instantiate<AffectableRegistrar<TTarget, TEffect>>(new object[] { context.Container.Resolve<SimulationAffectable<MovementState, TEffect>>() }))
                         .AsCached()
                         .NonLazy();
                     break;
                 case PeerType.Client:
-                    Container.Bind<PredictedAffectableRegistration<TTarget, TEffect>>()
-                        .FromMethod(context => context.Container.Instantiate<PredictedAffectableRegistration<TTarget, TEffect>>(new object[] { context.Container.Resolve<SimulationAffectable<MovementState, TEffect>>() }))
+                    Container.Bind<PredictedAffectableRegistrar<TTarget, TEffect>>()
+                        .FromMethod(context => context.Container.Instantiate<PredictedAffectableRegistrar<TTarget, TEffect>>(new object[] { context.Container.Resolve<SimulationAffectable<MovementState, TEffect>>() }))
                         .AsCached()
                         .NonLazy();
                     break;

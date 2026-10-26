@@ -48,8 +48,8 @@ namespace Bw.Injection.Mortality
                         .WriterOnlyInto<IRestorable<GuardState>>(typeof(RollbackPart<GuardState>), typeof(ServerStateFollower<GuardState>));
                     Container.BindResultReceiver(state).WhenInjectedInto<ReplicatedStates<GuardState>>();
                     RollbackPartInstaller<GuardState>.Install(Container);
-                    Container.Bind<IStateDivergence<GuardState>>().To<GuardDivergence>().AsSingle();
-                    Container.Bind<GuardCoverRegistration>().AsSingle().NonLazy();
+                    Container.Bind<IStateDivergence<GuardState>>().To<ExactDivergence<GuardState>>().AsSingle();
+                    Container.Bind<GuardCoverRegistrar>().AsSingle().NonLazy();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(_runtimeSettings.CurrentPeerType), _runtimeSettings.CurrentPeerType, null);
@@ -58,9 +58,9 @@ namespace Bw.Injection.Mortality
 
         private void BindBlows()
         {
-            Container.Bind<GuardBlows>().AsSingle();
-            Container.Bind<AffectableRegistration<IReadonlyMortal, Impacts>>()
-                .FromMethod(context => context.Container.Instantiate<AffectableRegistration<IReadonlyMortal, Impacts>>(new object[] { context.Container.Resolve<GuardBlows>() }))
+            Container.Bind<AffectableGuard>().AsSingle();
+            Container.Bind<AffectableRegistrar<IReadonlyMortal, Impacts>>()
+                .FromMethod(context => context.Container.Instantiate<AffectableRegistrar<IReadonlyMortal, Impacts>>(new object[] { context.Container.Resolve<AffectableGuard>() }))
                 .AsCached()
                 .NonLazy();
             Container.Decorate<IEffectRules<Vitals, Impacts>>().With<GuardedVitalsRules>();

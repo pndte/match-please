@@ -103,8 +103,8 @@ namespace Bw.UseCases.Character.View.Rig
             var squash = 1f + Squash();
             var body = _parts.Body.localScale;
             _parts.Body.localScale = new Vector3(body.x * squash, body.y / squash, body.z);
-            RigLegPlacement.Place(_parts.Far, transform, _look);
-            RigLegPlacement.Place(_parts.Near, transform, _look);
+            RigLegPlacer.Place(_parts.Far, transform, _look);
+            RigLegPlacer.Place(_parts.Near, transform, _look);
             var sway = HairSway();
             Flap(sway.y);
             //TODO: в воздухе тень пропадает вместе с клипом; в прототипе она остаётся на полу и тает с высотой, для этого нужна высота над полом

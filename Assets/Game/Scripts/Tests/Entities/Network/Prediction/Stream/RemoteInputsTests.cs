@@ -229,7 +229,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Stream
                 Math.Abs(guessed - relayed) > Allowed;
         }
 
-        private sealed class PlusThousandPerTick : IInputContinuation<int>
+        private sealed class PlusThousandPerTick : IInputExtrapolator<int>
         {
             public int Continued(int last, int ticks) =>
                 last + 1000 * ticks;

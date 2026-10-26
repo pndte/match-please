@@ -10,7 +10,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
 {
     public sealed class CarriedWeaponsPublisher
     {
-        private readonly CarriedWeaponsReport _report;
+        private readonly CarriedWeaponsReporter _reporter;
         private readonly INetResultSender<TickedState<CarriedWeapons>> _carried;
         private readonly WorldRollbackConfig _config;
 
@@ -20,12 +20,12 @@ namespace Bw.UseCases.Combat.Weapon.Network
         public CarriedWeaponsPublisher(
             Lifetime lifetime,
             IReadonlyWeaponInventory inventory,
-            CarriedWeaponsReport report,
+            CarriedWeaponsReporter reporter,
             INetResultSender<TickedState<CarriedWeapons>> carried,
             IWorldStep worldStep,
             WorldRollbackConfig config)
         {
-            _report = report;
+            _reporter = reporter;
             _carried = carried;
             _config = config;
 
@@ -40,7 +40,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
 
             _changed = false;
             _sentTick = tick;
-            _carried.Broadcast(new TickedState<CarriedWeapons>(tick, _report.Current));
+            _carried.Broadcast(new TickedState<CarriedWeapons>(tick, _reporter.Current));
         }
     }
 }

@@ -69,7 +69,7 @@ namespace Bw.UseCases.Combat.Weapon.Network.Prediction
                 var ray = _tracer.Aim(shot.Shot.Aim);
                 _hits.Clear();
                 _affected.Clear();
-                _tracer.CastPellets(ray, _power.Along(ray.Direction, _simulation.State.Value), _hits); //TODO: свой выстрел проверяется по миру клиента: предсказанные цели стоят в настоящем, остальные там, где их показывает интерполяция, а сервер судит интерполированных по откату к тику вида стрелка — между кадрами вида и тиком шага они расходятся на долю тика
+                _tracer.CastPellets(ray, _power.Along(ray.Direction, _simulation.State.Value), _hits);
 
                 _hits.GroupByTarget(_affected);
                 if (_affected.Count > 0)

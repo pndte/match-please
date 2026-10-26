@@ -8,9 +8,6 @@ namespace Bw.Entities.Network.Variables
         NetSendTarget INetSignal<T>.PendingTarget => _pendingTarget;
         IViewableProperty<bool> INetSyncEntry.Dirty => _dirty;
 
-        private protected ISource<T> FromNetwork => _fromNetwork;
-
-        private readonly Signal<T> _fromNetwork = new();
         private readonly ViewableProperty<bool> _dirty = new(false);
         private readonly INetSendGuard _sendGuard;
         private T _pending;
@@ -21,11 +18,13 @@ namespace Bw.Entities.Network.Variables
             _sendGuard = sendGuard;
         }
 
-        void INetSignal<T>.ApplyFromNetwork(T value) =>
-            _fromNetwork.Fire(value);
+        void INetSignal<T>.ApplyFromNetwork(T value, ulong senderClientId) =>
+            Heard(value, senderClientId);
 
         void INetSyncEntry.Accept(INetSyncVisitor visitor) =>
             visitor.VisitSignal(this);
+
+        private protected abstract void Heard(T value, ulong senderClientId);
 
         private protected void Stage(NetSendTarget target, T value)
         {

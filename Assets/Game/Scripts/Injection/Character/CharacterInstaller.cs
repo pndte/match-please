@@ -101,8 +101,8 @@ namespace Bw.Injection
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Server)
             {
-                Container.Bind<CharacterArming>().AsSingle().NonLazy();
-                Container.Bind<Regeneration>().AsSingle().WithArguments(_regeneration).NonLazy();
+                Container.Bind<CharacterArmer>().AsSingle().NonLazy();
+                Container.Bind<HealthRegenerator>().AsSingle().WithArguments(_regeneration).NonLazy();
             }
 
             if (_runtimeSettings.CurrentPeerType == PeerType.Client)
@@ -125,16 +125,16 @@ namespace Bw.Injection
         private void BindCharacter()
         {
             Container.Bind(typeof(ICharacter), typeof(IReadonlyCharacter)).To<Character>().AsSingle();
-            Container.Bind<CarriersRegistration>().AsSingle().NonLazy();
-            Container.Bind<InHandsRegistration>().AsSingle().NonLazy();
+            Container.Bind<CarriersRegistrar>().AsSingle().NonLazy();
+            Container.Bind<InHandsRegistrar>().AsSingle().NonLazy();
         }
 
         private void BindPrediction()
         {
             Container.Bind<IBubbleMembership>().To<BubbleMembership>().AsSingle().WithArguments(transform);
             Container.Bind<IPredictedBy>().To<CharacterPredictedBy>().AsSingle();
-            Container.Bind<CharacterPredictionRegistration>().AsSingle().NonLazy();
-            Container.Bind<ControlledCharacterRegistration>().AsSingle().NonLazy();
+            Container.Bind<CharacterPredictionRegistrar>().AsSingle().NonLazy();
+            Container.Bind<ControlledCharacterRegistrar>().AsSingle().NonLazy();
         }
 
         private void BindClientSounds()
@@ -149,18 +149,18 @@ namespace Bw.Injection
             Container.Decorate<IDamageViewModel>().With<ArrivingDamageViewModel>();
             Container.Bind<IPlayerViewModel>().To<CharacterPlayerViewModel>().AsSingle();
             Container.Bind(typeof(HitFeedbackConfig), typeof(IHitFlashConfig)).FromInstance(_hitFeedbackConfig).AsSingle();
-            Container.Bind<HitFlash>().AsSingle().NonLazy();
-            Container.Bind<HitCameraShake>().AsSingle().NonLazy();
-            Container.Bind<CameraTargetRegistration>().AsSingle().WithArguments(transform).NonLazy();
-            Container.Bind<CharacterDeathAnimation>().AsSingle().NonLazy();
-            Container.Bind<CharacterDeathBurst>().AsSingle().WithArguments(transform).NonLazy();
+            Container.Bind<HitFlashView>().AsSingle().NonLazy();
+            Container.Bind<HitCameraShakeView>().AsSingle().NonLazy();
+            Container.Bind<CameraTargetRegistrar>().AsSingle().WithArguments(transform).NonLazy();
+            Container.Bind<CharacterDeathAnimationView>().AsSingle().NonLazy();
+            Container.Bind<CharacterDeathBurstView>().AsSingle().WithArguments(transform).NonLazy();
             Container.Bind<CharacterHealthBar>().AsSingle().WithArguments(transform).NonLazy();
             Container.Bind<IGuardViewModel>().To<GuardViewModel>().AsSingle();
             Container.Bind<CharacterGuardBar>().AsSingle().WithArguments(transform).NonLazy();
             Container.Bind<ICharacterPoses>().To<CharacterPoses>().AsSingle();
             Container.Bind<IGripView>().To<GripView>().AsSingle().WithArguments(_gripHands);
             Container.Bind<ICharacterView>().To<CharacterView>().AsSingle().WithArguments(transform);
-            Container.Bind<CharacterViewRegistration>().AsSingle().NonLazy();
+            Container.Bind<CharacterViewRegistrar>().AsSingle().NonLazy();
         }
     }
 }

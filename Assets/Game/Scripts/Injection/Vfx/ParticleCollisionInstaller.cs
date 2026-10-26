@@ -16,8 +16,8 @@ namespace Bw.Injection.Vfx
             foreach (var system in _systems)
             {
                 RequireCollidable(system);
-                Container.Bind<ParticleCollision>()
-                    .FromMethod(context => new ParticleCollision(gameObject.Lifetime(), system.Particles, system.Config, context.Container.Resolve<IPhysicsSpace>().World))
+                Container.Bind<ParticleCollisionSolver>()
+                    .FromMethod(context => new ParticleCollisionSolver(gameObject.Lifetime(), system.Particles, system.Config, context.Container.Resolve<IPhysicsSpace>().World))
                     .AsCached()
                     .NonLazy();
             }

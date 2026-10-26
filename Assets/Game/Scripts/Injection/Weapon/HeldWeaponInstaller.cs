@@ -75,8 +75,8 @@ namespace Bw.Injection.Weapon
         private void BindWeapon()
         {
             Container.BindInterfacesTo<ShootingWeapon<TState>>().AsSingle().WithArguments(_parts.Initial).NonLazy();
-            Container.Bind<WeaponKindRegistration>().AsSingle().WithArguments(_parts.Kind).NonLazy();
-            Container.Bind<WeaponNetworkRegistration>().AsSingle().NonLazy();
+            Container.Bind<WeaponKindRegistrar>().AsSingle().WithArguments(_parts.Kind).NonLazy();
+            Container.Bind<WeaponNetworkRegistrar>().AsSingle().NonLazy();
             Container.Bind<WeaponClock>().AsSingle().NonLazy();
             Container.Bind<WeaponOrbit>().AsSingle();
             Container.Bind<ShotTimer>().AsSingle();
@@ -87,7 +87,7 @@ namespace Bw.Injection.Weapon
         private void BindServer()
         {
             Container.Bind<RaycastShooter<TState>>().AsSingle().NonLazy();
-            Container.Bind<CarrierOwnership>().AsSingle().NonLazy();
+            Container.Bind<CarrierOwnerAssigner>().AsSingle().NonLazy();
         }
 
         private void BindClient()
@@ -96,10 +96,10 @@ namespace Bw.Injection.Weapon
             Container.Bind<IPredictedBy>().To<WeaponPredictedBy>().AsSingle();
             Container.Bind<IReadonlyControlledBy>().To<HolderControl>().AsSingle();
             Container.Bind<IStateDivergence<TState>>().To<ExactDivergence<TState>>().AsSingle();
-            Container.Bind<AimDeflectionRegistration>().AsSingle().NonLazy();
+            Container.Bind<AimDeflectionRegistrar>().AsSingle().NonLazy();
             Container.Bind<IStrikes>().To<HitPredictor<TState>>().AsSingle().NonLazy();
             Container.Bind<DecidedImpacts>().AsSingle().NonLazy();
-            Container.Bind<StrikeDamagePrediction>().AsSingle().NonLazy();
+            Container.Bind<StrikeDamagePredictor>().AsSingle().NonLazy();
             BindClientVisuals();
         }
 
@@ -111,13 +111,13 @@ namespace Bw.Injection.Weapon
             Container.Bind<WeaponOrbitView>().AsSingle().WithArguments(_parts.Weapon).NonLazy();
             Container.Bind<StowedWeaponView>().AsSingle().WithArguments(_parts.Visual.GetComponentsInChildren<Renderer>(true)).NonLazy();
             Container.Bind<WeaponRecoilView>().AsSingle().WithArguments(_parts.Visual).NonLazy();
-            Container.Bind<WeaponCameraKick>().AsSingle().NonLazy();
-            Container.Bind<WeaponCursorKick>().AsSingle().NonLazy();
+            Container.Bind<WeaponCameraKickView>().AsSingle().NonLazy();
+            Container.Bind<WeaponCursorKickView>().AsSingle().NonLazy();
         }
 
         private void BindVisualFlip()
         {
-            Container.Bind<WeaponVisualFlip>().AsSingle().WithArguments(_parts.Weapon, _parts.Visual).NonLazy();
+            Container.Bind<WeaponVisualFlipper>().AsSingle().WithArguments(_parts.Weapon, _parts.Visual).NonLazy();
         }
     }
 }

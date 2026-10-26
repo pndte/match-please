@@ -21,8 +21,8 @@ namespace Bw.Injection.Match
             Container.BindInterfacesTo<MatchReferee>().AsSingle().NonLazy();
             Container.Bind(typeof(ScoreKeeper), typeof(IKills)).To<ScoreKeeper>().AsSingle();
             Container.Bind<Combatants>().AsSingle();
-            Container.Bind<HitScoring>().AsSingle().NonLazy();
-            Container.Bind<DeathScoring>().AsSingle().NonLazy();
+            Container.Bind<HitScorer>().AsSingle().NonLazy();
+            Container.Bind<DeathScorer>().AsSingle().NonLazy();
         }
     }
 }

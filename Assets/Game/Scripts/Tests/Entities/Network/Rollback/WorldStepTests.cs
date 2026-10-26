@@ -21,7 +21,7 @@ namespace Bw.Tests.Entities.Network.Rollback
             _clock = new ManualClock();
             _order = new List<string>();
             _step = new WorldStep(_lifetime.Lifetime, _clock);
-            new PhysicsSchedule(_lifetime.Lifetime, new CountingSteps(() => _order.Add("physics")), _step);
+            new PhysicsStepper(_lifetime.Lifetime, new CountingSteps(() => _order.Add("physics")), _step);
             foreach (var phase in new[] { TickPhase.Prepare, TickPhase.Early, TickPhase.Default, TickPhase.Late, TickPhase.Publish })
                 _step.Stepped(phase).Advise(_lifetime.Lifetime, tick => _order.Add($"{phase} {tick}"));
         }

@@ -13,6 +13,7 @@ namespace Bw.Injection.Network
             RegisterCodec<Bw.Entities.ClientConnectionState, Bw.Entities.Network.Codecs.ClientConnectionStateCodec>(receivers, senders);
             RegisterCodec<System.Int32, Bw.Entities.Network.Codecs.IntCodec>(receivers, senders);
             RegisterCodec<System.String, Bw.Entities.Network.Codecs.StringCodec>(receivers, senders);
+            RegisterCodec<System.UInt32, Bw.Entities.Network.Codecs.UIntCodec>(receivers, senders);
             RegisterCodec<JetBrains.Core.Unit, Bw.Entities.Network.Codecs.UnitCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedInput<Bw.UseCases.Character.Network.Requests.CharacterControls>, Bw.UseCases.Character.Network.Codecs.TickedCharacterControlsCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Combat.Hands.Network.Requests.HandsSlots>, Bw.UseCases.Combat.Hands.Network.Codecs.TickedHandsSlotsCodec>(receivers, senders);

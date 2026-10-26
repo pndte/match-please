@@ -13,7 +13,7 @@ namespace Bw.Entities.Network.Prediction.Stream
         private readonly INetRequestSender<TickedInput<TInput>> _input;
         private readonly ITickHistory<TInput> _own;
         private readonly IInputDelay _delay;
-        private readonly IInputContinuation<TInput> _continuation;
+        private readonly IInputExtrapolator<TInput> _extrapolator;
 
         private TInput _previousInput;
         private int _sentTick = int.MinValue;
@@ -26,13 +26,13 @@ namespace Bw.Entities.Network.Prediction.Stream
             INetRequestSender<TickedInput<TInput>> input,
             ITickHistory<TInput> own,
             IInputDelay delay,
-            IInputContinuation<TInput> continuation)
+            IInputExtrapolator<TInput> extrapolator)
         {
             _sampler = sampler;
             _input = input;
             _own = own;
             _delay = delay;
-            _continuation = continuation;
+            _extrapolator = extrapolator;
 
             controlledBy.Me.WhenTrue(lifetime, controlledLifetime =>
                 worldStep.Stepped(TickPhase.Prepare).Advise(controlledLifetime, Send));
@@ -48,7 +48,7 @@ namespace Bw.Entities.Network.Prediction.Stream
             if (target == _sentTick + 2)
             {
                 Transmit(target - 1, input);
-                input = _continuation.Continued(input, 1);
+                input = _extrapolator.Continued(input, 1);
             }
 
             Transmit(target, input);

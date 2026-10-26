@@ -49,7 +49,7 @@ namespace Bw.Injection.Launch
             Container.Bind<StartMenu>().AsSingle();
             Container.Bind<RoomMenu>().AsSingle();
             Container.Bind<ConnectionMenu>().AsSingle();
-            Container.Bind<NetworkLaunch>().AsSingle();
+            Container.Bind<NetworkLauncher>().AsSingle();
         }
 
         private void RequireMenu()

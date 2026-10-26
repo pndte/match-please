@@ -21,7 +21,7 @@ namespace Bw.Tests.UseCases.Combat.Hands.Doubles
         public HandsGrip Grip { get; }
         public PhysicsBody Body { get; }
         public Bw.UseCases.Combat.Hands.Hands Hands { get; }
-        public HandsDraw Draw { get; }
+        public DrawnWeapons Draw { get; }
         public Bw.UseCases.Combat.Characters.Character Character { get; }
 
         public HandsRig(
@@ -37,7 +37,7 @@ namespace Bw.Tests.UseCases.Combat.Hands.Doubles
             Body = BodyIn(lifetime, space, oval.transform.position);
             ISimulator<HandsInput, HandsState> simulator = guardedByBusyHands ? new BusyHandsGuard(Rules, Inventory) : Rules;
             Hands = new Bw.UseCases.Combat.Hands.Hands(simulator, Rules, Inventory, oval, Grip, Body);
-            Draw = new HandsDraw(lifetime, Inventory, Hands);
+            Draw = new DrawnWeapons(lifetime, Inventory, Hands);
             Character = new Bw.UseCases.Combat.Characters.Character(Mortal, Movement, Hands, Inventory);
         }
 

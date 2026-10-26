@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Bw.Entities;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Variables;
@@ -12,13 +11,8 @@ namespace Bw.Tests.UseCases.PropsMatchBots.Doubles
 {
     public static class UnspawnedNetEntries
     {
-        public static INetEntries Create(Lifetime lifetime, GameObject owner, NetEntriesSchema schema) =>
-            new NetVariablesTableClient(
-                lifetime,
-                owner.AddComponent<NetworkObject>(),
-                schema,
-                new SendersCollection(new Dictionary<Type, IMessageSender>()),
-                new NobodysOwnership());
+        public static INetEntries Create(GameObject owner, NetEntriesSchema schema) =>
+            new NetEntries(schema, new NetSendGuardFactoryClient(new NobodysOwnership(), owner.AddComponent<NetworkObject>()));
 
         private sealed class NobodysOwnership : IOwnership
         {

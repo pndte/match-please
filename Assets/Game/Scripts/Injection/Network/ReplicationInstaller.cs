@@ -35,12 +35,12 @@ namespace Bw.Injection.Network
                     Container.BindResultSender(state).WhenInjectedInto(typeof(StateChangeBroadcaster<TState>), typeof(LateJoinTickedStateSender<TState>));
                     Container.Bind<StateChangeBroadcaster<TState>>().AsSingle().NonLazy();
                     Container.Bind<LateJoinTickedStateSender<TState>>().AsSingle().NonLazy();
-                    Container.Bind<SimulationViewSync<TState>>().AsSingle().NonLazy();
+                    Container.Bind<SimulationViewSynchronizer<TState>>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:
                     Container.BindResultReceiver(state).WhenInjectedInto<ReplicatedStates<TState>>();
                     Container.Bind<IReplicatedStates<TState>>().To<ReplicatedStates<TState>>().AsSingle().NonLazy();
-                    Container.Bind<SnapshotInterpolation<TState>>().AsSingle().NonLazy();
+                    Container.Bind<SnapshotInterpolator<TState>>().AsSingle().NonLazy();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

@@ -13,7 +13,7 @@ namespace Bw.Injection.Network.Prediction
         {
             Container.Bind<IReplicatedStates<TState>>().To<ReplicatedStates<TState>>().AsSingle().NonLazy();
             Container.Bind<RollbackPart<TState>>().AsSingle();
-            Container.Bind<RollbackPartRegistration<TState>>().AsSingle().NonLazy();
+            Container.Bind<RollbackPartRegistrar<TState>>().AsSingle().NonLazy();
             Container.Bind<ServerStateFollower<TState>>().AsSingle().NonLazy();
             Container.Bind<IStateCorrections<TState>>().To<StateCorrections<TState>>().AsSingle();
         }

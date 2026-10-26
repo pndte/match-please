@@ -57,19 +57,19 @@ namespace Bw.Tests.Integration.Netcode
             _jumpedOnlyOnServer = false;
 
             var serverStep = new WorldStep(_server.Lifetime, _server.Clock);
-            new PhysicsSchedule(_server.Lifetime, _server.Space, serverStep);
+            new PhysicsStepper(_server.Lifetime, _server.Space, serverStep);
             serverStep.Stepped(TickPhase.Default).Advise(_server.Lifetime, tick => _serverCharacter.Step(ServerControls(tick)));
 
-            var rollback = new WorldRollback(_client.Lifetime, _client.Clock, rollbackConfig);
-            new PhysicsSchedule(_client.Lifetime, _client.Space, rollback);
-            rollback.Stepped(TickPhase.Default).Advise(_client.Lifetime, tick =>
+            var stepper = new RollbackStepper(_client.Lifetime, _client.Clock, rollbackConfig);
+            new PhysicsStepper(_client.Lifetime, _client.Space, stepper);
+            stepper.Stepped(TickPhase.Default).Advise(_client.Lifetime, tick =>
             {
                 _clientSteps++;
                 _clientCharacter.Step(Controls(tick));
             });
             var replicated = new ReplicatedStates<MovementState>(_client.Lifetime, _received, rollbackConfig);
-            rollback.Track(_client.Lifetime, new RollbackPart<MovementState>(_clientCharacter, replicated, new MovementDivergence(), rollbackConfig));
-            new StateCorrections<MovementState>(_client.Lifetime, _clientCharacter, rollback).Corrected
+            stepper.Track(_client.Lifetime, new RollbackPart<MovementState>(_clientCharacter, replicated, new MovementDivergence(), rollbackConfig));
+            new StateCorrections<MovementState>(_client.Lifetime, _clientCharacter, stepper).Corrected
                 .Advise(_client.Lifetime, _ => _correctedAt.Add(_client.Clock.Current));
         }
 

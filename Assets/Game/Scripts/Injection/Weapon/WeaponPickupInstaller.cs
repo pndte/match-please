@@ -38,7 +38,7 @@ namespace Bw.Injection.Weapon
                     break;
                 case PeerType.Client:
                     Container.BindRequestSender(pickup).WhenInjectedInto<WeaponPickupClientHandler>();
-                    Container.BindInterfacesTo<PickupTargeting>().AsSingle().WithArguments(_body);
+                    Container.BindInterfacesTo<PickupTargetSelector>().AsSingle().WithArguments(_body);
                     Container.Bind<WeaponPickupClientHandler>().AsSingle().NonLazy();
                     BindClientVisuals();
                     break;
@@ -49,7 +49,7 @@ namespace Bw.Injection.Weapon
 
         private void BindClientVisuals()
         {
-            Container.Bind<PickupTargetHighlight>().AsSingle().NonLazy();
+            Container.Bind<PickupTargetHighlightView>().AsSingle().NonLazy();
         }
     }
 }

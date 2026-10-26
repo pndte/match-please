@@ -1,38 +1,71 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.Netcode;
 
 namespace Bw.Entities.Network.Variables
 {
     public interface INetEntriesSchemaBuilder
     {
-        public NetRequestDeclaration<T> DeclareRequest<T>(NetworkDelivery deliveryType);
-        public NetResultDeclaration<T> DeclareResult<T>(NetworkDelivery deliveryType);
-        public NetPropertyDeclaration<T> DeclareProperty<T>(T initial, NetworkDelivery deliveryType, NetworkPermissions permissions);
+        public NetRequestDeclaration<T> DeclareRequest<T>(
+            NetworkDelivery deliveryType,
+            [CallerFilePath] string file = "",
+            [CallerLineNumber] int line = 0);
+
+        public NetResultDeclaration<T> DeclareResult<T>(
+            NetworkDelivery deliveryType,
+            [CallerFilePath] string file = "",
+            [CallerLineNumber] int line = 0);
+
+        public NetPropertyDeclaration<T> DeclareProperty<T>(
+            T initial,
+            NetworkDelivery deliveryType,
+            NetworkPermissions permissions,
+            [CallerFilePath] string file = "",
+            [CallerLineNumber] int line = 0);
     }
 
     public sealed class NetEntriesSchemaBuilder : INetEntriesSchemaBuilder
     {
-        private readonly List<NetEntryDeclaration> _declarations = new();
+        private const string HashSite = "schema hash";
+
+        private readonly NetRequestDeclaration<uint> _hash = new(NetworkDelivery.Reliable, NetworkPermissions.Everyone, HashSite);
+        private readonly List<NetEntryDeclaration> _declarations;
         private bool _built;
 
-        public NetRequestDeclaration<T> DeclareRequest<T>(NetworkDelivery deliveryType)
+        public NetEntriesSchemaBuilder()
         {
-            var declaration = new NetRequestDeclaration<T>(deliveryType);
+            _declarations = new List<NetEntryDeclaration> { _hash };
+        }
+
+        public NetRequestDeclaration<T> DeclareRequest<T>(
+            NetworkDelivery deliveryType,
+            [CallerFilePath] string file = "",
+            [CallerLineNumber] int line = 0)
+        {
+            var declaration = new NetRequestDeclaration<T>(deliveryType, NetworkPermissions.Client, SiteOf(file, line));
             Add(declaration);
             return declaration;
         }
 
-        public NetResultDeclaration<T> DeclareResult<T>(NetworkDelivery deliveryType)
+        public NetResultDeclaration<T> DeclareResult<T>(
+            NetworkDelivery deliveryType,
+            [CallerFilePath] string file = "",
+            [CallerLineNumber] int line = 0)
         {
-            var declaration = new NetResultDeclaration<T>(deliveryType);
+            var declaration = new NetResultDeclaration<T>(deliveryType, SiteOf(file, line));
             Add(declaration);
             return declaration;
         }
 
-        public NetPropertyDeclaration<T> DeclareProperty<T>(T initial, NetworkDelivery deliveryType, NetworkPermissions permissions)
+        public NetPropertyDeclaration<T> DeclareProperty<T>(
+            T initial,
+            NetworkDelivery deliveryType,
+            NetworkPermissions permissions,
+            [CallerFilePath] string file = "",
+            [CallerLineNumber] int line = 0)
         {
-            var declaration = new NetPropertyDeclaration<T>(initial, deliveryType, permissions);
+            var declaration = new NetPropertyDeclaration<T>(initial, deliveryType, permissions, SiteOf(file, line));
             Add(declaration);
             return declaration;
         }
@@ -41,7 +74,7 @@ namespace Bw.Entities.Network.Variables
         {
             ThrowIfBuilt();
             _built = true;
-            return new NetEntriesSchema(_declarations.ToArray());
+            return new NetEntriesSchema(_hash, _declarations.ToArray());
         }
 
         private void Add(NetEntryDeclaration declaration)
@@ -55,5 +88,8 @@ namespace Bw.Entities.Network.Variables
             if (_built)
                 throw new InvalidOperationException("The net entries schema is already built, every entry must be declared before Build.");
         }
+
+        private static string SiteOf(string file, int line) =>
+            $"{file.Substring(Math.Max(file.LastIndexOf('/'), file.LastIndexOf('\\')) + 1)}:{line.ToString()}";
     }
 }

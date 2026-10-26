@@ -24,7 +24,7 @@ namespace Bw.Tests.UseCases.Level.Network
             _world = new PhysicsTestWorld();
             _lift = new Lift(_world, Path.Travel);
             _step = new WorldStep(_world.Lifetime, _world.Clock);
-            new PhysicsSchedule(_world.Lifetime, _world.Space, _step);
+            new PhysicsStepper(_world.Lifetime, _world.Space, _step);
         }
 
         [TearDown]
@@ -34,7 +34,7 @@ namespace Bw.Tests.UseCases.Level.Network
         [Test]
         public void ServerScheduleKeepsThePlatformOnItsPathByTheTick()
         {
-            new MovingPlatformSchedule(_world.Lifetime, _lift.Platform, Path, _world.Clock, _step);
+            new MovingPlatformStepper(_world.Lifetime, _lift.Platform, Path, _world.Clock, _step);
 
             for (var tick = 1; tick <= 200; tick++)
             {
@@ -46,7 +46,7 @@ namespace Bw.Tests.UseCases.Level.Network
         [Test]
         public void ScheduleFollowsTheTickNumberNotTheCountOfSteps()
         {
-            new MovingPlatformSchedule(_world.Lifetime, _lift.Platform, Path, _world.Clock, _step);
+            new MovingPlatformStepper(_world.Lifetime, _lift.Platform, Path, _world.Clock, _step);
             _lift.Platform.Apply(new PlatformState(Path.AlongAt(89 * (double)_world.Clock.Duration)));
 
             _world.Clock.Tick(90);
@@ -58,7 +58,7 @@ namespace Bw.Tests.UseCases.Level.Network
         public void PredictedScheduleDrivesOnlyWhilePredicted()
         {
             var predicted = new Predicted();
-            new PredictedPlatformSchedule(_world.Lifetime, _lift.Platform, Path, _world.Clock, predicted, _step);
+            new PredictedPlatformStepper(_world.Lifetime, _lift.Platform, Path, _world.Clock, predicted, _step);
 
             _world.Clock.Advance(30);
 
@@ -69,7 +69,7 @@ namespace Bw.Tests.UseCases.Level.Network
         public void PredictedScheduleDrivesLikeTheServerOnceInPrediction()
         {
             var predicted = new Predicted();
-            new PredictedPlatformSchedule(_world.Lifetime, _lift.Platform, Path, _world.Clock, predicted, _step);
+            new PredictedPlatformStepper(_world.Lifetime, _lift.Platform, Path, _world.Clock, predicted, _step);
             _world.Clock.Advance(10);
 
             predicted.Me.Value = true;
@@ -82,7 +82,7 @@ namespace Bw.Tests.UseCases.Level.Network
         public void PredictedScheduleStopsDrivingWhenPredictionEnds()
         {
             var predicted = new Predicted();
-            new PredictedPlatformSchedule(_world.Lifetime, _lift.Platform, Path, _world.Clock, predicted, _step);
+            new PredictedPlatformStepper(_world.Lifetime, _lift.Platform, Path, _world.Clock, predicted, _step);
             predicted.Me.Value = true;
             _world.Clock.Advance(30);
             var left = _lift.Platform.State.Value.Along;

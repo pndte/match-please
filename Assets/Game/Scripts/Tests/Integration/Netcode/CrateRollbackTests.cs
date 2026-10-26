@@ -31,7 +31,7 @@ namespace Bw.Tests.Integration.Netcode
         private PhysicsTestWorld _client;
         private DynamicBody _serverCrate;
         private DynamicBody _clientCrate;
-        private WorldRollback _rollback;
+        private RollbackStepper _stepper;
         private ManualResults<TickedState<RigidState>> _received;
         private Dictionary<int, RigidState> _serverStates;
         private Dictionary<int, RigidState> _clientStates;
@@ -55,15 +55,15 @@ namespace Bw.Tests.Integration.Netcode
             _steps = 0;
 
             var serverStep = new WorldStep(_server.Lifetime, _server.Clock);
-            new PhysicsSchedule(_server.Lifetime, _server.Space, serverStep);
+            new PhysicsStepper(_server.Lifetime, _server.Space, serverStep);
             serverStep.Stepped(TickPhase.Default).Advise(_server.Lifetime, ShoveTheServerCrate);
 
-            _rollback = new WorldRollback(_client.Lifetime, _client.Clock, config);
-            new PhysicsSchedule(_client.Lifetime, _client.Space, _rollback);
-            _rollback.Stepped(TickPhase.Default).Advise(_client.Lifetime, ShoveTheClientCrate);
+            _stepper = new RollbackStepper(_client.Lifetime, _client.Clock, config);
+            new PhysicsStepper(_client.Lifetime, _client.Space, _stepper);
+            _stepper.Stepped(TickPhase.Default).Advise(_client.Lifetime, ShoveTheClientCrate);
             var replicated = new ReplicatedStates<RigidState>(_client.Lifetime, _received, config);
-            _rollback.Track(_client.Lifetime, new RollbackPart<RigidState>(_clientCrate, replicated, new RigidDivergence(), config));
-            new StateCorrections<RigidState>(_client.Lifetime, _clientCrate, _rollback).Corrected.Advise(_client.Lifetime, _ => _correctedAt.Add(_client.Clock.Current));
+            _stepper.Track(_client.Lifetime, new RollbackPart<RigidState>(_clientCrate, replicated, new RigidDivergence(), config));
+            new StateCorrections<RigidState>(_client.Lifetime, _clientCrate, _stepper).Corrected.Advise(_client.Lifetime, _ => _correctedAt.Add(_client.Clock.Current));
         }
 
         [TearDown]

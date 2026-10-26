@@ -4,6 +4,6 @@ namespace Bw.Entities.Network.Variables
     {
         T PendingPayload { get; }
         NetSendTarget PendingTarget { get; }
-        void ApplyFromNetwork(T value);
+        void ApplyFromNetwork(T value, ulong senderClientId);
     }
 }

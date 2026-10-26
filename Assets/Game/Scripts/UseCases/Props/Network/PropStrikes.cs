@@ -23,7 +23,7 @@ namespace Bw.UseCases.Props.Network
         private readonly Signal<Strike> _struck = new();
         private readonly List<AffectedTarget<IReadonlyMortal, Impacts>> _affected = new(4);
         private readonly List<IReadonlyMortal> _struckSinceRelease = new();
-        private readonly PropRelease _release;
+        private readonly PropReleaser _releaser;
         private readonly IReadonlySimulation<RigidState> _body;
         private readonly PhysicsBody _physics;
         private readonly IWorldStep _worldStep;
@@ -32,26 +32,26 @@ namespace Bw.UseCases.Props.Network
 
         public PropStrikes(
             Lifetime lifetime,
-            PropRelease release,
+            PropReleaser releaser,
             IReadonlySimulation<RigidState> body,
             PhysicsBody physics,
             IWorldStep worldStep,
             PropThrowConfig config)
         {
-            _release = release;
+            _releaser = releaser;
             _body = body;
             _physics = physics;
             _worldStep = worldStep;
             _config = config;
             _targets = config.Targets.AsPhysicsMask();
 
-            release.Released.Advise(lifetime, _ => _struckSinceRelease.Clear());
+            releaser.Released.Advise(lifetime, _ => _struckSinceRelease.Clear());
             worldStep.Stepped(TickPhase.Late).Advise(lifetime, Detect);
         }
 
         private void Detect(int tick)
         {
-            if (_worldStep.Replaying.Value || !_release.TryGetReleaser(out var releaser))
+            if (_worldStep.Replaying.Value || !_releaser.TryGetReleaser(out var releaser))
                 return;
 
             FindStruck(releaser);

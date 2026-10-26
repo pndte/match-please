@@ -48,7 +48,7 @@ namespace Bw.Entities.Network.LagCompensation
             if (!_history.TryGetEarliest(tick, out _, out var first))
                 throw new InvalidOperationException($"No state of tick {tick.ToString()} or later is kept, though the history holds tick {_history.NewestTick.ToString()}.");
 
-            return first; //TODO: тик раньше первой записи (объект появился позже момента, который видел стрелок) даёт самое раннее состояние — честнее на время отката убирать объект из мира
+            return first;
         }
 
         private void Restore() =>

@@ -103,14 +103,14 @@ namespace Bw.Injection.Crates
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.Bind<AffectableRegistration<IReadonlyMortal, Impacts>>()
-                        .FromMethod(context => context.Container.Instantiate<AffectableRegistration<IReadonlyMortal, Impacts>>(new object[] { context.Container.Resolve<SimulationAffectable<RigidState, Impacts>>() }))
+                    Container.Bind<AffectableRegistrar<IReadonlyMortal, Impacts>>()
+                        .FromMethod(context => context.Container.Instantiate<AffectableRegistrar<IReadonlyMortal, Impacts>>(new object[] { context.Container.Resolve<SimulationAffectable<RigidState, Impacts>>() }))
                         .AsCached()
                         .NonLazy();
                     break;
                 case PeerType.Client:
-                    Container.Bind<PredictedAffectableRegistration<IReadonlyMortal, Impacts>>()
-                        .FromMethod(context => context.Container.Instantiate<PredictedAffectableRegistration<IReadonlyMortal, Impacts>>(new object[] { context.Container.Resolve<SimulationAffectable<RigidState, Impacts>>() }))
+                    Container.Bind<PredictedAffectableRegistrar<IReadonlyMortal, Impacts>>()
+                        .FromMethod(context => context.Container.Instantiate<PredictedAffectableRegistrar<IReadonlyMortal, Impacts>>(new object[] { context.Container.Resolve<SimulationAffectable<RigidState, Impacts>>() }))
                         .AsCached()
                         .NonLazy();
                     break;
@@ -125,11 +125,11 @@ namespace Bw.Injection.Crates
             Container.Bind(typeof(IHealthViewModel), typeof(IDamageViewModel), typeof(IDeathViewModel)).To<MortalViewModel>().AsSingle();
             Container.Decorate<IDamageViewModel>().With<ArrivingDamageViewModel>();
             Container.Bind<IHitFlashConfig>().FromInstance(_hitFlashConfig).AsSingle();
-            Container.Bind<HitFlash>().AsSingle().WithArguments(new[] { _sprite }).NonLazy();
+            Container.Bind<HitFlashView>().AsSingle().WithArguments(new[] { _sprite }).NonLazy();
             Container.BindInstance(_damage).AsSingle();
             Container.Bind<CrateCracks>().AsSingle().NonLazy();
-            Container.Bind<CrateHitJolt>().AsSingle().WithArguments(_visual).NonLazy();
-            Container.Bind<CrateBreak>().AsSingle().WithArguments(transform).NonLazy();
+            Container.Bind<CrateHitJoltView>().AsSingle().WithArguments(_visual).NonLazy();
+            Container.Bind<CrateBreakView>().AsSingle().WithArguments(transform).NonLazy();
         }
 
         private void BindClientSounds()

@@ -24,7 +24,7 @@ namespace Bw.Injection.Weapon
             RequireOneRowOfRulesPerKind();
             RequireSlotForEveryKind();
             RequireDistinctSwitchKeys();
-            WeaponCatalogValidation.Require(_catalog);
+            WeaponCatalogValidator.Require(_catalog);
             Container.BindInstance(_pickup).AsSingle();
             Container.BindInstance(_highlight).AsSingle();
             Container.BindInstance(_inventory).AsSingle();

@@ -12,7 +12,7 @@ namespace Bw.UseCases.Match.Network
         public MatchTableWriter(MatchTables tables, INetEntries entries, NetPropertyDeclaration<MatchTable> declaration)
         {
             _tables = tables;
-            _table = entries.Get(declaration);
+            _table = entries.Property(declaration);
         }
 
         public void Write() =>

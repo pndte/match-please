@@ -6,8 +6,8 @@ namespace Bw.Entities.Network.Objects
 {
     public interface INetworkLifetimedObject
     {
-        public ulong Id { get; } //TODO: никто не использует, и объект не должен знать свой id — удалить
-        public INetEntries NetEntries { get; }
+        public ulong Id { get; }
+        public INetInbox Inbox { get; }
         public IReadonlyProperty<Lifetime> SpawnedLifetime { get; }
     }
 }

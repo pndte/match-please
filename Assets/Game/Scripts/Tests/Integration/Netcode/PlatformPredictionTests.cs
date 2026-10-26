@@ -49,17 +49,17 @@ namespace Bw.Tests.Integration.Netcode
             _highest = float.MinValue;
 
             var serverStep = new WorldStep(_server.Lifetime, _server.Clock);
-            new PhysicsSchedule(_server.Lifetime, _server.Space, serverStep);
-            new MovingPlatformSchedule(_server.Lifetime, _serverLift.Platform, Path, _server.Clock, serverStep);
+            new PhysicsStepper(_server.Lifetime, _server.Space, serverStep);
+            new MovingPlatformStepper(_server.Lifetime, _serverLift.Platform, Path, _server.Clock, serverStep);
 
             var predicted = new Predicted();
-            var rollback = new WorldRollback(_client.Lifetime, _client.Clock, config);
-            new PhysicsSchedule(_client.Lifetime, _client.Space, rollback);
+            var stepper = new RollbackStepper(_client.Lifetime, _client.Clock, config);
+            new PhysicsStepper(_client.Lifetime, _client.Space, stepper);
             var replicated = new ReplicatedStates<PlatformState>(_client.Lifetime, _received, config);
             var part = new RollbackPart<PlatformState>(_clientLift.Platform, replicated, new PlatformDivergence(_clientLift.Rail), config);
-            new RollbackPartRegistration<PlatformState>(_client.Lifetime, predicted, part, rollback);
-            new PredictedPlatformSchedule(_client.Lifetime, _clientLift.Platform, Path, _client.Clock, predicted, rollback);
-            new StateCorrections<PlatformState>(_client.Lifetime, _clientLift.Platform, rollback).Corrected
+            new RollbackPartRegistrar<PlatformState>(_client.Lifetime, predicted, part, stepper);
+            new PredictedPlatformStepper(_client.Lifetime, _clientLift.Platform, Path, _client.Clock, predicted, stepper);
+            new StateCorrections<PlatformState>(_client.Lifetime, _clientLift.Platform, stepper).Corrected
                 .Advise(_client.Lifetime, _ => _correctedAt.Add(_client.Clock.Current));
         }
 

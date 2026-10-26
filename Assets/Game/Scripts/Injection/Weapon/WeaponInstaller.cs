@@ -163,7 +163,7 @@ namespace Bw.Injection.Weapon
             Container.Bind<WeaponDropServerHandler>().AsSingle().NonLazy();
             Container.Bind<HeldWeaponPose>().AsSingle();
             Container.Bind<WeaponReleaseSpots>().AsSingle().WithArguments(_releaseConfig);
-            Container.Bind<WeaponRelease>().AsSingle().NonLazy();
+            Container.Bind<WeaponReleaser>().AsSingle().NonLazy();
             Container.Bind<UnheldWeaponDespawner>().AsSingle().NonLazy();
             Container.InstantiateComponent<WeaponHolder>(gameObject);
         }
@@ -173,9 +173,9 @@ namespace Bw.Injection.Weapon
             Container.Bind<WeaponDropClientHandler>().AsSingle().NonLazy();
             Container.BindInterfacesTo<Spread>().AsSingle();
             Container.BindInterfacesTo<AimDeflection>().AsSingle();
-            Container.Bind<SpreadKick>().AsSingle();
+            Container.Bind<SpreadKicker>().AsSingle();
             Container.BindInterfacesTo<FloorWeapon>().AsSingle().WithArguments(_box);
-            Container.Bind<FloorWeaponRegistration>().AsSingle().NonLazy();
+            Container.Bind<FloorWeaponRegistrar>().AsSingle().NonLazy();
             BindClientVisuals();
             BindClientSounds();
         }
@@ -188,7 +188,7 @@ namespace Bw.Injection.Weapon
                     ctx.Container.Instantiate<SmoothedAimView<GunState>>(new object[] { ctx.Container.Resolve<WeaponPoseViewModel<GunState>>() }),
                     ctx.Container.Resolve<SeenShotsViewModel<GunState>>(),
                     ctx.Container.Resolve<GunViewModel>(),
-                    ctx.Container.Resolve<SpreadKick>()))
+                    ctx.Container.Resolve<SpreadKicker>()))
                 .AsSingle();
             Container.Bind<WeaponReloadCursor>().AsSingle().NonLazy();
             Container.Bind<WeaponRoundsCursor>().AsSingle().NonLazy();

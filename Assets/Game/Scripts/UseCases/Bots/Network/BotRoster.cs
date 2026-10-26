@@ -12,17 +12,17 @@ namespace Bw.UseCases.Bots.Network
 
         private readonly ViewableMap<IPlayer, BotEntry> _bots = new();
         private readonly Lifetime _lifetime;
-        private readonly IPlayerEntrance _entrance;
+        private readonly IPlayerAdmitter _admitter;
         private readonly BotsConfig _config;
 
         public BotRoster(
             Lifetime lifetime,
             INetworkHolder networkHolder,
-            IPlayerEntrance entrance,
+            IPlayerAdmitter admitter,
             BotsConfig config)
         {
             _lifetime = lifetime;
-            _entrance = entrance;
+            _admitter = admitter;
             _config = config;
 
             networkHolder.NetworkManager.AdviseNotNull(lifetime, _ => Join());
@@ -34,7 +34,7 @@ namespace Bw.UseCases.Bots.Network
             {
                 var player = new Player(entry.Nickname);
                 _bots.AddLifetimed(_lifetime, player, entry);
-                _entrance.Admit(_lifetime, player, entry.Character.Key, PlayerDriver.Server);
+                _admitter.Admit(_lifetime, player, entry.Character.Key, PlayerDriver.Server);
             }
         }
     }

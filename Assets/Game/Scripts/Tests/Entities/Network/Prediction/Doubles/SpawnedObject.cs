@@ -8,7 +8,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Doubles
     public sealed class SpawnedObject : INetworkLifetimedObject
     {
         public ulong Id { get; }
-        public INetEntries NetEntries => null;
+        public INetInbox Inbox => null;
         public IReadonlyProperty<Lifetime> SpawnedLifetime => _spawned;
 
         private readonly ViewableProperty<Lifetime> _spawned = new(Lifetime.Terminated);

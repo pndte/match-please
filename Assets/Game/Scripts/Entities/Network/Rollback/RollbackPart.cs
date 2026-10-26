@@ -10,6 +10,8 @@ namespace Bw.Entities.Network.Rollback
         private readonly IReplicatedStates<TState> _server;
         private readonly IStateDivergence<TState> _divergence;
 
+        private int _correctedTick = int.MinValue;
+
         public RollbackPart(
             IRestorable<TState> state,
             IReplicatedStates<TState> server,
@@ -25,7 +27,7 @@ namespace Bw.Entities.Network.Rollback
         public bool TryGetDivergence(out int tick)
         {
             var newest = _server.NewestTick;
-            if (_server.TryGetAt(newest, out var server) && Diverged(newest, server))
+            if (newest != _correctedTick && _server.TryGetAt(newest, out var server) && Diverged(newest, server))
             {
                 tick = newest;
                 return true;
@@ -40,7 +42,28 @@ namespace Bw.Entities.Network.Rollback
 
         public void Restore(int tick)
         {
-            var state = StateAt(tick);
+            if (TryGetStaleServerState(tick, out var stale))
+            {
+                _correctedTick = _server.NewestTick;
+                Apply(tick, stale);
+                return;
+            }
+
+            Apply(tick, StateAt(tick));
+        }
+
+        private bool TryGetStaleServerState(int tick, out TState stale)
+        {
+            var newest = _server.NewestTick;
+            if (newest < tick && newest != _correctedTick && _server.TryGetAt(newest, out stale) && Diverged(newest, stale))
+                return true;
+
+            stale = default;
+            return false;
+        }
+
+        private void Apply(int tick, TState state)
+        {
             _state.Apply(state);
             _saved.Record(tick, state);
         }

@@ -19,7 +19,7 @@ namespace Bw.Entities.Network.Prediction.Stream
         private readonly INetworkTicks _ticks;
         private readonly NetworkTicksConfig _config;
         private readonly IInputPolicy<TInput> _policy;
-        private readonly IInputContinuation<TInput> _continuation;
+        private readonly IInputExtrapolator<TInput> _extrapolator;
 
         private TInput _lastInput;
         private TInput _lastKnown;
@@ -33,13 +33,13 @@ namespace Bw.Entities.Network.Prediction.Stream
             INetworkTicks ticks,
             NetworkTicksConfig config,
             IInputPolicy<TInput> policy,
-            IInputContinuation<TInput> continuation,
+            IInputExtrapolator<TInput> extrapolator,
             INetRequestReceiver<TickedInput<TInput>> input)
         {
             _ticks = ticks;
             _config = config;
             _policy = policy;
-            _continuation = continuation;
+            _extrapolator = extrapolator;
             _buffered = new TickHistory<TInput>(config.MaxBufferedInputTicks + 1);
 
             input.Received.Advise(lifetime, Buffer);
@@ -69,7 +69,7 @@ namespace Bw.Entities.Network.Prediction.Stream
             else
             {
                 _gaps.Fire(InputGap.Substituted);
-                _lastKnown = _newestTick < tick ? _continuation.Continued(_newest, tick - _newestTick) : _continuation.Continued(_lastKnown, 1);
+                _lastKnown = _newestTick < tick ? _extrapolator.Continued(_newest, tick - _newestTick) : _extrapolator.Continued(_lastKnown, 1);
                 _lastInput = _policy.CaughtUp(_lastKnown, _lastInput, _newest, tick - _newestTick);
             }
 

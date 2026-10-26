@@ -8,16 +8,16 @@ namespace Bw.Tests.Entities.Network.Doubles
     public sealed class SpawnedObject : INetworkLifetimedObject
     {
         public ulong Id { get; }
-        public INetEntries NetEntries { get; }
+        public INetInbox Inbox { get; }
         public IReadonlyProperty<Lifetime> SpawnedLifetime => _spawnedLifetime;
 
         private readonly ViewableProperty<Lifetime> _spawnedLifetime = new(Lifetime.Terminated);
         private LifetimeDefinition _spawn;
 
-        public SpawnedObject(ulong id = 1, INetEntries netEntries = null)
+        public SpawnedObject(ulong id = 1, INetInbox inbox = null)
         {
             Id = id;
-            NetEntries = netEntries;
+            Inbox = inbox;
         }
 
         public void Spawn()

@@ -5,9 +5,9 @@ namespace Bw.UseCases.Movement.View.Adapters
     public sealed class RunFacingView : IStateView<MovementState>
     {
         private readonly IStateView<MovementState> _view;
-        private readonly RunFacing _facing;
+        private readonly RunFacingViewModel _facing;
 
-        public RunFacingView(IStateView<MovementState> view, RunFacing facing)
+        public RunFacingView(IStateView<MovementState> view, RunFacingViewModel facing)
         {
             _view = view;
             _facing = facing;

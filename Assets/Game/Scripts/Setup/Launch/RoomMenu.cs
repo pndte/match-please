@@ -17,7 +17,7 @@ namespace Setup.Launch
             _room = room;
             _create = create;
 
-            room.CloseChosen.Advise(lifetime, _ => GameRestart.ReturnToMenu());
+            room.CloseChosen.Advise(lifetime, _ => GameRestarter.ReturnToMenu());
         }
 
         public void ShowOpening(ushort port) =>
@@ -26,7 +26,7 @@ namespace Setup.Launch
         public UniTask<ushort> RetryPort(Lifetime lifetime, ushort busyPort)
         {
             var retried = new UniTaskCompletionSource<ushort>();
-            _create.BackChosen.Advise(lifetime, _ => GameRestart.ReturnToMenu());
+            _create.BackChosen.Advise(lifetime, _ => GameRestarter.ReturnToMenu());
             _create.PortChosen.Advise(lifetime, port => retried.TrySetResult(port));
             _create.ShowBusy(busyPort);
             return retried.Task;

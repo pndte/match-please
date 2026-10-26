@@ -25,6 +25,9 @@ namespace Bw.Entities.Network.Routing
     {
         private const int ReserveSize = 16;
         private const int MaxMessageSize = ushort.MaxValue;
+
+        private bool ShuttingDown => _networkHolder.NetworkManager.Value.ShutdownInProgress;
+
         private readonly INetworkHolder _networkHolder;
 
         public NetworkRouter(INetworkHolder networkHolder)
@@ -35,6 +38,9 @@ namespace Bw.Entities.Network.Routing
         public void SendToServer<T>(NetworkMessage<T> message, NetworkDelivery deliveryType)
             where T : struct, INetworkSerializable
         {
+            if (ShuttingDown)
+                return;
+
             var dataSize = Unsafe.SizeOf<T>() + ReserveSize;
             using var messageBuffer = new FastBufferWriter(dataSize, Allocator.Temp, MaxMessageSize);
 
@@ -48,6 +54,9 @@ namespace Bw.Entities.Network.Routing
         public void SendToClient<T>(NetworkMessage<T> message, NetworkDelivery deliveryType, IClient client)
             where T : struct, INetworkSerializable
         {
+            if (ShuttingDown)
+                return;
+
             var dataSize = Unsafe.SizeOf<T>() + ReserveSize;
             using var messageBuffer = new FastBufferWriter(dataSize, Allocator.Temp, MaxMessageSize);
 
@@ -62,7 +71,7 @@ namespace Bw.Entities.Network.Routing
             where T : struct, INetworkSerializable
         {
             var recipients = _networkHolder.NetworkManager.Value.ConnectedClientsIds;
-            if (recipients.Count == 0)
+            if (ShuttingDown || recipients.Count == 0)
                 return;
 
             var dataSize = Unsafe.SizeOf<T>() + ReserveSize;

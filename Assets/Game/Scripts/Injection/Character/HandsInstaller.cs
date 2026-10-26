@@ -66,7 +66,7 @@ namespace Bw.Injection
         {
             Container.Bind(roles).To<Hands>().AsSingle().WithArguments(_oval)
                 .WriterOnlyInto<IRestorable<HandsState>>(typeof(RollbackPart<HandsState>), typeof(ServerStateFollower<HandsState>));
-            Container.Bind<HandsDraw>().AsSingle().NonLazy();
+            Container.Bind<DrawnWeapons>().AsSingle().NonLazy();
         }
 
         private void BindHold()
@@ -80,7 +80,7 @@ namespace Bw.Injection
         {
             Container.Decorate<ISimulator<HandsInput, HandsState>>().With<BusyHandsGuard>();
             Container.Bind<IInputPolicy<HandsControls>>().To<HandsControlsPolicy>().AsSingle();
-            Container.Bind<HandsOnlyDrop>().AsSingle().NonLazy();
+            Container.Bind<HandsOnlyDropper>().AsSingle().NonLazy();
         }
 
         private void BindClient()

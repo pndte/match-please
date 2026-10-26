@@ -41,8 +41,8 @@ namespace Bw.Tests.UseCases.Match.Network
             _board = new MatchBoard();
             var schema = new NetEntriesSchemaBuilder();
             var declaration = schema.DeclareProperty(MatchTable.Empty, NetworkDelivery.ReliableFragmentedSequenced, NetworkPermissions.Everyone);
-            var entries = UnspawnedNetEntries.Create(_lifetime.Lifetime, _objects.Create("Match"), schema.Build());
-            _table = entries.Get(declaration);
+            var entries = UnspawnedNetEntries.Create(_objects.Create("Match"), schema.Build());
+            _table = entries.Property(declaration);
             _ = new MatchReceiver(_lifetime.Lifetime, entries, declaration, _board, _catalog, _localPlayer);
         }
 

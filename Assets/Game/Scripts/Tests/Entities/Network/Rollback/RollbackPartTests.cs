@@ -125,6 +125,59 @@ namespace Bw.Tests.Entities.Network.Rollback
         }
 
         [Test]
+        public void RestoreLaterThanAStaleDivergenceAppliesTheStaleServerState()
+        {
+            _state.Simulate(5);
+            _part.Save(4);
+            _server.Record(2, 50);
+
+            _part.Restore(12);
+
+            Assert.That(_state.Applied, Is.EqualTo(new[] { 50 }));
+        }
+
+        [Test]
+        public void StaleDivergenceIsCorrectedOnce()
+        {
+            _state.Simulate(5);
+            _part.Save(4);
+            _server.Record(2, 50);
+
+            _part.Restore(12);
+
+            Assert.That(_part.TryGetDivergence(out _), Is.False);
+        }
+
+        [Test]
+        public void NewerServerStateAfterAStaleCorrectionIsComparedAgain()
+        {
+            _state.Simulate(5);
+            _part.Save(4);
+            _server.Record(2, 50);
+            _part.Restore(12);
+            _part.Save(13);
+
+            _server.Record(13, 60);
+
+            Assert.That(_part.TryGetDivergence(out var tick), Is.True);
+            Assert.That(tick, Is.EqualTo(13));
+        }
+
+        [Test]
+        public void RestoreLaterThanAnAgreeingServerStateKeepsThePrediction()
+        {
+            _state.Simulate(5);
+            _part.Save(2);
+            _server.Record(2, 5);
+            _state.Simulate(6);
+            _part.Save(3);
+
+            _part.Restore(3);
+
+            Assert.That(_state.Applied, Is.EqualTo(new[] { 6 }));
+        }
+
+        [Test]
         public void RestoredServerStateBecomesThePredictionAtItsTick()
         {
             _state.Simulate(5);

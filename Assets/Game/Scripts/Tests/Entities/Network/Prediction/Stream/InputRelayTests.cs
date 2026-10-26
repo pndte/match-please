@@ -157,7 +157,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Stream
                 input;
         }
 
-        private sealed class SameInput : IInputContinuation<int>
+        private sealed class SameInput : IInputExtrapolator<int>
         {
             public int Continued(int last, int ticks) =>
                 last;

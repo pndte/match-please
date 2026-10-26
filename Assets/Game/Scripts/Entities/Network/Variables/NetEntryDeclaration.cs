@@ -6,11 +6,13 @@ namespace Bw.Entities.Network.Variables
     {
         internal NetworkDelivery DeliveryType { get; }
         internal NetworkPermissions Permissions { get; }
+        internal string Site { get; }
 
-        private protected NetEntryDeclaration(NetworkDelivery deliveryType, NetworkPermissions permissions)
+        private protected NetEntryDeclaration(NetworkDelivery deliveryType, NetworkPermissions permissions, string site)
         {
             DeliveryType = deliveryType;
             Permissions = permissions;
+            Site = site;
         }
 
         internal abstract INetSyncEntry Create(INetSendGuard sendGuard);
@@ -18,8 +20,8 @@ namespace Bw.Entities.Network.Variables
 
     public sealed class NetRequestDeclaration<T> : NetEntryDeclaration
     {
-        internal NetRequestDeclaration(NetworkDelivery deliveryType)
-            : base(deliveryType, NetworkPermissions.Client)
+        internal NetRequestDeclaration(NetworkDelivery deliveryType, NetworkPermissions permissions, string site)
+            : base(deliveryType, permissions, site)
         {
         }
 
@@ -29,8 +31,8 @@ namespace Bw.Entities.Network.Variables
 
     public sealed class NetResultDeclaration<T> : NetEntryDeclaration
     {
-        internal NetResultDeclaration(NetworkDelivery deliveryType)
-            : base(deliveryType, NetworkPermissions.Server)
+        internal NetResultDeclaration(NetworkDelivery deliveryType, string site)
+            : base(deliveryType, NetworkPermissions.Server, site)
         {
         }
 
@@ -42,8 +44,12 @@ namespace Bw.Entities.Network.Variables
     {
         private readonly T _initial;
 
-        internal NetPropertyDeclaration(T initial, NetworkDelivery deliveryType, NetworkPermissions permissions)
-            : base(deliveryType, permissions)
+        internal NetPropertyDeclaration(
+            T initial,
+            NetworkDelivery deliveryType,
+            NetworkPermissions permissions,
+            string site)
+            : base(deliveryType, permissions, site)
         {
             _initial = initial;
         }

@@ -32,8 +32,8 @@ namespace Bw.Injection.Movement
             Container.Bind<IStateDivergence<RigidState>>().To<RigidDivergence>().AsSingle();
             Container.Bind<RollbackPart<RigidState>>().AsSingle();
             Container.Bind<IStateCorrections<RigidState>>().To<StateCorrections<RigidState>>().AsSingle();
-            Container.Bind<RollbackPartRegistration<RigidState>>().AsSingle().NonLazy();
-            Container.Bind<PredictionInterpolation<RigidState>>().AsSingle().NonLazy();
+            Container.Bind<RollbackPartRegistrar<RigidState>>().AsSingle().NonLazy();
+            Container.Bind<PredictionInterpolator<RigidState>>().AsSingle().NonLazy();
             BindClientVisuals();
         }
 

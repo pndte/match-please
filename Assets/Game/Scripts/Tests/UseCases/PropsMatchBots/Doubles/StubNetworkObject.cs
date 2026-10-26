@@ -9,7 +9,7 @@ namespace Bw.Tests.UseCases.PropsMatchBots.Doubles
     public sealed class StubNetworkObject : INetworkLifetimedObject
     {
         public ulong Id => 1;
-        public INetEntries NetEntries => throw new NotSupportedException("The stub network object has no net entries.");
+        public INetInbox Inbox => throw new NotSupportedException("The stub network object has no net inbox.");
         public IReadonlyProperty<Lifetime> SpawnedLifetime => _spawnedLifetime;
 
         private readonly ViewableProperty<Lifetime> _spawnedLifetime = new(Lifetime.Terminated);

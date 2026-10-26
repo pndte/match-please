@@ -76,7 +76,7 @@ namespace Bw.Injection
         private void BindClient()
         {
             BindPhysics();
-            Container.Bind(typeof(IWorldStep), typeof(IRollbackParts)).To<WorldRollback>().AsSingle().WithArguments(gameObject.Lifetime()).NonLazy();
+            Container.Bind(typeof(IWorldStep), typeof(IRollbackParts)).To<RollbackStepper>().AsSingle().WithArguments(gameObject.Lifetime()).NonLazy();
             Container.Bind<IInputDelay>().To<AdaptiveInputDelay>().AsSingle().WithArguments(gameObject.Lifetime()).NonLazy();
 #if UNITY_EDITOR
             Container.Bind<InputDelayLog>().AsSingle().WithArguments(gameObject.Lifetime()).NonLazy();
@@ -89,9 +89,9 @@ namespace Bw.Injection
             Container.Bind<IAimDeflections>().To<AimDeflections>().AsSingle();
             Container.Bind<ICharacterPredictions>().To<CharacterPredictions>().AsSingle();
             Container.Bind(typeof(IReadonlyFloorWeapons), typeof(IFloorWeapons)).To<FloorWeapons>().AsSingle()
-                .WriterOnlyInto<IFloorWeapons>(typeof(FloorWeaponRegistration));
+                .WriterOnlyInto<IFloorWeapons>(typeof(FloorWeaponRegistrar));
             Container.Bind(typeof(IReadonlyGuardCovers), typeof(IGuardCovers)).To<GuardCovers>().AsSingle()
-                .WriterOnlyInto<IGuardCovers>(typeof(GuardCoverRegistration));
+                .WriterOnlyInto<IGuardCovers>(typeof(GuardCoverRegistrar));
             BindClientVisuals();
         }
 
@@ -104,7 +104,7 @@ namespace Bw.Injection
         private void BindWeapons()
         {
             Container.Bind(typeof(IReadonlyWeaponKindRegistry), typeof(IWeaponKindRegistry)).To<WeaponKindRegistry>().AsSingle()
-                .WriterOnlyInto<IWeaponKindRegistry>(typeof(WeaponKindRegistration));
+                .WriterOnlyInto<IWeaponKindRegistry>(typeof(WeaponKindRegistrar));
             Container.Bind<IWeaponCarriers>().To<WeaponCarriers>().AsSingle();
             Container.Bind<IWeaponCollections>().To<WeaponCollections>().AsSingle();
             Container.Bind<ICharacterTriggers>().To<CharacterTriggers>().AsSingle();
@@ -122,8 +122,8 @@ namespace Bw.Injection
                     context.Container.Resolve<ISimulationStep>()))
                 .AsSingle();
             Container.Bind<IPhysicsSteps>().To<PhysicsSpace>().FromResolve();
-            Container.Bind<PhysicsSchedule>()
-                .FromMethod(context => context.Container.Instantiate<PhysicsSchedule>(new object[] { gameObject.Lifetime(), context.Container.Resolve<PhysicsSpace>() }))
+            Container.Bind<PhysicsStepper>()
+                .FromMethod(context => context.Container.Instantiate<PhysicsStepper>(new object[] { gameObject.Lifetime(), context.Container.Resolve<PhysicsSpace>() }))
                 .AsSingle()
                 .NonLazy();
             Container.Bind<LevelGeometry>()

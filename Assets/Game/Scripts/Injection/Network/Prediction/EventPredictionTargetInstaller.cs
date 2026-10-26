@@ -30,16 +30,16 @@ namespace Bw.Injection.Network.Prediction
                     Container.BindResultSender(_state).WhenInjectedInto(typeof(AuthoritativeState<TState, TEffect>), typeof(LateJoinStateSender<TState>));
                     Container.Bind<AuthoritativeState<TState, TEffect>>().AsSingle();
                     Container.Bind<LateJoinStateSender<TState>>().AsSingle().NonLazy();
-                    Container.Bind<AffectableRegistration<TTarget, TEffect>>()
-                        .FromMethod(context => context.Container.Instantiate<AffectableRegistration<TTarget, TEffect>>(new object[] { context.Container.Resolve<AuthoritativeState<TState, TEffect>>() }))
+                    Container.Bind<AffectableRegistrar<TTarget, TEffect>>()
+                        .FromMethod(context => context.Container.Instantiate<AffectableRegistrar<TTarget, TEffect>>(new object[] { context.Container.Resolve<AuthoritativeState<TState, TEffect>>() }))
                         .AsCached()
                         .NonLazy();
                     break;
                 case PeerType.Client:
                     Container.BindResultReceiver(_state).WhenInjectedInto<PredictedState<TState, TEffect>>();
                     Container.Bind<PredictedState<TState, TEffect>>().AsSingle().NonLazy();
-                    Container.Bind<PredictionTargetRegistration<TTarget, TEffect>>()
-                        .FromMethod(context => context.Container.Instantiate<PredictionTargetRegistration<TTarget, TEffect>>(new object[] { context.Container.Resolve<PredictedState<TState, TEffect>>() }))
+                    Container.Bind<PredictionTargetRegistrar<TTarget, TEffect>>()
+                        .FromMethod(context => context.Container.Instantiate<PredictionTargetRegistrar<TTarget, TEffect>>(new object[] { context.Container.Resolve<PredictedState<TState, TEffect>>() }))
                         .AsCached()
                         .NonLazy();
                     break;

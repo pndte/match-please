@@ -10,17 +10,17 @@ namespace Bw.Entities.Network.Prediction.Stream
     {
         private readonly TickHistory<TInput> _relayed;
         private readonly TickHistory<TInput> _taken;
-        private readonly IInputContinuation<TInput> _continuation;
+        private readonly IInputExtrapolator<TInput> _extrapolator;
         private readonly IInputDivergence<TInput> _divergence;
 
         public RemoteInputs(
             Lifetime lifetime,
             INetResultReceiver<TickedInput<TInput>> relayed,
-            IInputContinuation<TInput> continuation,
+            IInputExtrapolator<TInput> extrapolator,
             IInputDivergence<TInput> divergence,
             WorldRollbackConfig config)
         {
-            _continuation = continuation;
+            _extrapolator = extrapolator;
             _divergence = divergence;
             _relayed = new TickHistory<TInput>(config.HistoryTicks);
             _taken = new TickHistory<TInput>(config.HistoryTicks);
@@ -36,7 +36,7 @@ namespace Bw.Entities.Network.Prediction.Stream
                 return false;
             }
 
-            input = relayedTick == tick ? relayedInput : _continuation.Continued(relayedInput, tick - relayedTick);
+            input = relayedTick == tick ? relayedInput : _extrapolator.Continued(relayedInput, tick - relayedTick);
             _taken.Record(tick, input);
             return true;
         }

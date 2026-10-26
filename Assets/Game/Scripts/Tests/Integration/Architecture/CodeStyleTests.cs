@@ -19,8 +19,8 @@ namespace Bw.Tests.Integration.Architecture
             "Entities/Pool/GameObjects/PrefabPools.cs: if (!listed.Add(pool.Prefab))",
             "Entities/Pool/GameObjects/PrefabPools.cs: if (pool.ViewOnly && !withViews)",
             "Entities/Utilities/BwViewableList.cs: _myStorage.Add(item);",
-            "Setup/NetworkAutoStart.cs: #endif",
-            "UseCases/Camera/View/Shake/CameraShake.cs: _lastPosition = position;",
+            "Setup/NetworkAutoStarter.cs: #endif",
+            "UseCases/Camera/View/Shake/CameraShaker.cs: _lastPosition = position;",
         };
 
         //TODO: старый долг: конструкторы больше чем на шесть аргументов; разбирать по ролям только по слову автора и убрать запись отсюда
@@ -29,7 +29,6 @@ namespace Bw.Tests.Integration.Architecture
             "Entities/Network/Prediction/Events/OutcomeDispatcher.cs: OutcomeDispatcher",
             "Entities/Network/Prediction/Events/OutcomeReceiver.cs: OutcomeReceiver",
             "Entities/Network/Prediction/Stream/PredictionInputSender.cs: PredictionInputSender",
-            "Entities/Network/Variables/Table/NetVariablesTableServer.cs: NetVariablesTableServer",
             "UseCases/Character/Network/TimelineBlendView.cs: TimelineBlendView",
             "UseCases/Combat/Shooting/Network/UnheldWeaponDespawner.cs: UnheldWeaponDespawner",
             "UseCases/Combat/Weapon/Network/Prediction/HitPredictor.cs: HitPredictor",

@@ -15,7 +15,9 @@ namespace Bw.Entities.Network.Variables
 
     internal sealed class NetResult<T> : NetSignal<T>, INetResultSender<T>, INetResultReceiver<T>
     {
-        public ISource<T> Received => FromNetwork;
+        public ISource<T> Received => _received;
+
+        private readonly Signal<T> _received = new();
 
         internal NetResult(INetSendGuard sendGuard) : base(sendGuard)
         {
@@ -32,5 +34,8 @@ namespace Bw.Entities.Network.Variables
             Stage(NetSendTarget.To(recipient), result);
             Dispatch();
         }
+
+        private protected override void Heard(T value, ulong senderClientId) =>
+            _received.Fire(value);
     }
 }

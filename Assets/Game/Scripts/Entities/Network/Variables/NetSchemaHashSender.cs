@@ -1,8 +1,6 @@
 using Bw.Entities.Extensions;
 using Bw.Entities.Network.Objects;
-using Bw.Entities.Network.Routing;
 using JetBrains.Lifetimes;
-using Unity.Netcode;
 
 namespace Bw.Entities.Network.Variables
 {
@@ -11,20 +9,11 @@ namespace Bw.Entities.Network.Variables
         public NetSchemaHashSender(
             Lifetime lifetime,
             NetEntriesSchema schema,
-            NetworkObject networkObject,
-            INetworkLifetimedObject networkLifetimed,
-            IClientNetworkRouter router)
+            INetworkLifetimedObject networkObject,
+            INetEntries entries)
         {
-            networkLifetimed.SpawnedLifetime.WhenAlive(lifetime, _ =>
-                router.SendToServer(
-                    new NetworkMessage<NetSchemaHash>(
-                        new NetworkMessageHeader
-                        {
-                            NetworkObjectId = networkObject.NetworkObjectId,
-                            VarId = NetVariablesTableBase.SchemaHashVarId
-                        },
-                        new NetSchemaHash { Value = schema.Hash }),
-                    NetworkDelivery.Reliable));
+            var hash = entries.RequestSender(schema.HashDeclaration);
+            networkObject.SpawnedLifetime.WhenAlive(lifetime, _ => hash.Send(schema.Hash));
         }
     }
 }

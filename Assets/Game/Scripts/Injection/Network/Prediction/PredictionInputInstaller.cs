@@ -39,7 +39,7 @@ namespace Bw.Injection.Network.Prediction
                     throw new ArgumentOutOfRangeException();
             }
 
-            Container.Bind<InputSteps<TInput>>().AsSingle().NonLazy();
+            Container.Bind<InputStepper<TInput>>().AsSingle().NonLazy();
         }
 
         private void BindClient(
@@ -57,7 +57,7 @@ namespace Bw.Injection.Network.Prediction
                 .WriterOnlyInto<ITickHistory<TInput>>(typeof(PredictionInputSender<TInput>));
             Container.Bind<PredictionInputSender<TInput>>().AsSingle().NonLazy();
             Container.Bind(typeof(IRemoteInputs<TInput>), typeof(RemoteInputs<TInput>)).To<RemoteInputs<TInput>>().AsSingle();
-            Container.Bind<RemoteInputsRegistration<TInput>>().AsSingle().NonLazy();
+            Container.Bind<RemoteInputsRegistrar<TInput>>().AsSingle().NonLazy();
             Container.Bind<IStepInputs<TInput>>().To<PredictedInputs<TInput>>().AsSingle();
             Container.Bind<InputMarginClientHandler>().AsSingle().NonLazy();
         }

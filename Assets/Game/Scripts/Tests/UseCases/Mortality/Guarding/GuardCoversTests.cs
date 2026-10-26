@@ -36,7 +36,7 @@ namespace Bw.Tests.UseCases.Mortality.Guarding
         {
             var mortal = new FakeMortal();
 
-            new GuardCoverRegistration(_lifetime.Lifetime, mortal, new EveryCover(), _covers);
+            new GuardCoverRegistrar(_lifetime.Lifetime, mortal, new EveryCover(), _covers);
 
             Assert.That(_covers.CoverOf(mortal).InCover(Right), Is.True);
             Assert.That(_covers.CoverOf(new FakeMortal()).InCover(Right), Is.False);

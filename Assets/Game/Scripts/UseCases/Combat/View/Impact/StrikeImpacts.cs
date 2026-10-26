@@ -23,7 +23,7 @@ namespace Bw.UseCases.Combat.View.Impact
         private void See(SeenShot strike)
         {
             var trace = strike.Pellets[0];
-            if (trace.End == PelletEnd.Missed) //TODO: попадание видно по локальной трассировке, а урон решает сервер (свой удар предсказан той же трассировкой, но сервер может его отменить) — изредка будет эффект без урона или урон без эффекта
+            if (trace.End == PelletEnd.Missed) //TODO: пофиксить, что иногда кровь не совпадает с моментом нанесения урона
                 return;
 
             var impact = new StrikeImpact(trace.To, strike.Direction);

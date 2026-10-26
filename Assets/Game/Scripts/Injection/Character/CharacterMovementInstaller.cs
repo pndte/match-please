@@ -82,7 +82,7 @@ namespace Bw.Injection
                             MotionOf(context.Container, context.Container.Instantiate<MovementAnimationView>())))
                         .AsSingle();
                     BindFacing();
-                    Container.Bind<SimulationViewSync<MovementState>>().AsSingle().NonLazy();
+                    Container.Bind<SimulationViewSynchronizer<MovementState>>().AsSingle().NonLazy();
                     break;
                 case PeerType.Client:
                     Container.Bind<IStateView<MovementState>>()
@@ -104,7 +104,7 @@ namespace Bw.Injection
 
         private void BindFacing()
         {
-            Container.Bind(typeof(IFacingViewModel), typeof(RunFacing)).To<RunFacing>().AsSingle();
+            Container.Bind(typeof(IFacingViewModel), typeof(RunFacingViewModel)).To<RunFacingViewModel>().AsSingle();
             Container.Decorate<IStateView<MovementState>>().With<RunFacingView>();
         }
 

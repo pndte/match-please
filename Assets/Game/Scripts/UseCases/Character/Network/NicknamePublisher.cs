@@ -16,7 +16,7 @@ namespace Bw.UseCases.Character.Network
             INetEntries entries,
             NetPropertyDeclaration<string> declaration)
         {
-            var published = entries.Get(declaration);
+            var published = entries.Property(declaration);
             networkLifetimed.SpawnedLifetime.WhenAlive(lifetime, spawnedLifetime =>
                 registry.PlayerByCharacter.ViewForKey(spawnedLifetime, character, (_, player) => published.Value = player.Nickname));
         }

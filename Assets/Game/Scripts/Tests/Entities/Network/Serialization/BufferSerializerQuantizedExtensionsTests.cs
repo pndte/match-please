@@ -145,6 +145,19 @@ namespace Bw.Tests.Entities.Network.Serialization
             }
         }
 
+        [Test]
+        public void AngleSentAgainComesBackUnchanged()
+        {
+            for (var degrees = -720f; degrees <= 720f; degrees += 7.37f)
+            {
+                var once = Wire.RoundTrip(new Angle { Degrees = degrees });
+
+                var twice = Wire.RoundTrip(once);
+
+                Assert.That(twice.Degrees, Is.EqualTo(once.Degrees), $"{degrees.ToString()}°");
+            }
+        }
+
         [TestCase(float.NaN)]
         [TestCase(float.PositiveInfinity)]
         [TestCase(float.NegativeInfinity)]

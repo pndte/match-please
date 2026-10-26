@@ -1,0 +1,34 @@
+using Bw.Entities.Network.Rollback;
+using Bw.Entities.Network.Ticks;
+using Bw.Entities.Simulation;
+using JetBrains.Collections.Viewable;
+using JetBrains.Lifetimes;
+using R3;
+
+namespace Bw.Entities.Network.Prediction.Stream
+{
+    public sealed class PredictionInterpolator<TState> where TState : struct
+    {
+        private readonly IInterpolationTicks _ticks;
+        private readonly IReadonlySimulation<TState> _simulation;
+        private readonly IStateView<TState> _view;
+
+        public PredictionInterpolator(
+            Lifetime lifetime,
+            IPredictedBy predictedBy,
+            IInterpolationTicks ticks,
+            IReadonlySimulation<TState> simulation,
+            IStateView<TState> view)
+        {
+            _ticks = ticks;
+            _simulation = simulation;
+            _view = view;
+
+            predictedBy.Me.WhenTrue(lifetime, predictedLifetime =>
+                Observable.EveryUpdate(UnityFrameProvider.Update, predictedLifetime).Subscribe(UpdateView));
+        }
+
+        private void UpdateView(Unit _) =>
+            _view.Show(_simulation.Previous, _simulation.State.Value, _ticks.Progress);
+    }
+}

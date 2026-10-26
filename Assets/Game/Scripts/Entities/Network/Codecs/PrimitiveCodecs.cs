@@ -29,6 +29,22 @@ namespace Bw.Entities.Network.Codecs
         }
     }
 
+    public struct UIntCodec : ICodec<uint>
+    {
+        public uint Value
+        {
+            get => _value;
+            set => _value = value;
+        }
+
+        private uint _value;
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref _value);
+        }
+    }
+
     public struct StringCodec : ICodec<string>
     {
         public string Value
