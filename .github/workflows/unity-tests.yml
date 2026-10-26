@@ -1,18 +1,21 @@
 name: Unity tests
 
-# Runs on GitHub's free Linux machines in GameCI's Unity containers, on pushes to master and by hand, never on pull
-# requests: the Unity license lives in the repository's secrets, which a fork's pull request never receives.
+# Runs on GitHub's free Linux machines in GameCI's Unity containers, on pushes to master, by hand and as the first job
+# of Build, never on pull requests: the Unity license lives in the repository's secrets, which a fork's pull request
+# never receives.
 on:
   push:
     branches: [master]
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
   checks: write
 
+# A call from Build takes Build's name, so it never queues behind, or cancels, a run of its own.
 concurrency:
-  group: unity-tests-${{ github.ref }}
+  group: ${{ github.workflow }}-unity-tests-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -29,10 +32,10 @@ jobs:
           swap-storage: false
 
       - name: Check out
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Restore the imported Library
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: Library
           key: Library-EditMode-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
@@ -85,7 +88,7 @@ jobs:
 
       - name: Keep the results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: editmode-results
           path: ${{ steps.tests.outputs.artifactsPath || 'artifacts' }}

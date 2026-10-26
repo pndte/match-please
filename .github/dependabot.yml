@@ -9,3 +9,10 @@ updates:
       actions:
         patterns:
           - "*"
+    # GameCI's newer lines wrap game-ci/cli, and unity-test-runner 4.4.0 exits before Unity starts
+    # (see unity-tests.yml); the Unity jobs never run on pull requests, so such a bump only fails after its merge.
+    ignore:
+      - dependency-name: game-ci/unity-test-runner
+        update-types: ["version-update:semver-minor", "version-update:semver-major"]
+      - dependency-name: game-ci/unity-builder
+        update-types: ["version-update:semver-major"]

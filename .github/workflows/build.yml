@@ -1,8 +1,9 @@
 name: Build
 
 # Builds the players on GitHub's free Linux machines in GameCI's Unity containers, by hand and for every version tag,
-# never on pull requests, since the Unity license lives in the repository's secrets. Every run builds and starts the
-# server's Docker image; a version tag also pushes the image to GitHub Container Registry and publishes a GitHub Release.
+# never on pull requests, since the Unity license lives in the repository's secrets. Every run first passes the Unity
+# tests, then builds and starts the server's Docker image; a version tag also pushes the image to GitHub Container
+# Registry and publishes a GitHub Release.
 on:
   push:
     tags: ["v*"]
@@ -32,9 +33,18 @@ jobs:
           if [ "$GITHUB_REF_TYPE" = tag ]; then version="${GITHUB_REF_NAME#v}"; else version="0.0.0-${GITHUB_SHA::7}"; fi
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
+  tests:
+    name: Unity tests
+    needs: version
+    uses: ./.github/workflows/unity-tests.yml
+    secrets: inherit
+    permissions:
+      contents: read
+      checks: write
+
   build:
     name: ${{ matrix.name }}
-    needs: version
+    needs: [version, tests]
     runs-on: ubuntu-latest
     timeout-minutes: 90
     strategy:
@@ -62,10 +72,10 @@ jobs:
           swap-storage: false
 
       - name: Check out
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Restore the imported Library
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: Library
           key: Library-${{ matrix.platform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
@@ -110,7 +120,7 @@ jobs:
           fi
 
       - name: Keep the build
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact }}-${{ needs.version.outputs.version }}
           path: ${{ steps.package.outputs.path }}
@@ -129,10 +139,10 @@ jobs:
       VERSION: ${{ needs.version.outputs.version }}
     steps:
       - name: Check out
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Download the server build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: MatchPlease-LinuxServer-${{ needs.version.outputs.version }}
           path: ${{ runner.temp }}/artifact
@@ -198,7 +208,7 @@ jobs:
 
       - name: Keep the server log
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: server-log-${{ needs.version.outputs.version }}
           path: ${{ runner.temp }}/server.log
@@ -231,7 +241,7 @@ jobs:
       VERSION: ${{ needs.version.outputs.version }}
     steps:
       - name: Download the builds
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: MatchPlease-*-${{ needs.version.outputs.version }}
           path: dist
