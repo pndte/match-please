@@ -23,16 +23,16 @@ jobs:
     timeout-minutes: 90
     steps:
       - name: Make room for the Unity image
-        uses: jlumbroso/free-disk-space@v1.3.1
+        uses: jlumbroso/free-disk-space@v2.0.0
         with:
           large-packages: false
           swap-storage: false
 
       - name: Check out
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Restore the imported Library
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: Library
           key: Library-EditMode-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
@@ -84,7 +84,7 @@ jobs:
 
       - name: Keep the results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: editmode-results
           path: ${{ steps.tests.outputs.artifactsPath || 'artifacts' }}
