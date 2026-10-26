@@ -1,7 +1,7 @@
 name: Build
 
-# Builds the players on the project's own Linux machine (the self-hosted runner labelled "unity") in GameCI's Unity
-# containers: by hand, and for every version tag, never on pull requests.
+# Builds the players on GitHub's free Linux machines in GameCI's Unity containers: by hand, and for every version tag,
+# never on pull requests, since the Unity license lives in the repository's secrets.
 on:
   push:
     tags: ["v*"]
@@ -18,11 +18,10 @@ jobs:
   build:
     name: ${{ matrix.name }}
     if: github.repository == 'pndte/match-please'
-    runs-on: [self-hosted, linux, unity]
-    timeout-minutes: 120
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
     strategy:
       fail-fast: false
-      max-parallel: 1
       matrix:
         include:
           - name: Windows client
@@ -39,19 +38,29 @@ jobs:
             artifact: MatchPlease-LinuxServer
             tarball: true
     steps:
-      - name: Check out, keeping the imported Library
-        uses: actions/checkout@v4
+      - name: Make room for the Unity image
+        uses: jlumbroso/free-disk-space@v1.3.1
         with:
-          clean: false
+          large-packages: false
+          swap-storage: false
 
-      - name: Choose the version and clear the output
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Restore the imported Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ matrix.platform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-${{ matrix.platform }}-
+            Library-
+
+      - name: Choose the version
         id: version
-        env:
-          BUILD_METHOD: ${{ matrix.method }}
         run: |
           if [ "$GITHUB_REF_TYPE" = tag ]; then version="${GITHUB_REF_NAME#v}"; else version="0.0.0-${GITHUB_SHA::7}"; fi
           echo "version=$version" >> "$GITHUB_OUTPUT"
-          rm -rf "Builds/$BUILD_METHOD"
 
       - name: Build ${{ matrix.name }}
         uses: game-ci/unity-builder@v4
@@ -66,8 +75,8 @@ jobs:
           customParameters: -buildOutput Builds/${{ matrix.method }} ${{ matrix.parameters }}
           versioning: Custom
           version: ${{ steps.version.outputs.version }}
-          runAsHostUser: true
 
+      # The container writes the build as root.
       - name: Package ${{ matrix.name }}
         id: package
         env:
@@ -78,7 +87,7 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           output="Builds/$BUILD_METHOD"
-          find "$output" -mindepth 1 -maxdepth 1 -type d \( -name '*DoNotShip*' -o -name '*DontShipItWithYourGame*' \) -exec rm -rf {} +
+          sudo find "$output" -mindepth 1 -maxdepth 1 -type d \( -name '*DoNotShip*' -o -name '*DontShipItWithYourGame*' \) -exec rm -rf {} +
           megabytes=$(du -sm "$output" | cut -f1)
           printf '| Build | Version | Size |\n|---|---|---|\n| %s | %s | %s MB |\n' "$BUILD_NAME" "$VERSION" "$megabytes" >> "$GITHUB_STEP_SUMMARY"
 

@@ -1,7 +1,7 @@
 name: Unity tests
 
-# Runs on the project's own Linux machine (a self-hosted runner labelled "unity") in GameCI's Unity containers,
-# never on pull requests: a public repository must not let a fork's code run on that machine.
+# Runs on GitHub's free Linux machines in GameCI's Unity containers, on pushes to master and by hand, never on pull
+# requests: the Unity license lives in the repository's secrets, which a fork's pull request never receives.
 on:
   push:
     branches: [master]
@@ -12,23 +12,33 @@ permissions:
   checks: write
 
 concurrency:
-  group: unity-tests
+  group: unity-tests-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
   editmode:
     name: EditMode tests
     if: github.repository == 'pndte/match-please'
-    runs-on: [self-hosted, linux, unity]
-    timeout-minutes: 120
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
     steps:
-      - name: Check out, keeping the imported Library
-        uses: actions/checkout@v4
+      - name: Make room for the Unity image
+        uses: jlumbroso/free-disk-space@v1.3.1
         with:
-          clean: false
+          large-packages: false
+          swap-storage: false
 
-      - name: Forget the previous results
-        run: rm -rf artifacts
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Restore the imported Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-EditMode-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-EditMode-
+            Library-
 
       - name: Run the EditMode tests
         id: tests
@@ -40,7 +50,6 @@ jobs:
         with:
           testMode: editmode
           coverageEnabled: false
-          runAsHostUser: true
           checkName: EditMode test results
 
       - name: Summarize the results
