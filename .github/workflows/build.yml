@@ -1,7 +1,8 @@
 name: Build
 
-# Builds the players on GitHub's free Linux machines in GameCI's Unity containers: by hand, and for every version tag,
-# never on pull requests, since the Unity license lives in the repository's secrets.
+# Builds the players on GitHub's free Linux machines in GameCI's Unity containers, by hand and for every version tag,
+# never on pull requests, since the Unity license lives in the repository's secrets. Every run builds and starts the
+# server's Docker image; a version tag also pushes the image to GitHub Container Registry and publishes a GitHub Release.
 on:
   push:
     tags: ["v*"]
@@ -14,10 +15,26 @@ concurrency:
   group: unity-build-${{ github.ref }}
   cancel-in-progress: false
 
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/match-please-server
+
 jobs:
+  version:
+    name: Version
+    if: github.repository == 'pndte/match-please'
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Choose the version
+        id: version
+        run: |
+          if [ "$GITHUB_REF_TYPE" = tag ]; then version="${GITHUB_REF_NAME#v}"; else version="0.0.0-${GITHUB_SHA::7}"; fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
   build:
     name: ${{ matrix.name }}
-    if: github.repository == 'pndte/match-please'
+    needs: version
     runs-on: ubuntu-latest
     timeout-minutes: 90
     strategy:
@@ -56,12 +73,6 @@ jobs:
             Library-${{ matrix.platform }}-
             Library-
 
-      - name: Choose the version
-        id: version
-        run: |
-          if [ "$GITHUB_REF_TYPE" = tag ]; then version="${GITHUB_REF_NAME#v}"; else version="0.0.0-${GITHUB_SHA::7}"; fi
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-
       - name: Build ${{ matrix.name }}
         uses: game-ci/unity-builder@v4.8.2
         env:
@@ -74,7 +85,7 @@ jobs:
           buildsPath: Builds
           customParameters: -buildOutput Builds/${{ matrix.method }} ${{ matrix.parameters }}
           versioning: Custom
-          version: ${{ steps.version.outputs.version }}
+          version: ${{ needs.version.outputs.version }}
 
       # The container writes the build as root.
       - name: Package ${{ matrix.name }}
@@ -84,7 +95,7 @@ jobs:
           BUILD_NAME: ${{ matrix.name }}
           ARTIFACT: ${{ matrix.artifact }}
           TARBALL: ${{ matrix.tarball }}
-          VERSION: ${{ steps.version.outputs.version }}
+          VERSION: ${{ needs.version.outputs.version }}
         run: |
           output="Builds/$BUILD_METHOD"
           sudo find "$output" -mindepth 1 -maxdepth 1 -type d \( -name '*DoNotShip*' -o -name '*DontShipItWithYourGame*' \) -exec rm -rf {} +
@@ -101,7 +112,153 @@ jobs:
       - name: Keep the build
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact }}-${{ steps.version.outputs.version }}
+          name: ${{ matrix.artifact }}-${{ needs.version.outputs.version }}
           path: ${{ steps.package.outputs.path }}
           if-no-files-found: error
           retention-days: 30
+
+  image:
+    name: Server image
+    needs: [version, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+    env:
+      VERSION: ${{ needs.version.outputs.version }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Download the server build
+        uses: actions/download-artifact@v4
+        with:
+          name: MatchPlease-LinuxServer-${{ needs.version.outputs.version }}
+          path: ${{ runner.temp }}/artifact
+
+      - name: Unpack the server build
+        run: |
+          mkdir "$RUNNER_TEMP/server"
+          tar -xzf "$RUNNER_TEMP/artifact/MatchPlease-LinuxServer-$VERSION.tar.gz" -C "$RUNNER_TEMP/server"
+
+      - name: Name the image
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{ env.IMAGE }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+          labels: |
+            org.opencontainers.image.title=Match Please server
+            org.opencontainers.image.description=The Linux dedicated server of Match Please; UDP port 7777.
+
+      - name: Build the image
+        uses: docker/build-push-action@v7
+        with:
+          context: ${{ runner.temp }}/server
+          file: Docker/Server.Dockerfile
+          load: true
+          tags: |
+            ${{ steps.meta.outputs.tags }}
+            match-please-server:smoke
+          labels: ${{ steps.meta.outputs.labels }}
+
+      # The server must start listening and keep running without an exception.
+      - name: Start the server in the image
+        run: |
+          docker run --detach --name server --publish 7777:7777/udp match-please-server:smoke
+          for second in $(seq 1 60); do
+            if docker logs server 2>&1 | grep -q 'Starting as the server on 0.0.0.0:7777'; then break; fi
+            if [ "$(docker inspect --format '{{.State.Running}}' server)" != true ]; then break; fi
+            sleep 1
+          done
+          sleep 15
+          running=$(docker inspect --format '{{.State.Running}}' server)
+          docker logs server > "$RUNNER_TEMP/server.log" 2>&1
+          docker rm --force server > /dev/null
+          tail -n 60 "$RUNNER_TEMP/server.log"
+
+          failed=false
+          if ! grep -q 'Starting as the server on 0.0.0.0:7777' "$RUNNER_TEMP/server.log"; then
+            echo "::error::The server never started listening on 0.0.0.0:7777"
+            failed=true
+          fi
+          if [ "$running" != true ]; then
+            echo "::error::The server exited within 15 seconds of listening"
+            failed=true
+          fi
+          if grep -q 'Exception' "$RUNNER_TEMP/server.log"; then
+            grep 'Exception' "$RUNNER_TEMP/server.log" | sed 's/^/::error::/'
+            failed=true
+          fi
+          [ "$failed" = false ]
+
+      - name: Keep the server log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-log-${{ needs.version.outputs.version }}
+          path: ${{ runner.temp }}/server.log
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Sign in to GitHub Container Registry
+        if: github.ref_type == 'tag'
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push the image
+        if: github.ref_type == 'tag'
+        run: |
+          docker push --all-tags "$IMAGE"
+          printf '### Server image\n\n```\ndocker pull %s:%s\n```\n' "$IMAGE" "$VERSION" >> "$GITHUB_STEP_SUMMARY"
+
+  release:
+    name: GitHub Release
+    needs: [version, build, image]
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      VERSION: ${{ needs.version.outputs.version }}
+    steps:
+      - name: Download the builds
+        uses: actions/download-artifact@v4
+        with:
+          pattern: MatchPlease-*-${{ needs.version.outputs.version }}
+          path: dist
+
+      - name: Pack the release files
+        working-directory: dist
+        run: |
+          zip -q -r "MatchPlease-Windows-$VERSION.zip" "MatchPlease-Windows-$VERSION"
+          mv "MatchPlease-LinuxServer-$VERSION/MatchPlease-LinuxServer-$VERSION.tar.gz" .
+          sha256sum "MatchPlease-Windows-$VERSION.zip" "MatchPlease-LinuxServer-$VERSION.tar.gz" > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Publish the release
+        working-directory: dist
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cat > notes.md <<EOF
+          **Windows:** unpack \`MatchPlease-Windows-$VERSION.zip\` and run \`MatchPlease.exe\`.
+
+          **Dedicated server:** \`docker run -d -p 7777:7777/udp $IMAGE:$VERSION\`, or unpack \`MatchPlease-LinuxServer-$VERSION.tar.gz\` into a folder and run \`./MatchPleaseServer.x86_64 -server 7777 -logFile -\`.
+
+          \`SHA256SUMS.txt\` holds the checksums of both archives.
+          EOF
+
+          prerelease=()
+          case "$VERSION" in *-*) prerelease=(--prerelease) ;; esac
+          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --verify-tag \
+            --title "Match Please $VERSION" --notes-file notes.md --generate-notes "${prerelease[@]}" \
+            "MatchPlease-Windows-$VERSION.zip" "MatchPlease-LinuxServer-$VERSION.tar.gz" SHA256SUMS.txt
