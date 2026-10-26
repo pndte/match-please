@@ -793,6 +793,7 @@ flowchart LR
 | `repository.yml` | push и pull request | проверяет, что у каждого ассета есть .meta-файл и у каждого .meta-файла есть ассет, что GUID не повторяются и что Library, Temp, Logs и UserSettings не попали в git |
 | `unity-tests.yml` | push в master, вручную | все EditMode-тесты сборки `Bw.Tests` |
 | `build.yml` | тег `v*`, вручную | те же тесты, затем сборки клиента и сервера, Docker-образ сервера и релиз |
+| `itch.yml` | после релиза стабильной версии, вручную | выкладывает клиент для Windows из GitHub Release на itch.io через butler |
 
 Сами тесты идут около 14 секунд, а весь джоб вместе с запуском контейнера и импортом проекта занимает 7–9 минут. Папка Library сохраняется между запусками в кэше `actions/cache`, поэтому проект не импортируется каждый раз с нуля. Итоговая таблица выводится в Summary запуска, а результат публикуется как проверка «EditMode test results». На pull request тесты не запускаются, потому что секреты с лицензией Unity недоступны для pull request из форков.
 
@@ -803,7 +804,7 @@ git tag -a v0.2.0 -m "Match Please 0.2.0"
 git push origin v0.2.0
 ```
 
-По тегу `build.yml` сначала прогоняет тесты, и сборки начинаются, только если тесты прошли. Editor-скрипт `GameBuilder` (меню Tools → Build) собирает клиент для Windows (StandaloneWindows64, Mono) и выделенный сервер для Linux (StandaloneLinux64, Server). Сервер упаковывается в Docker-образ на Ubuntu 24.04, который работает от непривилегированного пользователя и слушает UDP-порт 7777. Перед публикацией образ запускается прямо в workflow: сервер должен открыть порт и проработать 15 секунд без исключений. После этого образ уходит в GitHub Container Registry, а в GitHub Releases появляются архив клиента, архив сервера и файл `SHA256SUMS.txt` с контрольными суммами. Тег с дефисом, например `v0.2.0-beta.1`, публикуется как пре-релиз. От тега до готового релиза проходит около 15 минут. Первый релиз — [v0.1.0](https://github.com/pndte/match-please/releases/tag/v0.1.0).
+По тегу `build.yml` сначала прогоняет тесты, и сборки начинаются, только если тесты прошли. Editor-скрипт `GameBuilder` (меню Tools → Build) собирает клиент для Windows (StandaloneWindows64, Mono) и выделенный сервер для Linux (StandaloneLinux64, Server). Сервер упаковывается в Docker-образ на Ubuntu 24.04, который работает от непривилегированного пользователя и слушает UDP-порт 7777. Перед публикацией образ запускается прямо в workflow: сервер должен открыть порт и проработать 15 секунд без исключений. После этого образ уходит в GitHub Container Registry, а в GitHub Releases появляются архив клиента, архив сервера и файл `SHA256SUMS.txt` с контрольными суммами. Тег с дефисом, например `v0.2.0-beta.1`, публикуется как пре-релиз. Клиент стабильной версии затем уходит на [itch.io](https://pndte.itch.io/match-please?secret=lGJwzXWXsiEN7X02vTIVU1Fs) через butler, в канал `windows`; пре-релизы туда не попадают. Уже опубликованный релиз можно выложить на itch.io и вручную, запустив `itch.yml` с его тегом. От тега до готового релиза проходит около 15 минут. Первый релиз — [v0.1.0](https://github.com/pndte/match-please/releases/tag/v0.1.0).
 
 Сервер из образа запускается одной командой. Образ публичный, его сжатый размер около 66 МБ:
 
@@ -856,7 +857,7 @@ docker run -d -p 7800:7800/udp ghcr.io/pndte/match-please-server:0.1.0 -server 7
 2. Назначьте главному редактору тег `server`, а клонам — тег `client`.
 3. Чтобы добавить клону 150 мс пинга через Network Simulator, назначьте ему тег `ping150`.
 
-Клиент для Windows и выделенный сервер для Linux собираются командами Tools → Build → Windows Client и Tools → Build → Linux Dedicated Server. В собранной игре кнопка «Создать» запускает сервер в фоновом процессе и подключает к нему текущее окно. Сервер и клиента можно запустить и из командной строки:
+Клиент для Windows и выделенный сервер для Linux собираются командами Tools → Build → Windows Client и Tools → Build → Linux Dedicated Server. Кнопка «Создать» запускает сервер в фоновом процессе и подключает к нему текущее окно. Фоновым сервером всегда работает собранный клиент, поэтому в редакторе сначала нужно собрать `Builds/WindowsClient/MatchPlease.exe`, иначе меню сообщит, что сборки нет. Сервер и клиента можно запустить и из командной строки:
 
 | Команда | Что запускается |
 |---|---|
@@ -885,9 +886,10 @@ Assets/
 │   │   └── Tests/           Bw.Tests: модульные и интеграционные тесты
 │   ├── Editor/              генератор кодеков, запекание навигации, сборки, инспекторы
 │   ├── Prefabs/
+│   ├── Scenes/              Network, ConstructionSite, MeatPlant, SampleScene: грузятся через Addressables
 │   └── UI/                  UXML и USS меню и HUD
 └── Resources/
-    ├── Scenes/              GameSetupScene, Network, MeatPlant, ConstructionSite
+    ├── Scenes/              GameSetupScene: стартовая сцена, единственная в Build Settings
     └── Setup/               настройки сети, физики и пулов
 ```
 
@@ -906,11 +908,11 @@ UseCases/Movement/
 
 | Область | Технологии |
 |---|---|
-| Движок | Unity 6000.3, C# 9, URP 2D, 2D Animation |
+| Движок | Unity 6000.3, C# 9, URP 2D, 2D Animation, Addressables |
 | Сеть | Netcode for GameObjects 2.9.1 как транспорт, Multiplayer Play Mode, Multiplayer Tools (Network Simulator) |
 | Физика | LowLevelPhysics2D (Box2D v3) |
 | Архитектура | Extenject (Zenject), JetBrains.Lifetimes, R3, UniTask |
 | Интерфейс | UI Toolkit, DOTween |
-| Тесты и CI/CD | Unity Test Framework, GitHub Actions, GameCI, CodeQL, Dependabot, Docker, GitHub Container Registry |
+| Тесты и CI/CD | Unity Test Framework, GitHub Actions, GameCI, CodeQL, Dependabot, Docker, GitHub Container Registry, itch.io (butler) |
 
 Проект распространяется под лицензией GPL-3.0, её полный текст — в файле [LICENSE](LICENSE).
