@@ -134,6 +134,7 @@ namespace Bw.Tests.Integration.Injection
         private static void BindPrefabHandlers(DiContainer container)
         {
             container.Bind<IPrefabPools>().FromMethodUntyped(_ => null);
+            container.Bind<NetworkPrefabHandlerFactory>().AsSingle().WithArguments(Lifetime.Eternal);
             container.BindInterfacesTo<NetworkPrefabRegistrationBus>().AsSingle().WithArguments(Lifetime.Eternal, NetworkManager.Singleton);
         }
     }

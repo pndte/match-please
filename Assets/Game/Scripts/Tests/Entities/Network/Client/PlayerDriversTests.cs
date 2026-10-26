@@ -19,7 +19,7 @@ namespace Bw.Tests.Entities.Network
         {
             _lifetime = new LifetimeDefinition();
             _drivers = new PlayerDrivers();
-            _client = new Client(new ConnectionRequest("Саня", 3));
+            _client = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()));
             _human = new Player("Саня");
             _bot = new Player("Гошак");
         }
@@ -72,7 +72,7 @@ namespace Bw.Tests.Entities.Network
         public void ClientWithoutAPlayerThrows()
         {
             _drivers.AddClientDriven(_lifetime.Lifetime, _human, _client);
-            var stranger = new Client(new ConnectionRequest("Чужой", 2));
+            var stranger = new Client(new ConnectionRequest("Чужой", 2, System.Guid.NewGuid()));
 
             Assert.Throws<InvalidOperationException>(() => _drivers.PlayerOf(stranger));
         }
@@ -129,6 +129,53 @@ namespace Bw.Tests.Entities.Network
             _drivers.AddClientDriven(_lifetime.Lifetime, _human, _client);
 
             Assert.That(DriverOf(_human), Is.EqualTo("client Саня"));
+        }
+
+        [Test]
+        public void PlayerWhoseClientLeftIsDrivenByTheServerAndFreesTheClient()
+        {
+            _drivers.AddClientDriven(_lifetime.Lifetime, _human, _client);
+
+            _drivers.ChangeDriver(_human, PlayerDriver.Server);
+
+            Assert.That(DriverOf(_human), Is.EqualTo("server"));
+            Assert.That(_drivers.ByClient.ContainsKey(_client), Is.False);
+        }
+
+        [Test]
+        public void ReturningClientDrivesItsPlayerAgain()
+        {
+            var returned = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()));
+            _drivers.AddClientDriven(_lifetime.Lifetime, _human, _client);
+            _drivers.ChangeDriver(_human, PlayerDriver.Server);
+
+            _drivers.ChangeDriver(_human, PlayerDriver.Client(returned));
+
+            Assert.That(_drivers.PlayerOf(returned), Is.SameAs(_human));
+            Assert.That(_drivers.Of(_human).Value, Is.Not.SameAs(PlayerDriver.Server));
+        }
+
+        [Test]
+        public void ChangeToAClientThatDrivesAnotherPlayerThrows()
+        {
+            _drivers.AddClientDriven(_lifetime.Lifetime, _human, _client);
+            _drivers.AddServerDriven(_lifetime.Lifetime, _bot);
+
+            Assert.Throws<InvalidOperationException>(() => _drivers.ChangeDriver(_bot, PlayerDriver.Client(_client)));
+        }
+
+        [Test]
+        public void PlayerLeavingTheSessionFreesItsCurrentClient()
+        {
+            var session = new LifetimeDefinition();
+            var returned = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()));
+            _drivers.AddClientDriven(session.Lifetime, _human, _client);
+            _drivers.ChangeDriver(_human, PlayerDriver.Client(returned));
+
+            session.Terminate();
+
+            Assert.That(_drivers.ByClient.ContainsKey(returned), Is.False);
+            Assert.That(_drivers.ByClient.ContainsKey(_client), Is.False);
         }
 
         private string DriverOf(IPlayer player)

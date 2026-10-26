@@ -10,6 +10,7 @@ namespace Bw.UseCases.Bots
         public BotEntry[] Bots = Array.Empty<BotEntry>();
         public LayerMask SightBlockers = 1 << 14;
         public MeleeWeaponConfig Fists;
+        public BotDifficultyConfig StandIn;
         [Min(1f)] public float PropSearchRange = 12f;
 
         [Header("Plan costs")]

@@ -70,6 +70,7 @@ namespace Bw.Injection.Props
             EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyMortal, Impacts>.Install(Container, _runtimeSettings, _netSchema);
             BindHold();
             BindFlight();
+            Container.Bind<WeaponHolder>().FromNewComponentOn(_parts.Prop.gameObject).AsSingle().NonLazy();
 
             switch (_runtimeSettings.CurrentPeerType)
             {
@@ -114,7 +115,6 @@ namespace Bw.Injection.Props
         {
             WeaponSimulatorInstaller<PropState, PropSimulator>.Install(Container);
             Container.BindInterfacesTo<ShootingWeapon<PropState>>().AsSingle().WithArguments(new PropState(0f, PropPhase.Holding, 0, 0, true)).NonLazy();
-            Container.Bind<WeaponKindRegistrar>().AsSingle().WithArguments(WeaponKind.Prop).NonLazy(); //TODO: ящик создаёт спавнер ящиков, а не Armory, и в каталоге оружия его нет, поэтому описания у ящика нет: когда матч начнёт засчитывать броски (HitScorer), убийство ящиком бросит исключение в ленте убийств, пока ящику не дадут описание, строку в каталоге, иконку в WeaponIconsConfig и создание через Armory
             Container.Bind<WeaponNetworkRegistrar>().AsSingle().NonLazy();
             Container.Bind<WeaponClock>().AsSingle().NonLazy();
 
@@ -170,7 +170,6 @@ namespace Bw.Injection.Props
             Container.Bind<SimulationHistory<PropState>>().AsSingle().NonLazy();
             Container.Bind<SimulationRewinder<PropState>>().AsSingle();
             Container.Decorate<IRewindable>().With<PropRewindable>();
-            Container.Bind<WeaponHolder>().FromNewComponentOn(_parts.Prop.gameObject).AsSingle().NonLazy();
         }
 
         private void BindClient()

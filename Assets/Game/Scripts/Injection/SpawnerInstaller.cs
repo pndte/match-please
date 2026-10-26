@@ -42,6 +42,7 @@ namespace Bw.Injection
         public override void InstallBindings()
         {
             Container.Bind<IPlayerCollection>().To<PlayerCollection>().AsSingle();
+            Container.BindInstance(WeaponPrefabKinds.Of(_weaponCatalog, Props())).AsSingle();
 
             if (_runtimeSettings.CurrentPeerType != PeerType.Server)
                 return;
@@ -54,7 +55,9 @@ namespace Bw.Injection
             Container.Bind(typeof(IReadonlyPlayerIds), typeof(IPlayerIds)).To<PlayerIds>().AsSingle()
                 .WriterOnlyInto<IPlayerIds>(typeof(PlayerAdmitter));
             Container.Bind(typeof(IReadonlyPlayerDrivers), typeof(IPlayerDrivers)).To<PlayerDrivers>().AsSingle()
-                .WriterOnlyInto<IPlayerDrivers>(typeof(PlayerAdmitter));
+                .WriterOnlyInto<IPlayerDrivers>(typeof(PlayerAdmitter), typeof(ConnectedClientAdmitter));
+            Container.Bind(typeof(IReadonlyDepartedPlayers), typeof(DepartedPlayers)).To<DepartedPlayers>().AsSingle()
+                .WriterOnlyInto<DepartedPlayers>(typeof(ConnectedClientAdmitter));
             Container.Bind(typeof(IReadonlyPlayerCharacters), typeof(IPlayerCharacters)).To<PlayerCharacters>().AsSingle()
                 .WriterOnlyInto<IPlayerCharacters>(typeof(PlayerAdmitter));
             Container.Bind<IPlayerAdmitter>().To<PlayerAdmitter>().AsSingle();
@@ -84,7 +87,8 @@ namespace Bw.Injection
                 throw new InvalidOperationException("The spawner has crate spots but no crate config: assign Resources/Crates/CrateSpawnConfig.");
 
             RequireNetworkPrefab(registered, _crates.Prefab);
-            Container.Bind<NetworkCratesSpawner>().AsSingle().WithArguments(_crates, _crateSpots).NonLazy();
+            Container.Bind<CrateSpots>().AsSingle().WithArguments(_crates, _crateSpots);
+            Container.Bind<NetworkCratesSpawner>().AsSingle().WithArguments(_crates).NonLazy();
         }
 
         private void BindPlatforms(NetworkPrefabs registered)
@@ -99,6 +103,9 @@ namespace Bw.Injection
 
             Container.Bind<NetworkPlatformsSpawner>().AsSingle().WithArguments(_platforms).NonLazy();
         }
+
+        private NetworkObject[] Props() =>
+            _crateSpots.Length > 0 ? new[] { _crates.Prefab } : Array.Empty<NetworkObject>();
 
         private void RequireLoadout()
         {

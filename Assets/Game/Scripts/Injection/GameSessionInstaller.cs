@@ -30,8 +30,8 @@ using Bw.UseCases.Level;
 using Bw.UseCases.Match;
 using Bw.UseCases.Mortality.Guarding;
 using Bw.UseCases.Mortality.Network.Guarding;
-using Bw.UseCases.Movement.Network.Prediction;
 using Bw.UseCases.Movement.Physics;
+using Bw.UseCases.Spawning.Network;
 using UnityEngine;
 using Zenject;
 
@@ -104,7 +104,7 @@ namespace Bw.Injection
         private void BindWeapons()
         {
             Container.Bind(typeof(IReadonlyWeaponKindRegistry), typeof(IWeaponKindRegistry)).To<WeaponKindRegistry>().AsSingle()
-                .WriterOnlyInto<IWeaponKindRegistry>(typeof(WeaponKindRegistrar));
+                .WriterOnlyInto<IWeaponKindRegistry>(typeof(Armory), typeof(NetworkCratesSpawner), typeof(NetworkPrefabHandlerFactory));
             Container.Bind(typeof(IReadonlyWeaponCarriers), typeof(IWeaponCarriers)).To<WeaponCarriers>().AsSingle()
                 .WriterOnlyInto<IWeaponCarriers>(typeof(CarriersRegistrar));
             Container.Bind<IWeaponCollections>().To<WeaponCollections>().AsSingle();

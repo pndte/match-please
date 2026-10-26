@@ -1,3 +1,4 @@
+using System;
 using Bw.Entities.Network;
 using UnityEngine;
 
@@ -5,13 +6,18 @@ namespace Setup.Launch
 {
     public sealed class PlayerPrefsProfile : IPlayerProfile
     {
-        private const string NicknamePref = "Launch.PlayerName";
+        private const string NicknamePref = "Launch.PlayerName"; //TODO: config 
         private const string CharacterPref = "Launch.CharacterKey";
         private const string RoomPortPref = "Launch.RoomPort";
         private const string LastServerPref = "Launch.ServerAddress";
+        private const string TokenPref = "Launch.PlayerToken";
+        private const string TokenFormat = "N";
 
         public string Nickname => PlayerPrefs.GetString(NicknamePref, string.Empty);
         public int CharacterKey => PlayerPrefs.GetInt(CharacterPref, 0);
+
+        public Guid Token =>
+            Guid.TryParseExact(PlayerPrefs.GetString(TokenPref, string.Empty), TokenFormat, out var token) ? token : SavedNewToken();
 
         public ushort RoomPort
         {
@@ -49,6 +55,13 @@ namespace Setup.Launch
 
         public void SaveLastServer(LaunchChoice.Client server) =>
             Save(LastServerPref, server.Endpoint());
+
+        private static Guid SavedNewToken()
+        {
+            var token = Guid.NewGuid();
+            Save(TokenPref, token.ToString(TokenFormat));
+            return token;
+        }
 
         private static void Save(string pref, string value)
         {

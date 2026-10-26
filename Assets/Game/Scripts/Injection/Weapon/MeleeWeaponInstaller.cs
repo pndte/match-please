@@ -60,11 +60,11 @@ namespace Bw.Injection.Weapon
             var netSchema = new NetEntriesSchemaBuilder();
             HeldWeaponInstaller<MeleeState>.Install(Container, _runtimeSettings, netSchema, Parts());
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
+            Container.InstantiateComponent<WeaponHolder>(gameObject);
 
             switch (_runtimeSettings.CurrentPeerType)
             {
                 case PeerType.Server:
-                    Container.InstantiateComponent<WeaponHolder>(gameObject);
                     break;
                 case PeerType.Client:
                     Container.Bind<IReadonlyAimDeflection>().To<SteadyAim>().AsSingle();
@@ -110,8 +110,7 @@ namespace Bw.Injection.Weapon
                 _visual,
                 _networkObject,
                 _networkLifetimedBehaviour,
-                default,
-                WeaponKind.Fists);
+                default);
 
         private void BindMelee()
         {

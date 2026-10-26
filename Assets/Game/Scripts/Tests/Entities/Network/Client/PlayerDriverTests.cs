@@ -9,7 +9,7 @@ namespace Bw.Tests.Entities.Network
         [Test]
         public void ClientDriverTakesTheClientBranchWithItsClient()
         {
-            var client = new Client(new ConnectionRequest("Саня", 3));
+            var client = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()));
             IClient reached = null;
             var server = false;
 
@@ -34,7 +34,7 @@ namespace Bw.Tests.Entities.Network
         [Test]
         public void StateIsPassedToTheClientBranch()
         {
-            var client = new Client(new ConnectionRequest("Сева", 4));
+            var client = new Client(new ConnectionRequest("Сева", 4, System.Guid.NewGuid()));
             var reached = "";
 
             PlayerDriver.Client(client).Switch(

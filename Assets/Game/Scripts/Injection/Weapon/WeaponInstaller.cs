@@ -122,8 +122,7 @@ namespace Bw.Injection.Weapon
                 _visual,
                 _networkObject,
                 _networkLifetimedBehaviour,
-                new GunState(0f, _shootingWeaponConfig.AmmoSettings.OnSpawnValue, 0, 0, 0),
-                WeaponKind.Gun);
+                new GunState(0f, _shootingWeaponConfig.AmmoSettings.OnSpawnValue, 0, 0, 0));
 
         private void BindGun()
         {
@@ -165,7 +164,6 @@ namespace Bw.Injection.Weapon
             Container.Bind<WeaponReleaseSpots>().AsSingle().WithArguments(_releaseConfig);
             Container.Bind<WeaponReleaser>().AsSingle().NonLazy();
             Container.Bind<UnheldWeaponDespawner>().AsSingle().NonLazy();
-            Container.InstantiateComponent<WeaponHolder>(gameObject);
         }
 
         private void BindClient()

@@ -20,6 +20,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 16384
   Fists: {fileID: 11400000, guid: c1df4db9df884a340b5571179d76add6, type: 2}
+  StandIn: {fileID: 11400000, guid: d16c951d4b5099440917bbf6a3dce92a, type: 2}
   PropSearchRange: 12
   ShootCost: 1
   DrawCost: 1

@@ -13,7 +13,7 @@ namespace Bw.UseCases.Combat.Weapon
         public WeaponKind KindOf(IWeapon weapon)
         {
             if (!_kinds.TryGetValue(weapon, out var kind))
-                throw new InvalidOperationException("The weapon has no kind: every weapon registers what it is while it is spawned.");
+                throw new InvalidOperationException("The weapon has no kind: whoever creates a weapon or a prop registers its kind while it exists.");
 
             return kind;
         }

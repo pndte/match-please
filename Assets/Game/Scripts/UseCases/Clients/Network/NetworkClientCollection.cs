@@ -71,7 +71,7 @@ namespace Bw.UseCases.Clients.Network
 
         private ConnectionRequest Accepted(byte[] payload) =>
             ConnectionRequestPayload.TryRead(payload, out var requested)
-                ? new ConnectionRequest(NicknameRules.Accepted(requested.Nickname), _characters.Accepted(requested.CharacterKey).Key)
-                : new ConnectionRequest(NicknameRules.Fallback, _characters.DefaultCharacter().Key);
+                ? new ConnectionRequest(NicknameRules.Accepted(requested.Nickname), _characters.Accepted(requested.CharacterKey).Key, requested.Token)
+                : new ConnectionRequest(NicknameRules.Fallback, _characters.DefaultCharacter().Key, Guid.NewGuid());
     }
 }

@@ -17,12 +17,14 @@ namespace Bw.UseCases.Spawning.Network
         private readonly Dictionary<IReadonlyWeapon, WeaponDescription> _issued = new();
         private readonly WeaponCatalog _catalog;
         private readonly DiContainer _container;
+        private readonly IWeaponKindRegistry _kinds;
         private int _issuedCount;
 
-        public Armory(WeaponCatalog catalog, DiContainer container)
+        public Armory(WeaponCatalog catalog, DiContainer container, IWeaponKindRegistry kinds)
         {
             _catalog = catalog;
             _container = container;
+            _kinds = kinds;
         }
 
         public IWeapon CreateWeapon(
@@ -33,10 +35,12 @@ namespace Bw.UseCases.Spawning.Network
         {
             var weaponObject = NetworkPrefabInstantiationHelper.Instantiate(_container, _catalog.PrefabOf(weapon), position, rotation);
             var created = HolderOf(weaponObject).Value;
+            var issued = lifetime.Intersect(weaponObject.gameObject.Lifetime());
+            _kinds.AddLifetimed(issued, created, _catalog.KindOf(weapon));
             weaponObject.name += $", {_issuedCount++}";
             weaponObject.Spawn(destroyWithScene: true);
             _issued.Add(created, weapon);
-            lifetime.Intersect(weaponObject.gameObject.Lifetime()).OnTermination(() =>
+            issued.OnTermination(() =>
             {
                 _issued.Remove(created);
                 if (weaponObject.IsSpawned)

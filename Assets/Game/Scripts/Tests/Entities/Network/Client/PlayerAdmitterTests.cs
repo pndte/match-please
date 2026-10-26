@@ -42,7 +42,7 @@ namespace Bw.Tests.Entities.Network
         [Test]
         public void ClientPlayerIsAnnouncedWithItsIdDriverAndCharacterKnown()
         {
-            var client = new Client(new ConnectionRequest("Саня", 3));
+            var client = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()));
 
             _admitter.Admit(_lifetime.Lifetime, new Player("Саня"), 3, PlayerDriver.Client(client));
 
@@ -60,7 +60,7 @@ namespace Bw.Tests.Entities.Network
         [Test]
         public void ClientPlayerIsListedByItsClient()
         {
-            var client = new Client(new ConnectionRequest("Саня", 3));
+            var client = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()));
             var player = new Player("Саня");
 
             _admitter.Admit(_lifetime.Lifetime, player, 3, PlayerDriver.Client(client));
@@ -80,7 +80,7 @@ namespace Bw.Tests.Entities.Network
         public void AdmissionEndsWithItsLifetime()
         {
             var stay = new LifetimeDefinition();
-            var client = new Client(new ConnectionRequest("Саня", 3));
+            var client = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()));
             var player = new Player("Саня");
             _admitter.Admit(stay.Lifetime, player, 3, PlayerDriver.Client(client));
 
@@ -122,7 +122,7 @@ namespace Bw.Tests.Entities.Network
         [Test]
         public void AdmissionRefusedForABusyClientLeavesNoTrace()
         {
-            var client = new Client(new ConnectionRequest("Саня", 3));
+            var client = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()));
             _admitter.Admit(_lifetime.Lifetime, new Player("Саня"), 3, PlayerDriver.Client(client));
             var second = new Player("Сева");
 
@@ -135,7 +135,7 @@ namespace Bw.Tests.Entities.Network
         [Test]
         public void RefusedAdmissionSpendsNoId()
         {
-            var client = new Client(new ConnectionRequest("Саня", 3));
+            var client = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()));
             _admitter.Admit(_lifetime.Lifetime, new Player("Саня"), 3, PlayerDriver.Client(client));
             Assert.Catch(() => _admitter.Admit(_lifetime.Lifetime, new Player("Сева"), 4, PlayerDriver.Client(client)));
 
@@ -150,7 +150,7 @@ namespace Bw.Tests.Entities.Network
             var listedIds = new List<int>();
             _drivers.ByClient.View(_lifetime.Lifetime, (_, _, player) => listedIds.Add(_ids.IdOf(player)));
 
-            _admitter.Admit(_lifetime.Lifetime, new Player("Саня"), 3, PlayerDriver.Client(new Client(new ConnectionRequest("Саня", 3))));
+            _admitter.Admit(_lifetime.Lifetime, new Player("Саня"), 3, PlayerDriver.Client(new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()))));
 
             Assert.That(listedIds, Is.EqualTo(new[] { 1 }));
         }

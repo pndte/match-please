@@ -18,6 +18,7 @@ namespace Bw.Injection.Prefabs
         public override void InstallBindings()
         {
             BindPools();
+            Container.Bind<NetworkPrefabHandlerFactory>().AsSingle().WithArguments(gameObject.Lifetime());
             Container.BindInterfacesTo<NetworkPrefabRegistrationBus>().AsSingle()
                 .WithArguments(gameObject.Lifetime(), NetworkManager.Singleton);
         }

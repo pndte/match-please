@@ -6,8 +6,6 @@ using Bw.Entities.Network.Objects;
 using Bw.Entities.Network.Prediction.Bubble;
 using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Variables;
-using Bw.Entities.Simulation;
-using Bw.Injection.Network;
 using Bw.Injection.Network.Prediction;
 using Bw.Injection.Ownership;
 using Bw.UseCases.Combat.Abstractions.Weapons;
@@ -75,7 +73,6 @@ namespace Bw.Injection.Weapon
         private void BindWeapon()
         {
             Container.BindInterfacesTo<ShootingWeapon<TState>>().AsSingle().WithArguments(_parts.Initial).NonLazy();
-            Container.Bind<WeaponKindRegistrar>().AsSingle().WithArguments(_parts.Kind).NonLazy();
             Container.Bind<WeaponNetworkRegistrar>().AsSingle().NonLazy();
             Container.Bind<WeaponClock>().AsSingle().NonLazy();
             Container.Bind<WeaponOrbit>().AsSingle();

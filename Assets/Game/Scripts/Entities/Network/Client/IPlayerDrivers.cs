@@ -15,5 +15,6 @@ namespace Bw.Entities.Network
     {
         public void AddClientDriven(Lifetime lifetime, IPlayer player, IClient client);
         public void AddServerDriven(Lifetime lifetime, IPlayer player);
+        public void ChangeDriver(IPlayer player, PlayerDriver driver); //TODO: lf сюда
     }
 }

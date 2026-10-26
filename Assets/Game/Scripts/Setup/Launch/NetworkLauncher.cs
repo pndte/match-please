@@ -117,7 +117,7 @@ namespace Setup.Launch
             var transport = TransportOf(manager);
             transport.SetConnectionData(true, server.Address, server.Port);
             transport.MaxConnectAttempts = attempts;
-            manager.NetworkConfig.ConnectionData = ConnectionRequestPayload.Of(new ConnectionRequest(_profile.Nickname, _profile.CharacterKey));
+            manager.NetworkConfig.ConnectionData = ConnectionRequestPayload.Of(new ConnectionRequest(_profile.Nickname, _profile.CharacterKey, _profile.Token));
             _connection.ShowConnecting(server);
             _connection.Watch(manager, server, chosen);
             if (manager.StartClient())

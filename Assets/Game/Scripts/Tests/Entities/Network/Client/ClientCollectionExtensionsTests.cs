@@ -25,7 +25,7 @@ namespace Bw.Tests.Entities.Network
             var lifetime = new LifetimeDefinition();
             var clients = new ClientsById(lifetime.Lifetime);
 
-            Assert.Throws<InvalidOperationException>(() => clients.IdOf(new Client(new ConnectionRequest("Чужой", 1))));
+            Assert.Throws<InvalidOperationException>(() => clients.IdOf(new Client(new ConnectionRequest("Чужой", 1, System.Guid.NewGuid()))));
             lifetime.Terminate();
         }
     }

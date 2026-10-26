@@ -1,8 +1,11 @@
+using System;
+
 namespace Setup.Launch
 {
     public interface IPlayerProfile
     {
         public string Nickname { get; }
+        public Guid Token { get; }
         public int CharacterKey { get; }
         public ushort RoomPort { get; }
         public bool TryGetLastServer(out LaunchChoice.Client server);

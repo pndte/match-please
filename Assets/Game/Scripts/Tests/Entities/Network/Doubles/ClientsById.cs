@@ -13,9 +13,12 @@ namespace Bw.Tests.Entities.Network.Doubles
             ByIds = new ViewableBiMap<ulong, IClient>(lifetime);
         }
 
-        public Client Connect(ulong id, string nickname = "Саня")
+        public Client Connect(ulong id, string nickname = "Саня") =>
+            Connect(id, System.Guid.NewGuid(), nickname);
+
+        public Client Connect(ulong id, System.Guid token, string nickname = "Саня")
         {
-            var client = new Client(new ConnectionRequest(nickname, 1));
+            var client = new Client(new ConnectionRequest(nickname, 1, token));
             ByIds.Add(id, client);
             return client;
         }

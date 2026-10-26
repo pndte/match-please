@@ -8,7 +8,7 @@ namespace Bw.Tests.Entities.Network
         [Test]
         public void ClientKeepsItsRequest()
         {
-            var client = new Client(new ConnectionRequest("Саня", 3));
+            var client = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()));
 
             Assert.That(client.Request.Nickname, Is.EqualTo("Саня"));
             Assert.That(client.Request.CharacterKey, Is.EqualTo(3));
@@ -17,7 +17,7 @@ namespace Bw.Tests.Entities.Network
         [Test]
         public void ClientIsNamedByItsNickname()
         {
-            Assert.That(new Client(new ConnectionRequest("Сева", 4)).ToString(), Is.EqualTo("Сева"));
+            Assert.That(new Client(new ConnectionRequest("Сева", 4, System.Guid.NewGuid())).ToString(), Is.EqualTo("Сева"));
         }
     }
 }

@@ -40,12 +40,16 @@ namespace Bw.Injection.Bots
             Container.Bind<IBotRoster>().To<BotRoster>().AsSingle().NonLazy();
             Container.Bind<IBotLauncher>().To<BotLauncher>().AsSingle();
             Container.Bind<BotLives>().AsSingle().NonLazy();
+            Container.Bind<StandInBots>().AsSingle().NonLazy();
         }
 
         private void RequireBots()
         {
             if (_bots == null)
                 throw new InvalidOperationException($"'{name}' has no bots config: assign Resources/Bots/BotsConfig, whose empty list means a level without bots.");
+
+            if (_bots.StandIn == null)
+                throw new InvalidOperationException($"Bots config '{_bots.name}' has no stand-in difficulty: a bot of it plays for a player whose client left, assign Resources/Bots/Light.");
 
             if (_bots.Fists == null)
                 throw new InvalidOperationException($"Bots config '{_bots.name}' has no fists config: bots judge their punches by Resources/Weapons/FistsMeleeConfig.");

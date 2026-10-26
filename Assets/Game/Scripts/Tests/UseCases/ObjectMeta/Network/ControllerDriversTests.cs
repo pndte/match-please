@@ -37,7 +37,7 @@ namespace Bw.Tests.UseCases.ObjectMeta.Network
         public void UserDrivenByAClientMakesThatClientAController()
         {
             var player = new Player("Саня");
-            var client = new Client(new ConnectionRequest("Саня", 0));
+            var client = new Client(new ConnectionRequest("Саня", 0, System.Guid.NewGuid()));
             _drivers.AddClientDriven(_lifetime.Lifetime, player, client);
 
             _registry.Set(_lifetime.Lifetime, player);
@@ -62,7 +62,7 @@ namespace Bw.Tests.UseCases.ObjectMeta.Network
         public void ControllerLeavesWithTheUse()
         {
             var player = new Player("Саня");
-            var client = new Client(new ConnectionRequest("Саня", 0));
+            var client = new Client(new ConnectionRequest("Саня", 0, System.Guid.NewGuid()));
             _drivers.AddClientDriven(_lifetime.Lifetime, player, client);
             var use = new LifetimeDefinition();
             _registry.Set(use.Lifetime, player);
@@ -88,8 +88,8 @@ namespace Bw.Tests.UseCases.ObjectMeta.Network
         [Test]
         public void EveryUserBringsItsOwnController()
         {
-            var first = new Client(new ConnectionRequest("Саня", 0));
-            var second = new Client(new ConnectionRequest("Матвей", 2));
+            var first = new Client(new ConnectionRequest("Саня", 0, System.Guid.NewGuid()));
+            var second = new Client(new ConnectionRequest("Матвей", 2, System.Guid.NewGuid()));
             var sanya = new Player("Саня");
             var matvey = new Player("Матвей");
             _drivers.AddClientDriven(_lifetime.Lifetime, sanya, first);
