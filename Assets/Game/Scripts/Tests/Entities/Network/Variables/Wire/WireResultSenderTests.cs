@@ -25,7 +25,7 @@ namespace Bw.Tests.Entities.Network.Variables
         {
             var wire = new RecordingResults<string>();
             var sender = new WireResultSender<int, string>(wire, new DecimalForm());
-            var recipient = new Client(7, new ConnectionRequest("Сева", 4));
+            var recipient = new Client(new ConnectionRequest("Сева", 4));
 
             sender.SendTo(recipient, -3);
 

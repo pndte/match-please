@@ -15,7 +15,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
         public CarrierOwnerAssigner(
             Lifetime lifetime,
             IWeapon weapon,
-            IWeaponCarriers carriers,
+            IReadonlyWeaponCarriers carriers,
             ICharacterRegistry characterRegistry,
             IOwnerRegistry ownerRegistry)
         {

@@ -41,7 +41,6 @@ namespace Bw.Injection
 
         public override void InstallBindings()
         {
-            Container.BindInterfacesTo<NetworkClientCollection>().AsSingle().WithArguments(NetworkManager.Singleton).NonLazy();
             Container.Bind<IPlayerCollection>().To<PlayerCollection>().AsSingle();
 
             if (_runtimeSettings.CurrentPeerType != PeerType.Server)

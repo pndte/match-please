@@ -24,13 +24,13 @@ namespace Bw.UseCases.Combat.View.Adapters
         public float Angle => _inHands.HolderOf(_prop).Hands.Grip.Angle;
 
         private readonly IWeapon _prop;
-        private readonly IWeaponsInHands _inHands;
+        private readonly IReadonlyWeaponsInHands _inHands;
         private readonly BodyBox _shape;
         private readonly ICharacterViews _views;
 
         public HeldPropViewModel(
             IWeapon prop,
-            IWeaponsInHands inHands,
+            IReadonlyWeaponsInHands inHands,
             BodyBox shape,
             ICharacterViews views)
         {

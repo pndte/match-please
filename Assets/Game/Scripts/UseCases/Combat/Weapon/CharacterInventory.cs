@@ -24,7 +24,7 @@ namespace Bw.UseCases.Combat.Weapon
         private readonly ViewableProperty<InventoryContent> _content = new(InventoryContent.Empty);
         private readonly Dictionary<IWeapon, Carry> _carries = new();
         private readonly List<IWeapon> _unlisted = new();
-        private readonly IWeaponCarriers _carriers;
+        private readonly IReadonlyWeaponCarriers _carriers;
         private readonly IReadonlyWeaponKindRegistry _kinds;
         private readonly WeaponInventoryConfig _config;
 
@@ -33,7 +33,7 @@ namespace Bw.UseCases.Combat.Weapon
         public CharacterInventory(
             Lifetime lifetime,
             IReadonlyMortal mortal,
-            IWeaponCarriers carriers,
+            IReadonlyWeaponCarriers carriers,
             IReadonlyWeaponKindRegistry kinds,
             WeaponInventoryConfig config)
         {

@@ -10,15 +10,15 @@ namespace Bw.UseCases.Combat.Weapon.Network.Requests
     public sealed class WeaponDropServerHandler
     {
         private readonly IWeapon _weapon;
-        private readonly IWeaponsInHands _inHands;
-        private readonly IWeaponCarriers _carriers;
+        private readonly IReadonlyWeaponsInHands _inHands;
+        private readonly IReadonlyWeaponCarriers _carriers;
 
         public WeaponDropServerHandler(
             Lifetime lifetime,
             IWeapon weapon,
-            IWeaponsInHands inHands,
+            IReadonlyWeaponsInHands inHands,
             INetRequestReceiver<Unit> drop,
-            IWeaponCarriers carriers)
+            IReadonlyWeaponCarriers carriers)
         {
             _weapon = weapon;
             _inHands = inHands;

@@ -23,15 +23,15 @@ namespace Bw.UseCases.Combat.View.Adapters
         private readonly ViewableProperty<bool> _held = new(false);
         private readonly ViewableProperty<bool> _drawn = new(false);
         private readonly IWeapon _weapon;
-        private readonly IWeaponCarriers _carriers;
+        private readonly IReadonlyWeaponCarriers _carriers;
         private readonly ICharacterViews _views;
         private readonly IReadonlyControlledBy _controlledBy;
 
         public WeaponCarryViewModel(
             Lifetime lifetime,
             IWeapon weapon,
-            IWeaponCarriers carriers,
-            IWeaponsInHands inHands,
+            IReadonlyWeaponCarriers carriers,
+            IReadonlyWeaponsInHands inHands,
             ICharacterViews views,
             IReadonlyControlledBy controlledBy)
         {

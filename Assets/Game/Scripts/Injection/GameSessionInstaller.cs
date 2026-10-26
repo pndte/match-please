@@ -105,10 +105,12 @@ namespace Bw.Injection
         {
             Container.Bind(typeof(IReadonlyWeaponKindRegistry), typeof(IWeaponKindRegistry)).To<WeaponKindRegistry>().AsSingle()
                 .WriterOnlyInto<IWeaponKindRegistry>(typeof(WeaponKindRegistrar));
-            Container.Bind<IWeaponCarriers>().To<WeaponCarriers>().AsSingle();
+            Container.Bind(typeof(IReadonlyWeaponCarriers), typeof(IWeaponCarriers)).To<WeaponCarriers>().AsSingle()
+                .WriterOnlyInto<IWeaponCarriers>(typeof(CarriersRegistrar));
             Container.Bind<IWeaponCollections>().To<WeaponCollections>().AsSingle();
             Container.Bind<ICharacterTriggers>().To<CharacterTriggers>().AsSingle();
-            Container.Bind<IWeaponsInHands>().To<WeaponsInHands>().AsSingle();
+            Container.Bind(typeof(IReadonlyWeaponsInHands), typeof(IWeaponsInHands)).To<WeaponsInHands>().AsSingle()
+                .WriterOnlyInto<IWeaponsInHands>(typeof(InHandsRegistrar));
             Container.Bind<IHeldBoxes>().To<HeldBoxes>().AsSingle();
         }
 

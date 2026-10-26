@@ -20,7 +20,7 @@ namespace Bw.UseCases.Bots.Senses
         private readonly PhysicsWorld _world;
         private readonly PhysicsQuery.QueryFilter _props;
         private readonly IReadonlyWeaponKindRegistry _kinds;
-        private readonly IWeaponCarriers _carriers;
+        private readonly IReadonlyWeaponCarriers _carriers;
         private readonly WeaponPickupConfig _pickup;
         private readonly BotsConfig _bots;
 
@@ -28,7 +28,7 @@ namespace Bw.UseCases.Bots.Senses
             IReadonlyMovement movement,
             IPhysicsSpace space,
             IReadonlyWeaponKindRegistry kinds,
-            IWeaponCarriers carriers,
+            IReadonlyWeaponCarriers carriers,
             WeaponPickupConfig pickup,
             BotsConfig bots)
         {

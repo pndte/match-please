@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Routing;
-using JetBrains.Lifetimes;
 using Unity.Netcode;
 using Zenject;
 
@@ -44,7 +43,7 @@ namespace Bw.Injection.Network
                         null);
             }
 
-            Container.Bind<MessagesHandler>().AsSingle().WithArguments(Lifetime.Eternal).NonLazy(); //TODO: lifetime приложения
+            Container.Bind<MessagesHandler>().AsSingle().NonLazy();
         }
 
         partial void RegisterGeneratedMessageCodecs(

@@ -10,7 +10,7 @@ namespace Bw.UseCases.Combat.Characters
         public CarriersRegistrar(Lifetime lifetime, ICharacter character, IWeaponCarriers carriers)
         {
             character.Inventory.Carried.View(lifetime, (carriedLifetime, weapon, _) =>
-                carriers.ByWeapon.AddLifetimed(carriedLifetime, weapon, character));
+                carriers.Add(carriedLifetime, weapon, character));
         }
     }
 }

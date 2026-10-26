@@ -14,7 +14,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
             Lifetime lifetime,
             INetworkLifetimedObject networkObject,
             IWeapon weapon,
-            IWeaponCarriers carriers,
+            IReadonlyWeaponCarriers carriers,
             IFloorWeapon floorWeapon,
             IFloorWeapons floorWeapons)
         {

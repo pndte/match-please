@@ -1,19 +1,16 @@
 using Bw.Entities;
 using Bw.Entities.Players;
-using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases
 {
     public sealed class OwnerRegistry : IOwnerRegistry
     {
-        public IReadonlyViewableList<IPlayer> Owners => _owners;
+        public IReadonlyViewableSet<IPlayer> Owners => _owners;
 
-        private readonly BwViewableList<IPlayer> _owners = new();
+        private readonly BwViewableSet<IPlayer> _owners = new();
 
-        public void AddOwner(Lifetime lifetime, IPlayer player)
-        {
-            _owners.AddLifetimed(lifetime, player);
-        }
+        public void AddOwner(Lifetime lifetime, IPlayer player) =>
+            lifetime.Bracket(() => _owners.Add(player), () => _owners.Remove(player));
     }
 }

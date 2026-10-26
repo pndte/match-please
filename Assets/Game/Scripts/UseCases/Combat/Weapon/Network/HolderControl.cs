@@ -17,7 +17,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
         public HolderControl(
             Lifetime lifetime,
             IWeapon weapon,
-            IWeaponsInHands inHands,
+            IReadonlyWeaponsInHands inHands,
             IControlledCharacters controlled)
         {
             inHands.ByWeapon.ViewForKey(lifetime, weapon, (drawnLifetime, holder) =>

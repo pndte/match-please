@@ -21,7 +21,7 @@ namespace Bw.UseCases.Props.View.Adapters
         private readonly ThrowTrajectory _trajectory;
         private readonly IReadonlyControlledBy _controlledBy;
         private readonly IWeapon _prop;
-        private readonly IWeaponsInHands _inHands;
+        private readonly IReadonlyWeaponsInHands _inHands;
         private readonly float _horizon;
 
         public ThrowArcViewModel(
@@ -29,7 +29,7 @@ namespace Bw.UseCases.Props.View.Adapters
             ThrowTrajectory trajectory,
             IReadonlyControlledBy controlledBy,
             IWeapon prop,
-            IWeaponsInHands inHands,
+            IReadonlyWeaponsInHands inHands,
             PropVfxConfig config)
         {
             _launcher = launcher;

@@ -11,14 +11,14 @@ namespace Bw.UseCases.Combat.Weapon.Network.Requests
 {
     public sealed class PickableWeapons
     {
-        private readonly IWeaponCarriers _carriers;
+        private readonly IReadonlyWeaponCarriers _carriers;
         private readonly WeaponPickupConfig _config;
         private readonly WeaponPickupNetworkConfig _networkConfig;
         private readonly PhysicsBody _body;
         private readonly PhysicsQuery.QueryFilter _filter;
 
         public PickableWeapons(
-            IWeaponCarriers carriers,
+            IReadonlyWeaponCarriers carriers,
             WeaponPickupConfig config,
             WeaponPickupNetworkConfig networkConfig,
             PhysicsBody body)

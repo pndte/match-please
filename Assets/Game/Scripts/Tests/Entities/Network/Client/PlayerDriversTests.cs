@@ -19,7 +19,7 @@ namespace Bw.Tests.Entities.Network
         {
             _lifetime = new LifetimeDefinition();
             _drivers = new PlayerDrivers();
-            _client = new Client(7, new ConnectionRequest("Саня", 3));
+            _client = new Client(new ConnectionRequest("Саня", 3));
             _human = new Player("Саня");
             _bot = new Player("Гошак");
         }
@@ -33,7 +33,7 @@ namespace Bw.Tests.Entities.Network
         {
             _drivers.AddClientDriven(_lifetime.Lifetime, _human, _client);
 
-            Assert.That(DriverOf(_human), Is.EqualTo("client 7"));
+            Assert.That(DriverOf(_human), Is.EqualTo("client Саня"));
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace Bw.Tests.Entities.Network
         public void ClientWithoutAPlayerThrows()
         {
             _drivers.AddClientDriven(_lifetime.Lifetime, _human, _client);
-            var stranger = new Client(9, new ConnectionRequest("Чужой", 2));
+            var stranger = new Client(new ConnectionRequest("Чужой", 2));
 
             Assert.Throws<InvalidOperationException>(() => _drivers.PlayerOf(stranger));
         }
@@ -128,13 +128,13 @@ namespace Bw.Tests.Entities.Network
 
             _drivers.AddClientDriven(_lifetime.Lifetime, _human, _client);
 
-            Assert.That(DriverOf(_human), Is.EqualTo("client 7"));
+            Assert.That(DriverOf(_human), Is.EqualTo("client Саня"));
         }
 
         private string DriverOf(IPlayer player)
         {
             var named = "";
-            _drivers.Of(player).Value.Switch(client => named = "client " + client.Id.ToString(), () => named = "server");
+            _drivers.Of(player).Value.Switch(client => named = "client " + client.Request.Nickname, () => named = "server");
             return named;
         }
     }

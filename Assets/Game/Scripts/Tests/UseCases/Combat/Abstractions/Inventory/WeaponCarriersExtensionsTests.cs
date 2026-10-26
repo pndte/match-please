@@ -45,7 +45,7 @@ namespace Bw.Tests.UseCases.Combat.Abstractions.Inventory
         {
             _carriers.ViewUncarried(_lifetime.Lifetime, _weapon, _uncarried.Add);
 
-            _carriers.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, _carrier);
+            _carriers.Add(_lifetime.Lifetime, _weapon, _carrier);
 
             Assert.That(_uncarried, Has.Count.EqualTo(1));
             Assert.That(_uncarried[0].IsAlive, Is.False);
@@ -56,7 +56,7 @@ namespace Bw.Tests.UseCases.Combat.Abstractions.Inventory
         {
             var carry = new LifetimeDefinition(_lifetime.Lifetime);
             _carriers.ViewUncarried(_lifetime.Lifetime, _weapon, _uncarried.Add);
-            _carriers.ByWeapon.AddLifetimed(carry.Lifetime, _weapon, _carrier);
+            _carriers.Add(carry.Lifetime, _weapon, _carrier);
 
             carry.Terminate();
 
@@ -68,7 +68,7 @@ namespace Bw.Tests.UseCases.Combat.Abstractions.Inventory
         public void WeaponCarriedFromTheStartIsUncarriedOnlyAfterItsCarry()
         {
             var carry = new LifetimeDefinition(_lifetime.Lifetime);
-            _carriers.ByWeapon.AddLifetimed(carry.Lifetime, _weapon, _carrier);
+            _carriers.Add(carry.Lifetime, _weapon, _carrier);
             _carriers.ViewUncarried(_lifetime.Lifetime, _weapon, _uncarried.Add);
             var beforeTheEnd = _uncarried.Count;
 
@@ -83,7 +83,7 @@ namespace Bw.Tests.UseCases.Combat.Abstractions.Inventory
         {
             _carriers.ViewUncarried(_lifetime.Lifetime, _weapon, _uncarried.Add);
 
-            _carriers.ByWeapon.AddLifetimed(_lifetime.Lifetime, new FakeWeapon(), _carrier);
+            _carriers.Add(_lifetime.Lifetime, new FakeWeapon(), _carrier);
 
             Assert.That(_uncarried, Has.Count.EqualTo(1));
             Assert.That(_uncarried[0].IsAlive, Is.True);
@@ -105,7 +105,7 @@ namespace Bw.Tests.UseCases.Combat.Abstractions.Inventory
         {
             var view = new LifetimeDefinition(_lifetime.Lifetime);
             var carry = new LifetimeDefinition(_lifetime.Lifetime);
-            _carriers.ByWeapon.AddLifetimed(carry.Lifetime, _weapon, _carrier);
+            _carriers.Add(carry.Lifetime, _weapon, _carrier);
             _carriers.ViewUncarried(view.Lifetime, _weapon, _uncarried.Add);
             view.Terminate();
 

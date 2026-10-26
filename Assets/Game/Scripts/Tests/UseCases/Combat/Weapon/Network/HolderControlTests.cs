@@ -45,7 +45,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         {
             _controlled.Add(_lifetime.Lifetime, _holder);
 
-            _inHands.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, _holder);
+            _inHands.Add(_lifetime.Lifetime, _weapon, _holder);
 
             Assert.That(_control.Me.Value, Is.True);
         }
@@ -55,7 +55,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         {
             _controlled.Add(_lifetime.Lifetime, new FakeCharacter());
 
-            _inHands.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, _holder);
+            _inHands.Add(_lifetime.Lifetime, _weapon, _holder);
 
             Assert.That(_control.Me.Value, Is.False);
         }
@@ -63,7 +63,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         [Test]
         public void CharacterControlledAfterTheDrawTakesTheWeaponsControl()
         {
-            _inHands.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, _holder);
+            _inHands.Add(_lifetime.Lifetime, _weapon, _holder);
 
             _controlled.Add(_lifetime.Lifetime, _holder);
 
@@ -75,7 +75,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         {
             _controlled.Add(_lifetime.Lifetime, _holder);
             var drawn = new LifetimeDefinition();
-            _inHands.ByWeapon.AddLifetimed(drawn.Lifetime, _weapon, _holder);
+            _inHands.Add(drawn.Lifetime, _weapon, _holder);
 
             drawn.Terminate();
 
@@ -87,7 +87,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         {
             var controlled = new LifetimeDefinition();
             _controlled.Add(controlled.Lifetime, _holder);
-            _inHands.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, _holder);
+            _inHands.Add(_lifetime.Lifetime, _weapon, _holder);
 
             controlled.Terminate();
 
@@ -99,7 +99,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         {
             _controlled.Add(_lifetime.Lifetime, _holder);
 
-            _inHands.ByWeapon.AddLifetimed(_lifetime.Lifetime, new FakeWeapon(), _holder);
+            _inHands.Add(_lifetime.Lifetime, new FakeWeapon(), _holder);
 
             Assert.That(_control.Me.Value, Is.False);
         }

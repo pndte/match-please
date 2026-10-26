@@ -12,7 +12,7 @@ namespace Bw.UseCases.Props.Network
         private readonly IRewindable _body;
         private readonly SimulationRewinder<PropState> _aim;
         private readonly IWeapon _prop;
-        private readonly IWeaponCarriers _carriers;
+        private readonly IReadonlyWeaponCarriers _carriers;
 
         private int _releaseTick = int.MinValue;
 
@@ -21,7 +21,7 @@ namespace Bw.UseCases.Props.Network
             IRewindable body,
             SimulationRewinder<PropState> aim,
             IWeapon prop,
-            IWeaponCarriers carriers,
+            IReadonlyWeaponCarriers carriers,
             INetworkTicks ticks)
         {
             _body = body;

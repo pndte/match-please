@@ -42,8 +42,8 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network.Requests
         [Test]
         public void RequestDropsTheWeaponInHandsFromItsCarriersInventory()
         {
-            _carriers.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, _carrier);
-            _inHands.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, _carrier);
+            _carriers.Add(_lifetime.Lifetime, _weapon, _carrier);
+            _inHands.Add(_lifetime.Lifetime, _weapon, _carrier);
 
             _requests.Deliver(Unit.Instance);
 
@@ -53,7 +53,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network.Requests
         [Test]
         public void StowedWeaponIsNotDropped()
         {
-            _carriers.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, _carrier);
+            _carriers.Add(_lifetime.Lifetime, _weapon, _carrier);
 
             _requests.Deliver(Unit.Instance);
 
@@ -63,7 +63,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network.Requests
         [Test]
         public void WeaponNobodyCarriesIsNotDropped()
         {
-            _inHands.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, _carrier);
+            _inHands.Add(_lifetime.Lifetime, _weapon, _carrier);
 
             _requests.Deliver(Unit.Instance);
 
@@ -73,8 +73,8 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network.Requests
         [Test]
         public void RequestsAfterTheHandlersLifetimeAreIgnored()
         {
-            _carriers.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, _carrier);
-            _inHands.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, _carrier);
+            _carriers.Add(_lifetime.Lifetime, _weapon, _carrier);
+            _inHands.Add(_lifetime.Lifetime, _weapon, _carrier);
             var handler = new LifetimeDefinition();
             var requests = new ManualResults<Unit>();
             new WeaponDropServerHandler(handler.Lifetime, _weapon, _inHands, requests, _carriers);

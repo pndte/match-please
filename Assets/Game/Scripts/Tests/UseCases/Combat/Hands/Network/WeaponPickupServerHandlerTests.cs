@@ -8,6 +8,7 @@ using Bw.UseCases.Combat.Weapon;
 using Bw.UseCases.Combat.Weapon.Network;
 using Bw.UseCases.Combat.Weapon.Network.Requests;
 using Bw.UseCases.Combat.Weapon.Pickup;
+using JetBrains.Lifetimes;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.LowLevelPhysics2D;
@@ -98,7 +99,7 @@ namespace Bw.Tests.UseCases.Combat.Hands.Network
         [Test]
         public void CarriedWeaponIsNeverTaken()
         {
-            _carriers.ByWeapon.Add(_gun, new Bw.UseCases.Combat.Characters.Character(new FakeMortal(), null, null, null));
+            _carriers.Add(Lifetime.Eternal, _gun, new Bw.UseCases.Combat.Characters.Character(new FakeMortal(), null, null, null));
 
             _requests.Deliver(new WeaponPickup(GunId));
 

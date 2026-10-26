@@ -14,7 +14,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
 
         private readonly Signal<TimedShot> _timed = new();
         private readonly IWeapon _weapon;
-        private readonly IWeaponCarriers _carriers;
+        private readonly IReadonlyWeaponCarriers _carriers;
         private readonly ICharacterTriggers _triggers;
 
         private float _viewDelay;
@@ -26,7 +26,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
             Lifetime lifetime,
             IWeapon weapon,
             IWeaponFeed feed,
-            IWeaponCarriers carriers,
+            IReadonlyWeaponCarriers carriers,
             ICharacterTriggers triggers)
         {
             _weapon = weapon;

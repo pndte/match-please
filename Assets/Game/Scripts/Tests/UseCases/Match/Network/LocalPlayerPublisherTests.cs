@@ -25,8 +25,8 @@ namespace Bw.Tests.UseCases.Match.Network
             _drivers = new PlayerDrivers();
             _ids = new PlayerIds();
             _sender = new RecordingResults<int>();
-            _first = new Client(10, default);
-            _second = new Client(20, default);
+            _first = new Client(default);
+            _second = new Client(default);
             _ = new LocalPlayerPublisher(_lifetime.Lifetime, _match, _drivers, _ids, _sender);
         }
 

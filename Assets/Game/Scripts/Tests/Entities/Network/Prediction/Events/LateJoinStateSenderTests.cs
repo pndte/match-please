@@ -35,7 +35,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Events
         {
             _object.Spawn();
             Send(_lifetime.Lifetime);
-            var client = new Client(4UL, default);
+            var client = new Client(default);
             _state.Apply(55);
 
             _clients.ByIds.Add(4UL, client);
@@ -51,8 +51,8 @@ namespace Bw.Tests.Entities.Network.Prediction.Events
         public void ClientsAlreadyConnectedGetTheStateAtOnce()
         {
             _object.Spawn();
-            _clients.ByIds.Add(1UL, new Client(1UL, default));
-            _clients.ByIds.Add(2UL, new Client(2UL, default));
+            _clients.ByIds.Add(1UL, new Client(default));
+            _clients.ByIds.Add(2UL, new Client(default));
 
             Send(_lifetime.Lifetime);
 
@@ -64,7 +64,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Events
         {
             Send(_lifetime.Lifetime);
 
-            _clients.ByIds.Add(4UL, new Client(4UL, default));
+            _clients.ByIds.Add(4UL, new Client(default));
 
             Assert.That(_results.Sent, Is.Empty);
         }
@@ -76,7 +76,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Events
             Send(_lifetime.Lifetime);
             _object.Despawn();
 
-            _clients.ByIds.Add(4UL, new Client(4UL, default));
+            _clients.ByIds.Add(4UL, new Client(default));
 
             Assert.That(_results.Sent, Is.Empty);
         }
@@ -86,7 +86,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Events
         {
             _object.Spawn();
             Send(_lifetime.Lifetime);
-            _clients.ByIds.Add(4UL, new Client(4UL, default));
+            _clients.ByIds.Add(4UL, new Client(default));
 
             _clients.ByIds.Remove(4UL);
 
@@ -101,7 +101,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Events
             Send(ended.Lifetime);
 
             ended.Terminate();
-            _clients.ByIds.Add(4UL, new Client(4UL, default));
+            _clients.ByIds.Add(4UL, new Client(default));
 
             Assert.That(_results.Sent, Is.Empty);
         }

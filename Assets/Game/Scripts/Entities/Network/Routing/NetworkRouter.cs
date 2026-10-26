@@ -29,10 +29,12 @@ namespace Bw.Entities.Network.Routing
         private bool ShuttingDown => _networkHolder.NetworkManager.Value.ShutdownInProgress;
 
         private readonly INetworkHolder _networkHolder;
+        private readonly IClientCollection _clients;
 
-        public NetworkRouter(INetworkHolder networkHolder)
+        public NetworkRouter(INetworkHolder networkHolder, IClientCollection clients)
         {
             _networkHolder = networkHolder;
+            _clients = clients;
         }
 
         public void SendToServer<T>(NetworkMessage<T> message, NetworkDelivery deliveryType)
@@ -62,7 +64,7 @@ namespace Bw.Entities.Network.Routing
 
             messageBuffer.WriteNetworkSerializable(message);
             _networkHolder.CustomMessagingManager().SendUnnamedMessage(
-                client.Id,
+                _clients.IdOf(client),
                 messageBuffer,
                 deliveryType);
         }

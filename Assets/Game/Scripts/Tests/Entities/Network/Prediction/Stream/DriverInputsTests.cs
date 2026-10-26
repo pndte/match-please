@@ -193,7 +193,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Stream
         private IPlayer ClientPlayer()
         {
             var player = new Player("client");
-            _drivers.AddClientDriven(_lifetime.Lifetime, player, new Client(1UL, default));
+            _drivers.AddClientDriven(_lifetime.Lifetime, player, new Client(default));
             return player;
         }
 

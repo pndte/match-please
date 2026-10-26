@@ -10,14 +10,14 @@ namespace Bw.UseCases.Combat.Weapon.Network
     public sealed class HeldWeaponBody
     {
         private readonly IWeapon _weapon;
-        private readonly IWeaponCarriers _carriers;
+        private readonly IReadonlyWeaponCarriers _carriers;
         private readonly PhysicsBody _body;
 
         public HeldWeaponBody(
             Lifetime lifetime,
             INetworkLifetimedObject networkObject,
             IWeapon weapon,
-            IWeaponCarriers carriers,
+            IReadonlyWeaponCarriers carriers,
             PhysicsBody body)
         {
             _weapon = weapon;

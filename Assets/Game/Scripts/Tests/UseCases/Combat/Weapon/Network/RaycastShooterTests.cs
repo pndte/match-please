@@ -37,7 +37,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
             _shooter = new FakeCharacter();
             _trigger = new CharacterTrigger();
             var carriers = new WeaponCarriers();
-            carriers.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, _shooter);
+            carriers.Add(_lifetime.Lifetime, _weapon, _shooter);
             var triggers = new CharacterTriggers();
             triggers.ByCharacter.AddLifetimed(_lifetime.Lifetime, _shooter, _trigger);
             var timer = new ShotTimer(_lifetime.Lifetime, _weapon, _feed, carriers, triggers);

@@ -1,11 +1,17 @@
+using Bw.Entities;
 using Bw.UseCases.Combat.Abstractions.Characters;
 using Bw.UseCases.Combat.Abstractions.Weapons;
-using JetBrains.Collections.Viewable;
+using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Combat.Abstractions.Hands
 {
-    public interface IWeaponsInHands //TODO: ByWeapon наружу открыт на запись, как и у носителей: запись с чужим лайфтаймом пережила бы руки
+    public interface IReadonlyWeaponsInHands
     {
-        public IViewableMap<IWeapon, IReadonlyCharacter> ByWeapon { get; }
+        public IReadonlyViewableMap<IWeapon, IReadonlyCharacter> ByWeapon { get; }
+    }
+
+    public interface IWeaponsInHands : IReadonlyWeaponsInHands
+    {
+        public void Add(Lifetime heldLifetime, IWeapon weapon, IReadonlyCharacter holder);
     }
 }

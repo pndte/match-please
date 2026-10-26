@@ -11,14 +11,14 @@ namespace Bw.UseCases.Props.Network
     public sealed class DestroyedPropDropper
     {
         private readonly IWeapon _prop;
-        private readonly IWeaponCarriers _carriers;
+        private readonly IReadonlyWeaponCarriers _carriers;
 
         public DestroyedPropDropper(
             Lifetime lifetime,
             IWeapon prop,
             IReadonlyMortal mortal,
             INetworkLifetimedObject networkObject,
-            IWeaponCarriers carriers)
+            IReadonlyWeaponCarriers carriers)
         {
             _prop = prop;
             _carriers = carriers;

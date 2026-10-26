@@ -37,8 +37,8 @@ namespace Bw.Tests.Entities.Network.Prediction.Stream
             _worldStep = new ScriptedWorldStep();
             _relayed = new RecordingResults<TickedInput<int>>();
             _audience = new Audience();
-            _first = new Client(1UL, default);
-            _second = new Client(2UL, default);
+            _first = new Client(default);
+            _second = new Client(default);
             new InputRelay<int>(_lifetime.Lifetime, _inputs, _worldStep, _relayed, _audience);
         }
 

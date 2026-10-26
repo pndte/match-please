@@ -64,7 +64,7 @@ namespace Bw.Tests.UseCases.Character.Network
         [Test]
         public void MoverIsNotItsOwnAudience()
         {
-            var moverClient = new Client(1UL, default);
+            var moverClient = new Client(default);
             var player = new Player("mover");
             _drivers.AddClientDriven(_lifetime.Lifetime, player, moverClient);
             _registry.PlayerByCharacter.Add(_mover, player);
@@ -85,7 +85,7 @@ namespace Bw.Tests.UseCases.Character.Network
         [Test]
         public void ClientWithTwoWatchingCharactersIsAddedOnce()
         {
-            var client = new Client(2UL, default);
+            var client = new Client(default);
             var player = new Player("two characters");
             _drivers.AddClientDriven(_lifetime.Lifetime, player, client);
             _registry.PlayerByCharacter.Add(new FakeCharacter(new Vector2(2f, 0f)), player);
@@ -109,7 +109,7 @@ namespace Bw.Tests.UseCases.Character.Network
         public void AudienceFollowsWhereEveryoneIsNow()
         {
             var watcherCharacter = new FakeCharacter(new Vector2(5f, 0f));
-            var client = new Client(2UL, default);
+            var client = new Client(default);
             var player = new Player("watcher");
             _drivers.AddClientDriven(_lifetime.Lifetime, player, client);
             _registry.PlayerByCharacter.Add(watcherCharacter, player);
@@ -125,7 +125,7 @@ namespace Bw.Tests.UseCases.Character.Network
 
         private IClient ClientWatching(Vector2 position, ulong id)
         {
-            var client = new Client(id, default);
+            var client = new Client(default);
             var player = new Player($"watcher {id}");
             _drivers.AddClientDriven(_lifetime.Lifetime, player, client);
             _registry.PlayerByCharacter.Add(new FakeCharacter(position), player);

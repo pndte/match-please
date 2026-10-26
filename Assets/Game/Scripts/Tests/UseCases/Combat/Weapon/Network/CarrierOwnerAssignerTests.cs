@@ -46,7 +46,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         [Test]
         public void CarriedWeaponIsOwnedByItsCarriersPlayer()
         {
-            _carriers.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, _carrier);
+            _carriers.Add(_lifetime.Lifetime, _weapon, _carrier);
 
             Assert.That(_owners.Owners, Is.EqualTo(new[] { _player }));
         }
@@ -55,7 +55,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         public void DroppedWeaponLosesItsOwner()
         {
             var carried = new LifetimeDefinition();
-            _carriers.ByWeapon.AddLifetimed(carried.Lifetime, _weapon, _carrier);
+            _carriers.Add(carried.Lifetime, _weapon, _carrier);
 
             carried.Terminate();
 
@@ -69,10 +69,10 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
             var nextPlayer = new Player("Матвей");
             _characters.PlayerByCharacter.AddLifetimed(_lifetime.Lifetime, next, nextPlayer);
             var carried = new LifetimeDefinition();
-            _carriers.ByWeapon.AddLifetimed(carried.Lifetime, _weapon, _carrier);
+            _carriers.Add(carried.Lifetime, _weapon, _carrier);
             carried.Terminate();
 
-            _carriers.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, next);
+            _carriers.Add(_lifetime.Lifetime, _weapon, next);
 
             Assert.That(_owners.Owners, Is.EqualTo(new[] { nextPlayer }));
         }
@@ -80,7 +80,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         [Test]
         public void AnotherCarriedWeaponGivesThisOneNoOwner()
         {
-            _carriers.ByWeapon.AddLifetimed(_lifetime.Lifetime, new FakeWeapon(), _carrier);
+            _carriers.Add(_lifetime.Lifetime, new FakeWeapon(), _carrier);
 
             Assert.That(_owners.Owners, Is.Empty);
         }

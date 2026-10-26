@@ -8,7 +8,7 @@ namespace Bw.UseCases.Combat.Abstractions.Inventory.Extensions
     public static class WeaponCarriersExtensions
     {
         public static void ViewUncarried(
-            this IWeaponCarriers carriers,
+            this IReadonlyWeaponCarriers carriers,
             Lifetime lifetime,
             IWeapon weapon,
             Action<Lifetime> handler)

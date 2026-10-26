@@ -54,7 +54,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         {
             _networkObject.Spawn();
 
-            _carriers.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, new FakeCharacter());
+            _carriers.Add(_lifetime.Lifetime, _weapon, new FakeCharacter());
 
             Assert.That(_floor.Lying, Is.Empty);
         }
@@ -64,7 +64,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         {
             _networkObject.Spawn();
             var carried = new LifetimeDefinition();
-            _carriers.ByWeapon.AddLifetimed(carried.Lifetime, _weapon, new FakeCharacter());
+            _carriers.Add(carried.Lifetime, _weapon, new FakeCharacter());
 
             carried.Terminate();
 
@@ -74,7 +74,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         [Test]
         public void WeaponSpawnedInHandsIsNotOnTheFloor()
         {
-            _carriers.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, new FakeCharacter());
+            _carriers.Add(_lifetime.Lifetime, _weapon, new FakeCharacter());
 
             _networkObject.Spawn();
 

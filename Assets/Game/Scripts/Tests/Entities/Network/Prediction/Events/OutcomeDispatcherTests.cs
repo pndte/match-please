@@ -40,7 +40,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Events
             _outcomes = new ScriptedOutcomes();
             _reports = new RecordingResults<OutcomeReport<float>>();
             _shooter = new Player("shooter");
-            _shooterClient = new Client(3UL, default);
+            _shooterClient = new Client(default);
             _drivers.AddClientDriven(_lifetime.Lifetime, _shooter, _shooterClient);
             new OutcomeDispatcher<Weapon, Target, float>(
                 _lifetime.Lifetime,

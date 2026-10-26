@@ -21,7 +21,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
         public WeaponPredictedBy(
             Lifetime lifetime,
             IWeapon weapon,
-            IWeaponCarriers carriers,
+            IReadonlyWeaponCarriers carriers,
             ICharacterPredictions characters,
             IBubbleMembership floor)
         {

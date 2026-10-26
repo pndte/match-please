@@ -22,7 +22,7 @@ namespace Bw.UseCases.Combat.View.Adapters
 
         private readonly Signal<SeenShot> _seen = new();
         private readonly IWeapon _weapon;
-        private readonly IWeaponsInHands _inHands;
+        private readonly IReadonlyWeaponsInHands _inHands;
         private readonly IShotTracer _tracer;
         private readonly ICharacterViews _views;
         private readonly IReadonlyGuardCovers _covers;
@@ -34,7 +34,7 @@ namespace Bw.UseCases.Combat.View.Adapters
         public SeenShotsViewModel(
             Lifetime lifetime,
             IWeapon weapon,
-            IWeaponsInHands inHands,
+            IReadonlyWeaponsInHands inHands,
             IShotTracer tracer,
             ICharacterViews views,
             IReadonlyGuardCovers covers)

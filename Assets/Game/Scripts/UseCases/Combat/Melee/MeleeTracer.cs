@@ -19,14 +19,14 @@ namespace Bw.UseCases.Combat.Melee
         public int Pellets => 1;
 
         private readonly IWeapon _weapon;
-        private readonly IWeaponsInHands _inHands;
+        private readonly IReadonlyWeaponsInHands _inHands;
         private readonly MeleeWeaponConfig _config;
         private readonly PhysicsWorld _world;
         private readonly PhysicsQuery.QueryFilter _filter;
 
         public MeleeTracer(
             IWeapon weapon,
-            IWeaponsInHands inHands,
+            IReadonlyWeaponsInHands inHands,
             MeleeWeaponConfig config,
             IPhysicsSpace space)
         {

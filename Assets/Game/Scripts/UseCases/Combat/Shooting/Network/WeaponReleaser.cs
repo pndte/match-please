@@ -16,7 +16,7 @@ namespace Bw.UseCases.Combat.Shooting.Network
         public WeaponReleaser(
             Lifetime lifetime,
             IWeapon weapon,
-            IWeaponCarriers carriers,
+            IReadonlyWeaponCarriers carriers,
             WeaponReleaseSpots spots,
             IRestartable<RigidState> body)
         {

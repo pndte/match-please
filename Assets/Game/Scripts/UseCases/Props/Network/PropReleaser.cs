@@ -14,7 +14,7 @@ namespace Bw.UseCases.Props.Network
 
         private readonly Signal<IReadonlyCharacter> _released = new();
         private readonly IWeapon _prop;
-        private readonly IWeaponCarriers _carriers;
+        private readonly IReadonlyWeaponCarriers _carriers;
         private readonly PropLauncher _launcher;
 
         private IReadonlyCharacter _releaser;
@@ -24,7 +24,7 @@ namespace Bw.UseCases.Props.Network
         public PropReleaser(
             Lifetime lifetime,
             IWeapon prop,
-            IWeaponCarriers carriers,
+            IReadonlyWeaponCarriers carriers,
             PropLauncher launcher)
         {
             _prop = prop;

@@ -42,25 +42,13 @@ namespace Bw.Entities.Network.Variables
                 throw NotOwnedBy(senderClientId);
 
             var player = _drivers.PlayerOf(client);
-            if (IsOwner(player))
+            if (_ownerRegistry.Owners.Contains(player))
                 return true;
 
             if (_staleWriters.Listed(player))
                 return false;
 
             throw NotOwnedBy(senderClientId);
-        }
-
-        private bool IsOwner(IPlayer player)
-        {
-            var owners = _ownerRegistry.Owners;
-            for (var index = 0; index < owners.Count; index++)
-            {
-                if (owners[index] == player)
-                    return true;
-            }
-
-            return false;
         }
 
         private InvalidOperationException NotOwnedBy(ulong senderClientId) =>

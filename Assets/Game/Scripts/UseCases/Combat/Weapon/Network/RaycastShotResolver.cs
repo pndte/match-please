@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Bw.Entities.Network;
 using Bw.Entities.Network.LagCompensation;
@@ -22,7 +21,8 @@ namespace Bw.UseCases.Combat.Weapon.Network
         private readonly List<RaycastShot> _shots = new();
         private readonly List<ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Impacts>> _outcomes = new();
         private readonly List<AffectedTarget<IReadonlyMortal, Impact>> _struck = new();
-        private readonly List<AffectedTarget<IReadonlyMortal, Impacts>> _affected = new();
+        private readonly Stack<List<AffectedTarget<IReadonlyMortal, Impacts>>> _freeAffected = new();
+        private readonly List<List<AffectedTarget<IReadonlyMortal, Impacts>>> _lentAffected = new();
 
         private readonly ILagCompensator _lagCompensator;
         private readonly ICharacterRegistry _registry;
@@ -59,6 +59,7 @@ namespace Bw.UseCases.Combat.Weapon.Network
             {
                 _shots.Clear();
                 _outcomes.Clear();
+                ReturnAffected();
             }
         }
 
@@ -67,19 +68,27 @@ namespace Bw.UseCases.Combat.Weapon.Network
             var ray = shot.Tracer.Aim(shot.WeaponShot.Aim);
             var view = new ShooterView(tick - shot.Timing.ViewDelay, tick - shot.Timing.PredictedDelay, _drivers.Of(_registry.PlayerByCharacter[shot.Shooter]).Value);
             _struck.Clear();
-            _affected.Clear();
             Lifetime.Using(rewindLifetime =>
             {
                 _lagCompensator.Rewind(rewindLifetime, view);
                 shot.Tracer.CastPellets(ray, shot.Hit, _struck);
             });
 
-            _struck.GroupByTarget(_affected);
-
-            var affected = _affected.Count > 0
-                ? _affected.ToArray() //TODO: выделение массива на выстрел - плохо, в идеале пуллировать массивы и переиспользовать их
-                : Array.Empty<AffectedTarget<IReadonlyMortal, Impacts>>();
+            var affected = _freeAffected.Count > 0 ? _freeAffected.Pop() : new List<AffectedTarget<IReadonlyMortal, Impacts>>();
+            _lentAffected.Add(affected);
+            _struck.GroupByTarget(affected);
             return new ActionOutcome<IReadonlyWeapon, IReadonlyMortal, Impacts>(shot.Weapon, _registry.PlayerByCharacter[shot.Shooter], tick - shot.Timing.LateTicks, affected);
+        }
+
+        private void ReturnAffected()
+        {
+            for (var index = 0; index < _lentAffected.Count; index++)
+            {
+                _lentAffected[index].Clear();
+                _freeAffected.Push(_lentAffected[index]);
+            }
+
+            _lentAffected.Clear();
         }
     }
 }

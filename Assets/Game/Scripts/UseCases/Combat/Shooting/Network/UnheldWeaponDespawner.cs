@@ -19,7 +19,7 @@ namespace Bw.UseCases.Combat.Shooting.Network
         public UnheldWeaponDespawner( //TODO: чрезвычайное к-во параметров
             Lifetime lifetime,
             IWeapon weapon,
-            IWeaponCarriers carriers,
+            IReadonlyWeaponCarriers carriers,
             INetworkTicks ticks,
             IWorldStep worldStep,
             ShootingWeaponConfig config,

@@ -15,7 +15,7 @@ namespace Bw.UseCases.Combat.Characters
             IWeaponsInHands inHands)
         {
             drawnWeapons.Drawn.View(lifetime, (drawnLifetime, weapon) =>
-                inHands.ByWeapon.AddLifetimed(drawnLifetime, weapon, character));
+                inHands.Add(drawnLifetime, weapon, character));
         }
     }
 }

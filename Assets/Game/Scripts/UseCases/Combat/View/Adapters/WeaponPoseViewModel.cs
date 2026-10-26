@@ -17,14 +17,14 @@ namespace Bw.UseCases.Combat.View.Adapters
         public float RadiusSpeed => _config.RadiusChangeSpeed;
 
         private readonly IWeapon _weapon;
-        private readonly IWeaponsInHands _inHands;
+        private readonly IReadonlyWeaponsInHands _inHands;
         private readonly WeaponOrbit _orbit;
         private readonly WeaponRotationConfig _config;
         private readonly ICharacterViews _views;
 
         public WeaponPoseViewModel(
             IWeapon weapon,
-            IWeaponsInHands inHands,
+            IReadonlyWeaponsInHands inHands,
             WeaponOrbit orbit,
             WeaponRotationConfig config,
             ICharacterViews views)

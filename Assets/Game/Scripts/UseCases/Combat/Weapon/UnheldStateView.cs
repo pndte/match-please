@@ -8,9 +8,9 @@ namespace Bw.UseCases.Combat.Weapon
     {
         private readonly IStateView<TState> _view;
         private readonly IWeapon _weapon;
-        private readonly IWeaponCarriers _carriers;
+        private readonly IReadonlyWeaponCarriers _carriers;
 
-        public UnheldStateView(IStateView<TState> view, IWeapon weapon, IWeaponCarriers carriers)
+        public UnheldStateView(IStateView<TState> view, IWeapon weapon, IReadonlyWeaponCarriers carriers)
         {
             _view = view;
             _weapon = weapon;

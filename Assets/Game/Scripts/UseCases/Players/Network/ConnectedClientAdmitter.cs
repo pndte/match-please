@@ -1,6 +1,6 @@
 using Bw.Entities.Network;
 using Bw.Entities.Players;
-using Bw.UseCases.Clients.Extensions;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 
 namespace Bw.UseCases.Players.Network
@@ -9,7 +9,7 @@ namespace Bw.UseCases.Players.Network
     {
         public ConnectedClientAdmitter(Lifetime lifetime, IClientCollection clients, IPlayerAdmitter admitter)
         {
-            clients.WhenNewConnected(lifetime, (connectedLifetime, client) =>
+            clients.ByIds.View(lifetime, (connectedLifetime, _, client) =>
                 admitter.Admit(
                     connectedLifetime,
                     new Player(client.Request.Nickname),

@@ -43,7 +43,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon
         [Test]
         public void CarriedWeaponIsNotShown()
         {
-            _carriers.ByWeapon.AddLifetimed(_lifetime.Lifetime, _weapon, new FakeCharacter());
+            _carriers.Add(_lifetime.Lifetime, _weapon, new FakeCharacter());
 
             _view.Show(From, To, 0.25f);
 
@@ -54,7 +54,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon
         public void DroppedWeaponIsShownAgain()
         {
             var carried = new LifetimeDefinition();
-            _carriers.ByWeapon.AddLifetimed(carried.Lifetime, _weapon, new FakeCharacter());
+            _carriers.Add(carried.Lifetime, _weapon, new FakeCharacter());
             carried.Terminate();
 
             _view.Show(From, To, 1f);
@@ -65,7 +65,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon
         [Test]
         public void AnotherCarriedWeaponDoesNotHideThisOne()
         {
-            _carriers.ByWeapon.AddLifetimed(_lifetime.Lifetime, new FakeWeapon(), new FakeCharacter());
+            _carriers.Add(_lifetime.Lifetime, new FakeWeapon(), new FakeCharacter());
 
             _view.Show(From, To, 0f);
 

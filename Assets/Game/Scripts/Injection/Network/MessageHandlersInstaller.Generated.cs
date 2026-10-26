@@ -10,7 +10,6 @@ namespace Bw.Injection.Network
             System.Collections.Generic.Dictionary<System.Type, Bw.Entities.Network.IMessageSender> senders)
         {
             RegisterCodec<System.Boolean, Bw.Entities.Network.Codecs.BoolCodec>(receivers, senders);
-            RegisterCodec<Bw.Entities.ClientConnectionState, Bw.Entities.Network.Codecs.ClientConnectionStateCodec>(receivers, senders);
             RegisterCodec<System.Int32, Bw.Entities.Network.Codecs.IntCodec>(receivers, senders);
             RegisterCodec<System.String, Bw.Entities.Network.Codecs.StringCodec>(receivers, senders);
             RegisterCodec<System.UInt32, Bw.Entities.Network.Codecs.UIntCodec>(receivers, senders);

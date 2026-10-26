@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Bw.UseCases.Clients.Network
 {
-    public class NetworkClientCollection : IClientCollection //TODO: to project Context
+    public sealed class NetworkClientCollection : IClientCollection
     {
         public IViewableBiMap<ulong, IClient> ByIds { get; }
 
@@ -50,9 +50,7 @@ namespace Bw.UseCases.Clients.Network
         private void OnClientConnected(ulong id)
         {
             Debug.Log($"<color=cyan>Client {id} connected. Adding to client collection...</color>");
-            var client = new Client(id, TakeRequest(id));
-            ByIds.Add(id, client);
-            client.ChangeState(ClientConnectionState.Connected);
+            ByIds.Add(id, new Client(TakeRequest(id)));
         }
 
         private void OnClientDisconnected(ulong id)

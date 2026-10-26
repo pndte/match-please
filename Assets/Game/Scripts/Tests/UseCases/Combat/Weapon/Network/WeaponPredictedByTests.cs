@@ -151,6 +151,6 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         }
 
         private void Carry(Lifetime lifetime) =>
-            _carriers.ByWeapon.AddLifetimed(lifetime, _weapon, _holder);
+            _carriers.Add(lifetime, _weapon, _holder);
     }
 }

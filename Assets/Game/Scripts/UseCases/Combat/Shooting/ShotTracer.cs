@@ -20,7 +20,7 @@ namespace Bw.UseCases.Combat.Shooting
         public int Pellets => _pellets.Count;
 
         private readonly IWeapon _weapon;
-        private readonly IWeaponsInHands _inHands;
+        private readonly IReadonlyWeaponsInHands _inHands;
         private readonly WeaponMuzzle _muzzle;
         private readonly RaycastShootConfig _config;
         private readonly PelletsConfig _pellets;
@@ -29,7 +29,7 @@ namespace Bw.UseCases.Combat.Shooting
 
         public ShotTracer(
             IWeapon weapon,
-            IWeaponsInHands inHands,
+            IReadonlyWeaponsInHands inHands,
             WeaponMuzzle muzzle,
             RaycastShootConfig config,
             PelletsConfig pellets,

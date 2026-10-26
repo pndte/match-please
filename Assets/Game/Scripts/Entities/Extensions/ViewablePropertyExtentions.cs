@@ -97,6 +97,25 @@ namespace Bw.Entities.Extensions
                 handler(itemLifetime, item));
         }
 
+        public static void View<T>(this IReadonlyViewableSet<T> set, Lifetime lifetime, Action<Lifetime, T> handler)
+        {
+            var lifetimes = new Dictionary<T, LifetimeDefinition>();
+            set.Advise(lifetime, change =>
+            {
+                if (change.Kind == AddRemove.Remove)
+                {
+                    if (lifetimes.Remove(change.Value, out var ended))
+                        ended.Terminate();
+
+                    return;
+                }
+
+                var definition = lifetime.CreateNested();
+                lifetimes.Add(change.Value, definition);
+                handler(definition.Lifetime, change.Value);
+            });
+        }
+
         public static void View<K, V>(this IReadonlyViewableMap<K, V> map, Lifetime lifetime, Action<Lifetime, K, V> handler)
         {
             var lifetimes = new Dictionary<K, LifetimeDefinition>();
@@ -111,6 +130,19 @@ namespace Bw.Entities.Extensions
                 var definition = lifetime.CreateNested();
                 lifetimes.Add(change.Key, definition);
                 handler(definition.Lifetime, change.Key, change.NewValue);
+            });
+        }
+
+        public static void ViewForKey<K, V>(
+            this IReadonlyViewableMap<K, V> map,
+            Lifetime lifetime,
+            K targetKey,
+            Action<Lifetime, V> handler)
+        {
+            map.View(lifetime, (entryLifetime, key, value) =>
+            {
+                if (Equals(key, targetKey))
+                    handler(entryLifetime, value);
             });
         }
 

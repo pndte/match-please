@@ -25,7 +25,7 @@ namespace Bw.Entities.Network
         public IPlayer PlayerOf(IClient client)
         {
             if (!_byClient.TryGetValue(client, out var player))
-                throw new InvalidOperationException($"Client {client.Id.ToString()} drives no player: a client gets its player when it connects.");
+                throw new InvalidOperationException($"Client '{client}' drives no player: a client gets its player when it connects.");
 
             return player;
         }
@@ -33,7 +33,7 @@ namespace Bw.Entities.Network
         public void AddClientDriven(Lifetime lifetime, IPlayer player, IClient client)
         {
             if (_byClient.TryGetValue(client, out var driven))
-                throw new InvalidOperationException($"Client {client.Id.ToString()} drives one player at a time: it already drives '{driven.Nickname}'.");
+                throw new InvalidOperationException($"Client '{client}' drives one player at a time: it already drives '{driven.Nickname}'.");
 
             Add(lifetime, player, PlayerDriver.Client(client));
             _byClient.AddLifetimed(lifetime, client, player);
