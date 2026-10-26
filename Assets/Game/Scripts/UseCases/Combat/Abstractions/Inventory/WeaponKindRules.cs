@@ -9,5 +9,6 @@ namespace Bw.UseCases.Combat.Abstractions.Inventory
         public WeaponKind Kind;
         public bool Droppable;
         public bool HandsOnly;
+        public bool PressOnly;
     }
 }

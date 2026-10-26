@@ -25,13 +25,13 @@ namespace Bw.UseCases.Mortality.View.Adapters
             _level = new ViewableProperty<HealthLevel>(new HealthLevel(_health / guard.Max, 0f));
             Up = guard.State.Select(lifetime, state => state.Up);
 
-            guard.State.Advise(lifetime, Show);
+            guard.State.Select(lifetime, state => state.Health).Advise(lifetime, Show);
         }
 
-        private void Show(GuardState state)
+        private void Show(float health)
         {
-            _level.Value = new HealthLevel(state.Health / _guard.Max, (state.Health - _health) / _guard.Max);
-            _health = state.Health;
+            _level.Value = new HealthLevel(health / _guard.Max, (health - _health) / _guard.Max);
+            _health = health;
         }
     }
 }

@@ -73,7 +73,7 @@ namespace Bw.UseCases.Combat.Weapon.Network.Prediction
 
                 _hits.GroupByTarget(_affected);
                 if (_affected.Count > 0)
-                    _struck.Fire(new Strike(tick, shot.Shooter, _affected.ToArray())); //TODO: удар показывается в тик выстрела, а кровь — когда долетит трассер (ShotVfxConfig.BulletSpeed): издалека цель мигает раньше, чем в неё попадает пуля; отложить можно только показ, записать удар в предсказание итогов нужно сразу — итог может прийти раньше пули
+                    _struck.Fire(new Strike(tick, shot.Shooter, _affected.ToArray()));
             }
         }
     }

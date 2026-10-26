@@ -15,6 +15,7 @@ using Bw.Injection.Network.Variables;
 using Bw.Injection.Ownership;
 using Bw.Injection.Props;
 using Bw.Injection.Weapon;
+using Bw.UseCases.Combat.View.Adapters.Hit;
 using Bw.UseCases.Crates.View.Audio;
 using Bw.UseCases.Crates.View.Break;
 using Bw.UseCases.Crates.View.Damage;
@@ -122,6 +123,7 @@ namespace Bw.Injection.Crates
         {
             Container.Bind<SpriteRenderer>().FromInstance(_sprite).AsSingle();
             Container.Bind(typeof(IHealthViewModel), typeof(IDamageViewModel), typeof(IDeathViewModel)).To<MortalViewModel>().AsSingle();
+            Container.Decorate<IDamageViewModel>().With<ArrivingDamageViewModel>();
             Container.Bind<IHitFlashConfig>().FromInstance(_hitFlashConfig).AsSingle();
             Container.Bind<HitFlash>().AsSingle().WithArguments(new[] { _sprite }).NonLazy();
             Container.BindInstance(_damage).AsSingle();

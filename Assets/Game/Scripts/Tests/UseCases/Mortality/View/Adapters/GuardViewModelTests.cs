@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Bw.Tests.UseCases.Mortality.Doubles;
 using Bw.UseCases.Mortality.Guarding;
 using Bw.UseCases.Mortality.View.Adapters;
 using Bw.UseCases.Mortality.View.Health;
@@ -17,7 +18,7 @@ namespace Bw.Tests.UseCases.Mortality.View.Adapters
         public void SetUp()
         {
             _lifetime = new LifetimeDefinition();
-            _guard = new ShownGuard(new GuardState(50f, false, false));
+            _guard = new ShownGuard(GuardStateOf.Shown(50f, false, false));
         }
 
         [TearDown]
@@ -39,7 +40,7 @@ namespace Bw.Tests.UseCases.Mortality.View.Adapters
         {
             var viewModel = new GuardViewModel(_lifetime.Lifetime, _guard);
 
-            _guard.Show(new GuardState(30f, true, false));
+            _guard.Show(GuardStateOf.Shown(30f, true, false));
 
             Assert.That(viewModel.Level.Value, Is.EqualTo(new HealthLevel(0.15f, -0.1f)));
         }
@@ -51,21 +52,24 @@ namespace Bw.Tests.UseCases.Mortality.View.Adapters
             var levels = new List<HealthLevel>();
             viewModel.Level.Advise(_lifetime.Lifetime, levels.Add);
 
-            _guard.Show(new GuardState(30f, true, false));
-            _guard.Show(new GuardState(70f, true, false));
+            _guard.Show(GuardStateOf.Shown(30f, true, false));
+            _guard.Show(GuardStateOf.Shown(70f, true, false));
 
             Assert.That(levels, Is.EqualTo(new[] { new HealthLevel(0.25f, 0f), new HealthLevel(0.15f, -0.1f), new HealthLevel(0.35f, 0.2f) }));
         }
 
         [Test]
-        public void StanceChangeWithoutBlowShowsNoChange()
+        public void StanceOrCounterChangeWithoutBlowShowsNothing()
         {
             var viewModel = new GuardViewModel(_lifetime.Lifetime, _guard);
-            _guard.Show(new GuardState(30f, false, false));
+            _guard.Show(GuardStateOf.Shown(30f, false, false));
+            var levels = new List<HealthLevel>();
+            viewModel.Level.Advise(_lifetime.Lifetime, levels.Add);
 
-            _guard.Show(new GuardState(30f, true, false));
+            _guard.Show(GuardStateOf.Shown(30f, true, false));
+            _guard.Show(new GuardState(30f, true, false, 45f, 3, 1));
 
-            Assert.That(viewModel.Level.Value, Is.EqualTo(new HealthLevel(0.15f, 0f)));
+            Assert.That(levels, Is.EqualTo(new[] { new HealthLevel(0.15f, -0.1f) }));
         }
 
         [TestCase(true, false, true)]
@@ -75,7 +79,7 @@ namespace Bw.Tests.UseCases.Mortality.View.Adapters
         {
             var viewModel = new GuardViewModel(_lifetime.Lifetime, _guard);
 
-            _guard.Show(new GuardState(10f, raised, broken));
+            _guard.Show(GuardStateOf.Shown(10f, raised, broken));
 
             Assert.That(viewModel.Up.Value, Is.EqualTo(up));
         }

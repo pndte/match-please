@@ -20,6 +20,7 @@ using Bw.UseCases.Combat.Characters;
 using Bw.UseCases.Combat.Hands;
 using Bw.UseCases.Combat.Hands.Abstractions;
 using Bw.UseCases.Combat.View.Adapters;
+using Bw.UseCases.Combat.View.Adapters.Hit;
 using Bw.UseCases.Combat.Weapon;
 using Bw.UseCases.Combat.Weapon.Abstractions;
 using Bw.UseCases.Combat.Weapon.Network;
@@ -27,6 +28,8 @@ using Bw.UseCases.Combat.Weapon.Pickup;
 using Bw.UseCases.Combat.Weapon.Pickup.Abstractions;
 using Bw.UseCases.Level;
 using Bw.UseCases.Match;
+using Bw.UseCases.Mortality.Guarding;
+using Bw.UseCases.Mortality.Network.Guarding;
 using Bw.UseCases.Movement.Network.Prediction;
 using Bw.UseCases.Movement.Physics;
 using UnityEngine;
@@ -87,12 +90,15 @@ namespace Bw.Injection
             Container.Bind<ICharacterPredictions>().To<CharacterPredictions>().AsSingle();
             Container.Bind(typeof(IReadonlyFloorWeapons), typeof(IFloorWeapons)).To<FloorWeapons>().AsSingle()
                 .WriterOnlyInto<IFloorWeapons>(typeof(FloorWeaponRegistration));
+            Container.Bind(typeof(IReadonlyGuardCovers), typeof(IGuardCovers)).To<GuardCovers>().AsSingle()
+                .WriterOnlyInto<IGuardCovers>(typeof(GuardCoverRegistration));
             BindClientVisuals();
         }
 
         private void BindClientVisuals()
         {
             Container.Bind<ICharacterViews>().To<CharacterViews>().AsSingle();
+            Container.Bind<ShotLaunches>().AsSingle();
         }
 
         private void BindWeapons()

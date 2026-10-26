@@ -95,6 +95,41 @@ namespace Bw.Tests.UseCases.Combat.Hands.Network
         }
 
         [Test]
+        public void HoldCarriedOverByAChoiceStaysIgnoredUntilAPress()
+        {
+            var latch = new TriggerLatch();
+
+            latch.CarryOver(true);
+
+            Assert.That(latch.Pulled(true), Is.False);
+        }
+
+        [Test]
+        public void PressLatchedWithAChoiceStillPullsAndKeepsItsHold()
+        {
+            var latch = new TriggerLatch();
+            latch.Latch();
+
+            latch.CarryOver(true);
+            var pressed = latch.Pulled(true);
+            latch.Clear();
+
+            Assert.That(pressed, Is.True);
+            Assert.That(latch.Pulled(true), Is.True);
+        }
+
+        [Test]
+        public void ChoiceWithTheButtonReleasedCarriesNothingOver()
+        {
+            var latch = new TriggerLatch();
+            latch.Begin(true);
+
+            latch.CarryOver(false);
+
+            Assert.That(latch.Pulled(true), Is.True);
+        }
+
+        [Test]
         public void BeginForgetsALatchedPress()
         {
             var latch = new TriggerLatch();

@@ -1,7 +1,8 @@
 using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network.Ticks;
-using Bw.UseCases.Combat.Abstractions.Hands;
+using Bw.UseCases.Combat.Abstractions.Characters;
+using Bw.UseCases.Combat.Hands.Network.Requests;
 using Bw.UseCases.Combat.Weapon.Network.Requests;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
@@ -15,6 +16,10 @@ namespace Bw.UseCases.Combat.Hands.Network
         private TriggerPress LastPress =>
             new(_pressNumber, (byte)Mathf.Min(_ticks.Current - _pressTick, byte.MaxValue), _pressViewDelay, _pressPredictedDelay, 0);
 
+        private bool HoldCounted =>
+            _character.Hands.TryFindInHands(out var weapon) && !_character.Inventory.RulesOf(weapon).PressOnly;
+
+        private readonly IReadonlyCharacter _character;
         private readonly GuardKey _guard;
         private readonly INetworkTicks _ticks;
         private readonly IInterpolationTicks _interpolationTicks;
@@ -30,11 +35,12 @@ namespace Bw.UseCases.Combat.Hands.Network
         public TriggerSampler(
             Lifetime lifetime,
             IReadonlyControlledBy controlledBy,
-            IReadonlyHands hands,
+            IReadonlyCharacter character,
             GuardKey guard,
             INetworkTicks ticks,
             IInterpolationTicks interpolationTicks)
         {
+            _character = character;
             _guard = guard;
             _ticks = ticks;
             _interpolationTicks = interpolationTicks;
@@ -46,14 +52,19 @@ namespace Bw.UseCases.Combat.Hands.Network
                 Observable.EveryUpdate(UnityFrameProvider.Update, controlledLifetime).Subscribe(_ => LatchPress());
                 controlledLifetime.OnTermination(_trigger.Clear);
             });
-            hands.State.Select(lifetime, state => state.InHands).Advise(lifetime, _ => _trigger.Begin(Input.GetMouseButton(0))); //TODO: new input system
+            //TODO: оружие, поднятое на E с зажатой ЛКМ, сервер кладёт в руки раньше, чем сэмплер это увидит, и удержание сразу стреляет из него
+            character.Hands.State.Select(lifetime, state => state.InHands).Advise(lifetime, _ => _trigger.Begin(Input.GetMouseButton(0))); //TODO: new input system
             guard.Held.Advise(lifetime, _ => _trigger.Begin(Input.GetMouseButton(0))); //TODO: new input system
         }
 
-        public TriggerControls Sample()
+        public TriggerControls Sample(DrawControl choice)
         {
+            var held = Input.GetMouseButton(0); //TODO: new input system
+            if (choice.Kind != DrawControlKind.Keep)
+                _trigger.CarryOver(held);
+
             var pressed = _trigger.Latched;
-            var pulled = !_guard.Held.Value && _trigger.Pulled(Input.GetMouseButton(0)); //TODO: new input system
+            var pulled = !_guard.Held.Value && _trigger.Pulled(held && HoldCounted);
             var viewTick = pressed ? _triggerViewTick : _interpolationTicks.InterpolationTick;
             var predictedTick = pressed ? _triggerPredictedTick : _ticks.PredictedViewTick(_interpolationTicks);
             var viewDelay = pulled ? (float)(_ticks.Current - viewTick) : 0f;

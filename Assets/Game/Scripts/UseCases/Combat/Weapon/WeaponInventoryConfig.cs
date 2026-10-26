@@ -18,7 +18,7 @@ namespace Bw.UseCases.Combat.Weapon
         {
             new() { Kind = WeaponKind.Fists },
             new() { Kind = WeaponKind.Gun, Droppable = true },
-            new() { Kind = WeaponKind.Prop, Droppable = true, HandsOnly = true }
+            new() { Kind = WeaponKind.Prop, Droppable = true, HandsOnly = true, PressOnly = true }
         };
 
         public KeyCode LastKey = KeyCode.Q;

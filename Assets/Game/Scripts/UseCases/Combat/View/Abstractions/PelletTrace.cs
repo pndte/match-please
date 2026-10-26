@@ -7,7 +7,7 @@ namespace Bw.UseCases.Combat.View.Abstractions
         public readonly Vector2 From;
         public readonly Vector2 To;
         public readonly Vector2 Direction;
-        public readonly bool Struck;
+        public readonly PelletEnd End;
         public readonly Vector2 Normal;
         public readonly int Layer;
 
@@ -15,14 +15,14 @@ namespace Bw.UseCases.Combat.View.Abstractions
             Vector2 from,
             Vector2 to,
             Vector2 direction,
-            bool struck,
+            PelletEnd end,
             Vector2 normal,
             int layer)
         {
             From = from;
             To = to;
             Direction = direction;
-            Struck = struck;
+            End = end;
             Normal = normal;
             Layer = layer;
         }

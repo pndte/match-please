@@ -30,6 +30,7 @@ using Bw.UseCases.Combat.Characters;
 using Bw.UseCases.Combat.Hands;
 using Bw.UseCases.Combat.Melee.Network;
 using Bw.UseCases.Combat.View.Adapters;
+using Bw.UseCases.Combat.View.Adapters.Hit;
 using Bw.UseCases.Combat.Weapon.Network;
 using Bw.UseCases.Mortality;
 using Bw.UseCases.Mortality.Guarding;
@@ -145,6 +146,7 @@ namespace Bw.Injection
         private void BindClientVisuals()
         {
             Container.Bind(typeof(IHealthViewModel), typeof(IDamageViewModel), typeof(IDeathViewModel)).To<MortalViewModel>().AsSingle();
+            Container.Decorate<IDamageViewModel>().With<ArrivingDamageViewModel>();
             Container.Bind<IPlayerViewModel>().To<CharacterPlayerViewModel>().AsSingle();
             Container.Bind(typeof(HitFeedbackConfig), typeof(IHitFlashConfig)).FromInstance(_hitFeedbackConfig).AsSingle();
             Container.Bind<HitFlash>().AsSingle().NonLazy();

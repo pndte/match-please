@@ -31,6 +31,7 @@ namespace Bw.Injection
             Container.Bind<CharacterTriggerRegistration>().AsSingle().NonLazy();
             Container.Bind<ISteppable<CharacterControls>>().To<CharacterSteps>().AsSingle();
             Container.Decorate<ISteppable<CharacterControls>>().With<RootedCharacterSteps>();
+            Container.Decorate<ISteppable<CharacterControls>>().With<GuardedCharacterSteps>();
             Container.Bind<IInputContinuation<CharacterControls>>().To<CharacterControlsContinuation>().AsSingle();
             PredictionInputInstaller<CharacterControls>.Install(Container, _runtimeSettings, _netSchema);
 
@@ -38,7 +39,6 @@ namespace Bw.Injection
             {
                 case PeerType.Server:
                     Container.Bind<IInputPolicy<CharacterControls>>().To<CharacterControlsPolicy>().AsSingle();
-                    Container.Decorate<ISteppable<CharacterControls>>().With<GuardedCharacterSteps>();
                     Container.Bind<IInputAudience>().To<CharacterInputAudience>().AsSingle();
                     break;
                 case PeerType.Client:

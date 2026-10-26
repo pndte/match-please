@@ -22,7 +22,10 @@ namespace Bw.UseCases.Combat.Hands.Network
             _choices = choices;
         }
 
-        public HandsControls Sample() =>
-            new(_aim.Sample(), _trigger.Sample(), _reload.Sample(), _choices.Sample());
+        public HandsControls Sample()
+        {
+            var choice = _choices.Sample();
+            return new(_aim.Sample(), _trigger.Sample(choice), _reload.Sample(), choice);
+        }
     }
 }

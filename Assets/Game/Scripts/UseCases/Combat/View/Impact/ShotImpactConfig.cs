@@ -7,6 +7,7 @@ namespace Bw.UseCases.Combat.View.Impact
     public sealed class ShotImpactConfig
     {
         public GameObject Prefab;
+        public GameObject Blocked;
         public LayerMask BodyLayers = 1 << 15;
     }
 }

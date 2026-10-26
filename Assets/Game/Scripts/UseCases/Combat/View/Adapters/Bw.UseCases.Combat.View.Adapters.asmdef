@@ -4,6 +4,7 @@
     "references": [
         "Bw.Entities",
         "Bw.UseCases.Mortality",
+        "Bw.UseCases.Mortality.View",
         "Bw.UseCases.Combat",
         "Bw.UseCases.Combat.View",
         "Bw.UseCases.Audio.View",

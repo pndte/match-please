@@ -57,7 +57,7 @@ namespace Bw.Tests.UseCases.Mortality.Guarding
         public void NewGuardIsWholeAndLowered()
         {
             Assert.That(_guard.Max, Is.EqualTo(100f));
-            Assert.That(_guard.State.Value, Is.EqualTo(new GuardState(100f, false, false)));
+            Assert.That(GuardStateOf.ShownPart(_guard.State.Value), Is.EqualTo((100f, false, false)));
             Assert.That(_guard.State.Value.Up, Is.False);
         }
 
@@ -234,9 +234,10 @@ namespace Bw.Tests.UseCases.Mortality.Guarding
         }
 
         [Test]
-        public void WholeGuardNeverChanges()
+        public void RestedWholeGuardNeverChanges()
         {
             Hold(true, 0f);
+            Steps(BrokenRegenDelayTicks);
             var changes = 0;
             _guard.State.Advise(_lifetime.Lifetime, _ => changes++);
 
@@ -303,7 +304,7 @@ namespace Bw.Tests.UseCases.Mortality.Guarding
 
             Steps(1);
 
-            Assert.That(_guard.State.Value, Is.EqualTo(new GuardState(0f, true, true)));
+            Assert.That(GuardStateOf.ShownPart(_guard.State.Value), Is.EqualTo((0f, true, true)));
             Assert.That(_guard.State.Value.Up, Is.False);
         }
 
@@ -325,7 +326,7 @@ namespace Bw.Tests.UseCases.Mortality.Guarding
             Steps(1);
 
             Assert.That(beforeDelay.Broken, Is.True);
-            Assert.That(_guard.State.Value, Is.EqualTo(new GuardState(RegenAmount, true, false)));
+            Assert.That(GuardStateOf.ShownPart(_guard.State.Value), Is.EqualTo((RegenAmount, true, false)));
             Assert.That(_guard.State.Value.Up, Is.True);
         }
 
@@ -377,7 +378,7 @@ namespace Bw.Tests.UseCases.Mortality.Guarding
 
             Hold(false, 0f);
 
-            Assert.That(_guard.State.Value, Is.EqualTo(new GuardState(0f, false, true)));
+            Assert.That(GuardStateOf.ShownPart(_guard.State.Value), Is.EqualTo((0f, false, true)));
         }
 
         [Test]
@@ -388,19 +389,63 @@ namespace Bw.Tests.UseCases.Mortality.Guarding
             for (var index = 1; index < BrokenRegenDelayTicks; index++)
                 Hold(false, 0f);
 
-            Assert.That(_guard.State.Value, Is.EqualTo(new GuardState(RegenAmount, false, false)));
+            Assert.That(GuardStateOf.ShownPart(_guard.State.Value), Is.EqualTo((RegenAmount, false, false)));
             Assert.That(_guard.State.Value.Up, Is.False);
         }
 
         [Test]
         public void AppliedStateIsShownAsItCame()
         {
-            var shown = new GuardState(42.5f, true, false);
+            var shown = new GuardState(42.5f, true, false, 45f, 3, 1);
 
             _guard.Apply(shown);
 
             Assert.That(_guard.State.Value, Is.EqualTo(shown));
             Assert.That(_guard.State.Value.Up, Is.True);
+        }
+
+        [Test]
+        public void StepFacesTheStancesAim()
+        {
+            Hold(true, 135f);
+
+            Assert.That(_guard.State.Value.Aim, Is.EqualTo(135f));
+        }
+
+        [Test]
+        public void StepRemembersThePreviousStateAndTellsTheNewOne()
+        {
+            Hold(true, 0f);
+            var before = _guard.State.Value;
+            var stepped = new List<GuardState>();
+            _guard.Stepped.Advise(_lifetime.Lifetime, stepped.Add);
+
+            Hold(false, 0f);
+
+            Assert.That(_guard.Previous, Is.EqualTo(before));
+            Assert.That(stepped, Is.EqualTo(new[] { _guard.State.Value }));
+        }
+
+        [Test]
+        public void AppliedAimIsTheOneCovered()
+        {
+            _guard.Apply(new GuardState(100f, true, false, 180f, 0, 0));
+
+            Assert.That(_guard.InCover(Back[0].Contact), Is.True);
+            Assert.That(_guard.InCover(Front[0].Contact), Is.False);
+        }
+
+        [Test]
+        public void AppliedCountersCarryOnWhereTheyStood()
+        {
+            _guard.Apply(new GuardState(70f, true, false, 0f, RegenDelayTicks - 2, RegenIntervalTicks));
+
+            Steps(1);
+            var beforeDelay = _guard.State.Value.Health;
+            Steps(1);
+
+            Assert.That(beforeDelay, Is.EqualTo(70f));
+            Assert.That(_guard.State.Value.Health, Is.EqualTo(70f + RegenAmount));
         }
 
         [Test]

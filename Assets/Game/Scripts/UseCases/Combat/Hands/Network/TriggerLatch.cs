@@ -18,6 +18,9 @@ namespace Bw.UseCases.Combat.Hands.Network
             _heldOver = false;
         }
 
+        public void CarryOver(bool held) =>
+            _heldOver = held && !Latched;
+
         public void Clear() =>
             Latched = false;
 

@@ -23,10 +23,13 @@ MonoBehaviour:
   - Kind: 0
     Droppable: 0
     HandsOnly: 0
+    PressOnly: 0
   - Kind: 1
     Droppable: 1
     HandsOnly: 0
+    PressOnly: 0
   - Kind: 2
     Droppable: 1
     HandsOnly: 1
+    PressOnly: 1
   LastKey: 113

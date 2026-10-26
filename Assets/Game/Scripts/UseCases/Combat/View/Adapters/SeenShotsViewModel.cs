@@ -8,6 +8,8 @@ using Bw.UseCases.Combat.View.Abstractions;
 using Bw.UseCases.Combat.View.Adapters.Extensions;
 using Bw.UseCases.Combat.Weapon;
 using Bw.UseCases.Combat.Weapon.Abstractions;
+using Bw.UseCases.Mortality.Extensions;
+using Bw.UseCases.Mortality.Guarding;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using UnityEngine;
@@ -23,6 +25,7 @@ namespace Bw.UseCases.Combat.View.Adapters
         private readonly IWeaponsInHands _inHands;
         private readonly IShotTracer _tracer;
         private readonly ICharacterViews _views;
+        private readonly IReadonlyGuardCovers _covers;
 
         private bool _drawn;
         private bool _synchronized;
@@ -33,12 +36,14 @@ namespace Bw.UseCases.Combat.View.Adapters
             IWeapon weapon,
             IWeaponsInHands inHands,
             IShotTracer tracer,
-            ICharacterViews views)
+            ICharacterViews views,
+            IReadonlyGuardCovers covers)
         {
             _weapon = weapon;
             _inHands = inHands;
             _tracer = tracer;
             _views = views;
+            _covers = covers;
 
             inHands.ByWeapon.ViewForKey(lifetime, weapon, (drawnLifetime, _) =>
             {
@@ -74,8 +79,11 @@ namespace Bw.UseCases.Combat.View.Adapters
         {
             var trace = _tracer.Cast(ray);
             return trace.IsStruck
-                ? new PelletTrace(trace.From, trace.To, ray.Direction, true, trace.Normal, trace.Shape.Layer())
-                : new PelletTrace(trace.From, trace.To, ray.Direction, false, Vector2.zero, 0);
+                ? new PelletTrace(trace.From, trace.To, ray.Direction, EndOf(trace), trace.Normal, trace.Shape.Layer())
+                : new PelletTrace(trace.From, trace.To, ray.Direction, PelletEnd.Missed, Vector2.zero, 0);
         }
+
+        private PelletEnd EndOf(ShotTrace trace) =>
+            trace.Shape.TryGetMortal(out var mortal) && _covers.CoverOf(mortal).InCover(trace.Shape.ContactAt(trace.To)) ? PelletEnd.Blocked : PelletEnd.Struck;
     }
 }

@@ -53,10 +53,12 @@ namespace Bw.UseCases.Combat.View
 
             _sfxPlayer.PlayImpact(trace, arrival);
 
-            if (!trace.Struck)
+            if (trace.End == PelletEnd.Missed)
                 return;
 
-            if (IsBody(trace.Layer)) //TODO: кровь рисуется по локальному трассеру, а урон решает сервер (свой выстрел предсказан той же трассировкой, но сервер может его отменить) — изредка будет кровь без урона или урон без крови
+            if (trace.End == PelletEnd.Blocked)
+                _lifetime.WhenElapsed(arrival, () => _pools.For<IEffect>(_impact.Blocked).OneShot(_lifetime).Play(trace.To, trace.Normal));
+            else if (IsBody(trace.Layer)) //TODO: кровь рисуется по локальному трассеру, а урон решает сервер (свой выстрел предсказан той же трассировкой, но сервер может его отменить) — изредка будет кровь без урона или урон без крови
                 _lifetime.WhenElapsed(arrival, () => _pools.For<IEffect>(_impact.Prefab).OneShot(_lifetime).Play(trace.To, trace.Direction));
             else //TODO: любая поверхность бьётся одинаково (искры, серая крошка, пыль, дырка) — дереву, металлу и земле нужны свои частицы, как и звуки попадания; дырка остаётся там, куда попала пуля, и на едущем лифте, на отброшенном выстрелом или разбитом ящике повиснет в воздухе
                 _lifetime.WhenElapsed(arrival, () => _pools.For<IEffect>(_vfx.Impact).OneShot(_lifetime).Play(trace.To, trace.Normal));

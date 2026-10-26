@@ -6,26 +6,29 @@ using UnityEngine;
 
 namespace Bw.UseCases.Mortality.Guarding
 {
-    public sealed class Guard : IGuard, IGuardCover, IGuardBlows, ISteppable<GuardStance>
+    public sealed class Guard : IReadonlyGuard, IGuardCover, IGuardBlows, ISteppable<GuardStance>, IReadonlySimulation<GuardState>, IRestorable<GuardState>
     {
         public float Max => _config.MaxHealth;
         public IReadonlyProperty<GuardState> State => _state;
+        public GuardState Previous { get; private set; }
+        public ISource<GuardState> Stepped => _stepped;
+
+        private int RestTicks =>
+            Mathf.CeilToInt(Mathf.Max(Mathf.Max(_config.RegenDelay, _config.BrokenRegenDelay), _config.RegenInterval) / _step.Duration);
 
         private readonly ViewableProperty<GuardState> _state;
+        private readonly Signal<GuardState> _stepped = new();
         private readonly GuardConfig _config;
         private readonly ISimulationStep _step;
         private readonly BodyBox _box;
-
-        private float _aim;
-        private int _ticksSinceBlow = int.MaxValue;
-        private int _ticksSinceRegen = int.MaxValue;
 
         public Guard(GuardConfig config, ISimulationStep step, BodyBox box)
         {
             _config = config;
             _step = step;
             _box = box;
-            _state = new ViewableProperty<GuardState>(new GuardState(config.MaxHealth, false, false));
+            _state = new ViewableProperty<GuardState>(new GuardState(config.MaxHealth, false, false, 0f, 0, 0));
+            Previous = _state.Value;
         }
 
         public void Apply(GuardState state) =>
@@ -33,15 +36,9 @@ namespace Bw.UseCases.Mortality.Guarding
 
         public void Step(GuardStance stance)
         {
-            _aim = stance.Aim;
-            _ticksSinceBlow = Counted(_ticksSinceBlow);
-            _ticksSinceRegen = Counted(_ticksSinceRegen);
-            var raised = _state.Value.WithRaised(stance.Raised);
-            var recovered = Recovered(raised);
-            if (recovered.Health > raised.Health)
-                _ticksSinceRegen = 0;
-
-            _state.Value = recovered;
+            Previous = _state.Value;
+            _state.Value = Recovered(Previous.Counted(RestTicks).Faced(stance));
+            _stepped.Fire(_state.Value);
         }
 
         public bool InCover(Contact contact) =>
@@ -53,14 +50,13 @@ namespace Bw.UseCases.Mortality.Guarding
             if (damage <= 0f)
                 return;
 
-            _ticksSinceBlow = 0;
             _state.Value = _state.Value.AfterBlow(damage * (1f - _config.Armor));
         }
 
         private GuardState Recovered(GuardState state)
         {
             if (state.Broken)
-                return Seconds(_ticksSinceBlow) >= _config.BrokenRegenDelay ? state.Mended(Mathf.Min(Max, _config.RegenAmount)) : state;
+                return Seconds(state.TicksSinceBlow) >= _config.BrokenRegenDelay ? state.Mended(Mathf.Min(Max, _config.RegenAmount)) : state;
 
             if (state.Health <= 0f)
                 return state.AsBroken();
@@ -70,19 +66,16 @@ namespace Bw.UseCases.Mortality.Guarding
 
         private bool Regenerating(GuardState state) =>
             state.Health < Max
-            && Seconds(_ticksSinceBlow) >= _config.RegenDelay
-            && Seconds(_ticksSinceRegen) >= _config.RegenInterval;
+            && Seconds(state.TicksSinceBlow) >= _config.RegenDelay
+            && Seconds(state.TicksSinceRegen) >= _config.RegenInterval;
 
         private Vector2 Facing()
         {
-            var radians = _aim * Mathf.Deg2Rad;
+            var radians = _state.Value.Aim * Mathf.Deg2Rad;
             return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
         }
 
         private float Seconds(int ticks) =>
             ticks * _step.Duration;
-
-        private static int Counted(int ticks) =>
-            ticks == int.MaxValue ? ticks : ticks + 1;
     }
 }

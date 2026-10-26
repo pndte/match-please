@@ -200,19 +200,28 @@ Lifetime.Using(rewound =>
 Для каждого типа сообщения пишется кодек: структура, в которой один и тот же метод и записывает значение в буфер, и читает его оттуда.
 
 ```csharp
-public struct GuardStateCodec : ICodec<GuardState>
+public struct TickedGuardStateCodec : ICodec<TickedState<GuardState>>
 {
-    public GuardState Value { get => _value; set => _value = value; }
-    private GuardState _value;
+    public TickedState<GuardState> Value { get => _value; set => _value = value; }
+    private TickedState<GuardState> _value;
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
-        var health = Value.Health;
-        var raised = Value.Raised;
-        var broken = Value.Broken;
-        serializer.SerializeValue(ref health);
+        var tick = Value.Tick;
+        var health = Value.State.Health;
+        var raised = Value.State.Raised;
+        var broken = Value.State.Broken;
+        var aim = Value.State.Aim;
+        var ticksSinceBlow = Value.State.TicksSinceBlow;
+        var ticksSinceRegen = Value.State.TicksSinceRegen;
+        serializer.SerializePacked(ref tick);
         serializer.SerializeFlags(ref raised, ref broken); // два bool в одном байте
-        Value = new GuardState(health, raised, broken);
+        serializer.SerializeValue(ref health);
+        if (raised)
+            serializer.SerializeAngle(ref aim);             // угол только у поднятого блока
+        serializer.SerializePacked(ref ticksSinceBlow);
+        serializer.SerializePacked(ref ticksSinceRegen);
+        Value = new TickedState<GuardState>(tick, new GuardState(health, raised, broken, raised ? aim : 0f, ticksSinceBlow, ticksSinceRegen));
     }
 }
 ```
@@ -404,7 +413,7 @@ customMessaging.SendUnnamedMessage(NetworkManager.ServerClientId, buffer, delive
 Пары «тип значения и его кодек» регистрирует сгенерированный код, по одной строке на кодек. Повторная регистрация того же типа значения бросает исключение.
 
 ```csharp
-RegisterCodec<GuardState, GuardStateCodec>(receivers, senders);
+RegisterCodec<TickedState<GuardState>, TickedGuardStateCodec>(receivers, senders);
 ```
 
 Результат сервера отличается от запроса только адресатом: одному клиенту или всем. Адресат хранится в маленьком типе-объединении `NetSendTarget`, и таблица сервера выбирает ветку через статические лямбды. Состояние передаётся в лямбду кортежем, поэтому при рассылке не создаются замыкания.
