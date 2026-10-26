@@ -56,16 +56,16 @@ jobs:
             tarball: true
     steps:
       - name: Make room for the Unity image
-        uses: jlumbroso/free-disk-space@v1.3.1
+        uses: jlumbroso/free-disk-space@v2.0.0
         with:
           large-packages: false
           swap-storage: false
 
       - name: Check out
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Restore the imported Library
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: Library
           key: Library-${{ matrix.platform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
@@ -74,7 +74,7 @@ jobs:
             Library-
 
       - name: Build ${{ matrix.name }}
-        uses: game-ci/unity-builder@v4.8.2
+        uses: game-ci/unity-builder@v6.0.0
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
@@ -110,7 +110,7 @@ jobs:
           fi
 
       - name: Keep the build
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact }}-${{ needs.version.outputs.version }}
           path: ${{ steps.package.outputs.path }}
@@ -129,10 +129,10 @@ jobs:
       VERSION: ${{ needs.version.outputs.version }}
     steps:
       - name: Check out
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Download the server build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: MatchPlease-LinuxServer-${{ needs.version.outputs.version }}
           path: ${{ runner.temp }}/artifact
@@ -198,7 +198,7 @@ jobs:
 
       - name: Keep the server log
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: server-log-${{ needs.version.outputs.version }}
           path: ${{ runner.temp }}/server.log
@@ -231,7 +231,7 @@ jobs:
       VERSION: ${{ needs.version.outputs.version }}
     steps:
       - name: Download the builds
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: MatchPlease-*-${{ needs.version.outputs.version }}
           path: dist
