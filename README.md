@@ -5,6 +5,7 @@
 [![CodeQL](https://github.com/pndte/match-please/actions/workflows/codeql.yml/badge.svg)](https://github.com/pndte/match-please/actions/workflows/codeql.yml)
 [![Repository](https://github.com/pndte/match-please/actions/workflows/repository.yml/badge.svg)](https://github.com/pndte/match-please/actions/workflows/repository.yml)
 [![Release](https://img.shields.io/github/v/release/pndte/match-please)](https://github.com/pndte/match-please/releases/latest)
+[![itch.io](https://img.shields.io/badge/itch.io-download-FA5C5C?logo=itchdotio&logoColor=white)](https://pndte.itch.io/match-please?secret=lGJwzXWXsiEN7X02vTIVU1Fs)
 
 <img src="Media/brawl.gif" align="right" width="460" alt="Шесть игроков дерутся все против всех на карте «Стройка»">
 
@@ -841,7 +842,7 @@ docker run -d -p 7800:7800/udp ghcr.io/pndte/match-please-server:0.1.0 -server 7
 
 ## Запуск
 
-Готовые сборки клиента для Windows и сервера для Linux выложены в [GitHub Releases](https://github.com/pndte/match-please/releases), а сервер есть и в виде Docker-образа (команды в разделе [«CI/CD»](#cicd)).
+Игру можно скачать со [страницы на itch.io](https://pndte.itch.io/match-please?secret=lGJwzXWXsiEN7X02vTIVU1Fs). Готовые сборки клиента для Windows и сервера для Linux есть и в [GitHub Releases](https://github.com/pndte/match-please/releases), а сервер — ещё и в виде Docker-образа (команды в разделе [«CI/CD»](#cicd)).
 
 Для запуска из исходников нужен Unity 6000.3.11f1.
 
