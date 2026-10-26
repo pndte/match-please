@@ -848,7 +848,7 @@ docker run -d -p 7800:7800/udp ghcr.io/pndte/match-please-server:0.1.0 -server 7
 Для запуска из исходников нужен Unity 6000.3.11f1.
 
 1. Откройте папку проекта в Unity Hub.
-2. Откройте сцену `Assets/Resources/Scenes/GameSetupScene.unity` и нажмите Play.
+2. Откройте сцену `Assets/Game/Scenes/GameSetupScene.unity` и нажмите Play.
 3. В меню введите имя, затем создайте комнату или подключитесь по IP и порту.
 
 Чтобы запустить несколько копий игры в одном редакторе:
@@ -885,13 +885,14 @@ Assets/
 │   │   ├── Setup/           запуск и меню
 │   │   └── Tests/           Bw.Tests: модульные и интеграционные тесты
 │   ├── Editor/              генератор кодеков, запекание навигации, сборки, инспекторы
+│   ├── Content/             конфиги персонажей, оружия, ящиков, ботов и матча; в Setup/ — настройки сети, физики и пулов
 │   ├── Prefabs/
-│   ├── Scenes/              Network, ConstructionSite, MeatPlant, SampleScene: грузятся через Addressables
+│   ├── Scenes/              Boot, GameSetupScene, Network, ConstructionSite, MeatPlant, SampleScene
 │   └── UI/                  UXML и USS меню и HUD
-└── Resources/
-    ├── Scenes/              GameSetupScene: стартовая сцена, единственная в Build Settings
-    └── Setup/               настройки сети, физики и пулов
+└── Resources/               только ProjectContext и настройки DOTween
 ```
+
+В Build Settings стоит одна пустая сцена Boot: она загружает GameSetupScene. Всё остальное (сцены, конфиги, префабы, интерфейс и звуки) грузится через Addressables, поэтому в собранной игре каждый ассет существует в одном экземпляре. Из Resources грузятся только ProjectContext, который ищет там Zenject, и настройки DOTween.
 
 Все папки фич устроены одинаково:
 
