@@ -1,0 +1,98 @@
+name: Build
+
+# Builds the players on the project's own Linux machine (the self-hosted runner labelled "unity") in GameCI's Unity
+# containers: by hand, and for every version tag, never on pull requests.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unity-build-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    if: github.repository == 'pndte/match-please'
+    runs-on: [self-hosted, linux, unity]
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - name: Windows client
+            method: WindowsClient
+            platform: StandaloneWindows64
+            parameters: ""
+            artifact: MatchPlease-Windows
+            tarball: false
+          # A tarball keeps the server's executable bit, which an artifact's zip loses.
+          - name: Linux dedicated server
+            method: LinuxServer
+            platform: StandaloneLinux64
+            parameters: -standaloneBuildSubtarget Server
+            artifact: MatchPlease-LinuxServer
+            tarball: true
+    steps:
+      - name: Check out, keeping the imported Library
+        uses: actions/checkout@v4
+        with:
+          clean: false
+
+      - name: Choose the version and clear the output
+        id: version
+        env:
+          BUILD_METHOD: ${{ matrix.method }}
+        run: |
+          if [ "$GITHUB_REF_TYPE" = tag ]; then version="${GITHUB_REF_NAME#v}"; else version="0.0.0-${GITHUB_SHA::7}"; fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          rm -rf "Builds/$BUILD_METHOD"
+
+      - name: Build ${{ matrix.name }}
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: ${{ matrix.platform }}
+          buildMethod: Bw.EditorTools.Build.GameBuild.${{ matrix.method }}
+          buildsPath: Builds
+          customParameters: -buildOutput Builds/${{ matrix.method }} ${{ matrix.parameters }}
+          versioning: Custom
+          version: ${{ steps.version.outputs.version }}
+          runAsHostUser: true
+
+      - name: Package ${{ matrix.name }}
+        id: package
+        env:
+          BUILD_METHOD: ${{ matrix.method }}
+          BUILD_NAME: ${{ matrix.name }}
+          ARTIFACT: ${{ matrix.artifact }}
+          TARBALL: ${{ matrix.tarball }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          output="Builds/$BUILD_METHOD"
+          find "$output" -mindepth 1 -maxdepth 1 -type d \( -name '*DoNotShip*' -o -name '*DontShipItWithYourGame*' \) -exec rm -rf {} +
+          megabytes=$(du -sm "$output" | cut -f1)
+          printf '| Build | Version | Size |\n|---|---|---|\n| %s | %s | %s MB |\n' "$BUILD_NAME" "$VERSION" "$megabytes" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$TARBALL" = true ]; then
+            tar -czf "$RUNNER_TEMP/$ARTIFACT-$VERSION.tar.gz" -C "$output" .
+            echo "path=$RUNNER_TEMP/$ARTIFACT-$VERSION.tar.gz" >> "$GITHUB_OUTPUT"
+          else
+            echo "path=$output" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Keep the build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}-${{ steps.version.outputs.version }}
+          path: ${{ steps.package.outputs.path }}
+          if-no-files-found: error
+          retention-days: 30
