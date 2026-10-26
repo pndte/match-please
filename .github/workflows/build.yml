@@ -40,7 +40,7 @@ jobs:
             tarball: true
     steps:
       - name: Check out, keeping the imported Library
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           clean: false
 
@@ -54,7 +54,7 @@ jobs:
           rm -rf "Builds/$BUILD_METHOD"
 
       - name: Build ${{ matrix.name }}
-        uses: game-ci/unity-builder@v4
+        uses: game-ci/unity-builder@v6
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
@@ -90,7 +90,7 @@ jobs:
           fi
 
       - name: Keep the build
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact }}-${{ steps.version.outputs.version }}
           path: ${{ steps.package.outputs.path }}
