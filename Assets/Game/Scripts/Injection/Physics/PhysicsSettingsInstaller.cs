@@ -19,7 +19,7 @@ namespace Bw.Injection.Physics
         private void RequireConfig()
         {
             if (_config == null)
-                throw new InvalidOperationException($"Physics settings '{name}' have no config: assign Assets/Resources/Physics/PhysicsConfig.asset.");
+                throw new InvalidOperationException($"Physics settings '{name}' have no config: assign Assets/Game/Content/Physics/PhysicsConfig.asset.");
 
             if (_config.SubSteps < 1)
                 throw new InvalidOperationException($"Physics config '{_config.name}' has {_config.SubSteps.ToString()} sub-steps: a step needs at least one.");

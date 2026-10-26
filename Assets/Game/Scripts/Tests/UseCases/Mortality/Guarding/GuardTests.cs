@@ -451,7 +451,7 @@ namespace Bw.Tests.UseCases.Mortality.Guarding
         [Test]
         public void ShippedGuardRegeneratesTwoSecondsAfterABlowAtThirtyTicks()
         {
-            var shipped = AssetDatabase.LoadAssetAtPath<GuardConfig>("Assets/Resources/GuardConfig.asset");
+            var shipped = AssetDatabase.LoadAssetAtPath<GuardConfig>("Assets/Game/Content/GuardConfig.asset");
             var guard = new Guard(shipped, new ManualClock(1f / 30f), _box);
             var delayTicks = Mathf.CeilToInt(shipped.RegenDelay * 30f);
             guard.Step(new GuardStance(true, 0f));

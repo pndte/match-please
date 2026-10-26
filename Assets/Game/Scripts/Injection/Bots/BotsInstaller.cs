@@ -46,18 +46,18 @@ namespace Bw.Injection.Bots
         private void RequireBots()
         {
             if (_bots == null)
-                throw new InvalidOperationException($"'{name}' has no bots config: assign Resources/Bots/BotsConfig, whose empty list means a level without bots.");
+                throw new InvalidOperationException($"'{name}' has no bots config: assign Assets/Game/Content/Bots/BotsConfig, whose empty list means a level without bots.");
 
             if (_bots.StandIn == null)
-                throw new InvalidOperationException($"Bots config '{_bots.name}' has no stand-in difficulty: a bot of it plays for a player whose client left, assign Resources/Bots/Light.");
+                throw new InvalidOperationException($"Bots config '{_bots.name}' has no stand-in difficulty: a bot of it plays for a player whose client left, assign Assets/Game/Content/Bots/Light.");
 
             if (_bots.Fists == null)
-                throw new InvalidOperationException($"Bots config '{_bots.name}' has no fists config: bots judge their punches by Resources/Weapons/FistsMeleeConfig.");
+                throw new InvalidOperationException($"Bots config '{_bots.name}' has no fists config: bots judge their punches by Assets/Game/Content/Weapons/FistsMeleeConfig.");
 
             foreach (var bot in _bots.Bots)
             {
                 if (bot.Difficulty == null)
-                    throw new InvalidOperationException($"Bot '{bot.Nickname}' in '{_bots.name}' has no difficulty: assign one from Resources/Bots.");
+                    throw new InvalidOperationException($"Bot '{bot.Nickname}' in '{_bots.name}' has no difficulty: assign one from Assets/Game/Content/Bots.");
 
                 if (!NicknameRules.IsValid(bot.Nickname))
                     throw new InvalidOperationException($"Bot '{bot.Nickname}' in '{_bots.name}' has a nickname no player may have: {NicknameRules.MinLength}-{NicknameRules.MaxLength} letters, digits, spaces, '_' or '-'.");
@@ -70,7 +70,7 @@ namespace Bw.Injection.Bots
         private void RequireNavigation()
         {
             if (_navigation == null || _navigationConfig == null)
-                throw new InvalidOperationException($"'{name}' has no navigation for its bots: assign Resources/Bots/NavGraphConfig and bake the graph (Tools → Bots → Bake Navigation).");
+                throw new InvalidOperationException($"'{name}' has no navigation for its bots: assign Assets/Game/Content/Bots/NavGraphConfig and bake the graph (Tools → Bots → Bake Navigation).");
 
             var fingerprint = NavFingerprint.Of(LevelBoxes.In(gameObject.scene), _navigationConfig, 1f / NetworkManager.Singleton.NetworkConfig.TickRate);
             if (_navigation.Fingerprint != fingerprint)

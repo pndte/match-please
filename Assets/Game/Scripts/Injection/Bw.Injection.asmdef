@@ -47,7 +47,9 @@
         "Bw.UseCases.Level.View.Adapters",
         "Unity.RenderPipelines.Core.Runtime",
         "Unity.RenderPipelines.Universal.Runtime",
-        "Bw.UseCases.Combat.Abstractions"
+        "Bw.UseCases.Combat.Abstractions",
+        "Unity.Addressables",
+        "Unity.ResourceManager"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

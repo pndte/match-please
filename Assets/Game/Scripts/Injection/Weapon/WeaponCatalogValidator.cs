@@ -9,14 +9,14 @@ namespace Bw.Injection.Weapon
         public static void Require(WeaponCatalog weapons)
         {
             if (weapons == null)
-                throw new InvalidOperationException("The weapon catalog is not set: assign Assets/Resources/Weapons/WeaponCatalog.asset to WeaponSettings.");
+                throw new InvalidOperationException("The weapon catalog is not set: assign Assets/Game/Content/Weapons/WeaponCatalog.asset to WeaponSettings.");
 
             var keys = new HashSet<int>();
             foreach (var entry in weapons.Weapons)
             {
                 if (entry.Weapon == null)
                     throw new InvalidOperationException(
-                        $"The weapon catalog '{weapons.name}' has a row without a weapon: assign a weapon description from Assets/Resources/Weapons or remove the row.");
+                        $"The weapon catalog '{weapons.name}' has a row without a weapon: assign a weapon description from Assets/Game/Content/Weapons or remove the row.");
 
                 if (entry.Weapon.Key == 0 || !keys.Add(entry.Weapon.Key))
                     throw new InvalidOperationException(

@@ -15,8 +15,793 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: ccc31f90b0756a4499eeb38d40746a9f
   m_SerializeEntries:
+  - m_GUID: 01117806cb1f2ff46ad99329bdd08826
+    m_Address: Assets/Game/Prefabs/Vfx/BloodBurst.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0158411740f607e47be436b41ec33557
+    m_Address: Assets/Game/Prefabs/Vfx/MuzzleFlashRifle.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 028f3f7f1f83f474697f765f7043df94
+    m_Address: Assets/Game/Content/RaycastShootConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 033c591566a65ed49b3c6aeb1c7a6447
+    m_Address: Assets/Game/Prefabs/Vfx/Hull.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 056741bfec43f0d4a897aed0336dec79
+    m_Address: Assets/Game/Prefabs/Level/Site/Lift.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 06b1c2facaa67e6428aa57dd9beabd9f
+    m_Address: Assets/Game/Prefabs/Network/Network.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 06f8ba4e5776bcd4f82a4023693d1e06
+    m_Address: Assets/Game/Content/Vfx/FistHitParticleCollisionConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 084f0a82d2d884c4f92d4b64dd456784
+    m_Address: Assets/Game/Prefabs/Level/Site/Bricks.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0942f4b40f199fd429d7b4264165aaa8
+    m_Address: Assets/Game/Content/PlatformSkinConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0a15f72084f716842bc2ff2b01807b31
+    m_Address: Assets/Game/Prefabs/Vfx/DeathBlood.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0a3b31e59699cfb419c61f3a8007e762
+    m_Address: Assets/Game/UI/Menu/StartScreen.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0b1403a98fa7f9d42a518ef6027b73b4
+    m_Address: Assets/Game/Content/Setup/Pools/PoolSettings.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - settings
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0cc015d738294cd9b3e4c1811d88a2cd
+    m_Address: Assets/Game/Content/Characters/CharacterLooksConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d42d7a7b7cc75b46975aa36f4e5cbce
+    m_Address: Assets/Game/Prefabs/Level/Site/Scaffold.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0dcfd80fc0049a94687ffe5564779af5
+    m_Address: Assets/Game/Audio/Footsteps/Grass/LandGrass_04.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0e59b23191e4ae94395979be25dbde66
+    m_Address: Assets/Game/UI/Hud/MatchTimer.uss
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 110cd4f23ccac584591ad73f2e292b8e
+    m_Address: Assets/Game/Prefabs/Level/MeatPlant/PaternosterCabinDown.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1142591e815bc134ab20663a14a975aa
+    m_Address: Assets/Game/Content/Vfx/CasingParticleCollisionConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 11b0c5cf0a0f6e34084151ebe9cf7cc9
+    m_Address: Assets/Game/Content/Vfx/CrateChipsParticleCollisionConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 122e52389f1e4f1fa8d913fe0e520f2c
+    m_Address: Assets/Game/Content/CameraShakeConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1349f0cce07404940825faf34c26a95f
+    m_Address: Assets/Game/Audio/Footsteps/Grass/JumpGrass_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 13d1464b4bf8a694286ec46e58a03d0e
+    m_Address: Assets/Game/Prefabs/Vfx/CrateBreak.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 148e537fe6e399a40997e8db8ffab01d
+    m_Address: Assets/Game/Prefabs/Vfx/PelletImpact.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 14ec802b8df0ffa48a7f920d8d9b9927
+    m_Address: Assets/Game/Audio/Weapons/Ak/AkShot_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 16a0e7dbc7842a54a93b6b8313184795
+    m_Address: Assets/Game/UI/Menu/Cast.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1934f9418b7a4b6791c8a753a7d47d6c
+    m_Address: Assets/Game/Content/Setup/Network/NetworkSettings.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - settings
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 19bb880cae21df44fa018eedfc2df75e
+    m_Address: Assets/Game/Audio/Footsteps/Grass/FootstepGrass_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 19ea7c9e54d4b34499ca838c97bc8f46
+    m_Address: Assets/Game/Prefabs/Level/Site/Pallet.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1aa62028084ebec4995dab37a52b0961
+    m_Address: Assets/Game/Prefabs/Vfx/Tracer.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1b88bcc648054744e9a05b31611718bb
+    m_Address: Assets/Game/Content/HealthBarConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1c47e7559db79da4da505b76bb309394
+    m_Address: Assets/Game/Audio/Melee/FistHitWall_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1ebf8f10f73503e4db3da16a3a3afc1d
+    m_Address: Assets/Game/Audio/Melee/FistSwing_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1f12fcf994a84d94ba773b527a654626
+    m_Address: Assets/Game/Content/Weapons/ShotgunCameraKickConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 20665ca7550f0604d82f61652021be97
+    m_Address: Assets/Game/Content/HealthConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 21455f8ce2ce2c547ac7333cd59da293
+    m_Address: Assets/Game/Prefabs/Character/WeaponVariants/Fists.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 217cad3e5b30f6347b847ddd6fa2f187
+    m_Address: Assets/Game/Prefabs/Main Camera Site.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 233408d7ab1b4f440ab9ba9592ba8df6
+    m_Address: Assets/Game/Audio/Melee/FistHitBody_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2347963ac83ad924e82854630d1cb3fd
+    m_Address: Assets/Game/Content/Weapons/ShotgunAmmoConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 23864a47149a08f4681697e7b91ae51e
+    m_Address: Assets/Game/Audio/Impacts/BulletHitBody_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 24f8c767fbe7f114193bc5a6f77967c7
+    m_Address: Assets/Game/Prefabs/Character/CharacterVariants/GOSHAK.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 25ccd82384ce31447af8bd6c2357f025
+    m_Address: Assets/Game/Audio/Crates/CrateHit_03.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 261aa6427960c4d4c94fa9b17d2e29e0
+    m_Address: Assets/Game/Audio/Footsteps/Grass/LandGrass_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 26d357a479301944f8c8b65c08b87317
+    m_Address: Assets/Game/Content/Crates/CrateHitImpulseConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 26eeb9d88db5657469dcd8a8897fd9ca
+    m_Address: Assets/Game/Prefabs/Level/Site/Crate.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 26f0710dc9b3b0241aab95c34cdb727a
+    m_Address: Assets/Game/DefaultNetworkPrefabs.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 28c1d05763d5c724987f5766ef8d8a60
+    m_Address: Assets/Game/Prefabs/Character/Character.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 29256685220723e4693c32934dc1d7f9
+    m_Address: Assets/Game/Content/Weapons/SniperShotVfxConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2957cebefd38bf442a8d181c923a7642
+    m_Address: Assets/Game/Audio/Footsteps/Grass/JumpGrass_03.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 29cda7185da4dcc4196476ef4b3fa138
+    m_Address: Assets/Game/Prefabs/Character/WeaponVariants/Pistol.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2abbc7a6c47ca094ba2698b00eda7561
+    m_Address: Assets/Game/Content/Setup/Graphics/GraphicsSettings.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - settings
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2b10217f579c40c79917feb1030e7736
+    m_Address: Assets/Game/Content/Characters/SanyaDescription.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2be3ce0dc60547b4b2eee00319b34bc2
+    m_Address: Assets/Game/Content/Characters/SevaDescription.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c144b103a9c41fa987990bd2ceb2c8b
+    m_Address: Assets/Game/Content/WeaponCameraKickConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c45f87132822ac4f9be9a4616677aa0
+    m_Address: Assets/Game/Audio/Impacts/BulletHitGrass_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2df3a39d3a4956845ba54da0268bc7fb
+    m_Address: Assets/Game/Prefabs/Level/Site/WorkLamp.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 328243071a44f3548b1546f294bba765
+    m_Address: Assets/Game/Audio/Footsteps/Grass/JumpGrass_04.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 335bfd112bce32e47b5a2fc01803dc3b
+    m_Address: Assets/Game/Prefabs/Level/Site/Excavator.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 33da2d01df3a46940a4f72793e7babee
+    m_Address: Assets/Game/Content/Vfx/CrateBoardsParticleCollisionConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 344f33af925f5d54e837ecabeeb0fb29
+    m_Address: Assets/Game/Audio/Character/CharacterDeath_03.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 345704b1ad4d50e41a15480428631f7e
+    m_Address: Assets/Game/UI/Menu/Backdrop.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 36e40c069b7a9a74baad29a6310ed3b0
+    m_Address: Assets/Game/Prefabs/Character/CharacterVariants/Matvey.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 380149d7526343b58675c1bd9c71c1c7
+    m_Address: Assets/Game/Content/Characters/GoshakDescription.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 38fcf51858e1d7e4ab7a857ae7d5e617
+    m_Address: Assets/Game/Content/Weapons/FistsStrikeFeelConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3a126147689d4e25823f5bd20676cebf
+    m_Address: Assets/Game/Content/Weapons/WeaponPickupConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3af4a8d9b74b02a46957b4f418005750
+    m_Address: Assets/Game/Content/FogOfWarConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b2a502b946ec2d4e87dc0d4e290cd0a
+    m_Address: Assets/Game/Content/PlankSkinConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3d75886c3117bb440bba58f2338eaa4b
+    m_Address: Assets/Game/UI/Hud/HudPanel.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3fd7bd3678e192d438b70b7931d97ee8
+    m_Address: Assets/Game/Audio/Weapons/Sniper/SniperBoltCycle.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 40bbf3c784b54bb4882f4c9cc223b3f7
+    m_Address: Assets/Game/Prefabs/Vfx/PropFlightFx.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 40ca6380182844b59ea4453ba435527e
+    m_Address: Assets/Game/Content/Match/MatchConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 41070df745f243848a3d841ce560f62e
+    m_Address: Assets/Game/UI/Menu/MenuPanel.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4215a293d9f5d7049966c9c84ca6a7ba
+    m_Address: Assets/Game/Audio/Weapons/Sniper/SniperMagazineIn.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4315e8acf15b0574c8ca1ea6a0d431fd
+    m_Address: Assets/Game/Audio/Crates/CrateBreak_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4344c00d96aa676449521002d9111650
+    m_Address: Assets/Game/Prefabs/Match/Match.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4359f2675494472b93a9f1010f583111
+    m_Address: Assets/Game/Content/HitFeedbackConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43fe75ed63fc92240ba575f1bb5cd806
+    m_Address: Assets/Game/UI/Theme.tss
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 44e469e6b42190446ab1ba2a474db6c9
+    m_Address: Assets/Game/Prefabs/Level/Site/Cabin.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 456625fa957beb244815e31fa463de33
+    m_Address: Assets/Game/Content/Weapons/ShotgunRecoilConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 45729ec3d8d6db84e828e541a4a4b3ad
+    m_Address: Assets/Game/Prefabs/Level/Site/ConcreteColumn.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 46f8317e1b3ded84e9a713613fc5caba
+    m_Address: Assets/Game/UI/Hud/MatchHud.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4853a69a2570a4248a0730541abb2b3d
+    m_Address: Assets/Game/Audio/Melee/FistHitBody_03.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 49827ed38d2b9f540bef2f5990a8c4af
+    m_Address: Assets/Game/Prefabs/Character/TestWeaponPhysicsMaterial2D.physicsMaterial2D
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 49f8e15a857195b4da01aaccd19a3d09
+    m_Address: Assets/Game/Content/Setup/Physics/PhysicsSettings.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - settings
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4b2ee92a1dd54364fab2a8b9658a92e6
+    m_Address: Assets/Game/Prefabs/Level/Site/Cable.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c31140a5afaa24428fd7a3c955bcffa
+    m_Address: Assets/Game/Audio/Weapons/Pistol/PistolMagazineOut.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e38d5578a519c4469bd3f5128ff40e3
+    m_Address: Assets/Game/Content/Crates/CrateBodyConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e5352db3a50994449722aa805a90039
+    m_Address: Assets/Game/Prefabs/Level/Site/CementBags.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e5a9f52c7dec7747b8942e283be4aa1
+    m_Address: Assets/Game/Content/Weapons/WeaponReleaseConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e7c8beb88fbae14dbbc6d028031b77f
+    m_Address: Assets/Game/Prefabs/Level/MeatPlant/FreightLiftA.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ebec94c7a1cc00428dc62c7d75fa66a
+    m_Address: Assets/Game/Content/Weapons/WeaponBodyConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f92421d5ab018545a059f7474cee9f0
+    m_Address: Assets/Game/Content/Bots/NavGraphConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50305404a0d420741ac751250c5771f9
+    m_Address: Assets/Game/Content/Characters/MatveyRigLook.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50bd76907abd45142a6c624c60fb2616
+    m_Address: Assets/Game/Audio/Weapons/Pistol/PistolShot_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50fcd73c243542e45a6252431fd25d6f
+    m_Address: Assets/Game/Prefabs/Vfx/FlashlightBeam.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5107845087cc83d4fb390036fb7a512b
+    m_Address: Assets/Game/Audio/Props/PropThrow_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 516c0f670600422da9a9a3b6fd959a8e
+    m_Address: Assets/Game/Content/Weapons/PistolDescription.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 554e05eafb6a70a4b9ac1047de0eb40d
+    m_Address: Assets/Game/Prefabs/Character/WeaponVariants/Sniper.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58f60db39be851544bab2832a3f0068a
+    m_Address: Assets/Game/Prefabs/Level/MeatPlant/FreightLiftB.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 593b495fbb66a20448b7179a5de7299a
+    m_Address: Assets/Game/Prefabs/Level/Site/GasCylinder.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5bd6aa44685b41de92c8585ee6274c58
+    m_Address: Assets/Game/Prefabs/Audio/Voice.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5cd6a27028da15a4087b5f6c9ee99f2f
+    m_Address: Assets/Game/Content/Bots/Medium.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f3de78017bc14845986f35008e5b13a
+    m_Address: Assets/Game/Content/Bots/Peaceful.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f844cdf73647084580a9c1e6b0dd2c3
+    m_Address: Assets/Game/Prefabs/Level/Site/ConcreteRing.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 610734818427e5b4a85b80261918c96d
+    m_Address: Assets/Game/Prefabs/Level/Site/JumpPad.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 61254149a9d9153419162ac5d38ca0e0
+    m_Address: Assets/Game/Content/Characters/SanyaRigLook.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 639dae86b1b71a0489335d7fef45aa64
+    m_Address: Assets/Game/Content/Vfx/BloodParticleCollisionConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 644c37f64e4addd4cbad943c05254a84
+    m_Address: Assets/Game/Audio/Weapons/Pistol/PistolSlideRelease.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 650dd1f6a28d63a429be6ad5205f4523
+    m_Address: Assets/Game/Prefabs/Level/MeatPlant/Hoist.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 65634c0c656338b4c825b88c425547bb
+    m_Address: Assets/Game/Content/AimCursorConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 67b8692086bc7534e9905955033682de
+    m_Address: Assets/Game/Audio/Impacts/BulletHitBody_03.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 69101f3b70e0ebf4fa6208d7e23a3360
+    m_Address: Assets/Game/Prefabs/Vfx/BulletImpact.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 69583fc462e9fe145a5a5101d5d42728
+    m_Address: Assets/Game/Content/Movement2DConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6a67feed73f98794ab03749efa07cc8f
+    m_Address: Assets/Game/UI/Hud/Scoreboard.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6af241e1a9ee1144c90814c6fdfcecd6
+    m_Address: Assets/Game/Prefabs/Level/Site/Cone.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6afe280a29156124ea3b956f8a1ae6c1
+    m_Address: Assets/Game/UI/Menu/CharacterSelect.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c6b6de2063cf0343810ca4e569be06e
+    m_Address: Assets/Game/Content/Crates/CrateHitFlashConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6caa8e872ddd2dd4c95b46dd411985ce
+    m_Address: Assets/Game/Audio/Melee/FistSwing_03.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6fc7d442acf72eb4398d1451212398a5
+    m_Address: Assets/Game/UI/Menu/JoinRoomWindow.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6fdb6dd5a5333f04a9ee3e83aaf53cad
+    m_Address: Assets/Game/Audio/Footsteps/Grass/LandGrass_06.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 702bc1ea939f2784495afb093193db74
+    m_Address: Assets/Game/Content/ShotVfxConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 708cad25022645343a7e85c9cf9c83a5
+    m_Address: Assets/Game/Content/Bots/Navigation/ConstructionSiteNavigation.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 718c4ed0582ee354d8e5c7c9125fbf62
+    m_Address: Assets/Game/Audio/Weapons/Pistol/PistolShot_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7207d623ffeb39042802596b1139d6a8
+    m_Address: Assets/Game/UI/Menu/ConnectionFailedWindow.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 739b90a5ea0659b4abb912c018e95501
+    m_Address: Assets/Game/Audio/Weapons/Ak/AkBoltRack.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 73d6d53706448034a9cfb49ebf52157f
+    m_Address: Assets/Game/Audio/Footsteps/Grass/LandGrass_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 747093c07ca5d7c4a8f65d13608f2a1c
+    m_Address: Assets/Game/Content/GirderSkinConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74e79068f7182524abb5b62b2204ca1f
+    m_Address: Assets/Game/Audio/Crates/CrateBreak_03.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76bfb669dc26afa4fa8af9cb1fb6dbce
+    m_Address: Assets/Game/Audio/Weapons/Ak/AkMagazineOut.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 770c9e12b3b0dfb4ba0c3bcc43fe011e
+    m_Address: Assets/Game/Prefabs/Level/Site/Sign.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 773ee935fd9e5844ea7a6b16e1edd005
+    m_Address: Assets/Game/Content/Weapons/ShotgunShotVfxConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 77e253963a2c4153be7b7ae65a9ea74f
+    m_Address: Assets/Game/Content/Characters/MatveyDescription.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 785daf116b9989948ba977ba4381af1e
+    m_Address: Assets/Game/UI/Hud/Winner.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78b5bbe41f014835bd138a176d78989a
+    m_Address: Assets/Game/Content/Weapons/ShotgunDescription.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 797cc554f5fdc2040845b53c1e31414f
+    m_Address: Assets/Game/Prefabs/Level/Plank.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7a2e66abefd64418bd2523decce9c27f
+    m_Address: Assets/Game/Content/Weapons/AkDescription.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7be1da687e2731e45af842bc4eb15274
+    m_Address: Assets/Game/Content/Weapons/PistolAmmoConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7cccaebbc957b394faba0cb89ed8d3ce
+    m_Address: Assets/Game/Audio/Crates/CrateHit_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e4679416c174f5a984103270b97739d
+    m_Address: Assets/Game/Content/Weapons/FistsDescription.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8090bc8428e80c44fbf201c325b23b46
+    m_Address: Assets/Game/Audio/Character/CharacterDeath_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 80c33c86a493d374383b3dd2ac22d940
+    m_Address: Assets/Game/Prefabs/New Material.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 820bb045ddf761e4d9dd7ba543c40f57
+    m_Address: Assets/Game/Prefabs/Level/Site/Counterweight.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 823429968a4d0cc4897820a547516ad6
+    m_Address: Assets/Game/Prefabs/Vfx/FistHitBody.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 832fdcd246066944db8da5546f505a36
+    m_Address: Assets/Game/Audio/Props/PropThrow_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84294630526c9614084eb7bafefccfbf
+    m_Address: Assets/Game/Prefabs/Level/Concrete.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 842fe65765e750b4e93f6463190b8f76
+    m_Address: Assets/Game/Prefabs/Character/CharacterVariants/Seva.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84c80eed6cfb1f84999ed58dc61eb23f
+    m_Address: Assets/Game/Audio/Weapons/Ak/AkShot_03.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8631f89eb10f0eb4998925ae00df54cc
+    m_Address: Assets/Game/Content/Setup/Network/GlobalNetworkInstaller.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 871024e5afdee7a4f823f098a3b9d2d0
+    m_Address: Assets/Game/UI/Kit.uss
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8741eeaf042b4ac449f644aa4dabac48
+    m_Address: Assets/Game/Content/Characters/CharacterRigFeel.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 88f59f7bbddb7a84184772dc73bee68a
+    m_Address: Assets/Game/Prefabs/Main Camera.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 891e7919073767242a08fedaed502991
+    m_Address: Assets/Game/Content/Setup/Audio/SoundSettings.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - settings
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 89b06bd15d0dbfa489d58f3e7415b4ff
+    m_Address: Assets/Game/Audio/Footsteps/Grass/JumpGrass_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 89ce462876145584c8ad3a1985eff5f1
+    m_Address: Assets/Game/Prefabs/Level/MeatPlant/PaternosterCabin.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 89e7304b27ad8224bbe0532a7c2496c1
+    m_Address: Assets/Game/Prefabs/Character/TestWeapon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8a955af8ec0793d478fbe4580d7bbd60
     m_Address: MeatPlant
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b07385f9e0c78242a214bd4b9906226
+    m_Address: Assets/Game/Audio/Footsteps/Grass/FootstepGrass_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b22657bc8c8ea9428fd4b520bbeff6c
+    m_Address: Assets/Game/Prefabs/Level/Site/CraneTrolley.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -25,13 +810,631 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ca55a79aa499024baf49cc44a5598d2
+    m_Address: Assets/Game/Audio/Melee/FistSwing_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d901174063506d45919c8378e37827f
+    m_Address: Assets/Game/Prefabs/Level/Site/LiftRail.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e4158b7aec053844b9cf8335fb3c15b
+    m_Address: Assets/Game/Audio/Props/PropFlight_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f12d19a64144154f90c3d9a0ba9c3ba
+    m_Address: Assets/Game/Content/Vfx/ShotChipsParticleCollisionConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9034a6c368ff5b84cb82b57fcaafc5a8
+    m_Address: Assets/Game/Prefabs/Crates/Crate.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9089c466a56ed4549b1de5b6e1e7405f
+    m_Address: Assets/Game/Prefabs/Level/Site/CraneHook.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 90f312472f3b2d04b84f037f35d7ab61
+    m_Address: Assets/Game/Audio/Footsteps/Grass/LandGrass_05.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 92126c60c91e4d56a85fa47553e46842
+    m_Address: Assets/Game/Content/Crates/CrateSpawnConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 94054ed5e6f85fa41a36239b0cb27c3f
+    m_Address: Assets/Game/Audio/Footsteps/Grass/FootstepGrass_06.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 941e86b96892c324da8ede8f4c7fe983
+    m_Address: Assets/Game/UI/Menu/StartScreenFlow.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 94a75e3e5ebc6fe4bb639c5c029f4d52
+    m_Address: Assets/Game/Audio/Props/PropFlight_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 94f441bc4a571c2429527d2d49963246
+    m_Address: Assets/Game/Content/Vfx/CrateSplintersParticleCollisionConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 95584e7891041794395c560e94c882b0
+    m_Address: Assets/Game/UI/Hud/ScoreboardRow.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 964c30fe9af9f1f449dff1dc5aa7e85f
+    m_Address: Assets/Game/UI/Menu/MainMenu.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 973d12df8356f7344906a79baf072dc8
+    m_Address: Assets/Game/UI/Hud/HudFlow.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98002dd5f17863b458874a1f2798669b
+    m_Address: Assets/Game/Audio/Footsteps/Grass/LandGrass_03.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98602f6b0b6f47238c9f1af108098f6a
+    m_Address: Assets/Game/UI/Menu/CharacterCard.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98753cec1e22a2049a07f96f903dcceb
+    m_Address: Assets/Game/Prefabs/Level/Site/CraneJib.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99b5c0a1e2fda99409c1cc7ac53df75d
+    m_Address: Assets/Game/Audio/Weapons/Sniper/SniperShot.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9bf0a853abbc3994b98cd7e5af19a5be
+    m_Address: Assets/Game/Content/Characters/SevaRigLook.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ec4d842ab5de8d4e8f9728f8037530a
+    m_Address: Assets/Game/Content/ConcreteSkinConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a09ecd4f11dbd614da295e3a36b796fc
+    m_Address: GameSetupScene
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1649f834de5c89449b4440bd790a01c
+    m_Address: Assets/Game/Audio/Melee/FistHitBody_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a39b8726ccbd4ea9a38868ff75adea1a
+    m_Address: Assets/Game/Content/Weapons/WeaponInventoryConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a51c584712cf59c4f889ccb5a8573018
+    m_Address: Assets/Game/Content/Weapons/FistsCameraKickConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a52da7b8cfba480593bc386918923ffc
+    m_Address: Assets/Game/Content/Setup/Characters/CharacterSettings.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - settings
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a58d7c5426427e54a8ed49995a9910e6
+    m_Address: Assets/Game/Prefabs/Level/Platform.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a74ba26da67b6f84fa7a776c8169e1c2
+    m_Address: Assets/Game/Prefabs/Level/Lighting/LightDust.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9701eaab6d984f4785f66ad3044f8f7
+    m_Address: Assets/Game/Content/Weapons/PistolShotVfxConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9eb625e0e71c854482722115d0aca6b
+    m_Address: Assets/Game/Prefabs/Level/Site/CraneCab.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aab64aa6b81dc0f40bd784650f741adc
+    m_Address: Assets/Game/Prefabs/Vfx/Casing.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab8392d6e9a0be14a9b05d592a5f2dfe
+    m_Address: Assets/Game/Content/AmmoConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac04d9c8673f4d839415f2e3cdcd8d39
+    m_Address: Assets/Game/Content/Characters/CharacterCatalog.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac64a3045a10d9c4090679cf1f7f1032
+    m_Address: Assets/Game/UI/Menu/Menu.uss
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: acd675c95b562dc45bf48d48c34f2cdc
+    m_Address: Assets/Game/Audio/Props/PropLand_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af0d98bf73b152b45b8a96bdc4b19a0f
+    m_Address: Assets/Game/UI/Hud/Hud.uss
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: afc0231ee46e3b4429d8947bdf114a38
+    m_Address: Assets/Game/Content/Weapons/PistolShootingConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: afdd494230b21c949945dfef5c84561c
+    m_Address: Assets/Game/Content/Setup/Vfx/VfxSettings.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - settings
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b01899a655f27a34d8ecadb83c796f48
+    m_Address: Assets/Game/Content/Bots/Navigation/MeatPlantNavigation.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b01bb0a124fecdf449c54818f00bf824
+    m_Address: Assets/Game/Audio/Footsteps/Grass/FootstepGrass_03.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b077c3cf503c65643a9ab739d4a6b90c
+    m_Address: Assets/Game/Audio/Weapons/Pistol/PistolMagazineIn.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b1af04de9ad503641add2a42dde5ed2d
+    m_Address: Assets/Game/Prefabs/Level/Site/Barrier.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b22570d52edb09a40a43e28a5b5a6be8
+    m_Address: Assets/Game/Content/Bots/BotsConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b3a76b560f324f718a6b6c52d08c1967
+    m_Address: Assets/Game/Content/Match/KillFeedConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b431b9e0945c41df8869d024eeb0b71a
+    m_Address: Assets/Game/Content/Weapons/WeaponCatalog.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b56c1b3c160b00d42a198f5c9218d945
+    m_Address: Assets/Game/Content/WeaponRotationConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b7d0487c6b818e64b93783900d765a6e
+    m_Address: Assets/Game/Content/Weapons/PistolCameraKickConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8729bd82a2c4259810d8da265661a80
+    m_Address: Assets/Game/Content/Crates/CrateDamageConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b9d527b2ed6a4f34d9e4ba72455ef8f2
+    m_Address: Assets/Game/Content/Weapons/SniperShootingConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bd376c1dd984b834da613c8999b565a1
+    m_Address: Assets/Game/Prefabs/Vfx/PelletTracer.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bdecee9c57d164a49ae8f8d1c8c57e2e
+    m_Address: Assets/Game/Audio/Props/PropLand_03.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be6871395cbf4024294c668422c5fd57
+    m_Address: Assets/Game/Audio/Weapons/Sniper/SniperMagazineOut.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be6df812ea539a44f9786f6f526b4ad0
+    m_Address: Assets/Game/Audio/Character/CharacterDeath_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bf713c69bc1feed47af21acde442e647
+    m_Address: Assets/Game/Prefabs/Level/Site/CraneMast.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c01bf4c97847080459a0d1910735b67b
+    m_Address: Assets/Game/Audio/Weapons/Shotgun/ShotgunShot.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c02964025c753ce46ae9b884792e719f
+    m_Address: Assets/Game/Audio/Footsteps/Grass/FootstepGrass_05.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c0e2d751b3d6cc442bb165647265ec80
+    m_Address: Assets/Game/UI/Hud/KillFeedTile.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c1234bfcc6899a14f8b28e803096e4b4
+    m_Address: Assets/Game/Content/Bots/Hard.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c1694969b85b6164fbe466a9b185a29e
+    m_Address: Assets/Game/Audio/Weapons/Ak/AkShot_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c1df4db9df884a340b5571179d76add6
+    m_Address: Assets/Game/Content/Weapons/FistsMeleeConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c208298a8d27f044fad9ab3d9f6a3088
+    m_Address: Assets/Game/UI/Menu/CreateRoomWindow.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c244297206f3e1b4990e64926891d6f9
+    m_Address: Assets/Game/Audio/Impacts/BulletHitBody_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c30aad5053a384c40b3570ce85cb2c7b
+    m_Address: Assets/Game/Content/WeaponRecoilConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c4352b376e4907f469d5c897f0a5877a
+    m_Address: Assets/Game/Prefabs/Level/Site/CabinBlue.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c4de9cb9eec4ad74aaa6a44924c915ee
+    m_Address: Assets/Game/Prefabs/Vfx/PropDust.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c5fec0a38d626d1448f78c5c4bc4ba74
+    m_Address: Assets/Game/Content/Weapons/SniperCameraKickConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c66dbd850fc3080418a073dc5fda6d96
+    m_Address: Assets/Game/Prefabs/Vfx/ThrowArcDots.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c709bed08fe34074eaedfd370b82954e
+    m_Address: Assets/Game/Audio/Weapons/Shotgun/ShotgunPump.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7210083ab45bac4eb075b9602232847
+    m_Address: Assets/Game/Content/TestWeaponShootingConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c818a12ad4f6e484d863f0a19a0110b4
+    m_Address: Assets/Game/Audio/Crates/CrateHit_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c8ba254aebc44be449eabf59bd7450e8
+    m_Address: Assets/Game/Prefabs/Level/Girder.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9e3424369833284bb1734bd05835340
+    m_Address: Assets/Game/Content/Setup/Weapons/WeaponSettings.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - settings
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cb3590ef982f34648af9b6d46fee4bcc
+    m_Address: Assets/Game/Prefabs/Vfx/MuzzleFlashShotgun.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cb42ce57cd2f73148bf07f5f69611d6c
+    m_Address: Assets/Game/Audio/Props/PropLand_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ccd632e335980924285a6e802d6051da
+    m_Address: Assets/Game/Prefabs/Character/Rig/CharacterRig.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd4a9e69da65224459d58d43bef4cc27
+    m_Address: Assets/Game/Audio/Impacts/BulletHitGrass_04.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd9ddbeb6bc611943a3c6ef21be0e8e7
+    m_Address: Assets/Game/Content/GuardConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce598c293cdf4aebb0a09b1908588668
+    m_Address: Assets/Game/Content/Props/HeldPropConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0cf3eefd16d2d349bb6847e5d86a55f
+    m_Address: Assets/Game/Audio/Weapons/Shotgun/ShotgunShellLoad.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d16c951d4b5099440917bbf6a3dce92a
+    m_Address: Assets/Game/Content/Bots/Light.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d30cf74246b77a5408cb2554dbaee392
+    m_Address: Assets/Game/Prefabs/Level/Site/Toilet.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d874a73f2f7a0f445b18a7b895f397d7
+    m_Address: Assets/Game/UI/Menu/ConnectingWindow.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d8767ecf0ca8894438a507fe11db28e2
+    m_Address: Assets/Game/UI/Menu/RoomOpenWindow.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d91a5cd356bbd4e47b5f8409a2113fa6
+    m_Address: Assets/Game/Prefabs/Hud/HealthBar.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dae2f8025b0ca964f894bf43b21433f5
+    m_Address: Assets/Game/Prefabs/Character/CharacterMaterial.physicsMaterial2D
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: db11e75b1b38c5c479288f84e6a0db54
     m_Address: Network
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: db31ada4dd54c59468374e0227683027
+    m_Address: Assets/Game/Content/Physics/PhysicsConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd93c03c7af93964fbc64d0478156732
+    m_Address: Assets/Game/Audio/Impacts/BulletHitGrass_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd9c21990ca0d0c4fa6b66d7bff58c5a
+    m_Address: Assets/Game/Content/Weapons/SniperRecoilConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ddedd5d8f5ec6214fae1b0471df27eab
+    m_Address: Assets/Game/Audio/Footsteps/Grass/LandGrass_08.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de96c4f3e8dedbc43a0e989209c69064
+    m_Address: Assets/Game/Audio/Weapons/Ak/AkMagazineIn.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df6e6b54c60645c45ae7521de7859394
+    m_Address: Assets/Game/Content/GuardBarConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1699611bb65440cb3a498548936c58c
+    m_Address: Assets/Game/Content/Match/WeaponIconsConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e21dbbdc8b364de489cefa388c1611c5
+    m_Address: Assets/Game/Prefabs/Character/WeaponVariants/Shotgun.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e22f64863d2340bbba7a3b217d70da68
+    m_Address: Assets/Game/Content/Crates/CrateDeathConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e35951f8da9d497dbdcd6094ebb31c21
+    m_Address: Assets/Game/Content/Weapons/WeaponHighlightConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e37bc7d9fb2442b49a0753324da56ffe
     m_Address: ConstructionSite
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e444e022607712c41a37b8197a1b7e0d
+    m_Address: Assets/Game/Prefabs/Level/Site/Wheelbarrow.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e44ffcf2f6e28f447b9e3795cd33f989
+    m_Address: Assets/Game/Audio/Melee/FistHitWall_03.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e531d3a0383d3284b8b4b8d35e845d65
+    m_Address: Assets/Game/Content/Weapons/PistolRecoilConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e54fac7e40b4cbd4c8db7bad139c9827
+    m_Address: Assets/Game/Content/Crates/CrateHealthConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e6bd90372af2b6949992c5657b9ef327
+    m_Address: Assets/Game/Content/Weapons/SniperRaycastShootConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e6dbc9705a59a2949a095e90813ac025
+    m_Address: Assets/Game/Prefabs/Vfx/MuzzleFlashPistol.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e9059c0c38fe823439b61e138266ac99
+    m_Address: Assets/Game/Audio/Impacts/BulletHitGrass_03.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e97d733574fe9e74eb1dc22a106864c8
+    m_Address: Assets/Game/Audio/Footsteps/Grass/LandGrass_07.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eab457b4b63658b4ca31cffa5d361375
+    m_Address: Assets/Game/Audio/Footsteps/Grass/FootstepGrass_04.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eca40bdd9433480588c3eed31d59302a
+    m_Address: Assets/Game/Content/Weapons/SniperDescription.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed3bd92c6e4540242a03f06a782975fc
+    m_Address: Assets/Game/Audio/Melee/FistHitWall_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eda978f3ca085374fbbc51a34b4e249e
+    m_Address: Assets/Game/Prefabs/Vfx/MuzzleFlashSniper.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ef3e7dbdb9d609d43bf7b7381697f1ef
+    m_Address: Assets/Game/Content/Weapons/FlashlightConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f18a91c7779946b7b6e691c4a94852b8
+    m_Address: Assets/Game/Content/CharacterRegenerationConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f1c86814d9bc456fa8246411f630c030
+    m_Address: Assets/Game/Content/CharacterDeathConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f29e323ca89425d43898ff478a956f26
+    m_Address: Assets/Game/Prefabs/Level/Site/PalletLow.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f45639b6fab348ad9217ba0a00ead047
+    m_Address: Assets/Game/Content/CameraFollowConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f463bf6f5bb49ea4fa066366710d5fa2
+    m_Address: Assets/Game/Prefabs/Vfx/FistHitWall.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f4a2356f9009d2c4780854e46c0f55aa
+    m_Address: Assets/Game/Content/Weapons/SniperAmmoConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f4c4dd18546d6854c9662fd89ef2b9ce
+    m_Address: Assets/Game/Audio/Impacts/BulletHitGrass_05.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f94689a4498d4eceb590543e642d2ad9
+    m_Address: Assets/Game/Content/Props/PropThrowConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa3ed321e4038c74a8be8395328fe5e7
+    m_Address: Assets/Game/Content/Characters/GOSHAKRigLook.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fbe1bccac56db0b4483288774463003c
+    m_Address: Assets/Game/Audio/Props/PropThrow_03.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc8b285af66260547821ffb4b60738cc
+    m_Address: Assets/Game/Prefabs/Character/CharacterVariants/Sanya.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fcb1171378a556743aaa0a5caea0812c
+    m_Address: Assets/Game/UI/Hud/KillFeed.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ff3d8f306bcca9e4193bfdb4b581aed2
+    m_Address: Assets/Game/Audio/Crates/CrateBreak_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ff8ef23cfcdf415478ffd6db68609853
+    m_Address: Assets/Game/Content/Weapons/FistsRecoilConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ffaa7d60a8aa3e8478a21abd827a5f60
+    m_Address: Assets/Game/Content/Weapons/ShotgunShootingConfig.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

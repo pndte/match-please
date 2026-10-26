@@ -22,7 +22,7 @@ namespace Bw.Tests.UseCases.Combat.Hands.Doubles
 
         public CombatPhysics()
         {
-            Space = PhysicsSpace.Create(_lifetime.Lifetime, AssetDatabase.LoadAssetAtPath<PhysicsConfig>("Assets/Resources/Physics/PhysicsConfig.asset"), new ManualClock());
+            Space = PhysicsSpace.Create(_lifetime.Lifetime, AssetDatabase.LoadAssetAtPath<PhysicsConfig>("Assets/Game/Content/Physics/PhysicsConfig.asset"), new ManualClock());
         }
 
         public BodyBox Box(

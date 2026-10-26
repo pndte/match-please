@@ -120,7 +120,7 @@ namespace Bw.Tests.UseCases.Combat.Melee.Extensions
         [Test]
         public void ShippedFistsSwingInNineTicksAndChargeInThirtyAtThirtyHertz()
         {
-            var shipped = UnityEditor.AssetDatabase.LoadAssetAtPath<MeleeWeaponConfig>("Assets/Resources/Weapons/FistsMeleeConfig.asset");
+            var shipped = UnityEditor.AssetDatabase.LoadAssetAtPath<MeleeWeaponConfig>("Assets/Game/Content/Weapons/FistsMeleeConfig.asset");
             var step = new ManualClock(1f / 30f);
 
             Assert.That(shipped.SwingTicks(step), Is.EqualTo(9));

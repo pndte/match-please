@@ -19,7 +19,7 @@ namespace Bw.Tests.UseCases.Mortality.Doubles
         {
             _lifetime = lifetime;
             _objects = objects;
-            var config = AssetDatabase.LoadAssetAtPath<PhysicsConfig>("Assets/Resources/Physics/PhysicsConfig.asset");
+            var config = AssetDatabase.LoadAssetAtPath<PhysicsConfig>("Assets/Game/Content/Physics/PhysicsConfig.asset");
             Space = PhysicsSpace.Create(lifetime, config, new ManualClock());
         }
 

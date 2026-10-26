@@ -110,7 +110,7 @@ namespace Bw.Injection.Match
         private void BindHudVisuals()
         {
             if (_killFeed == null)
-                throw new InvalidOperationException("The match HUD has no kill feed config: assign Resources/Match/KillFeedConfig.");
+                throw new InvalidOperationException("The match HUD has no kill feed config: assign Assets/Game/Content/Match/KillFeedConfig.");
 
             RequireWeaponIcons();
             Container.Bind<MatchCountdown>().AsSingle();
@@ -126,7 +126,7 @@ namespace Bw.Injection.Match
         private void RequireWeaponIcons()
         {
             if (_weaponIcons == null)
-                throw new InvalidOperationException("The match HUD has no weapon icons: assign Resources/Match/WeaponIconsConfig.");
+                throw new InvalidOperationException("The match HUD has no weapon icons: assign Assets/Game/Content/Match/WeaponIconsConfig.");
 
             foreach (var entry in _weapons.Weapons)
                 if (Array.FindIndex(_weaponIcons.Icons, row => row.Weapon == entry.Weapon && row.Icon != null) < 0)

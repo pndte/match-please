@@ -60,7 +60,10 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Zenject",
-        "Zenject-TestFramework"
+        "Zenject-TestFramework",
+        "Unity.Addressables",
+        "Unity.Addressables.Editor",
+        "Unity.ResourceManager"
     ],
     "includePlatforms": [
         "Editor"

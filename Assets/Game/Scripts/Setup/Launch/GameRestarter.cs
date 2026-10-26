@@ -1,14 +1,13 @@
 using Cysharp.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
 namespace Setup.Launch
 {
     public sealed class GameRestarter
     {
-        private const string SetupScene = "GameSetupScene";
-
         private readonly NextLaunch _next;
         private readonly SessionScenes _scenes;
 
@@ -42,7 +41,7 @@ namespace Setup.Launch
             {
                 await StopNetwork(NetworkManager.Singleton);
                 await _scenes.Unload();
-                await SceneManager.LoadSceneAsync(SetupScene, LoadSceneMode.Single).ToUniTask();
+                await Addressables.LoadSceneAsync(SetupSceneLoader.SetupScene, LoadSceneMode.Single).ToUniTask();
             }
             finally
             {

@@ -17,8 +17,8 @@ namespace Bw.EditorTools.Bots
     public static class NavGraphBakeMenu
     {
         private const string MenuPath = "Tools/Bots/Bake Navigation";
-        private const string PhysicsConfigPath = "Assets/Resources/Physics/PhysicsConfig.asset";
-        private const string GraphFolder = "Assets/Resources/Bots/Navigation";
+        private const string PhysicsConfigPath = "Assets/Game/Content/Physics/PhysicsConfig.asset";
+        private const string GraphFolder = "Assets/Game/Content/Bots/Navigation";
 
         [MenuItem(MenuPath)]
         public static void Bake()
@@ -39,7 +39,7 @@ namespace Bw.EditorTools.Bots
             var serialized = new SerializedObject(installer);
             var config = serialized.FindProperty(BotsInstaller.NavigationConfigField).objectReferenceValue as NavGraphConfig;
             if (config == null)
-                throw new InvalidOperationException($"'{installer.name}' in '{scene.name}' has no navigation config: assign Resources/Bots/NavGraphConfig before baking.");
+                throw new InvalidOperationException($"'{installer.name}' in '{scene.name}' has no navigation config: assign Assets/Game/Content/Bots/NavGraphConfig before baking.");
 
             var physics = AssetDatabase.LoadAssetAtPath<PhysicsConfig>(PhysicsConfigPath);
             if (physics == null)

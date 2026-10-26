@@ -7,7 +7,7 @@ namespace Bw.Tests.Entities.Network.Ticks
 {
     public sealed class NetworkTicksConfigTests
     {
-        private const string SettingsPath = "Assets/Resources/Setup/Network/NetworkSettings.asset";
+        private const string SettingsPath = "Assets/Game/Content/Setup/Network/NetworkSettings.asset";
 
         [Test]
         public void DefaultsKeepTheirBoundsInOrder()

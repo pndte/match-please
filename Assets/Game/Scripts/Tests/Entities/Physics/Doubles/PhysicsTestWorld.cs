@@ -13,7 +13,7 @@ namespace Bw.Tests.Entities.Physics.Doubles
     {
         public const int Ground = 14;
         public const int Character = 15;
-        public const string ConfigPath = "Assets/Resources/Physics/PhysicsConfig.asset";
+        public const string ConfigPath = "Assets/Game/Content/Physics/PhysicsConfig.asset";
 
         public Lifetime Lifetime => _lifetime.Lifetime;
         public ManualClock Clock { get; } = new();

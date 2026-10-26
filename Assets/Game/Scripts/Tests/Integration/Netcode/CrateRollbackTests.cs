@@ -20,7 +20,7 @@ namespace Bw.Tests.Integration.Netcode
 {
     public sealed class CrateRollbackTests
     {
-        private const string CrateConfig = "Assets/Resources/Crates/CrateBodyConfig.asset";
+        private const string CrateConfig = "Assets/Game/Content/Crates/CrateBodyConfig.asset";
         private const int CrateLayer = 16;
         private const int Delay = 4;
         private const int Ticks = 120;

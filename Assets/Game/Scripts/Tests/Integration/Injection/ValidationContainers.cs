@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Bw.Entities.Network;
 using Bw.Entities.Pool.GameObjects;
+using Bw.Injection;
 using Bw.Injection.Prefabs;
 using Bw.UseCases;
 using Bw.UseCases.Spawning.Network;
@@ -11,6 +12,8 @@ using Setup;
 using Setup.Launch;
 using Unity.Netcode;
 using UnityEditor;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,7 +25,8 @@ namespace Bw.Tests.Integration.Injection
     public sealed class ValidationContainers : IDisposable
     {
         public const string ProjectContextPrefab = "Assets/Resources/ProjectContext.prefab";
-        public const string SetupScene = "Assets/Resources/Scenes/GameSetupScene.unity";
+        public const string SetupScene = "Assets/Game/Scenes/GameSetupScene.unity";
+        public const string BootScene = "Assets/Game/Scenes/Boot.unity";
         public const string NetworkScene = "Assets/Game/Scenes/Network.unity";
         public const string NetworkManagerPrefab = "Assets/Game/Prefabs/Network/Network.prefab";
         public const string ScenesFolder = "Assets/Game/Scenes";
@@ -40,12 +44,22 @@ namespace Bw.Tests.Integration.Injection
         public static IEnumerable<string> Scenes() =>
             AssetDatabase.FindAssets("t:Scene", new[] { ScenesFolder })
                 .Select(AssetDatabase.GUIDToAssetPath)
-                .Prepend(SetupScene);
+                .Where(path => path != BootScene);
 
         public static IEnumerable<string> Levels() =>
             AssetDatabase.FindAssets("t:Scene", new[] { ScenesFolder })
                 .Select(AssetDatabase.GUIDToAssetPath)
-                .Where(path => path != SetupScene && path != NetworkScene);
+                .Where(path => path != SetupScene && path != NetworkScene && path != BootScene);
+
+        public static IReadOnlyList<ScriptableObjectInstaller> SettingsInstallers()
+        {
+            var entries = new List<AddressableAssetEntry>();
+            AddressableAssetSettingsDefaultObject.Settings.GetAllAssets(entries, false, null, entry => entry.labels.Contains(AddressableSettingsInstaller.Label));
+            return entries
+                .Select(entry => AssetDatabase.LoadAssetAtPath<ScriptableObjectInstaller>(entry.AssetPath))
+                .OrderBy(installer => installer.name)
+                .ToList();
+        }
 
         public static Action<DiContainer> SessionOf(PeerType peer) =>
             container => container.Bind<IRuntimeSettings>().FromInstance(new RuntimeSettings(peer)).AsSingle();
@@ -63,7 +77,7 @@ namespace Bw.Tests.Integration.Injection
             container.Bind<SessionScenes>().AsSingle();
             container.Bind<GameRestarter>().AsSingle();
 
-            foreach (var installer in AssetDatabase.LoadAssetAtPath<GameObject>(ProjectContextPrefab).GetComponent<ProjectContext>().ScriptableObjectInstallers)
+            foreach (var installer in SettingsInstallers())
             {
                 container.Inject(installer);
                 installer.InstallBindings();

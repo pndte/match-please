@@ -32,7 +32,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Doubles
         public IPhysicsSpace Space => _space;
         public Lifetime Lifetime => _lifetime.Lifetime;
 
-        private const string PhysicsConfigPath = "Assets/Resources/Physics/PhysicsConfig.asset";
+        private const string PhysicsConfigPath = "Assets/Game/Content/Physics/PhysicsConfig.asset";
 
         private readonly LifetimeDefinition _lifetime = new();
         private readonly HiddenObjects _objects = new();

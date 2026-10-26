@@ -65,7 +65,7 @@ namespace Bw.Tests.UseCases.Character.Network
         [Test]
         public void ShippedGuardHalvesSpeedAndJumpHeight()
         {
-            var form = new MovementControlsForm(AssetDatabase.LoadAssetAtPath<GuardConfig>("Assets/Resources/GuardConfig.asset"));
+            var form = new MovementControlsForm(AssetDatabase.LoadAssetAtPath<GuardConfig>("Assets/Game/Content/GuardConfig.asset"));
 
             var input = form.InputOf(new CharacterControls(Controls.Running, Controls.Firing, new GuardStance(true, 0f)));
 

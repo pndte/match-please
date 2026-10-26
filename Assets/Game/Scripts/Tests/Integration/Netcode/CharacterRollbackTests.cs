@@ -21,7 +21,7 @@ namespace Bw.Tests.Integration.Netcode
 {
     public sealed class CharacterRollbackTests
     {
-        private const string MovementConfigPath = "Assets/Resources/Movement2DConfig.asset";
+        private const string MovementConfigPath = "Assets/Game/Content/Movement2DConfig.asset";
         private const int Delay = 4;
         private const int Ticks = 120;
         private const int ServerOnlyJumpTick = 50;

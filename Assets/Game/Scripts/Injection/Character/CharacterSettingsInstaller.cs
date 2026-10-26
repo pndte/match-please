@@ -24,7 +24,7 @@ namespace Bw.Injection
         private void RequireCatalog()
         {
             if (_catalog == null)
-                throw new InvalidOperationException($"Character settings '{name}' have no catalog: assign Assets/Resources/Characters/CharacterCatalog.asset.");
+                throw new InvalidOperationException($"Character settings '{name}' have no catalog: assign Assets/Game/Content/Characters/CharacterCatalog.asset.");
 
             if (_catalog.Characters.Length == 0)
                 throw new InvalidOperationException($"The character catalog '{_catalog.name}' is empty: add at least one character, the first one is the default.");
@@ -34,7 +34,7 @@ namespace Bw.Injection
             {
                 if (entry.Character == null)
                     throw new InvalidOperationException(
-                        $"The character catalog '{_catalog.name}' has a row without a character: assign a character description from Assets/Resources/Characters.");
+                        $"The character catalog '{_catalog.name}' has a row without a character: assign a character description from Assets/Game/Content/Characters.");
 
                 if (entry.Character.Key == 0 || !keys.Add(entry.Character.Key))
                     throw new InvalidOperationException(
@@ -48,7 +48,7 @@ namespace Bw.Injection
         private void RequireLooks()
         {
             if (_looks == null)
-                throw new InvalidOperationException($"Character settings '{name}' have no looks: assign Assets/Resources/Characters/CharacterLooksConfig.asset.");
+                throw new InvalidOperationException($"Character settings '{name}' have no looks: assign Assets/Game/Content/Characters/CharacterLooksConfig.asset.");
 
             var looked = new HashSet<CharacterDescription>();
             foreach (var look in _looks.Looks)

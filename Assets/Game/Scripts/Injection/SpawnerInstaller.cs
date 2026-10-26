@@ -84,7 +84,7 @@ namespace Bw.Injection
         private void BindCrates(NetworkPrefabs registered)
         {
             if (_crates == null)
-                throw new InvalidOperationException("The spawner has crate spots but no crate config: assign Resources/Crates/CrateSpawnConfig.");
+                throw new InvalidOperationException("The spawner has crate spots but no crate config: assign Assets/Game/Content/Crates/CrateSpawnConfig.");
 
             RequireNetworkPrefab(registered, _crates.Prefab);
             Container.Bind<CrateSpots>().AsSingle().WithArguments(_crates, _crateSpots);
@@ -130,7 +130,7 @@ namespace Bw.Injection
         private void RequireListedWeapon(WeaponDescription weapon)
         {
             if (weapon == null)
-                throw new InvalidOperationException("The spawner has an empty weapon slot: assign a description from Assets/Resources/Weapons or remove the slot.");
+                throw new InvalidOperationException("The spawner has an empty weapon slot: assign a description from Assets/Game/Content/Weapons or remove the slot.");
 
             if (!_weaponCatalog.Contains(weapon))
                 throw new InvalidOperationException(
