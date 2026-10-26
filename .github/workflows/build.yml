@@ -3,7 +3,7 @@ name: Build
 # Builds the players on GitHub's free Linux machines in GameCI's Unity containers, by hand and for every version tag,
 # never on pull requests, since the Unity license lives in the repository's secrets. Every run first passes the Unity
 # tests, then builds and starts the server's Docker image; a version tag also pushes the image to GitHub Container
-# Registry and publishes a GitHub Release.
+# Registry and publishes a GitHub Release, and a stable one (vX.Y.Z) also puts the Windows client on itch.io.
 on:
   push:
     tags: ["v*"]
@@ -272,3 +272,14 @@ jobs:
           gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --verify-tag \
             --title "Match Please $VERSION" --notes-file notes.md --generate-notes "${prerelease[@]}" \
             "MatchPlease-Windows-$VERSION.zip" "MatchPlease-LinuxServer-$VERSION.tar.gz" SHA256SUMS.txt
+
+  itch:
+    name: itch.io
+    needs: [version, release]
+    if: github.ref_type == 'tag' && !contains(needs.version.outputs.version, '-')
+    uses: ./.github/workflows/itch.yml
+    with:
+      tag: ${{ github.ref_name }}
+    secrets: inherit
+    permissions:
+      contents: read

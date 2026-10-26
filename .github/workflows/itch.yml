@@ -1,0 +1,71 @@
+name: itch.io
+
+# Publishes the Windows client of a stable GitHub Release (vX.Y.Z) to itch.io with butler: Build calls it after the
+# release of such a tag, and it runs by hand for a release that already exists. Prereleases never go to itch.io.
+on:
+  workflow_call:
+    inputs:
+      tag:
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: A published stable release, like v0.1.0
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: itch
+  cancel-in-progress: false
+
+env:
+  ITCH_GAME: pndte/match-please
+  BUTLER_VERSION: 15.32.0
+
+jobs:
+  publish:
+    name: Publish to itch.io
+    if: github.repository == 'pndte/match-please'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check the tag
+        id: version
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          if ! [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Only stable releases like v0.1.0 go to itch.io, not '$TAG'"
+            exit 1
+          fi
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Download the Windows client of the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern "MatchPlease-Windows-$VERSION.zip" --dir "$RUNNER_TEMP"
+          unzip -q "$RUNNER_TEMP/MatchPlease-Windows-$VERSION.zip" -d "$RUNNER_TEMP/release"
+
+      - name: Install butler
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/butler.zip" "https://broth.itch.zone/butler/linux-amd64/$BUTLER_VERSION/archive/default"
+          unzip -q "$RUNNER_TEMP/butler.zip" -d "$RUNNER_TEMP/butler"
+          chmod +x "$RUNNER_TEMP/butler/butler"
+          echo "$RUNNER_TEMP/butler" >> "$GITHUB_PATH"
+
+      - name: Push to itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          butler -V
+          butler push "$RUNNER_TEMP/release/MatchPlease-Windows-$VERSION" "$ITCH_GAME:windows" --userversion "$VERSION"
+          butler status "$ITCH_GAME"
+          printf '### itch.io\n\n%s %s → https://pndte.itch.io/match-please (channel windows)\n' "$ITCH_GAME" "$VERSION" >> "$GITHUB_STEP_SUMMARY"
