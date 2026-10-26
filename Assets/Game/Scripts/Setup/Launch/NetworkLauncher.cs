@@ -16,17 +16,20 @@ namespace Setup.Launch
         private const int ServerWindowWidth = 960;
         private const int ServerWindowHeight = 540;
 
+        private readonly Lifetime _lifetime;
         private readonly INetworkHolder _networkHolder;
         private readonly RoomMenu _room;
         private readonly ConnectionMenu _connection;
         private readonly IPlayerProfile _profile;
 
         public NetworkLauncher(
+            Lifetime lifetime,
             INetworkHolder networkHolder,
             RoomMenu room,
             ConnectionMenu connection,
             IPlayerProfile profile)
         {
+            _lifetime = lifetime;
             _networkHolder = networkHolder;
             _room = room;
             _connection = connection;
@@ -77,11 +80,17 @@ namespace Setup.Launch
 
         private async UniTask OpenRoom(NetworkManager manager, LaunchChoice.Room room)
         {
+            if (!BackgroundServer.Available)
+            {
+                _connection.ShowRoomServerMissing();
+                return;
+            }
+
             var port = room.Port;
             while (!LocalPorts.IsFree(port))
                 port = await RetryPort(port);
 
-            BackgroundServer.Open(port);
+            BackgroundServer.Open(_lifetime, port);
             Connect(manager, LaunchChoice.Client.Loopback(port), new LaunchChoice.Room(port), OwnRoomAttempts);
         }
 

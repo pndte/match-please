@@ -1,25 +1,64 @@
-using System;
-using System.Diagnostics;
+using Cysharp.Threading.Tasks;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Setup.Launch
 {
-    public static class GameRestarter
+    public sealed class GameRestarter
     {
-        public static void ReturnToMenu() => //TODO: в меню возвращаемся перезапуском процесса, а в редакторе выходом из Play: RuntimeSettings принимает роль пира один раз и ProjectContext собран под неё, поэтому внутри того же процесса меню заново не открыть
-            Restart(string.Empty);
+        private const string SetupScene = "GameSetupScene";
 
-        public static void Relaunch(LaunchChoice choice) =>
-            Restart(LaunchArguments.Of(choice));
+        private readonly NextLaunch _next;
+        private readonly SessionScenes _scenes;
 
-        private static void Restart(string arguments)
+        private bool _restarting;
+
+        public GameRestarter(NextLaunch next, SessionScenes scenes)
         {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Process.Start(Environment.GetCommandLineArgs()[0], arguments);
-            Application.Quit();
-#endif
+            _next = next;
+            _scenes = scenes;
+        }
+
+        public void ReturnToMenu()
+        {
+            _next.OpenMenu();
+            Restart().Forget();
+        }
+
+        public void Relaunch(LaunchChoice choice)
+        {
+            _next.StartWith(choice);
+            Restart().Forget();
+        }
+
+        private async UniTaskVoid Restart()
+        {
+            if (_restarting)
+                return;
+
+            _restarting = true;
+            try
+            {
+                await StopNetwork(NetworkManager.Singleton);
+                await _scenes.Unload();
+                await SceneManager.LoadSceneAsync(SetupScene, LoadSceneMode.Single).ToUniTask();
+            }
+            finally
+            {
+                _restarting = false;
+            }
+        }
+
+        private static async UniTask StopNetwork(NetworkManager manager)
+        {
+            if (manager.IsListening)
+            {
+                manager.Shutdown();
+                await UniTask.WaitWhile(() => manager.ShutdownInProgress);
+            }
+
+            Object.Destroy(manager.gameObject);
         }
     }
 }

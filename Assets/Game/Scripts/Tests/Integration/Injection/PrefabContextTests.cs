@@ -15,7 +15,7 @@ namespace Bw.Tests.Integration.Injection
     [TestFixture(PeerType.Client)]
     public sealed class PrefabContextTests
     {
-        private const string Level = "Assets/Resources/Scenes/MeatPlant.unity";
+        private const string Level = "Assets/Game/Scenes/MeatPlant.unity";
 
         private readonly PeerType _peer;
 
@@ -41,9 +41,9 @@ namespace Bw.Tests.Integration.Injection
         {
             _containers = new ValidationContainers();
             _containers.UseGameNetworkManager();
-            var project = _containers.Project(ValidationContainers.SettingsOf(_peer));
+            var project = _containers.Project();
             project.ResolveRoots();
-            var network = _containers.Scene(ValidationContainers.NetworkScene, project);
+            var network = _containers.Scene(ValidationContainers.NetworkScene, project, ValidationContainers.SessionOf(_peer));
             network.Resolve();
             var level = _containers.Scene(Level, network.Container);
             level.Resolve();

@@ -8,6 +8,7 @@ using Bw.UseCases;
 using Bw.UseCases.Spawning.Network;
 using JetBrains.Lifetimes;
 using Setup;
+using Setup.Launch;
 using Unity.Netcode;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -22,8 +23,9 @@ namespace Bw.Tests.Integration.Injection
     {
         public const string ProjectContextPrefab = "Assets/Resources/ProjectContext.prefab";
         public const string SetupScene = "Assets/Resources/Scenes/GameSetupScene.unity";
-        public const string NetworkScene = "Assets/Resources/Scenes/Network.unity";
+        public const string NetworkScene = "Assets/Game/Scenes/Network.unity";
         public const string NetworkManagerPrefab = "Assets/Game/Prefabs/Network/Network.prefab";
+        public const string ScenesFolder = "Assets/Game/Scenes";
 
         private readonly List<Scene> _scenes = new();
         private readonly GameObject _holder;
@@ -35,17 +37,20 @@ namespace Bw.Tests.Integration.Injection
             _holder = EditorUtility.CreateGameObjectWithHideFlags("Validation", HideFlags.HideAndDontSave);
         }
 
+        public static IEnumerable<string> Scenes() =>
+            AssetDatabase.FindAssets("t:Scene", new[] { ScenesFolder })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Prepend(SetupScene);
+
         public static IEnumerable<string> Levels() =>
-            EditorBuildSettings.scenes.Select(scene => scene.path).Where(path => path != SetupScene && path != NetworkScene);
+            AssetDatabase.FindAssets("t:Scene", new[] { ScenesFolder })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(path => path != SetupScene && path != NetworkScene);
 
-        public static RuntimeSettings SettingsOf(PeerType peer)
-        {
-            var settings = new RuntimeSettings();
-            settings.Initialize(peer);
-            return settings;
-        }
+        public static Action<DiContainer> SessionOf(PeerType peer) =>
+            container => container.Bind<IRuntimeSettings>().FromInstance(new RuntimeSettings(peer)).AsSingle();
 
-        public DiContainer Project(IRuntimeSettings settings)
+        public DiContainer Project()
         {
             var container = new DiContainer(true);
             container.Settings = new ZenjectSettings(ValidationErrorResponses.Throw, RootResolveMethods.All);
@@ -53,10 +58,10 @@ namespace Bw.Tests.Integration.Injection
             ZenjectManagersInstaller.Install(container);
             container.Bind(typeof(ProjectKernel), typeof(MonoKernel)).To<ProjectKernel>().FromNewComponentOn(_holder).AsSingle();
             container.Bind<SceneContextRegistry>().AsSingle();
-            container.Bind<IRuntimeSettings>().FromInstance(settings);
             container.BindInterfacesTo<NetworkHolder>().AsSingle();
-            if (settings.CurrentPeerType == PeerType.Server)
-                container.BindInterfacesTo<CharacterRegistry>().AsSingle();
+            container.Bind<NextLaunch>().AsSingle();
+            container.Bind<SessionScenes>().AsSingle();
+            container.Bind<GameRestarter>().AsSingle();
 
             foreach (var installer in AssetDatabase.LoadAssetAtPath<GameObject>(ProjectContextPrefab).GetComponent<ProjectContext>().ScriptableObjectInstallers)
             {
@@ -67,7 +72,10 @@ namespace Bw.Tests.Integration.Injection
             return container;
         }
 
-        public SceneContext Scene(string path, DiContainer parent)
+        public SceneContext Scene(string path, DiContainer parent) =>
+            Scene(path, parent, _ => { });
+
+        public SceneContext Scene(string path, DiContainer parent, Action<DiContainer> session)
         {
             var scene = EditorSceneManager.OpenPreviewScene(path);
             _scenes.Add(scene);
@@ -75,10 +83,15 @@ namespace Bw.Tests.Integration.Injection
             context.ParentContractNames = Array.Empty<string>();
             context.ParentNewObjectsUnderSceneContext = true;
             SceneContext.ParentContainers = new[] { parent };
+            SceneContext.ExtraBindingsInstallMethod = session;
             if (context.Installers.Any(installer => installer is PrefabHandlersInstaller))
             {
                 context.Installers = context.Installers.Where(installer => installer is not PrefabHandlersInstaller).ToList();
-                SceneContext.ExtraBindingsInstallMethod = BindPrefabHandlers;
+                SceneContext.ExtraBindingsInstallMethod = container =>
+                {
+                    session(container);
+                    BindPrefabHandlers(container);
+                };
             }
 
             try

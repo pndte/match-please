@@ -45,10 +45,6 @@ namespace Setup.Launch
         }
 
         private static LaunchChoice RoomChoice(ushort port) =>
-#if UNITY_EDITOR
-            new LaunchChoice.Server(port); //TODO: редактор не может открыть фоновый сервер (это exe сборки в batch mode), поэтому комната из меню в редакторе открывается в этом же окне, и создатель в ней не играет
-#else
             new LaunchChoice.Room(port);
-#endif
     }
 }

@@ -10,6 +10,7 @@ using Unity.Netcode;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using Bw.Tests.Integration.Injection;
 
 namespace Bw.Tests.Integration.Assets
 {
@@ -24,8 +25,7 @@ namespace Bw.Tests.Integration.Assets
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Single(path => AssetDatabase.LoadAssetAtPath<MonoScript>(path).GetClass() == typeof(BotsInstaller));
             var reference = "guid: " + AssetDatabase.AssetPathToGUID(script);
-            return EditorBuildSettings.scenes
-                .Select(scene => scene.path)
+            return ValidationContainers.Levels()
                 .Where(path => File.ReadAllText(Path.GetFullPath(path)).Contains(reference))
                 .Select(path => new TestCaseData(path).SetName($"{{m}}({Path.GetFileNameWithoutExtension(path)})"));
         }

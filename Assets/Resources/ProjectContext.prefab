@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6797897561352049343}
   - component: {fileID: 5815400470788439531}
   - component: {fileID: 3368640831391852215}
-  - component: {fileID: 4355695920466450101}
   m_Layer: 0
   m_Name: ProjectContext
   m_TagString: Untagged
@@ -56,7 +55,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2abbc7a6c47ca094ba2698b00eda7561, type: 2}
   - {fileID: 11400000, guid: 49f8e15a857195b4da01aaccd19a3d09, type: 2}
   _monoInstallers:
-  - {fileID: 4355695920466450101}
   - {fileID: 3368640831391852215}
   _installerPrefabs: []
   _findSiblingMonoInstallers: 0
@@ -86,15 +84,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1375603f501d487e9a615dcf04adf1e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Injection.ProjectInstaller
---- !u!114 &4355695920466450101
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8602608575158285371}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70a9a8393c764a5d9bd54ec97eab02f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Bw.Injection::Injection.RuntimeSettingsInstaller

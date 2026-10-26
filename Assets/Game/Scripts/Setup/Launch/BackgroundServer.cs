@@ -1,27 +1,42 @@
-using System;
 using System.Diagnostics;
 using System.IO;
+using JetBrains.Lifetimes;
 using UnityEngine;
 
 namespace Setup.Launch
 {
     public static class BackgroundServer
     {
-        public static void Open(ushort port)
-        {
+        public static bool Available => File.Exists(Executable);
+
+        public static string Executable =>
 #if UNITY_EDITOR
-            throw new InvalidOperationException("The editor can't open a background server: it is the game's own exe started in batch mode, so a room opens from a built game.");
+            Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Builds", "WindowsClient", "MatchPlease.exe"));
 #else
-            using var server = Process.Start(new ProcessStartInfo(Environment.GetCommandLineArgs()[0], ArgumentsFor(port))
+            System.Environment.GetCommandLineArgs()[0];
+#endif
+
+        public static void Open(Lifetime lifetime, ushort port)
+        {
+            var server = Process.Start(new ProcessStartInfo(Executable, ArgumentsFor(port))
             {
                 UseShellExecute = false,
                 CreateNoWindow = true
             });
-#endif
+            lifetime.OnTermination(() => Stop(server));
         }
 
         public static string LogOf(ushort port) =>
             Path.Combine(Application.persistentDataPath, $"Server-{port}.log");
+
+        private static void Stop(Process server)
+        {
+            using (server)
+            {
+                if (!server.HasExited)
+                    server.Kill();
+            }
+        }
 
         private static string ArgumentsFor(ushort port)
         {

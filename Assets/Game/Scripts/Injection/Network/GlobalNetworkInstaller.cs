@@ -1,5 +1,6 @@
 using Bw.Entities.Extensions;
 using Bw.Injection.Network.Prediction;
+using Bw.UseCases;
 using Bw.UseCases.Clients.Network;
 using JetBrains.Lifetimes;
 using Unity.Netcode;
@@ -24,6 +25,7 @@ namespace Bw.Injection.Network
         {
             Container.Bind<Lifetime>().FromMethod(() => Container.Resolve<Context>().gameObject.Lifetime()).AsSingle();
             Container.BindInterfacesTo<NetworkClientCollection>().AsSingle().WithArguments(NetworkManager.Singleton).NonLazy();
+            Container.BindInterfacesTo<CharacterRegistry>().AsSingle();
         }
     }
 }

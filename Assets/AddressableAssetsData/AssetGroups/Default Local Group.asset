@@ -14,7 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Default Local Group
   m_GUID: ccc31f90b0756a4499eeb38d40746a9f
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 8a955af8ec0793d478fbe4580d7bbd60
+    m_Address: MeatPlant
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c9cfa26abfee488c85f1582747f6a02
+    m_Address: SampleScene
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: db11e75b1b38c5c479288f84e6a0db54
+    m_Address: Network
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e37bc7d9fb2442b49a0753324da56ffe
+    m_Address: ConstructionSite
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 2664de413c542c648924371e963c7784, type: 2}
   m_SchemaSet:

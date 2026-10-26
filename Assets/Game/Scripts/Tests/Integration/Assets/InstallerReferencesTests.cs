@@ -8,6 +8,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using Zenject;
 using Object = UnityEngine.Object;
+using Bw.Tests.Integration.Injection;
 
 namespace Bw.Tests.Integration.Assets
 {
@@ -16,8 +17,8 @@ namespace Bw.Tests.Integration.Assets
         private const string ProjectContextPrefab = "Assets/Resources/ProjectContext.prefab";
 
         private static IEnumerable<TestCaseData> Scenes() =>
-            EditorBuildSettings.scenes
-                .Select(scene => new TestCaseData(scene.path).SetName($"{{m}}({Path.GetFileNameWithoutExtension(scene.path)})"));
+            ValidationContainers.Scenes()
+                .Select(path => new TestCaseData(path).SetName($"{{m}}({Path.GetFileNameWithoutExtension(path)})"));
 
         private static IEnumerable<TestCaseData> ContextPrefabs() =>
             AssetDatabase.FindAssets("t:Prefab", new[] { "Assets" })

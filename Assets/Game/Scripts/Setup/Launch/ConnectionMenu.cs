@@ -11,22 +11,25 @@ namespace Setup.Launch
         private readonly MenuDocument _document;
         private readonly ConnectingScreen _connecting;
         private readonly ConnectionFailedScreen _failed;
+        private readonly GameRestarter _restarter;
         private readonly SequentialLifetimes _spinning;
 
         public ConnectionMenu(
             Lifetime lifetime,
             MenuDocument document,
             ConnectingScreen connecting,
-            ConnectionFailedScreen failed)
+            ConnectionFailedScreen failed,
+            GameRestarter restarter)
         {
             _lifetime = lifetime;
             _document = document;
             _connecting = connecting;
             _failed = failed;
+            _restarter = restarter;
             _spinning = new SequentialLifetimes(lifetime);
 
-            connecting.CancelChosen.Advise(lifetime, _ => GameRestarter.ReturnToMenu());
-            failed.BackChosen.Advise(lifetime, _ => GameRestarter.ReturnToMenu());
+            connecting.CancelChosen.Advise(lifetime, _ => restarter.ReturnToMenu());
+            failed.BackChosen.Advise(lifetime, _ => restarter.ReturnToMenu());
         }
 
         public void ShowConnecting(LaunchChoice.Client server) =>
@@ -35,7 +38,7 @@ namespace Setup.Launch
         public void Watch(NetworkManager manager, LaunchChoice.Client server, LaunchChoice chosen)
         {
             var connected = false;
-            _failed.RetryChosen.Advise(_lifetime, _ => GameRestarter.Relaunch(chosen));
+            _failed.RetryChosen.Advise(_lifetime, _ => _restarter.Relaunch(chosen));
             manager.AdviseConnectionEvents(_lifetime, connection =>
             {
                 if (connection.EventType != ConnectionEvent.ClientConnected || connection.ClientId != manager.LocalClientId)
@@ -52,6 +55,9 @@ namespace Setup.Launch
 
         public void ShowStartFailed(LaunchChoice.Client server) =>
             ShowFailed($"Не получилось начать подключение к {server.Endpoint()}.");
+
+        public void ShowRoomServerMissing() =>
+            ShowFailed($"Комнату открывает сервер из сборки игры, а её нет: {BackgroundServer.Executable}. Собери её через Tools → Build → Windows Client.");
 
         private void ShowFailed(string reason)
         {

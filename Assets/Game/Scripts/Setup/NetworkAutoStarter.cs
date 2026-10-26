@@ -6,7 +6,6 @@ using JetBrains.Lifetimes;
 using Setup.Launch;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace Setup
@@ -25,22 +24,25 @@ namespace Setup
         [Header("Game Scene")]
         [SerializeField] private string _gameScene = "SampleScene";
 
-        private IRuntimeSettings _runtimeSettings;
         private ConnectionConfig _connection;
         private StartMenu _menu;
         private NetworkLauncher _launcher;
+        private NextLaunch _next;
+        private SessionScenes _scenes;
 
         [Inject]
         private void Construct(
-            IRuntimeSettings runtimeSettings,
             ConnectionConfig connection,
             StartMenu menu,
-            NetworkLauncher launcher)
+            NetworkLauncher launcher,
+            NextLaunch next,
+            SessionScenes scenes)
         {
-            _runtimeSettings = runtimeSettings;
             _connection = connection;
             _menu = menu;
             _launcher = launcher;
+            _next = next;
+            _scenes = scenes;
         }
 
         private void Start()
@@ -60,16 +62,19 @@ namespace Setup
 
         private async UniTaskVoid StartGame()
         {
+            var choice = await _next.Switch(ChooseAtProcessStart, ChooseInMenu, UniTask.FromResult);
+            _launcher.ShowStarting(choice);
+            await _scenes.Load(choice.Switch(_ => PeerType.Server, _ => PeerType.Client, _ => PeerType.Client), _gameScene);
+            SimulatePlayModePing();
+            await _launcher.Start(choice);
+        }
+
+        private UniTask<LaunchChoice> ChooseAtProcessStart()
+        {
             if (LaunchArguments.TryReadOwner(Environment.GetCommandLineArgs(), out var ownerId))
                 OwnerProcess.QuitWhenGone(ownerId).Forget();
 
-            var choice = TryChooseWithoutMenu(out var preset) ? preset : await ChooseInMenu();
-            _launcher.ShowStarting(choice);
-            _runtimeSettings.Initialize(choice.Switch(_ => PeerType.Server, _ => PeerType.Client, _ => PeerType.Client));
-            await LoadServicesAndGame();
-            SimulatePlayModePing();
-            await _launcher.Start(choice);
-            await SceneManager.UnloadSceneAsync("GameSetupScene").ToUniTask();
+            return TryChooseWithoutMenu(out var preset) ? UniTask.FromResult(preset) : ChooseInMenu();
         }
 
         private async UniTask<LaunchChoice> ChooseInMenu()
@@ -125,15 +130,6 @@ namespace Setup
                 return;
             }
 #endif
-        }
-
-        private async UniTask LoadServicesAndGame()
-        {
-            await SceneManager.LoadSceneAsync("Network", LoadSceneMode.Additive).ToUniTask(); //TODO: addresables for scene loading
-            await SceneManager.LoadSceneAsync(_gameScene, LoadSceneMode.Additive).ToUniTask();
-
-            var gameScene = SceneManager.GetSceneByName(_gameScene);
-            SceneManager.SetActiveScene(gameScene);
         }
 
         private void Log(string message)

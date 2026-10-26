@@ -10,14 +10,20 @@ namespace Setup.Launch
         private readonly Lifetime _lifetime;
         private readonly RoomScreen _room;
         private readonly CreateRoomScreen _create;
+        private readonly GameRestarter _restarter;
 
-        public RoomMenu(Lifetime lifetime, RoomScreen room, CreateRoomScreen create)
+        public RoomMenu(
+            Lifetime lifetime,
+            RoomScreen room,
+            CreateRoomScreen create,
+            GameRestarter restarter)
         {
             _lifetime = lifetime;
             _room = room;
             _create = create;
+            _restarter = restarter;
 
-            room.CloseChosen.Advise(lifetime, _ => GameRestarter.ReturnToMenu());
+            room.CloseChosen.Advise(lifetime, _ => restarter.ReturnToMenu());
         }
 
         public void ShowOpening(ushort port) =>
@@ -26,7 +32,7 @@ namespace Setup.Launch
         public UniTask<ushort> RetryPort(Lifetime lifetime, ushort busyPort)
         {
             var retried = new UniTaskCompletionSource<ushort>();
-            _create.BackChosen.Advise(lifetime, _ => GameRestarter.ReturnToMenu());
+            _create.BackChosen.Advise(lifetime, _ => _restarter.ReturnToMenu());
             _create.PortChosen.Advise(lifetime, port => retried.TrySetResult(port));
             _create.ShowBusy(busyPort);
             return retried.Task;

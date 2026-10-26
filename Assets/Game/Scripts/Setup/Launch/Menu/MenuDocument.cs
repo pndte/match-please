@@ -30,9 +30,6 @@ namespace Setup.Launch.Menu
         public static MenuDocument Create(PanelSettings panel, VisualTreeAsset screen)
         {
             var host = new GameObject("StartMenu");
-            if (Application.isPlaying)
-                Object.DontDestroyOnLoad(host);
-
             host.SetActive(false);
             var document = host.AddComponent<UIDocument>();
             document.panelSettings = panel;

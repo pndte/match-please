@@ -1,4 +1,5 @@
-﻿using JetBrains.Lifetimes;
+﻿using Bw.Entities.Extensions;
+using JetBrains.Lifetimes;
 using Zenject;
 
 namespace Bw.Injection
@@ -7,7 +8,7 @@ namespace Bw.Injection
     {
         public override void InstallBindings()
         {
-            Container.Bind<Lifetime>().FromInstance(Lifetime.Eternal).AsSingle();
+            Container.Bind<Lifetime>().FromMethod(() => Container.Resolve<Context>().gameObject.Lifetime()).AsSingle();
         }
     }
 }

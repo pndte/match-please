@@ -11,7 +11,10 @@
         "Bw.CoreAdapters",
         "Bw.UseCases.Character",
         "Bw.UseCases.Graphics",
-        "Unity.Multiplayer.Tools.NetworkSimulator.Runtime"
+        "Unity.Multiplayer.Tools.NetworkSimulator.Runtime",
+        "UniTask.Addressables",
+        "Unity.Addressables",
+        "Unity.ResourceManager"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -2,7 +2,6 @@ using Bw.Entities.Network;
 using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
 using Bw.Entities.Simulation;
-using JetBrains.Lifetimes;
 using Zenject;
 
 namespace Bw.Injection.Network
@@ -19,7 +18,6 @@ namespace Bw.Injection.Network
                     Container.Bind(typeof(INetworkTicks), typeof(ISimulationStep), typeof(IWorldClock))
                         .To<ServerNetworkTicks>()
                         .AsSingle()
-                        .WithArguments(Lifetime.Eternal)
                         .WriterOnlyInto<IWorldClock>(typeof(WorldStep))
                         .NonLazy();
                     break;
@@ -34,7 +32,6 @@ namespace Bw.Injection.Network
                             typeof(IInputLead))
                         .To<ClientNetworkTicks>()
                         .AsSingle()
-                        .WithArguments(Lifetime.Eternal)
                         .WriterOnlyInto<IWorldClock>(typeof(RollbackStepper))
                         .NonLazy();
                     break;

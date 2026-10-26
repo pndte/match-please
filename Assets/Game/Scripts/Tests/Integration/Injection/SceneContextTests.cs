@@ -27,7 +27,7 @@ namespace Bw.Tests.Integration.Injection
         [Test]
         public void SetupSceneResolvesOverTheProjectContextBeforeThePeerIsChosen()
         {
-            var project = _containers.Project(new RuntimeSettings());
+            var project = _containers.Project();
             project.ResolveRoots();
 
             var setup = _containers.Scene(ValidationContainers.SetupScene, project);
@@ -39,10 +39,10 @@ namespace Bw.Tests.Integration.Injection
         [TestCase(PeerType.Client)]
         public void NetworkSceneResolvesOverTheProjectContext(PeerType peer)
         {
-            var project = _containers.Project(ValidationContainers.SettingsOf(peer));
+            var project = _containers.Project();
             project.ResolveRoots();
 
-            var network = _containers.Scene(ValidationContainers.NetworkScene, project);
+            var network = _containers.Scene(ValidationContainers.NetworkScene, project, ValidationContainers.SessionOf(peer));
 
             Assert.DoesNotThrow(network.Resolve);
         }
@@ -51,9 +51,9 @@ namespace Bw.Tests.Integration.Injection
         public void LevelResolvesOverTheNetworkScene(string level, PeerType peer)
         {
             _containers.UseGameNetworkManager();
-            var project = _containers.Project(ValidationContainers.SettingsOf(peer));
+            var project = _containers.Project();
             project.ResolveRoots();
-            var network = _containers.Scene(ValidationContainers.NetworkScene, project);
+            var network = _containers.Scene(ValidationContainers.NetworkScene, project, ValidationContainers.SessionOf(peer));
             network.Resolve();
 
             var scene = _containers.Scene(level, network.Container);

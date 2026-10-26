@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Bw.Entities.Network;
 using Bw.Injection;
 using NUnit.Framework;
 using UnityEditor;
@@ -22,11 +21,10 @@ namespace Bw.Tests.Integration.Injection
         public void TearDown() =>
             _containers.Dispose();
 
-        [TestCase(PeerType.Server)]
-        [TestCase(PeerType.Client)]
-        public void SettingsInstallersOfTheProjectContextResolveEveryBinding(PeerType peer)
+        [Test]
+        public void SettingsInstallersOfTheProjectContextResolveEveryBinding()
         {
-            var project = _containers.Project(ValidationContainers.SettingsOf(peer));
+            var project = _containers.Project();
 
             Assert.DoesNotThrow(project.ResolveRoots);
         }
@@ -38,7 +36,7 @@ namespace Bw.Tests.Integration.Injection
 
             var installers = context.Installers.Select(installer => installer.GetType()).ToList();
 
-            Assert.That(installers, Is.EquivalentTo(new[] { typeof(RuntimeSettingsInstaller), typeof(ProjectInstaller) }));
+            Assert.That(installers, Is.EquivalentTo(new[] { typeof(ProjectInstaller) }));
             Assert.That(context.InstallerPrefabs, Is.Empty);
         }
 
