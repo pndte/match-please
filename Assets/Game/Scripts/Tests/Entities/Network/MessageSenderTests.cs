@@ -49,7 +49,7 @@ namespace Bw.Tests.Entities.Network
         [Test]
         public void SendToClientGoesOnlyToItsRecipient()
         {
-            var recipient = new Client(new ConnectionRequest("Сева", 4, System.Guid.NewGuid()));
+            var recipient = new Client(new ConnectionRequest("Сева", 4, System.Guid.NewGuid(), System.Guid.Empty));
 
             _sender.SendToClient(Header, 9, NetworkDelivery.Reliable, recipient);
 

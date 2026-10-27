@@ -9,6 +9,7 @@ namespace Setup.Launch
         private const string NicknamePref = "Launch.PlayerName"; //TODO: config 
         private const string CharacterPref = "Launch.CharacterKey";
         private const string RoomPortPref = "Launch.RoomPort";
+        private const string RoomLevelPref = "Launch.RoomLevel";
         private const string LastServerPref = "Launch.ServerAddress";
         private const string TokenPref = "Launch.PlayerToken";
         private const string TokenFormat = "N";
@@ -27,6 +28,8 @@ namespace Setup.Launch
                 return saved is > 0 and <= ushort.MaxValue ? (ushort)saved : _connection.Port;
             }
         }
+
+        public string RoomLevel => PlayerPrefs.GetString(RoomLevelPref, string.Empty);
 
         private readonly ConnectionConfig _connection;
 
@@ -52,6 +55,9 @@ namespace Setup.Launch
             PlayerPrefs.SetInt(RoomPortPref, port);
             PlayerPrefs.Save();
         }
+
+        public void SaveRoomLevel(string level) =>
+            Save(RoomLevelPref, level);
 
         public void SaveLastServer(LaunchChoice.Client server) =>
             Save(LastServerPref, server.Endpoint());

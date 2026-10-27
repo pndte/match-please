@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using Bw.Entities.Network;
 
 namespace Setup.Launch
 {
@@ -19,8 +20,11 @@ namespace Setup.Launch
 
         public sealed class Server : LaunchChoice
         {
-            public Server(ushort port) : base(port)
+            public RoomSettings Settings { get; }
+
+            public Server(ushort port, RoomSettings settings) : base(port)
             {
+                Settings = settings;
             }
 
             public override TResult Switch<TResult>(Func<Server, TResult> server, Func<Client, TResult> client, Func<Room, TResult> room) =>
@@ -69,8 +73,11 @@ namespace Setup.Launch
 
         public sealed class Room : LaunchChoice
         {
-            public Room(ushort port) : base(port)
+            public RoomSettings Settings { get; }
+
+            public Room(ushort port, RoomSettings settings) : base(port)
             {
+                Settings = settings;
             }
 
             public override TResult Switch<TResult>(Func<Server, TResult> server, Func<Client, TResult> client, Func<Room, TResult> room) =>

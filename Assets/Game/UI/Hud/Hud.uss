@@ -78,6 +78,24 @@
     width: 860px;
 }
 
+.bots-dock {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 48px;
+    align-items: center;
+}
+
+.bots-window {
+    width: 820px;
+}
+
+.bots-window__title {
+    -unity-font-definition: var(--font-extrabold);
+    font-size: 28px;
+    margin: 0 0 4px 8px;
+}
+
 .scoreboard__title {
     -unity-font-definition: var(--font-extrabold);
     font-size: 28px;

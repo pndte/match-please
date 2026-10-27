@@ -1,9 +1,10 @@
+using Bw.Entities.Content;
 using UnityEngine;
 
 namespace Bw.UseCases.Bots
 {
     [CreateAssetMenu(fileName = "BotPersonality", menuName = "Configs/BotPersonality")]
-    public sealed class BotPersonality : ScriptableObject
+    public sealed class BotPersonality : ContentAsset
     {
         [Header("Goal weights (a goal's priority times its weight; a goal of weight 0 is left out)")]
         [Min(0f)] public float Kill = 1f;

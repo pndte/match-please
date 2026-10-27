@@ -8,6 +8,11 @@ using Bw.Injection.ControlledBy;
 using Bw.Injection.Network;
 using Bw.Injection.Network.Variables;
 using Bw.Injection.Ownership;
+using Bw.UseCases.Bots.Network.Requests;
+using Bw.UseCases.Bots.Network.Room;
+using Bw.UseCases.Bots.View.Adapters;
+using Bw.UseCases.Bots.View.Roster;
+using Bw.UseCases.Bots.View.Window;
 using Bw.UseCases.Match;
 using Bw.UseCases.Match.Network;
 using Bw.UseCases.Match.Network.Requests;
@@ -50,6 +55,11 @@ namespace Bw.Injection.Match
             var table = netSchema.DeclareProperty(MatchTable.Empty, NetworkDelivery.ReliableFragmentedSequenced, NetworkPermissions.Server);
             var kills = netSchema.DeclareResult<KillNotice>(NetworkDelivery.ReliableSequenced);
             var localPlayer = netSchema.DeclareResult<int>(NetworkDelivery.Reliable);
+            var bots = new BotRosterEntries(
+                netSchema.DeclareProperty(BotTable.Empty, NetworkDelivery.ReliableFragmentedSequenced, NetworkPermissions.Server),
+                netSchema.DeclareRequest<RoomBot>(NetworkDelivery.Reliable),
+                netSchema.DeclareRequest<int>(NetworkDelivery.Reliable),
+                netSchema.DeclareRequest<BotPresetChange>(NetworkDelivery.Reliable));
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
 
             switch (_runtimeSettings.CurrentPeerType)
@@ -58,6 +68,7 @@ namespace Bw.Injection.Match
                     BindPublishing(table);
                     BindKillPublishing(kills);
                     BindLocalPlayerPublishing(localPlayer);
+                    BindBotRosterServing(bots);
                     break;
                 case PeerType.Client:
                     BindLocalPlayerReceiving(localPlayer);
@@ -65,6 +76,7 @@ namespace Bw.Injection.Match
                         .WriterOnlyInto<IMatchBoard>(typeof(MatchReceiver));
                     Container.Bind<MatchReceiver>().AsSingle().WithArguments(table).NonLazy();
                     BindKillReceiving(kills);
+                    BindBotRosterOrdering(bots);
                     BindHudVisuals();
                     break;
                 default:
@@ -107,6 +119,28 @@ namespace Bw.Injection.Match
             Container.Bind<KillReceiver>().AsSingle().NonLazy();
         }
 
+        private void BindBotRosterServing(BotRosterEntries bots)
+        {
+            Container.Bind<RoomHostAssigner>().AsSingle().NonLazy();
+            Container.Bind<BotTablePublisher>().AsSingle().WithArguments(bots.Table).NonLazy();
+            Container.BindRequestReceiver(bots.Joins).WhenInjectedInto<BotJoinServerHandler>();
+            Container.Bind<BotJoinServerHandler>().AsSingle().NonLazy();
+            Container.BindRequestReceiver(bots.Removals).WhenInjectedInto<BotSeatServerHandler>();
+            Container.BindRequestReceiver(bots.Changes).WhenInjectedInto<BotSeatServerHandler>();
+            Container.Bind<BotSeatServerHandler>().AsSingle().NonLazy();
+        }
+
+        private void BindBotRosterOrdering(BotRosterEntries bots)
+        {
+            Container.Bind(typeof(IReadonlyBotSeats), typeof(IBotSeats)).To<BotSeats>().AsSingle()
+                .WriterOnlyInto<IBotSeats>(typeof(BotTableReceiver));
+            Container.Bind<BotTableReceiver>().AsSingle().WithArguments(bots.Table).NonLazy();
+            Container.BindRequestSender(bots.Joins).WhenInjectedInto<BotOrderSender>();
+            Container.BindRequestSender(bots.Removals).WhenInjectedInto<BotOrderSender>();
+            Container.BindRequestSender(bots.Changes).WhenInjectedInto<BotOrderSender>();
+            Container.Bind<IBotOrders>().To<BotOrderSender>().AsSingle();
+        }
+
         private void BindHudVisuals()
         {
             if (_killFeed == null)
@@ -121,6 +155,9 @@ namespace Bw.Injection.Match
             Container.Bind<MatchTimerView>().AsSingle().NonLazy();
             Container.Bind<IKillFeedViewModel>().To<KillFeedViewModel>().AsSingle().WithArguments(_weaponIcons);
             Container.Bind<KillFeedView>().AsSingle().WithArguments(_killFeed).NonLazy();
+            Container.Bind<IBotRosterViewModel>().To<MatchBotRosterViewModel>().AsSingle();
+            Container.Bind<IBotsWindowViewModel>().To<BotsWindowViewModel>().AsSingle();
+            Container.Bind<BotsWindowView>().AsSingle().NonLazy();
         }
 
         private void RequireWeaponIcons()

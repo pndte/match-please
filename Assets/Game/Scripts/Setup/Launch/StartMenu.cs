@@ -30,7 +30,7 @@ namespace Setup.Launch
             _main.CreateChosen.Advise(lifetime, _ => _create.Show());
             _main.JoinChosen.Advise(lifetime, _ => _join.Show());
             _create.BackChosen.Advise(lifetime, _ => _main.Show());
-            _create.PortChosen.Advise(lifetime, port => chosen.TrySetResult(RoomChoice(port)));
+            _create.RoomChosen.Advise(lifetime, room => chosen.TrySetResult(room));
             _join.BackChosen.Advise(lifetime, _ => _main.Show());
             _join.ServerChosen.Advise(lifetime, server => PickCharacter(joins.Next(), server, chosen));
             _characters.BackChosen.Advise(lifetime, _ => _join.Show());
@@ -43,8 +43,5 @@ namespace Setup.Launch
             _characters.CharacterChosen.Advise(joined, _ => chosen.TrySetResult(server));
             _characters.Show(server);
         }
-
-        private static LaunchChoice RoomChoice(ushort port) =>
-            new LaunchChoice.Room(port);
     }
 }

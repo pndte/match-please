@@ -30,6 +30,7 @@ namespace Bw.Tests.Integration.Injection
         public const string NetworkScene = "Assets/Game/Scenes/Network.unity";
         public const string NetworkManagerPrefab = "Assets/Game/Prefabs/Network/Network.prefab";
         public const string ScenesFolder = "Assets/Game/Scenes";
+        private const string ValidationLevel = "Validation";
 
         private readonly List<Scene> _scenes = new();
         private readonly GameObject _holder;
@@ -62,7 +63,12 @@ namespace Bw.Tests.Integration.Injection
         }
 
         public static Action<DiContainer> SessionOf(PeerType peer) =>
-            container => container.Bind<IRuntimeSettings>().FromInstance(new RuntimeSettings(peer)).AsSingle();
+            container =>
+            {
+                container.Bind<IRuntimeSettings>().FromInstance(new RuntimeSettings(peer, ValidationLevel)).AsSingle();
+                if (peer == PeerType.Server)
+                    container.BindInstance(new RoomSettings(ValidationLevel, Guid.NewGuid(), Array.Empty<RoomBot>())).AsSingle();
+            };
 
         public DiContainer Project()
         {

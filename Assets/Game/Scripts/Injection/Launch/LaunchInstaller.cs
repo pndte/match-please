@@ -35,6 +35,7 @@ namespace Bw.Injection.Launch
         private void BindScreens()
         {
             Container.Bind<MainScreen>().AsSingle();
+            Container.Bind<RoomBotsViewModel>().AsSingle();
             Container.Bind<CreateRoomScreen>().AsSingle();
             Container.Bind<JoinRoomScreen>().AsSingle();
             Container.Bind<CharacterSelectScreen>().AsSingle();

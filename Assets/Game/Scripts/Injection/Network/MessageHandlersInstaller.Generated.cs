@@ -14,6 +14,9 @@ namespace Bw.Injection.Network
             RegisterCodec<System.String, Bw.Entities.Network.Codecs.StringCodec>(receivers, senders);
             RegisterCodec<System.UInt32, Bw.Entities.Network.Codecs.UIntCodec>(receivers, senders);
             RegisterCodec<JetBrains.Core.Unit, Bw.Entities.Network.Codecs.UnitCodec>(receivers, senders);
+            RegisterCodec<Bw.UseCases.Bots.Network.Requests.BotPresetChange, Bw.UseCases.Bots.Network.Codecs.BotPresetChangeCodec>(receivers, senders);
+            RegisterCodec<Bw.UseCases.Bots.Network.Requests.BotTable, Bw.UseCases.Bots.Network.Codecs.BotTableCodec>(receivers, senders);
+            RegisterCodec<Bw.Entities.Network.RoomBot, Bw.UseCases.Bots.Network.Codecs.RoomBotCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedInput<Bw.UseCases.Character.Network.Requests.CharacterControls>, Bw.UseCases.Character.Network.Codecs.TickedCharacterControlsCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Combat.Hands.Network.Requests.HandsSlots>, Bw.UseCases.Combat.Hands.Network.Codecs.TickedHandsSlotsCodec>(receivers, senders);
             RegisterCodec<Bw.Entities.Network.Prediction.Stream.Requests.TickedState<Bw.UseCases.Combat.Melee.MeleeState>, Bw.UseCases.Combat.Melee.Network.Codecs.TickedMeleeStateCodec>(receivers, senders);

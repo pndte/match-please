@@ -2,6 +2,7 @@
     <ui:Template name="KillFeed" src="KillFeed.uxml" />
     <ui:Template name="Scoreboard" src="Scoreboard.uxml" />
     <ui:Template name="Winner" src="Winner.uxml" />
+    <ui:Template name="BotsWindow" src="BotsWindow.uxml" />
     <Style src="../Kit.uss" />
     <Style src="Hud.uss" />
     <Style src="MatchTimer.uss" />
@@ -14,5 +15,6 @@
         </ui:VisualElement>
         <ui:Instance template="Scoreboard" name="scoreboard-layer" class="layer hidden" picking-mode="Ignore" />
         <ui:Instance template="Winner" name="winner-layer" class="layer hidden" picking-mode="Ignore" />
+        <ui:Instance template="BotsWindow" name="bots-layer" class="layer hidden" picking-mode="Ignore" />
     </ui:VisualElement>
 </ui:UXML>

@@ -9,9 +9,6 @@ namespace Setup.Launch
     {
         private const string RadminPrefix = "26.";
 
-        public static bool IsRadmin(string address) =>
-            address.StartsWith(RadminPrefix);
-
         public static string[] Read()
         {
             try
@@ -19,7 +16,7 @@ namespace Setup.Launch
                 return Dns.GetHostEntry(Dns.GetHostName()).AddressList
                     .Where(address => address.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(address))
                     .Select(address => address.ToString())
-                    .OrderByDescending(address => address.StartsWith(RadminPrefix))
+                    .Where(address => !address.StartsWith(RadminPrefix))
                     .ToArray();
             }
             catch (SocketException)

@@ -1,0 +1,22 @@
+{
+    "name": "Bw.UseCases.Bots.View.Adapters",
+    "rootNamespace": "Bw",
+    "references": [
+        "Bw.Entities",
+        "Bw.UseCases.Bots",
+        "Bw.UseCases.Bots.Network",
+        "Bw.UseCases.Bots.View",
+        "Bw.CoreAdapters.Bots"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "JetBrains.Lifetimes.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

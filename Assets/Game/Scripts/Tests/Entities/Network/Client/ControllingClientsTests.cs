@@ -23,7 +23,7 @@ namespace Bw.Tests.Entities.Network
         [Test]
         public void AddedClientIsListed()
         {
-            var client = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()));
+            var client = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid(), System.Guid.Empty));
 
             _controlling.Add(_lifetime.Lifetime, client);
 
@@ -33,8 +33,8 @@ namespace Bw.Tests.Entities.Network
         [Test]
         public void ClientIsUnlistedWhenItsControlEnds()
         {
-            var stay = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()));
-            var leave = new Client(new ConnectionRequest("Сева", 4, System.Guid.NewGuid()));
+            var stay = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid(), System.Guid.Empty));
+            var leave = new Client(new ConnectionRequest("Сева", 4, System.Guid.NewGuid(), System.Guid.Empty));
             var control = new LifetimeDefinition();
             _controlling.Add(_lifetime.Lifetime, stay);
             _controlling.Add(control.Lifetime, leave);
@@ -47,7 +47,7 @@ namespace Bw.Tests.Entities.Network
         [Test]
         public void ListingIsAnnounced()
         {
-            var client = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()));
+            var client = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid(), System.Guid.Empty));
             var control = new LifetimeDefinition();
             var changes = 0;
             _controlling.Change.Advise(_lifetime.Lifetime, _ => changes++);

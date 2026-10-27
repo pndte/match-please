@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Bw.UseCases.Combat.Hands.Network
 {
-    public sealed class TriggerSampler
+    public sealed class TriggerSampler //TODO: спуск читается с мыши напрямую: клик по окну ботов (B) у хоста тоже стреляет
     {
         private TriggerPress LastPress =>
             new(_pressNumber, (byte)Mathf.Min(_ticks.Current - _pressTick, byte.MaxValue), _pressViewDelay, _pressPredictedDelay, 0);

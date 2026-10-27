@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Bw.Entities.Network;
+using Bw.UseCases.Bots;
 using Cysharp.Threading.Tasks;
 using JetBrains.Lifetimes;
 using Setup.Launch;
@@ -29,6 +30,7 @@ namespace Setup
         private NetworkLauncher _launcher;
         private NextLaunch _next;
         private SessionScenes _scenes;
+        private RoomBotsConfig _roomBots;
 
         [Inject]
         private void Construct(
@@ -36,13 +38,15 @@ namespace Setup
             StartMenu menu,
             NetworkLauncher launcher,
             NextLaunch next,
-            SessionScenes scenes)
+            SessionScenes scenes,
+            RoomBotsConfig roomBots)
         {
             _connection = connection;
             _menu = menu;
             _launcher = launcher;
             _next = next;
             _scenes = scenes;
+            _roomBots = roomBots;
         }
 
         private void Start()
@@ -64,9 +68,41 @@ namespace Setup
         {
             var choice = await _next.Switch(ChooseAtProcessStart, ChooseInMenu, UniTask.FromResult);
             _launcher.ShowStarting(choice);
-            await _scenes.Load(choice.Switch(_ => PeerType.Server, _ => PeerType.Client, _ => PeerType.Client), _gameScene);
+            if (!await TryLoadSession(choice))
+                return;
+
             SimulatePlayModePing();
             await _launcher.Start(choice);
+        }
+
+        private UniTask<bool> TryLoadSession(LaunchChoice choice) =>
+            choice.Switch(
+                server => Loaded(_scenes.LoadServer(server.Settings)),
+                TryLoadServerLevel,
+                room => Loaded(_scenes.LoadClient(room.Settings.Level)));
+
+        private async UniTask<bool> TryLoadServerLevel(LaunchChoice.Client server)
+        {
+            var answer = await _launcher.AskLevel(server);
+            return await answer.Switch(level => Loaded(_scenes.LoadClient(level)), () => UniTask.FromResult(false));
+        }
+
+        private static async UniTask<bool> Loaded(UniTask loading)
+        {
+            await loading;
+            return true;
+        }
+
+        private RoomSettings DefaultRoom()
+        {
+            var bots = new RoomBot[_roomBots.StartingBots.Length];
+            for (var index = 0; index < bots.Length; index++)
+            {
+                var bot = _roomBots.StartingBots[index];
+                bots[index] = new RoomBot(bot.Nickname, bot.Difficulty.Key, bot.Personality.Key);
+            }
+
+            return new RoomSettings(_gameScene, Guid.NewGuid(), bots);
         }
 
         private UniTask<LaunchChoice> ChooseAtProcessStart()
@@ -84,7 +120,7 @@ namespace Setup
         }
 
         private bool TryChooseWithoutMenu(out LaunchChoice choice) =>
-            TryReadPlayModeTag(out choice) || LaunchArguments.TryRead(Environment.GetCommandLineArgs(), _connection.Port, out choice);
+            TryReadPlayModeTag(out choice) || LaunchArguments.TryRead(Environment.GetCommandLineArgs(), _connection.Port, DefaultRoom(), out choice);
 
         private bool TryReadPlayModeTag(out LaunchChoice choice)
         {
@@ -95,7 +131,7 @@ namespace Setup
             if (string.Equals(currentTag, serverTag, StringComparison.OrdinalIgnoreCase))
             {
                 Log($"Multiplayer Play Mode tag '{currentTag}': starting as the server.");
-                choice = new LaunchChoice.Server(_connection.Port);
+                choice = new LaunchChoice.Server(_connection.Port, DefaultRoom());
                 return true;
             }
 

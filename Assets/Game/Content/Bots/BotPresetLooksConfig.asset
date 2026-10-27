@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebeed5981f94541469c203516830b5d1, type: 3}
+  m_Name: BotPresetLooksConfig
+  m_EditorClassIdentifier: Bw.CoreAdapters.Bots::Bw.CoreAdapters.Bots.BotPresetLooksConfig
+  Difficulties:
+  - Difficulty: {fileID: 11400000, guid: 5f3de78017bc14845986f35008e5b13a, type: 2}
+    DisplayName: "\u041C\u0438\u0440\u043D\u044B\u0439"
+  - Difficulty: {fileID: 11400000, guid: d16c951d4b5099440917bbf6a3dce92a, type: 2}
+    DisplayName: "\u041B\u0451\u0433\u043A\u0438\u0439"
+  - Difficulty: {fileID: 11400000, guid: 5cd6a27028da15a4087b5f6c9ee99f2f, type: 2}
+    DisplayName: "\u0421\u0440\u0435\u0434\u043D\u0438\u0439"
+  - Difficulty: {fileID: 11400000, guid: c1234bfcc6899a14f8b28e803096e4b4, type: 2}
+    DisplayName: "\u0421\u043B\u043E\u0436\u043D\u044B\u0439"
+  Personalities:
+  - Personality: {fileID: 11400000, guid: 88fb5d8307215d04e826f84e93b2ff4a, type: 2}
+    DisplayName: "\u0411\u0435\u0440\u0441\u0435\u0440\u043A"
+  - Personality: {fileID: 11400000, guid: d4ee4d956179eba488126e87b73f3f87, type: 2}
+    DisplayName: "\u041E\u0445\u043E\u0442\u043D\u0438\u043A"
+  - Personality: {fileID: 11400000, guid: 267c2c94538360d41b9d4d41a1e4eb86, type: 2}
+    DisplayName: "\u041E\u0441\u0442\u043E\u0440\u043E\u0436\u043D\u044B\u0439"
+  - Personality: {fileID: 11400000, guid: 004d7aaefc9339e45a8f553e6468066d, type: 2}
+    DisplayName: "\u0423\u0432\u0451\u0440\u0442\u043B\u0438\u0432\u044B\u0439"
+  - Personality: {fileID: 11400000, guid: 23d4a4c6fb5e1a0419b8de6e9bec2d58, type: 2}
+    DisplayName: "\u0421\u0442\u0440\u0435\u043B\u043E\u043A"

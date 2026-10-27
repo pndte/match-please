@@ -1,3 +1,4 @@
+using System;
 using Bw.Entities.Network;
 using Cysharp.Threading.Tasks;
 using JetBrains.Lifetimes;
@@ -42,6 +43,28 @@ namespace Setup.Launch
                 client => _connection.ShowConnecting(client),
                 room => _connection.ShowConnecting(LaunchChoice.Client.Loopback(room.Port)));
 
+        public async UniTask<LevelAnswer> AskLevel(LaunchChoice.Client server)
+        {
+            var manager = NetworkManager.Singleton;
+            var transport = TransportOf(manager);
+            transport.SetConnectionData(true, server.Address, server.Port);
+            transport.MaxConnectAttempts = JoinAttempts;
+            manager.NetworkConfig.ConnectionData = LevelQuery.Payload;
+            using var asking = new LifetimeDefinition();
+            var stopped = new UniTaskCompletionSource();
+            var admitted = false;
+            manager.AdviseClientStopped(asking.Lifetime, () => stopped.TrySetResult());
+            manager.AdviseConnectionEvents(asking.Lifetime, connection => admitted |= connection.EventType == ConnectionEvent.ClientConnected);
+            if (!manager.StartClient())
+                return Unanswered(server);
+
+            await stopped.Task;
+            await UniTask.WaitWhile(() => manager.ShutdownInProgress);
+            return !admitted && LevelQuery.TryReadAnswer(manager.DisconnectReason, out var level)
+                ? new LevelAnswer.Given(level)
+                : Unanswered(server);
+        }
+
         public UniTask Start(LaunchChoice choice)
         {
             var manager = NetworkManager.Singleton;
@@ -65,7 +88,7 @@ namespace Setup.Launch
                     return;
                 }
 
-                port = await RetryPort(port);
+                port = (await RetryRoom(port)).Port;
             }
 
             _room.ShowOpen(manager, port);
@@ -74,7 +97,7 @@ namespace Setup.Launch
 
         private UniTask Join(NetworkManager manager, LaunchChoice.Client server)
         {
-            Connect(manager, server, server, JoinAttempts);
+            Connect(manager, server, server, Guid.Empty, JoinAttempts);
             return UniTask.CompletedTask;
         }
 
@@ -86,18 +109,23 @@ namespace Setup.Launch
                 return;
             }
 
-            var port = room.Port;
-            while (!LocalPorts.IsFree(port))
-                port = await RetryPort(port);
+            while (!LocalPorts.IsFree(room.Port))
+                room = await RetryRoom(room.Port);
 
-            BackgroundServer.Open(_lifetime, port);
-            Connect(manager, LaunchChoice.Client.Loopback(port), new LaunchChoice.Room(port), OwnRoomAttempts);
+            BackgroundServer.Open(_lifetime, new LaunchChoice.Server(room.Port, room.Settings));
+            Connect(manager, LaunchChoice.Client.Loopback(room.Port), room, room.Settings.HostKey, OwnRoomAttempts);
         }
 
-        private async UniTask<ushort> RetryPort(ushort busyPort)
+        private async UniTask<LaunchChoice.Room> RetryRoom(ushort busyPort)
         {
             using var retrying = new LifetimeDefinition();
-            return await _room.RetryPort(retrying.Lifetime, busyPort);
+            return await _room.RetryRoom(retrying.Lifetime, busyPort);
+        }
+
+        private LevelAnswer Unanswered(LaunchChoice.Client server)
+        {
+            _connection.ShowUnanswered(server);
+            return LevelAnswer.Missing.Instance;
         }
 
         private static bool TryListen(NetworkManager manager, ushort port)
@@ -111,13 +139,14 @@ namespace Setup.Launch
             NetworkManager manager,
             LaunchChoice.Client server,
             LaunchChoice chosen,
+            Guid hostKey,
             int attempts)
         {
             Debug.Log($"[NetworkLauncher] Starting as a client of {server.Endpoint()}");
             var transport = TransportOf(manager);
             transport.SetConnectionData(true, server.Address, server.Port);
             transport.MaxConnectAttempts = attempts;
-            manager.NetworkConfig.ConnectionData = ConnectionRequestPayload.Of(new ConnectionRequest(_profile.Nickname, _profile.CharacterKey, _profile.Token));
+            manager.NetworkConfig.ConnectionData = ConnectionRequestPayload.Of(new ConnectionRequest(_profile.Nickname, _profile.CharacterKey, _profile.Token, hostKey));
             _connection.ShowConnecting(server);
             _connection.Watch(manager, server, chosen);
             if (manager.StartClient())

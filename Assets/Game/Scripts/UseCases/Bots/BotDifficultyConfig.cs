@@ -1,9 +1,10 @@
+using Bw.Entities.Content;
 using UnityEngine;
 
 namespace Bw.UseCases.Bots
 {
     [CreateAssetMenu(fileName = "BotDifficultyConfig", menuName = "Configs/BotDifficultyConfig")]
-    public sealed class BotDifficultyConfig : ScriptableObject
+    public sealed class BotDifficultyConfig : ContentAsset
     {
         public BotBrainKind Brain = BotBrainKind.Goap;
         public bool Moving = true;

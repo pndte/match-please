@@ -53,6 +53,12 @@ namespace Setup.Launch
                 : NoAnswerOf(server, chosen)));
         }
 
+        public void ShowUnanswered(LaunchChoice.Client server)
+        {
+            _failed.RetryChosen.Advise(_lifetime, _ => _restarter.Relaunch(server));
+            ShowFailed($"Сервер {server.Endpoint()} не сказал, какая у него карта. Проверь адрес, что комната создана и что у вас одна версия игры.");
+        }
+
         public void ShowStartFailed(LaunchChoice.Client server) =>
             ShowFailed($"Не получилось начать подключение к {server.Endpoint()}.");
 

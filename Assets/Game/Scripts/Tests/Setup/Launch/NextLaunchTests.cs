@@ -1,3 +1,5 @@
+using System;
+using Bw.Entities.Network;
 using NUnit.Framework;
 using Setup.Launch;
 
@@ -27,7 +29,7 @@ namespace Bw.Tests.Setup.Launch
         public void RelaunchStartsWithTheSameChoice()
         {
             var next = new NextLaunch();
-            var choice = new LaunchChoice.Server(7777);
+            var choice = new LaunchChoice.Server(7777, Room());
 
             next.StartWith(choice);
 
@@ -39,7 +41,7 @@ namespace Bw.Tests.Setup.Launch
         {
             var next = new NextLaunch();
 
-            next.StartWith(new LaunchChoice.Server(7777));
+            next.StartWith(new LaunchChoice.Server(7777, Room()));
             next.OpenMenu();
 
             Assert.That(KindOf(next), Is.EqualTo("menu"));
@@ -47,5 +49,8 @@ namespace Bw.Tests.Setup.Launch
 
         private static string KindOf(NextLaunch next) =>
             next.Switch(() => "initial", () => "menu", _ => "chosen");
+
+        private static RoomSettings Room() =>
+            new("ConstructionSite", Guid.NewGuid(), Array.Empty<RoomBot>());
     }
 }

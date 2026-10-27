@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="../Kit.uss" />
+    <ui:VisualElement class="bot-row">
+        <ui:Label name="bot-name" text="Пельмень" class="bot-row__name" />
+        <ui:Button name="bot-difficulty" text="Средний" class="chip bot-row__choice bot-row__difficulty" />
+        <ui:Button name="bot-personality" text="Охотник" class="chip bot-row__choice bot-row__personality" />
+        <ui:Button name="bot-remove" text="убрать" class="chip bot-row__choice bot-row__remove" />
+    </ui:VisualElement>
+</ui:UXML>

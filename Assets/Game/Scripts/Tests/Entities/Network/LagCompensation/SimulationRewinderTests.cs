@@ -12,7 +12,7 @@ namespace Bw.Tests.Entities.Network.LagCompensation
 {
     public sealed class SimulationRewinderTests
     {
-        private static readonly Client Shooter = new(new ConnectionRequest("Саня", 0, System.Guid.NewGuid()));
+        private static readonly Client Shooter = new(new ConnectionRequest("Саня", 0, System.Guid.NewGuid(), System.Guid.Empty));
 
         private LifetimeDefinition _lifetime;
         private SteppedSimulation<float> _simulation;

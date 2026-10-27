@@ -109,7 +109,7 @@ namespace Bw.Tests.Entities.Network.Variables
         public void ResultIsNeverSentToAClientByAClient()
         {
             _ownership.SetMine(_lifetime.Lifetime);
-            var recipient = new Client(new ConnectionRequest("Сева", 4, System.Guid.NewGuid()));
+            var recipient = new Client(new ConnectionRequest("Сева", 4, System.Guid.NewGuid(), System.Guid.Empty));
 
             Assert.Throws<InvalidOperationException>(() => _entries.ResultSender(_result).SendTo(recipient, 1));
         }

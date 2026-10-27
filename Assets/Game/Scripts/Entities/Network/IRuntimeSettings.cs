@@ -9,5 +9,6 @@
     public interface IRuntimeSettings
     {
         PeerType CurrentPeerType { get; }
+        string Level { get; }
     }
 }

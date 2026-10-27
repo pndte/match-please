@@ -49,7 +49,10 @@
         "Unity.RenderPipelines.Universal.Runtime",
         "Bw.UseCases.Combat.Abstractions",
         "Unity.Addressables",
-        "Unity.ResourceManager"
+        "Unity.ResourceManager",
+        "Bw.UseCases.Bots.View",
+        "Bw.UseCases.Bots.View.Adapters",
+        "Bw.CoreAdapters.Bots"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,33 +1,49 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Template name="BotRow" src="../Bots/BotRow.uxml" />
     <Style src="../Kit.uss" />
     <Style src="Menu.uss" />
     <ui:VisualElement class="dim" />
     <ui:VisualElement name="create-room-window" class="modal" picking-mode="Ignore">
-        <ui:VisualElement class="card window">
+        <ui:VisualElement class="card window window--room">
             <ui:VisualElement class="tape tape--left" picking-mode="Ignore" />
             <ui:VisualElement class="tape tape--right" picking-mode="Ignore" />
             <ui:Label text="Новая комната" class="title" />
             <ui:VisualElement class="divider" />
-            <ui:Label text="Порт" class="label" />
-            <ui:VisualElement class="row">
-                <ui:TextField name="port" value="7777" max-length="5" class="field field--port" />
-                <ui:VisualElement class="gap" />
-                <ui:Label name="port-hint" text="на этом порту друзья тебя найдут" class="hint grow side-hint" />
-            </ui:VisualElement>
-            <ui:VisualElement class="spacer" />
-            <ui:Label text="Адрес для друзей" class="label" />
-            <ui:VisualElement name="addresses" class="wrap">
-                <ui:VisualElement class="chip">
-                    <ui:Label text="192.168.1.5" class="chip__text" />
-                    <ui:Button name="copy" class="chip__copy" />
+            <ui:VisualElement class="room-columns">
+                <ui:VisualElement class="room-column">
+                    <ui:Label text="Порт" class="label" />
+                    <ui:VisualElement class="row">
+                        <ui:TextField name="port" value="7777" max-length="5" class="field field--port" />
+                        <ui:VisualElement class="gap" />
+                        <ui:Label name="port-hint" text="на этом порту друзья тебя найдут" class="hint grow side-hint" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="spacer" />
+                    <ui:Label text="Адрес для друзей" class="label" />
+                    <ui:VisualElement name="addresses" class="wrap">
+                        <ui:VisualElement class="chip">
+                            <ui:Label text="192.168.1.5" class="chip__text" />
+                            <ui:Button name="copy" class="chip__copy" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:Label text="Друзья вводят адрес и порт в «Подключиться». Комната работает, пока открыто это окно." class="hint" />
+                    <ui:VisualElement class="spacer" />
+                    <ui:Label text="Карта" class="label" />
+                    <ui:VisualElement name="levels" class="levels">
+                        <ui:Button text="Стройка" class="button button--small" />
+                        <ui:Button text="Бойня" class="button button--small button--paper" />
+                    </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement class="chip">
-                    <ui:Label text="26.12.34.56" class="chip__text" />
-                    <ui:Label text="Radmin" class="chip__note" />
-                    <ui:Button name="copy" class="chip__copy" />
+                <ui:VisualElement name="bots" class="room-column room-column--bots">
+                    <ui:VisualElement class="bots-head">
+                        <ui:Label text="Боты" class="label" />
+                        <ui:Label name="bots-count" text="0" class="bots-count" />
+                        <ui:Label text="из 8 · щёлкни по пресету, чтобы сменить" class="hint bots-count" />
+                    </ui:VisualElement>
+                    <ui:Instance template="BotRow" name="bot-sample" />
+                    <ui:VisualElement name="bot-rows" class="bots-rows" />
+                    <ui:Button name="add-bot" text="Добавить бота" class="chip bot-row__choice bot-add" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:Label text="Друзья вводят адрес и порт в «Подключиться». Комната работает, пока открыто это окно." class="hint" />
             <ui:VisualElement class="actions">
                 <ui:Button name="back" text="Назад" class="button button--paper" />
                 <ui:Button name="create" text="Создать" class="button button--wide" />

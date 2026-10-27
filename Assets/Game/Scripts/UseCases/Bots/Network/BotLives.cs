@@ -1,3 +1,4 @@
+using Bw.Entities.Extensions;
 using Bw.UseCases.Mortality.Extensions;
 using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
@@ -9,7 +10,7 @@ namespace Bw.UseCases.Bots.Network
         public BotLives(
             Lifetime lifetime,
             ICharacterRegistry registry,
-            IBotRoster roster,
+            IReadonlyBotRoster roster,
             IBotLauncher launcher)
         {
             roster.Bots.View(lifetime, (botLifetime, bot, entry) =>

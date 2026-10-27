@@ -26,11 +26,6 @@
                     <ui:Label text="192.168.1.5" class="chip__text" />
                     <ui:Button name="copy" class="chip__copy" />
                 </ui:VisualElement>
-                <ui:VisualElement class="chip">
-                    <ui:Label text="26.12.34.56" class="chip__text" />
-                    <ui:Label text="Radmin" class="chip__note" />
-                    <ui:Button name="copy" class="chip__copy" />
-                </ui:VisualElement>
             </ui:VisualElement>
             <ui:Label text="Чтобы играть самому, открой второе окно игры и подключись к 127.0.0.1." class="hint" />
             <ui:VisualElement class="actions">

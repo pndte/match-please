@@ -16,16 +16,20 @@ namespace Setup.Launch
 
         private readonly List<AsyncOperationHandle<SceneInstance>> _loaded = new();
 
-        public async UniTask Load(PeerType peer, string gameScene)
+        public UniTask LoadServer(RoomSettings room)
         {
-            if (_loaded.Count > 0)
-                throw new InvalidOperationException("A session is loaded already: unload it before loading the next one.");
+            var settings = new RuntimeSettings(PeerType.Server, room.Level);
+            return Load(room.Level, container =>
+            {
+                container.Bind<IRuntimeSettings>().FromInstance(settings).AsSingle();
+                container.BindInstance(room).AsSingle();
+            });
+        }
 
-            var settings = new RuntimeSettings(peer);
-            SceneContext.ExtraBindingsInstallMethod = container => container.Bind<IRuntimeSettings>().FromInstance(settings).AsSingle();
-            await LoadAdditive(NetworkScene);
-            var game = await LoadAdditive(gameScene);
-            SceneManager.SetActiveScene(game.Scene);
+        public UniTask LoadClient(string level)
+        {
+            var settings = new RuntimeSettings(PeerType.Client, level);
+            return Load(level, container => container.Bind<IRuntimeSettings>().FromInstance(settings).AsSingle());
         }
 
         public async UniTask Unload()
@@ -34,6 +38,17 @@ namespace Setup.Launch
                 await Addressables.UnloadSceneAsync(_loaded[index]).ToUniTask();
 
             _loaded.Clear();
+        }
+
+        private async UniTask Load(string level, Action<DiContainer> bindSession)
+        {
+            if (_loaded.Count > 0)
+                throw new InvalidOperationException("A session is loaded already: unload it before loading the next one.");
+
+            SceneContext.ExtraBindingsInstallMethod = bindSession;
+            await LoadAdditive(NetworkScene);
+            var game = await LoadAdditive(level);
+            SceneManager.SetActiveScene(game.Scene);
         }
 
         private async UniTask<SceneInstance> LoadAdditive(string address)

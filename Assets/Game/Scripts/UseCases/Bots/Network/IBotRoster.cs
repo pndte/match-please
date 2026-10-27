@@ -1,10 +1,17 @@
+using Bw.Entities;
 using Bw.Entities.Players;
-using JetBrains.Collections.Viewable;
 
 namespace Bw.UseCases.Bots.Network
 {
-    public interface IBotRoster
+    public interface IReadonlyBotRoster
     {
-        public IViewableMap<IPlayer, BotEntry> Bots { get; }
+        public IReadonlyViewableMap<IPlayer, BotEntry> Bots { get; }
+    }
+
+    public interface IBotRoster : IReadonlyBotRoster
+    {
+        public void Add(string nickname, BotPreset preset);
+        public void Remove(IPlayer bot);
+        public void Change(IPlayer bot, BotPreset preset);
     }
 }

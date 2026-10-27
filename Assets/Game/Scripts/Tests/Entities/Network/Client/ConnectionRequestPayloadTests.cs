@@ -9,8 +9,10 @@ namespace Bw.Tests.Entities.Network
     {
         private const string Separator = "\u001F";
         private const string TokenText = "0123456789abcdef0123456789abcdef";
+        private const string HostKeyText = "fedcba9876543210fedcba9876543210";
 
         private static readonly Guid Token = Guid.ParseExact(TokenText, "N");
+        private static readonly Guid HostKey = Guid.ParseExact(HostKeyText, "N");
 
         [TestCase("Лёха", 37)]
         [TestCase("Player", 1)]
@@ -19,7 +21,7 @@ namespace Bw.Tests.Entities.Network
         [TestCase("a", int.MaxValue)]
         public void RequestSurvivesTheRoundTrip(string nickname, int characterKey)
         {
-            var payload = ConnectionRequestPayload.Of(new ConnectionRequest(nickname, characterKey, Token));
+            var payload = ConnectionRequestPayload.Of(new ConnectionRequest(nickname, characterKey, Token, Guid.Empty));
 
             var read = ConnectionRequestPayload.TryRead(payload, out var request);
 
@@ -30,17 +32,36 @@ namespace Bw.Tests.Entities.Network
         }
 
         [Test]
-        public void PayloadIsTheKeyTheTokenAndTheNicknameInUtf8()
+        public void PayloadIsTheKeyTheTokenTheHostKeyAndTheNicknameInUtf8()
         {
-            var payload = ConnectionRequestPayload.Of(new ConnectionRequest("Лёха", 37, Token));
+            var payload = ConnectionRequestPayload.Of(new ConnectionRequest("Лёха", 37, Token, HostKey));
 
-            Assert.That(payload, Is.EqualTo(Encoding.UTF8.GetBytes("37" + Separator + TokenText + Separator + "Лёха")));
+            Assert.That(payload, Is.EqualTo(Encoding.UTF8.GetBytes("37" + Separator + TokenText + Separator + HostKeyText + Separator + "Лёха")));
+        }
+
+        [Test]
+        public void HostKeySurvivesTheRoundTrip()
+        {
+            var payload = ConnectionRequestPayload.Of(new ConnectionRequest("Лёха", 37, Token, HostKey));
+
+            ConnectionRequestPayload.TryRead(payload, out var request);
+
+            Assert.That(request.HostKey, Is.EqualTo(HostKey));
+            Assert.That(request.Nickname, Is.EqualTo("Лёха"));
+        }
+
+        [Test]
+        public void PayloadWithoutAHostKeyIsUnread()
+        {
+            var payload = Encoding.UTF8.GetBytes("37" + Separator + TokenText + Separator + "Лёха");
+
+            Assert.That(ConnectionRequestPayload.TryRead(payload, out _), Is.False);
         }
 
         [Test]
         public void NicknameMayContainTheSeparator()
         {
-            var payload = ConnectionRequestPayload.Of(new ConnectionRequest("a" + Separator + "b", 2, Token));
+            var payload = ConnectionRequestPayload.Of(new ConnectionRequest("a" + Separator + "b", 2, Token, Guid.Empty));
 
             ConnectionRequestPayload.TryRead(payload, out var request);
 
@@ -71,19 +92,19 @@ namespace Bw.Tests.Entities.Network
         [Test]
         public void PayloadOfTheLimitIsRead()
         {
-            var payload = Encoding.UTF8.GetBytes("1" + Separator + TokenText + Separator + new string('a', 221));
+            var payload = Encoding.UTF8.GetBytes("1" + Separator + TokenText + Separator + HostKeyText + Separator + new string('a', 188));
 
             var read = ConnectionRequestPayload.TryRead(payload, out var request);
 
             Assert.That(payload.Length, Is.EqualTo(256));
             Assert.That(read, Is.True);
-            Assert.That(request.Nickname, Has.Length.EqualTo(221));
+            Assert.That(request.Nickname, Has.Length.EqualTo(188));
         }
 
         [Test]
         public void PayloadOverTheLimitIsRefused()
         {
-            var payload = Encoding.UTF8.GetBytes("1" + Separator + TokenText + Separator + new string('a', 222));
+            var payload = Encoding.UTF8.GetBytes("1" + Separator + TokenText + Separator + HostKeyText + Separator + new string('a', 189));
 
             Assert.That(ConnectionRequestPayload.TryRead(payload, out _), Is.False);
         }

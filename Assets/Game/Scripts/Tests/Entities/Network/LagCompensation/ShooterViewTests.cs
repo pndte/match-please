@@ -7,7 +7,7 @@ namespace Bw.Tests.Entities.Network.LagCompensation
 {
     public sealed class ShooterViewTests
     {
-        private static readonly Client Shooter = new(new ConnectionRequest("Саня", 0, System.Guid.NewGuid()));
+        private static readonly Client Shooter = new(new ConnectionRequest("Саня", 0, System.Guid.NewGuid(), System.Guid.Empty));
 
         [Test]
         public void ViewKeepsBothTicks()

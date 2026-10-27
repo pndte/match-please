@@ -139,6 +139,33 @@
     width: 820px;
 }
 
+.window--room {
+    width: 1600px;
+}
+
+.room-columns {
+    flex-direction: row;
+}
+
+.room-column {
+    width: 640px;
+}
+
+.room-column--bots {
+    width: auto;
+    flex-grow: 1;
+    margin-left: 48px;
+}
+
+.levels {
+    flex-direction: row;
+}
+
+.levels > .button {
+    min-width: 240px;
+    margin-right: 16px;
+}
+
 .window--alert {
     width: 760px;
 }

@@ -14,7 +14,10 @@
         "Unity.Multiplayer.Tools.NetworkSimulator.Runtime",
         "UniTask.Addressables",
         "Unity.Addressables",
-        "Unity.ResourceManager"
+        "Unity.ResourceManager",
+        "Bw.UseCases.Bots",
+        "Bw.UseCases.Bots.View",
+        "Bw.CoreAdapters.Bots"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

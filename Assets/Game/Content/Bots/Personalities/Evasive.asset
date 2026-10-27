@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee9cce322a01f1c488b346f06ea7c13b, type: 3}
   m_Name: Evasive
   m_EditorClassIdentifier: Bw.UseCases.Bots::Bw.UseCases.Bots.BotPersonality
+  _key: 16
   Kill: 0.6
   FinishOff: 1.1
   PunishReload: 1.6

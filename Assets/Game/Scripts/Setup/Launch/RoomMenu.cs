@@ -29,11 +29,11 @@ namespace Setup.Launch
         public void ShowOpening(ushort port) =>
             _room.Show(port);
 
-        public UniTask<ushort> RetryPort(Lifetime lifetime, ushort busyPort)
+        public UniTask<LaunchChoice.Room> RetryRoom(Lifetime lifetime, ushort busyPort)
         {
-            var retried = new UniTaskCompletionSource<ushort>();
+            var retried = new UniTaskCompletionSource<LaunchChoice.Room>();
             _create.BackChosen.Advise(lifetime, _ => _restarter.ReturnToMenu());
-            _create.PortChosen.Advise(lifetime, port => retried.TrySetResult(port));
+            _create.RoomChosen.Advise(lifetime, room => retried.TrySetResult(room));
             _create.ShowBusy(busyPort);
             return retried.Task;
         }

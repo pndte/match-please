@@ -7,12 +7,18 @@ namespace Bw.Entities.Network
         public readonly string Nickname;
         public readonly int CharacterKey;
         public readonly Guid Token;
+        public readonly Guid HostKey;
 
-        public ConnectionRequest(string nickname, int characterKey, Guid token)
+        public ConnectionRequest(
+            string nickname,
+            int characterKey,
+            Guid token,
+            Guid hostKey)
         {
             Nickname = nickname;
             CharacterKey = characterKey;
             Token = token;
+            HostKey = hostKey;
         }
     }
 }

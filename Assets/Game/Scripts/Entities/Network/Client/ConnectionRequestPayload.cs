@@ -12,7 +12,10 @@ namespace Bw.Entities.Network
 
         public static byte[] Of(ConnectionRequest request) =>
             Encoding.UTF8.GetBytes(
-                request.CharacterKey.ToString(CultureInfo.InvariantCulture) + Separator + request.Token.ToString(TokenFormat) + Separator + request.Nickname);
+                request.CharacterKey.ToString(CultureInfo.InvariantCulture)
+                + Separator + request.Token.ToString(TokenFormat)
+                + Separator + request.HostKey.ToString(TokenFormat)
+                + Separator + request.Nickname);
 
         public static bool TryRead(byte[] payload, out ConnectionRequest request)
         {
@@ -26,12 +29,26 @@ namespace Bw.Entities.Network
                 return false;
 
             var tokenStart = keyEnd + Separator.Length;
-            var tokenEnd = text.IndexOf(Separator, tokenStart, StringComparison.Ordinal);
-            if (tokenEnd < 0 || !Guid.TryParseExact(text.Substring(tokenStart, tokenEnd - tokenStart), TokenFormat, out var token))
+            if (!TryReadGuid(text, tokenStart, out var token, out var tokenEnd))
                 return false;
 
-            request = new ConnectionRequest(text.Substring(tokenEnd + Separator.Length), key, token);
+            var hostKeyStart = tokenEnd + Separator.Length;
+            if (!TryReadGuid(text, hostKeyStart, out var hostKey, out var hostKeyEnd))
+                return false;
+
+            request = new ConnectionRequest(text.Substring(hostKeyEnd + Separator.Length), key, token, hostKey);
             return true;
+        }
+
+        private static bool TryReadGuid(
+            string text,
+            int start,
+            out Guid guid,
+            out int end)
+        {
+            guid = default;
+            end = text.IndexOf(Separator, start, StringComparison.Ordinal);
+            return end >= 0 && Guid.TryParseExact(text.Substring(start, end - start), TokenFormat, out guid);
         }
     }
 }

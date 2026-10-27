@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: ccc31f90b0756a4499eeb38d40746a9f
   m_SerializeEntries:
+  - m_GUID: 004d7aaefc9339e45a8f553e6468066d
+    m_Address: Assets/Game/Content/Bots/Personalities/Evasive.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 01117806cb1f2ff46ad99329bdd08826
     m_Address: Assets/Game/Prefabs/Vfx/BloodBurst.prefab
     m_ReadOnly: 0
@@ -212,6 +217,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 23d4a4c6fb5e1a0419b8de6e9bec2d58
+    m_Address: Assets/Game/Content/Bots/Personalities/Marksman.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 24f8c767fbe7f114193bc5a6f77967c7
     m_Address: Assets/Game/Prefabs/Character/CharacterVariants/GOSHAK.prefab
     m_ReadOnly: 0
@@ -224,6 +234,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 261aa6427960c4d4c94fa9b17d2e29e0
     m_Address: Assets/Game/Audio/Footsteps/Grass/LandGrass_02.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 267c2c94538360d41b9d4d41a1e4eb86
+    m_Address: Assets/Game/Content/Bots/Personalities/Cautious.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -315,6 +330,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 345704b1ad4d50e41a15480428631f7e
     m_Address: Assets/Game/UI/Menu/Backdrop.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3673cb4cc2e8e564cbf7ba7d1cfcd0cc
+    m_Address: Assets/Game/Content/Bots/BotPresetLooksConfig.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -481,6 +501,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 50bd76907abd45142a6c624c60fb2616
     m_Address: Assets/Game/Audio/Weapons/Pistol/PistolShot_01.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50f03fcd75abc07419bc3af5aed07240
+    m_Address: Assets/Game/Content/Bots/RoomBotsConfig.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -769,6 +794,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 88fb5d8307215d04e826f84e93b2ff4a
+    m_Address: Assets/Game/Content/Bots/Personalities/Berserker.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 891e7919073767242a08fedaed502991
     m_Address: Assets/Game/Content/Setup/Audio/SoundSettings.asset
     m_ReadOnly: 0
@@ -930,6 +960,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a4c328612610e084fb21b06e2a935650
+    m_Address: Assets/Game/Content/Bots/BotPresetCatalog.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a51c584712cf59c4f889ccb5a8573018
     m_Address: Assets/Game/Content/Weapons/FistsCameraKickConfig.asset
     m_ReadOnly: 0
@@ -943,6 +978,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a58d7c5426427e54a8ed49995a9910e6
     m_Address: Assets/Game/Prefabs/Level/Platform.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a709ffde581b2fc42bfb004175fc9f9c
+    m_Address: Assets/Game/Content/Setup/Room/RoomLevelsConfig.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -1218,6 +1258,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d4ee4d956179eba488126e87b73f3f87
+    m_Address: Assets/Game/Content/Bots/Personalities/Hunter.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d874a73f2f7a0f445b18a7b895f397d7
     m_Address: Assets/Game/UI/Menu/ConnectingWindow.uxml
     m_ReadOnly: 0
@@ -1407,6 +1452,12 @@ MonoBehaviour:
     m_Address: Assets/Game/Content/Characters/GOSHAKRigLook.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fbca8bf4fd4401d4f986521495fda1b8
+    m_Address: Assets/Game/Content/Setup/Room/RoomContent.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - settings
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fbe1bccac56db0b4483288774463003c
     m_Address: Assets/Game/Audio/Props/PropThrow_03.wav

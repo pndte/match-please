@@ -12,7 +12,8 @@
         "Unity.Netcode.Runtime",
         "Bw.UseCases.Character.Network",
         "Bw.UseCases.Movement.Network",
-        "Bw.UseCases.Combat.Abstractions"
+        "Bw.UseCases.Combat.Abstractions",
+        "Bw.CoreAdapters"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

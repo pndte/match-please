@@ -82,7 +82,7 @@ namespace Bw.Tests.UseCases.Spawning.Network
         }
 
         private NetworkPrefabHandlerFactory Factory(PeerType peer) =>
-            new(_lifetime.Lifetime, new DiContainer(), new Pools(_instance), new RuntimeSettings(peer), WeaponPrefabKinds.Of(_catalog, new[] { _prefab }), _kinds);
+            new(_lifetime.Lifetime, new DiContainer(), new Pools(_instance), new RuntimeSettings(peer, "Test"), WeaponPrefabKinds.Of(_catalog, new[] { _prefab }), _kinds);
 
         private NetworkObject PooledObject(string name)
         {

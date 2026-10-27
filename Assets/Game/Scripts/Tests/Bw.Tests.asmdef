@@ -63,7 +63,9 @@
         "Zenject-TestFramework",
         "Unity.Addressables",
         "Unity.Addressables.Editor",
-        "Unity.ResourceManager"
+        "Unity.ResourceManager",
+        "Bw.UseCases.Bots.View",
+        "Bw.CoreAdapters.Bots"
     ],
     "includePlatforms": [
         "Editor"

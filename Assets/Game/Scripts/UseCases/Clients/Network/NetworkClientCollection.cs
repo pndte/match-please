@@ -16,6 +16,7 @@ namespace Bw.UseCases.Clients.Network
         public IViewableBiMap<ulong, IClient> ByIds { get; }
 
         private readonly CharacterCatalog _characters;
+        private readonly string _level;
         private readonly Dictionary<ulong, ConnectionRequest> _requests = new();
 
         private NetworkClientCollection(
@@ -25,6 +26,7 @@ namespace Bw.UseCases.Clients.Network
             CharacterCatalog characters)
         {
             _characters = characters;
+            _level = runtimeSettings.Level;
             ByIds = new ViewableBiMap<ulong, IClient>(lifetime);
             if (runtimeSettings.CurrentPeerType != PeerType.Server)
             {
@@ -42,6 +44,13 @@ namespace Bw.UseCases.Clients.Network
 
         private void Approve(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
         {
+            if (LevelQuery.IsAsked(request.Payload))
+            {
+                response.Approved = false;
+                response.Reason = LevelQuery.Answer(_level);
+                return;
+            }
+
             _requests[request.ClientNetworkId] = Accepted(request.Payload);
             response.Approved = true;
             response.CreatePlayerObject = false;
@@ -71,7 +80,7 @@ namespace Bw.UseCases.Clients.Network
 
         private ConnectionRequest Accepted(byte[] payload) =>
             ConnectionRequestPayload.TryRead(payload, out var requested)
-                ? new ConnectionRequest(NicknameRules.Accepted(requested.Nickname), _characters.Accepted(requested.CharacterKey).Key, requested.Token)
-                : new ConnectionRequest(NicknameRules.Fallback, _characters.DefaultCharacter().Key, Guid.NewGuid());
+                ? new ConnectionRequest(NicknameRules.Accepted(requested.Nickname), _characters.Accepted(requested.CharacterKey).Key, requested.Token, requested.HostKey)
+                : new ConnectionRequest(NicknameRules.Fallback, _characters.DefaultCharacter().Key, Guid.NewGuid(), Guid.Empty);
     }
 }

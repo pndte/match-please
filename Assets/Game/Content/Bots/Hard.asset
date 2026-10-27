@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 194d88aa0e0c93147b90c447bd8122bf, type: 3}
   m_Name: Hard
   m_EditorClassIdentifier: Bw.UseCases.Bots::Bw.UseCases.Bots.BotDifficultyConfig
+  _key: 10
   Brain: 1
   Moving: 1
   Hostile: 1

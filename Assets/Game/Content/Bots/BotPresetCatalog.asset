@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e3803741f1dd5428a539a27d3415f4, type: 3}
+  m_Name: BotPresetCatalog
+  m_EditorClassIdentifier: Bw.UseCases.Bots::Bw.UseCases.Bots.BotPresetCatalog
+  Difficulties:
+  - {fileID: 11400000, guid: 5f3de78017bc14845986f35008e5b13a, type: 2}
+  - {fileID: 11400000, guid: d16c951d4b5099440917bbf6a3dce92a, type: 2}
+  - {fileID: 11400000, guid: 5cd6a27028da15a4087b5f6c9ee99f2f, type: 2}
+  - {fileID: 11400000, guid: c1234bfcc6899a14f8b28e803096e4b4, type: 2}
+  Personalities:
+  - {fileID: 11400000, guid: 88fb5d8307215d04e826f84e93b2ff4a, type: 2}
+  - {fileID: 11400000, guid: d4ee4d956179eba488126e87b73f3f87, type: 2}
+  - {fileID: 11400000, guid: 267c2c94538360d41b9d4d41a1e4eb86, type: 2}
+  - {fileID: 11400000, guid: 004d7aaefc9339e45a8f553e6468066d, type: 2}
+  - {fileID: 11400000, guid: 23d4a4c6fb5e1a0419b8de6e9bec2d58, type: 2}
+  DefaultDifficulty: {fileID: 11400000, guid: 5cd6a27028da15a4087b5f6c9ee99f2f, type: 2}

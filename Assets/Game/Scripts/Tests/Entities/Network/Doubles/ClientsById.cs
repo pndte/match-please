@@ -18,7 +18,7 @@ namespace Bw.Tests.Entities.Network.Doubles
 
         public Client Connect(ulong id, System.Guid token, string nickname = "Саня")
         {
-            var client = new Client(new ConnectionRequest(nickname, 1, token));
+            var client = new Client(new ConnectionRequest(nickname, 1, token, System.Guid.Empty));
             ByIds.Add(id, client);
             return client;
         }

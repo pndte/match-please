@@ -16,9 +16,9 @@ namespace Setup.Launch
             System.Environment.GetCommandLineArgs()[0];
 #endif
 
-        public static void Open(Lifetime lifetime, ushort port)
+        public static void Open(Lifetime lifetime, LaunchChoice.Server room)
         {
-            var server = Process.Start(new ProcessStartInfo(Executable, ArgumentsFor(port))
+            var server = Process.Start(new ProcessStartInfo(Executable, ArgumentsFor(room))
             {
                 UseShellExecute = false,
                 CreateNoWindow = true
@@ -38,10 +38,10 @@ namespace Setup.Launch
             }
         }
 
-        private static string ArgumentsFor(ushort port)
+        private static string ArgumentsFor(LaunchChoice.Server room)
         {
             using var owner = Process.GetCurrentProcess();
-            return $"-batchmode -nographics {LaunchArguments.Of(new LaunchChoice.Server(port))} {LaunchArguments.Owner} {owner.Id} -logFile \"{LogOf(port)}\"";
+            return $"-batchmode -nographics {LaunchArguments.Of(room)} {LaunchArguments.Owner} {owner.Id} -logFile \"{LogOf(room.Port)}\"";
         }
     }
 }

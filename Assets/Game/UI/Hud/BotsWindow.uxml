@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Template name="BotRow" src="../Bots/BotRow.uxml" />
+    <Style src="../Kit.uss" />
+    <Style src="Hud.uss" />
+    <ui:VisualElement class="bots-dock" picking-mode="Ignore">
+        <ui:VisualElement name="bots" class="panel bots-window">
+            <ui:VisualElement class="bots-head">
+                <ui:Label text="Боты" class="bots-window__title" />
+                <ui:Label name="bots-count" text="0" class="bots-count" />
+                <ui:Label text="из 8 · B — закрыть" class="hint bots-count" />
+            </ui:VisualElement>
+            <ui:Instance template="BotRow" name="bot-sample" />
+            <ui:VisualElement name="bot-rows" class="bots-rows" />
+            <ui:Button name="add-bot" text="Добавить бота" class="chip bot-row__choice bot-add" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -19,7 +19,7 @@ namespace Bw.Tests.Entities.Network
         {
             _lifetime = new LifetimeDefinition();
             _drivers = new PlayerDrivers();
-            _client = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()));
+            _client = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid(), System.Guid.Empty));
             _human = new Player("Саня");
             _bot = new Player("Гошак");
         }
@@ -72,7 +72,7 @@ namespace Bw.Tests.Entities.Network
         public void ClientWithoutAPlayerThrows()
         {
             _drivers.AddClientDriven(_lifetime.Lifetime, _human, _client);
-            var stranger = new Client(new ConnectionRequest("Чужой", 2, System.Guid.NewGuid()));
+            var stranger = new Client(new ConnectionRequest("Чужой", 2, System.Guid.NewGuid(), System.Guid.Empty));
 
             Assert.Throws<InvalidOperationException>(() => _drivers.PlayerOf(stranger));
         }
@@ -145,7 +145,7 @@ namespace Bw.Tests.Entities.Network
         [Test]
         public void ReturningClientDrivesItsPlayerAgain()
         {
-            var returned = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()));
+            var returned = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid(), System.Guid.Empty));
             _drivers.AddClientDriven(_lifetime.Lifetime, _human, _client);
             _drivers.ChangeDriver(_human, PlayerDriver.Server);
 
@@ -168,7 +168,7 @@ namespace Bw.Tests.Entities.Network
         public void PlayerLeavingTheSessionFreesItsCurrentClient()
         {
             var session = new LifetimeDefinition();
-            var returned = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid()));
+            var returned = new Client(new ConnectionRequest("Саня", 3, System.Guid.NewGuid(), System.Guid.Empty));
             _drivers.AddClientDriven(session.Lifetime, _human, _client);
             _drivers.ChangeDriver(_human, PlayerDriver.Client(returned));
 

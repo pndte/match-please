@@ -7,7 +7,6 @@ namespace Bw.UseCases.Bots
     [CreateAssetMenu(fileName = "BotsConfig", menuName = "Configs/BotsConfig")]
     public sealed class BotsConfig : ScriptableObject
     {
-        public BotEntry[] Bots = Array.Empty<BotEntry>();
         public LayerMask SightBlockers = 1 << 14;
         public Vector2 SightHalfExtents = new(13f, 7.3f);
         public MeleeWeaponConfig Fists;

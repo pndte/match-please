@@ -11,7 +11,7 @@ namespace Setup.Launch.Menu
             var addresses = LocalAddresses.Read();
             if (addresses.Length == 0)
             {
-                var none = new Label("адрес не определился — посмотри его в Radmin VPN");
+                var none = new Label("адрес не определился — посмотри его в настройках сети");
                 none.AddToClassList("hint");
                 container.Add(none);
                 return;
@@ -28,13 +28,6 @@ namespace Setup.Launch.Menu
             var text = new Label(address);
             text.AddToClassList("chip__text");
             chip.Add(text);
-            if (LocalAddresses.IsRadmin(address))
-            {
-                var note = new Label("Radmin");
-                note.AddToClassList("chip__note");
-                chip.Add(note);
-            }
-
             var copy = new Button(() => GUIUtility.systemCopyBuffer = address);
             copy.AddToClassList("chip__copy");
             chip.Add(copy);
