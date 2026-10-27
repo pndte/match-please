@@ -7,13 +7,14 @@ using Bw.UseCases.Combat.Hands.Network.Requests;
 using Bw.UseCases.Mortality.Guarding;
 using Bw.UseCases.Movement.Network.Requests;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace Bw.Tests.UseCases.Character.Network
 {
     public sealed class CharacterControlsPolicyTests
     {
         private static readonly MovementControls CaughtUpMovement = new(-1f, true, true, true);
-        private static readonly HandsControls CaughtUpHands = new(90f, default, true, DrawControl.Last);
+        private static readonly HandsControls CaughtUpHands = new(new Vector2(0f, 9f), default, true, DrawControl.Last);
 
         private RecordedPolicy<MovementControls> _movement;
         private RecordedPolicy<HandsControls> _hands;
@@ -82,9 +83,9 @@ namespace Bw.Tests.UseCases.Character.Network
         [Test]
         public void CatchingUpHandsEachPartItsOwnInputsAndTheAge()
         {
-            var controls = new CharacterControls(new MovementControls(0.25f, false, false, false), Hands(10f), GuardStance.Lowered);
-            var last = new CharacterControls(new MovementControls(0.5f, false, false, false), Hands(20f), GuardStance.Lowered);
-            var heard = new CharacterControls(new MovementControls(0.75f, false, false, false), Hands(30f), GuardStance.Lowered);
+            var controls = new CharacterControls(new MovementControls(0.25f, false, false, false), Hands(Vector2.one), GuardStance.Lowered);
+            var last = new CharacterControls(new MovementControls(0.5f, false, false, false), Hands(Vector2.up), GuardStance.Lowered);
+            var heard = new CharacterControls(new MovementControls(0.75f, false, false, false), Hands(Vector2.left), GuardStance.Lowered);
 
             _policy.CaughtUp(controls, last, heard, 3);
 
@@ -105,8 +106,8 @@ namespace Bw.Tests.UseCases.Character.Network
             Assert.That(guard.Aim, Is.EqualTo(60f));
         }
 
-        private static HandsControls Hands(float aim) =>
-            new(aim, default, false, DrawControl.Keep);
+        private static HandsControls Hands(Vector2 aimPoint) =>
+            new(aimPoint, default, false, DrawControl.Keep);
 
         private sealed class RecordedPolicy<TInput> : IInputPolicy<TInput> where TInput : struct
         {

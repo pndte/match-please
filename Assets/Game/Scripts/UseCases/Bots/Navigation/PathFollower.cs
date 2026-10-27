@@ -10,7 +10,7 @@ namespace Bw.UseCases.Bots.Navigation
 {
     public sealed class PathFollower //TODO: лифты, подъёмник и патерностеры граф не знает: бот их не вызывает и не ждёт, а если платформа окажется на пути, ребро сорвётся и путь строится заново
     {
-        private const float Aligned = 0.01f;
+        private const float Aligned = 0.05f;
         private const float Resting = 0.01f;
         private const float PressedReach = 0.1f;
         private const float Stalled = 0.001f;

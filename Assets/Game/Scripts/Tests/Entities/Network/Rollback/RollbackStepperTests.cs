@@ -73,8 +73,8 @@ namespace Bw.Tests.Entities.Network.Rollback
                 "Prepare 10",
                 "diverged saved 9", "other saved 9",
                 "diverged restored 7", "other restored 7",
-                "Early 8", "physics", "Default 8", "Late 8", "diverged saved 8", "other saved 8",
-                "Early 9", "physics", "Default 9", "Late 9", "diverged saved 9", "other saved 9",
+                "Early 8", "physics", "Default 8", "Late 8", "diverged followed 8", "other followed 8", "diverged saved 8", "other saved 8",
+                "Early 9", "physics", "Default 9", "Late 9", "diverged followed 9", "other followed 9", "diverged saved 9", "other saved 9",
                 "Early 10", "physics", "Default 10", "Late 10",
                 "Publish 10"
             }));
@@ -253,6 +253,9 @@ namespace Bw.Tests.Entities.Network.Rollback
                 Saved.Add(tick);
                 _order.Add($"{_name} saved {tick}");
             }
+
+            public void Follow(int tick) =>
+                _order.Add($"{_name} followed {tick}");
 
             public void Restore(int tick)
             {

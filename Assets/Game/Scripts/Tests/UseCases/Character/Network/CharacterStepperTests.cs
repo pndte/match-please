@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Bw.Entities.Simulation;
 using Bw.Tests.UseCases.Character.Doubles;
+using Bw.Tests.UseCases.Combat.Weapon.Doubles;
 using Bw.UseCases.Character.Network;
 using Bw.UseCases.Character.Network.Requests;
 using Bw.UseCases.Combat.Hands;
@@ -39,7 +40,7 @@ namespace Bw.Tests.UseCases.Character.Network
             _order = new List<string>();
             _movement = new Recorded<MovementInput>(() => _order.Add($"movement with the trigger {_trigger.Current.Pulled}"));
             _hands = new Recorded<HandsInput>(() => _order.Add("hands"));
-            _stepper = new CharacterStepper(_trigger, _movement, _hands, new MovementControlsForm(_guard), new HandsControlsForm(_inventory));
+            _stepper = new CharacterStepper(_trigger, _movement, _hands, new MovementControlsForm(_guard), new HandsControlsForm(_inventory, new FakeHands()));
         }
 
         [TearDown]
@@ -82,9 +83,9 @@ namespace Bw.Tests.UseCases.Character.Network
         [Test]
         public void HandsStepByTheAimTriggerAndReload()
         {
-            _stepper.Step(new CharacterControls(Controls.Running, new HandsControls(75f, Controls.Firing.Trigger, true, DrawControl.Keep), GuardStance.Lowered));
+            _stepper.Step(new CharacterControls(Controls.Running, new HandsControls(new Vector2(0f, 2f), Controls.Firing.Trigger, true, DrawControl.Keep), GuardStance.Lowered));
 
-            Assert.That(_hands.Inputs[0].Weapon.Aim, Is.EqualTo(75f));
+            Assert.That(_hands.Inputs[0].Weapon.Aim, Is.EqualTo(90f).Within(1e-4f));
             Assert.That(_hands.Inputs[0].Weapon.Pulled, Is.True);
             Assert.That(_hands.Inputs[0].Weapon.ReloadPressed, Is.True);
             Assert.That(_hands.Inputs[0].Weapon.Guarded, Is.False);
@@ -102,7 +103,7 @@ namespace Bw.Tests.UseCases.Character.Network
         [Test]
         public void SlotChoiceDrawsTheSlotOfTheLayout()
         {
-            _stepper.Step(new CharacterControls(Controls.Running, new HandsControls(0f, default, false, DrawControl.ToSlot(1)), GuardStance.Lowered));
+            _stepper.Step(new CharacterControls(Controls.Running, new HandsControls(Vector2.right, default, false, DrawControl.ToSlot(1)), GuardStance.Lowered));
 
             Assert.That(_hands.Inputs[0].Choice, Is.EqualTo(DrawChoice.ToSlot(_inventory.Slots[1])));
         }

@@ -159,6 +159,19 @@ namespace Bw.Tests.Entities.Network.Variables
         }
 
         [Test]
+        public void ResultForAClientThatLeftBeforeThePublishIsDropped()
+        {
+            var recipient = _clients.Connect(7);
+            _spawned.Spawn();
+            _entries.ResultSender(_result).SendTo(recipient, 2);
+            _clients.Disconnect(7);
+
+            _worldStep.Fire(TickPhase.Publish, 10);
+
+            Assert.That(_senders.All.Where(sent => sent.Recipient == recipient), Is.Empty, "a client that left has no id to send to");
+        }
+
+        [Test]
         public void ResultsOfAnEndedSpawnAreNeverSent()
         {
             _spawned.Spawn();

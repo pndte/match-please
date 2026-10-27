@@ -9,9 +9,11 @@ namespace Bw.UseCases.Bots
     {
         public BotEntry[] Bots = Array.Empty<BotEntry>();
         public LayerMask SightBlockers = 1 << 14;
+        public Vector2 SightHalfExtents = new(13f, 7.3f);
         public MeleeWeaponConfig Fists;
         public BotDifficultyConfig StandIn;
         [Min(1f)] public float PropSearchRange = 12f;
+        [Min(0f)] public float RestingPropSpeed = 1f;
 
         [Header("Plan costs")]
         [Min(0.1f)] public float ShootCost = 1f;

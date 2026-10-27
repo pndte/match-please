@@ -7,6 +7,7 @@ using Bw.UseCases.Combat.Weapon.Network.Requests;
 using Bw.UseCases.Mortality.Guarding;
 using Bw.UseCases.Movement.Network.Requests;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace Bw.Tests.UseCases.Character.Network
 {
@@ -28,12 +29,12 @@ namespace Bw.Tests.UseCases.Character.Network
             yield return Case("JumpPressed", new MovementControls(running.Horizontal, true, running.JumpHeld, running.Down), hands, guard);
             yield return Case("JumpHeld", new MovementControls(running.Horizontal, running.JumpPressed, false, running.Down), hands, guard);
             yield return Case("Down", new MovementControls(running.Horizontal, running.JumpPressed, running.JumpHeld, true), hands, guard);
-            yield return Case("Aim", running, new HandsControls(31f, trigger, hands.ReloadPressed, hands.Choice), guard);
+            yield return Case("AimPoint", running, new HandsControls(hands.AimPoint + new Vector2(0f, 0.1f), trigger, hands.ReloadPressed, hands.Choice), guard);
             yield return Case("Pulled", running, Hands(new TriggerControls(false, trigger.ViewDelay, trigger.PredictedDelay, press)), guard);
             yield return Case("PressNumber", running, Hands(Pressed(new TriggerPress(5, press.Age, press.ViewDelay, press.PredictedDelay, press.Late))), guard);
             yield return Case("PressAge", running, Hands(Pressed(new TriggerPress(press.Number, 4, press.ViewDelay, press.PredictedDelay, press.Late))), guard);
-            yield return Case("Reload", running, new HandsControls(hands.Aim, trigger, true, hands.Choice), guard);
-            yield return Case("Choice", running, new HandsControls(hands.Aim, trigger, hands.ReloadPressed, DrawControl.ToSlot(2)), guard);
+            yield return Case("Reload", running, new HandsControls(hands.AimPoint, trigger, true, hands.Choice), guard);
+            yield return Case("Choice", running, new HandsControls(hands.AimPoint, trigger, hands.ReloadPressed, DrawControl.ToSlot(2)), guard);
             yield return Case("GuardRaised", running, hands, new GuardStance(false, guard.Aim));
             yield return Case("GuardAim", running, hands, new GuardStance(true, 46f));
         }
@@ -89,7 +90,7 @@ namespace Bw.Tests.UseCases.Character.Network
         private static HandsControls Hands(TriggerControls trigger)
         {
             var hands = Controls.Firing;
-            return new HandsControls(hands.Aim, trigger, hands.ReloadPressed, hands.Choice);
+            return new HandsControls(hands.AimPoint, trigger, hands.ReloadPressed, hands.Choice);
         }
 
         private static TriggerControls Pressed(TriggerPress press)

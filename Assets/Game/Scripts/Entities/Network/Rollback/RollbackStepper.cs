@@ -84,6 +84,9 @@ namespace Bw.Entities.Network.Rollback
             {
                 Step(replayed);
                 for (var index = 0; index < _reconciled.Count; index++)
+                    _reconciled[index].Follow(replayed);
+
+                for (var index = 0; index < _reconciled.Count; index++)
                     _reconciled[index].Save(replayed);
             }
         }

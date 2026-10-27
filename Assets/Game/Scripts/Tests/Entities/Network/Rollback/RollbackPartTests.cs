@@ -115,6 +115,70 @@ namespace Bw.Tests.Entities.Network.Rollback
         }
 
         [Test]
+        public void GuessesSavedBeforeTheFirstServerStateAreNotRestoredAfterIt()
+        {
+            _part.Save(1);
+            _server.Record(3, 9);
+            _state.Simulate(9);
+            _part.Save(2);
+
+            _part.Restore(1);
+
+            Assert.That(_state.Applied, Is.EqualTo(new[] { 9 }));
+        }
+
+        [Test]
+        public void GuessesSavedWhileTheServerStatesWereForgottenAreNotRestoredAfterTheNextOne()
+        {
+            _server.Record(1, 5);
+            _state.Simulate(5);
+            _part.Save(1);
+            _server.Clear();
+            _state.Simulate(0);
+            _part.Save(2);
+            _server.Record(4, 9);
+            _state.Simulate(9);
+            _part.Save(3);
+
+            _part.Restore(2);
+
+            Assert.That(_state.Applied, Is.EqualTo(new[] { 9 }));
+        }
+
+        [Test]
+        public void FollowTakesTheServerStateOfItsTick()
+        {
+            _server.Record(3, 9);
+            _state.Simulate(5);
+
+            _part.Follow(3);
+
+            Assert.That(_state.Applied, Is.EqualTo(new[] { 9 }));
+        }
+
+        [Test]
+        public void FollowWithoutAServerStateKeepsThePrediction()
+        {
+            _server.Record(2, 9);
+            _state.Simulate(5);
+
+            _part.Follow(3);
+
+            Assert.That(_state.Applied, Is.Empty);
+        }
+
+        [Test]
+        public void FollowOfAnAgreeingServerStateChangesNothing()
+        {
+            _server.Record(3, 5);
+            _state.Simulate(5);
+
+            _part.Follow(3);
+
+            Assert.That(_state.Applied, Is.Empty);
+        }
+
+        [Test]
         public void RestoreWithNothingKnownKeepsTheCurrentState()
         {
             _state.Simulate(7);

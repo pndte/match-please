@@ -35,25 +35,28 @@ namespace Bw.UseCases.Spawning.Network
             _kinds = kinds;
         }
 
-        public INetworkPrefabInstanceHandler Create(GameObject prefab)
+        public INetworkPrefabInstanceHandler Create(GameObject prefab) =>
+            _runtimeSettings.CurrentPeerType switch
+            {
+                PeerType.Server => ServerHandler(prefab),
+                PeerType.Client => ClientHandler(prefab),
+                _ => throw new ArgumentOutOfRangeException(nameof(_runtimeSettings.CurrentPeerType), _runtimeSettings.CurrentPeerType, null),
+            };
+
+        private INetworkPrefabInstanceHandler ServerHandler(GameObject prefab) =>
+            IsPooled(prefab) ? new PoolSpawnedNetworkPrefabHandler(prefab) : new NetworkPrefabHandler(_container, prefab);
+
+        private INetworkPrefabInstanceHandler ClientHandler(GameObject prefab)
         {
-            var handler = Instantiating(prefab);
+            INetworkPrefabInstanceHandler handler = IsPooled(prefab)
+                ? new PooledNetworkPrefabHandler(_lifetime, _pools.For<NetworkObject>(prefab))
+                : new NetworkPrefabHandler(_container, prefab);
             return _prefabKinds.ByPrefab.TryGetValue(prefab, out var kind)
                 ? new KindRegisteringPrefabHandler(_lifetime, handler, kind, _kinds)
                 : handler;
         }
 
-        private INetworkPrefabInstanceHandler Instantiating(GameObject prefab)
-        {
-            if (!prefab.TryGetComponent<PooledNetworkObject>(out _))
-                return new NetworkPrefabHandler(_container, prefab);
-
-            return _runtimeSettings.CurrentPeerType switch
-            {
-                PeerType.Server => new PoolSpawnedNetworkPrefabHandler(prefab),
-                PeerType.Client => new PooledNetworkPrefabHandler(_lifetime, _pools.For<NetworkObject>(prefab)),
-                _ => throw new ArgumentOutOfRangeException(nameof(_runtimeSettings.CurrentPeerType), _runtimeSettings.CurrentPeerType, null),
-            };
-        }
+        private static bool IsPooled(GameObject prefab) =>
+            prefab.TryGetComponent<PooledNetworkObject>(out _);
     }
 }

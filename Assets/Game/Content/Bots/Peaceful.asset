@@ -15,7 +15,6 @@ MonoBehaviour:
   Brain: 1
   Moving: 0
   Hostile: 0
-  SightRange: 22
   ReactionTime: 0.6
   MemoryTime: 3
   AimError: 7

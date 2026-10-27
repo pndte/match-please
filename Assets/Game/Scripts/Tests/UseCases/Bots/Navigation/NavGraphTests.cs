@@ -115,6 +115,26 @@ namespace Bw.Tests.UseCases.Bots.Navigation
         }
 
         [Test]
+        public void NodeBelowIsTheNearestNodeNotAboveTheFeet()
+        {
+            var graph = _graphs.Graph(new[] { new Vector2(0f, 0f), new Vector2(3f, 0f), new Vector2(0f, 4f) });
+
+            Assert.That(graph.TryFindNodeBelow(new Vector2(0.3f, 1f), out var onCrate), Is.True);
+            Assert.That(onCrate, Is.Zero);
+            Assert.That(graph.TryFindNodeBelow(new Vector2(1f, 4.5f), out var upstairs), Is.True);
+            Assert.That(upstairs, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void NodeAboveTheFeetIsNoNodeBelow()
+        {
+            var graph = _graphs.Graph(new[] { new Vector2(0f, 5f) });
+
+            Assert.That(graph.TryFindNodeBelow(Vector2.zero, out var node), Is.False);
+            Assert.That(node, Is.EqualTo(-1));
+        }
+
+        [Test]
         public void NearestNodeIsFoundInAnyDirection()
         {
             var graph = _graphs.Graph(new[] { new Vector2(0f, 0f), new Vector2(10f, 0f), new Vector2(0f, 4f) });

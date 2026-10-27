@@ -22,6 +22,7 @@ namespace Bw.UseCases.Bots.Senses
         private readonly IGameObjectByCharacterCollection _characters;
         private readonly PhysicsWorld _world;
         private readonly PhysicsQuery.QueryFilter _blockers;
+        private readonly Vector2 _frame;
         private readonly BotDifficultyConfig _config;
         private readonly ISimulationStep _step;
 
@@ -37,6 +38,7 @@ namespace Bw.UseCases.Bots.Senses
             _characters = characters;
             _world = space.World;
             _blockers = new PhysicsQuery.QueryFilter(PhysicsMask.All, bots.SightBlockers.AsPhysicsMask());
+            _frame = bots.SightHalfExtents;
             _config = config;
             _step = step;
         }
@@ -53,7 +55,7 @@ namespace Bw.UseCases.Bots.Senses
                     continue;
 
                 var position = (Vector2)pair.Value.transform.position;
-                var visible = (position - eye).sqrMagnitude <= _config.SightRange * _config.SightRange && IsClear(eye, position);
+                var visible = IsInFrame(position - eye) && IsClear(eye, position);
                 var index = IndexOf(sightings, character);
                 if (index >= 0)
                     sightings[index] = visible ? sightings[index].Seen(position, reaction) : sightings[index].Unseen();
@@ -77,6 +79,9 @@ namespace Bw.UseCases.Bots.Senses
 
             return kept;
         }
+
+        private bool IsInFrame(Vector2 offset) =>
+            Mathf.Abs(offset.x) <= _frame.x && Mathf.Abs(offset.y) <= _frame.y;
 
         private bool IsClear(Vector2 from, Vector2 to)
         {

@@ -1,3 +1,5 @@
+using Bw.Entities.Extensions;
+using Bw.Entities.Network.Objects;
 using Bw.Entities.Network.Rollback;
 using Bw.Entities.Network.Ticks;
 using Bw.UseCases.Combat.Abstractions.Inventory;
@@ -18,6 +20,7 @@ namespace Bw.UseCases.Combat.Shooting.Network
 
         public UnheldWeaponDespawner( //TODO: чрезвычайное к-во параметров
             Lifetime lifetime,
+            INetworkLifetimedObject networkLifetimed,
             IWeapon weapon,
             IReadonlyWeaponCarriers carriers,
             INetworkTicks ticks,
@@ -30,7 +33,8 @@ namespace Bw.UseCases.Combat.Shooting.Network
             _config = config;
             _networkObject = networkObject;
 
-            carriers.ViewUncarried(lifetime, weapon, DespawnLater);
+            networkLifetimed.SpawnedLifetime.WhenAlive(lifetime, spawnedLifetime =>
+                carriers.ViewUncarried(spawnedLifetime, weapon, DespawnLater));
         }
 
         private void DespawnLater(Lifetime uncarriedLifetime)

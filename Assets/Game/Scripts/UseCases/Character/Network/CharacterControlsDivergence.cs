@@ -20,7 +20,7 @@ namespace Bw.UseCases.Character.Network
             || guessed.Down != relayed.Down;
 
         private static bool Diverged(HandsControls guessed, HandsControls relayed) =>
-            !guessed.Aim.Equals(relayed.Aim)
+            !guessed.AimPoint.Equals(relayed.AimPoint)
             || guessed.Trigger.Pulled != relayed.Trigger.Pulled
             || guessed.Trigger.Press.Number != relayed.Trigger.Press.Number
             || guessed.Trigger.Press.Age != relayed.Trigger.Press.Age

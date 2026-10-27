@@ -8,13 +8,14 @@ namespace Bw.UseCases.Combat.Hands.Network
     public sealed class CursorAim
     {
         private const float MinAimDistance = 0.01f;
+        private const float MinAimReach = 1.5f;
 
         private readonly CursorPoint _cursor;
         private readonly IReadonlyHands _hands;
         private readonly IAimDeflections _deflections;
         private readonly Transform _character;
 
-        private float _aim;
+        private Vector2 _toCursor = Vector2.right;
 
         public CursorAim(
             CursorPoint cursor,
@@ -28,13 +29,15 @@ namespace Bw.UseCases.Combat.Hands.Network
             _character = character;
         }
 
-        public float Sample()
+        public Vector2 Sample()
         {
-            var target = (Vector2)_character.InverseTransformPoint(_cursor.World);
-            if (target.sqrMagnitude > MinAimDistance * MinAimDistance)
-                _aim = Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg;
+            var center = (Vector2)_character.position;
+            var toCursor = _cursor.World - center;
+            if (toCursor.sqrMagnitude > MinAimDistance * MinAimDistance)
+                _toCursor = toCursor;
 
-            return Mathf.DeltaAngle(0f, _aim + Deflection());
+            var direction = (Vector2)(Quaternion.Euler(0f, 0f, Deflection()) * _toCursor.normalized);
+            return center + direction * Mathf.Max(_toCursor.magnitude, MinAimReach);
         }
 
         private float Deflection() =>

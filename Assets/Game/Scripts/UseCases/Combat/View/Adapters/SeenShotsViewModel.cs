@@ -64,23 +64,21 @@ namespace Bw.UseCases.Combat.View.Adapters
 
         private void See(float aim)
         {
-            var ray = Shifted(_tracer.Aim(aim), _views.ShownOffset(_inHands.HolderOf(_weapon)));
+            var ray = _tracer.Aim(aim);
+            var shown = _views.ShownOffset(_inHands.HolderOf(_weapon));
             var pellets = new PelletTrace[_tracer.Pellets];
             for (var pellet = 0; pellet < pellets.Length; pellet++)
-                pellets[pellet] = TraceOf(_tracer.Pellet(ray, pellet));
+                pellets[pellet] = TraceOf(_tracer.Pellet(ray, pellet), shown);
 
             _seen.Fire(new SeenShot(ray.Direction, pellets));
         }
 
-        private static ShotRay Shifted(ShotRay ray, Vector2 offset) =>
-            new(ray.Pivot + offset, ray.Muzzle + offset, ray.Direction);
-
-        private PelletTrace TraceOf(ShotRay ray)
+        private PelletTrace TraceOf(ShotRay ray, Vector2 shown)
         {
             var trace = _tracer.Cast(ray);
             return trace.IsStruck
-                ? new PelletTrace(trace.From, trace.To, ray.Direction, EndOf(trace), trace.Normal, trace.Shape.Layer())
-                : new PelletTrace(trace.From, trace.To, ray.Direction, PelletEnd.Missed, Vector2.zero, 0);
+                ? new PelletTrace(trace.From + shown, trace.To, ray.Direction, EndOf(trace), trace.Normal, trace.Shape.Layer())
+                : new PelletTrace(trace.From + shown, trace.To, ray.Direction, PelletEnd.Missed, Vector2.zero, 0);
         }
 
         private PelletEnd EndOf(ShotTrace trace) =>

@@ -52,12 +52,12 @@ namespace Bw.Tests.UseCases.Combat.Hands.Network
             Assert.That(_policy.IsValid(Choosing(new DrawControl(kind, (sbyte)value))), Is.False);
         }
 
-        [TestCase(float.NaN)]
-        [TestCase(float.PositiveInfinity)]
-        [TestCase(float.NegativeInfinity)]
-        public void BrokenAimIsInvalid(float aim)
+        [TestCase(float.NaN, 0f)]
+        [TestCase(0f, float.PositiveInfinity)]
+        [TestCase(float.NegativeInfinity, 1f)]
+        public void BrokenAimPointIsInvalid(float x, float y)
         {
-            Assert.That(_policy.IsValid(new HandsControls(aim, default, false, DrawControl.Keep)), Is.False);
+            Assert.That(_policy.IsValid(new HandsControls(new Vector2(x, y), default, false, DrawControl.Keep)), Is.False);
         }
 
         [TestCase(0)]
@@ -74,17 +74,17 @@ namespace Bw.Tests.UseCases.Combat.Hands.Network
                 _ => new TriggerControls(true, 0f, 0f, new TriggerPress(1, 0, 0f, float.NegativeInfinity, 0))
             };
 
-            Assert.That(_policy.IsValid(new HandsControls(0f, trigger, false, DrawControl.Keep)), Is.False);
+            Assert.That(_policy.IsValid(new HandsControls(Vector2.right, trigger, false, DrawControl.Keep)), Is.False);
         }
 
         [Test]
         public void LateInputKeepsItsOwnAimReloadAndChoice()
         {
-            var controls = new HandsControls(45f, new TriggerControls(false, 0f, 0f, Press(4, 0)), true, DrawControl.Last);
+            var controls = new HandsControls(new Vector2(4f, 4f), new TriggerControls(false, 0f, 0f, Press(4, 0)), true, DrawControl.Last);
 
             var caughtUp = _policy.CaughtUp(controls, Controls(Press(4, 2)), Controls(Press(4, 1)), 2);
 
-            Assert.That(caughtUp.Aim, Is.EqualTo(45f));
+            Assert.That(caughtUp.AimPoint, Is.EqualTo(new Vector2(4f, 4f)));
             Assert.That(caughtUp.ReloadPressed, Is.True);
             Assert.That(caughtUp.Choice, Is.EqualTo(DrawControl.Last));
         }
@@ -92,7 +92,7 @@ namespace Bw.Tests.UseCases.Combat.Hands.Network
         [Test]
         public void PressAlreadyKnownOnlyAgesByATick()
         {
-            var controls = new HandsControls(0f, new TriggerControls(true, 1f, 1f, Press(4, 0)), false, DrawControl.Keep);
+            var controls = new HandsControls(Vector2.right, new TriggerControls(true, 1f, 1f, Press(4, 0)), false, DrawControl.Keep);
 
             var caughtUp = _policy.CaughtUp(controls, Controls(Press(4, 6)), Controls(Press(4, 1)), 2);
 
@@ -147,10 +147,10 @@ namespace Bw.Tests.UseCases.Combat.Hands.Network
         }
 
         private static HandsControls Choosing(DrawControl choice) =>
-            new(0f, default, false, choice);
+            new(Vector2.right, default, false, choice);
 
         private static HandsControls Controls(TriggerPress press) =>
-            new(0f, new TriggerControls(false, 0f, 0f, press), false, DrawControl.Keep);
+            new(Vector2.right, new TriggerControls(false, 0f, 0f, press), false, DrawControl.Keep);
 
         private static TriggerPress Press(byte number, byte age) =>
             new(number, age, 1f, 1f, 0);

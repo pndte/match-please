@@ -83,6 +83,24 @@ namespace Bw.UseCases.Bots.Navigation
             return node >= 0;
         }
 
+        public bool TryFindNodeBelow(Vector2 position, out int node)
+        {
+            node = -1;
+            var closest = float.MaxValue;
+            for (var index = 0; index < _nodes.Length; index++)
+            {
+                var delta = _nodes[index] - position;
+                var distance = delta.sqrMagnitude;
+                if (delta.y > StandingHeight || distance >= closest)
+                    continue;
+
+                closest = distance;
+                node = index;
+            }
+
+            return node >= 0;
+        }
+
         public int NearestNode(Vector2 position)
         {
             var nearest = 0;

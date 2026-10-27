@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Bw.UseCases.Character.Network
 {
-    public sealed class GuardStanceSampler
+    public sealed class GuardStanceSampler //TODO: угол стойки считается от нарисованного тела, а блок ставится у тела в симуляции: на бегу и в прыжке он уходит от курсора на несколько градусов, как раньше уходил выстрел
     {
         private readonly GuardKey _key;
         private readonly CursorPoint _cursor;

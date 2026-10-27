@@ -50,7 +50,7 @@ namespace Bw.UseCases.Bots.Senses
             for (var index = 0; index < found.Length; index++)
             {
                 var shape = found[index].shape;
-                if (!shape.TryGetComponent<IHolder<IWeapon>>(out var holder) || _carriers.ByWeapon.ContainsKey(holder.Value) || _kinds.KindOf(holder.Value) != WeaponKind.Prop)
+                if (!shape.TryGetComponent<IHolder<IWeapon>>(out var holder) || _carriers.ByWeapon.ContainsKey(holder.Value) || _kinds.KindOf(holder.Value) != WeaponKind.Prop || IsFlying(shape.body))
                     continue;
 
                 var center = shape.aabb.center;
@@ -67,5 +67,8 @@ namespace Bw.UseCases.Bots.Senses
 
         public bool IsPickable(PropSighting prop) =>
             (prop.Position - Position).sqrMagnitude <= _pickup.Reach * _pickup.Reach;
+
+        private bool IsFlying(PhysicsBody body) =>
+            body.linearVelocity.sqrMagnitude > _bots.RestingPropSpeed * _bots.RestingPropSpeed;
     }
 }

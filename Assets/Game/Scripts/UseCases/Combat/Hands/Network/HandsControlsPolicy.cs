@@ -22,14 +22,14 @@ namespace Bw.UseCases.Combat.Hands.Network
         }
 
         public bool IsValid(HandsControls controls) =>
-            float.IsFinite(controls.Aim) && controls.Trigger.IsFinite() && IsValid(controls.Choice);
+            float.IsFinite(controls.AimPoint.x) && float.IsFinite(controls.AimPoint.y) && controls.Trigger.IsFinite() && IsValid(controls.Choice);
 
         public HandsControls CaughtUp(
             HandsControls controls,
             HandsControls lastControls,
             HandsControls heard,
             int heardTicksAgo) =>
-            new(controls.Aim, CaughtUp(controls.Trigger, lastControls.Trigger, heard.Trigger, heardTicksAgo), controls.ReloadPressed, controls.Choice);
+            new(controls.AimPoint, CaughtUp(controls.Trigger, lastControls.Trigger, heard.Trigger, heardTicksAgo), controls.ReloadPressed, controls.Choice);
 
         private TriggerControls CaughtUp(
             TriggerControls trigger,

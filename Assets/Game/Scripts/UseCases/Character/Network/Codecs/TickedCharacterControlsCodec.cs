@@ -15,6 +15,7 @@ namespace Bw.UseCases.Character.Network.Codecs
     {
         private static readonly Quantization Axis = new(3);
         private static readonly Quantization Delay = new(8);
+        private static readonly Quantization Point = new(6);
 
         public TickedInput<CharacterControls> Value
         {
@@ -38,7 +39,7 @@ namespace Bw.UseCases.Character.Network.Codecs
             var jump = movement.JumpPressed;
             var jumpHeld = movement.JumpHeld;
             var down = movement.Down;
-            var aim = hands.Aim;
+            var aim = hands.AimPoint;
             var pulled = hands.Trigger.Pulled;
             var viewDelay = hands.Trigger.ViewDelay;
             var predictedDelay = hands.Trigger.PredictedDelay;
@@ -53,7 +54,7 @@ namespace Bw.UseCases.Character.Network.Codecs
             var previousJump = previousMovement.JumpPressed;
             var previousJumpHeld = previousMovement.JumpHeld;
             var previousDown = previousMovement.Down;
-            var previousAim = previousHands.Aim;
+            var previousAim = previousHands.AimPoint;
             var previousPulled = previousHands.Trigger.Pulled;
             var previousViewDelay = previousHands.Trigger.ViewDelay;
             var previousPredictedDelay = previousHands.Trigger.PredictedDelay;
@@ -87,7 +88,7 @@ namespace Bw.UseCases.Character.Network.Codecs
             serializer.SerializeQuantized(ref horizontal, Axis);
             serializer.SerializeQuantized(ref previousHorizontal, Axis);
 
-            serializer.SerializeAngle(ref aim);
+            serializer.SerializeQuantized(ref aim, Point);
             if (pulled)
             {
                 serializer.SerializeQuantized(ref viewDelay, Delay);
@@ -98,7 +99,7 @@ namespace Bw.UseCases.Character.Network.Codecs
             if (raised)
                 serializer.SerializeAngle(ref guardAim);
 
-            serializer.SerializeAngle(ref previousAim);
+            serializer.SerializeQuantized(ref previousAim, Point);
             if (previousPulled)
             {
                 serializer.SerializeQuantized(ref previousViewDelay, Delay);

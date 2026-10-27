@@ -11,8 +11,7 @@ namespace Bw.UseCases.Bots.Extensions
             Vector2 to,
             float offset)
         {
-            var toward = to - from;
-            gamepad.AimAt(Mathf.Atan2(toward.y, toward.x) * Mathf.Rad2Deg + offset);
+            gamepad.AimAt(from + (Vector2)(Quaternion.Euler(0f, 0f, offset) * (to - from)));
         }
     }
 }

@@ -22,5 +22,8 @@ namespace Bw.Tests.Entities.Network.Doubles
             ByIds.Add(id, client);
             return client;
         }
+
+        public void Disconnect(ulong id) =>
+            ByIds.Remove(id);
     }
 }

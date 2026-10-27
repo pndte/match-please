@@ -120,10 +120,13 @@ namespace Bw.Entities.Network.Variables
 
             void INetSyncVisitor.VisitSignal<T>(INetSignal<T> signal) =>
                 signal.PendingTarget.Switch(
-                    (Sender: _senders.Get<T>(), Header, Payload: signal.PendingPayload, Delivery: _slot.Declaration.DeliveryType),
+                    (Sender: _senders.Get<T>(), Clients: _clients, Header, Payload: signal.PendingPayload, Delivery: _slot.Declaration.DeliveryType),
                     untargeted: static message => message.Sender.Broadcast(message.Header, message.Payload, message.Delivery),
                     targeted: static (message, recipient) =>
-                        message.Sender.SendToClient(message.Header, message.Payload, message.Delivery, recipient));
+                    {
+                        if (message.Clients.IsConnected(recipient))
+                            message.Sender.SendToClient(message.Header, message.Payload, message.Delivery, recipient);
+                    });
         }
 
         private sealed class StateTo : INetSyncVisitor

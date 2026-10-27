@@ -1,12 +1,12 @@
 using Bw.UseCases.Bots.Abstractions;
 using Bw.UseCases.Bots.Navigation;
+using UnityEngine;
 
 namespace Bw.UseCases.Bots.Skills
 {
     public sealed class RoamSkill : IBotSkill
     {
-        private const float Forward = 0f;
-        private const float Backward = 180f;
+        private const float Ahead = 10f;
 
         public SkillStatus Status { get; private set; }
 
@@ -31,7 +31,7 @@ namespace Bw.UseCases.Bots.Skills
             _gamepad.PressReload();
             var horizontal = _gamepad.Movement.Horizontal;
             if (horizontal != 0f)
-                _gamepad.AimAt(horizontal > 0f ? Forward : Backward);
+                _gamepad.AimAt(perception.Eye + Vector2.right * (Mathf.Sign(horizontal) * Ahead));
 
             Status = _navigator.Status switch
             {

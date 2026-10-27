@@ -1,6 +1,7 @@
 using System;
 using Bw.Entities.Simulation;
 using Bw.UseCases.Bots.Abstractions;
+using Bw.UseCases.Bots.Extensions;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -39,9 +40,8 @@ namespace Bw.UseCases.Bots.Skills
                 throw new InvalidOperationException("The shoot skill aims at a target in sight: the brain runs it only while the bot sees one.");
 
             var time = _ticks++ * _step.Duration;
-            var toTarget = target.Position - perception.Eye;
             var error = (Mathf.PerlinNoise(_seed, time * _config.AimWander) * 2f - 1f) * _config.AimError;
-            _gamepad.AimAt(Mathf.Atan2(toTarget.y, toTarget.x) * Mathf.Rad2Deg + error);
+            _gamepad.AimAt(perception.Eye, target.Position, error);
             if (target.Visible && IsBursting(time))
                 _gamepad.PullTrigger();
         }

@@ -59,9 +59,12 @@ namespace Bw.UseCases.Bots.Navigation
             _heading = false;
         }
 
+        private bool TryFindStart(Vector2 position, out int node) =>
+            _graph.TryFindStandingNode(position, out node) || _graph.TryFindNodeBelow(position, out node);
+
         private bool TryHead(int destination)
         {
-            if (!_graph.TryFindStandingNode(_movement.State.Value.Body.Position, out var from) || !_pathfinder.TryFind(from, destination, _path))
+            if (!TryFindStart(_movement.State.Value.Body.Position, out var from) || !_pathfinder.TryFind(from, destination, _path))
                 return false;
 
             _follower.Follow(_path);

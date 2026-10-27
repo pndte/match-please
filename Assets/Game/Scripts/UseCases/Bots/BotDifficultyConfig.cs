@@ -10,7 +10,6 @@ namespace Bw.UseCases.Bots
         public bool Hostile = true;
 
         [Header("Sight")]
-        [Min(1f)] public float SightRange = 22f;
         [Min(0f)] public float ReactionTime = 0.5f;
         [Min(0f)] public float MemoryTime = 3f;
 

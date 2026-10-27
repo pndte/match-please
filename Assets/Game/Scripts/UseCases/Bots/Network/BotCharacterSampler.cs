@@ -26,7 +26,7 @@ namespace Bw.UseCases.Bots.Network
             return new CharacterControls(
                 new MovementControls(movement.Horizontal, movement.JumpPressed, movement.JumpHeld, movement.Down),
                 new HandsControls(
-                    _gamepad.Aim,
+                    _gamepad.AimPoint,
                     new TriggerControls(_gamepad.TriggerPulled, 0f, 0f, default),
                     _gamepad.ReloadPressed,
                     _hands.ControlOf(_gamepad.Choice)),

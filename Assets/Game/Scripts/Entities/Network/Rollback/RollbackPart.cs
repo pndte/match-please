@@ -11,6 +11,7 @@ namespace Bw.Entities.Network.Rollback
         private readonly IStateDivergence<TState> _divergence;
 
         private int _correctedTick = int.MinValue;
+        private int _heardSince = int.MaxValue;
 
         public RollbackPart(
             IRestorable<TState> state,
@@ -37,8 +38,17 @@ namespace Bw.Entities.Network.Rollback
             return false;
         }
 
-        public void Save(int tick) =>
+        public void Save(int tick)
+        {
+            Hear();
             _saved.Record(tick, _state.State.Value);
+        }
+
+        public void Follow(int tick)
+        {
+            if (_server.TryGetAt(tick, out var server) && _divergence.Diverged(_state.State.Value, server))
+                _state.Apply(server);
+        }
 
         public void Restore(int tick)
         {
@@ -76,12 +86,23 @@ namespace Bw.Entities.Network.Rollback
             return _saved.NewestTick > tick;
         }
 
+        private void Hear()
+        {
+            if (_server.NewestTick == int.MinValue)
+                _heardSince = int.MaxValue;
+            else if (_heardSince == int.MaxValue && _server.TryGetEarliest(int.MinValue, out var first, out _))
+                _heardSince = first;
+        }
+
         private TState StateAt(int tick)
         {
             if (_server.TryGetAt(tick, out var server))
                 return server;
 
-            return _saved.TryGetAt(tick, out var saved) ? saved : _state.State.Value;
+            return !Guessed(tick) && _saved.TryGetAt(tick, out var saved) ? saved : _state.State.Value;
         }
+
+        private bool Guessed(int tick) =>
+            _heardSince != int.MaxValue && tick < _heardSince;
     }
 }

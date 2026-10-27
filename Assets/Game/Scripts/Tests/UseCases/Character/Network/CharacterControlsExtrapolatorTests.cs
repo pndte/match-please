@@ -6,6 +6,7 @@ using Bw.UseCases.Combat.Weapon.Network.Requests;
 using Bw.UseCases.Mortality.Guarding;
 using Bw.UseCases.Movement.Network.Requests;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace Bw.Tests.UseCases.Character.Network
 {
@@ -87,7 +88,7 @@ namespace Bw.Tests.UseCases.Character.Network
         [Test]
         public void ReloadAndWeaponChoiceLiveOneTick()
         {
-            var last = new CharacterControls(Controls.Running, new HandsControls(10f, default, true, DrawControl.ToSlot(1)), GuardStance.Lowered);
+            var last = new CharacterControls(Controls.Running, new HandsControls(Vector2.one, default, true, DrawControl.ToSlot(1)), GuardStance.Lowered);
 
             var hands = _extrapolator.Continued(last, 1).Hands;
 
@@ -100,7 +101,7 @@ namespace Bw.Tests.UseCases.Character.Network
         {
             var last = Controls.RunningAndFiring;
 
-            Assert.That(_extrapolator.Continued(last, 3).Hands.Aim, Is.EqualTo(Controls.Firing.Aim));
+            Assert.That(_extrapolator.Continued(last, 3).Hands.AimPoint, Is.EqualTo(Controls.Firing.AimPoint));
         }
 
         [TestCase(true, 135f)]
@@ -116,6 +117,6 @@ namespace Bw.Tests.UseCases.Character.Network
         }
 
         private static HandsControls Hands(TriggerControls trigger) =>
-            new(30f, trigger, false, DrawControl.Keep);
+            new(new Vector2(3f, 1.75f), trigger, false, DrawControl.Keep);
     }
 }

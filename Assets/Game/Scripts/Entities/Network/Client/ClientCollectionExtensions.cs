@@ -8,5 +8,8 @@ namespace Bw.Entities.Network
             clients.ByIds.TryGetLeft(client, out var id)
                 ? id
                 : throw new InvalidOperationException($"Client '{client}' has no id: only a connected client is in the collection.");
+
+        public static bool IsConnected(this IClientCollection clients, IClient client) =>
+            clients.ByIds.TryGetLeft(client, out _);
     }
 }

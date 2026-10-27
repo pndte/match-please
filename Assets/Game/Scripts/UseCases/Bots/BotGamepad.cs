@@ -1,13 +1,14 @@
 using Bw.UseCases.Bots.Abstractions;
 using Bw.UseCases.Combat.Hands;
 using Bw.UseCases.Movement;
+using UnityEngine;
 
 namespace Bw.UseCases.Bots
 {
     public sealed class BotGamepad : IBotGamepad
     {
         public MovementInput Movement { get; private set; }
-        public float Aim { get; private set; }
+        public Vector2 AimPoint { get; private set; }
         public bool TriggerPulled { get; private set; }
         public bool ReloadPressed { get; private set; }
         public DrawChoice Choice { get; private set; } = DrawChoice.Keep;
@@ -23,8 +24,8 @@ namespace Bw.UseCases.Bots
         public void Steer(MovementInput input) =>
             Movement = input;
 
-        public void AimAt(float angle) =>
-            Aim = angle;
+        public void AimAt(Vector2 point) =>
+            AimPoint = point;
 
         public void PullTrigger() =>
             TriggerPulled = true;

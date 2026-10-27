@@ -15,7 +15,7 @@ namespace Bw.UseCases.Character.Network
             var hands = last.Hands;
             return new CharacterControls(
                 new MovementControls(movement.Horizontal, false, movement.JumpHeld, false),
-                new HandsControls(hands.Aim, Aged(hands.Trigger.WithoutFreshPress(), ticks), false, DrawControl.Keep),
+                new HandsControls(hands.AimPoint, Aged(hands.Trigger.WithoutFreshPress(), ticks), false, DrawControl.Keep),
                 last.Guard);
         }
 

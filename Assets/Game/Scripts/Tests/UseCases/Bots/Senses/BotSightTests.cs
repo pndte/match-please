@@ -27,7 +27,7 @@ namespace Bw.Tests.UseCases.Bots.Senses
             _world = new PhysicsTestWorld();
             _bots = ScriptableObject.CreateInstance<BotsConfig>();
             _difficulty = ScriptableObject.CreateInstance<BotDifficultyConfig>();
-            _difficulty.SightRange = 10f;
+            _bots.SightHalfExtents = new Vector2(10f, 5f);
             _difficulty.ReactionTime = 0.09f;
             _difficulty.MemoryTime = 0.19f;
             _characters = new GameObjectByCharacterCollection();
@@ -92,12 +92,23 @@ namespace Bw.Tests.UseCases.Bots.Senses
             Assert.That(sightings[0].Noticed, Is.True);
         }
 
-        [Test]
-        public void CharacterBeyondTheSightRangeIsNotSeen()
+        [TestCase(10.5f, 1f)]
+        [TestCase(-10.5f, 1f)]
+        [TestCase(0f, 6.5f)]
+        [TestCase(0f, -4.5f)]
+        public void CharacterOutsideTheFrameIsNotSeen(float x, float y)
         {
-            Place(new Vector2(10.5f, 1f));
+            Place(new Vector2(x, y));
 
-            Assert.That(_sight.SightingsAfter(Array.Empty<Sighting>()), Is.Empty);
+            Assert.That(_sight.SightingsAfter(Array.Empty<Sighting>()), Is.Empty, "a bot sees no further than a player's camera frame around it");
+        }
+
+        [Test]
+        public void CharacterInTheFrameCornerIsSeen()
+        {
+            Place(new Vector2(9.5f, 5.5f));
+
+            Assert.That(_sight.SightingsAfter(Array.Empty<Sighting>()), Has.Count.EqualTo(1));
         }
 
         [Test]

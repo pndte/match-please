@@ -13,7 +13,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Doubles
         public ISource<HandsState> Stepped => _stepped;
         public bool Busy => false;
         public HoldPose Pose { get; set; }
-        public GripPose Grip => throw new NotSupportedException("The fake hands have no grip.");
+        public GripPose Grip { get; set; }
 
         private readonly ViewableProperty<HandsState> _state = new(HandsState.Empty);
         private readonly Signal<HandsState> _stepped = new();
