@@ -176,7 +176,9 @@ jobs:
             match-please-server:smoke
           labels: ${{ steps.meta.outputs.labels }}
 
-      # The server must start listening and keep running without an exception.
+      # The server must start listening and keep running without an exception. Unity logs an exception as a
+      # «Type: message» line (after « ---> » for an inner one, after «Rethrow as » for a rethrown one) followed by
+      # its stack; only those message lines become errors.
       - name: Start the server in the image
         run: |
           docker run --detach --name server --publish 7777:7777/udp match-please-server:smoke
@@ -200,8 +202,9 @@ jobs:
             echo "::error::The server exited within 15 seconds of listening"
             failed=true
           fi
-          if grep -q 'Exception' "$RUNNER_TEMP/server.log"; then
-            grep 'Exception' "$RUNNER_TEMP/server.log" | sed 's/^/::error::/'
+          exception='^( *---> |Rethrow as )?([A-Za-z_][A-Za-z0-9_.+]*)?Exception:( |$)'
+          if grep -qE "$exception" "$RUNNER_TEMP/server.log"; then
+            grep -E "$exception" "$RUNNER_TEMP/server.log" | sed 's/^ *//; s/^/::error::/'
             failed=true
           fi
           [ "$failed" = false ]
