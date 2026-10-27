@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Bw.CoreAdapters.Weapons;
 using Bw.Entities.Network;
+using Bw.UseCases.Combat.Weapon;
+using Bw.UseCases.Spawning.Network;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -53,6 +56,34 @@ namespace Bw.Tests.Integration.Injection
         [OneTimeTearDown]
         public void CloseTheLevel() =>
             _containers.Dispose();
+
+        private static IEnumerable<TestCaseData> WeaponPrefabs()
+        {
+            var catalog = AssetDatabase.LoadAssetAtPath<WeaponCatalog>("Assets/Game/Content/Weapons/WeaponCatalog.asset");
+            var crates = AssetDatabase.LoadAssetAtPath<CrateSpawnConfig>("Assets/Game/Content/Crates/CrateSpawnConfig.asset");
+            return catalog.Weapons
+                .Select(entry => entry.Prefab)
+                .Append(crates.Prefab)
+                .Select(prefab => new TestCaseData(AssetDatabase.GetAssetPath(prefab)).SetName($"{{m}}({prefab.name})"));
+        }
+
+        [TestCaseSource(nameof(WeaponPrefabs))]
+        public void WeaponPrefabHoldsItsWeaponAfterTheInstall(string path)
+        {
+            var root = PrefabUtility.LoadPrefabContents(path);
+            try
+            {
+                var context = root.GetComponent<GameObjectContext>();
+
+                context.Install(_level);
+
+                Assert.That(context.Container.HasBinding<WeaponHolder>(), Is.True, "Armory, the crate spawner and the client's kind registration find the weapon through its WeaponHolder");
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(root);
+            }
+        }
 
         [Test]
         public void ThereArePrefabsToValidate()

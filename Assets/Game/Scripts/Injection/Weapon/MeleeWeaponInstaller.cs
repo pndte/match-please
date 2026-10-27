@@ -60,7 +60,7 @@ namespace Bw.Injection.Weapon
             var netSchema = new NetEntriesSchemaBuilder();
             HeldWeaponInstaller<MeleeState>.Install(Container, _runtimeSettings, netSchema, Parts());
             NetTablesInstaller.Install(Container, _runtimeSettings, netSchema.Build());
-            Container.InstantiateComponent<WeaponHolder>(gameObject);
+            Container.Bind<WeaponHolder>().FromNewComponentOn(gameObject).AsSingle().NonLazy();
 
             switch (_runtimeSettings.CurrentPeerType)
             {

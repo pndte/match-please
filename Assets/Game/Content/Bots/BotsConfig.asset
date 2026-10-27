@@ -16,6 +16,12 @@ MonoBehaviour:
   - Nickname: "\u0411\u043E\u0442 \u0413\u043E\u0448\u0430\u043A"
     Character: {fileID: 11400000, guid: 380149d7526343b58675c1bd9c71c1c7, type: 2}
     Difficulty: {fileID: 11400000, guid: c1234bfcc6899a14f8b28e803096e4b4, type: 2}
+  - Nickname: "\u0411\u043E\u0442 \u041C\u0430\u0442\u0432\u0435\u0439"
+    Character: {fileID: 11400000, guid: 77e253963a2c4153be7b7ae65a9ea74f, type: 2}
+    Difficulty: {fileID: 11400000, guid: c1234bfcc6899a14f8b28e803096e4b4, type: 2}
+  - Nickname: "\u0411\u043E\u0442 \u0421\u0435\u0432\u0430"
+    Character: {fileID: 11400000, guid: 2be3ce0dc60547b4b2eee00319b34bc2, type: 2}
+    Difficulty: {fileID: 11400000, guid: c1234bfcc6899a14f8b28e803096e4b4, type: 2}
   SightBlockers:
     serializedVersion: 2
     m_Bits: 16384

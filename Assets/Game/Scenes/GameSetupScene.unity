@@ -202,7 +202,7 @@ MonoBehaviour:
   serverTag: server
   clientTag: client
   enableLogging: 1
-  _gameScene: MeatPlant
+  _gameScene: ConstructionSite
 --- !u!114 &1858275100
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -95,6 +95,8 @@ namespace Bw.Injection.Weapon
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            Container.Bind<WeaponHolder>().FromNewComponentOn(gameObject).AsSingle().NonLazy();
         }
 
         private void RequireTurnSpeed()
