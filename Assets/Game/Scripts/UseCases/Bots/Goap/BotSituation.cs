@@ -1,42 +1,51 @@
 using System.Collections.Generic;
+using Bw.UseCases.Bots.Extensions;
 using Bw.UseCases.Bots.Senses;
 using Bw.UseCases.Bots.Senses.Extensions;
 using Bw.UseCases.Combat.Abstractions.Weapons;
 using Bw.UseCases.Mortality;
+using Bw.UseCases.Mortality.Guarding;
 using UnityEngine;
 
 namespace Bw.UseCases.Bots.Goap
 {
     public sealed class BotSituation
     {
-        private const float CloseSlack = 1.5f;
-        private const float TargetHalfWidth = 0.4f;
-
         private readonly BotInventory _inventory;
         private readonly BotProps _props;
+        private readonly TargetAssessor _targets;
         private readonly IReadonlyMortal _self;
-        private readonly BotDifficultyConfig _difficulty;
-        private readonly BotsConfig _bots;
+        private readonly IReadonlyGuard _guard;
+        private readonly BotPersonality _personality;
 
         public BotSituation(
             BotInventory inventory,
             BotProps props,
+            TargetAssessor targets,
             IReadonlyMortal self,
-            BotDifficultyConfig difficulty,
-            BotsConfig bots)
+            IReadonlyGuard guard,
+            BotPersonality personality)
         {
             _inventory = inventory;
             _props = props;
+            _targets = targets;
             _self = self;
-            _difficulty = difficulty;
-            _bots = bots;
+            _guard = guard;
+            _personality = personality;
         }
 
-        public BotFact FactsAfter(BotFact previous, Vector2 eye, IReadOnlyList<Sighting> sightings)
+        public BotAssessment AssessmentAfter(
+            BotAssessment previous,
+            Vector2 eye,
+            IReadOnlyList<Sighting> sightings,
+            Threat threat)
         {
-            var facts = sightings.TryFindTarget(eye, out var target) ? FactsAbout(target, eye, previous) : BotFact.None;
+            var facts = sightings.TryFindTarget(eye, out var target) ? _targets.FactsAbout(target, eye, previous.Facts) : BotFact.None;
             if (_inventory.IsDrawn(WeaponKind.Gun))
                 facts |= BotFact.GunDrawn;
+
+            if (_inventory.GunLoaded)
+                facts |= BotFact.GunReady;
 
             if (_inventory.IsDrawn(WeaponKind.Fists))
                 facts |= BotFact.FistsDrawn;
@@ -47,26 +56,17 @@ namespace Bw.UseCases.Bots.Goap
             if (_props.TryFindNearest(out _))
                 facts |= BotFact.PropNearby;
 
-            if (_self.Health.State.Value.Current <= _self.Health.Max * _difficulty.HurtShare)
+            var health = _self.Health.Share();
+            if (health <= _personality.RetreatHealth)
                 facts |= BotFact.Hurt;
 
-            return facts;
-        }
+            if (threat.Noticed)
+                facts |= BotFact.Threatened;
 
-        private BotFact FactsAbout(Sighting target, Vector2 eye, BotFact previous)
-        {
-            if (!target.Visible)
-                return BotFact.TargetNoticed;
+            if (!_guard.State.Value.Broken)
+                facts |= BotFact.GuardReady;
 
-            var facts = BotFact.TargetNoticed | BotFact.TargetInSight;
-            var distance = (target.Position - eye).magnitude;
-            if (distance <= _difficulty.CloseRange + ((previous & BotFact.TargetClose) != 0 ? CloseSlack : 0f))
-                facts |= BotFact.TargetClose;
-
-            if (distance <= _bots.Fists.Reach + _bots.Fists.Radius + TargetHalfWidth)
-                facts |= BotFact.TargetInReach;
-
-            return facts;
+            return new BotAssessment(facts, health);
         }
     }
 }

@@ -8,7 +8,8 @@
         "Bw.UseCases.Mortality",
         "Bw.UseCases.Movement",
         "Bw.UseCases.Combat",
-        "Bw.UseCases.Combat.Abstractions"
+        "Bw.UseCases.Combat.Abstractions",
+        "Bw.UseCases.Props"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

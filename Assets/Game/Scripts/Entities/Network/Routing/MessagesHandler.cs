@@ -26,8 +26,9 @@ namespace Bw.Entities.Network.Routing
 
             _networkHolder.NetworkManager.AdviseNotNull(lifetime, network =>
             {
-                network.CustomMessagingManager.OnUnnamedMessage += HandleUnnamedMessage;
-                lifetime.OnTermination(() => network.CustomMessagingManager.OnUnnamedMessage -= HandleUnnamedMessage);
+                var messaging = network.CustomMessagingManager;
+                messaging.OnUnnamedMessage += HandleUnnamedMessage;
+                lifetime.OnTermination(() => messaging.OnUnnamedMessage -= HandleUnnamedMessage);
             });
         }
 

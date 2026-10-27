@@ -101,7 +101,8 @@ namespace Bw.UseCases.Combat.Weapon
                 Drop(weapon);
 
             for (var index = 0; index < content.Items.Count; index++)
-                Take(content.Items[index]);
+                if (_kinds.Contains(content.Items[index].Weapon))
+                    Take(content.Items[index]);
         }
 
         private void Take(InventoryItem item)

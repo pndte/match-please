@@ -8,7 +8,7 @@ namespace Bw.UseCases.Bots.Goals
 
         public BotFact Wanted => BotFact.Roamed;
 
-        public float PriorityIn(BotFact facts) =>
+        public float PriorityIn(BotAssessment assessment) =>
             Idle;
     }
 }

@@ -85,6 +85,7 @@ namespace Bw.Injection.Weapon
         {
             Container.Bind<RaycastShooter<TState>>().AsSingle().NonLazy();
             Container.Bind<CarrierOwnerAssigner>().AsSingle().NonLazy();
+            Container.Bind<WeaponStateRegistrar<TState>>().AsSingle().NonLazy();
         }
 
         private void BindClient()

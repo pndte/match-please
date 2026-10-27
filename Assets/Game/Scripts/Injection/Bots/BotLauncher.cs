@@ -20,12 +20,16 @@ namespace Bw.Injection.Bots
             _registry = registry;
         }
 
-        public void Launch(Lifetime lifetime, IReadonlyCharacter character, BotDifficultyConfig difficulty)
+        public void Launch(
+            Lifetime lifetime,
+            IReadonlyCharacter character,
+            BotDifficultyConfig difficulty,
+            BotPersonality personality)
         {
             var life = ContainerOf(character).CreateSubContainer();
             life.BindInstance(lifetime);
             life.BindInstance(_registry.PlayerByCharacter[character]);
-            BotLifeInstaller.Install(life, difficulty);
+            BotLifeInstaller.Install(life, difficulty, personality);
             life.ResolveRoots();
         }
 

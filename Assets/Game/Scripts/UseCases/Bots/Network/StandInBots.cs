@@ -20,7 +20,7 @@ namespace Bw.UseCases.Bots.Network
                 {
                     if (owner == player)
                         character.Mortal.State.WhenAlive(characterLifetime, aliveLifetime =>
-                            launcher.Launch(aliveLifetime, character, config.StandIn));
+                            launcher.Launch(aliveLifetime, character, config.StandIn, config.StandInPersonality));
                 }));
         }
     }

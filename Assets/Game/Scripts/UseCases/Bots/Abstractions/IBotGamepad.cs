@@ -1,4 +1,5 @@
 using Bw.UseCases.Combat.Hands;
+using Bw.UseCases.Mortality.Guarding;
 using Bw.UseCases.Movement;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace Bw.UseCases.Bots.Abstractions
         public bool TriggerPulled { get; }
         public bool ReloadPressed { get; }
         public DrawChoice Choice { get; }
+        public GuardStance Guard { get; }
     }
 
     public interface IBotGamepad : IReadonlyBotGamepad
@@ -21,5 +23,6 @@ namespace Bw.UseCases.Bots.Abstractions
         public void PullTrigger();
         public void PressReload();
         public void Choose(DrawChoice choice);
+        public void RaiseGuard(float aim);
     }
 }

@@ -24,11 +24,12 @@ namespace Bw.UseCases.Bots
         [Header("Melee")]
         public bool Brawling;
         public bool ChargingPunches;
-        [Min(0.5f)] public float CloseRange = 3.5f;
         [Min(0.3f)] public float ChargeTime = 0.9f;
+
+        [Header("Guard")]
+        public bool Parrying;
 
         [Header("Props")]
         public bool Shielding;
-        [Range(0f, 1f)] public float HurtShare = 0.6f;
     }
 }

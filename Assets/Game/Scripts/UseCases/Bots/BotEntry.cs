@@ -9,5 +9,6 @@ namespace Bw.UseCases.Bots
         public string Nickname;
         public CharacterDescription Character;
         public BotDifficultyConfig Difficulty;
+        public BotPersonality Personality;
     }
 }

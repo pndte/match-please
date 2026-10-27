@@ -16,27 +16,45 @@ MonoBehaviour:
   - Nickname: "\u0411\u043E\u0442 \u0413\u043E\u0448\u0430\u043A"
     Character: {fileID: 11400000, guid: 380149d7526343b58675c1bd9c71c1c7, type: 2}
     Difficulty: {fileID: 11400000, guid: c1234bfcc6899a14f8b28e803096e4b4, type: 2}
+    Personality: {fileID: 11400000, guid: 88fb5d8307215d04e826f84e93b2ff4a, type: 2}
   - Nickname: "\u0411\u043E\u0442 \u041C\u0430\u0442\u0432\u0435\u0439"
     Character: {fileID: 11400000, guid: 77e253963a2c4153be7b7ae65a9ea74f, type: 2}
     Difficulty: {fileID: 11400000, guid: c1234bfcc6899a14f8b28e803096e4b4, type: 2}
+    Personality: {fileID: 11400000, guid: d4ee4d956179eba488126e87b73f3f87, type: 2}
   - Nickname: "\u0411\u043E\u0442 \u0421\u0435\u0432\u0430"
     Character: {fileID: 11400000, guid: 2be3ce0dc60547b4b2eee00319b34bc2, type: 2}
     Difficulty: {fileID: 11400000, guid: c1234bfcc6899a14f8b28e803096e4b4, type: 2}
+    Personality: {fileID: 11400000, guid: 004d7aaefc9339e45a8f553e6468066d, type: 2}
   SightBlockers:
     serializedVersion: 2
     m_Bits: 16384
   SightHalfExtents: {x: 13, y: 7.3}
   Fists: {fileID: 11400000, guid: c1df4db9df884a340b5571179d76add6, type: 2}
   StandIn: {fileID: 11400000, guid: d16c951d4b5099440917bbf6a3dce92a, type: 2}
+  StandInPersonality: {fileID: 11400000, guid: 267c2c94538360d41b9d4d41a1e4eb86, type: 2}
   PropSearchRange: 12
   RestingPropSpeed: 1
+  ThreatRadius: 1.5
+  ThreatRange: 25
+  ChargeThreatRange: 3.5
+  ThreatMemory: 0.4
+  RetreatRange: 15
+  KiteNear: 7
+  KiteFar: 12
+  KiteStride: 2
   ShootCost: 1
+  WaitCost: 3
   DrawCost: 1
   ApproachCost: 2
   CloseInCost: 2
+  RushCost: 1.5
   PunchCost: 1
   ChargedPunchCost: 2.5
   FetchPropCost: 2
   ShieldCost: 1.5
-  ThrowCost: 1
+  ThrowCost: 3
+  RetreatCost: 3
+  ShieldedRetreatCost: 0.5
+  KiteCost: 1
   RoamCost: 1
+  ParryCost: 1

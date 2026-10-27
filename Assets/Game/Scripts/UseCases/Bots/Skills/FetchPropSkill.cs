@@ -5,7 +5,7 @@ using Bw.UseCases.Combat.Abstractions.Weapons;
 
 namespace Bw.UseCases.Bots.Skills
 {
-    public sealed class FetchPropSkill : IBotSkill
+    public sealed class FetchPropSkill : IBotSkill //TODO: бот идёт к ближайшему ящику, даже когда тот лежит у цели: отступать с ним он может начать навстречу ей
     {
         public SkillStatus Status { get; private set; }
 

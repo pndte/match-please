@@ -1,5 +1,6 @@
 using Bw.UseCases.Bots.Abstractions;
 using Bw.UseCases.Combat.Hands;
+using Bw.UseCases.Mortality.Guarding;
 using Bw.UseCases.Movement;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace Bw.UseCases.Bots
         public bool TriggerPulled { get; private set; }
         public bool ReloadPressed { get; private set; }
         public DrawChoice Choice { get; private set; } = DrawChoice.Keep;
+        public GuardStance Guard { get; private set; } = GuardStance.Lowered;
 
         public void Release()
         {
@@ -19,6 +21,7 @@ namespace Bw.UseCases.Bots
             TriggerPulled = false;
             ReloadPressed = false;
             Choice = DrawChoice.Keep;
+            Guard = GuardStance.Lowered;
         }
 
         public void Steer(MovementInput input) =>
@@ -35,5 +38,8 @@ namespace Bw.UseCases.Bots
 
         public void Choose(DrawChoice choice) =>
             Choice = choice;
+
+        public void RaiseGuard(float aim) =>
+            Guard = new GuardStance(true, aim);
     }
 }

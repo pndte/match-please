@@ -4,6 +4,6 @@ namespace Bw.UseCases.Bots.Goap
     {
         public BotFact Wanted { get; }
 
-        public float PriorityIn(BotFact facts);
+        public float PriorityIn(BotAssessment assessment);
     }
 }

@@ -12,9 +12,7 @@ using UnityEngine.LowLevelPhysics2D;
 
 namespace Bw.UseCases.Bots.Senses
 {
-    public sealed class BotSight //TODO: слух пока не робит,
-                                 // выстрел за стеной или удар в спину замечается, только когда стрелок окажется на виду
-    
+    public sealed class BotSight //TODO: выстрел по себе бот слышит и закрывается, но стрелка за стеной или удар в спину замечает, только когда тот окажется на виду
     {
         public Vector2 Eye => _characters[_self].transform.position;
 
@@ -55,7 +53,7 @@ namespace Bw.UseCases.Bots.Senses
                     continue;
 
                 var position = (Vector2)pair.Value.transform.position;
-                var visible = IsInFrame(position - eye) && IsClear(eye, position);
+                var visible = IsInView(eye, position);
                 var index = IndexOf(sightings, character);
                 if (index >= 0)
                     sightings[index] = visible ? sightings[index].Seen(position, reaction) : sightings[index].Unseen();
@@ -65,6 +63,9 @@ namespace Bw.UseCases.Bots.Senses
 
             return sightings;
         }
+
+        public bool IsInView(Vector2 from, Vector2 to) =>
+            IsInFrame(to - from) && IsClear(from, to);
 
         private List<Sighting> StillRemembered(IReadOnlyList<Sighting> remembered)
         {

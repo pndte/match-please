@@ -23,7 +23,6 @@ MonoBehaviour:
   PauseTime: 0.35
   Brawling: 1
   ChargingPunches: 1
-  CloseRange: 3.5
   ChargeTime: 1.2
+  Parrying: 1
   Shielding: 1
-  HurtShare: 0.6

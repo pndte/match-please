@@ -2,14 +2,21 @@ using Bw.UseCases.Bots.Goap;
 
 namespace Bw.UseCases.Bots.Goals
 {
-    public sealed class GuardGoal : IGoapGoal //TODO: раненый бот с ящиком не отступает: он подбегает к цели и бросает в неё ящик
+    public sealed class GuardGoal : IGoapGoal
     {
-        private const float Urgent = 1.5f;
-        private const BotFact Danger = BotFact.Hurt | BotFact.TargetNoticed | BotFact.PropNearby;
+        private const float Urgent = 1.8f;
+        private const BotFact Needs = BotFact.Threatened | BotFact.GuardReady;
 
-        public BotFact Wanted => BotFact.PropHeld;
+        public BotFact Wanted => BotFact.Parried;
 
-        public float PriorityIn(BotFact facts) =>
-            (facts & Danger) == Danger ? Urgent : 0f;
+        private readonly float _weight;
+
+        public GuardGoal(float weight)
+        {
+            _weight = weight;
+        }
+
+        public float PriorityIn(BotAssessment assessment) =>
+            (assessment.Facts & Needs) == Needs ? Urgent * _weight : 0f;
     }
 }

@@ -19,6 +19,8 @@ using Bw.UseCases.Combat.Abstractions.Inventory;
 using Bw.UseCases.Combat.Characters;
 using Bw.UseCases.Combat.Hands;
 using Bw.UseCases.Combat.Hands.Abstractions;
+using Bw.UseCases.Combat.Melee;
+using Bw.UseCases.Combat.Shooting;
 using Bw.UseCases.Combat.View.Adapters;
 using Bw.UseCases.Combat.View.Adapters.Hit;
 using Bw.UseCases.Combat.Weapon;
@@ -31,6 +33,7 @@ using Bw.UseCases.Match;
 using Bw.UseCases.Mortality.Guarding;
 using Bw.UseCases.Mortality.Network.Guarding;
 using Bw.UseCases.Movement.Physics;
+using Bw.UseCases.Props;
 using Bw.UseCases.Spawning.Network;
 using UnityEngine;
 using Zenject;
@@ -66,6 +69,7 @@ namespace Bw.Injection
             Container.BindInterfacesTo<MovingPlatformCollection>().AsSingle();
             Container.BindInterfacesTo<ShovableCollection>().AsSingle();
             BindWeapons();
+            BindWeaponStates();
             Container.BindInterfacesTo<LagCompensator>().AsSingle();
             Container.Bind<IClientBubbles>().To<ClientBubbles>().AsSingle().WithArguments(gameObject.Lifetime());
             Container.BindInterfacesTo<RaycastShotResolver>().AsSingle().NonLazy();
@@ -113,6 +117,17 @@ namespace Bw.Injection
                 .WriterOnlyInto<IWeaponsInHands>(typeof(InHandsRegistrar));
             Container.Bind<IHeldBoxes>().To<HeldBoxes>().AsSingle();
         }
+
+        private void BindWeaponStates()
+        {
+            BindWeaponStates<GunState>();
+            BindWeaponStates<MeleeState>();
+            BindWeaponStates<PropState>();
+        }
+
+        private void BindWeaponStates<TState>() where TState : struct =>
+            Container.Bind(typeof(IReadonlyWeaponStates<TState>), typeof(IWeaponStates<TState>)).To<WeaponStates<TState>>().AsSingle()
+                .WriterOnlyInto<IWeaponStates<TState>>(typeof(WeaponStateRegistrar<TState>));
 
         private void BindPhysics()
         {

@@ -64,7 +64,7 @@ namespace Bw.Tests.UseCases.Bots.Goap.Extensions
         [Test]
         public void GoalIsMetWhenAllItsWantedFactsHold()
         {
-            var goal = new KillGoal();
+            var goal = new KillGoal(1f);
 
             Assert.That(goal.IsMetBy(BotFact.TargetDown | BotFact.Hurt), Is.True);
             Assert.That(goal.IsMetBy(Seen), Is.False);

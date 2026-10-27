@@ -165,6 +165,7 @@ namespace Bw.Injection.Props
             Container.Bind<IStateView<PropState>>().To<HeldPropPose>().FromResolve();
             Container.Bind<SimulationViewSynchronizer<PropState>>().AsSingle().NonLazy();
             Container.Bind<CarrierOwnerAssigner>().AsSingle().NonLazy();
+            Container.Bind<WeaponStateRegistrar<PropState>>().AsSingle().NonLazy();
             Container.BindInterfacesTo<StrikeOutcomes>().AsSingle();
             Container.Bind<DestroyedPropDropper>().AsSingle().NonLazy();
             Container.Bind<SimulationHistory<PropState>>().AsSingle().NonLazy();

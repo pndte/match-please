@@ -5,6 +5,7 @@ namespace Bw.UseCases.Combat.Weapon.Abstractions
 {
     public interface IReadonlyWeaponKindRegistry
     {
+        public bool Contains(IWeapon weapon);
         public WeaponKind KindOf(IWeapon weapon);
     }
 

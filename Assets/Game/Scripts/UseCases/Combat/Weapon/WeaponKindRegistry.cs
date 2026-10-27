@@ -10,6 +10,9 @@ namespace Bw.UseCases.Combat.Weapon
     {
         private readonly Dictionary<IWeapon, WeaponKind> _kinds = new();
 
+        public bool Contains(IWeapon weapon) =>
+            _kinds.ContainsKey(weapon);
+
         public WeaponKind KindOf(IWeapon weapon)
         {
             if (!_kinds.TryGetValue(weapon, out var kind))

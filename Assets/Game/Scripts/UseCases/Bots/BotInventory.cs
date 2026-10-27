@@ -3,21 +3,42 @@ using Bw.UseCases.Combat.Abstractions.Hands;
 using Bw.UseCases.Combat.Abstractions.Inventory;
 using Bw.UseCases.Combat.Abstractions.Weapons;
 using Bw.UseCases.Combat.Hands;
+using Bw.UseCases.Combat.Shooting;
+using Bw.UseCases.Combat.Weapon.Abstractions;
 using Bw.UseCases.Combat.Weapon.Extensions;
+using JetBrains.Collections.Viewable;
 
 namespace Bw.UseCases.Bots
 {
     public sealed class BotInventory
     {
+        public bool GunLoaded
+        {
+            get
+            {
+                foreach (var (carried, _) in _inventory.Carried)
+                    if (_inventory.RulesOf(carried).Kind == WeaponKind.Gun && IsLoaded(carried))
+                        return true;
+
+                return false;
+            }
+        }
+
         private readonly IReadonlyWeaponInventory _inventory;
         private readonly IHands _hands;
         private readonly IBotGamepad _gamepad;
+        private readonly IReadonlyWeaponStates<GunState> _guns;
 
-        public BotInventory(IReadonlyWeaponInventory inventory, IHands hands, IBotGamepad gamepad)
+        public BotInventory(
+            IReadonlyWeaponInventory inventory,
+            IHands hands,
+            IBotGamepad gamepad,
+            IReadonlyWeaponStates<GunState> guns)
         {
             _inventory = inventory;
             _hands = hands;
             _gamepad = gamepad;
+            _guns = guns;
         }
 
         public bool IsDrawn(WeaponKind kind) =>
@@ -47,6 +68,12 @@ namespace Bw.UseCases.Bots
 
             _hands.Take(weapon);
             return true;
+        }
+
+        private bool IsLoaded(IWeapon gun)
+        {
+            var state = _guns.ByWeapon[gun].State.Value;
+            return state.ReloadTicks == 0 && (state.Ammo > 0 || _hands.TryFindInHands(out var inHands) && inHands == gun);
         }
     }
 }

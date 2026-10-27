@@ -16,6 +16,14 @@ namespace Bw.UseCases.Bots.Goap
         PropHeld = 1 << 7,
         PropNearby = 1 << 8,
         Hurt = 1 << 9,
-        Roamed = 1 << 10
+        Roamed = 1 << 10,
+        Threatened = 1 << 11,
+        Parried = 1 << 12,
+        TargetReloading = 1 << 13,
+        TargetWounded = 1 << 14,
+        GunReady = 1 << 15,
+        GuardReady = 1 << 16,
+        Retreated = 1 << 17,
+        Kited = 1 << 18
     }
 }

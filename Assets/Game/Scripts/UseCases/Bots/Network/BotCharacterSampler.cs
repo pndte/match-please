@@ -4,7 +4,6 @@ using Bw.UseCases.Character.Network.Requests;
 using Bw.UseCases.Combat.Hands.Network;
 using Bw.UseCases.Combat.Hands.Network.Requests;
 using Bw.UseCases.Combat.Weapon.Network.Requests;
-using Bw.UseCases.Mortality.Guarding;
 using Bw.UseCases.Movement.Network.Requests;
 
 namespace Bw.UseCases.Bots.Network
@@ -30,7 +29,7 @@ namespace Bw.UseCases.Bots.Network
                     new TriggerControls(_gamepad.TriggerPulled, 0f, 0f, default),
                     _gamepad.ReloadPressed,
                     _hands.ControlOf(_gamepad.Choice)),
-                GuardStance.Lowered);
+                _gamepad.Guard);
         }
     }
 }

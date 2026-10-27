@@ -9,24 +9,28 @@ namespace Bw.UseCases.Bots.Goap
     public sealed class GoapBrain : IBotBrain
     {
         private const int RetryTicks = 15;
+        private const float Hysteresis = 0.25f;
 
         private readonly List<GoapAction> _plan = new();
         private readonly int[] _cooldowns;
 
         private readonly BotSight _sight;
+        private readonly BotThreats _threats;
         private readonly BotSituation _situation;
         private readonly IReadOnlyList<IGoapGoal> _goals;
         private readonly GoapPlanner _planner;
         private readonly IBotGamepad _gamepad;
 
         private IReadOnlyList<Sighting> _sightings = Array.Empty<Sighting>();
-        private BotFact _facts;
+        private Threat _threat;
+        private BotAssessment _assessment;
         private int _goal;
         private int _step;
         private bool _begun;
 
         public GoapBrain(
             BotSight sight,
+            BotThreats threats,
             BotSituation situation,
             IReadOnlyList<IGoapGoal> goals,
             GoapPlanner planner,
@@ -34,6 +38,7 @@ namespace Bw.UseCases.Bots.Goap
         {
             _cooldowns = new int[goals.Count];
             _sight = sight;
+            _threats = threats;
             _situation = situation;
             _goals = goals;
             _planner = planner;
@@ -45,46 +50,47 @@ namespace Bw.UseCases.Bots.Goap
             _gamepad.Release();
             var eye = _sight.Eye;
             _sightings = _sight.SightingsAfter(_sightings);
-            _facts = _situation.FactsAfter(_facts, eye, _sightings);
+            _threat = _threats.ThreatAfter(_threat);
+            _assessment = _situation.AssessmentAfter(_assessment, eye, _sightings, _threat);
             CoolDown();
-            if (!IsFollowing(_facts))
-                Plan(_facts);
+            if (!IsFollowing(_assessment))
+                Plan(_assessment);
 
             if (_step < _plan.Count)
-                Perform(_plan[_step], new Perception(eye, _sightings, _facts));
+                Perform(_plan[_step], new Perception(eye, _sightings, _assessment.Facts, _threat));
         }
 
-        private bool IsFollowing(BotFact facts) =>
+        private bool IsFollowing(BotAssessment assessment) =>
             _step < _plan.Count
-            && _plan[_step].When.IsMetBy(facts)
-            && !IsOutranked(facts);
+            && _plan[_step].When.IsMetBy(assessment.Facts)
+            && !IsOutranked(assessment);
 
-        private bool IsOutranked(BotFact facts)
+        private bool IsOutranked(BotAssessment assessment)
         {
-            var priority = _goals[_goal].PriorityIn(facts);
+            var priority = _goals[_goal].PriorityIn(assessment);
             if (priority <= 0f)
                 return true;
 
             for (var index = 0; index < _goals.Count; index++)
-                if (index != _goal && _cooldowns[index] == 0 && !_goals[index].IsMetBy(facts) && _goals[index].PriorityIn(facts) > priority)
+                if (index != _goal && _cooldowns[index] == 0 && !_goals[index].IsMetBy(assessment.Facts) && _goals[index].PriorityIn(assessment) > priority + Hysteresis)
                     return true;
 
             return false;
         }
 
-        private void Plan(BotFact facts)
+        private void Plan(BotAssessment assessment)
         {
             _plan.Clear();
             _step = 0;
             _begun = false;
-            var tried = 0; 
+            var tried = 0;
             for (var attempt = 0; attempt < _goals.Count; attempt++)
             {
-                if (!TryPickGoal(facts, tried, out var goal))
+                if (!TryPickGoal(assessment, tried, out var goal))
                     return;
 
                 tried |= 1 << goal;
-                if (_planner.TryPlan(facts, _goals[goal].Wanted, _plan) && _plan.Count > 0)
+                if (_planner.TryPlan(assessment.Facts, _goals[goal].Wanted, _plan) && _plan.Count > 0)
                 {
                     _goal = goal;
                     return;
@@ -92,16 +98,16 @@ namespace Bw.UseCases.Bots.Goap
             }
         }
 
-        private bool TryPickGoal(BotFact facts, int tried, out int picked)
+        private bool TryPickGoal(BotAssessment assessment, int tried, out int picked)
         {
             picked = -1;
             var best = 0f;
             for (var index = 0; index < _goals.Count; index++)
             {
-                if ((tried & 1 << index) != 0 || _cooldowns[index] > 0 || _goals[index].IsMetBy(facts))
+                if ((tried & 1 << index) != 0 || _cooldowns[index] > 0 || _goals[index].IsMetBy(assessment.Facts))
                     continue;
 
-                var priority = _goals[index].PriorityIn(facts);
+                var priority = _goals[index].PriorityIn(assessment);
                 if (priority <= best)
                     continue;
 
