@@ -1,6 +1,7 @@
 using System;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
+using Bw.Entities.Pool;
 using Bw.Entities.Pool.GameObjects;
 using Bw.UseCases.Combat.Weapon.Abstractions;
 using JetBrains.Lifetimes;
@@ -14,7 +15,7 @@ namespace Bw.UseCases.Spawning.Network
     {
         private readonly Lifetime _lifetime;
         private readonly DiContainer _container;
-        private readonly IPrefabPools _pools;
+        private readonly IPools _pools;
         private readonly IRuntimeSettings _runtimeSettings;
         private readonly WeaponPrefabKinds _prefabKinds;
         private readonly IWeaponKindRegistry _kinds;
@@ -22,7 +23,7 @@ namespace Bw.UseCases.Spawning.Network
         public NetworkPrefabHandlerFactory(
             Lifetime lifetime,
             DiContainer container,
-            IPrefabPools pools,
+            IPools pools,
             IRuntimeSettings runtimeSettings,
             WeaponPrefabKinds prefabKinds,
             IWeaponKindRegistry kinds)

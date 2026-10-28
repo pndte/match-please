@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Bw.Entities.Pool.GameObjects
 {
-    public sealed class PrefabInstance : IPrefabInstance
+    internal sealed class PrefabInstance : IPrefabInstance
     {
         private readonly Lifetime _lifetime;
         private readonly GameObject _gameObject;

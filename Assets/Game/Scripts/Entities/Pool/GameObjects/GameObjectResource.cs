@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Bw.Entities.Pool.GameObjects
 {
-    public sealed class GameObjectResource : IResource<IPrefabInstance>
+    internal sealed class GameObjectResource : IResource<IPrefabInstance>
     {
         private readonly GameObject _gameObject;
         private readonly Lifetime _gameObjectLifetime;

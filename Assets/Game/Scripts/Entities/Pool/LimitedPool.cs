@@ -5,7 +5,7 @@ using JetBrains.Lifetimes;
 
 namespace Bw.Entities.Pool
 {
-    public sealed class LimitedPool<T> : IPool<T>
+    internal sealed class LimitedPool<T> : IPool<T>
     {
         private readonly Stack<IResource<T>> _resources = new();
         private readonly Dictionary<IResource<T>, LifetimeDefinition> _resourceLifetimes = new();

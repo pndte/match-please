@@ -1,9 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Bw.CoreAdapters.Weapons;
 using Bw.Entities.Network;
 using Bw.Entities.Network.Objects;
 using Bw.Entities.Pool;
-using Bw.Entities.Pool.GameObjects;
 using Bw.Tests.Doubles;
 using Bw.Tests.UseCases.Combat.Weapon.Doubles;
 using Bw.UseCases.Combat.Abstractions.Weapons;
@@ -82,7 +82,10 @@ namespace Bw.Tests.UseCases.Spawning.Network
         }
 
         private NetworkPrefabHandlerFactory Factory(PeerType peer) =>
-            new(_lifetime.Lifetime, new DiContainer(), new Pools(_instance), new RuntimeSettings(peer, "Test"), WeaponPrefabKinds.Of(_catalog, new[] { _prefab }), _kinds);
+            new(_lifetime.Lifetime, new DiContainer(), Pools(), new RuntimeSettings(peer, "Test"), WeaponPrefabKinds.Of(_catalog, new[] { _prefab }), _kinds);
+
+        private IPools Pools() =>
+            new MappedPools(new Dictionary<Type, IPool<object>>(), new Dictionary<Type, object> { [typeof(GameObject)] = new Instances(_instance) });
 
         private NetworkObject PooledObject(string name)
         {
@@ -92,11 +95,11 @@ namespace Bw.Tests.UseCases.Spawning.Network
             return networkObject;
         }
 
-        private sealed class Pools : IPrefabPools, IPool<NetworkObject>
+        private sealed class Instances : IKeyedPools<GameObject>, IPool<NetworkObject>
         {
             private readonly NetworkObject _instance;
 
-            public Pools(NetworkObject instance)
+            public Instances(NetworkObject instance)
             {
                 _instance = instance;
             }

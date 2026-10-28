@@ -2,7 +2,7 @@ using JetBrains.Lifetimes;
 
 namespace Bw.Entities.Pool.GameObjects
 {
-    public sealed class PrefabPool<T> : IPool<T>
+    internal sealed class PrefabPool<T> : IPool<T>
     {
         private readonly IPool<IPrefabInstance> _instances;
 

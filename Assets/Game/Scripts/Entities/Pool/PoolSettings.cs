@@ -1,6 +1,6 @@
 namespace Bw.Entities.Pool
 {
-    public sealed class PoolSettings
+    internal sealed class PoolSettings
     {
         public readonly int Prewarm;
         public readonly int MaxIdle;

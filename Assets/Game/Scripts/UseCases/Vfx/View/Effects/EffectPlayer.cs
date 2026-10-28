@@ -9,9 +9,9 @@ namespace Bw.UseCases.Vfx.View.Effects
     public sealed class EffectPlayer : IEffectPlayer
     {
         private readonly Lifetime _lifetime;
-        private readonly IPrefabPools _pools;
+        private readonly IPools _pools;
 
-        public EffectPlayer(Lifetime lifetime, IPrefabPools pools)
+        public EffectPlayer(Lifetime lifetime, IPools pools)
         {
             _lifetime = lifetime;
             _pools = pools;

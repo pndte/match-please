@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace Bw.Entities.Pool.GameObjects
 {
-    public sealed class PrefabPools : IPrefabPools
+    public sealed class PrefabPools : IKeyedPools<GameObject>
     {
         private readonly Dictionary<GameObject, IPool<IPrefabInstance>> _instances = new();
         private readonly Dictionary<(GameObject Prefab, Type Facade), IPool<object>> _pools = new();

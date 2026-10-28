@@ -13,7 +13,7 @@ namespace Bw.UseCases.Combat.View
 
         private readonly Lifetime _lifetime;
         private readonly IMuzzleFlash _flash;
-        private readonly IPrefabPools _pools;
+        private readonly IPools _pools;
         private readonly ShotVfxConfig _vfx;
         private readonly Transform _ejector;
 
@@ -21,7 +21,7 @@ namespace Bw.UseCases.Combat.View
             Lifetime lifetime,
             IShotsViewModel shots,
             IMuzzleFlash flash,
-            IPrefabPools pools,
+            IPools pools,
             ShotVfxConfig vfx,
             Transform ejector)
         {
@@ -37,7 +37,9 @@ namespace Bw.UseCases.Combat.View
         private void Play()
         {
             _flash.Play();
-            _pools.For<IEffect>(_vfx.Casing).OneShot(_lifetime).Play(_ejector.position, (Vector2.up - (Vector2)_ejector.right * EjectBack).normalized); //TODO: гильза вылетает в момент выстрела у всех пушек — у дробовика и снайперки она должна вылетать при передёргивании помпы и затвора, когда у рига появится такая анимация
+            _pools.For<IEffect>(_vfx.Casing)
+                .OneShot(_lifetime)
+                .Play(_ejector.position, (Vector2.up - (Vector2)_ejector.right * EjectBack).normalized); //TODO: гильза вылетает в момент выстрела у всех пушек — у дробовика и снайперки она должна вылетать при передёргивании помпы и затвора, когда у рига появится такая анимация
         }
     }
 }

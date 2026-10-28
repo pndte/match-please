@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Bw.Entities.Network;
-using Bw.Entities.Pool.GameObjects;
+using Bw.Entities.Pool;
 using Bw.Injection;
 using Bw.Injection.Prefabs;
 using Bw.UseCases;
@@ -153,7 +153,7 @@ namespace Bw.Tests.Integration.Injection
 
         private static void BindPrefabHandlers(DiContainer container)
         {
-            container.Bind<IPrefabPools>().FromMethodUntyped(_ => null);
+            container.Bind<IPools>().FromMethodUntyped(_ => null);
             container.Bind<NetworkPrefabHandlerFactory>().AsSingle().WithArguments(Lifetime.Eternal);
             container.BindInterfacesTo<NetworkPrefabRegistrationBus>().AsSingle().WithArguments(Lifetime.Eternal, NetworkManager.Singleton);
         }

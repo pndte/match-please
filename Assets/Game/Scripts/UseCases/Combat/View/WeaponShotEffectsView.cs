@@ -14,7 +14,7 @@ namespace Bw.UseCases.Combat.View
     public sealed class WeaponShotEffectsView
     {
         private readonly IShotSfxPlayer _sfxPlayer;
-        private readonly IPrefabPools _pools;
+        private readonly IPools _pools;
         private readonly ShotVfxConfig _vfx;
         private readonly ShotImpactConfig _impact;
         private readonly Lifetime _lifetime;
@@ -23,7 +23,7 @@ namespace Bw.UseCases.Combat.View
             Lifetime lifetime,
             IShotsViewModel shots,
             IShotSfxPlayer sfxPlayer,
-            IPrefabPools pools,
+            IPools pools,
             ShotVfxConfig vfx,
             ShotImpactConfig impact)
         {

@@ -1,11 +1,15 @@
+using System;
+using System.Collections.Generic;
 using Bw.Entities;
 using Bw.Entities.Extensions;
 using Bw.Entities.Network;
+using Bw.Entities.Pool;
 using Bw.Entities.Pool.GameObjects;
 using Bw.UseCases.Spawning.Network;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
+using Object = UnityEngine.Object;
 
 namespace Bw.Injection.Prefabs
 {
@@ -25,10 +29,11 @@ namespace Bw.Injection.Prefabs
 
         private void BindPools()
         {
-            var pools = PrefabPools.Create(gameObject.Lifetime(), _pools, _runtimeSettings.CurrentPeerType == PeerType.Client,
+            var prefabs = PrefabPools.Create(gameObject.Lifetime(), _pools, _runtimeSettings.CurrentPeerType == PeerType.Client,
                 (prefab, parent) => Instantiate(Container, prefab, parent));
-            Container.Bind<IPrefabPools>().FromInstance(pools);
-            _sceneContext.PostResolve += pools.Prewarm;
+            var pools = new MappedPools(new Dictionary<Type, IPool<object>>(), new Dictionary<Type, object> { [typeof(GameObject)] = prefabs });
+            Container.Bind<IPools>().FromInstance(pools);
+            _sceneContext.PostResolve += prefabs.Prewarm;
         }
 
         private static GameObject Instantiate(DiContainer container, GameObject prefab, Transform parent) =>

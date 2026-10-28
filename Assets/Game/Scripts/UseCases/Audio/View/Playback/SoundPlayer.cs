@@ -14,11 +14,11 @@ namespace Bw.UseCases.Audio.View.Playback
         private IPool<Voice> Voices => _pools.For<Voice>(_config.Voice);
 
         private readonly Lifetime _lifetime;
-        private readonly IPrefabPools _pools;
+        private readonly IPools _pools;
         private readonly SoundPlayerConfig _config;
         private readonly Dictionary<Sound, int> _lastClips = new();
 
-        public SoundPlayer(Lifetime lifetime, IPrefabPools pools, SoundPlayerConfig config)
+        public SoundPlayer(Lifetime lifetime, IPools pools, SoundPlayerConfig config)
         {
             _lifetime = lifetime;
             _pools = pools;
