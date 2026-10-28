@@ -243,9 +243,9 @@ config:
     htmlLabels: false
 ---
 flowchart TB
-    Core["Core<br/>IReadonlyFlashlight"] --> Adapter["Adapter<br/>FlashlightViewModel"]
-    Adapter -->|implements| VM["IFlashlightViewModel<br/>in the view assembly"]
-    View["FlashlightView"] --> VM
+    Core["core<br/>Flashlight"] --> Adapter["adapter in<br/>its own<br/>assembly"]
+    Adapter -->|implements| VM["view model<br/>interface in<br/>the view's<br/>assembly"]
+    View["view"] --> VM
 ```
 
 With a hand-filled model a view runs without a match; that's how I check weapon sounds. Menus and HUD use UI Toolkit, interface animations use DOTween.
@@ -342,15 +342,15 @@ config:
     htmlLabels: false
 ---
 flowchart TB
-    Tests["Bw.Tests<br/>EditMode tests<br/>(editor only)"]
+    Tests["Bw.Tests<br/>EditMode<br/>tests"]
     subgraph Game["Game assemblies"]
-        Injection["Bw.Injection<br/>Zenject installers"]
-        Network["Feature.Network<br/>net adapters,<br/>codecs"]
-        Adapters["Feature.View.<br/>Adapters<br/>view models"]
-        View["Feature.View<br/>animation,<br/>sound, VFX, HUD"]
+        Injection["Bw.Injection<br/>Zenject<br/>installers"]
+        Network["Feature.<br/>Network<br/>adapters,<br/>codecs"]
+        Adapters["Feature.<br/>View.<br/>Adapters<br/>view models"]
+        View["Feature.<br/>View<br/>animation,<br/>sound, VFX,<br/>HUD"]
         Core["Bw.UseCases.<br/>Feature<br/>game rules"]
-        NetFw["Bw.Entities.<br/>Network<br/>net framework"]
-        Entities["Bw.Entities<br/>Lifetime,<br/>simulation,<br/>physics, pools"]
+        NetFw["Bw.Entities.<br/>Network<br/>network<br/>framework"]
+        Entities["Bw.Entities<br/>Lifetime,<br/>simulation,<br/>physics,<br/>pools"]
     end
 
     Tests -.->|references all| Game
@@ -493,7 +493,7 @@ More traffic is saved by not sending what isn't needed. An optional field goes i
 
 The server updates the world 30 times a second, and the input for tick T has to arrive before that tick starts, so the client clock runs ahead by the input's travel time. Taking the transport's RTT seemed enough, until one day on a local machine one of two clients reported an 828 ms ping while packets arrived within a couple of frames. UnityTransport updates its RTT only when a reliable packet is acknowledged, and a client that only runs and shoots sends nothing but unreliable packets, so its RTT stayed stuck on a spike from connecting. Now every 15 ticks the server tells the client the smallest margin its input arrived with, and the client steers its lead to keep that margin at about one tick. The lead grows fast and shrinks slowly, since a late input costs more than a spare tick.
 
-A tick is split into phases whose order must be identical on server and client, or the same input produces different worlds. One enum, `TickPhase`, describes the whole tick in execution order, so code subscribed to a phase is written once and runs on both sides. Between Prepare and Early the client rolls back, and it repeats Early to Late for every replayed tick:
+A tick is split into phases whose order must be identical on server and client, or the same input produces different worlds. One enum, `TickPhase`, describes the whole tick in execution order, so code subscribed to a phase is written once and runs on both sides. Between Prepare and BeforePhysics the client rolls back, and it repeats BeforePhysics to Late for every replayed tick:
 
 ```mermaid
 ---
@@ -503,8 +503,8 @@ config:
     rankSpacing: 25
 ---
 flowchart TB
-    P["Prepare"] --> R["rollback and replay<br/>(client only)"]
-    R --> E["Early"]
+    P["Prepare"] --> R["rollback and<br/>replay<br/>(client only)"]
+    R --> E["BeforePhysics"]
     E --> PH["Physics"]
     PH --> D["Default"]
     D --> L["Late"]
@@ -514,7 +514,7 @@ flowchart TB
 | Phase | What runs | On replay |
 |---|---|---|
 | `Prepare` | the client samples and sends its input; the prediction bubble is updated; objects outside it take the server's state; bots decide | no |
-| `Early` | moving objects such as platforms set their velocity for the tick | yes |
+| `BeforePhysics` | sets what the physics step has to account for this tick: velocities, forces, impulses, teleports (moving platforms set their velocity here) | yes |
 | `Physics` | Box2D moves the whole world in one step | yes |
 | `Default` | characters step with this tick's input; tick timers count | yes |
 | `Late` | shots, punches and throws that need the finished world | yes |
@@ -642,11 +642,12 @@ config:
     rankSpacing: 25
 ---
 flowchart TB
-    Sense["Perception<br/>camera frame, line of sight,<br/>nearby shots and wind-ups"] --> Facts["Facts<br/>19 bit flags"]
-    Facts --> Goal["Goal<br/>weighted by personality"]
+    Sense["Perception<br/>what a player<br/>would see<br/>and hear"] --> Facts["Facts<br/>19 bit flags"]
+    Facts --> Goal["Goal<br/>weighted by<br/>personality"]
     Goal --> Planner["A* planner<br/>about 9 µs"]
-    Planner --> Skill["Skill<br/>Shoot, Kite, Guard, Punch…"]
-    Skill --> Pad["Virtual gamepad<br/>CharacterControls,<br/>same as a player's"]
+    Planner --> Skill["Skill<br/>Shoot, Kite,<br/>Guard, Punch"]
+    Skill --> Pad["Virtual<br/>gamepad"]
+    Pad --> Input["the same<br/>input as a<br/>player's"]
 ```
 
 A bot sees what a player in its place would, a 26 × 14.6 m camera frame minus whatever walls hide, hears shots passing within 1.5 m and notices wind-ups within 3.5 m. A behaviour tree for a bot that shoots, brawls, guards, throws crates and retreats would grow into a web of conditions, so decisions are made by GOAP (Goal-Oriented Action Planning), first used in F.E.A.R. The situation is 19 facts, each action lists the facts it needs, forbids, adds and removes, and an A* planner finds the cheapest chain of actions to a goal in about 9 µs over 17 actions. The brain sits behind `IBotBrain`, so a behaviour tree could replace GOAP as one more implementation.
