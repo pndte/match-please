@@ -237,7 +237,12 @@ public sealed class FlashlightViewModel : IFlashlightViewModel
 ```
 
 ```mermaid
-flowchart LR
+---
+config:
+  flowchart:
+    htmlLabels: false
+---
+flowchart TB
     Core["Core<br/>IReadonlyFlashlight"] --> Adapter["Adapter<br/>FlashlightViewModel"]
     Adapter -->|implements| VM["IFlashlightViewModel<br/>in the view assembly"]
     View["FlashlightView"] --> VM
@@ -320,12 +325,8 @@ The lifetime passed in is an upper bound: if the view that started the effect di
 | Game code | 1183 C# files, about 41,700 lines, 48 assemblies |
 | Tests | 3218 EditMode tests: 459 files, about 41,400 lines |
 | Network framework | 192 files, about 6100 lines |
-| Movement input | 11 bytes, 330 B/s (28 bytes, 840 B/s with NetworkVariable and RPC) |
-| Damage and deaths, 8 players and 28 objects | about 2 KB/s instead of 80 KB/s with streaming replication |
-| Physics tick with 200 crates | 0.064 ms instead of 4.1 ms |
+| Physics tick with 200 moving networked objects | 0.064 ms instead of 4.1 ms |
 | Boxing in the network framework | none |
-| Bot plan | about 9 µs for a search over 17 actions and 19 facts |
-| Bot routes completed | 952 of 1000 on Construction Site, 934 of 1000 on Slaughterhouse |
 | Bots in a room | up to 8, four difficulty levels, five personalities |
 
 ## Architecture
@@ -335,19 +336,24 @@ The lifetime passed in is an upper bound: if the view that started the effect di
 In Unity it's easy to end up with everything referencing everything, from the character script calling the network to the animation peeking into the game rules. I wanted the rules to build and test with no network and no graphics, so the code is split into 48 assemblies (asmdef) whose dependencies point strictly one way:
 
 ```mermaid
+---
+config:
+  flowchart:
+    htmlLabels: false
+---
 flowchart TB
-    Tests["Bw.Tests<br/>EditMode tests, editor only"]
+    Tests["Bw.Tests<br/>EditMode tests<br/>(editor only)"]
     subgraph Game["Game assemblies"]
         Injection["Bw.Injection<br/>Zenject installers"]
-        Network["Feature.Network<br/>network adapters, codecs"]
-        Adapters["Feature.View.Adapters<br/>view models"]
-        View["Feature.View<br/>animation, sound, VFX, HUD"]
-        Core["Bw.UseCases.Feature<br/>game rules"]
-        NetFw["Bw.Entities.Network<br/>network framework"]
-        Entities["Bw.Entities<br/>Lifetime, simulation, physics, pools"]
+        Network["Feature.Network<br/>net adapters,<br/>codecs"]
+        Adapters["Feature.View.<br/>Adapters<br/>view models"]
+        View["Feature.View<br/>animation,<br/>sound, VFX, HUD"]
+        Core["Bw.UseCases.<br/>Feature<br/>game rules"]
+        NetFw["Bw.Entities.<br/>Network<br/>net framework"]
+        Entities["Bw.Entities<br/>Lifetime,<br/>simulation,<br/>physics, pools"]
     end
 
-    Tests -.->|references every assembly| Game
+    Tests -.->|references all| Game
     Injection --> Network
     Injection --> Adapters
     Network --> Core
@@ -366,21 +372,27 @@ The core is the same on server and client. So what makes the sides differ? Only 
 In the examples above it all looks simple: `Send` on the client, `Received` on the server. You may wonder what happens between those two calls. Let's follow one key press, F for the flashlight. The framework (`Bw.Entities.Network`) takes only client connections, `NetworkObject` spawning and unnamed messages from NGO; the full list of its classes is in [Where to look in the code](#6-network-framework).
 
 ```mermaid
+---
+config:
+  sequence:
+    width: 70
+    actorMargin: 25
+---
 sequenceDiagram
-    participant H as Client handler
-    participant E as NetRequest entry
-    participant R as NetReplicationClient
+    participant H as Client<br/>handler
+    participant E as NetRequest
+    participant R as NetReplication<br/>Client
     participant N as NGO
-    participant M as Server MessagesHandler
-    participant I as NetInboxServer
-    participant S as Server handler
+    participant M as Messages<br/>Handler
+    participant I as NetInbox<br/>Server
+    participant S as Server<br/>handler
     H->>E: Send(true)
-    E->>E: check the right to send
+    E->>E: right to send?
     E->>R: dirty flag
-    R->>N: header and BoolCodec
+    R->>N: header,<br/>BoolCodec
     N->>M: bytes
-    M->>I: object by NetworkObjectId
-    I->>I: entry by VarId,<br/>check the right to receive
+    M->>I: object<br/>by id
+    I->>I: entry by VarId,<br/>right to receive?
     I->>S: Received(true)
 ```
 
@@ -484,7 +496,13 @@ The server updates the world 30 times a second, and the input for tick T has to 
 A tick is split into phases whose order must be identical on server and client, or the same input produces different worlds. One enum, `TickPhase`, describes the whole tick in execution order, so code subscribed to a phase is written once and runs on both sides. Between Prepare and Early the client rolls back, and it repeats Early to Late for every replayed tick:
 
 ```mermaid
-flowchart LR
+---
+config:
+  flowchart:
+    htmlLabels: false
+    rankSpacing: 25
+---
+flowchart TB
     P["Prepare"] --> R["rollback and replay<br/>(client only)"]
     R --> E["Early"]
     E --> PH["Physics"]
@@ -507,17 +525,23 @@ flowchart LR
 Without prediction, every move would show up only after the input reached the server and the result came back, 100 ms late at 100 ms ping, and the character would feel like cotton wool. The classic fix: the client applies its input to a local copy of the world at once and saves the predicted state every tick. The server computes the same tick with the same input and sends the result. If it differs from the saved one, the client puts the server's state in at that tick and replays up to the current tick from the recorded input:
 
 ```mermaid
+---
+config:
+  sequence:
+    width: 90
+    actorMargin: 120
+---
 sequenceDiagram
     participant C as Client
     participant S as Server
-    Note over C: tick 105, the input is applied<br/>to the local world, the state is saved
-    C->>S: input of tick 105 and a copy of tick 104
+    Note over C: tick 105: the input<br/>is applied locally,<br/>the state is saved
+    C->>S: input of tick 105,<br/>copy of tick 104
     S-->>C: state of tick 105
-    Note over C: by now the client is on tick 108
+    Note over C: the client is<br/>on tick 108 by now
     alt matches the saved state
-        Note over C: nothing changes
+        Note over C,S: nothing changes
     else differs
-        Note over C: back to tick 105, ticks 106–108<br/>are replayed, the view smooths the correction
+        Note over C,S: back to tick 105, ticks 106–108<br/>replayed, the view smooths it
     end
 ```
 
@@ -540,17 +564,23 @@ Input goes unreliable with two ticks per packet, so a single loss costs nothing.
 Damage and death are a different problem. Health changes rarely, sending it every tick wastes about 80 KB/s with 8 players and 28 objects, and damage is discrete: it happened or it didn't. So the server sends a new health value only when it changes, together with its cause, the object that dealt the blow and the tick. The server decides a hit once and never revisits it:
 
 ```mermaid
+---
+config:
+  sequence:
+    width: 90
+    actorMargin: 60
+---
 sequenceDiagram
-    participant A as Shooter's client
+    participant A as Shooter's<br/>client
     participant S as Server
-    participant O as Other clients
-    Note over A: tick 240, the shot hits the local world,<br/>the target's health drops on screen
-    A->>S: input of tick 240 with the trigger pressed
-    Note over S: Late phase of tick 240, rewind and decision
-    S->>A: target's health, cause "shot of tick 240"
-    S->>O: target's health, cause "shot of tick 240"
-    S->>A: report on the shot: whom and how much
-    Note over A: if it matches, nothing changes,<br/>otherwise a silent correction
+    participant O as Other<br/>clients
+    Note over A: tick 240: a local hit,<br/>health drops on screen
+    A->>S: input of tick 240,<br/>trigger pressed
+    Note over S: Late of tick 240:<br/>rewind and decide
+    S->>A: health, cause:<br/>shot of tick 240
+    S->>O: health, cause:<br/>shot of tick 240
+    S->>A: shot report:<br/>whom, how much
+    Note over A: a match changes nothing,<br/>a mismatch is fixed silently
 ```
 
 Messages arrive in any order and two barrels can fire in one tick, so every action is identified by an "object, tick" pair (`ActionId`). If the server rejects a hit, the client silently restores the target's health, with no flash and no sound. A replay must not decide hits anew, or one hit would count twice, so it repeats the decisions made the first time (`DecidedImpacts`). Health traffic drops from about 80 KB/s to about 2 KB/s.
@@ -560,14 +590,21 @@ Messages arrive in any order and two barrels can fire in one tick, so every acti
 Picture it: you aim, pull the trigger, watch the bullet hit your opponent's head, and the server says "miss". Annoying? Very. The shooter sees other players about half a ping and one interpolation tick in the past, so checking against current positions turns hits into misses. How do you fix it? The client sends its view delay with the press, and the server rewinds the world to that moment before checking:
 
 ```mermaid
+---
+config:
+  sequence:
+    width: 90
+    actorMargin: 120
+---
 sequenceDiagram
-    participant C as Shooter's client
+    participant C as Shooter's<br/>client
     participant S as Server
-    Note over C: trigger pressed, the screen shows tick 1200.5
-    C->>S: input of tick 1204, view delay 3.5 ticks
-    S->>S: rewind, objects take their tick 1200.5 poses
-    S->>S: ray against the rewound world
-    S->>S: lifetime ends, poses return to tick 1204
+    Note over C: trigger pressed,<br/>screen at tick 1200.5
+    C->>S: input of tick 1204,<br/>view delay 3.5 ticks
+    Note over S: Late of tick 1204
+    Note over S: rewind: objects take<br/>their tick 1200.5 poses
+    Note over S: a ray against<br/>the rewound world
+    Note over S: the lifetime ends,<br/>poses return to 1204
 ```
 
 The server moves only bodies when rewinding, so nothing has to be recomputed afterwards. A client can't be trusted with its view delay (a made-up one-second delay would hit people who hid long ago), so the server caps it at 0.15 s, as Brawlhalla does. The bubble adds a subtlety: the shooter saw objects in its bubble in the present and the rest in the past. The server keeps the same bubble for each client from its own positions and remembers who was in it (`BubbleHistory`) instead of trusting a client report, which is easy to forge.
@@ -598,13 +635,18 @@ That left rollback. Box2D is deterministic, but LowLevelPhysics2D in Unity 6.3 h
 For bots I set one hard rule: a bot plays by the same rules as a human. No coordinates through walls, no special paths in the core. A bot is a player without a client, admitted through the same entry point (`PlayerAdmitter.Admit`) and driven by the server instead of a client (`PlayerDriver`). Its brain presses buttons on a virtual gamepad that produces an ordinary `CharacterControls`, and from there it's the same rules and the same network code. A fun side effect: the clip at the top was shot with six bots whose gamepads were pressed by a filming script.
 
 ```mermaid
-flowchart LR
+---
+config:
+  flowchart:
+    htmlLabels: false
+    rankSpacing: 25
+---
+flowchart TB
     Sense["Perception<br/>camera frame, line of sight,<br/>nearby shots and wind-ups"] --> Facts["Facts<br/>19 bit flags"]
-    Facts --> Goal["Goal weighted by personality<br/>Kill, FinishOff, Guard, Retreat, Kite…"]
+    Facts --> Goal["Goal<br/>weighted by personality"]
     Goal --> Planner["A* planner<br/>about 9 µs"]
-    Planner --> Skill["Skill<br/>Shoot, Kite, Guard, Punch, Throw…"]
-    Skill --> Pad["Virtual gamepad"]
-    Pad --> Input["CharacterControls,<br/>same as a player's"]
+    Planner --> Skill["Skill<br/>Shoot, Kite, Guard, Punch…"]
+    Skill --> Pad["Virtual gamepad<br/>CharacterControls,<br/>same as a player's"]
 ```
 
 A bot sees what a player in its place would, a 26 × 14.6 m camera frame minus whatever walls hide, hears shots passing within 1.5 m and notices wind-ups within 3.5 m. A behaviour tree for a bot that shoots, brawls, guards, throws crates and retreats would grow into a web of conditions, so decisions are made by GOAP (Goal-Oriented Action Planning), first used in F.E.A.R. The situation is 19 facts, each action lists the facts it needs, forbids, adds and removes, and an A* planner finds the cheapest chain of actions to a goal in about 9 µs over 17 actions. The brain sits behind `IBotBrain`, so a behaviour tree could replace GOAP as one more implementation.
