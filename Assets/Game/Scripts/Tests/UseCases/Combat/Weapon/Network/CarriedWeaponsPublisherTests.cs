@@ -101,7 +101,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         [Test]
         public void OnlyThePublishPhaseSends()
         {
-            foreach (var phase in new[] { TickPhase.Prepare, TickPhase.Early, TickPhase.Default, TickPhase.Late })
+            foreach (var phase in new[] { TickPhase.Prepare, TickPhase.BeforePhysics, TickPhase.Default, TickPhase.Late })
                 _world.Fire(phase, 1);
 
             Assert.That(_sent.Broadcasts, Is.Empty);

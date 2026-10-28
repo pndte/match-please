@@ -100,7 +100,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Events
             Assert.That(_part.Calls, Is.EqualTo(new[] { "show 0@14 1", "show 0@15 2", "reject 0@14" }));
         }
 
-        [TestCase(TickPhase.Early)]
+        [TestCase(TickPhase.BeforePhysics)]
         [TestCase(TickPhase.Default)]
         [TestCase(TickPhase.Late)]
         [TestCase(TickPhase.Publish)]

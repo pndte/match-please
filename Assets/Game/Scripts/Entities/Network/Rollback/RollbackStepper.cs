@@ -93,7 +93,7 @@ namespace Bw.Entities.Network.Rollback
 
         private void Step(int tick)
         {
-            _phases.Fire(TickPhase.Early, tick);
+            _phases.Fire(TickPhase.BeforePhysics, tick);
             _phases.Fire(TickPhase.Physics, tick);
             _phases.Fire(TickPhase.Default, tick);
             _phases.Fire(TickPhase.Late, tick);

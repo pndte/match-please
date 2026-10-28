@@ -75,7 +75,7 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Network
         public void RestComesAtTheLatePhase()
         {
             _world.Fire(TickPhase.Prepare, 1);
-            _world.Fire(TickPhase.Early, 1);
+            _world.Fire(TickPhase.BeforePhysics, 1);
             _world.Fire(TickPhase.Default, 1);
 
             Assert.That(_rests.Count, Is.EqualTo(0));

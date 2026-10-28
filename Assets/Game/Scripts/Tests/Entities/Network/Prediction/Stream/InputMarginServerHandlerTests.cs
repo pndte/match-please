@@ -101,7 +101,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Stream
         }
 
         [TestCase(TickPhase.Prepare)]
-        [TestCase(TickPhase.Early)]
+        [TestCase(TickPhase.BeforePhysics)]
         [TestCase(TickPhase.Default)]
         [TestCase(TickPhase.Late)]
         public void OnlyPublishReports(TickPhase phase)

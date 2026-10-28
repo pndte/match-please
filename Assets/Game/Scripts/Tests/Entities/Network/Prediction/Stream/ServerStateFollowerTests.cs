@@ -109,7 +109,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Stream
             Assert.That(_state.Applied, Is.EqualTo(new[] { 50 }));
         }
 
-        [TestCase(TickPhase.Early)]
+        [TestCase(TickPhase.BeforePhysics)]
         [TestCase(TickPhase.Default)]
         [TestCase(TickPhase.Late)]
         [TestCase(TickPhase.Publish)]

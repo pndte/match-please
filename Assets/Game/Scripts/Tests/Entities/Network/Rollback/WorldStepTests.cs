@@ -22,7 +22,7 @@ namespace Bw.Tests.Entities.Network.Rollback
             _order = new List<string>();
             _step = new WorldStep(_lifetime.Lifetime, _clock);
             new PhysicsStepper(_lifetime.Lifetime, new CountingSteps(() => _order.Add("physics")), _step);
-            foreach (var phase in new[] { TickPhase.Prepare, TickPhase.Early, TickPhase.Default, TickPhase.Late, TickPhase.Publish })
+            foreach (var phase in new[] { TickPhase.Prepare, TickPhase.BeforePhysics, TickPhase.Default, TickPhase.Late, TickPhase.Publish })
                 _step.Stepped(phase).Advise(_lifetime.Lifetime, tick => _order.Add($"{phase} {tick}"));
         }
 
@@ -35,7 +35,7 @@ namespace Bw.Tests.Entities.Network.Rollback
         {
             _clock.Tick(5);
 
-            Assert.That(_order, Is.EqualTo(new[] { "Prepare 5", "Early 5", "physics", "Default 5", "Late 5", "Publish 5" }));
+            Assert.That(_order, Is.EqualTo(new[] { "Prepare 5", "BeforePhysics 5", "physics", "Default 5", "Late 5", "Publish 5" }));
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace Bw.Tests.Entities.Network.Rollback
 
             _clock.Tick(5);
 
-            Assert.That(_order.IndexOf("Physics 5"), Is.GreaterThan(_order.IndexOf("Early 5")));
+            Assert.That(_order.IndexOf("Physics 5"), Is.GreaterThan(_order.IndexOf("BeforePhysics 5")));
             Assert.That(_order.IndexOf("Physics 5"), Is.LessThan(_order.IndexOf("Default 5")));
         }
 

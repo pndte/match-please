@@ -23,7 +23,7 @@ namespace Bw.UseCases.Level.Network
             _path = path;
             _step = step;
 
-            world.Stepped(TickPhase.Early).Advise(lifetime, DriveTo);
+            world.Stepped(TickPhase.BeforePhysics).Advise(lifetime, DriveTo);
         }
 
         private void DriveTo(int tick) =>

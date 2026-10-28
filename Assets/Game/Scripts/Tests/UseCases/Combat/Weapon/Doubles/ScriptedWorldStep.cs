@@ -7,8 +7,8 @@ namespace Bw.Tests.UseCases.Combat.Weapon.Doubles
 {
     public sealed class ScriptedWorldStep : IWorldStep
     {
-        private static readonly TickPhase[] Live = { TickPhase.Prepare, TickPhase.Early, TickPhase.Default, TickPhase.Late, TickPhase.Publish };
-        private static readonly TickPhase[] Replayed = { TickPhase.Early, TickPhase.Default, TickPhase.Late };
+        private static readonly TickPhase[] Live = { TickPhase.Prepare, TickPhase.BeforePhysics, TickPhase.Default, TickPhase.Late, TickPhase.Publish };
+        private static readonly TickPhase[] Replayed = { TickPhase.BeforePhysics, TickPhase.Default, TickPhase.Late };
 
         public IReadonlyProperty<bool> Replaying => _replaying;
 

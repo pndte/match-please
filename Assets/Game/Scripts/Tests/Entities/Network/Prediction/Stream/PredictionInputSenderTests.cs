@@ -155,7 +155,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Stream
             Assert.That(_requests.Requests.Single().Tick, Is.EqualTo(101));
         }
 
-        [TestCase(TickPhase.Early)]
+        [TestCase(TickPhase.BeforePhysics)]
         [TestCase(TickPhase.Default)]
         [TestCase(TickPhase.Late)]
         [TestCase(TickPhase.Publish)]
@@ -173,7 +173,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Stream
             _worldStep.Fire(TickPhase.Prepare, 100);
             _worldStep.SetReplaying(true);
 
-            _worldStep.Fire(TickPhase.Early, 100);
+            _worldStep.Fire(TickPhase.BeforePhysics, 100);
             _worldStep.Fire(TickPhase.Default, 100);
             _worldStep.SetReplaying(false);
 

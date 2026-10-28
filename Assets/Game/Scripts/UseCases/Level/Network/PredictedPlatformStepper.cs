@@ -26,7 +26,7 @@ namespace Bw.UseCases.Level.Network
             _step = step;
 
             predictedBy.Me.WhenTrue(lifetime, predictedLifetime =>
-                world.Stepped(TickPhase.Early).Advise(predictedLifetime, DriveTo));
+                world.Stepped(TickPhase.BeforePhysics).Advise(predictedLifetime, DriveTo));
         }
 
         private void DriveTo(int tick) =>

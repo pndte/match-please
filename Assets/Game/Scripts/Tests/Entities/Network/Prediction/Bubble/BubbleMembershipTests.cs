@@ -81,7 +81,7 @@ namespace Bw.Tests.Entities.Network.Prediction.Bubble
             Assert.That(predictedBy.Me, Is.SameAs(_membership.Inside));
         }
 
-        [TestCase(TickPhase.Early)]
+        [TestCase(TickPhase.BeforePhysics)]
         [TestCase(TickPhase.Default)]
         [TestCase(TickPhase.Late)]
         [TestCase(TickPhase.Publish)]

@@ -12,7 +12,7 @@ namespace Bw.Tests.Entities.Network.Ticks
             Assert.That(Enum.GetValues(typeof(TickPhase)), Is.EqualTo(new[]
             {
                 TickPhase.Prepare,
-                TickPhase.Early,
+                TickPhase.BeforePhysics,
                 TickPhase.Physics,
                 TickPhase.Default,
                 TickPhase.Late,
