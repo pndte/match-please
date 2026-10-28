@@ -7,153 +7,101 @@
 [![Release](https://img.shields.io/github/v/release/pndte/match-please)](https://github.com/pndte/match-please/releases/latest)
 [![itch.io](https://img.shields.io/badge/itch.io-download-FA5C5C?logo=itchdotio&logoColor=white)](https://pndte.itch.io/match-please?secret=lGJwzXWXsiEN7X02vTIVU1Fs)
 
-<img src="Media/brawl.gif" align="right" width="460" alt="Шесть игроков дерутся все против всех на карте «Стройка»">
+<img src="Media/brawl.gif" align="right" width="460" alt="Six players in a free-for-all on the Construction Site map">
 
-Match, Please! — сетевой 2D-шутер на Unity 6. Игроки сражаются на многоэтажных картах с лифтами и движущимися платформами: стреляют из пистолета, автомата, дробовика и снайперской винтовки, дерутся врукопашную, ставят блок, прикрываются ящиками и бросают их в противников.
+Match, Please! is an epic multiplayer 2D shooter on Unity 6. Players fight on multi-storey maps with elevators and moving platforms, shoot each other with pistols, assault rifles, shotguns and sniper rifles, brawl hand to hand and even use the environment to throw their opponents off balance!
 
-Комната открывается на «Стройке» или на «Бойне», и её создатель сам набирает до восьми ботов. У каждого бота свой уровень сложности и характер, а по ходу матча состав меняется в окне, которое открывается клавишей B. Боты играют по тем же правилам и через тот же сетевой код, что и живые игроки. Если клиент отключился, его персонажем управляет бот, пока игрок не вернётся.
+Most of the work went into the network code. From Netcode for GameObjects (NGO) I took the bare minimum: client connections, message delivery (unnamed messages) and spawning network objects. Everything else (the protocol, one tick timeline for all peers, client-side prediction with rollback and lag compensation) is written from scratch. My framework is far cheaper on the wire than stock Unity Netcode (a movement input takes 11 bytes against 28 with NetworkVariable and RPC), and the network code runs and is tested in isolation from Unity, outside NetworkBehaviour.
 
-Большая часть работы над проектом ушла на сетевой код. Из Netcode for GameObjects (NGO) используются подключение клиентов, доставка сообщений и спавн сетевых объектов, а протокол, единая шкала тиков, клиентское предсказание с откатом и лаг-компенсация написаны с нуля. В собственном протоколе ввод движения занимает 11 байт против 28 у NetworkVariable и RPC, а урон и смерти, переданные событиями, требуют в 40 раз меньше трафика, чем при потоковой репликации. Физика переведена на LowLevelPhysics2D (Box2D v3), и тик с двумя сотнями ящиков рассчитывается за 0,064 мс вместо 4,1 мс. Код проверяют больше 3200 автоматических тестов.
+If you want to go straight to the code, open [Where to look in the code](#where-to-look-in-the-code) at the end of this README. It lists the scripts every module starts from and the order to read them in.
 
-Автор и единственный разработчик — Андрей Панфилов.
+Author and sole developer: Andrey Panfilov.
 
-## Содержание
+## Contents
 
-- [API на примерах](#api-на-примерах)
-- [Проект в цифрах](#проект-в-цифрах)
-- [Архитектура](#архитектура)
-  - [Сборки и зависимости](#сборки-и-зависимости)
-  - [Сетевой фреймворк изнутри](#сетевой-фреймворк-изнутри)
-  - [Сетевой протокол](#сетевой-протокол)
-  - [Тик](#тик)
-  - [Предсказание с откатом](#предсказание-с-откатом)
-  - [Событийное предсказание](#событийное-предсказание)
-  - [Лаг-компенсация](#лаг-компенсация)
-  - [Физика](#физика)
-  - [Боты](#боты)
-  - [Комнаты и переподключение](#комнаты-и-переподключение)
-  - [Слой отображения](#слой-отображения)
-  - [Пулы](#пулы)
-- [Как проверяется код](#как-проверяется-код)
+- [Where to look in the code](#where-to-look-in-the-code)
+- [API by example](#api-by-example): the network, tick phases, rollback, damage, lag compensation, wire format, subscriptions, bots, view models, [pools](#pools)
+- [The project in numbers](#the-project-in-numbers)
+- [Architecture](#architecture)
+  - [Assemblies and dependencies](#assemblies-and-dependencies)
+  - [The network framework from the inside](#the-network-framework-from-the-inside)
+  - [Network protocol](#network-protocol)
+  - [The tick](#the-tick)
+  - [Prediction with rollback](#prediction-with-rollback)
+  - [Event prediction](#event-prediction)
+  - [Lag compensation](#lag-compensation)
+  - [Physics](#physics)
+  - [Bots](#bots)
+  - [Rooms and reconnection](#rooms-and-reconnection)
+- [How the code is checked](#how-the-code-is-checked)
 - [CI/CD](#cicd)
-- [Тесты при плохой сети](#тесты-при-плохой-сети)
-- [Запуск](#запуск)
-- [Структура репозитория](#структура-репозитория)
-- [Стек](#стек)
+- [Bad network tests](#bad-network-tests)
+- [Running the game](#running-the-game)
+- [Repository layout](#repository-layout)
+- [Stack](#stack)
 
-## API на примерах
+## API by example
 
-Ниже собраны короткие примеры работы с основными подсистемами. Код сокращён для README, но классы и методы в нём настоящие.
+Below are short examples of the main subsystems. The code is shortened for clarity.
 
-Почти все методы принимают `Lifetime` из библиотеки [JetBrains.Lifetimes](https://www.nuget.org/packages/JetBrains.Lifetimes). Подписка или объект из пула, привязанные к lifetime, живут не дольше него и освобождаются, когда lifetime завершается. В коде игры нет ни одного вызова `Dispose`, и даже подписки на события C# снимаются вместе с lifetime.
+First, a word about what almost all the code rests on. Sooner or later every Unity project drowns in unsubscriptions: subscribed in `OnEnable`, don't forget `OnDisable`; took an object from a pool, don't forget to return it. Miss one pair and at best memory leaks, at worst a destroyed object gets a callback and throws `MissingReferenceException`. My way out is `Lifetime` from [JetBrains.Lifetimes](https://www.nuget.org/packages/JetBrains.Lifetimes), and almost every method in the project takes one. A lifetime stands for the time while something is alive; whatever is bound to it lives no longer, and nested lifetimes end with their parent, so a dying character takes all its subscriptions with it. The game code has no `Dispose` calls at all.
 
-### Взять объект из пула
+### Sending data over the network
 
-Пул выдаёт объект на то время, пока жив переданный lifetime. Для эффектов, которые сами сообщают о своём окончании (интерфейс `IOneShot`), есть короткий вызов `OneShot`: объект вернётся в пул, как только эффект закончится.
+NGO offers NetworkVariable and RPC for exchanging data. Both live inside a NetworkBehaviour, so client and server code end up in one class, split by `IsServer` and `IsOwner` checks. Such a class is hard to read (which side does this method run on?) and almost impossible to test without a running network.
 
-```csharp
-// Кровь при попадании вернётся в пул, когда эффект доиграет
-_pools.For<IEffect>(bloodPrefab).OneShot(lifetime).Play(hitPoint, hitNormal);
+Look closer, and data in a networked game travels only three ways: a client asks the server to do something (a request), the server tells clients what happened (a result), and some values live on an object and must be the same for everyone (a property). I gave each way and each side its own interface, and a game class gets exactly the one it needs:
 
-// Трассер занят, пока летит пуля
-_pools.For<IBulletTracer>(tracerPrefab).OneShot(lifetime).Fly(muzzle, hitPoint, bulletSpeed);
-
-// Аренда на фиксированный срок: голос вернётся в пул через clip.length секунд игрового времени
-var voice = _pools.For<Voice>(voicePrefab).Resource(lifetime.CreateNestedFor(clip.length));
-
-// Сетевой ящик на сервере деспавнится и вернётся в пул при завершении crateLifetime
-_pools.For<PooledNetworkObject>(cratePrefab).Spawn(crateLifetime, spot, Quaternion.identity);
-```
-
-Параметр `T` в `For<T>` задаёт тип, через который потребитель работает с объектом. Пул ищет на префабе компонент `IResource<T>`, а если такого нет, берёт компонент типа `T`. Настройки пулов хранятся в общем реестре (ScriptableObject) и описаны в разделе [«Пулы»](#пулы); вызывающий код от них не зависит.
-
-### Подписаться, пока выполняется условие
-
-Расширения `WhenTrue`, `WhenAlive` и подобные им открывают вложенный lifetime на то время, пока выполняется условие. Подписка внутри него снимается сама, когда условие перестаёт выполняться.
-
-```csharp
-// Пока персонаж жив, регенерация здоровья проверяется каждый тик; после смерти подписка снимается сама
-mortal.State.WhenAlive(lifetime, alive =>
-    worldStep.Stepped(TickPhase.Default).Advise(alive, Step));
-```
-
-На этом приёме построена большая часть кода. Клиент опрашивает клавиатуру, пока управляет персонажем, а луч фонаря горит, пока фонарь включён и оружие в руках.
-
-### Передать данные по сети
-
-Для обмена данными по сети игровой код использует пять интерфейсов. Запрос идёт от клиента, который владеет объектом, к серверу. Результат идёт от сервера к одному клиенту или ко всем. Свойство хранит значение: его изменения рассылает тот, у кого есть право на запись, а новый клиент получает текущее значение при подключении.
-
-| Интерфейс | Где используется | Что умеет |
+| Interface | Used on | What it does |
 |---|---|---|
-| `INetRequestSender<T>` | на клиенте-владельце | `Send(value)` и событие `Sent` для локального предсказания |
-| `INetRequestReceiver<T>` | на сервере | событие `Received` |
-| `INetResultSender<T>` | на сервере | `Broadcast(value)` и `SendTo(client, value)` |
-| `INetResultReceiver<T>` | на клиенте | событие `Received` |
-| `INetProperty<T>` | на обеих сторонах | `Value` и подписка на изменения |
-
-Запрос от клиента к серверу:
+| `INetRequestSender<T>` | the owning client | `Send(value)` and a `Sent` event for local prediction |
+| `INetRequestReceiver<T>` | the server | `Received` event |
+| `INetResultSender<T>` | the server | `Broadcast(value)` and `SendTo(client, value)` |
+| `INetResultReceiver<T>` | clients | `Received` event |
+| `INetProperty<T>` | both sides | `Value` and change notifications |
 
 ```csharp
-// Клиент: клавиша F переключает фонарь
+// Client: F toggles the flashlight
 _switch.Send(!flashlight.Lit.Value);
 
-// Сервер передаёт запрос в ядро игры, которое ничего не знает о сети
+// Server: hands the request to the game core, which knows nothing about the network
 _switch.Received.Advise(lifetime, flashlight.Apply);
-```
 
-Результат от сервера одному клиенту или всем:
-
-```csharp
-// Сервер: каждому клиенту — номер его игрока, всем — запись для ленты убийств
+// Server: each client gets its own player id, everyone gets the kill feed entry
 _localPlayer.SendTo(client, ids.IdOf(player));
 _kills.Broadcast(notices.Of(kill));
 
-// Клиент
-_kills.Received.Advise(lifetime, ShowKill);
-```
-
-Свойство, которое пишет сервер:
-
-```csharp
-// Сервер: фонарь включился
+// A property the server writes; a client gets every change and the current value on joining
 _lit.Value = true;
-
-// Клиент: значение приходит при каждом изменении и после подключения
 _lit.Advise(lifetime, flashlight.Apply);
 ```
 
-Право на запись проверяется в момент вызова. Запрос с клиента, который не владеет объектом, бросит исключение раньше, чем изменится какое-либо состояние.
-
-Объекты записей создаёт и внедряет установщик сетевого объекта (Zenject Installer). Сначала он объявляет схему: список записей, одинаковый на сервере и клиенте, потому что номер записи в сообщении равен порядковому номеру её объявления.
+What if client code sends a request for an object it doesn't own? The right is checked at the call, which throws before any state changes. And how does the receiver know which entry the incoming bytes belong to? Sending the entry's name in every message is too expensive. So a network object's installer (a Zenject Installer) first declares a schema, a list of entries identical on server and client, and an entry's number in a message is its declaration index. Each entry has two ends, and handing the same entry to both classes would bring the `IsServer` mess back, so the entry is bound to each class through the interface of its role:
 
 ```csharp
 var @switch = netSchema.DeclareRequest<bool>(NetworkDelivery.Reliable);
 var lit = netSchema.DeclareProperty(false, NetworkDelivery.Reliable, NetworkPermissions.Server);
+
+Container.BindRequestSender(@switch).WhenInjectedInto<FlashlightClientHandler>();   // client
+Container.BindRequestReceiver(@switch).WhenInjectedInto<FlashlightServerHandler>(); // server
 ```
 
-Затем каждая запись привязывается к классам, которые с ней работают, и каждый класс получает интерфейс своей роли, отправителя или получателя:
+What happens between `Send` and `Received` is in [The network framework from the inside](#the-network-framework-from-the-inside).
+
+### Tick phases
+
+Unity doesn't define the order of `Update` across components, and for a network simulation that's a real problem. A shot has to be checked against a world where every body has already moved for this tick. If half the characters are still on the previous tick, the bullet passes through someone it hit on screen. So the simulation runs in ticks, each tick is split into phases, and a handler subscribes to the phase it needs:
 
 ```csharp
-Container.BindRequestSender(@switch).WhenInjectedInto<FlashlightClientHandler>();   // на клиенте
-Container.BindRequestReceiver(@switch).WhenInjectedInto<FlashlightServerHandler>(); // на сервере
-```
-
-Что происходит между `Send` и `Received`, описано в разделе [«Сетевой фреймворк изнутри»](#сетевой-фреймворк-изнутри).
-
-### Выполнить код в нужной фазе тика
-
-Сетевая симуляция идёт тиками, и каждый тик разбит на фазы. Обработчик подписывается на ту фазу, в которой ему нужно работать:
-
-```csharp
-// В фазе Late все тела уже сдвинулись на этот тик, и попадания проверяются по готовому миру
+// In Late every body has moved for this tick, so hits are checked against the finished world
 worldStep.Stepped(TickPhase.Late).Advise(lifetime, ResolveShots);
 ```
 
-Порядок фаз и их назначение описаны в разделе [«Тик»](#тик).
+The phases are listed in [The tick](#the-tick).
 
-### Подключить объект к предсказанию
+### Rollback
 
-Чтобы объект участвовал в откате, его классу в ядре достаточно отдавать текущее состояние и применять сохранённое:
+Prediction with rollback tends to spread across the whole codebase: every object has to keep a history of its states, compare it with the server and know how to recompute itself. I wanted core classes to know nothing about it. A class only exposes its current state and applies a saved one:
 
 ```csharp
 public interface IRestorable<TState> where TState : struct
@@ -163,47 +111,37 @@ public interface IRestorable<TState> where TState : struct
 }
 ```
 
-Установщики персонажа подключают сетевой ввод и откат двумя строками:
+To repeat a character's steps, the server and nearby clients need its input, and the client needs its state rolled back. The character's installers wire both in two lines:
 
 ```csharp
-PredictionInputInstaller<CharacterControls>.Install(Container, runtime, netSchema); // ввод: клиент → сервер → соседние клиенты
-RollbackStateInstaller<MovementState>.Install(Container, runtime, netSchema);       // состояние: сервер → клиенты, откат
+PredictionInputInstaller<CharacterControls>.Install(Container, runtime, netSchema); // input: client → server → nearby clients
+RollbackStateInstaller<MovementState>.Install(Container, runtime, netSchema);       // state: server → clients, rollback
 ```
 
-Остальное делает фреймворк. Он сохраняет состояние на каждом тике, сравнивает его с ответом сервера и при расхождении откатывает мир и пересчитывает его до текущего тика.
+The framework does the rest. It saves the state every tick, compares it with the server's answer and, on a mismatch, rolls the world back and replays it to the current tick.
 
-<p align="center">
-  <img src="Media/punch.gif" width="480" alt="Сильный удар кулаком"><br>
-  <sub>Кулаки тоже откатываются вместе с миром: их состояние — конечный автомат из фаз джеба, заряда и сильного удара</sub>
-</p>
+<p align="center"><img src="Media/punch.gif" width="480" alt="A charged punch"><br><sub>Fists roll back with the world too: their state is a state machine of jab, charge and heavy punch phases</sub></p>
 
-### Предсказать урон
+### Damage prediction
 
-Для урона используется другая, событийная модель предсказания. Цель и источник урона подключаются так:
+That trick doesn't work for damage. Health changes rarely, and streaming it every tick for the sake of rollback would be wasteful (see [Event prediction](#event-prediction)). Damage gets its own event-based prediction with two sides, the one who hits and the one who is hit. The shooter can't wait for the server, or every hit would lag by the ping, so the shooter's client shows the damage at once and checks it against the server's verdict later:
 
 ```csharp
-// Цель: любой объект со здоровьем (персонажи и ящики)
-EventPredictionTargetInstaller<IReadonlyMortal, Vitals, Impacts>.Install(Container, runtime, vitals);
+EventPredictionTargetInstaller<IReadonlyMortal, Vitals, Impacts>.Install(Container, runtime, vitals);                 // anything with health
+EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyMortal, Impacts>.Install(Container, runtime, netSchema); // a weapon
 
-// Источник урона: оружие
-EventPredictionInitiatorInstaller<IReadonlyWeapon, IReadonlyMortal, Impacts>.Install(Container, runtime, netSchema);
+_outcomePredictor.Predict(tick, target, impacts); // the shooter's client
 ```
 
-Клиент стрелка показывает урон до ответа сервера и ждёт его решения:
+### Checking a shot in the past
 
-```csharp
-_outcomePredictor.Predict(tick, target, impacts);
-```
-
-### Проверить выстрел задним числом
-
-Объект, в который попадают пули, подключается к лаг-компенсации одной строкой, после чего сервер хранит его позы за последние тики:
+The shooter always sees opponents slightly in the past, so the server has to put the world back into the moment the shooter saw. An object bullets can hit joins this with one line, and the server starts keeping its poses for the last ticks:
 
 ```csharp
 LagCompensationInstaller<RigidState, RigidPoseView>.Install(Container, runtime);
 ```
 
-Сервер проверяет выстрел внутри временного lifetime. Пока этот lifetime жив, все объекты стоят в позах того тика, который видел стрелок, а когда он завершается, позы возвращаются в настоящее:
+After the check the world must return to the present. Forget it (or let the trace throw) and the next tick runs on the past world. A lifetime helps again: while it's alive, every object stands in the pose of the tick the shooter saw, and when it ends, the poses come back:
 
 ```csharp
 Lifetime.Using(rewound =>
@@ -213,81 +151,50 @@ Lifetime.Using(rewound =>
 });
 ```
 
-### Описать сетевой формат
+### Wire format
 
-Для каждого типа сообщения пишется кодек: структура, в которой один и тот же метод и записывает значение в буфер, и читает его оттуда.
+The classic serialization bug is having separate methods for writing and reading: you add a field to one, forget the other, and the client reads garbage. My codec is a struct where one method both writes the value and reads it back. Here is the body of `TickedGuardStateCodec`:
 
 ```csharp
-public struct TickedGuardStateCodec : ICodec<TickedState<GuardState>>
+public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
 {
-    public TickedState<GuardState> Value { get => _value; set => _value = value; }
-    private TickedState<GuardState> _value;
-
-    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-    {
-        var tick = Value.Tick;
-        var health = Value.State.Health;
-        var raised = Value.State.Raised;
-        var broken = Value.State.Broken;
-        var aim = Value.State.Aim;
-        var ticksSinceBlow = Value.State.TicksSinceBlow;
-        var ticksSinceRegen = Value.State.TicksSinceRegen;
-        serializer.SerializePacked(ref tick);
-        serializer.SerializeFlags(ref raised, ref broken); // два bool в одном байте
-        serializer.SerializeValue(ref health);
-        if (raised)
-            serializer.SerializeAngle(ref aim);             // угол только у поднятого блока
-        serializer.SerializePacked(ref ticksSinceBlow);
-        serializer.SerializePacked(ref ticksSinceRegen);
-        Value = new TickedState<GuardState>(tick, new GuardState(health, raised, broken, raised ? aim : 0f, ticksSinceBlow, ticksSinceRegen));
-    }
+    // … fields copied from Value into locals
+    serializer.SerializePacked(ref tick);
+    serializer.SerializeFlags(ref raised, ref broken); // two bools in one byte
+    serializer.SerializeValue(ref health);
+    if (raised)
+        serializer.SerializeAngle(ref aim);             // the angle only for a raised guard
+    // … the remaining fields, then Value is rebuilt from the locals
 }
 ```
 
-Числа с плавающей точкой передаются в квантованном виде. Точность задаётся рядом с кодеком и считается частью протокола:
+Floats are the next expense. A float takes 4 bytes, while a character's position needs only 1/256 m of precision, and at that precision almost any position on the map fits into 1–3 bytes. The precision of each value is declared next to its codec and is part of the protocol:
 
 ```csharp
-private static readonly Quantization Position = new(8); // шаг 1/256 м
-private static readonly Quantization Point = new(6);    // шаг 1/64 м
+private static readonly Quantization Position = new(8); // step 1/256 m
+private static readonly Quantization Point = new(6);    // step 1/64 m
 
-serializer.SerializeQuantized(ref position, Position);  // число шагов в varint вместо 4 байт float
-serializer.SerializeQuantized(ref aim, Point);          // точка прицела во вводе игрока
-serializer.SerializeAngle(ref angle);                   // угол в 2 байтах
+serializer.SerializeQuantized(ref position, Position);  // a varint count of steps instead of a 4-byte float
+serializer.SerializeQuantized(ref aim, Point);          // the aim point in the player's input
+serializer.SerializeAngle(ref angle);                   // an angle in 2 bytes
 ```
 
-Код, который регистрирует кодеки в обработчике сообщений, генерирует команда редактора Tools → Network → Regenerate message codec registrations.
+Every codec has to be registered in the message handler, and a forgotten registration only shows up when a message arrives and can't be read. So I don't write registrations by hand. The editor command Tools → Network → Regenerate message codec registrations generates them, and a test compares the registry with the generator's output.
 
-<p align="center">
-  <img src="Media/guard.gif" width="480" alt="Блок под автоматной очередью и контратака"><br>
-  <sub>Состояние блока передаёт кодек из примера выше. Пули, попавшие в поднятый блок, не снимают здоровье: боец подходит под очередью и добивает стрелка заряженным ударом</sub>
-</p>
+<p align="center"><img src="Media/guard.gif" width="480" alt="Guarding under rifle fire and a counterattack"><br><sub>The guard state goes through the codec above. Bullets that hit a raised guard take no health: the fighter walks into the burst and finishes the shooter with a charged punch</sub></p>
 
-### Научить бота новому действию
+### Subscriptions that end on their own
 
-Поведение бота складывается из GOAP-действий. Действие описывает условия, результат, стоимость и навык, который его выполняет:
+A game has plenty of behaviour that must run while something is true. Health regenerates while the character is alive. The flashlight beam is on while the flashlight is lit and the weapon is drawn. Usually this turns into `if (_isAlive)` flags and subscribe/unsubscribe pairs scattered over `OnEnable`, `OnDisable` and death handlers. Forget one unsubscribe and a dead character keeps healing.
 
-```csharp
-// «Отбить удар»: бот под угрозой и его блок цел, результат — удар отбит
-new GoapAction(
-    when: new GoapCondition(needs: BotFact.Threatened | BotFact.GuardReady, forbids: BotFact.PropHeld),
-    then: new GoapEffect(gives: BotFact.Parried, takes: BotFact.None),
-    cost: bots.ParryCost,
-    skill: guard);
-```
-
-Цепочку вроде «достать оружие, выйти на линию огня, выстрелить» планировщик строит сам из таких описаний.
-
-### Связать вью с данными
-
-Данные приходят во вью через интерфейс модели. Интерфейс объявлен в той же сборке, что и вью, и все его члены доступны для чтения, но не для записи:
+`WhenTrue`, `WhenAlive` and similar extensions open a nested lifetime for as long as a condition holds, and a subscription inside it ends by itself when the condition stops holding:
 
 ```csharp
-public interface IFlashlightViewModel
-{
-    public IReadonlyProperty<bool> Lit { get; }
-}
+// While the character is alive, regeneration runs every tick; after death the subscription is gone
+mortal.State.WhenAlive(lifetime, alive =>
+    worldStep.Stepped(TickPhase.Default).Advise(alive, Step));
 
-// Луч фонаря горит, пока оружие в руках и фонарь включён
+// The beam is on while the weapon is drawn and the flashlight is lit
 carry.Drawn.WhenTrue(lifetime, drawn =>
     flashlight.Lit.WhenTrue(drawn, lit =>
     {
@@ -296,48 +203,151 @@ carry.Drawn.WhenTrue(lifetime, drawn =>
     }));
 ```
 
-## Проект в цифрах
+`Step` has no "is the character alive?" check, because nobody calls it for a dead character. Most of the game code is built on this pattern.
 
-| Показатель | Значение |
+### A new bot action
+
+Writing bot behaviour as a tree of conditions is fun right up to the moment you want to teach the bot something new. Then you have to touch every branch where the new skill could apply. Instead, a bot's behaviour is made of GOAP actions. An action says when it's possible, what it gives, what it costs and which skill performs it:
+
+```csharp
+// "Parry": the bot is threatened and its guard is intact; the result is a parried blow
+new GoapAction(
+    when: new GoapCondition(needs: BotFact.Threatened | BotFact.GuardReady, forbids: BotFact.PropHeld),
+    then: new GoapEffect(gives: BotFact.Parried, takes: BotFact.None),
+    cost: bots.ParryCost,
+    skill: guard);
+```
+
+The planner builds chains like "draw the gun, step into the line of fire, shoot" out of such descriptions. More in [Bots](#bots).
+
+### View models
+
+In many Unity projects views (animation, sound, effects, HUD) reach into game logic directly, and half a year later nobody can tell what changes what. I also wanted views to run without the game at all, on hand-filled data. So a view gets its data through its own read-only `I…ViewModel` interface, declared in the view's assembly, which depends on nothing else. The view assembly can't see the core, so an adapter from a separate assembly implements the interface and passes the core's state through without copying:
+
+```csharp
+public interface IFlashlightViewModel
+{
+    public IReadonlyProperty<bool> Lit { get; }
+}
+
+public sealed class FlashlightViewModel : IFlashlightViewModel
+{
+    public IReadonlyProperty<bool> Lit => _flashlight.Lit;
+}
+```
+
+```mermaid
+flowchart LR
+    Core["Core<br/>IReadonlyFlashlight"] --> Adapter["Adapter<br/>FlashlightViewModel"]
+    Adapter -->|implements| VM["IFlashlightViewModel<br/>in the view assembly"]
+    View["FlashlightView"] --> VM
+```
+
+With a hand-filled model a view runs without a match; that's how I check weapon sounds. Menus and HUD use UI Toolkit, interface animations use DOTween.
+
+### Pools
+
+Unity's built-in `ObjectPool<T>` works like most pools: `Get` hands an object out, `Release` brings it back, and returning is the caller's job. Forget `Release` and the object is lost for good; call it twice and one object has two owners (the built-in pool catches that only in the editor); destroy the owner first and the object stays checked out forever. Wondering how to build a pool where forgetting to return an object is impossible, I arrived at this API:
+
+```csharp
+public interface IPool<out T>
+{
+    public T Resource(Lifetime lifetime);
+}
+```
+
+There is no `Release`. The pool lends the object while the lifetime is alive and takes it back when the lifetime ends, so the caller only says how long it needs the object. NGO's prefab handler is a good example: NGO calls a pair of methods to create and destroy a network prefab instance, and the handler turns that pair into a lifetime nested in its own, so the instance returns even if `Destroy` never comes:
+
+```csharp
+var life = _lifetime.CreateNested();               // Instantiate
+var networkObject = _pool.Resource(life.Lifetime); // busy while life is alive
+life.Terminate();                                  // Destroy: the instance is back in the pool
+```
+
+What if the object ends before its taker? Other code may destroy it, the pool may end with the scene or reclaim the object when too many are out. So a loan lasts for the intersection of the taker's and the object's lifetimes (`Lifetime.DefineIntersection`) and ends when either does.
+
+Next is cleanup, which differs per object: a tracer hides its lines, blood clears its particles, a sound cut off midway should fade fast or the speakers click. The taker also needs a specific type (`IBulletTracer`, `IEffect`). Only the object knows either, so the pool stores resources, and on every loan a resource gets the loan's lifetime and returns a facade of the type the taker works with:
+
+```csharp
+public interface IResource<out T>
+{
+    public T Facade(Lifetime lifetime);
+}
+
+// BulletTracer
+public IBulletTracer Facade(Lifetime lifetime)
+{
+    lifetime.OnTermination(Hide); // the loan is over and the tracer lines go out
+    return this;
+}
+```
+
+The pool itself (`LimitedPool<T>`) knows nothing about Unity, and a resource can be a GameObject or a plain C# object. A prefab resource activates the instance for the loan (a free instance would keep rendering) and takes the facade from the instance's own `IResource<T>` component, or a `T` component if there isn't one.
+
+Where does the taker get the right pool? A pool with its own Zenject binding per effect prefab would mean dozens of bindings, so all pools sit behind one `IPools` and are found by key at the call site; for prefabs the key is the prefab, with a short `For<T>(prefab)` extension:
+
+```csharp
+public interface IPools
+{
+    public IPool<T> For<T>() where T : class;               // the pool of objects of type T
+    public IPool<T> For<T, TKey>(TKey key) where T : class; // a pool by key
+}
+```
+
+Sizes and overflow behaviour don't belong at call sites either, so they live in a shared ScriptableObject registry: `Prewarm`, `MaxIdle`, an optional `InUseCap` that reclaims the oldest loan or throws, and `ViewOnly` for client-only pools. Instances are created through the Zenject container, so prefabs with their own `GameObjectContext` work from a pool as usual.
+
+All this works while the taker knows how long it needs the object. Effects break that. A sound seems to last `clip.length`, but it plays at a random pitch, so it really lasts `clip.length / pitch`. Blood is particles with random lifetimes. A tracer outlives the bullet by a tail only the tracer knows. Only the object knows when it's done, so it has to say so through `IOneShot` and its single event, `ISource<Unit> Finished`. With just that event, each of the eight places that play an effect or a sound needs a nested lifetime, a loan on it and a subscription that ends it on `Finished`. That begs for an extension, and `OneShot` is it (exception handling left out):
+
+```csharp
+public static T OneShot<T>(this IPool<T> pool, Lifetime lifetime) where T : IOneShot
+{
+    var shot = lifetime.CreateNested();
+    var facade = pool.Resource(shot.Lifetime);
+    facade.Finished.Advise(shot.Lifetime, _ => shot.Terminate());
+    return facade;
+}
+
+// An effect now takes one line
+_pools.For<IEffect>(bloodPrefab).OneShot(_lifetime).Play(hitPoint, hitNormal);
+```
+
+The lifetime passed in is an upper bound: if the view that started the effect dies first, the effect returns unfinished. One hole remains: if the pool reclaims a loan at `InUseCap`, `Finished` never comes and the nested lifetime lives until the outer one ends, a tiny leak marked with a TODO in the code.
+
+## The project in numbers
+
+| Metric | Value |
 |---|---|
-| Код игры | 1183 файла C#, около 41 700 строк, 48 сборок |
-| Тесты | 3218 тестов EditMode: 459 файлов, около 41 400 строк |
-| Сетевой фреймворк | 192 файла, около 6100 строк |
-| Частота тика | 30 Гц |
-| Заголовок сетевого сообщения | 2–3 байта (у NetworkVariable и RPC 12–15) |
-| Ввод движения | 11 байт, 330 Б/с (у NetworkVariable и RPC 28 байт, 840 Б/с) |
-| Состояние движения | 22 байта (у NetworkVariable 43) |
-| Урон и смерти при 8 игроках и 28 объектах | около 2 КБ/с вместо 80 КБ/с при потоковой репликации |
-| Тик физики с 200 ящиками | 0,064 мс вместо 4,1 мс |
-| Глубина отката | 30 тиков (1 с) |
-| Окно лаг-компенсации | 0,15 с (5 тиков) |
-| Боксинг в сетевом фреймворке | 0 случаев |
-| Instantiate и Destroy во время стрельбы | 0 |
-| План бота | около 9 мкс на поиск по 17 действиям и 19 фактам |
-| Пройденные ботами маршруты | 952 из 1000 на «Стройке», 934 из 1000 на «Бойне» |
-| Боты в комнате | до 8, четыре уровня сложности и пять характеров |
-| Слой отображения | 256 файлов в 21 сборке |
+| Game code | 1183 C# files, about 41,700 lines, 48 assemblies |
+| Tests | 3218 EditMode tests: 459 files, about 41,400 lines |
+| Network framework | 192 files, about 6100 lines |
+| Movement input | 11 bytes, 330 B/s (28 bytes, 840 B/s with NetworkVariable and RPC) |
+| Damage and deaths, 8 players and 28 objects | about 2 KB/s instead of 80 KB/s with streaming replication |
+| Physics tick with 200 crates | 0.064 ms instead of 4.1 ms |
+| Boxing in the network framework | none |
+| Bot plan | about 9 µs for a search over 17 actions and 19 facts |
+| Bot routes completed | 952 of 1000 on Construction Site, 934 of 1000 on Slaughterhouse |
+| Bots in a room | up to 8, four difficulty levels, five personalities |
 
-## Архитектура
+## Architecture
 
-### Сборки и зависимости
+### Assemblies and dependencies
 
-Код игры разбит на 48 сборок (asmdef), и зависимости между ними направлены строго в одну сторону. Правила игры опираются на базовые контракты и больше ни на что. Сетевые адаптеры связывают правила с сетевым фреймворком, адаптеры моделей вью — с вью. Сборка `Bw.Injection` ссылается на все игровые сборки и строит из них граф объектов Zenject. Над всем этим стоит сборка тестов `Bw.Tests`: она ссылается на все сборки игры, а на неё не ссылается ни одна. Тесты собираются в редакторе и в сборку игры не попадают.
+In Unity it's easy to end up with everything referencing everything, from the character script calling the network to the animation peeking into the game rules. I wanted the rules to build and test with no network and no graphics, so the code is split into 48 assemblies (asmdef) whose dependencies point strictly one way:
 
 ```mermaid
 flowchart TB
-    Tests["Bw.Tests<br/>тесты EditMode, только в редакторе"]
-    subgraph Game["Сборки игры"]
-        Injection["Bw.Injection<br/>установщики Zenject"]
-        Network["Фича.Network<br/>сетевые адаптеры, кодеки"]
-        Adapters["Фича.View.Adapters<br/>модели вью"]
-        View["Фича.View<br/>анимация, звук, VFX, HUD"]
-        Core["Bw.UseCases.Фича<br/>правила игры"]
-        NetFw["Bw.Entities.Network<br/>сетевой фреймворк"]
-        Entities["Bw.Entities<br/>Lifetime, симуляция, физика, пулы"]
+    Tests["Bw.Tests<br/>EditMode tests, editor only"]
+    subgraph Game["Game assemblies"]
+        Injection["Bw.Injection<br/>Zenject installers"]
+        Network["Feature.Network<br/>network adapters, codecs"]
+        Adapters["Feature.View.Adapters<br/>view models"]
+        View["Feature.View<br/>animation, sound, VFX, HUD"]
+        Core["Bw.UseCases.Feature<br/>game rules"]
+        NetFw["Bw.Entities.Network<br/>network framework"]
+        Entities["Bw.Entities<br/>Lifetime, simulation, physics, pools"]
     end
 
-    Tests -.->|ссылается на все сборки| Game
+    Tests -.->|references every assembly| Game
     Injection --> Network
     Injection --> Adapters
     Network --> Core
@@ -349,159 +359,83 @@ flowchart TB
     View --> Entities
 ```
 
-| Сборка | Что содержит | На что не ссылается |
-|---|---|---|
-| `Bw.UseCases.<Фича>` | правила игры: движение, оружие, здоровье, ящики, матч, боты | сеть, вью |
-| `<Фича>.Network` | обработчики запросов, рассылку состояний, кодеки | вью |
-| `<Фича>.View` | анимацию, звук, VFX, HUD | ядро, сеть |
-| `<Фича>.View.Adapters` | модели вью, которые читают ядро | сеть |
-| `Bw.Injection` | установщики Zenject с отдельными ветками для сервера и клиента | — |
-| `Bw.Tests` | модульные и интеграционные тесты, правила архитектуры и стиля кода | — |
+The core is the same on server and client. So what makes the sides differ? Only which classes the installers attach to it: hit and death rules run on the server, prediction runs on the client. The core never checks where it runs and knows nothing about tick phases. When a client has to run a core command on another tick (an interpolation tick, say), a network adapter calls it at the right moment.
 
-Ядро игры одно для сервера и клиента. Стороны различаются тем, какие классы подключены к ядру в установщиках: правила попаданий и смерти работают на сервере, а предсказание — на клиенте. Само ядро не проверяет, где оно запущено, и ничего не знает о фазах тика. Если на клиенте команду ядра нужно выполнить на другом тике, например на тике интерполяции, её в нужный момент вызывает сетевой адаптер.
+### The network framework from the inside
 
-### Сетевой фреймворк изнутри
-
-Сетевой фреймворк (`Bw.Entities.Network`) стоит между игровым кодом и NGO. Из NGO он берёт подключение клиентов, спавн `NetworkObject` и неименованные сообщения `CustomMessagingManager`, а остальное реализует сам.
-
-| Часть | Классы | Задача |
-|---|---|---|
-| Сетевой объект | `NetworkLifetimedBehaviour` | даёт объекту lifetime на время спавна (`SpawnedLifetime`) и входящий ящик для его сообщений (`Inbox`) |
-| Схема | `NetEntriesSchemaBuilder`, `NetEntriesSchema` | хранит объявления записей по порядку и считает их хеш |
-| Записи объекта | `NetEntries` | создаёт записи по схеме, нумерует их и выдаёт классам интерфейсы их ролей |
-| Записи | `NetRequest<T>`, `NetResult<T>`, `NetProperty<T>` | реализуют интерфейсы из раздела API |
-| Отправка | `NetReplicationClient`, `NetReplicationServer` | отправляют изменённые записи |
-| Приём | `NetInboxClient`, `NetInboxServer` | передают входящее значение в запись, а на сервере сначала проверяют право отправителя |
-| Права | `INetSendGuard`, `INetReceiveGuard` | решают, кто может отправить запись и от кого её можно принять |
-| Сверка схемы | `NetSchemaHashSender`, `NetSchemaHashChecker` | отключают клиента, у которого схема объекта не совпала с серверной |
-| Кодеки | `ICodec<T>`, `MessageSender<T, TCodec>`, `MessageReceiver<T, TCodec>` | превращают значение в байты и обратно |
-| Маршрутизация | `NetworkRouter`, `MessagesHandler` | передают байты в NGO и разбирают входящие сообщения |
-
-`NetEntries` одинаков на сервере и клиенте. Отправка, приём и сверка схемы на двух сторонах устроены по-разному, и у каждой стороны свои классы. `NetTablesInstaller` привязывает классы своей стороны, так что в клиентском классе нет методов, которые имеют смысл лишь на сервере, и наоборот.
-
-Путь запроса от клавиши до сервера выглядит так:
+In the examples above it all looks simple: `Send` on the client, `Received` on the server. You may wonder what happens between those two calls. Let's follow one key press, F for the flashlight. The framework (`Bw.Entities.Network`) takes only client connections, `NetworkObject` spawning and unnamed messages from NGO; the full list of its classes is in [Where to look in the code](#6-network-framework).
 
 ```mermaid
 sequenceDiagram
-    participant H as Обработчик клиента
-    participant E as Запись NetRequest
+    participant H as Client handler
+    participant E as NetRequest entry
     participant R as NetReplicationClient
     participant N as NGO
-    participant M as MessagesHandler сервера
+    participant M as Server MessagesHandler
     participant I as NetInboxServer
-    participant S as Обработчик сервера
+    participant S as Server handler
     H->>E: Send(true)
-    E->>E: проверка права на отправку
-    E->>R: флаг изменения
-    R->>N: заголовок и кодек BoolCodec
-    N->>M: байты
-    M->>I: объект по NetworkObjectId
-    I->>I: запись по VarId,<br/>проверка права на приём
+    E->>E: check the right to send
+    E->>R: dirty flag
+    R->>N: header and BoolCodec
+    N->>M: bytes
+    M->>I: object by NetworkObjectId
+    I->>I: entry by VarId,<br/>check the right to receive
     I->>S: Received(true)
 ```
 
-Фрагменты кода ниже сокращены: проверки и тексты исключений убраны.
+Sending, receiving and the schema check work differently on the two sides, and one class with server and client branches would carry methods that mean nothing on one of them. So each side has its own classes, `NetTablesInstaller` binds the classes of its side, and only `NetEntries`, the object's entry table, is shared. The snippets below are shortened.
 
-#### Отправка
+#### Sending
 
-Отправка начинается в самой записи. Метод `Send` проверяет право на отправку, запоминает значение и поднимает флаг изменения:
-
-```csharp
-public void Send(T request)
-{
-    Stage(NetSendTarget.Untargeted, request); // проверка права и запоминание значения
-    _sent.Fire(request);                       // локальное эхо для предсказания
-    Dispatch();                                // флаг изменения Dirty = true
-}
-```
-
-Дальше запись отправляет класс своей стороны: `NetReplicationClient` на клиенте или `NetReplicationServer` на сервере. Он подписан на флаг каждой записи, пока этой стороне разрешено её отправлять: для запроса это время, пока клиент владеет объектом. Когда флаг поднимается, класс сбрасывает его и отправляет запись. Отправка идёт в тот же момент, без ожидания тика, а сообщения одного кадра NGO сам объединяет в пакеты.
+`Send` checks the right to send, stores the value and raises a dirty flag. Why doesn't the entry send itself? It would have to know about NGO and decide whether sending is allowed yet, and on the server, as you'll see below, it isn't always. So the replication class of each side watches the flags while its side may send an entry, clears a raised flag and sends the entry right away; NGO batches the messages of one frame into packets:
 
 ```csharp
 slot.SendGuard.WhenOpen(lifetime, open =>
     slot.Entry.Dirty.AdviseTrue(open, () =>
     {
         slot.Entry.Dirty.Value = false;
-        slot.Entry.Accept(toServer); // запись вызывает типизированный метод посетителя
+        slot.Entry.Accept(toServer); // the entry calls the visitor's typed method
     }));
 ```
 
-Записи разных типов лежат в одном массиве, и класс отправки не знает их тип `T`. Чтобы не приводить значение к `object` и не упаковывать его, отправка использует двойную диспетчеризацию: запись сама вызывает обобщённый метод посетителя со своим типом, и дальше значение идёт через обобщённые методы. Посетитель сделан классом, по одному на запись, потому что структура, вызванная через интерфейс, упаковывалась бы.
+Here I ran into an interesting problem. Entries of different types share one array, and the sending class doesn't know their `T`. The easy way, casting the value to `object`, would box every value on every tick. Double dispatch solved it: the entry calls the visitor's generic method with its own type, and from there the value moves only through generic methods. The visitor is a class, one per entry, because a struct called through an interface would box too:
 
 ```csharp
 void INetSyncVisitor.VisitSignal<T>(INetSignal<T> signal) =>
     _senders.Get<T>().SendToServer(Header, signal.PendingPayload, delivery);
 ```
 
-Отправитель сообщений для типа `T` знает его кодек. Он заворачивает значение в кодек, а кодек и заголовок — в `NetworkMessage`. `NetworkRouter` записывает сообщение во временный буфер и передаёт его NGO, а пока NGO выключается, ничего не отправляет:
+The sender for `T` wraps the value into its codec and the codec with a header into a `NetworkMessage`, and `NetworkRouter` hands the bytes to NGO's `SendUnnamedMessage`. A server result also has an addressee, one client or everyone. A client that is null for "everyone" would be too easy to confuse with a bug, so the addressee is a tiny union, `NetSendTarget`, switched through static lambdas so that no send allocates a closure.
+
+#### Receiving
+
+`MessagesHandler` gets every unnamed NGO message, reads the header, finds the spawned object and passes the message to its inbox. The client inbox simply finds the entry by number. The server can't trust clients, so its inbox first asks the receive guard whether the sender may write this entry:
 
 ```csharp
-var message = new NetworkMessage<TCodec>(header, new TCodec { Value = payload });
-
-using var buffer = new FastBufferWriter(Unsafe.SizeOf<TCodec>() + 16, Allocator.Temp, ushort.MaxValue);
-buffer.WriteNetworkSerializable(message);
-customMessaging.SendUnnamedMessage(NetworkManager.ServerClientId, buffer, delivery);
-```
-
-Пары «тип значения и его кодек» регистрирует сгенерированный код, по одной строке на кодек. Повторная регистрация того же типа значения бросает исключение.
-
-```csharp
-RegisterCodec<TickedState<GuardState>, TickedGuardStateCodec>(receivers, senders);
-```
-
-Результат сервера отличается от запроса адресатом: одному клиенту или всем. Адресат хранится в маленьком типе-объединении `NetSendTarget`, и `NetReplicationServer` выбирает ветку через статические лямбды. Состояние передаётся в лямбду кортежем, и при рассылке не создаются замыкания.
-
-```csharp
-signal.PendingTarget.Switch(
-    outgoing,
-    untargeted: static message => message.Sender.Broadcast(message.Header, message.Payload, message.Delivery),
-    targeted: static (message, client) => message.Sender.SendToClient(message.Header, message.Payload, message.Delivery, client));
-```
-
-#### Приём
-
-На другой стороне все неименованные сообщения NGO получает `MessagesHandler`. Он читает заголовок, находит заспавненный объект и передаёт сообщение его входящему ящику. Ящик клиента (`NetInboxClient`) находит запись по номеру. Ящик сервера (`NetInboxServer`) сначала спрашивает у проверки приёма, имеет ли отправитель право писать в эту запись:
-
-```csharp
-// MessagesHandler
-reader.ReadNetworkSerializable(out NetworkMessageHeader header);
-SpawnedObject(header.NetworkObjectId).Inbox.Receive(senderClientId, header, this);
-
-// NetInboxServer
 var slot = _entries.At(header.VarId);
 if (_guards[slot.VarId].TryAdmit(senderClientId))
     slot.Entry.Accept(reader);
 ```
 
-Запись снова вызывает обобщённый метод, и получатель сообщений для её типа читает кодек и передаёт значение в запись. Для запроса и результата это событие `Received`, для свойства — новое значение `Value`. Запрос на сервере знает ещё и номер клиента-отправителя, и по нему работает сверка схемы.
+The entry calls a generic method again, the receiver for its type reads the codec, and a request or result fires `Received` while a property changes `Value`. A message for an object that's gone is skipped with a warning. An unknown entry number or an entry without the right throws, and NGO catches the exception, logs it and drops the message, so a bad packet can't bring the server down.
 
-```csharp
-reader.ReadNetworkSerializable(out TCodec codec);
-signal.ApplyFromNetwork(codec.Value, senderClientId);
-```
+#### Rights
 
-Свойство с правом `Everyone` записывает любой клиент. Сервер принимает новое значение и пересылает его остальным клиентам, кроме автора.
+A hacked client could send a request for someone else's character, and a bug could make a client write a server property. So who may send what is declared with each entry (`NetworkPermissions`), and each side picks its guards by it:
 
-Сообщение для объекта, которого уже нет, пропускается с предупреждением в логе. Неизвестный номер записи и запись без права бросают исключение. NGO перехватывает его, пишет в лог и отбрасывает сообщение, и испорченный или чужой пакет не роняет сервер.
-
-#### Права
-
-Право на запись указывается при объявлении (`NetworkPermissions`). По нему каждая сторона выбирает проверку отправки, а сервер ещё и проверку приёма:
-
-| Право | Отправка с клиента | Отправка с сервера | Приём на сервере |
+| Right | Sending from a client | Sending from the server | Receiving on the server |
 |---|---|---|---|
-| `Server`: результаты и свойства сервера | запрещена | разрешена | запрещён |
-| `Client`: запросы | пока клиент владеет объектом | запрещена | от владельца |
-| `Owner` | пока эта сторона владеет объектом | пока эта сторона владеет объектом | от владельца |
-| `Everyone` | разрешена | разрешена | от любого клиента; свойство сервер пересылает остальным клиентам |
+| `Server`: server results and properties | forbidden | allowed | forbidden |
+| `Client`: requests | while the client owns the object | forbidden | from the owner |
+| `Owner` | while this side owns the object | while this side owns the object | from the owner |
+| `Everyone` | allowed | allowed | from any client; the server forwards a property to the other clients |
 
-Запрещённая отправка никогда не проходит молча: проверка бросает исключение ещё до изменения состояния. Приём устроен так же, с одной поправкой на гонку. Если владение только что перешло к другому игроку, например после гибели персонажа, записи бывшего владельца ещё могли быть в пути, и сервер в течение секунды отбрасывает их без ошибки. Любую другую чужую запись сервер считает нарушением.
+A forbidden send never passes silently: the guard throws before any state changes. Receiving has one allowance for a race. Right after ownership moves (when a character dies, say), the former owner's entries may still be in flight, and for one second the server drops them without an error; any other foreign entry is a violation. Bot management stands on these rights: the room's creator owns the match object, so bot orders are accepted from the creator alone.
 
-На этих правах держится управление ботами в комнате. Сервер делает создателя комнаты владельцем объекта матча, и запросы на добавление, удаление и смену настроек ботов принимаются от него одного. Тот же запрос от любого другого клиента проверка приёма считает нарушением.
+#### Schema, lifetime and late joiners
 
-#### Схема, время жизни и поздний клиент
-
-Записи нумеруются в порядке объявления. Номер 0 занимает хеш схемы: он передаётся обычным запросом с правом `Everyone`, который построитель схемы объявляет первым, раньше всех записей объекта. Хеш считается по FNV-1a из типа, способа доставки и права каждой записи, а также из места её объявления, то есть имени файла и номера строки, которые компилятор подставляет через `[CallerFilePath]` и `[CallerLineNumber]`. Хеш меняется, даже если две записи одного типа поменялись местами.
+An entry's number in a message is its index in the schema. Compact, but risky: a client of another build with entries declared in a different order would read someone else's bytes as its own and never notice. So entry 0 of every schema is the schema's hash, FNV-1a over each entry's type, delivery, right and the place it was declared, which the compiler fills in through `[CallerFilePath]` and `[CallerLineNumber]`. Swap two entries of the same type and the hash changes:
 
 ```csharp
 foreach (var declaration in declarations)
@@ -509,75 +443,49 @@ foreach (var declaration in declarations)
     hash = Mix(hash, declaration.GetType().ToString());
     hash = Mix(hash, (uint)declaration.DeliveryType);
     hash = Mix(hash, (uint)declaration.Permissions);
-    hash = Mix(hash, declaration.Site); // например, "FlashlightInstaller.cs:27"
+    hash = Mix(hash, declaration.Site); // e.g. "FlashlightInstaller.cs:27"
 }
 ```
 
-Клиент отправляет хеш при спавне каждого объекта (`NetSchemaHashSender`). Сервер сравнивает его со своим (`NetSchemaHashChecker`) и при расхождении отключает клиента через `IClientDisconnector`, указав в причине оба хеша. Клиент другой сборки отключается на первом же объекте и не продолжает играть с записями, которые на двух сторонах означают разное.
+The client sends the hash when each object spawns, and the server disconnects it through `IClientDisconnector` on a mismatch, with both hashes in the reason. A client of another build drops out on the very first object.
 
-Всё, что отправляет сообщения, привязано к `SpawnedLifetime` сетевого объекта: этот lifetime начинается при спавне и завершается при деспавне. Клиент отправляет записи, пока объект заспавнен, а изменения, сделанные до спавна, не отправляются.
+A message for an object the receiver doesn't have yet, or anymore, has nowhere to go, so everything that sends is bound to the object's `SpawnedLifetime`, from spawn to despawn. The server turned out to be trickier: NGO calls `OnNetworkSpawn` before it tells clients the object exists, so an entry sent then would arrive before the object. That's why `NetReplicationServer` starts sending at the first `Publish` phase after spawn, and changes made earlier wait in the flags. At despawn unsent flags are cleared, so a pooled object doesn't send signals from its previous life. A client joining mid-match never saw the earlier changes but needs every property's current value, so in the same `Publish` phase the server reliably sends each new client a snapshot of all the properties it may send.
 
-Сервер ждёт дольше. NGO вызывает `OnNetworkSpawn` раньше, чем отправляет клиентам сообщение о создании объекта, и запись, отправленная в этот момент, пришла бы к клиенту раньше самого объекта. `NetReplicationServer` начинает отправлять записи объекта в первой фазе тика `Publish` после спавна, а изменения, сделанные до этого, ждут во флагах записей и уходят все вместе. При деспавне неотправленные флаги сбрасываются, чтобы объект из пула после нового спавна не разослал сигналы прошлой жизни.
+#### No boxing
 
-В ту же фазу `Publish` сервер отправляет каждому подключённому клиенту текущие значения всех свойств, которые он вправе отправлять, с гарантированной доставкой. Клиент, подключившийся позже, получает такой же снимок при подключении. Запросы и результаты не повторяются: они относятся к моменту, в который были отправлены.
+Why care about boxing this much? Every box is a heap allocation, network code runs 30 times a second for every object, and its garbage sooner or later becomes a GC pause in the middle of a firefight. So the framework has no boxing, and `NetBoxingTests` enforces it by reading the compiled assembly with Mono.Cecil and failing on any `box`, `unbox` or `unbox.any`. The sneaky part is boxing in code that has none of these instructions: the `ViewableProperty<T>.Value` setter from JetBrains.Lifetimes compares values through `EqualityComparer<T>.Default`, and for a struct without `IEquatable<T>` that quietly boxed `MovementState` on every tick. Since then every state kept in a reactive property implements `IEquatable<T>`.
 
-```csharp
-_clients.ByIds.View(announcedLifetime, (_, _, client) => SendStateTo(client));
-```
+### Network protocol
 
-#### Проводная форма
-
-Если сетевой вид значения отличается от игрового, между ними встаёт `IWireForm<TValue, TWire>`. Например, состояние рук уходит в сеть в виде `HandsSlots`, а игровой код по-прежнему работает с `HandsState`. Обёртки `WireResultSender` и `WireResultReceiver` переводят значение из одного вида в другой, и код по обе стороны о проводной форме не знает.
-
-#### Без боксинга
-
-Все пути отправки и приёма построены на обобщённых методах, и в IL сетевого фреймворка нет ни одной операции боксинга. Проверяет это тест `NetBoxingTests`: он читает скомпилированную сборку через Mono.Cecil и падает на любой инструкции `box`, `unbox` или `unbox.any`. Упаковка встречается и там, где этих инструкций в собственном коде нет. Сеттер `ViewableProperty<T>.Value` из JetBrains.Lifetimes сравнивает старое и новое значения через `EqualityComparer<T>.Default`, и для структуры без `IEquatable<T>` это сравнение упаковывало `MovementState` на каждом тике. С тех пор состояния, которые хранятся в реактивных свойствах, реализуют `IEquatable<T>`.
-
-### Сетевой протокол
-
-Каждое сообщение начинается с заголовка из двух чисел переменной длины (varint): идентификатора сетевого объекта и номера записи в его схеме. Вместе они занимают 2–3 байта.
+Why drop NetworkVariable and RPC at all? Two reasons. The first is size: their header takes 12–15 bytes, longer than the data of a typical shooter message. The second is time: a NetworkVariable keeps no tick number, and without one a state can be neither rolled back nor rewound. NGO has no client prediction anyway (Netcode for Entities does), so it had to be written regardless. My header is two varints, the network object id and the entry number, 2–3 bytes together:
 
 ```
 ┌─────────────────┬──────────────┬──────────────┐
-│ NetworkObjectId │ VarId        │ данные       │
-│ varint          │ varint       │ кодек записи │
-│ объект          │ запись схемы │ значение     │
+│ NetworkObjectId │ VarId        │ data         │
+│ varint          │ varint       │ entry codec  │
 └─────────────────┴──────────────┴──────────────┘
 ```
 
-NetworkVariable и RPC в проекте не используются по двум причинам. Во-первых, их заголовок занимает 12–15 байт, то есть в коротком сообщении он длиннее самих данных. Во-вторых, NetworkVariable не хранит номер тика, а без него состояние нельзя ни откатить, ни перемотать. Встроенного клиентского предсказания в NGO нет вовсе (оно есть в Netcode for Entities), и предсказание с откатом в любом случае пришлось бы писать самостоятельно.
-
-| Что передаётся | NetworkVariable и RPC | Match, Please! |
+| What is sent | NetworkVariable and RPC | Match, Please! |
 |---|---|---|
-| заголовок сообщения | 12–15 байт | 2–3 байта |
-| float | 4 байта | 1–3 байта: число шагов фиксированной точности в varint |
-| угол | 4 байта | 2 байта с шагом 0,0055° |
-| восемь bool | 8 байт | 1 байт |
-| ввод движения | 28 байт, 840 Б/с | 11 байт, 330 Б/с |
-| состояние движения | 43 байта | 22 байта |
+| message header | 12–15 bytes | 2–3 bytes |
+| float | 4 bytes | 1–3 bytes: a varint count of fixed-precision steps |
+| angle | 4 bytes | 2 bytes, 0.0055° step |
+| eight bools | 8 bytes | 1 byte |
+| movement input | 28 bytes, 840 B/s | 11 bytes, 330 B/s |
+| movement state | 43 bytes | 22 bytes |
 
-Трафик сокращается ещё и за счёт того, что лишние данные вообще не отправляются. Необязательное поле пишется в пакет, если установлен его флаг. Задержка вида для лаг-компенсации, например, передаётся при нажатом спуске. Состояние ящиков, выпавшего оружия и платформ отправляется при изменении, а в покое подтверждается раз в 10 тиков. Ввод игрока сервер пересылает тем клиентам, чьи персонажи рядом с его персонажем.
+More traffic is saved by not sending what isn't needed. An optional field goes into a packet only when its flag is set; crates, dropped weapons and platforms send their state on change and confirm it every 10 ticks at rest; a player's input goes only to clients whose characters are nearby. A restored value may go back onto the wire (the server forwards inputs, for instance), and if each re-quantization shifted it by a step, the error would pile up. So the quantization steps are powers of two, and a restored value quantizes back to the same number of steps: 1/256 m for positions, 1/64 m/s for velocity and knockback, 1/64 m for the aim point, 1/8 for the movement axis (keyboard ±1 is exact and takes one byte), 1/32 for health and damage and 360°/65,536 for angles.
 
-Шаги квантования — степени двойки, и восстановленное значение точно представимо в формате float. При повторном квантовании оно даёт то же число шагов.
+### The tick
 
-| Величина | Шаг квантования |
-|---|---|
-| позиция | 1/256 м |
-| скорость, отбрасывание | 1/64 м/с |
-| точка прицела во вводе | 1/64 м |
-| ось движения | 1/8; значения ±1 с клавиатуры передаются точно и занимают один байт |
-| здоровье, урон | 1/32 |
-| угол оружия, блока и тела | 360°/65 536 |
+The server updates the world 30 times a second, and the input for tick T has to arrive before that tick starts, so the client clock runs ahead by the input's travel time. Taking the transport's RTT seemed enough, until one day on a local machine one of two clients reported an 828 ms ping while packets arrived within a couple of frames. UnityTransport updates its RTT only when a reliable packet is acknowledged, and a client that only runs and shoots sends nothing but unreliable packets, so its RTT stayed stuck on a spike from connecting. Now every 15 ticks the server tells the client the smallest margin its input arrived with, and the client steers its lead to keep that margin at about one tick. The lead grows fast and shrinks slowly, since a late input costs more than a spare tick.
 
-### Тик
-
-Сервер обновляет мир 30 раз в секунду. Клиентские часы опережают серверные на время доставки ввода, чтобы ввод для тика T успевал на сервер до начала этого тика. Раз в 15 тиков сервер сообщает клиенту наименьший запас, с которым приходил его ввод, и клиент подстраивает опережение так, чтобы этот запас держался около одного тика. Опережение увеличивается быстро, а уменьшается медленно: опоздавший ввод обходится дороже лишнего запаса.
-
-Весь тик описан одним перечислением `TickPhase`, и порядок его значений совпадает с порядком выполнения. Сервер и клиент проходят одни и те же фазы, и код, подписанный на фазу, пишется один раз и работает на обеих сторонах. Между фазами Prepare и Early клиент выполняет откат, а фазы Early, Physics, Default и Late повторяет для каждого пересчитанного тика.
+A tick is split into phases whose order must be identical on server and client, or the same input produces different worlds. One enum, `TickPhase`, describes the whole tick in execution order, so code subscribed to a phase is written once and runs on both sides. Between Prepare and Early the client rolls back, and it repeats Early to Late for every replayed tick:
 
 ```mermaid
 flowchart LR
-    P["Prepare"] --> R["откат и пересчёт<br/>(только клиент)"]
+    P["Prepare"] --> R["rollback and replay<br/>(client only)"]
     R --> E["Early"]
     E --> PH["Physics"]
     PH --> D["Default"]
@@ -585,373 +493,458 @@ flowchart LR
     L --> PB["Publish"]
 ```
 
-| Фаза | Что выполняется | Повторяется при пересчёте |
+| Phase | What runs | On replay |
 |---|---|---|
-| `Prepare` | клиент считывает свой ввод и отправляет его серверу; уточняется состав пузыря предсказания (о нём ниже); объекты вне пузыря получают состояние с сервера; боты решают, что делать | нет |
-| `Early` | движущиеся объекты, например платформы, задают себе скорость на этот тик: куда их довезёт шаг физики | да |
-| `Physics` | Box2D одним шагом двигает весь мир: движущиеся объекты, ящики, контакты; тела принимают позы этого тика | да |
-| `Default` | шаг персонажей с вводом этого тика по миру после шага физики, отсчёт таймеров, заданных в тиках | да |
-| `Late` | выстрелы, удары и броски, которым нужен готовый мир этого тика | да |
-| `Publish` | рассылка состояний и ввода с сервера, запись истории поз для лаг-компенсации | нет |
+| `Prepare` | the client samples and sends its input; the prediction bubble is updated; objects outside it take the server's state; bots decide | no |
+| `Early` | moving objects such as platforms set their velocity for the tick | yes |
+| `Physics` | Box2D moves the whole world in one step | yes |
+| `Default` | characters step with this tick's input; tick timers count | yes |
+| `Late` | shots, punches and throws that need the finished world | yes |
+| `Publish` | the server sends states and inputs and records poses for lag compensation | no |
 
-### Предсказание с откатом
+### Prediction with rollback
 
-Без предсказания игрок видел бы реакцию на своё нажатие только после того, как ввод дойдёт до сервера и результат вернётся. При пинге 100 мс каждое движение запаздывало бы на 100 мс. Чтобы этой задержки не было, клиент применяет свой ввод к локальной копии мира в тот же тик и сохраняет предсказанное состояние на каждом тике. Сервер рассчитывает тот же тик с тем же вводом и присылает результат. Если результат расходится с сохранённым, клиент возвращает все предсказанные объекты к тику ответа, подставляя состояние сервера, и заново рассчитывает мир до текущего тика по записанному вводу.
+Without prediction, every move would show up only after the input reached the server and the result came back, 100 ms late at 100 ms ping, and the character would feel like cotton wool. The classic fix: the client applies its input to a local copy of the world at once and saves the predicted state every tick. The server computes the same tick with the same input and sends the result. If it differs from the saved one, the client puts the server's state in at that tick and replays up to the current tick from the recorded input:
 
 ```mermaid
 sequenceDiagram
-    participant C as Клиент
-    participant S as Сервер
-    Note over C: тик 105, ввод применяется<br/>к локальному миру, состояние сохраняется
-    C->>S: ввод тика 105 и копия ввода тика 104
-    Note over S: тик 105 рассчитывается с вводом клиента
-    S-->>C: состояние тика 105
-    Note over C: к этому моменту клиент на тике 108
-    alt совпадает с сохранённым
-        Note over C: ничего не меняется
-    else расходится
-        Note over C: мир возвращается к тику 105,<br/>тики 106, 107 и 108 пересчитываются,<br/>поправка сглаживается во вью
+    participant C as Client
+    participant S as Server
+    Note over C: tick 105, the input is applied<br/>to the local world, the state is saved
+    C->>S: input of tick 105 and a copy of tick 104
+    S-->>C: state of tick 105
+    Note over C: by now the client is on tick 108
+    alt matches the saved state
+        Note over C: nothing changes
+    else differs
+        Note over C: back to tick 105, ticks 106–108<br/>are replayed, the view smooths the correction
     end
 ```
 
-Откатывается весь предсказанный мир разом (`RollbackStepper`). Каждый объект регистрирует в этом общем откате свою часть (`RollbackPart<TState>`), и при расхождении все части восстанавливаются одновременно. Пересчитывать объекты по отдельности нельзя, потому что они влияют друг на друга: персонаж толкает ящик, а брошенный ящик сбивает персонажа. Глубина отката ограничена 30 тиками (1 с). Всё, что запоминается по тикам (состояния, ввод, решённые попадания, позы для лаг-компенсации), хранится в кольцевых буферах одного типа — `TickHistory<T>`.
+Objects affect each other (a character pushes a crate, a thrown crate knocks a character down), so they can't be replayed one by one, and the whole predicted world rolls back at once (`RollbackStepper`). Each object registers its part (`RollbackPart<TState>`), rollback goes back at most 30 ticks (1 s), and all per-tick data lives in ring buffers of one type, `TickHistory<T>`, so nothing is allocated per tick. Some events the client doesn't simulate itself, like a bot picking up a crate or a crate breaking. For those to happen on their own tick during a replay, after each replayed tick a part takes the server's state of that tick if the client already has it (`IRollbackPart.Follow`).
 
-Состояния сервера участвуют и в самом пересчёте. После каждого пересчитанного тика часть отката сверяется с состоянием сервера на этом тике, если клиент его уже получил, и принимает его при расхождении (`IRollbackPart.Follow`). Так в пересчёте на своём тике происходят и события, которые клиент сам не моделирует: бот поднял ящик, ящик раскололся, оружие выпало из рук.
+What to predict? Your own character isn't enough, since pushing a crate or picking up a weapon must happen without delay, and the whole map is too expensive. I settled on a bubble, much like the distance-based prediction in Netcode for Entities and Roblox: the client predicts everything within 20 m of its character (crates with full Box2D physics, other characters from their input) and interpolates the rest between server snapshots, and an object leaves the bubble only at 24 m so it doesn't flip modes on the border. The visible area reaches about 19 m, so the switch always happens off screen.
 
-Клиент предсказывает «пузырь» — своего персонажа и всё в радиусе 20 м от него. Расчёт всей карты обошёлся бы дорого, а далёкие объекты на игрока не влияют. Одного своего персонажа мало: толкнуть ящик или подобрать оружие игрок должен без задержки. Похожее переключение предсказания по расстоянию используется в Netcode for Entities и в Roblox.
+Other characters in the bubble were the most interesting part. Most shooters draw other players in the past from snapshots: exact, but in a different time from yours, so pushes and hits between neighbours stop agreeing. I decided the whole world around the player lives in one time, and other characters are computed from their own input. The server forwards a player's input on the tick it arrives to the clients whose bubble holds that character. Until a fresh input comes, the client extends the last one (held keys stay held, single presses aren't repeated), and if the real input differs from the guess, the client replays at once.
 
-Радиус выбран шире экрана. С учётом сдвига камеры за курсором видимая область доходит примерно до 19 м от персонажа, и переход объекта между предсказанием и интерполяцией всегда происходит за краем экрана. Уровни строятся без больших открытых пространств, и этого запаса хватает.
+The first version forwarded inputs only after the server applied them, and even on a local machine a remote character that stopped overshot by 1.28 m and jumped back. Forwarding on arrival cut that to 0.43 m, and input delay reduces the rest: every input takes effect a tick (33 ms) later, and at high ping the delay grows by the Brawlhalla rule, up to 3 ticks at 200 ms and 4 at 300 ms. Each tick of delay is a tick less of guessing.
 
-| Объект | Как рассчитывается на клиенте |
-|---|---|
-| свой персонаж | по собственному вводу, без ожидания сервера |
-| чужой персонаж в радиусе 20 м | по его вводу, который пересылает сервер |
-| ящики и оружие в радиусе 20 м | полноценной физикой Box2D в общем откате |
-| объекты дальше 24 м | интерполяцией между снимками сервера |
+After a replay an object would teleport to its new position, so the view fades the correction over 0.2 s. One nasty surprise: after several corrections in a row, a remote character that landed on a girder was drawn inside it. Now the picture's offset is limited by the level geometry with the motor's own rules, while the Box2D bodies always stay at the exact simulated pose.
 
-Границы входа и выхода разнесены: объект попадает в пузырь на расстоянии 20 м, а покидает его на 24 м. Иначе объект на границе постоянно переключался бы между предсказанием и интерполяцией.
+Input goes unreliable with two ticks per packet, so a single loss costs nothing. A click, though, lasts a tick or two, and losing exactly those packets would erase a shot the client already drew, so presses are numbered and the next packet that gets through tells the server the number and age of the press. The price of all this is that a nearby character may twitch when it turns sharply, because the client learns about the new input late.
 
-Чужих персонажей внутри пузыря клиент рассчитывает по их собственному вводу. Получив ввод игрока, сервер в ближайшем же тике пересылает его клиентам, в чей пузырь (с запасом 6 м) попадает персонаж этого игрока, и не ждёт, пока применит ввод сам. Пока свежий ввод соседа не пришёл, клиент достраивает его по последнему известному: зажатые клавиши остаются зажатыми, а одиночные нажатия не повторяются. По тому же правилу сервер восполняет ввод клиента, если пакет потерялся. Если пришедший ввод расходится с догадкой, клиент запускает пересчёт, не дожидаясь состояния от сервера.
+<p align="center"><img src="Media/rifle.gif" width="480" alt="Assault rifle bursts"><br><sub>Every hit knocks the target back. Knockback is part of the movement state and is replayed like running and jumping</sub></p>
 
-Ввод каждого игрока вступает в силу с задержкой в один тик (33 мс), а при высоком пинге задержка растёт по правилу из Brawlhalla: до 3 тиков при 200 мс и до 4 тиков при 300 мс. За время задержки ввод успевает дойти до соседей, и каждый тик задержки на тик сокращает время, в течение которого клиенту приходится угадывать чужой ввод. При пинге 50 мс остановившийся чужой персонаж раньше проскакивал точку остановки на 1,28 м, а с задержкой и пересчётом по пришедшему вводу — на 0,43 м.
+### Event prediction
 
-Поправку после пересчёта вью гасит постепенно, за 0,2 с. Смещение ограничивается геометрией уровня по тем же правилам, по которым мотор персонажа двигает тело, и изображение не проходит сквозь стены и платформы. Физические тела Box2D всегда стоят в точной позиции симуляции, и сглаживание не влияет ни на попадания, ни на столкновения.
-
-Ввод отправляется без гарантии доставки (Unreliable): потерянный пакет пересылать незачем, следующий уже несёт более свежие данные. Каждый пакет содержит ввод двух тиков, текущего и предыдущего, и одиночная потеря ничего не стоит. Нажатию на спуск присваивается номер, и даже если потеряются все пакеты с ним, первый дошедший пакет сообщит серверу номер и возраст нажатия. Если нажатие укладывается в окно лаг-компенсации, сервер засчитает выстрел задним числом, с перемоткой на момент нажатия.
-
-У этой схемы есть цена: чужой персонаж рядом может дёрнуться, когда резко меняет направление. О смене его ввода клиент узнаёт через сервер, с опозданием, и исправляет положение со сглаживанием. Для чужих персонажей нет отдельного, отстающего времени: весь мир вокруг игрока рассчитывается для одного тика, и толчки и попадания между соседями согласованы.
-
-<p align="center">
-  <img src="Media/rifle.gif" width="480" alt="Очереди из автомата"><br>
-  <sub>Каждое попадание отбрасывает цель. Отбрасывание входит в состояние движения и при откате пересчитывается так же, как бег и прыжок</sub>
-</p>
-
-### Событийное предсказание
-
-Урон и смерть требуют другого подхода. Здоровье меняется редко, и передавать его каждый тик значило бы расходовать трафик впустую. Сервер отправляет новое значение здоровья при изменении и прикладывает к нему причину, то есть объект, нанёсший удар, и тик, в котором это произошло. Решение о попадании сервер принимает один раз и больше его не пересматривает.
+Damage and death are a different problem. Health changes rarely, sending it every tick wastes about 80 KB/s with 8 players and 28 objects, and damage is discrete: it happened or it didn't. So the server sends a new health value only when it changes, together with its cause, the object that dealt the blow and the tick. The server decides a hit once and never revisits it:
 
 ```mermaid
 sequenceDiagram
-    participant A as Клиент стрелка
-    participant S as Сервер
-    participant O as Другие клиенты
-    Note over A: тик 240, выстрел попал по локальному миру,<br/>здоровье цели на экране уменьшается
-    A->>S: ввод тика 240 с нажатием на спуск
-    Note over S: фаза Late тика 240, перемотка и решение
-    S->>A: здоровье цели с причиной «выстрел тика 240»
-    S->>O: здоровье цели с причиной «выстрел тика 240»
-    S->>A: отчёт о выстреле тика 240, по кому и сколько
-    Note over A: при совпадении ничего не меняется,<br/>при расхождении применяется тихая поправка
+    participant A as Shooter's client
+    participant S as Server
+    participant O as Other clients
+    Note over A: tick 240, the shot hits the local world,<br/>the target's health drops on screen
+    A->>S: input of tick 240 with the trigger pressed
+    Note over S: Late phase of tick 240, rewind and decision
+    S->>A: target's health, cause "shot of tick 240"
+    S->>O: target's health, cause "shot of tick 240"
+    S->>A: report on the shot: whom and how much
+    Note over A: if it matches, nothing changes,<br/>otherwise a silent correction
 ```
 
-Каждое действие однозначно определяется парой «объект, тик» (`ActionId`), и сообщения о нём приходят в любом порядке, а два выстрела одного тика не путаются. Если сервер не засчитал попадание, клиент тихо возвращает здоровье цели, без вспышки и звука. При пересчёте после отката клиент повторяет решения о попаданиях, принятые при первом расчёте тика (`DecidedImpacts`). Новых решений он не принимает, и лишних попаданий не возникает.
+Messages arrive in any order and two barrels can fire in one tick, so every action is identified by an "object, tick" pair (`ActionId`). If the server rejects a hit, the client silently restores the target's health, with no flash and no sound. A replay must not decide hits anew, or one hit would count twice, so it repeats the decisions made the first time (`DecidedImpacts`). Health traffic drops from about 80 KB/s to about 2 KB/s.
 
-| | Потоковая модель | Событийная модель |
-|---|---|---|
-| Что предсказывается | движение, оружие, ящики, руки | урон, смерть, лечение |
-| Что передаётся | ввод каждый тик, состояние при изменении | одно сообщение на действие |
-| Доставка | без гарантии, важен самый свежий пакет | гарантированная |
-| Как исправляется ошибка | откатом и пересчётом мира | поправкой одной записи |
-| Трафик здоровья при 8 игроках и 28 объектах | около 80 КБ/с | около 2 КБ/с |
+### Lag compensation
 
-### Лаг-компенсация
-
-Стрелок видит других игроков с опозданием: на его экране они там, где были на сервере примерно половину пинга и один тик интерполяции назад. Если проверять выстрел по текущим позициям, попадание на экране превратится в промах. Поэтому вместе с нажатием клиент отправляет задержку вида, то есть на сколько тиков картинка на его экране отстаёт от тика ввода, а сервер перед проверкой перематывает мир к этому моменту.
+Picture it: you aim, pull the trigger, watch the bullet hit your opponent's head, and the server says "miss". Annoying? Very. The shooter sees other players about half a ping and one interpolation tick in the past, so checking against current positions turns hits into misses. How do you fix it? The client sends its view delay with the press, and the server rewinds the world to that moment before checking:
 
 ```mermaid
 sequenceDiagram
-    participant C as Клиент стрелка
-    participant S as Сервер
-    Note over C: нажатие на спуск, на экране тик 1200,5
-    C->>S: ввод тика 1204, задержка вида 3,5 тика
-    Note over S: фаза Late тика 1204
-    S->>S: перемотка, объекты встают в позы тика 1200,5
-    S->>S: луч по перемотанному миру
-    S->>S: lifetime завершён, позы вернулись к тику 1204
+    participant C as Shooter's client
+    participant S as Server
+    Note over C: trigger pressed, the screen shows tick 1200.5
+    C->>S: input of tick 1204, view delay 3.5 ticks
+    S->>S: rewind, objects take their tick 1200.5 poses
+    S->>S: ray against the rewound world
+    S->>S: lifetime ends, poses return to tick 1204
 ```
 
-Сервер хранит позы каждого объекта по тикам и при перемотке сдвигает тела, не затрагивая состояние симуляции, так что после проверки пересчитывать ничего не нужно. Задержку вида присылает клиент, и сервер ограничивает её окном в 0,15 с (5 тиков), как в Brawlhalla. Игрок с более медленной связью стреляет с упреждением.
+The server moves only bodies when rewinding, so nothing has to be recomputed afterwards. A client can't be trusted with its view delay (a made-up one-second delay would hit people who hid long ago), so the server caps it at 0.15 s, as Brawlhalla does. The bubble adds a subtlety: the shooter saw objects in its bubble in the present and the rest in the past. The server keeps the same bubble for each client from its own positions and remembers who was in it (`BubbleHistory`) instead of trusting a client report, which is easy to forge.
 
-Какие объекты стрелок видел предсказанными, сервер решает сам. Для каждого клиента он ведёт такой же пузырь, как у клиента, по своим позициям и с теми же радиусами, и запоминает, когда объект входил в пузырь и выходил из него (`BubbleHistory`). Объекты из пузыря стрелка сервер ставит в позу тика выстрела, а остальные — в позу тика интерполяции (`ShooterView.TickOf`). Отчёт о пузыре сервер от клиента не принимает, такой отчёт можно подделать.
+If the aim were an angle, a running shooter's bullet would miss the cursor, because on the shot's tick the hands are somewhere else. So the input carries the aim as a point on the map, and each side computes the angle from the hands of that tick. One tick's shots are handled in two passes, traces first and damage second, so two players who shoot each other on the same tick both hit.
 
-Прицел передаётся во вводе точкой на карте с шагом 1/64 м. Угол выстрела каждая сторона считает сама, от положения рук на тике выстрела, и пуля бегущего или прыгающего стрелка уходит в точку под курсором. Трассер выходит из нарисованного ствола, а попадание и кровь показываются там, где прошёл луч симуляции: из-за укрытия кровь не появится на цели, до которой выстрел не дошёл.
+<p align="center"><img src="Media/shotgun.gif" width="480" alt="Shotgun blasts"><br><sub>Every pellet is traced separately, and damage and knockback on one target add up</sub></p>
 
-Выстрелы одного тика сервер обрабатывает в два прохода: сначала выполняет все трассировки, затем начисляет урон. Если два игрока выстрелили друг в друга в один и тот же тик, попадут оба.
+### Physics
 
-<p align="center">
-  <img src="Media/shotgun.gif" width="480" alt="Выстрелы из дробовика"><br>
-  <sub>Каждая дробинка трассируется отдельно, а урон и отбрасывание по одной цели суммируются</sub>
-</p>
+At first the character moved on classic Physics2D with `Physics2D.BoxCast`. It worked until I checked lots of crates: with two hundred, a physics tick took 4.1 ms, and a client replays several ticks per frame. Unity 6.3 brought LowLevelPhysics2D, a low-level API for Box2D v3, and I moved all physics to it. The world is stepped manually inside the tick, in the Physics phase, so rollback replays physics with movement. Box2D doesn't move characters: my kinematic motor asks the world how far the character's box can go and computes velocity, gravity and jumps itself. Measured on the real maps at 30 Hz with 8 characters:
 
-### Физика
-
-Вся физика проекта работает на LowLevelPhysics2D — низкоуровневом API Box2D v3 в Unity 6.3. Мир Box2D не обновляется сам (`SimulationType.Script`): он рассчитывается внутри тика, в фазе Physics. Физика входит в шаг мира, и откат пересчитывает её вместе с движением персонажей.
-
-Персонажа Box2D не двигает. Его ведёт собственный кинематический мотор: на каждом шаге мотор спрашивает мир Box2D, докуда пройдёт коробка персонажа, а скорость, гравитацию и прыжок считает сам. Шаг персонажей выполняется в фазе Default, уже после шага физики, и мотор видит платформы и ящики там, где они окажутся в конце тика. В мире Box2D у персонажа есть кинематическое тело, в которое попадают пули и о которое бьются ящики.
-
-Ниже — сравнение с прежней реализацией на классической Physics2D, где мотор опирался на `Physics2D.BoxCast`. Замеры сделаны на реальных картах при 30 Гц и 8 персонажах.
-
-| Сцена | Мотор на Physics2D | LowLevelPhysics2D | Ускорение |
+| Scene | Motor on Physics2D | LowLevelPhysics2D | Speed-up |
 |---|---|---|---|
-| «Стройка», 12 ящиков | 0,42 мс | 0,062 мс | в 6,8 раза |
-| «Бойня», 12 ящиков | 0,35 мс | 0,040 мс | в 8,8 раза |
-| 100 ящиков | 2,5 мс | 0,12 мс | в 21 раз |
-| «Бойня», 200 ящиков | 4,1 мс | 0,064 мс | в 64 раза |
+| Construction Site, 12 crates | 0.42 ms | 0.062 ms | 6.8× |
+| Slaughterhouse, 12 crates | 0.35 ms | 0.040 ms | 8.8× |
+| 100 crates | 2.5 ms | 0.12 ms | 21× |
+| Slaughterhouse, 200 crates | 4.1 ms | 0.064 ms | 64× |
 
-Box2D рассчитывает мир в вызывающем потоке (`simulationWorkers = 0`), и на небольшом мире это в 2,4 раза быстрее, чем с одним рабочим потоком.
+<p align="center"><img src="Media/crates.gif" width="480" alt="Shooting at a stack of crates"><br><sub>Bullets push and split crates, and the stack collapses once the bottom crate breaks</sub></p>
 
-<p align="center">
-  <img src="Media/crates.gif" width="480" alt="Стрельба по штабелю ящиков"><br>
-  <sub>Пули толкают и раскалывают ящики, а штабель рушится, когда разбит нижний ящик</sub>
-</p>
+Crates and dropped weapons are full rigid bodies that can be pushed, picked up and thrown, with their poses sent by my own network code. A body's shape is needed by both the Box2D body and the 2D lighting shadow, so one `BodyBox` component builds both, and the levels have no classic Collider2D left. Since the built-in particle module collides only with classic physics, effect particles collide with the Box2D world through my own collision pass.
 
-Ящики и выпавшее оружие стали полноценными твёрдыми телами. Они вращаются и складываются в стопки, а ящик толкается на ходу, поднимается и бросается. Позы тел передаёт собственный сетевой код, NetworkTransform в проекте не используется. Форма тела задаётся компонентом `BodyBox`, из которого строятся и тело Box2D, и тень для 2D-освещения; классических Collider2D на уровнях не осталось. Выстрелы, удары, подбор оружия и туман войны работают через запросы к тому же миру Box2D, а частицы эффектов сталкиваются с ним через собственный проход столкновений, повторяющий формулу встроенного модуля частиц Unity.
+That left rollback. Box2D is deterministic, but LowLevelPhysics2D in Unity 6.3 has no snapshot of the whole world, and contacts carry hidden state. I save and restore bodies one by one with contact warm starting off, since its impulses turned out to be the main hidden state. With it off, 50 of 58 replays in a test matched the original bit for bit, and the rest are cut by thresholds of 1 cm, 1° and 0.1 m/s.
 
-Симуляция Box2D детерминирована, то есть те же шаги в новом мире дают побитово тот же результат. Откату мешает скрытое состояние контактов: снимка всего мира в LowLevelPhysics2D из Unity 6.3 нет. Откат сохраняет и восстанавливает тела по одному, а тёплый старт контактов отключён, так как именно его импульсы оказались главным скрытым состоянием. С выключенным тёплым стартом 50 пересчётов из 58 в замере совпали с исходным расчётом бит в бит. Оставшиеся расхождения отсекаются порогами, и тело исправляется, если отклонилось больше чем на 1 см, 1° или 0,1 м/с.
+### Bots
 
-### Боты
-
-Бот — игрок без клиента. Сервер добавляет его в матч через ту же точку входа, что и людей (`PlayerAdmitter.Admit`). Разница в том, кто управляет игроком (`PlayerDriver`): ботом управляет сервер, а человеком — его клиент. Мозг бота нажимает кнопки виртуального геймпада, а геймпад формирует обычный `CharacterControls`. Дальше всё как у человека: те же правила движения и стрельбы, тот же сетевой код. Ядро игры о ботах ничего не знает. Ролик в начале README снят на шести ботах: кнопки их геймпадов нажимал сценарий съёмки вместо мозга, а остальное работало как в обычном матче.
+For bots I set one hard rule: a bot plays by the same rules as a human. No coordinates through walls, no special paths in the core. A bot is a player without a client, admitted through the same entry point (`PlayerAdmitter.Admit`) and driven by the server instead of a client (`PlayerDriver`). Its brain presses buttons on a virtual gamepad that produces an ordinary `CharacterControls`, and from there it's the same rules and the same network code. A fun side effect: the clip at the top was shot with six bots whose gamepads were pressed by a filming script.
 
 ```mermaid
 flowchart LR
-    Sense["Восприятие<br/>кадр камеры, линия видимости,<br/>выстрелы и замахи рядом"] --> Facts["Факты<br/>19 битовых флагов"]
-    Facts --> Goal["Цель с весом характера<br/>Kill, FinishOff, Guard, Retreat, Kite…"]
-    Goal --> Planner["Планировщик A*<br/>около 9 мкс"]
-    Planner --> Skill["Навык<br/>Shoot, Kite, Guard, Punch, Throw…"]
-    Skill --> Pad["Виртуальный геймпад"]
-    Pad --> Input["CharacterControls,<br/>как у игрока"]
+    Sense["Perception<br/>camera frame, line of sight,<br/>nearby shots and wind-ups"] --> Facts["Facts<br/>19 bit flags"]
+    Facts --> Goal["Goal weighted by personality<br/>Kill, FinishOff, Guard, Retreat, Kite…"]
+    Goal --> Planner["A* planner<br/>about 9 µs"]
+    Planner --> Skill["Skill<br/>Shoot, Kite, Guard, Punch, Throw…"]
+    Skill --> Pad["Virtual gamepad"]
+    Pad --> Input["CharacterControls,<br/>same as a player's"]
 ```
 
-Бот видит то же, что увидел бы игрок на его месте: прямоугольник 26 × 14,6 м вокруг себя, как кадр камеры, и то, что не закрыто стенами. Выстрел, который проходит в 1,5 м от бота на дальности до 25 м, бот слышит, а заряженный удар или замах ящиком рядом с собой, в пределах 3,5 м, замечает. На угрозу он отвечает через время реакции своего уровня сложности и помнит её ещё 0,4 с после последней атаки.
+A bot sees what a player in its place would, a 26 × 14.6 m camera frame minus whatever walls hide, hears shots passing within 1.5 m and notices wind-ups within 3.5 m. A behaviour tree for a bot that shoots, brawls, guards, throws crates and retreats would grow into a web of conditions, so decisions are made by GOAP (Goal-Oriented Action Planning), first used in F.E.A.R. The situation is 19 facts, each action lists the facts it needs, forbids, adds and removes, and an A* planner finds the cheapest chain of actions to a goal in about 9 µs over 17 actions. The brain sits behind `IBotBrain`, so a behaviour tree could replace GOAP as one more implementation.
 
-Решения бот принимает с помощью GOAP (Goal-Oriented Action Planning), подхода, впервые применённого в F.E.A.R. Обстановка описывается 19 фактами: противник замечен, противник на линии огня, противник перезаряжается, бот ранен, блок готов и другие. Каждое действие указывает, какие факты ему нужны и какие запрещены, а также какие факты оно добавляет и убирает. Планировщик находит самую дешёвую цепочку действий, ведущую к цели, алгоритмом A* по наборам фактов, и план из 17 действий строится в среднем за 9 мкс. Новое поведение добавляется описанием нового действия, а остальные действия и планировщик при этом не меняются. Мозг подключается через интерфейс `IBotBrain`, и дерево поведения или другой ИИ встанет на его место как ещё одна реализация.
+A bot has seven goals: Kill, FinishOff, PunishReload, Guard, Retreat, Kite and Roam. Bots that weighed them the same way would all play the same, so each goal's urgency is multiplied by a weight from the bot's personality, and a new goal wins only by a margin of 0.25 so the bot doesn't flip between two close ones.
 
-Целей у бота семь: убить противника (Kill), добить раненого (FinishOff), напасть, пока противник перезаряжается (PunishReload), отбить удар (Guard), отступить (Retreat), держать дистанцию и стрелять (Kite), бродить по карте (Roam). Срочность каждой цели умножается на вес из характера бота. Новая цель сменяет текущую, если обгоняет её больше чем на 0,25, и бот не мечется между двумя близкими по срочности целями.
-
-| Сложность | Что умеет | Реакция | Разброс прицела |
+| Difficulty | What it does | Reaction | Aim spread |
 |---|---|---|---|
-| Мирный | стоит на месте и не стреляет | 0,6 с | ±7° |
-| Лёгкий | ходит по карте и стреляет | 0,6 с | ±7° |
-| Средний | как Лёгкий, а ещё дерётся кулаками, бьёт заряженным ударом и отбивает удары блоком | 0,45 с | ±4,5° |
-| Сложный | как Средний, а ещё прикрывается ящиками и бросает их | 0,3 с | ±2,5° |
+| Peaceful | stands still and doesn't shoot | 0.6 s | ±7° |
+| Light | walks the map and shoots | 0.6 s | ±7° |
+| Medium | as Light, plus fists, charged punches and parrying | 0.45 s | ±4.5° |
+| Hard | as Medium, plus hiding behind crates and throwing them | 0.3 s | ±2.5° |
 
-| Характер | Чем отличается | Отступает при здоровье |
+| Personality | What sets it apart | Retreats at health |
 |---|---|---|
-| Берсерк | охотнее всех добивает и лезет врукопашную, ящики берёт неохотно | 15 % |
-| Охотник | в первую очередь добивает раненых | 30 % |
-| Осторожный | чаще всех ставит блок и отступает, прикрываясь ящиком | 55 % |
-| Увёртливый | держится в 7–12 м от противника и ловит его на перезарядке | 40 % |
-| Стрелок | предпочитает стрельбу и избегает драки на кулаках | 40 % |
+| Berserker | the keenest to finish off and brawl, reluctant to take crates | 15 % |
+| Hunter | finishes off the wounded first | 30 % |
+| Cautious | guards and retreats behind a crate more than anyone | 55 % |
+| Evasive | keeps 7–12 m away and punishes reloads | 40 % |
+| Marksman | prefers shooting and avoids fist fights | 40 % |
 
-Уровень сложности и характер хранятся в ScriptableObject, и новый вариант собирается в инспекторе без правки кода. У обоих есть числовой ключ, по которому комната передаёт состав ботов по сети и в аргументах командной строки.
+The navigation graph is the part I'm most proud of. A NavMesh knows nothing about platformer jumps, and hand-placed links lie about where a character can really jump, so bots get stuck. My graph is built by the real character motor in a separate Box2D world: from every node, a metre apart, it tries running, 39 jumps and 7 drop-downs, and the cheapest manoeuvre between each pair of nodes goes into the graph (652 nodes and 6513 edges on Slaughterhouse). Bots replay jumps tick by tick and complete 952 of 1000 random routes on Construction Site and 934 on Slaughterhouse. The graph carries a fingerprint of the level and movement settings, so the server rejects a stale one.
 
-Граф навигации строит настоящий мотор персонажа, запущенный в отдельном мире Box2D. Узлы расставляются через каждый метр, из каждого узла мотор пробует бег, 39 вариантов прыжка и 7 вариантов спрыгивания, и для каждой пары узлов в граф попадает самый дешёвый манёвр. Граф запекается в редакторе командой Tools → Bots → Bake Navigation: для «Бойни» он содержит 652 узла и 6513 рёбер, для «Стройки» 235 узлов и 2790 рёбер. A* находит путь примерно за 0,3 мс, а прыжки бот воспроизводит по записанному манёвру тик в тик. Из 1000 случайных маршрутов боты проходят 952 на «Стройке» и 934 на «Бойне». Граф помечен отпечатком геометрии уровня и настроек движения, и устаревший граф сервер не примет.
+### Rooms and reconnection
 
-### Комнаты и переподключение
+My architecture has no host mode where one window is both server and client: the side is chosen once per session. So a room is held by a background server. "Create" launches the game's own build with `-server`, `-level`, `-host-key` and `-bots`, and the current window connects to it as a client.
 
-Комнату держит фоновый сервер. Кнопка «Создать» запускает собранную игру с аргументами `-server`, `-level`, `-host-key` и `-bots`, а текущее окно подключается к ней как клиент. Состав ботов передаётся строкой вида `ник|ключ сложности|ключ характера`. Сервер, запущенный без `-bots`, начинает матч с тремя ботами уровня «Сложный».
+Joining a room is a small chicken-and-egg problem: a client needs the map scene to enter the match but learns the map only by connecting. So the first connection carries a map request, the server rejects it with the scene name in the reason, and the client loads that scene and connects again. To tell its creator from other clients, the room gets a secret host key at launch; the creator sends the same key and becomes the owner of the match object, so only the creator can manage bots (see [Rights](#rights)).
 
-Клиент, который входит в чужую комнату, сначала узнаёт её карту. Первое подключение несёт запрос карты, сервер отклоняет его и пишет в причине отказа имя сцены. Клиент загружает эту сцену и подключается снова, уже в матч.
+What if a player's connection drops mid-match? Each client sends its token (a Guid) when connecting. When it disconnects, the player stays in the match and a Light, Cautious stand-in bot drives the character until a client with the same token takes the player back.
 
-Создатель комнаты присылает при подключении секретный ключ хоста, тот же, что получил фоновый сервер. По ключу сервер узнаёт создателя и делает его владельцем объекта матча. Приказы о ботах сервер принимает от него одного (об этом в разделе [«Права»](#права)), и окно ботов на клавише B тоже открывается у него одного.
+## How the code is checked
 
-Каждый клиент хранит свой токен (Guid) и отправляет его при подключении. Когда клиент отключается, сервер забирает игрока под своё управление: игрок остаётся в матче, а его персонажем управляет бот-заместитель уровня «Лёгкий» с характером «Осторожный». Клиент с тем же токеном забирает игрока обратно, а с концом сессии отключившийся игрок уходит насовсем. Две копии игры на одном компьютере делят один токен, и вторая копия, пока первая в матче, входит новым игроком.
+The project has almost as much test code as game code: 3218 EditMode tests in the `Bw.Tests` assembly on the Unity Test Framework, 459 files and about 41,400 lines. Unit tests mirror the code structure, and integration suites check the project as a whole:
 
-### Слой отображения
-
-Вью (анимация, звук, VFX, HUD) работает с данными через собственные интерфейсы `I…ViewModel`. Состояние приходит через `IReadonlyProperty`, события — через `ISource`, а значения, которые меняются каждый кадр, — через обычные свойства. Реализует интерфейс адаптер из отдельной сборки, и к ядру обращаются одни адаптеры. Состояние ядра адаптер передаёт напрямую или преобразует, ничего не копируя.
-
-```mermaid
-flowchart LR
-    Core["Ядро<br/>IReadonlyFlashlight"] --> Adapter["Адаптер<br/>FlashlightViewModel"]
-    Adapter -->|реализует| VM["IFlashlightViewModel<br/>в сборке вью"]
-    View["FlashlightView"] --> VM
-```
-
-Вью не видит ни ядра, ни сети и запускается с вручную заполненной моделью, без игры. Так проверяются звуки оружия. Анимации интерфейса построены на DOTween, меню и HUD — на UI Toolkit.
-
-### Пулы
-
-Объект выдаётся на пересечение двух lifetime — потребителя и самого объекта — и возвращается в пул, как только завершится любой из них. Экземпляры создаются по требованию, и пул готов к работе с первого запроса. Прогрев запускается после сборки сцены и заполняет запас. Такой порядок нужен для префабов, которые сами зависят от пулов, например для ящика со звуком разрушения. Если бы прогрев шёл во время сборки сцены, у таких префабов возникала бы циклическая зависимость.
-
-| Настройка в реестре | Назначение |
+| Suite | What it checks |
 |---|---|
-| `Prewarm` | сколько экземпляров создаётся после сборки сцены |
-| `MaxIdle` | сколько свободных экземпляров хранится после возврата |
-| `InUseCap` | предел числа выданных экземпляров и поведение при его достижении: отобрать самый старый или бросить исключение; предел необязателен |
-| `ViewOnly` | пул нужен клиенту и на сервере не создаётся |
+| `Architecture` | the core doesn't reference the network, views don't reference the core, the network framework's IL has no boxing, the code follows the style rules |
+| `Injection` | the Zenject graph builds for every prefab, scene and the project context, separately on server and client |
+| `Netcode` | rollback and replay of a character, a crate and a platform in real server and client Box2D worlds |
+| `Network` | the codec registry matches the generator's output, and every message type has exactly one codec |
+| `Assets` | installer references, network prefabs and the bots' navigation graph |
 
-Сетевые объекты используют те же пулы. На сервере префаб с компонентом `PooledNetworkObject` спавнится из пула и возвращается в него при деспавне. На клиенте NGO получает экземпляры через обработчик префабов, который тоже берёт их из пула. Пулы создают объекты через контейнер Zenject, и префаб с собственным `GameObjectContext` работает из пула так же, как созданный напрямую.
-
-## Как проверяется код
-
-Код проверяют 3218 тестов EditMode в сборке `Bw.Tests` на Unity Test Framework. По объёму тесты почти равны коду игры: 459 файлов и около 41 400 строк. Модульные тесты повторяют структуру кода, а интеграционные наборы проверяют проект целиком:
-
-| Набор | Что проверяет |
-|---|---|
-| `Architecture` | ядро не ссылается на сеть, вью не ссылается на ядро, в IL сетевого фреймворка нет боксинга, код следует правилам стиля |
-| `Injection` | граф Zenject собирается для каждого префаба, сцены и контекста проекта, отдельно на сервере и на клиенте |
-| `Netcode` | откат и пересчёт персонажа, ящика и платформы на настоящих мирах Box2D сервера и клиента |
-| `Network` | реестр кодеков совпадает с выводом генератора, и у каждого типа сообщения ровно один кодек |
-| `Assets` | ссылки установщиков, сетевые префабы и граф навигации ботов |
-
-Тесты запускаются в GitHub Actions на каждый пуш в master, а релиз собирается из кода, который их прошёл. Подробнее об этом в следующем разделе.
+The tests run in GitHub Actions on every push to master, and a release is built only from code that passed them.
 
 ## CI/CD
 
-Вся автоматизация работает на бесплатных раннерах GitHub (`ubuntu-latest`). Unity запускается в Docker-контейнерах [GameCI](https://game.ci) (`unity-test-runner` и `unity-builder`), а лицензия Unity Personal хранится в секретах репозитория.
+All automation runs on free GitHub runners (`ubuntu-latest`). Unity runs in [GameCI](https://game.ci) Docker containers (`unity-test-runner` and `unity-builder`), and the Unity Personal license is kept in repository secrets.
 
-| Workflow | Когда запускается | Что делает |
+| Workflow | Runs on | What it does |
 |---|---|---|
-| `codeql.yml` | push и pull request в master, раз в неделю | статический анализ C# в CodeQL с набором правил security-and-quality |
-| `repository.yml` | push и pull request | проверяет, что у каждого ассета есть .meta-файл и у каждого .meta-файла есть ассет, что GUID не повторяются и что Library, Temp, Logs и UserSettings не попали в git |
-| `unity-tests.yml` | push в master, вручную | все EditMode-тесты сборки `Bw.Tests` |
-| `build.yml` | тег `v*`, вручную | те же тесты, затем сборки клиента и сервера, Docker-образ сервера и релиз |
-| `itch.yml` | после релиза стабильной версии, вручную | выкладывает клиент для Windows из GitHub Release на itch.io через butler |
+| `codeql.yml` | push and pull request to master, weekly | CodeQL static analysis of C# with the security-and-quality rule set |
+| `repository.yml` | push and pull request | every asset has a .meta file and every .meta file has an asset, GUIDs are unique, Library, Temp, Logs and UserSettings aren't in git |
+| `unity-tests.yml` | push to master, manual | all EditMode tests of `Bw.Tests` |
+| `build.yml` | `v*` tag, manual | the same tests, then client and server builds, the server Docker image and a release |
+| `itch.yml` | after a stable release, manual | uploads the Windows client from the GitHub Release to itch.io with butler |
 
-Сами тесты идут около 14 секунд, а весь джоб вместе с запуском контейнера и импортом проекта занимает 7–9 минут. Папка Library сохраняется между запусками в кэше `actions/cache`, и проект не импортируется каждый раз с нуля. Итоговая таблица выводится в Summary запуска, а результат публикуется как проверка «EditMode test results». На pull request тесты не запускаются: секреты с лицензией Unity недоступны для pull request из форков.
-
-Релиз выпускается тегом версии:
+The tests take about 14 seconds and the whole job 7–9 minutes, with the Library folder cached by `actions/cache`. Pull requests from forks get no Unity license secrets, so tests don't run on them. A release is made with a version tag:
 
 ```bash
 git tag -a v0.2.0 -m "Match Please 0.2.0"
 git push origin v0.2.0
 ```
 
-По тегу `build.yml` сначала прогоняет тесты, и сборки начинаются, если тесты прошли. Editor-скрипт `GameBuilder` (меню Tools → Build) собирает клиент для Windows (StandaloneWindows64, Mono) и выделенный сервер для Linux (StandaloneLinux64, Server). Сервер упаковывается в Docker-образ на Ubuntu 24.04, который работает от непривилегированного пользователя и слушает UDP-порт 7777. Перед публикацией образ запускается прямо в workflow: сервер должен открыть порт и проработать 15 секунд без исключений. После этого образ уходит в GitHub Container Registry, а в GitHub Releases появляются архив клиента, архив сервера и файл `SHA256SUMS.txt` с контрольными суммами. Тег с дефисом, например `v0.2.0-beta.1`, публикуется как пре-релиз. Клиент стабильной версии затем уходит на [itch.io](https://pndte.itch.io/match-please?secret=lGJwzXWXsiEN7X02vTIVU1Fs) через butler, в канал `windows`; пре-релизы туда не попадают. Уже опубликованный релиз выкладывается на itch.io и вручную, запуском `itch.yml` с его тегом. От тега до готового релиза проходит около 20 минут. Текущая версия — [v0.1.2](https://github.com/pndte/match-please/releases/tag/v0.1.2).
+On a tag, `build.yml` runs the tests and, if they pass, builds the Windows client (StandaloneWindows64, Mono) and the Linux dedicated server with the editor script `GameBuilder` (Tools → Build). The server goes into an Ubuntu 24.04 Docker image (an unprivileged user, UDP port 7777), which the workflow starts and requires to run for 15 seconds without exceptions before pushing it to GitHub Container Registry. GitHub Releases gets both archives and `SHA256SUMS.txt`, a tag with a hyphen (`v0.2.0-beta.1`) becomes a pre-release, and a stable client goes on to [itch.io](https://pndte.itch.io/match-please?secret=lGJwzXWXsiEN7X02vTIVU1Fs) through butler. A release takes about 20 minutes; the current version is [v0.1.2](https://github.com/pndte/match-please/releases/tag/v0.1.2), and Dependabot updates the action versions weekly.
 
-Сервер из образа запускается одной командой. Образ публичный, его сжатый размер около 120 МБ:
+The server image is public (about 120 MB compressed) and starts with one command; another port is passed as an argument:
 
 ```bash
 docker run -d -p 7777:7777/udp ghcr.io/pndte/match-please-server:0.1.2
-```
-
-Чтобы сервер слушал другой порт, порт передаётся аргументом:
-
-```bash
 docker run -d -p 7800:7800/udp ghcr.io/pndte/match-please-server:0.1.2 -server 7800
 ```
 
-Версии actions раз в неделю обновляет Dependabot.
+## Bad network tests
 
-## Тесты при плохой сети
+Network code is easy to write so that everything is perfect on a local machine and falls apart on the real internet. So I run the game in Multiplayer Play Mode with Unity Network Simulator, which adds latency, jitter and packet loss to the clones. The server counts input gaps per object: packets that came late, packets that came too early, ticks restored from the copy in the next packet and ticks replaced by a guess. Results per object over 40 seconds:
 
-Сетевое поведение проверяется в Multiplayer Play Mode с Unity Network Simulator, который добавляет клонам задержку, джиттер и потерю пакетов. Сервер ведёт по каждому объекту счётчики пропусков ввода: сколько пакетов опоздало, сколько пришло слишком рано, сколько тиков восстановлено из копии в следующем пакете и сколько заменено догадкой. Результаты за 40 секунд на объект:
-
-| Сеть | Опоздало | Заменено догадкой | Восстановлено из копии |
+| Network | Late | Guessed | Restored from the copy |
 |---|---|---|---|
-| пинг 40 ± 20 мс, потери 1 % | 0 | 0 | 10–14 |
-| пинг 150 ± 50 мс, потери 3 % | 0–2 | до 0,6 % тиков | около 100 |
+| ping 40 ± 20 ms, 1 % loss | 0 | 0 | 10–14 |
+| ping 150 ± 50 ms, 3 % loss | 0–2 | up to 0.6 % of ticks | about 100 |
 
-Отдельный сценарий автоматически нажимал на спуск и сравнивал выстрелы клиента и сервера. Прогон шёл при прежнем окне лаг-компенсации 0,4 с:
+A separate script pulled the trigger automatically and compared client and server shots (with the earlier 0.4 s lag compensation window). The server counted 12 of 12 shots at 15 % loss, 10 of 10 with a 250 ms spike on every press and every shot with ping jumping from 20 to 110 or 250 ms; at 700 ms it counted 6 of 8, because older presses fall outside the window. The shot tick always matched the client's, and there were no extra shots.
 
-| Условия | Засчитано сервером |
+## Running the game
+
+The easiest way is to download the game from [its itch.io page](https://pndte.itch.io/match-please?secret=lGJwzXWXsiEN7X02vTIVU1Fs). Builds of the Windows client and the Linux server are also in [GitHub Releases](https://github.com/pndte/match-please/releases), and the server is available as a Docker image (see [CI/CD](#cicd)).
+
+Running from source requires Unity 6000.3.11f1.
+
+1. Open the project folder in Unity Hub.
+2. Open `Assets/Game/Scenes/GameSetupScene.unity` and press Play.
+3. Enter a name, then create a room or join one by IP and port. Creating a room lets you pick the map and the bots; during the match the room's creator changes bots in the window on B.
+
+To run several copies in one editor, open Window → Multiplayer → Multiplayer Play Mode and enable clones, tag the main editor `server` and the clones `client`, and tag a clone `ping150` to give it 150 ms of ping through Network Simulator.
+
+Tools → Build → Windows Client and Tools → Build → Linux Dedicated Server build the client and the server. The background room server is always the built client, so in the editor build `Builds/WindowsClient/MatchPlease.exe` first, or the menu reports that the build is missing. The command line works too:
+
+| Command | What starts |
 |---|---|
-| потери 15 % пакетов | 12 из 12 |
-| скачок задержки на 250 мс при каждом нажатии | 10 из 10 |
-| пинг меняется с 20 до 110 мс | 8 из 8 |
-| пинг меняется с 20 до 250 мс | 10 из 10 |
-| пинг меняется с 20 до 700 мс | 6 из 8: нажатия старше окна лаг-компенсации не засчитываются |
+| `MatchPlease.exe -server 7777` | a server on port 7777 without a game window |
+| `MatchPlease.exe -room 7777` | a background server and the game in the current window |
+| `MatchPlease.exe -connect 192.168.1.5:7777` | a client connected to that server |
+| `MatchPlease.exe -server 7777 -level MeatPlant -bots "Vasya\|12\|14;Petya\|10\|17"` | a server on Slaughterhouse with two bots: a Medium Berserker and a Hard Hunter |
+| `./MatchPleaseServer.x86_64 -batchmode -nographics -server 7777` | the Linux dedicated server |
 
-Во всех прогонах тик выстрела в отчёте сервера совпал с тиком на клиенте, лишних выстрелов не было.
+The map is a scene name: `ConstructionSite` (Construction Site) or `MeatPlant` (Slaughterhouse). Difficulty keys: 13 Peaceful, 11 Light, 12 Medium, 10 Hard. Personality keys: 14 Berserker, 17 Hunter, 15 Cautious, 16 Evasive, 18 Marksman. After changing a level's geometry, rebake the bots' navigation graph with Tools → Bots → Bake Navigation.
 
-## Запуск
-
-Игру можно скачать со [страницы на itch.io](https://pndte.itch.io/match-please?secret=lGJwzXWXsiEN7X02vTIVU1Fs). Готовые сборки клиента для Windows и сервера для Linux есть и в [GitHub Releases](https://github.com/pndte/match-please/releases), а сервер — ещё и в виде Docker-образа (команды в разделе [«CI/CD»](#cicd)).
-
-Для запуска из исходников нужен Unity 6000.3.11f1.
-
-1. Откройте папку проекта в Unity Hub.
-2. Откройте сцену `Assets/Game/Scenes/GameSetupScene.unity` и нажмите Play.
-3. В меню введите имя, затем создайте комнату или подключитесь к чужой по IP и порту. При создании комнаты выбирается карта и состав ботов, а во время матча создатель комнаты меняет ботов в окне на клавише B.
-
-Чтобы запустить несколько копий игры в одном редакторе:
-
-1. Откройте Window → Multiplayer → Multiplayer Play Mode и включите клоны.
-2. Назначьте главному редактору тег `server`, а клонам — тег `client`.
-3. Чтобы добавить клону 150 мс пинга через Network Simulator, назначьте ему тег `ping150`.
-
-Клиент для Windows и выделенный сервер для Linux собираются командами Tools → Build → Windows Client и Tools → Build → Linux Dedicated Server. Кнопка «Создать» запускает сервер в фоновом процессе и подключает к нему текущее окно. Фоновым сервером всегда работает собранный клиент, и в редакторе сначала нужно собрать `Builds/WindowsClient/MatchPlease.exe`, иначе меню сообщит, что сборки нет. Сервер и клиент запускаются и из командной строки:
-
-| Команда | Что запускается |
-|---|---|
-| `MatchPlease.exe -server 7777` | сервер на порту 7777 без окна игры |
-| `MatchPlease.exe -room 7777` | сервер в фоновом процессе и игра в текущем окне |
-| `MatchPlease.exe -connect 192.168.1.5:7777` | клиент, подключённый к указанному серверу |
-| `MatchPlease.exe -server 7777 -level MeatPlant -bots "Вася\|12\|14;Петя\|10\|17"` | сервер на «Бойне» с двумя ботами: средний берсерк и сложный охотник |
-| `./MatchPleaseServer.x86_64 -batchmode -nographics -server 7777` | выделенный сервер на Linux |
-
-Карта задаётся именем сцены: `ConstructionSite` («Стройка») или `MeatPlant` («Бойня»). Ключи сложности: 13 («Мирный»), 11 («Лёгкий»), 12 («Средний»), 10 («Сложный»). Ключи характера: 14 («Берсерк»), 17 («Охотник»), 15 («Осторожный»), 16 («Увёртливый»), 18 («Стрелок»).
-
-После изменения геометрии уровня граф навигации ботов нужно перезапечь командой Tools → Bots → Bake Navigation.
-
-## Структура репозитория
+## Repository layout
 
 ```
-.github/workflows/           CI/CD: CodeQL, проверка репозитория, тесты Unity, сборки и релизы
-Docker/                      образ выделенного сервера
-Media/                       ролики для README
+.github/workflows/           CI/CD: CodeQL, repository checks, Unity tests, builds and releases
+Docker/                      the dedicated server image
+Media/                       clips for this README
 Assets/
 ├── Game/
 │   ├── Scripts/
-│   │   ├── Entities/        базовые контракты: Lifetime, симуляция, физика, пулы
-│   │   │   └── Network/     сетевой фреймворк: записи, тики, предсказание, откат, лаг-компенсация
-│   │   ├── UseCases/        фичи: Movement, Combat, Mortality, Props, Bots, Match, Level…
-│   │   ├── CoreAdapters/    каталоги персонажей, оружия и настроек ботов
-│   │   ├── Injection/       установщики Zenject
-│   │   ├── Setup/           запуск, комнаты и меню
-│   │   └── Tests/           Bw.Tests: модульные и интеграционные тесты
-│   ├── Editor/              генератор кодеков, запекание навигации, сборки, инспекторы
-│   ├── Content/             конфиги персонажей, оружия, ящиков, ботов и матча; в Setup/ — настройки сети, физики и пулов
+│   │   ├── Entities/        base contracts: Lifetime, simulation, physics, pools
+│   │   │   └── Network/     network framework: entries, ticks, prediction, rollback, lag compensation
+│   │   ├── UseCases/        features: Movement, Combat, Mortality, Props, Bots, Match, Level…
+│   │   ├── CoreAdapters/    character, weapon and bot settings catalogs
+│   │   ├── Injection/       Zenject installers
+│   │   ├── Setup/           launch, rooms and menus
+│   │   └── Tests/           Bw.Tests: unit and integration tests
+│   ├── Editor/              codec generator, navigation baking, builds, inspectors
+│   ├── Content/             character, weapon, crate, bot and match configs; network, physics and pool settings in Setup/
 │   ├── Prefabs/
 │   ├── Scenes/              Boot, GameSetupScene, Network, ConstructionSite, MeatPlant, SampleScene
-│   └── UI/                  UXML и USS меню и HUD
-└── Resources/               только ProjectContext и настройки DOTween
+│   └── UI/                  UXML and USS for the menus and HUD
+└── Resources/               only ProjectContext and DOTween settings
 ```
 
-В Build Settings стоит одна пустая сцена Boot: она загружает GameSetupScene. Всё остальное (сцены, конфиги, префабы, интерфейс и звуки) грузится через Addressables, и в собранной игре каждый ассет существует в одном экземпляре. Из Resources грузятся ProjectContext, который ищет там Zenject, и настройки DOTween.
+Build Settings hold a single empty Boot scene that loads GameSetupScene. Everything else (scenes, configs, prefabs, UI and sounds) loads through Addressables, so each asset exists once in a build. Resources holds only ProjectContext, which Zenject looks for there, and the DOTween settings. Every feature folder has the same shape: `Abstractions/`, `Extensions/` for pure functions over states, `Network/`, sometimes `Physics/`, and `View/` with view models in `View/Adapters`.
 
-Все папки фич устроены одинаково:
+## Stack
 
-```
-UseCases/Movement/
-├── Abstractions/    интерфейсы ядра
-├── Extensions/      чистые функции над состояниями
-├── Network/         сетевые адаптеры, кодеки, обработчики запросов
-├── Physics/         мотор и коллайдер персонажа на Box2D
-└── View/            вью, а в View/Adapters — модели вью
-```
-
-## Стек
-
-| Область | Технологии |
+| Area | Technologies |
 |---|---|
-| Движок | Unity 6000.3, C# 9, URP 2D, 2D Animation, Addressables |
-| Сеть | Netcode for GameObjects 2.9.1 как транспорт, Multiplayer Play Mode, Multiplayer Tools (Network Simulator) |
-| Физика | LowLevelPhysics2D (Box2D v3) |
-| Архитектура | Extenject (Zenject), JetBrains.Lifetimes, R3, UniTask |
-| Интерфейс | UI Toolkit, DOTween |
-| Тесты и CI/CD | Unity Test Framework, GitHub Actions, GameCI, CodeQL, Dependabot, Docker, GitHub Container Registry, itch.io (butler) |
+| Engine | Unity 6000.3, C# 9, URP 2D, 2D Animation, Addressables |
+| Network | Netcode for GameObjects 2.9.1 as transport, Multiplayer Play Mode, Multiplayer Tools (Network Simulator) |
+| Physics | LowLevelPhysics2D (Box2D v3) |
+| Architecture | Extenject (Zenject), JetBrains.Lifetimes, R3, UniTask |
+| UI | UI Toolkit, DOTween |
+| Tests and CI/CD | Unity Test Framework, GitHub Actions, GameCI, CodeQL, Dependabot, Docker, GitHub Container Registry, itch.io (butler) |
 
-Проект распространяется под лицензией GPL-3.0, её полный текст — в файле [LICENSE](LICENSE).
+The project is licensed under GPL-3.0; see [LICENSE](LICENSE).
+
+## Where to look in the code
+
+This section says which scripts to start reading from and where to go next so you don't get lost. Paths are relative to the repository root. Section 2 follows four typical flows through the code from start to finish; sections 3–13 list the starting files of every module in reading order, each one building on the ones before.
+
+### 1. General notes
+
+1.1. Game code is in `Assets/Game/Scripts`, editor tools in `Assets/Game/Editor`, tests in `Assets/Game/Scripts/Tests`.
+
+1.2. A feature consists of a core (`UseCases/<Feature>`), network adapters (`<Feature>/Network`), views (`<Feature>/View`) and view models (`<Feature>/View/Adapters`). The core references neither the network nor views.
+
+1.3. Dependencies are wired in Zenject installers (`Assets/Game/Scripts/Injection`). Start reading a module from its installer: the installer lists the module's classes and shows which of them run on the server and which on the client.
+
+1.4. The side (server or client) is set once per session in [`RuntimeSettings.cs`](Assets/Game/Scripts/Setup/RuntimeSettings.cs) (`CurrentPeerType`) and doesn't change until the session ends. Installers split server and client bindings by this value.
+
+1.5. Object and subscription lifetimes are expressed with `Lifetime` from JetBrains.Lifetimes. The game code has no `Dispose` calls.
+
+1.6. Simulation code runs in tick phases (`TickPhase`) rather than in `Update`. To find when a class runs, search it for `Stepped(TickPhase.`.
+
+### 2. Reading routes
+
+2.1. One request, from a key press to the game core (the flashlight on F):
+
+1. [`FlashlightInstaller.cs`](Assets/Game/Scripts/Injection/Weapon/FlashlightInstaller.cs): declares the request and the property and binds each to the class of its side.
+2. [`FlashlightClientHandler.cs`](Assets/Game/Scripts/UseCases/Combat/Shooting/Network/Requests/FlashlightClientHandler.cs): sends the request on F.
+3. [`NetRequests.cs`](Assets/Game/Scripts/Entities/Network/Variables/Signals/NetRequests.cs): `Send` checks the right, stores the value and raises the dirty flag.
+4. [`NetReplicationClient.cs`](Assets/Game/Scripts/Entities/Network/Variables/Table/NetReplicationClient.cs): sends the dirty entry through the visitor and the codec.
+5. [`MessagesHandler.cs`](Assets/Game/Scripts/Entities/Network/Routing/MessagesHandler.cs): the server reads the header and finds the object.
+6. [`NetInboxServer.cs`](Assets/Game/Scripts/Entities/Network/Variables/Table/NetInboxServer.cs): checks the sender's right and passes the value to the entry.
+7. [`FlashlightServerHandler.cs`](Assets/Game/Scripts/UseCases/Combat/Shooting/Network/Requests/FlashlightServerHandler.cs): hands the request to the core.
+8. [`Flashlight.cs`](Assets/Game/Scripts/UseCases/Combat/Shooting/Flashlight.cs): the core applies the new state.
+
+2.2. One client tick with prediction:
+
+1. [`ClientNetworkTicks.cs`](Assets/Game/Scripts/Entities/Network/Ticks/ClientNetworkTicks.cs): advances the client clock ahead of the server.
+2. [`RollbackStepper.cs`](Assets/Game/Scripts/Entities/Network/Rollback/RollbackStepper.cs): runs the phases, rolls back on a mismatch and replays the ticks.
+3. [`PredictionInputSender.cs`](Assets/Game/Scripts/Entities/Network/Prediction/Stream/PredictionInputSender.cs): in `Prepare` samples the input and sends it to the server.
+4. [`PhysicsStepper.cs`](Assets/Game/Scripts/Entities/Network/Rollback/PhysicsStepper.cs): in `Physics` steps the Box2D world.
+5. [`InputStepper.cs`](Assets/Game/Scripts/Entities/Network/Prediction/Stream/InputStepper.cs): in `Default` steps an object with the input of the tick.
+6. [`CharacterStepper.cs`](Assets/Game/Scripts/UseCases/Character/Network/CharacterStepper.cs): splits `CharacterControls` into the movement, hands and trigger steps.
+7. [`CharacterMovement.cs`](Assets/Game/Scripts/UseCases/Movement/CharacterMovement.cs) and [`PlatformerMotor.cs`](Assets/Game/Scripts/UseCases/Movement/Physics/PlatformerMotor.cs): the movement step and the motor.
+8. [`RollbackPart.cs`](Assets/Game/Scripts/Entities/Network/Rollback/RollbackPart.cs): saves the state of every tick, compares it with the server's and follows the server's state during a replay.
+
+2.3. One shot, from the trigger to the target's health:
+
+1. [`GunSimulator.cs`](Assets/Game/Scripts/UseCases/Combat/Shooting/GunSimulator.cs): the weapon step decides that a shot is fired.
+2. [`RaycastShooter.cs`](Assets/Game/Scripts/UseCases/Combat/Weapon/Network/RaycastShooter.cs): submits the shot to the server's resolver.
+3. [`RaycastShotResolver.cs`](Assets/Game/Scripts/UseCases/Combat/Weapon/Network/RaycastShotResolver.cs): in `Late` rewinds the world and traces every shot of the tick, then reports the outcomes.
+4. [`LagCompensator.cs`](Assets/Game/Scripts/Entities/Network/LagCompensation/LagCompensator.cs) and [`ShooterView.cs`](Assets/Game/Scripts/Entities/Network/LagCompensation/ShooterView.cs): pose each object on the tick the shooter saw.
+5. [`ShotTracer.cs`](Assets/Game/Scripts/UseCases/Combat/Shooting/ShotTracer.cs): traces the shot and its pellets.
+6. [`OutcomeDispatcher.cs`](Assets/Game/Scripts/Entities/Network/Prediction/Events/OutcomeDispatcher.cs): applies the outcome to the targets and reports to the shooter.
+7. [`Mortal.cs`](Assets/Game/Scripts/UseCases/Mortality/Mortal.cs): applies the new `Vitals`.
+8. [`OutcomePredictor.cs`](Assets/Game/Scripts/Entities/Network/Prediction/Events/OutcomePredictor.cs): on the shooter's client, matches the report against the predicted damage.
+
+2.4. One bot decision:
+
+1. [`BotBrainStepper.cs`](Assets/Game/Scripts/UseCases/Bots/Network/BotBrainStepper.cs): calls the brain in `Prepare`.
+2. [`GoapBrain.cs`](Assets/Game/Scripts/UseCases/Bots/Goap/GoapBrain.cs): updates sight and threats, turns them into facts, keeps the current plan or picks a goal and plans anew, then performs the current step.
+3. [`GoapPlanner.cs`](Assets/Game/Scripts/UseCases/Bots/Goap/GoapPlanner.cs): finds the cheapest chain of actions with A*.
+4. [`IBotSkill.cs`](Assets/Game/Scripts/UseCases/Bots/Abstractions/IBotSkill.cs) and [`ShootSkill.cs`](Assets/Game/Scripts/UseCases/Bots/Skills/ShootSkill.cs): a skill performs the current plan step.
+5. [`BotGamepad.cs`](Assets/Game/Scripts/UseCases/Bots/BotGamepad.cs): the skill presses buttons; from here the input follows route 2.2 like a player's.
+
+### 3. Launch
+
+Launch order: the Boot scene, the GameSetupScene scene, the menu choice, loading the session scenes.
+
+| No. | File | Purpose |
+|---|---|---|
+| 3.1 | [`Boot.unity`](Assets/Game/Scenes/Boot.unity) | the only scene in Build Settings |
+| 3.2 | [`SetupSceneLoader.cs`](Assets/Game/Scripts/Setup/Launch/SetupSceneLoader.cs) | loads GameSetupScene through Addressables |
+| 3.3 | [`ProjectInstaller.cs`](Assets/Game/Scripts/Injection/ProjectInstaller.cs) | project context bindings (`Assets/Resources/ProjectContext.prefab`): `NetworkHolder`, `NextLaunch`, `SessionScenes`, `GameRestarter` |
+| 3.4 | [`LaunchInstaller.cs`](Assets/Game/Scripts/Injection/Launch/LaunchInstaller.cs) | GameSetupScene bindings: the menu, room screens, `NetworkLauncher` |
+| 3.5 | [`LaunchArguments.cs`](Assets/Game/Scripts/Setup/Launch/LaunchArguments.cs) | command line arguments `-server`, `-room`, `-connect`, `-owner`, `-level`, `-host-key`, `-bots` |
+| 3.6 | [`NetworkLauncher.cs`](Assets/Game/Scripts/Setup/Launch/NetworkLauncher.cs) | starts a server or a client by the player's choice; asks a room for its map (`AskLevel`) |
+| 3.7 | [`SessionScenes.cs`](Assets/Game/Scripts/Setup/Launch/SessionScenes.cs) | loads the Network scene and the map scene on the server (`LoadServer`) and the client (`LoadClient`) |
+| 3.8 | [`BackgroundServer.cs`](Assets/Game/Scripts/Setup/Launch/BackgroundServer.cs) | starts a room's background server from the built client |
+| 3.9 | [`GameRestarter.cs`](Assets/Game/Scripts/Setup/Launch/GameRestarter.cs) | returns to the menu and restarts a session in the same process |
+
+### 4. Session assembly
+
+A session is assembled by the installers of the Network scene, the map scene and the network object prefabs.
+
+| No. | File | Purpose |
+|---|---|---|
+| 4.1 | [`GlobalNetworkInstaller.cs`](Assets/Game/Scripts/Injection/Network/GlobalNetworkInstaller.cs) | Network scene bindings: the session lifetime, the client collection, the character registry |
+| 4.2 | [`GameSessionInstaller.cs`](Assets/Game/Scripts/Injection/GameSessionInstaller.cs) | map scene bindings: the world step (`WorldStep` on the server, `RollbackStepper` on the client), physics, lag compensation, prediction bubbles, weapon registries; installs `MatchSessionInstaller` |
+| 4.3 | [`SpawnerInstaller.cs`](Assets/Game/Scripts/Injection/SpawnerInstaller.cs) | players and their drivers, admitting a client into the match, `Armory`, spawning characters, crates, platforms and the match object |
+| 4.4 | [`PrefabHandlersInstaller.cs`](Assets/Game/Scripts/Injection/Prefabs/PrefabHandlersInstaller.cs) | prefab pools, NGO network prefab handlers |
+| 4.5 | [`BotsInstaller.cs`](Assets/Game/Scripts/Injection/Bots/BotsInstaller.cs) | the navigation graph, the room's bot roster, stand-in bots |
+| 4.6 | [`CharacterInstaller.cs`](Assets/Game/Scripts/Injection/Character/CharacterInstaller.cs) | assembles a character (`Character.prefab`): the schema of network entries, movement, hands, health, prediction; the model installer of a network object |
+
+### 5. Base contracts
+
+The files in this section reference neither the game rules nor the network.
+
+| No. | File | Purpose |
+|---|---|---|
+| 5.1 | [`ISteppable.cs`](Assets/Game/Scripts/Entities/Simulation/ISteppable.cs) | an object that takes a simulation step with an input |
+| 5.2 | [`IRestorable.cs`](Assets/Game/Scripts/Entities/Simulation/IRestorable.cs) | an object that takes part in rollback: its current state and applying a saved one |
+| 5.3 | [`IPool.cs`](Assets/Game/Scripts/Entities/Pool/IPool.cs), [`IResource.cs`](Assets/Game/Scripts/Entities/Pool/IResource.cs), [`LimitedPool.cs`](Assets/Game/Scripts/Entities/Pool/LimitedPool.cs) | the pool, the resource and its facade, lending an object for a lifetime |
+| 5.4 | [`IPools.cs`](Assets/Game/Scripts/Entities/Pool/IPools.cs), [`PrefabPools.cs`](Assets/Game/Scripts/Entities/Pool/GameObjects/PrefabPools.cs), [`PoolExtensions.cs`](Assets/Game/Scripts/Entities/Pool/PoolExtensions.cs) | pools by type and by key, prefab pools, the `OneShot` extension |
+| 5.5 | [`PhysicsSpace.cs`](Assets/Game/Scripts/Entities/Physics/PhysicsSpace.cs), [`BodyBox.cs`](Assets/Game/Scripts/Entities/Physics/BodyBox.cs) | the session's Box2D world, a body's shape |
+
+### 6. Network framework
+
+Files are listed in the order a message passes through them: the object, the schema, the entries, sending, receiving, rights, the schema check, codecs.
+
+| No. | File | Purpose |
+|---|---|---|
+| 6.1 | [`NetworkLifetimedBehaviour.cs`](Assets/Game/Scripts/Entities/Network/Objects/NetworkLifetimedBehaviour.cs) | a network object: `SpawnedLifetime` and the `Inbox` |
+| 6.2 | [`NetEntriesSchemaBuilder.cs`](Assets/Game/Scripts/Entities/Network/Variables/NetEntriesSchemaBuilder.cs), [`NetEntriesSchema.cs`](Assets/Game/Scripts/Entities/Network/Variables/NetEntriesSchema.cs) | entry declarations, the schema hash |
+| 6.3 | [`NetEntries.cs`](Assets/Game/Scripts/Entities/Network/Variables/Table/NetEntries.cs) | an object's entries, their numbers, role interfaces |
+| 6.4 | [`NetRequests.cs`](Assets/Game/Scripts/Entities/Network/Variables/Signals/NetRequests.cs), [`NetResults.cs`](Assets/Game/Scripts/Entities/Network/Variables/Signals/NetResults.cs), [`NetProperty.cs`](Assets/Game/Scripts/Entities/Network/Variables/NetProperty.cs) | request, result, property |
+| 6.5 | [`NetReplicationClient.cs`](Assets/Game/Scripts/Entities/Network/Variables/Table/NetReplicationClient.cs), [`NetReplicationServer.cs`](Assets/Game/Scripts/Entities/Network/Variables/Table/NetReplicationServer.cs) | sending changed entries |
+| 6.6 | [`MessagesHandler.cs`](Assets/Game/Scripts/Entities/Network/Routing/MessagesHandler.cs), [`NetInboxClient.cs`](Assets/Game/Scripts/Entities/Network/Variables/Table/NetInboxClient.cs), [`NetInboxServer.cs`](Assets/Game/Scripts/Entities/Network/Variables/Table/NetInboxServer.cs) | receiving a message, passing the value to its entry |
+| 6.7 | [`NetworkPermissions.cs`](Assets/Game/Scripts/Entities/Network/Variables/NetworkPermissions.cs), [`INetSendGuard.cs`](Assets/Game/Scripts/Entities/Network/Variables/INetSendGuard.cs), [`INetReceiveGuard.cs`](Assets/Game/Scripts/Entities/Network/Variables/INetReceiveGuard.cs) | write rights, send and receive guards |
+| 6.8 | [`NetSchemaHashSender.cs`](Assets/Game/Scripts/Entities/Network/Variables/NetSchemaHashSender.cs), [`NetSchemaHashChecker.cs`](Assets/Game/Scripts/Entities/Network/Variables/NetSchemaHashChecker.cs) | the schema check, disconnecting a client on a mismatch |
+| 6.9 | [`ICodec.cs`](Assets/Game/Scripts/Entities/Network/ICodec.cs), [`Quantization.cs`](Assets/Game/Scripts/Entities/Network/Serialization/Quantization.cs) | the message codec, quantization |
+| 6.10 | [`MessageHandlersInstaller.Generated.cs`](Assets/Game/Scripts/Injection/Network/MessageHandlersInstaller.Generated.cs), [`MessageHandlersCodegen.cs`](Assets/Game/Editor/Network/MessageHandlersCodegen.cs) | generated codec registrations and their generator |
+| 6.11 | [`NetTablesInstaller.cs`](Assets/Game/Scripts/Injection/Network/Variables/NetTablesInstaller.cs) | binds the sending, receiving and schema check classes of its side |
+
+### 7. Tick, prediction and rollback
+
+| No. | File | Purpose |
+|---|---|---|
+| 7.1 | [`TickPhase.cs`](Assets/Game/Scripts/Entities/Network/Ticks/TickPhase.cs) | tick phases in execution order |
+| 7.2 | [`ServerNetworkTicks.cs`](Assets/Game/Scripts/Entities/Network/Ticks/ServerNetworkTicks.cs), [`ClientNetworkTicks.cs`](Assets/Game/Scripts/Entities/Network/Ticks/ClientNetworkTicks.cs) | server and client clocks; the client's lead driven by the server's reports |
+| 7.3 | [`IWorldStep.cs`](Assets/Game/Scripts/Entities/Network/Rollback/IWorldStep.cs), [`WorldStep.cs`](Assets/Game/Scripts/Entities/Network/Rollback/WorldStep.cs), [`RollbackStepper.cs`](Assets/Game/Scripts/Entities/Network/Rollback/RollbackStepper.cs) | the phased world step on the server; rollback and replay on the client |
+| 7.4 | [`IRollbackPart.cs`](Assets/Game/Scripts/Entities/Network/Rollback/IRollbackPart.cs), [`RollbackPart.cs`](Assets/Game/Scripts/Entities/Network/Rollback/RollbackPart.cs), [`TickHistory.cs`](Assets/Game/Scripts/Entities/Network/Rollback/TickHistory.cs) | an object's rollback part, per-tick history |
+| 7.5 | [`PredictionInputInstaller.cs`](Assets/Game/Scripts/Injection/Network/Prediction/PredictionInputInstaller.cs), [`RollbackStateInstaller.cs`](Assets/Game/Scripts/Injection/Network/Prediction/RollbackStateInstaller.cs) | wiring an object's input and state into prediction |
+| 7.6 | [`PredictionInputBuffer.cs`](Assets/Game/Scripts/Entities/Network/Prediction/Stream/PredictionInputBuffer.cs), [`InputRelay.cs`](Assets/Game/Scripts/Entities/Network/Prediction/Stream/InputRelay.cs), [`RemoteInputs.cs`](Assets/Game/Scripts/Entities/Network/Prediction/Stream/RemoteInputs.cs), [`AdaptiveInputDelay.cs`](Assets/Game/Scripts/Entities/Network/Ticks/AdaptiveInputDelay.cs) | a client's input on the server, forwarding input to neighbours, other players' input on a client, input delay |
+| 7.7 | [`PredictionBubble.cs`](Assets/Game/Scripts/UseCases/Character/Network/PredictionBubble.cs), [`ClientBubbles.cs`](Assets/Game/Scripts/UseCases/Character/Network/ClientBubbles.cs) | the prediction bubble on a client; every client's bubble on the server |
+
+### 8. Damage and lag compensation
+
+| No. | File | Purpose |
+|---|---|---|
+| 8.1 | [`ActionId.cs`](Assets/Game/Scripts/Entities/Network/Prediction/Events/ActionId.cs) | an action's identity: object and tick |
+| 8.2 | [`OutcomePredictor.cs`](Assets/Game/Scripts/Entities/Network/Prediction/Events/OutcomePredictor.cs), [`OutcomeDispatcher.cs`](Assets/Game/Scripts/Entities/Network/Prediction/Events/OutcomeDispatcher.cs) | predicting an outcome on the shooter's client; applying it to targets and reporting to the shooter on the server |
+| 8.3 | [`EventPredictionTargetInstaller.cs`](Assets/Game/Scripts/Injection/Network/Prediction/EventPredictionTargetInstaller.cs), [`EventPredictionInitiatorInstaller.cs`](Assets/Game/Scripts/Injection/Network/Prediction/EventPredictionInitiatorInstaller.cs) | wiring a damage target and a damage source |
+| 8.4 | [`DecidedImpacts.cs`](Assets/Game/Scripts/UseCases/Combat/Weapon/Network/Prediction/DecidedImpacts.cs) | hit decisions repeated during replays |
+| 8.5 | [`RaycastShotResolver.cs`](Assets/Game/Scripts/UseCases/Combat/Weapon/Network/RaycastShotResolver.cs) | resolving shots on the server in `Late` |
+| 8.6 | [`LagCompensator.cs`](Assets/Game/Scripts/Entities/Network/LagCompensation/LagCompensator.cs), [`BubbleHistory.cs`](Assets/Game/Scripts/Entities/Network/LagCompensation/BubbleHistory.cs), [`ShooterView.cs`](Assets/Game/Scripts/Entities/Network/LagCompensation/ShooterView.cs) | rewinding the world, bubble history, the tick the shooter saw |
+| 8.7 | [`LagCompensationInstaller.cs`](Assets/Game/Scripts/Injection/Network/LagCompensationInstaller.cs) | wiring an object into lag compensation |
+
+### 9. Game rules
+
+| No. | File | Purpose |
+|---|---|---|
+| 9.1 | [`CharacterMovement.cs`](Assets/Game/Scripts/UseCases/Movement/CharacterMovement.cs) | character movement, the `MovementState` |
+| 9.2 | [`PlatformerMotor.cs`](Assets/Game/Scripts/UseCases/Movement/Physics/PlatformerMotor.cs) | the kinematic character motor on Box2D queries |
+| 9.3 | [`Hands.cs`](Assets/Game/Scripts/UseCases/Combat/Hands/Hands.cs) | a character's hands: taking, holding and handing over items |
+| 9.4 | [`GunSimulator.cs`](Assets/Game/Scripts/UseCases/Combat/Shooting/GunSimulator.cs), [`MeleeSimulator.cs`](Assets/Game/Scripts/UseCases/Combat/Melee/MeleeSimulator.cs) | the firearm step, the melee step |
+| 9.5 | [`ShotTracer.cs`](Assets/Game/Scripts/UseCases/Combat/Shooting/ShotTracer.cs) | tracing a shot and its pellets |
+| 9.6 | [`Mortal.cs`](Assets/Game/Scripts/UseCases/Mortality/Mortal.cs) | health and death, applying `Vitals` |
+| 9.7 | [`LevelGeometry.cs`](Assets/Game/Scripts/UseCases/Level/LevelGeometry.cs) | the level's static geometry in the Box2D world |
+| 9.8 | [`MatchBoard.cs`](Assets/Game/Scripts/UseCases/Match/MatchBoard.cs), [`HitScorer.cs`](Assets/Game/Scripts/UseCases/Match/Network/HitScorer.cs), [`DeathScorer.cs`](Assets/Game/Scripts/UseCases/Match/Network/DeathScorer.cs) | the match table; scoring on the server (match network adapters) |
+
+### 10. Bots
+
+| No. | File | Purpose |
+|---|---|---|
+| 10.1 | [`BotLifeInstaller.cs`](Assets/Game/Scripts/Injection/Bots/BotLifeInstaller.cs) | assembles a bot: gamepad, brain, GOAP goals and actions by difficulty and personality |
+| 10.2 | [`GoapBrain.cs`](Assets/Game/Scripts/UseCases/Bots/Goap/GoapBrain.cs), [`GoapPlanner.cs`](Assets/Game/Scripts/UseCases/Bots/Goap/GoapPlanner.cs), [`GoapAction.cs`](Assets/Game/Scripts/UseCases/Bots/Goap/GoapAction.cs), [`BotFact.cs`](Assets/Game/Scripts/UseCases/Bots/Goap/BotFact.cs) | the brain, the A* planner, an action, the facts |
+| 10.3 | [`Goals/`](Assets/Game/Scripts/UseCases/Bots/Goals) | bot goals: `KillGoal`, `FinishOffGoal`, `PunishReloadGoal`, `GuardGoal`, `RetreatGoal`, `KiteGoal`, `RoamGoal` |
+| 10.4 | [`BotBrainStepper.cs`](Assets/Game/Scripts/UseCases/Bots/Network/BotBrainStepper.cs) | calls the brain in `Prepare` |
+| 10.5 | [`BotGamepad.cs`](Assets/Game/Scripts/UseCases/Bots/BotGamepad.cs) | the bot's virtual gamepad |
+| 10.6 | [`NavGraph.cs`](Assets/Game/Scripts/UseCases/Bots/Navigation/NavGraph.cs), [`NavGraphBuilder.cs`](Assets/Game/Scripts/UseCases/Bots/Navigation/NavGraphBuilder.cs), [`PathFollower.cs`](Assets/Game/Scripts/UseCases/Bots/Navigation/PathFollower.cs) | the navigation graph, building it with the character motor, following a path |
+| 10.7 | [`NavGraphBakeMenu.cs`](Assets/Game/Editor/Bots/NavGraphBakeMenu.cs) | the Tools → Bots → Bake Navigation command |
+| 10.8 | [`PlayerAdmitter.cs`](Assets/Game/Scripts/Entities/Network/Client/PlayerAdmitter.cs), [`PlayerDriver.cs`](Assets/Game/Scripts/Entities/Network/Client/PlayerDriver.cs) | admitting a player into the match; who drives a player (a client or the server) |
+
+### 11. Rooms and reconnection
+
+| No. | File | Purpose |
+|---|---|---|
+| 11.1 | [`LevelQuery.cs`](Assets/Game/Scripts/Entities/Network/Room/LevelQuery.cs) | asking a room for its map on the first connection |
+| 11.2 | [`RoomHostAssigner.cs`](Assets/Game/Scripts/UseCases/Bots/Network/Room/RoomHostAssigner.cs) | making the room's creator the owner of the match object by the host key |
+| 11.3 | [`ConnectedClientAdmitter.cs`](Assets/Game/Scripts/UseCases/Players/Network/ConnectedClientAdmitter.cs) | admitting a connected client into the match, returning a player by token |
+| 11.4 | [`DepartedPlayers.cs`](Assets/Game/Scripts/Entities/Network/Client/DepartedPlayers.cs), [`StandInBots.cs`](Assets/Game/Scripts/UseCases/Bots/Network/StandInBots.cs) | tokens of departed players, stand-in bots |
+
+### 12. View layer
+
+| No. | File | Purpose |
+|---|---|---|
+| 12.1 | [`IFlashlightViewModel.cs`](Assets/Game/Scripts/UseCases/Combat/View/Abstractions/IFlashlightViewModel.cs), [`FlashlightViewModel.cs`](Assets/Game/Scripts/UseCases/Combat/View/Adapters/FlashlightViewModel.cs), [`FlashlightView.cs`](Assets/Game/Scripts/UseCases/Combat/View/FlashlightView.cs) | a model example: the view model interface in the view assembly, the adapter to the core, the view |
+
+### 13. Checks and builds
+
+| No. | File | Purpose |
+|---|---|---|
+| 13.1 | [`NetIndependentCoreTests.cs`](Assets/Game/Scripts/Tests/Integration/Architecture/NetIndependentCoreTests.cs), [`ViewGateTests.cs`](Assets/Game/Scripts/Tests/Integration/Architecture/ViewGateTests.cs) | the direction of dependencies between assemblies |
+| 13.2 | [`NetBoxingTests.cs`](Assets/Game/Scripts/Tests/Integration/Architecture/NetBoxingTests.cs) | no boxing in the network framework's IL |
+| 13.3 | [`CodeStyleTests.cs`](Assets/Game/Scripts/Tests/Integration/Architecture/CodeStyleTests.cs) | code style rules |
+| 13.4 | [`ValidationContainers.cs`](Assets/Game/Scripts/Tests/Integration/Injection/ValidationContainers.cs) | Zenject containers of the project context, scenes and prefabs for checking the object graph |
+| 13.5 | [`Tests/Integration/Netcode`](Assets/Game/Scripts/Tests/Integration/Netcode) | rollback and replay in server and client Box2D worlds |
+| 13.6 | [`GameBuilder.cs`](Assets/Game/Editor/Build/GameBuilder.cs) | building the Windows client and the Linux server |
+| 13.7 | [`build.yml`](.github/workflows/build.yml) | tests, builds, the Docker image and a release on a version tag |
